@@ -43,6 +43,9 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
     protected $_sessionMock;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    protected $_sidResolver;
+
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected  $_translatorMock;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
@@ -93,15 +96,19 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Math\Random */
     protected $_mathMock;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Data\Form\FormKey */
+    protected $_formKey;
+
     protected function setUp()
     {
         // These mocks are accessed via context
         $this->_designMock          = $this->_makeMock('Magento\View\DesignInterface');
         $this->_sessionMock         = $this->_makeMock('Magento\Core\Model\Session');
+        $this->_sidResolver         = $this->_makeMock('Magento\Core\Model\Session\SidResolver');
         $this->_translatorMock      = $this->_makeMock('Magento\Core\Model\Translate');
         $this->_layoutMock          = $this->_makeMock('Magento\Core\Model\Layout');
         $this->_requestMock         = $this->_makeMock('Magento\App\RequestInterface');
-        $this->_messagesMock        = $this->_makeMock('Magento\View\Block\Messages');
+        $this->_messagesMock        = $this->_makeMock('Magento\View\Element\Messages');
         $this->_urlMock             = $this->_makeMock('Magento\UrlInterface');
         $this->_eventManagerMock    = $this->_makeMock('Magento\Event\ManagerInterface');
         $this->_controllerMock      = $this->_makeMock('Magento\App\FrontController');
@@ -125,6 +132,7 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
         $this->_localeMock          = $this->_makeMock('Magento\Core\Model\LocaleInterface');
         $appState                   = $this->_makeMock('Magento\App\State');
         $this->_mathMock            = $this->_makeMock('Magento\Math\Random');
+        $this->_formKey             = $this->_makeMock('Magento\Data\Form\FormKey');
 
         $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
@@ -142,6 +150,7 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
             $this->_cacheMock,
             $this->_designMock,
             $this->_sessionMock,
+            $this->_sidResolver,
             $this->_storeConfigMock,
             $this->_controllerMock,
             $this->_helperFactoryMock,
@@ -161,7 +170,8 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
             $this->_storeManagerMock,
             $authorizationMock,
             $backendSessionMock,
-            $this->_mathMock
+            $this->_mathMock,
+            $this->_formKey
         );
     }
 

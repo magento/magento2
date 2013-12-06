@@ -40,21 +40,21 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\User\Model\Resource\User\CollectionFactory $userCollectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\User\Model\Resource\User\CollectionFactory $userCollectionFactory,
         array $data = array()
     ) {
         // _userCollectionFactory is used in parent::__construct
         $this->_userCollectionFactory = $userCollectionFactory;
-        parent::__construct($context, $coreData, $authSession, $data);
+        parent::__construct($context, $jsonEncoder, $authSession, $data);
     }
 
     protected function _construct()

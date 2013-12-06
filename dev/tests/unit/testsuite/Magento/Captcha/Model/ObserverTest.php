@@ -209,8 +209,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getResourceModelStub()
     {
-        $resourceModel = $this->getMock('Magento\Captcha\Model\Resource\Log',
-            array('deleteUserAttempts', 'deleteOldAttempts'), array(), '', false);
+        $resourceModel = $this->getMock(
+            'Magento\Captcha\Model\Resource\Log',
+            array('deleteUserAttempts', 'deleteOldAttempts', '__wakeup'),
+            array(),
+            '',
+            false
+        );
 
         return $resourceModel;
     }

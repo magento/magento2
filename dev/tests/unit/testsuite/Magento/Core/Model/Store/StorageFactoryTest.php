@@ -137,7 +137,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $store->expects($this->at(0))
             ->method('getConfig')
-            ->with($this->equalTo(\Magento\Core\Model\Session\AbstractSession::XML_PATH_USE_FRONTEND_SID))
+            ->with($this->equalTo(\Magento\Core\Model\Session\SidResolver::XML_PATH_USE_FRONTEND_SID))
             ->will($this->returnValue(true));
 
         $store->expects($this->at(1))

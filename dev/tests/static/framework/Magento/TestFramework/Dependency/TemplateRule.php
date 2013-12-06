@@ -52,7 +52,7 @@ class TemplateRule implements \Magento\TestFramework\Dependency\RuleInterface
      */
     protected $_defaultModules = array(
         'default'   => 'Magento_Install',
-        'frontend'  => 'Magento_Page',
+        'frontend'  => 'Magento_Theme',
         'adminhtml' => 'Magento_Adminhtml',
     );
 

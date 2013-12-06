@@ -80,7 +80,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\View\Block\Text'))
+                ->createBlock('Magento\View\Element\Text'))
         ;
 
         $this->assertEmpty($this->_model->getLayer()->getState()->getFilters());
@@ -96,7 +96,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\View\Block\Text')
+                ->createBlock('Magento\View\Element\Text')
         );
 
         $this->assertNotEmpty($this->_model->getLayer()->getState()->getFilters());

@@ -25,12 +25,12 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-bundle-bundle-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-bundle-bundle-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Bundle::bundle.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-bundle-js-product-summary-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-bundle-js-product-summary-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Bundle::js/product-summary.js</argument>
             </arguments>

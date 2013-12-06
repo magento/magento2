@@ -26,7 +26,7 @@
 
 namespace Magento\Rss\Block;
 
-class AbstractBlock extends \Magento\View\Block\Template
+class AbstractBlock extends \Magento\View\Element\Template
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -34,19 +34,17 @@ class AbstractBlock extends \Magento\View\Block\Template
     protected $_customerSession;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

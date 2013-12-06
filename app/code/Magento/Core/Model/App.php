@@ -53,7 +53,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Magento version
      */
-    const VERSION = '2.0.0.0-dev54';
+    const VERSION = '2.0.0.0-dev55';
 
 
     /**
@@ -233,11 +233,11 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Retrieve cookie object
      *
-     * @return \Magento\Core\Model\Cookie
+     * @return \Magento\Stdlib\Cookie
      */
     public function getCookie()
     {
-        return $this->_objectManager->get('Magento\Core\Model\Cookie');
+        return $this->_objectManager->get('Magento\Stdlib\Cookie');
     }
 
     /**
@@ -801,7 +801,7 @@ class App implements \Magento\Core\Model\AppInterface
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '54',
+            'number'    => '55',
         );
     }
 }

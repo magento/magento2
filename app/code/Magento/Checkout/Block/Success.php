@@ -26,7 +26,7 @@
 
 namespace Magento\Checkout\Block;
 
-class Success extends \Magento\View\Block\Template
+class Success extends \Magento\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Model\OrderFactory
@@ -34,19 +34,17 @@ class Success extends \Magento\View\Block\Template
     protected $_orderFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         array $data = array()
     ) {
         $this->_orderFactory = $orderFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

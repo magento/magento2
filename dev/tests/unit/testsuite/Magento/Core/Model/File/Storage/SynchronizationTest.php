@@ -59,8 +59,13 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storageFactoryMock =
             $this->getMock('Magento\Core\Model\File\Storage\DatabaseFactory', array('create'), array(), '', false);
-        $this->_storageMock = $this->getMock('Magento\Core\Model\File\Storage\Database',
-                array('getContent', 'getId', 'loadByFilename'), array(), '', false);
+        $this->_storageMock = $this->getMock(
+            'Magento\Core\Model\File\Storage\Database',
+            array('getContent', 'getId', 'loadByFilename', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_storageFactoryMock
             ->expects($this->once())
             ->method('create')

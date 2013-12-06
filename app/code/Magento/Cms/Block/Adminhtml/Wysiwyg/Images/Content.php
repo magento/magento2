@@ -33,8 +33,29 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 
+use Magento\View\Element\Template;
+
 class Content extends \Magento\Adminhtml\Block\Widget\Container
 {
+    /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Json\EncoderInterface $jsonEncoder,
+        array $data = array()
+    ) {
+        $this->_jsonEncoder = $jsonEncoder;
+        parent::__construct($context, $data);
+    }
+
     /**
      * Block construction
      */
@@ -101,7 +122,7 @@ class Content extends \Magento\Adminhtml\Block\Widget\Container
             'showBreadcrumbs' => true
         ));
 
-        return $this->_coreData->jsonEncode($setupObject);
+        return $this->_jsonEncoder->encode($setupObject);
     }
 
     /**

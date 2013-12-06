@@ -77,31 +77,31 @@ class Collection
     protected $_storeManager;
 
     /**
-     * Construct
-     *
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Logger $logger
+     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Type\Configurable $catalogProductTypeConfigurable
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Logger $logger
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Catalog\Model\Resource\Product\Type\Configurable\Attribute $resource
+     * @param mixed $connection
      */
     public function __construct(
+        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Logger $logger,
+        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Logger $logger,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Catalog\Model\Resource\Product\Type\Configurable\Attribute  $resource
+        \Magento\Catalog\Model\Resource\Product\Type\Configurable\Attribute $resource,
+        $connection = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_catalogData = $catalogData;
-        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**

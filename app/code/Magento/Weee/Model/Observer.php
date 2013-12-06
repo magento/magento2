@@ -51,22 +51,22 @@ class Observer extends \Magento\Core\Model\AbstractModel
     protected $_layout;
 
     /**
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Weee\Helper\Data $weeeData
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
+        \Magento\Core\Model\Context $context,
+        \Magento\Core\Model\Registry $registry,
         \Magento\View\LayoutInterface $layout,
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Weee\Helper\Data $weeeData,
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

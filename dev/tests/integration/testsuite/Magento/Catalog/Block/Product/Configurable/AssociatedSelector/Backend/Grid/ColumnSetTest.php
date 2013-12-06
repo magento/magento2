@@ -34,6 +34,7 @@ class ColumnSetTest
     /**
      * Testing adding column with configurable attribute to column set
      *
+     * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_configurable.php
      */

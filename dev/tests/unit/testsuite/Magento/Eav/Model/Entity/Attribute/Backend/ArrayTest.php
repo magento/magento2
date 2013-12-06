@@ -42,7 +42,11 @@ class ArrayTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute', array('getAttributeCode'), array(), '', false
+            'Magento\Eav\Model\Entity\Attribute',
+            array('getAttributeCode', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend($logger);

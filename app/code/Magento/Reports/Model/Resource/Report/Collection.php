@@ -108,16 +108,16 @@ class Collection extends \Magento\Data\Collection
     protected $_collectionFactory;
 
     /**
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Reports\Model\DateFactory $dateFactory
-     * @param Collection\Factory $collectionFactory
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Reports\Model\Resource\Report\Collection\Factory $collectionFactory
      */
     public function __construct(
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Reports\Model\DateFactory $dateFactory,
-        \Magento\Reports\Model\Resource\Report\Collection\Factory $collectionFactory,
-        \Magento\Core\Model\EntityFactory $entityFactory
+        \Magento\Reports\Model\Resource\Report\Collection\Factory $collectionFactory
     ) {
         $this->_dateFactory = $dateFactory;
         $this->_locale = $locale;

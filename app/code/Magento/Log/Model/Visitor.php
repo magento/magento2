@@ -126,13 +126,11 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param array $data
-     * @param array $ignoredUserAgents
-     * @param array $ignores
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param array $ignoredUserAgents
+     * @param array $ignores
+     * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Context $context,
@@ -147,11 +145,11 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,
         \Magento\Stdlib\DateTime $dateTime,
-        array $data = array(),
+        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Data\Collection\Db $resourceCollection = null,
         array $ignoredUserAgents = array(),
         array $ignores = array(),
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null
+        array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_customerFactory = $customerFactory;

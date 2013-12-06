@@ -71,21 +71,19 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url\RewriteFactory $rewriteFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url\RewriteFactory $rewriteFactory,
         \Magento\Backend\Helper\Data $adminhtmlData,
         array $data = array()
     ) {
         $this->_rewriteFactory = $rewriteFactory;
         $this->_adminhtmlData = $adminhtmlData;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

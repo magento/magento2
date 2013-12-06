@@ -457,7 +457,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $optionCollection = $this->getMock(
             'Magento\Data\Collection\Db',
             array('reset', 'addProductToFilter', 'getSelect', 'getNewEmptyItem'),
-            array($logger, $fetchStrategy, $entityFactory)
+            array($entityFactory, $logger, $fetchStrategy)
         );
 
         $select = $this->getMock('Zend_Db_Select', array('join', 'where'), array(), '', false);

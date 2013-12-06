@@ -48,22 +48,31 @@ class Controller extends \Magento\TestFramework\TestCase\AbstractController
     {
         parent::setUp();
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
-            ->turnOffSecretKey();
+        $this->_objectManager->get('Magento\Backend\Model\Url')->turnOffSecretKey();
 
-        $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Auth');
+        $this->_auth = $this->_objectManager->get('Magento\Backend\Model\Auth');
         $this->_session = $this->_auth->getAuthStorage();
         $this->_auth->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
     }
 
     protected function tearDown()
     {
-        $this->_auth->logout();
+        /** @var $checkoutSession \Magento\Checkout\Model\Session */
+        $checkoutSession = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $checkoutSession->clearStorage();
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
+        if (isset($_COOKIE[$checkoutSession->getName()])) {
+            unset($_COOKIE[$checkoutSession->getName()]);
+        }
+
         $this->_auth = null;
         $this->_session = null;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Model\Url')->turnOnSecretKey();
+        $this->_objectManager->get('Magento\Backend\Model\Url')->turnOnSecretKey();
         parent::tearDown();
     }
 

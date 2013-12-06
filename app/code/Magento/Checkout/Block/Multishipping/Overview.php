@@ -46,19 +46,17 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     protected $_multishipping;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Type\Multishipping $multishipping
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Type\Multishipping $multishipping,
         array $data = array()
     ) {
         $this->_multishipping = $multishipping;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -362,7 +360,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * Retrieve renderer block for row-level item output
      *
      * @param string $type
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _getRowItemRenderer($type)
     {

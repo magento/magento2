@@ -33,8 +33,8 @@
 <div class="page-head">
     <h3><?php echo __("Welcome to Magento's Installation Wizard") ?>!</h3>
 </div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<?php if (count($this->getMessagesBlock()->getMessages()) == 0): ?>
+<?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+<?php if (count($this->getLayout()->getMessagesBlock()->getMessages()) == 0): ?>
 <form action="<?php echo $this->getPostUrl() ?>" method="post">
     <div
         style="height:20em; border:1px solid #ccc; margin-bottom:8px; padding:5px; background:#fff; overflow: auto; overflow-x:hidden; overflow-y:scroll;">

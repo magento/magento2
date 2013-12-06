@@ -53,7 +53,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
             ->disableOriginalConstructor()
-            ->setMethods(array('getStore'))
+            ->setMethods(array('getStore', '__wakeup'))
             ->getMock();
 
         $storeMock = $this->getMockBuilder('Magento\Core\Model\Store')
@@ -148,7 +148,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('getTierPrice'))
+            ->setMethods(array('getTierPrice', '__wakeup'))
             ->getMock();
         $product->expects($this->once())
             ->method('getTierPrice')

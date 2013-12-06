@@ -43,20 +43,18 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Reports\Model\Resource\Product\CollectionFactory $productsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\Reports\Model\Resource\Product\CollectionFactory $productsFactory,
         array $data = array()
     ) {
         $this->_productsFactory = $productsFactory;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     protected function _construct()

@@ -33,8 +33,8 @@ namespace Magento\Integration\Model;
  * @method Integration setEmail(\string $email)
  * @method \int getStatus()
  * @method Integration setStatus(\int $value)
- * @method \int getAuthentication()
- * @method Integration setAuthentication(\int $value)
+ * @method \int getType()
+ * @method Integration setType(\int $value)
  * @method \string getEndpoint()
  * @method Integration setEndpoint(\string $endpoint)
  * @method \string getCreatedAt()
@@ -45,17 +45,27 @@ namespace Magento\Integration\Model;
 class Integration extends \Magento\Core\Model\AbstractModel
 {
     /**#@+
-     * Integration statuses.
+     * Integration Status values
      */
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
     /**#@-*/
 
     /**#@+
-     * Authentication mechanism
+     * Integration setup type
      */
-    const AUTHENTICATION_OAUTH = 1;
-    const AUTHENTICATION_MANUAL = 2;
+    const TYPE_MANUAL = 0;
+    const TYPE_CONFIG = 1;
+    /**#@-*/
+
+    /**#@+
+     * Integration data key constants.
+     */
+    const ID = 'integration_id';
+    const NAME = 'name';
+    const EMAIL = 'email';
+    const ENDPOINT = 'endpoint';
+    const SETUP_TYPE = 'setup_type';
     /**#@-*/
 
     /**
@@ -66,9 +76,9 @@ class Integration extends \Magento\Core\Model\AbstractModel
     /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Customer\Model\Resource\Customer $resource
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Data\Collection\Db|null $resourceCollection
+     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -97,7 +107,7 @@ class Integration extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare data to be saved to database
      *
-     * @return Integration
+     * @return \Magento\Integration\Model\Integration
      */
     protected function _beforeSave()
     {

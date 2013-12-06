@@ -499,42 +499,40 @@ class Order extends \Magento\Sales\Model\AbstractModel
     protected $_carrierFactory;
 
     /**
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\LocaleInterface $coreLocale
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Sales\Helper\Data $salesData
+     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param ResourceFactory $resourceFactory
-     * @param Order\Config $orderConfig
+     * @param \Magento\Sales\Model\ResourceFactory $resourceFactory
+     * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Email\Model\Template\MailerFactory $templateMailerFactory
      * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
-     * @param Resource\Order\Item\CollectionFactory $orderItemCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param Service\OrderFactory $serviceOrderFactory
+     * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param Order\Status\HistoryFactory $orderHistoryFactory
+     * @param \Magento\Sales\Model\Order\Status\HistoryFactory $orderHistoryFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollFactory
-     * @param CarrierFactory $carrierFactory
+     * @param \Magento\Sales\Model\CarrierFactory $carrierFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Sales\Helper\Data $salesData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\LocaleInterface $coreLocale,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Sales\Helper\Data $salesData,
+        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\ResourceFactory $resourceFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,

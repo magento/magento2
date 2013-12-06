@@ -1,6 +1,6 @@
 <?php
 /**
- * Application installation plugin. Should be used b applications that require module install/upgrade.
+ * Application installation plugin. Should be used by applications that require module install/upgrade.
  *
  * Magento
  *

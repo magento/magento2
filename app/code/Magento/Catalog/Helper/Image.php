@@ -130,16 +130,14 @@ class Image extends \Magento\App\Helper\AbstractHelper
     protected $_productImageFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\App\Helper\Context $context,
+        \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\View\Url $viewUrl,
         \Magento\Core\Model\Store\Config $coreStoreConfig
     ) {

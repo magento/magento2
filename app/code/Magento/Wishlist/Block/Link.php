@@ -27,7 +27,7 @@
  */
 namespace Magento\Wishlist\Block;
 
-class Link extends \Magento\Page\Block\Link
+class Link extends \Magento\View\Element\Html\Link
 {
     /**
      * @return string

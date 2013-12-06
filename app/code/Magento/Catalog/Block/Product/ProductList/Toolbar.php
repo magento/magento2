@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
-class Toolbar extends \Magento\View\Block\Template
+class Toolbar extends \Magento\View\Element\Template
 {
     /**
      * Products collection
@@ -158,22 +158,20 @@ class Toolbar extends \Magento\View\Block\Template
     protected $_catalogSession;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Catalog\Model\Config $catalogConfig,
         array $data = array()
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogConfig = $catalogConfig;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -821,7 +819,7 @@ class Toolbar extends \Magento\View\Block\Template
 
         if ($pagerBlock instanceof \Magento\Object) {
 
-            /* @var $pagerBlock \Magento\Page\Block\Html\Pager */
+            /* @var $pagerBlock \Magento\Theme\Block\Html\Pager */
             $pagerBlock->setAvailableLimit($this->getAvailableLimit());
 
             $pagerBlock->setUseContainer(false)

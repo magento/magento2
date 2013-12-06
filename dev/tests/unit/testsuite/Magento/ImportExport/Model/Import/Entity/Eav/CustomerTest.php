@@ -127,7 +127,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         // mock to imitate data source model
         $dataSourceModelMock = $this->getMock(
             'Magento\ImportExport\Model\Resource\Import\Data',
-            array('getNextBunch'),
+            array('getNextBunch', '__wakeup'),
             array(),
             '',
             false

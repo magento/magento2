@@ -54,28 +54,33 @@ class Category extends \Magento\Data\Form\Element\Multiselect
     protected $_coreData;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Core\Helper\Data $coreData
      * @param array $attributes
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\View\LayoutInterface $layout,
-        \Magento\Core\Helper\Data $coreData,
         array $attributes = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_collectionFactory = $collectionFactory;
         $this->_backendData = $backendData;
-        $this->_coreData = $coreData;
         parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
         $this->_layout = $layout;
     }
@@ -123,7 +128,7 @@ class Category extends \Magento\Data\Form\Element\Multiselect
     {
         $htmlId = $this->getHtmlId();
         $suggestPlaceholder = __('start typing to search category');
-        $selectorOptions = $this->_coreData->jsonEncode($this->_getSelectorOptions());
+        $selectorOptions = $this->_jsonEncoder->encode($this->_getSelectorOptions());
         $newCategoryCaption = __('New Category');
 
         $button = $this->_layout

@@ -51,14 +51,14 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfigur
      * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Catalog\Helper\Product\Configuration $productConfigur
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product\Configuration $productConfigur,
         \Magento\App\Helper\Context $context,
-    \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Catalog\Helper\Product\Configuration $productConfigur,
+        \Magento\Core\Model\Store\Config $coreStoreConfig
     ) {
         $this->_productConfigur = $productConfigur;
         $this->_coreStoreConfig = $coreStoreConfig;

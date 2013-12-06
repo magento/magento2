@@ -34,7 +34,7 @@
 <div class="page-head">
     <h3><?php echo __('Configuration') ?></h3>
 </div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
 <?php if ($this->getInstaller()->getServerCheckStatus()): ?>
 <form action="<?php echo $this->getPostUrl() ?>" method="post" id="form-validate">
 

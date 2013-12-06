@@ -42,9 +42,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($select));
 
-        $resource = $this->getMockForAbstractClass('Magento\Core\Model\Resource\Db\AbstractDb', array(), '',
-            false, true,
-            true, array('getReadConnection', 'getMainTable', 'getTable'));
+        $resource = $this->getMockForAbstractClass('Magento\Core\Model\Resource\Db\AbstractDb',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('getReadConnection', 'getMainTable', 'getTable', '__wakeup')
+        );
         $resource->expects($this->any())
             ->method('getReadConnection')
             ->will($this->returnValue($connection));

@@ -49,23 +49,21 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $coreData, $customerSession, $subscriberFactory, $data);
+        parent::__construct($context, $customerSession, $subscriberFactory, $data);
     }
 
     protected function _initCollection()
@@ -101,11 +99,11 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Initializes toolbar
      *
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        $toolbar = $this->getLayout()->createBlock('Magento\Page\Block\Html\Pager', 'customer_review_list.toolbar')
+        $toolbar = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'customer_review_list.toolbar')
             ->setCollection($this->getCollection());
 
         $this->setChild('toolbar', $toolbar);
@@ -167,7 +165,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     }
 
     /**
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _beforeToHtml()
     {

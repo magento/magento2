@@ -44,7 +44,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         foreach ($codes as $code) {
             $mock = $this->getMock(
                 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-                array('isInSet', 'getBackend'),
+                array('isInSet', 'getBackend', '__wakeup'),
                 array(),
                 '',
                 false
@@ -68,7 +68,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $code = 'test_attr';
         $set = 10;
 
-        $object = $this->getMock('Magento\Catalog\Model\Product', null, array(), '', false);
+        $object = $this->getMock('Magento\Catalog\Model\Product', array('__wakeup'), array(), '', false);
 
         $object->setData(array(
             'test_attr' => 'test_attr',
@@ -84,7 +84,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            array('isInSet', 'getBackend'),
+            array('isInSet', 'getBackend', '__wakeup'),
             array(),
             '',
             false

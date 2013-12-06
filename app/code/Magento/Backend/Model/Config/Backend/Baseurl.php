@@ -26,7 +26,7 @@ namespace Magento\Backend\Model\Config\Backend;
 class Baseurl extends \Magento\Core\Model\Config\Value
 {
     /**
-     * @var \Magento\Core\Model\Page\Asset\MergeService
+     * @var \Magento\View\Asset\MergeService
      */
     protected $_mergeService;
 
@@ -35,7 +35,7 @@ class Baseurl extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\Page\Asset\MergeService $mergeService
+     * @param \Magento\View\Asset\MergeService $mergeService
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -45,7 +45,7 @@ class Baseurl extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\Page\Asset\MergeService $mergeService,
+        \Magento\View\Asset\MergeService $mergeService,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

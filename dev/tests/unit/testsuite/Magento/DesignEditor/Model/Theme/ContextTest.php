@@ -57,8 +57,13 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->_themeFactory = $this->getMock('Magento\Core\Model\ThemeFactory', array('create'), array(), '', false);
 
-        $this->_theme = $this->getMock('Magento\Core\Model\Theme',
-            array('load', 'getId', 'getType', 'getDomainModel', 'isVirtual'), array(), '', false);
+        $this->_theme = $this->getMock(
+            'Magento\Core\Model\Theme',
+            array('load', 'getId', 'getType', 'getDomainModel', 'isVirtual', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_themeFactory->expects($this->any())->method('create')->will($this->returnValue($this->_theme));
 
         $this->_copyService = $this->getMock('Magento\Core\Model\Theme\CopyService', array('copy'), array(), '', false);

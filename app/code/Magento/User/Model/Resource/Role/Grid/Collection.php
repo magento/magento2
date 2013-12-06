@@ -18,22 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_User
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\User\Model\Resource\Role\Grid;
+
+use Magento\User\Model\Acl\Role\Group as RoleGroup;
 
 /**
  * Admin role data grid collection
- *
- * @category    Magento
- * @package     Magento_User
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\User\Model\Resource\Role\Grid;
-
 class Collection extends \Magento\User\Model\Resource\Role\Collection
 {
     /**
@@ -42,7 +37,7 @@ class Collection extends \Magento\User\Model\Resource\Role\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addFieldToFilter('role_type', 'G');
+        $this->addFieldToFilter('role_type', RoleGroup::ROLE_TYPE);
         return $this;
     }
 }

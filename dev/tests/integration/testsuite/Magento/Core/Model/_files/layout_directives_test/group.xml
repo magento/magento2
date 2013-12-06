@@ -24,18 +24,18 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\View\Block\Text" name="block1">
-        <block class="Magento\View\Block\Text" name="block2" group="group1">
+    <block class="Magento\View\Element\Text" name="block1">
+        <block class="Magento\View\Element\Text" name="block2" group="group1">
             <argumrnts>
                 <argument xsi:type="string" name="text">blok2</argument>
             </argumrnts>
         </block>
-        <block class="Magento\View\Block\Text" name="block3" group="group1" >
+        <block class="Magento\View\Element\Text" name="block3" group="group1" >
             <argumrnts>
                 <argument xsi:type="string" name="text">blok3</argument>
             </argumrnts>
         </block>
-        <block class="Magento\View\Block\Text" name="block4">
+        <block class="Magento\View\Element\Text" name="block4">
             <argumrnts>
                 <argument xsi:type="string" name="text">blok4</argument>
             </argumrnts>

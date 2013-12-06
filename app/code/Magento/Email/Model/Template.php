@@ -142,16 +142,16 @@ class Template extends \Magento\Core\Model\Template
 
     /**
      * @param \Magento\Core\Model\Context $context
+     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\FileSystem $viewFileSystem
-     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\ConfigInterface $coreConfig
      * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\Dir $dir
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param array $data
@@ -160,16 +160,16 @@ class Template extends \Magento\Core\Model\Template
      */
     public function __construct(
         \Magento\Core\Model\Context $context,
+        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Filesystem $filesystem,
         \Magento\View\Url $viewUrl,
         \Magento\View\FileSystem $viewFileSystem,
-        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\ConfigInterface $coreConfig,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\Dir $dir,
         \Magento\Email\Model\Template\Config $emailConfig,
         array $data = array()
@@ -182,7 +182,7 @@ class Template extends \Magento\Core\Model\Template
         $this->_emailFilterFactory = $emailFilterFactory;
         $this->_dir = $dir;
         $this->_emailConfig = $emailConfig;
-        parent::__construct($design, $context, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
     }
 
     /**

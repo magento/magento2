@@ -95,25 +95,23 @@ class Flat extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected $_flatIndexerFactory;
 
     /**
-     * Construct
-     *
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\Product\Flat\IndexerFactory $flatIndexerFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Flat\Indexer $catalogProductFlatIndexer
      * @param \Magento\Catalog\Helper\Product\Flat $catalogProductFlat
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
+        \Magento\Core\Model\Context $context,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\Product\Flat\IndexerFactory $flatIndexerFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Flat\Indexer $catalogProductFlatIndexer,
         \Magento\Catalog\Helper\Product\Flat $catalogProductFlat,
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

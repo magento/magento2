@@ -41,18 +41,18 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Sales\Model\Order'))
             ->setTemplate('order/totals.phtml');
 
-        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\Block\Context');
-        $childOne = $this->getMock('Magento\View\Block\Text', array('initTotals'), array($context));
+        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\Element\Context');
+        $childOne = $this->getMock('Magento\View\Element\Text', array('initTotals'), array($context));
         $childOne->expects($this->once())
             ->method('initTotals');
         $layout->addBlock($childOne, 'child1', 'block');
 
-        $childTwo = $this->getMock('Magento\View\Block\Text', array('initTotals'), array($context));
+        $childTwo = $this->getMock('Magento\View\Element\Text', array('initTotals'), array($context));
         $childTwo->expects($this->once())
             ->method('initTotals');
         $layout->addBlock($childTwo, 'child2', 'block');
 
-        $childThree = $this->getMock('Magento\View\Block\Text', array('initTotals'), array($context));
+        $childThree = $this->getMock('Magento\View\Element\Text', array('initTotals'), array($context));
         $childThree->expects($this->once())
             ->method('initTotals');
         $layout->addBlock($childThree, 'child3', 'block');

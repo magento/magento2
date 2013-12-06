@@ -38,18 +38,16 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_registry = $registry;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -61,6 +59,8 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
         $this->_controller = 'adminhtml_integration';
         $this->_blockGroup = 'Magento_Integration';
         parent::_construct();
+        $this->_removeButton('reset');
+        $this->_removeButton('delete');
     }
 
     /**

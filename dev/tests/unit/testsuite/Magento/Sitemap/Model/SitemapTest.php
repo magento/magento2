@@ -106,7 +106,9 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('0.25'));
 
         $this->_resourceMock = $this->getMockBuilder('Magento\Sitemap\Model\Resource\Sitemap')
-            ->setMethods(array('_construct', 'beginTransaction', 'rollBack', 'save', 'addCommitCallback', 'commit'))
+            ->setMethods(array(
+                '_construct', 'beginTransaction', 'rollBack', 'save', 'addCommitCallback', 'commit', '__wakeup'
+            ))
             ->disableOriginalConstructor()
             ->getMock();
         $this->_resourceMock->expects($this->any())

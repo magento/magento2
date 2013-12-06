@@ -29,7 +29,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code;
 
-class Css extends \Magento\View\Block\Template
+class Css extends \Magento\View\Element\Template
 {
     /**
      * Get file groups content

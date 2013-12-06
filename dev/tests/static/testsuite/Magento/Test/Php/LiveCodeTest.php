@@ -70,7 +70,6 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCodeStylePsr2()
     {
-        $this->markTestSkipped('Skipped');
         $reportFile = self::$_reportDir . '/phpcs_psr2_report.xml';
         $wrapper = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper();
         $codeSniffer = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(

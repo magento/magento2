@@ -86,8 +86,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($jsOrder));
         $this->_request->expects($this->once(5))->method('getPost')->will($this->returnValue(true));
 
-        $themeMock = $this->getMock('Magento\Core\Model\Theme',
-            array('save', 'load', 'setCustomization', 'getThemeImage'), array(), '', false);
+        $themeMock = $this->getMock(
+            'Magento\Core\Model\Theme',
+            array('save', 'load', 'setCustomization', 'getThemeImage', '__wakeup'),
+            array(),
+            '',
+            false
+        );
 
         $themeImage = $this->getMock('Magento\Core\Model\Theme\Image', array(), array(), '', false);
         $themeMock->expects($this->any())->method('getThemeImage')->will($this->returnValue($themeImage));

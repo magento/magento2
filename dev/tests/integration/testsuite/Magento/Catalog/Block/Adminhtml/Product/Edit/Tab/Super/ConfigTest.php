@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Core\Model\Registry')
             ->register('current_product', $objectManager->create('Magento\Catalog\Model\Product')->load(1));
-        $objectManager->get('Magento\View\LayoutInterface')->createBlock('Magento\View\Block\Text', 'head');
+        $objectManager->get('Magento\View\LayoutInterface')->createBlock('Magento\View\Element\Text', 'head');
         $usedAttribute = $objectManager->get('Magento\Catalog\Model\Entity\Attribute')->loadByCode(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
                 ->getEntityType('catalog_product')->getId(),

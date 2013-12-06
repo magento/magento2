@@ -49,11 +49,11 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $helperManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
-            ->setMethods(array('getPayment'))
+            ->setMethods(array('getPayment', '__wakeup'))
             ->getMock();
         $this->_paymentMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
             ->disableOriginalConstructor()
-            ->setMethods(array('canVoid'))
+            ->setMethods(array('canVoid', '__wakeup'))
             ->getMock();
 
         $arguments = array(
@@ -94,7 +94,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_orderMock->expects($this->once())->method('getPayment')->will($this->returnValue($this->_paymentMock));
         $this->_paymentMock->expects($this->once())
-            ->method('canVoid')
+            ->method('canVoid', '__wakeup')
             ->with($this->equalTo($this->_model))
             ->will($this->returnValue($canVoid));
 

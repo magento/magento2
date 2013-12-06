@@ -38,21 +38,19 @@ class Info extends \Magento\Payment\Block\Info\Cc
     protected $_paypalInfoFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param \Magento\Paypal\Model\InfoFactory $paypalInfoFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Payment\Model\Config $paymentConfig,
         \Magento\Paypal\Model\InfoFactory $paypalInfoFactory,
         array $data = array()
     ) {
         $this->_paypalInfoFactory = $paypalInfoFactory;
-        parent::__construct($context, $coreData, $paymentConfig, $data);
+        parent::__construct($context, $paymentConfig, $data);
     }
 
     /**

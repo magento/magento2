@@ -43,15 +43,15 @@ class Setup extends \Magento\Core\Model\Resource\Setup
 
     /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param string $resourceName
      * @param \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig
-     * @param $resourceName
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
-        \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig,
         $resourceName,
+        \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig,
         $moduleName = 'Magento_Index',
         $connectionName = ''
     ) {

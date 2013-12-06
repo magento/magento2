@@ -48,12 +48,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\User\Model\User');
         $user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->_collection->setUserFilter($user->getId());
+        $this->_collection->setUserFilter($user->getId(), \Magento\Authz\Model\UserIdentifier::USER_TYPE_ADMIN);
 
         $selectQueryStr = $this->_collection->getSelect()->__toString();
 
         $this->assertContains('user_id', $selectQueryStr);
-        $this->assertContains('role_type', $selectQueryStr);
+        $this->assertContains('user_type', $selectQueryStr);
     }
 
     public function testSetRolesFilter()

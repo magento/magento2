@@ -50,7 +50,7 @@ class Observer
 
     public function unsetAll()
     {
-        $this->_checkoutSession->unsetAll();
+        $this->_checkoutSession->clearQuote()->clearStorage();
     }
 
     public function loadCustomerQuote()

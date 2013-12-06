@@ -129,7 +129,7 @@ class Storage
         );
 
         $result['cookie'] = array(
-            'name'     => $this->_helper->getSession()->getSessionName(),
+            'name'     => $this->_helper->getSession()->getName(),
             'value'    => $this->_helper->getSession()->getSessionId(),
             'lifetime' => $this->_helper->getSession()->getCookieLifetime(),
             'path'     => $this->_helper->getSession()->getCookiePath(),

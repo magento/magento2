@@ -60,7 +60,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->getMock('Magento\Core\Model\Layout', array('getChildName', 'getBlock', 'renderElement'),
             array(), '', false);
-        $context = $this->_objectHelper->getObject('Magento\View\Block\Template\Context', array(
+        $context = $this->_objectHelper->getObject('Magento\View\Element\Template\Context', array(
             'layout' => $layout
         ));
         $optionFactoryMock = $this->getMock('Magento\Catalog\Model\Product\Option\ValueFactory', array('create'),

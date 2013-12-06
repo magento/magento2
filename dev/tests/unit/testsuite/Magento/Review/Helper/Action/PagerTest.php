@@ -52,7 +52,7 @@ class PagerTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock(
             'Magento\App\Helper\Context', array('getTranslator', 'getModuleManager', 'getRequest'), array(), '', false
         );
-        $this->_helper = new \Magento\Review\Helper\Action\Pager($sessionMock, $contextMock);
+        $this->_helper = new \Magento\Review\Helper\Action\Pager($contextMock, $sessionMock);
         $this->_helper->setStorageId('reviews');
     }
 

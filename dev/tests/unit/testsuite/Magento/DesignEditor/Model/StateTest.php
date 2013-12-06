@@ -165,7 +165,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->will($this->returnValue($configMock));
 
-        $this->_theme = $this->getMock('Magento\Core\Model\Theme', array('getId'), array(), '', false);
+        $this->_theme = $this->getMock('Magento\Core\Model\Theme', array('getId', '__wakeup'), array(), '', false);
         $this->_theme->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(self::THEME_ID));

@@ -58,7 +58,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Core\Model\Resource\Db\Collection\AbstractCollection',
-            array($eventManager, $logger, $fetchStrategy, $entityFactory, $resource)
+            array($entityFactory, $logger, $fetchStrategy, $eventManager, null, $resource)
         );
     }
 

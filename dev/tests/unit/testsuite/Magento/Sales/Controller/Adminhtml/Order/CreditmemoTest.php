@@ -100,7 +100,11 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')->will($this->returnValue(null));
 
         $creditmemoMock = $this->getMock(
-            'Magento\Sales\Model\Order\Creditmemo', array('load', 'getGrandTotal'), array(), '', false
+            'Magento\Sales\Model\Order\Creditmemo',
+            array('load', 'getGrandTotal', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $creditmemoMock->expects($this->once())->method('load')
             ->with($this->equalTo($creditmemoId))->will($this->returnSelf());
@@ -131,8 +135,13 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects($this->any())
             ->method('getParam')->will($this->returnValue(null));
 
-        $creditmemoMock = $this->getMock('Magento\Sales\Model\Order\Creditmemo',
-            array('load', 'getGrandTotal', 'getAllowZeroGrandTotal'), array(), '', false);
+        $creditmemoMock = $this->getMock(
+            'Magento\Sales\Model\Order\Creditmemo',
+            array('load', 'getGrandTotal', 'getAllowZeroGrandTotal', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $creditmemoMock->expects($this->once())->method('load')
             ->with($this->equalTo($creditmemoId))->will($this->returnSelf());
         $creditmemoMock->expects($this->once())->method('getGrandTotal')->will($this->returnValue('0'));

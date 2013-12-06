@@ -58,18 +58,16 @@ class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexe
     protected $_eavDecimalFactory;
 
     /**
-     * Class constructor
-     *
+     * @param \Magento\App\Resource $resource
+     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Resource\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory
      * @param \Magento\Catalog\Model\Resource\Product\Indexer\Eav\SourceFactory $eavSourceFactory
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $resource
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
-        \Magento\Catalog\Model\Resource\Product\Indexer\Eav\SourceFactory $eavSourceFactory,
+        \Magento\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource
+        \Magento\Catalog\Model\Resource\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
+        \Magento\Catalog\Model\Resource\Product\Indexer\Eav\SourceFactory $eavSourceFactory
     ) {
         $this->_eavDecimalFactory = $eavDecimalFactory;
         $this->_eavSourceFactory = $eavSourceFactory;

@@ -107,7 +107,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->_helper->initProductLayout($product, $this->_controller);
         $rootBlock = $this->_layout->getBlock('root');
-        $this->assertInstanceOf('Magento\Page\Block\Html', $rootBlock);
+        $this->assertInstanceOf('Magento\Theme\Block\Html', $rootBlock);
         $this->assertContains("product-{$uniqid}", $rootBlock->getBodyClass());
         $handles = $this->_layout->getUpdate()->getHandles();
         $this->assertContains('catalog_product_view_type_simple', $handles);

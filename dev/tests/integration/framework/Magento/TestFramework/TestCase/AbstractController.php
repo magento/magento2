@@ -77,7 +77,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_assertSessionErrors = false;
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();;
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_objectManager->removeSharedInstance('Magento\App\ResponseInterface');
         $this->_objectManager->removeSharedInstance('Magento\App\RequestInterface');
 

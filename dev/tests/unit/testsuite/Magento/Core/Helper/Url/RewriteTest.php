@@ -33,28 +33,6 @@ namespace Magento\Core\Helper\Url;
 class RewriteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Initialize helper
-     */
-    protected function setUp()
-    {
-        $optionsModel = new \Magento\Core\Model\Source\Urlrewrite\Options();
-
-        $coreRegisterMock = $this->getMock('Magento\Core\Model\Registry');
-        $coreRegisterMock->expects($this->any())
-            ->method('registry')
-            ->with('_singleton/Magento_Core_Model_Source_Urlrewrite_Options')
-            ->will($this->returnValue($optionsModel));
-
-        $objectManagerMock = $this->getMockBuilder('Magento\ObjectManager')->getMock();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->with('Magento\Core\Model\Registry')
-            ->will($this->returnValue($coreRegisterMock));
-
-        \Magento\App\ObjectManager::setInstance($objectManagerMock);
-    }
-
-    /**
      * Test hasRedirectOptions
      *
      * @dataProvider redirectOptionsDataProvider

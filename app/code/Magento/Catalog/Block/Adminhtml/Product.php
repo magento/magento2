@@ -49,14 +49,12 @@ class Product extends \Magento\Adminhtml\Block\Widget\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Product\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Product\TypeFactory $typeFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array()
@@ -64,7 +62,7 @@ class Product extends \Magento\Adminhtml\Block\Widget\Container
         $this->_productFactory = $productFactory;
         $this->_typeFactory = $typeFactory;
 
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

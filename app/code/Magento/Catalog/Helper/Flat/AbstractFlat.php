@@ -78,8 +78,6 @@ abstract class AbstractFlat extends \Magento\App\Helper\AbstractHelper
     protected $_isAvailable;
 
     /**
-     * Construct
-     *
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param bool $isAvailable

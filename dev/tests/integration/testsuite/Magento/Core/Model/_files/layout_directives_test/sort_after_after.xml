@@ -25,17 +25,17 @@
 -->
 <layout>
     <container name="root" label="Root">
-        <block class="Magento\View\Block\Text" name="element1" after="element3">
+        <block class="Magento\View\Element\Text" name="element1" after="element3">
             <action method="setText">
                 <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="text" xsi:type="string">1</argument>
             </action>
         </block>
-        <block class="Magento\View\Block\Text" name="element2" after="element1">
+        <block class="Magento\View\Element\Text" name="element2" after="element1">
             <action method="setText">
                 <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="text" xsi:type="string">2</argument>
             </action>
         </block>
-        <block class="Magento\View\Block\Text" name="element3" after="element_non_existing">
+        <block class="Magento\View\Element\Text" name="element3" after="element_non_existing">
             <action method="setText">
                 <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="text" xsi:type="string">3</argument>
             </action>

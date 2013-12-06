@@ -44,7 +44,6 @@ class Conditions
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Rule\Block\Conditions $conditions
@@ -53,7 +52,6 @@ class Conditions
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Rule\Block\Conditions $conditions,
@@ -62,7 +60,7 @@ class Conditions
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**

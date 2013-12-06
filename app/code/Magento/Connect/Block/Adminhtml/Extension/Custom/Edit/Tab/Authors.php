@@ -33,9 +33,36 @@
  */
 namespace Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab;
 
+use Magento\Backend\Block\Widget\Form\Generic;
+
 class Authors
     extends \Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab\AbstractTab
 {
+    /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Connect\Model\Session $session
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
+        \Magento\Connect\Model\Session $session,
+        \Magento\Json\EncoderInterface $jsonEncoder,
+        array $data = array()
+    ) {
+        $this->_jsonEncoder = $jsonEncoder;
+        parent::__construct($context, $registry, $formFactory, $session, $data);
+    }
+
     /**
      * Get Tab Label
      *
@@ -89,7 +116,7 @@ class Authors
                 }
             }
             foreach ($temp as $key => $value) {
-                $authors[$key] = $this->_coreData->jsonEncode($value);
+                $authors[$key] = $this->_jsonEncoder->encode($value);
             }
         }
         return $authors;

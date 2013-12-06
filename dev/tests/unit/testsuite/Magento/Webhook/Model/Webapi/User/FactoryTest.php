@@ -181,7 +181,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         // Mock Role
         $this->_mockRole = $this->getMockBuilder('Magento\Webapi\Model\Acl\Role')
-            ->setMethods(array('load', 'save', 'getId', 'setRoleName', 'delete'))
+            ->setMethods(array('load', 'save', 'getId', 'setRoleName', 'delete', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
         $this->_mockRole->expects($this->once())
@@ -202,7 +202,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         // Mock Rule
         $this->_mockRule = $this->getMockBuilder('Magento\Webapi\Model\Acl\Rule')
             ->disableOriginalConstructor()
-            ->setMethods(array('setRoleId', 'setResources', 'saveResources'))
+            ->setMethods(array('setRoleId', 'setResources', 'saveResources', '__wakeup'))
             ->getMock();
         $this->_mockRule->expects($this->once())
             ->method('setRoleId')
@@ -220,9 +220,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         // Mock User
         $this->_mockUser = $this->getMockBuilder('Magento\Webapi\Model\Acl\User')
             ->disableOriginalConstructor()
-            ->setMethods(
-                array('setRoleId', 'setApiKey', 'setSecret', 'setCompanyName', 'setContactEmail', 'save', 'getId')
-            )
+            ->setMethods(array(
+                    'setRoleId', 'setApiKey', 'setSecret', 'setCompanyName', 'setContactEmail', 'save', 'getId',
+                    '__wakeup'
+            ))
             ->getMock();
         $this->_mockUser->expects($this->once())
             ->method('setRoleId')

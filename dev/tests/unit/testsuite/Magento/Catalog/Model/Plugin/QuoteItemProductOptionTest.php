@@ -64,7 +64,13 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
         $this->_invocationChainMock->expects($this->once())->method('proceed')
             ->will($this->returnValue($this->_orderItemMock));
 
-        $itemOption = $this->getMock('Magento\Sales\Model\Quote\Item\Option', array('getCode'), array(), '', false);
+        $itemOption = $this->getMock(
+            'Magento\Sales\Model\Quote\Item\Option',
+            array('getCode', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_quoteItemMock->expects($this->exactly(2))->method('getOptions')
             ->will($this->returnValue(array($itemOption, $itemOption)));
 

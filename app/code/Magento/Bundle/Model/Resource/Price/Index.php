@@ -90,24 +90,22 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * Class constructor
-     *
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $catalogRuleFactory
      * @param \Magento\Customer\Model\GroupFactory $customerGroup
      * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\App\Resource $resource
      */
     public function __construct(
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\CatalogRule\Model\Resource\RuleFactory $catalogRuleFactory,
         \Magento\Customer\Model\GroupFactory $customerGroup,
         \Magento\Catalog\Model\Config $config,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\App\Resource $resource
+        \Magento\Event\ManagerInterface $eventManager
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($resource);

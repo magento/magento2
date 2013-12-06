@@ -39,13 +39,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_locale;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Core\Model\LocaleInterface $locale
      */
-    public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\App\Helper\Context $context
-    ) {
+    public function __construct(\Magento\App\Helper\Context $context, \Magento\Core\Model\LocaleInterface $locale)
+    {
         $this->_locale = $locale;
         parent::__construct($context);
     }

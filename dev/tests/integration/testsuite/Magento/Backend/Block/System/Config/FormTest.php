@@ -78,8 +78,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /** @var $block \Magento\Backend\Block\System\Config\Form */
         $block = $layout->createBlock('Magento\Backend\Block\System\Config\Form', 'block');
 
-        /** @var $childBlock \Magento\View\Block\Text */
-        $childBlock = $layout->addBlock('Magento\View\Block\Text', 'element_dependence', 'block');
+        /** @var $childBlock \Magento\View\Element\Text */
+        $childBlock = $layout->addBlock('Magento\View\Element\Text', 'element_dependence', 'block');
 
         $expectedValue = 'dependence_html_relations';
         $this->assertNotContains($expectedValue, $block->toHtml());

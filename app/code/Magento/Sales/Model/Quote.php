@@ -285,11 +285,10 @@ class Quote extends \Magento\Core\Model\AbstractModel
     protected $_objectCopyService;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Helper\Data $salesData
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Sales\Helper\Data $salesData
+     * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Config $config
@@ -308,14 +307,12 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Sales\Helper\Data $salesData,
-        \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Sales\Helper\Data $salesData,
+        \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Config $config,

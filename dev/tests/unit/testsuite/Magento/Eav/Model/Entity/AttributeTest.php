@@ -37,7 +37,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMock('Magento\Eav\Model\Entity\Attribute', null, array(), '', false);
+        $this->_model = $this->getMock('Magento\Eav\Model\Entity\Attribute', array('__wakeup'), array(), '', false);
     }
 
     protected function tearDown()

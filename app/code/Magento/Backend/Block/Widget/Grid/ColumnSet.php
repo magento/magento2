@@ -34,7 +34,7 @@ namespace Magento\Backend\Block\Widget\Grid;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ColumnSet extends \Magento\View\Block\Template
+class ColumnSet extends \Magento\View\Element\Template
 {
     /**
      * @var \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
@@ -120,16 +120,14 @@ class ColumnSet extends \Magento\View\Block\Template
     protected $_totals = null;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory $generatorFactory
      * @param \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals
      * @param \Magento\Backend\Model\Widget\Grid\Totals $totals
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory $generatorFactory,
         \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals,
         \Magento\Backend\Model\Widget\Grid\Totals $totals,
@@ -149,7 +147,7 @@ class ColumnSet extends \Magento\View\Block\Template
             array_key_exists('filter_visibility', $data) ? (bool) $data['filter_visibility'] : true
         );
 
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
 
         $this->setEmptyText(__(
             isset($data['empty_text'])? $data['empty_text'] : 'We couldn\'t find any records.'
@@ -242,7 +240,7 @@ class ColumnSet extends \Magento\View\Block\Template
     /**
      * Prepare block for rendering
      *
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _beforeToHtml()
     {

@@ -77,7 +77,9 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\TestFramework\Helper\ObjectManager $objectManagerHelper */
         $this->_objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_setMageObjectManager();
+        $this->_mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_mockBackendHlpData = $this->getMockBuilder('Magento\Backend\Helper\Data')
             ->disableOriginalConstructor()
@@ -297,18 +299,6 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Makes sure that Mage has a mock object manager set.
-     *
-     */
-    protected function _setMageObjectManager()
-    {
-        $this->_mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        \Magento\App\ObjectManager::setInstance($this->_mockObjectManager);
-    }
-
-    /**
      * Creates the RegistrationController to test.
      * @return \Magento\Webhook\Controller\Adminhtml\Webhook\Registration
      */
@@ -324,7 +314,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         $layoutMock->expects($this->any())->method('getUpdate')->will($this->returnValue($layoutMergeMock));
         $testElement = new \Magento\Simplexml\Element('<test>test</test>');
         $layoutMock->expects($this->never())->method('getNode')->will($this->returnValue($testElement));
-        $blockMock = $this->getMockBuilder('Magento\View\Block\AbstractBlock')
+        $blockMock = $this->getMockBuilder('Magento\View\Element\AbstractBlock')
             ->disableOriginalConstructor()
             ->getMock();
         $layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));

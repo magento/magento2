@@ -29,9 +29,9 @@
     <?php $_isRequired = $this->getLinkSelectionRequired(); ?>
     <div class="field downloads<?php if ($_isRequired) echo ' required' ?>">
         <label class="label"><span><?php echo $this->getLinksTitle() ?></span></label>
-        <div class="control" id="downloadable-links-list">
+        <div class="control" id="downloadable-links-list" data-container-for="downloadable-links">
             <?php foreach ($_links as $_link): ?>
-                <div class="field choice">
+                <div class="field choice" data-role="link">
                     <?php if ($_linksPurchasedSeparately): ?>
                         <input type="checkbox"
                                <?php if ($_isRequired): ?>data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}" <?php endif; ?>

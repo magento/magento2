@@ -50,21 +50,19 @@ class Unitofmeasure extends \Magento\Backend\Block\System\Config\Form\Field
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Usa\Model\Shipping\Carrier\Dhl\International $shippingDhl
      * @param \Magento\Usa\Helper\Data $usaData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Usa\Model\Shipping\Carrier\Dhl\International $shippingDhl,
         \Magento\Usa\Helper\Data $usaData,
         array $data = array()
     ) {
         $this->_shippingDhl = $shippingDhl;
         $this->_usaData = $usaData;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

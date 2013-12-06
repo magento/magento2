@@ -68,11 +68,8 @@ class Observer
             return;
         }
 
-        /** @var $page \Magento\Core\Model\Page */
-        $page = $this->_objectManager->get('Magento\Core\Model\Page');
-
-        /** @var $pageAssets \Magento\Page\Model\Asset\GroupedCollection */
-        $pageAssets = $page->getAssets();
+        /** @var $pageAssets \Magento\View\Asset\GroupedCollection */
+        $pageAssets = $this->_objectManager->get('Magento\View\Asset\GroupedCollection');
 
         $vdeAssets = array();
         foreach ($pageAssets->getGroups() as $group) {
@@ -81,7 +78,7 @@ class Observer
             }
         }
 
-        /** @var $nonVdeAssets \Magento\Core\Model\Page\Asset\AssetInterface[] */
+        /** @var $nonVdeAssets \Magento\View\Asset\AssetInterface[] */
         $nonVdeAssets = array_diff_key($pageAssets->getAll(), $vdeAssets);
 
         foreach ($nonVdeAssets as $assetId => $asset) {

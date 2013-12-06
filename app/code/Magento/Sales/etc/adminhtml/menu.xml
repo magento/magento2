@@ -27,7 +27,7 @@
 -->
 <config>
     <menu>
-        <add id="Magento_Sales::sales" title="Sales" module="Magento_Sales" sortOrder="10" dependsOnModule="Magento_Sales" resource="Magento_Sales::sales"/>
+        <add id="Magento_Sales::sales" title="Sales" module="Magento_Sales" sortOrder="15" dependsOnModule="Magento_Sales" resource="Magento_Sales::sales"/>
         <add id="Magento_Sales::sales_operation" title="Operations" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales" resource="Magento_Sales::sales_operation" />
         <add id="Magento_Sales::sales_order" title="Orders" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales_operation" action="sales/order" resource="Magento_Sales::sales_order"/>
         <add id="Magento_Sales::sales_invoice" title="Invoices" module="Magento_Sales" sortOrder="20" parent="Magento_Sales::sales_operation" action="sales/invoice" resource="Magento_Sales::sales_invoice"/>

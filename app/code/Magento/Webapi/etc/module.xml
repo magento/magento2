@@ -36,6 +36,7 @@
             <module name="Magento_Integration"/>
             <module name="Magento_Service"/>
             <module name="Magento_Backend"/>
+            <module name="Magento_User"/>
         </depends>
     </module>
 </config>

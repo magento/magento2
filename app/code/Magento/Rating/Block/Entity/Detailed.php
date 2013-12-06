@@ -33,7 +33,7 @@
  */
 namespace Magento\Rating\Block\Entity;
 
-class Detailed extends \Magento\View\Block\Template
+class Detailed extends \Magento\View\Element\Template
 {
     /**
      * @var string
@@ -46,19 +46,17 @@ class Detailed extends \Magento\View\Block\Template
     protected $_ratingFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         array $data = array()
     ) {
         $this->_ratingFactory = $ratingFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

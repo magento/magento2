@@ -62,7 +62,6 @@ class Form extends \Magento\Adminhtml\Block\Urlrewrite\Edit\Form
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\Source\Urlrewrite\TypesFactory $typesFactory
@@ -79,7 +78,6 @@ class Form extends \Magento\Adminhtml\Block\Urlrewrite\Edit\Form
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\Source\Urlrewrite\TypesFactory $typesFactory,
@@ -97,7 +95,6 @@ class Form extends \Magento\Adminhtml\Block\Urlrewrite\Edit\Form
         $this->_catalogUrl = $catalogUrl;
         parent::__construct(
             $context,
-            $coreData,
             $registry,
             $formFactory,
             $typesFactory,

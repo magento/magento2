@@ -55,8 +55,7 @@ class ColumnSet
     protected $_productType;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory $generatorFactory
      * @param \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals
      * @param \Magento\Backend\Model\Widget\Grid\Totals $totals
@@ -65,8 +64,7 @@ class ColumnSet
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory $generatorFactory,
         \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals,
         \Magento\Backend\Model\Widget\Grid\Totals $totals,
@@ -74,7 +72,7 @@ class ColumnSet
         \Magento\Core\Model\Registry $registryManager,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $generatorFactory, $subtotals, $totals, $data);
+        parent::__construct($context, $generatorFactory, $subtotals, $totals, $data);
 
         $this->_registryManager = $registryManager;
         $this->_productType = $productType;

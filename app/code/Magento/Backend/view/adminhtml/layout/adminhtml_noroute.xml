@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="content">
-        <block class="Magento\View\Block\Text" name="content.noRoute">
+        <block class="Magento\View\Element\Text" name="content.noRoute">
             <action method="setText">
                 <argument translate="true" name="text" xsi:type="string">
                     <![CDATA[<h1 class="page-heading">404 Error</h1><p>Page not found.</p>]]>

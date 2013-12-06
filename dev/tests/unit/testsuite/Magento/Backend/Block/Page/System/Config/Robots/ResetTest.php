@@ -38,39 +38,21 @@ class ResetTest extends \PHPUnit_Framework_TestCase
     private $_resetRobotsBlock;
 
     /**
-     * @var \Magento\Page\Helper\Robots|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Core\Model\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $_mockRobotsHelper;
+    protected $coreConfigMock;
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
-        $this->_mockRobotsHelper = $this->getMock('Magento\Page\Helper\Robots',
-            array('getRobotsDefaultCustomInstructions'), array(), '', false, false
+        $this->coreConfigMock = $this->getMock(
+            'Magento\Core\Model\Config', array('getValue'), array(), '', false
         );
 
-        $this->_resetRobotsBlock = $objectManagerHelper->getObject(
-            'Magento\Backend\Block\Page\System\Config\Robots\Reset',
-            array(
-                'pageRobots' => $this->_mockRobotsHelper,
-                'coreData' => $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-                'application' => $this->getMock('Magento\Core\Model\App', array(), array(), '', false),
-            )
+        $this->_resetRobotsBlock = new Reset(
+            $this->getMock('Magento\Backend\Block\Template\Context', array(), array(), '', false),
+            $this->coreConfigMock,
+            array()
         );
-
-        $coreRegisterMock = $this->getMock('Magento\Core\Model\Registry');
-        $coreRegisterMock->expects($this->any())
-            ->method('registry')
-            ->with('_helper/\Magento\Page\Helper\Robots')
-            ->will($this->returnValue($this->_mockRobotsHelper));
-
-        $objectManagerMock = $this->getMockBuilder('Magento\ObjectManager')->getMock();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->with('Magento\Core\Model\Registry')
-            ->will($this->returnValue($coreRegisterMock));
-        \Magento\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     /**
@@ -79,8 +61,8 @@ class ResetTest extends \PHPUnit_Framework_TestCase
     public function testGetRobotsDefaultCustomInstructions()
     {
         $expectedInstructions = 'User-agent: *';
-        $this->_mockRobotsHelper->expects($this->once())
-            ->method('getRobotsDefaultCustomInstructions')
+        $this->coreConfigMock->expects($this->once())
+            ->method('getValue')
             ->will($this->returnValue($expectedInstructions));
         $this->assertEquals($expectedInstructions, $this->_resetRobotsBlock->getRobotsDefaultCustomInstructions());
     }

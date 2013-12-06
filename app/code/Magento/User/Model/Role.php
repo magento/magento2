@@ -18,11 +18,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_User
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\User\Model;
 
 /**
  * Admin Role Model
@@ -39,35 +39,30 @@
  * @method \Magento\User\Model\Role setRoleType(string $value)
  * @method int getUserId()
  * @method \Magento\User\Model\Role setUserId(int $value)
+ * @method string getUserType()
+ * @method \Magento\User\Model\Role setUserType(string $value)
  * @method string getRoleName()
  * @method \Magento\User\Model\Role setRoleName(string $value)
- *
- * @category    Magento
- * @package     Magento_User
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\User\Model;
-
 class Role extends \Magento\Core\Model\AbstractModel
 {
-
     /**
      * @var \Magento\User\Model\Resource\Role\User\CollectionFactory
      */
     protected $_userRolesFactory;
 
     /**
-     * @param \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory
      * @param \Magento\User\Model\Resource\Role $resource
      * @param \Magento\User\Model\Resource\Role\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory,
         \Magento\User\Model\Resource\Role $resource,
         \Magento\User\Model\Resource\Role\Collection $resourceCollection,
         array $data = array()

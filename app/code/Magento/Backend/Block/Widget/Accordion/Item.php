@@ -64,7 +64,7 @@ class Item extends \Magento\Backend\Block\Widget
         if (is_string($content)) {
             return $content;
         }
-        if ($content instanceof \Magento\View\Block\AbstractBlock) {
+        if ($content instanceof \Magento\View\Element\AbstractBlock) {
             return $content->toHtml();
         }
         return null;

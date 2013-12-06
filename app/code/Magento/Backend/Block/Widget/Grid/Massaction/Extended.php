@@ -60,19 +60,25 @@ class Extended extends \Magento\Backend\Block\Widget
     protected $_backendData = null;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Helper\Data $backendData,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_backendData = $backendData;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -92,7 +98,7 @@ class Extended extends \Magento\Backend\Block\Widget
      *      'complete' => string, // Only for ajax enabled grid (optional)
      *      'url'      => string,
      *      'confirm'  => string, // text of confirmation of this action (optional)
-     *      'additional' => string|array|\Magento\View\Block\AbstractBlock // (optional)
+     *      'additional' => string|array|\Magento\View\Element\AbstractBlock // (optional)
      * );
      *
      * @param string $itemId
@@ -151,7 +157,7 @@ class Extended extends \Magento\Backend\Block\Widget
             $result[$itemId] = $item->toArray();
         }
 
-        return $this->_coreData->jsonEncode($result);
+        return $this->_jsonEncoder->encode($result);
     }
 
     /**

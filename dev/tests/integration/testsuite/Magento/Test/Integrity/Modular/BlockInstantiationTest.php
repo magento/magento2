@@ -83,7 +83,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                     continue;
                 }
                 $class = new \ReflectionClass($blockClass);
-                if ($class->isAbstract() || !$class->isSubclassOf('Magento\View\Block\Template')) {
+                if ($class->isAbstract() || !$class->isSubclassOf('Magento\View\Element\Template')) {
                     continue;
                 }
                 $templateBlocks = $this->_addBlock($module, $blockClass, $class, $templateBlocks);

@@ -46,8 +46,6 @@ app/code/Magento/Core/Model/Layout/Update.php
 app/code/Magento/Core/Model/Layout/Argument
 app/code/Magento/Core/Model/Locale/Validator.php
 app/code/Magento/Core/Model/LocaleInterface.php
-app/code/Magento/Core/Model/Page
-app/code/Magento/Core/Model/Page.php
 app/code/Magento/Core/Model/Resource/Theme
 app/code/Magento/Core/Model/Resource/Theme.php
 app/code/Magento/Core/Model/Session/Validator.php
@@ -98,10 +96,7 @@ app/code/Magento/Log/Model/Resource/Helper.php
 app/code/Magento/Log/Model/Resource/Shell.php
 app/code/Magento/Log/Model/Shell.php
 app/code/Magento/Log/Model/Shell
-app/code/Magento/Page/Block/Html/Head
-app/code/Magento/Page/Block/Link{,.php,s.php}
-app/code/Magento/Page/Helper/Robots.php
-app/code/Magento/Page/Model/Asset
+app/code/Magento/Theme/Block/Html/Head
 app/code/Magento/PageCache/Model/CacheControlFactory.php
 app/code/Magento/ProductAlert/Block/Product/View
 app/code/Magento/Reports/Block/Adminhtml/Customer
@@ -120,6 +115,7 @@ app/code/Magento/Sales/Block/Recurring/Profile/View
 app/code/Magento/Sales/Model/Order/Pdf/Config
 app/code/Magento/Sales/Model/Order/Pdf/Config.php
 app/code/Magento/Sales/Model/Order/Pdf/Total/Factory.php
+app/code/Magento/Sales/Model/Observer
 app/code/Magento/SalesRule/Model/Plugin
 app/code/Magento/Theme
 app/code/Magento/Webapi

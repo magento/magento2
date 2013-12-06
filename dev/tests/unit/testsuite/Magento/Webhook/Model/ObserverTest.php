@@ -71,7 +71,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $mockSubscription = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
             ->disableOriginalConstructor()
-            ->setMethods(array('setStatus', 'save'))
+            ->setMethods(array('setStatus', 'save', '__wakeup'))
             ->getMock();
 
         $this->_subscriptionSet->expects($this->once())
@@ -98,7 +98,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $mockSubscription = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
             ->disableOriginalConstructor()
-            ->setMethods(array('setStatus', 'save'))
+            ->setMethods(array('setStatus', 'save', '__wakeup'))
             ->getMock();
 
         $this->_subscriptionSet->expects($this->once())

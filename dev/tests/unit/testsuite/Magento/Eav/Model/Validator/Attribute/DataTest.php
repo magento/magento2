@@ -344,7 +344,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _getAttributeMock($attributeData)
     {
         $attribute = $this->getMockBuilder('Magento\Eav\Model\Attribute')
-            ->setMethods(array('getAttributeCode', 'getDataModel', 'getFrontendInput'))
+            ->setMethods(array('getAttributeCode', 'getDataModel', 'getFrontendInput', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
         if (isset($attributeData['attribute_code'])) {
@@ -407,7 +407,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _getEntityMock()
     {
         $entity = $this->getMockBuilder('Magento\Core\Model\AbstractModel')
-            ->setMethods(array('getAttribute', 'getResource', 'getEntityType'))
+            ->setMethods(array('getAttribute', 'getResource', 'getEntityType', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
         return $entity;

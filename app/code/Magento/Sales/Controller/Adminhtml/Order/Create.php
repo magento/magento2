@@ -352,7 +352,7 @@ class Create extends \Magento\Backend\App\Action
 
     public function reorderAction()
     {
-        $this->_getSession()->clear();
+        $this->_getSession()->clearStorage();
         $orderId = $this->getRequest()->getParam('order_id');
         $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
         if (!$this->_objectManager->get('Magento\Sales\Helper\Reorder')->canReorder($order)) {
@@ -464,7 +464,7 @@ class Create extends \Magento\Backend\App\Action
      */
     public function startAction()
     {
-        $this->_getSession()->clear();
+        $this->_getSession()->clearStorage();
         $this->_redirect('sales/*', array('customer_id' => $this->getRequest()->getParam('customer_id')));
     }
 
@@ -474,12 +474,12 @@ class Create extends \Magento\Backend\App\Action
     public function cancelAction()
     {
         if ($orderId = $this->_getSession()->getReordered()) {
-            $this->_getSession()->clear();
+            $this->_getSession()->clearStorage();
             $this->_redirect('sales/order/view', array(
                 'order_id'=>$orderId
             ));
         } else {
-            $this->_getSession()->clear();
+            $this->_getSession()->clearStorage();
             $this->_redirect('sales/*');
         }
 
@@ -508,7 +508,7 @@ class Create extends \Magento\Backend\App\Action
                 ->importPostData($this->getRequest()->getPost('order'))
                 ->createOrder();
 
-            $this->_getSession()->clear();
+            $this->_getSession()->clearStorage();
             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(__('You created the order.'));
             if ($this->_authorization->isAllowed('Magento_Sales::actions_view')) {
                 $this->_redirect('sales/order/view', array('order_id' => $order->getId()));

@@ -78,24 +78,24 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_productFactory;
 
     /**
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory
      * @param \Magento\GoogleShopping\Model\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param array $data
      */
     public function __construct(
+        \Magento\Core\Model\Context $context,
+        \Magento\Core\Model\Registry $registry,
         \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory,
         \Magento\GoogleShopping\Model\TypeFactory $typeFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Core\Model\Resource\AbstractResource $resource,
+        \Magento\Data\Collection\Db $resourceCollection,
         \Magento\GoogleShopping\Model\Config $config,
         array $data = array()
     ) {

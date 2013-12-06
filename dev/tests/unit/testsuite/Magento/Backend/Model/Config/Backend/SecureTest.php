@@ -45,7 +45,7 @@ class SecureTest extends \PHPUnit_Framework_TestCase
             ->method('addCommitCallback')
             ->will($this->returnValue($resource));
         $resourceCollection = $this->getMock('Magento\Data\Collection\Db', array(), array(), '', false);
-        $mergeService = $this->getMock('Magento\Core\Model\Page\Asset\MergeService', array(), array(), '', false);
+        $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
         $coreConfig = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false);
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);

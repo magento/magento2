@@ -57,6 +57,7 @@
                         <argument name="required" xsi:type="string">0</argument>
                         <argument name="value" xsi:type="string">
                             <updater>Magento\Webapi\Model\Acl\User\RoleUpdater</updater>
+                            <value/>
                         </argument>
                     </arguments>
                 </block>

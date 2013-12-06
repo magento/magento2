@@ -28,7 +28,7 @@ namespace Magento\Backend\Block;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Context extends \Magento\View\Block\Context
+class Context extends \Magento\View\Element\Context
 {
     /**
      * @var \Magento\AuthorizationInterface
@@ -44,6 +44,7 @@ class Context extends \Magento\View\Block\Context
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\FrontController $frontController
      * @param \Magento\App\Helper\HelperFactory $helperFactory
@@ -57,7 +58,7 @@ class Context extends \Magento\View\Block\Context
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -69,6 +70,7 @@ class Context extends \Magento\View\Block\Context
         \Magento\App\CacheInterface $cache,
         \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Session\AbstractSession $session,
+        \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\App\FrontController $frontController,
         \Magento\App\Helper\HelperFactory $helperFactory,
@@ -84,9 +86,28 @@ class Context extends \Magento\View\Block\Context
         array $data = array()
     ) {
         $this->_authorization = $authorization;
-        parent::__construct($request, $layout, $eventManager, $urlBuilder, $translator, $cache, $design,
-            $session, $storeConfig, $frontController, $helperFactory, $viewUrl, $viewConfig, $cacheState, $logger, $app,
-            $escaper, $filterManager, $locale, $data
+        parent::__construct(
+            $request,
+            $layout,
+            $eventManager,
+            $urlBuilder,
+            $translator,
+            $cache,
+            $design,
+            $session,
+            $sidResolver,
+            $storeConfig,
+            $frontController,
+            $helperFactory,
+            $viewUrl,
+            $viewConfig,
+            $cacheState,
+            $logger,
+            $app,
+            $escaper,
+            $filterManager,
+            $locale,
+            $data
         );
     }
 

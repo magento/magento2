@@ -25,6 +25,7 @@
 -->
 <config>
     <type name="Magento\User\Model\Role" shared="false" />
+    <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <type name="Magento\User\Model\Resource\Rules">
         <param name="rootResource">
             <instance type="Magento\Core\Model\Acl\RootResource\Proxy" />
@@ -43,6 +44,14 @@
             <value>
                 <user_setup>Magento\User\Model\Resource\Setup</user_setup>
             </value>
+        </param>
+    </type>
+    <type name="Magento\Acl\Builder">
+        <param name="ruleLoader">
+            <instance type="Magento\User\Model\Acl\Loader\Rule" />
+        </param>
+        <param name="roleLoader">
+            <instance type="Magento\User\Model\Acl\Loader\Role" />
         </param>
     </type>
 </config>

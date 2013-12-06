@@ -30,7 +30,6 @@ use Magento\Core\Exception;
 use Magento\App\State;
 use Magento\Core\Model\AppInterface;
 use Magento\Core\Model\Config;
-use Magento\Core\Model\Cookie;
 use Magento\Core\Model\Store;
 use Magento\Core\Model\Store\StorageInterface;
 use Magento\Core\Model\Store\Group;
@@ -164,7 +163,7 @@ class Db implements StorageInterface
      * @param Website\Factory $websiteFactory
      * @param Group\Factory $groupFactory
      * @param Config $config
-     * @param Cookie $cookie
+     * @param \Magento\Stdlib\Cookie $cookie
      * @param State $appState
      * @param \Magento\Backend\Model\Url $url
      * @param $isSingleStoreAllowed
@@ -177,7 +176,7 @@ class Db implements StorageInterface
         \Magento\Core\Model\Website\Factory $websiteFactory,
         \Magento\Core\Model\Store\Group\Factory $groupFactory,
         \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\Cookie $cookie,
+        \Magento\Stdlib\Cookie $cookie,
         \Magento\App\State $appState,
         \Magento\Backend\Model\Url $url,
         $isSingleStoreAllowed,
@@ -291,7 +290,7 @@ class Db implements StorageInterface
         if ($this->_currentStore == $store) {
             $store = $this->getStore($store);
             if ($store->getWebsite()->getDefaultStore()->getId() == $store->getId()) {
-                $this->_cookie->delete(Store::COOKIE_NAME);
+                $this->_cookie->set(Store::COOKIE_NAME, null);
             } else {
                 $this->_cookie->set(Store::COOKIE_NAME, $this->_currentStore, true);
             }

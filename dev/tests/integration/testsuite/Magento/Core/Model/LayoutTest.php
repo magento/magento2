@@ -87,7 +87,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testDestructor()
     {
-        $this->_layout->addBlock('Magento\View\Block\Text', 'test');
+        $this->_layout->addBlock('Magento\View\Element\Text', 'test');
         $this->assertNotEmpty($this->_layout->getAllBlocks());
         $this->_layout->__destruct();
         $this->assertEmpty($this->_layout->getAllBlocks());
@@ -126,11 +126,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $this->_layout->setXml(simplexml_load_string(
             '<layout>
-                <block class="Magento\View\Block\Text" name="block1">
-                    <block class="Magento\View\Block\Text"/>
+                <block class="Magento\View\Element\Text" name="block1">
+                    <block class="Magento\View\Element\Text"/>
                 </block>
-                <block class="Magento\View\Block\Text" template="test"/>
-                <block class="Magento\View\Block\Text"/>
+                <block class="Magento\View\Element\Text" template="test"/>
+                <block class="Magento\View\Element\Text"/>
             </layout>',
             'Magento\View\Layout\Element'
         ));
@@ -149,14 +149,17 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $name = 'test';
         $this->_layout->addContainer($name, 'Test', array('option1' => 1, 'option2' => 2));
         $this->assertEquals('Test', $this->_layout->getElementProperty(
-            $name, \Magento\Core\Model\Layout::CONTAINER_OPT_LABEL
+            $name, \Magento\View\Layout\Element::CONTAINER_OPT_LABEL
         ));
-        $this->assertEquals(\Magento\Core\Model\Layout::TYPE_CONTAINER,
+        $this->assertEquals(\Magento\View\Layout\Element::TYPE_CONTAINER,
             $this->_layout->getElementProperty($name, 'type'));
         $this->assertSame(2, $this->_layout->getElementProperty($name, 'option2'));
 
-        $this->_layout->addBlock('Magento\View\Block\Text', 'text', $name);
-        $this->assertEquals(\Magento\Core\Model\Layout::TYPE_BLOCK, $this->_layout->getElementProperty('text', 'type'));
+        $this->_layout->addBlock('Magento\View\Element\Text', 'text', $name);
+        $this->assertEquals(
+            \Magento\View\Layout\Element::TYPE_BLOCK,
+            $this->_layout->getElementProperty('text', 'type')
+        );
         $this->assertSame(array('text' => 'text'), $this->_layout->getElementProperty(
             $name, \Magento\Data\Structure::CHILDREN
         ));
@@ -170,7 +173,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_layout->isBlock('container'));
         $this->assertFalse($this->_layout->isBlock('block'));
         $this->_layout->addContainer('container', 'Container');
-        $this->_layout->addBlock('Magento\View\Block\Text', 'block');
+        $this->_layout->addBlock('Magento\View\Element\Text', 'block');
         $this->assertFalse($this->_layout->isBlock('container'));
         $this->assertTrue($this->_layout->isBlock('block'));
     }
@@ -178,7 +181,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testSetUnsetBlock()
     {
         $expectedBlockName = 'block_' . __METHOD__;
-        $expectedBlock = $this->_layout->createBlock('Magento\View\Block\Text');
+        $expectedBlock = $this->_layout->createBlock('Magento\View\Element\Text');
 
         $this->_layout->setBlock($expectedBlockName, $expectedBlock);
         $this->assertSame($expectedBlock, $this->_layout->getBlock($expectedBlockName));
@@ -206,16 +209,16 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'named block' => array(
-                'Magento\View\Block\Template',
+                'Magento\View\Element\Template',
                 'some_block_name_full_class',
-                array('type' => 'Magento\View\Block\Template', 'is_anonymous' => false),
+                array('type' => 'Magento\View\Element\Template', 'is_anonymous' => false),
                 '/^some_block_name_full_class$/'
             ),
             'no name block' => array(
-                'Magento\View\Block\Text\ListText',
+                'Magento\View\Element\Text\ListText',
                 '',
                 array(
-                    'type' => 'Magento\View\Block\Text\ListText',
+                    'type' => 'Magento\View\Element\Text\ListText',
                     'key1' => 'value1',
                 ),
                 '/text\\\\list/'
@@ -242,9 +245,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testAddBlock()
     {
-        $this->assertInstanceOf('Magento\View\Block\Text', $this->_layout->addBlock('Magento\View\Block\Text',
+        $this->assertInstanceOf('Magento\View\Element\Text', $this->_layout->addBlock('Magento\View\Element\Text',
             'block1'));
-        $block2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\Block\Text');
+        $block2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\Element\Text');
         $block2->setNameInLayout('block2');
         $this->_layout->addBlock($block2, '', 'block1');
 
@@ -305,7 +308,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetChildBlock()
     {
         $this->_layout->addContainer('parent', 'Parent');
-        $block = $this->_layout->addBlock('Magento\View\Block\Text', 'block', 'parent', 'block_alias');
+        $block = $this->_layout->addBlock('Magento\View\Element\Text', 'block', 'parent', 'block_alias');
         $this->_layout->addContainer('container', 'Container', array(), 'parent', 'container_alias');
         $this->assertSame($block, $this->_layout->getChildBlock('parent', 'block_alias'));
         $this->assertFalse($this->_layout->getChildBlock('parent', 'container_alias'));
@@ -364,9 +367,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetChildBlocks()
     {
         $this->_layout->addContainer('parent', 'Parent');
-        $block1 = $this->_layout->addBlock('Magento\View\Block\Text', 'block1', 'parent');
+        $block1 = $this->_layout->addBlock('Magento\View\Element\Text', 'block1', 'parent');
         $this->_layout->addContainer('container', 'Container', array(), 'parent');
-        $block2 = $this->_layout->addBlock('Magento\View\Block\Template', 'block2', 'parent');
+        $block2 = $this->_layout->addBlock('Magento\View\Element\Template', 'block2', 'parent');
         $this->assertSame(array('block1' => $block1, 'block2' => $block2), $this->_layout->getChildBlocks('parent'));
     }
 
@@ -385,7 +388,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $block = 'block';
         $container = 'container';
-        $this->_layout->addBlock('Magento\View\Block\Text', $block);
+        $this->_layout->addBlock('Magento\View\Element\Text', $block);
         $this->_layout->addContainer($container, 'Container');
         $this->assertFalse($this->_layout->isContainer($block));
         $this->assertTrue($this->_layout->isContainer($container));
@@ -394,13 +397,13 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testIsManipulationAllowed()
     {
-        $this->_layout->addBlock('Magento\View\Block\Text', 'block1');
-        $this->_layout->addBlock('Magento\View\Block\Text', 'block2', 'block1');
+        $this->_layout->addBlock('Magento\View\Element\Text', 'block1');
+        $this->_layout->addBlock('Magento\View\Element\Text', 'block2', 'block1');
         $this->assertFalse($this->_layout->isManipulationAllowed('block1'));
         $this->assertFalse($this->_layout->isManipulationAllowed('block2'));
 
         $this->_layout->addContainer('container1', 'Container 1');
-        $this->_layout->addBlock('Magento\View\Block\Text', 'block3', 'container1');
+        $this->_layout->addBlock('Magento\View\Element\Text', 'block3', 'container1');
         $this->_layout->addContainer('container2', 'Container 2', array(), 'container1');
         $this->assertFalse($this->_layout->isManipulationAllowed('container1'));
         $this->assertTrue($this->_layout->isManipulationAllowed('block3'));
@@ -413,7 +416,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $expBlockName = 'block_renamed';
         $containerName = 'container';
         $expContainerName = 'container_renamed';
-        $block = $this->_layout->createBlock('Magento\View\Block\Text', $blockName);
+        $block = $this->_layout->createBlock('Magento\View\Element\Text', $blockName);
         $this->_layout->addContainer($containerName, 'Container');
 
         $this->assertEquals($block, $this->_layout->getBlock($blockName));
@@ -429,7 +432,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->_layout->getBlock('test'));
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
-            ->createBlock('Magento\View\Block\Text');
+            ->createBlock('Magento\View\Element\Text');
         $this->_layout->setBlock('test', $block);
         $this->assertSame($block, $this->_layout->getBlock('test'));
     }
@@ -463,7 +466,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $blockName = 'block_' . __METHOD__;
         $expectedText = "some_text_for_$blockName";
 
-        $block = $this->_layout->addBlock('Magento\View\Block\Text', $blockName);
+        $block = $this->_layout->addBlock('Magento\View\Element\Text', $blockName);
         $block->setText($expectedText);
 
         $this->_layout->addOutputElement($blockName);
@@ -477,14 +480,14 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMessagesBlock()
     {
-        $this->assertInstanceOf('Magento\View\Block\Messages', $this->_layout->getMessagesBlock());
+        $this->assertInstanceOf('Magento\View\Element\Messages', $this->_layout->getMessagesBlock());
     }
 
     public function testGetBlockSingleton()
     {
-        $block = $this->_layout->getBlockSingleton('Magento\View\Block\Text');
-        $this->assertInstanceOf('Magento\View\Block\Text', $block);
-        $this->assertSame($block, $this->_layout->getBlockSingleton('Magento\View\Block\Text'));
+        $block = $this->_layout->getBlockSingleton('Magento\View\Element\Text');
+        $this->assertInstanceOf('Magento\View\Element\Text', $block);
+        $this->assertSame($block, $this->_layout->getBlockSingleton('Magento\View\Element\Text'));
     }
 
     public function testUpdateContainerAttributes()

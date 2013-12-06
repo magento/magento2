@@ -54,21 +54,19 @@ class Files extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage $imageStorage
      * @param \Magento\Cms\Helper\Wysiwyg\Images $imageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Cms\Model\Wysiwyg\Images\Storage $imageStorage,
         \Magento\Cms\Helper\Wysiwyg\Images $imageHelper,
         array $data = array()
     ) {
         $this->_imageHelper = $imageHelper;
         $this->_imageStorage = $imageStorage;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

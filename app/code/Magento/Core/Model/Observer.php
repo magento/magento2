@@ -44,7 +44,7 @@ class Observer
     private $_currentTheme;
 
     /**
-     * @var \Magento\Core\Model\Page\Asset\Collection
+     * @var \Magento\View\Asset\GroupedCollection
      */
     private $_pageAssets;
 
@@ -54,7 +54,7 @@ class Observer
     protected $_config;
 
     /**
-     * @var \Magento\Core\Model\Page\Asset\PublicFileFactory
+     * @var \Magento\View\Asset\PublicFileFactory
      */
     protected $_assetFileFactory;
 
@@ -71,24 +71,24 @@ class Observer
     /**
      * @param \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Page $page
+     * @param \Magento\View\Asset\GroupedCollection $assets
      * @param \Magento\Core\Model\ConfigInterface $config
-     * @param \Magento\Core\Model\Page\Asset\PublicFileFactory $assetFileFactory
+     * @param \Magento\View\Asset\PublicFileFactory $assetFileFactory
      * @param \Magento\Core\Model\Theme\Registration $registration
      * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\App\Cache\Frontend\Pool $cacheFrontendPool,
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Page $page,
+        \Magento\View\Asset\GroupedCollection $assets,
         \Magento\Core\Model\ConfigInterface $config,
-        \Magento\Core\Model\Page\Asset\PublicFileFactory $assetFileFactory,
+        \Magento\View\Asset\PublicFileFactory $assetFileFactory,
         \Magento\Core\Model\Theme\Registration $registration,
         \Magento\Logger $logger
     ) {
         $this->_cacheFrontendPool = $cacheFrontendPool;
         $this->_currentTheme = $design->getDesignTheme();
-        $this->_pageAssets = $page->getAssets();
+        $this->_pageAssets = $assets;
         $this->_config = $config;
         $this->_assetFileFactory = $assetFileFactory;
         $this->_registration = $registration;

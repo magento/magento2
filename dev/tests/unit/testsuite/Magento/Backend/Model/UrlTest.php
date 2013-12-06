@@ -48,7 +48,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_coreSessionMock;
+    protected $_formKey;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -92,10 +92,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', array(), array(), '', false);
         $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
 
-        $this->_coreSessionMock = $this->getMock(
-            'Magento\Core\Model\Session', array('getFormKey'), array(), '', false
+        $this->_formKey = $this->getMock(
+            'Magento\Data\Form\FormKey', array('getFormKey'), array(), '', false
         );
-        $this->_coreSessionMock->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
+        $this->_formKey->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
 
         $mockItem = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
         $mockItem->expects($this->any())->method('isDisabled')->will($this->returnValue(false));
@@ -129,7 +129,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_model = $helper->getObject('Magento\Backend\Model\Url', array(
             'coreStoreConfig' => $this->_storeConfigMock,
             'backendHelper'   => $helperMock,
-            'session'         => $this->_coreSessionMock,
+            'formKey'         => $this->_formKey,
             'menuConfig'      => $this->_menuConfigMock,
             'coreData'        => $this->_coreDataMock,
             'authSession'     => $this->_authSessionMock,

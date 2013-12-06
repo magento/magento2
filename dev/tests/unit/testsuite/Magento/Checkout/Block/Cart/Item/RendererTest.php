@@ -39,11 +39,21 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $configManager = $this->getMock('Magento\View\ConfigInterface', array(), array(), '', false);
         $configManager->expects($this->any())->method('getViewConfig')->will($this->returnValue($configView));
 
-        $product = $this->getMock('Magento\Catalog\Model\Product', array('isConfigurable'), array(), '', false);
+        $product = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            array('isConfigurable', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $product->expects($this->any())->method('isConfigurable')->will($this->returnValue(true));
 
         $childProduct = $this->getMock(
-            'Magento\Catalog\Model\Product', array('getThumbnail', 'getDataByKey'), array(), '', false
+            'Magento\Catalog\Model\Product',
+            array('getThumbnail', 'getDataByKey', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $childProduct->expects($this->any())->method('getThumbnail')->will($this->returnValue('/_/_/__green.gif'));
 

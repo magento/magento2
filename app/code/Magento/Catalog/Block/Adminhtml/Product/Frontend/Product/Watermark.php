@@ -62,16 +62,16 @@ class Watermark
      * @param \Magento\Catalog\Model\Config\Source\Watermark\Position $watermarkPosition
      * @param \Magento\Backend\Block\System\Config\Form\Field $formField
      * @param \Magento\Data\Form\Element\Factory $elementFactory
-     * @param array $data
      * @param array $imageTypes
+     * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Catalog\Model\Config\Source\Watermark\Position $watermarkPosition,
         \Magento\Backend\Block\System\Config\Form\Field $formField,
         \Magento\Data\Form\Element\Factory $elementFactory,
-        array $data = array(),
-        array $imageTypes = array()
+        array $imageTypes = array(),
+        array $data = array()
     ) {
         $this->_watermarkPosition = $watermarkPosition;
         $this->_formField = $formField;

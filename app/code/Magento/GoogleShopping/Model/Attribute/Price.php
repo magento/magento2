@@ -62,32 +62,32 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     protected $_storeManager;
 
     /**
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\GoogleShopping\Helper\Data $gsData
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
      * @param \Magento\GoogleShopping\Helper\Price $gsPrice
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\GoogleShopping\Model\Config $config
-     * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
+        \Magento\Core\Model\Context $context,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\GoogleShopping\Helper\Data $gsData,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
         \Magento\GoogleShopping\Helper\Price $gsPrice,
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\GoogleShopping\Model\Resource\Attribute $resource,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\GoogleShopping\Model\Config $config,
-        \Magento\GoogleShopping\Model\Resource\Attribute $resource,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -95,8 +95,17 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         $this->_config = $config;
         $this->_taxData = $taxData;
         $this->_coreStoreConfig = $coreStoreConfig;
-        parent::__construct($productFactory, $gsData, $gsProduct, $gsPrice, $context, $registry, $resource,
-            $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $productFactory,
+            $gsData,
+            $gsProduct,
+            $gsPrice,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**

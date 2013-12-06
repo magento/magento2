@@ -30,7 +30,7 @@
         </action>
     </referenceBlock>
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Css" name="magento-catalog-zoom-css">
+        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-catalog-zoom-css">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Catalog::zoom.css</argument>
             </arguments>
@@ -52,8 +52,8 @@
             </block>
             <block class="Magento\Catalog\Block\Product\View" name="product.tierprices" as="tierprices" template="product/view/tierprices.phtml"/>
             <block class="Magento\Review\Block\Product\View\Other" name="product.info.other" as="other" template="Magento_Review::product/view/other.phtml"/>
-            <block class="Magento\Page\Block\Html\Pager" name="product_review_list.toolbar"/>
-            <block class="Magento\View\Block\Template" name="product_review_list.count" template="Magento_Review::product/view/count.phtml"/>
+            <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar"/>
+            <block class="Magento\View\Element\Template" name="product_review_list.count" template="Magento_Review::product/view/count.phtml"/>
             <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml">
                 <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
                     <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>

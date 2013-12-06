@@ -54,7 +54,6 @@ class Search extends \Magento\Backend\Block\Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Resource\HelperPool $helperPool
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Core\Model\Registry $registry
@@ -62,7 +61,6 @@ class Search extends \Magento\Backend\Block\Widget
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Resource\HelperPool $helperPool,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
         \Magento\Core\Model\Registry $registry,
@@ -71,7 +69,7 @@ class Search extends \Magento\Backend\Block\Widget
         $this->_helperPool = $helperPool;
         $this->_collectionFactory = $collectionFactory;
         $this->_coreRegistry = $registry;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

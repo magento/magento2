@@ -130,8 +130,8 @@ class Product extends \Magento\App\Action\Action
         /** @var \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress */
         $remoteAddress = $this->_objectManager->get('Magento\HTTP\PhpEnvironment\RemoteAddress');
 
-        /** @var \Magento\Core\Model\Cookie $cookie */
-        $cookie = $this->_objectManager->get('Magento\Core\Model\Cookie');
+        /** @var \Magento\Stdlib\Cookie $cookie */
+        $cookie = $this->_objectManager->get('Magento\Stdlib\Cookie');
 
         /** @var \Magento\Core\Model\StoreManagerInterface $store */
         $store = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface');

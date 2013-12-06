@@ -34,7 +34,7 @@
         <block class="Magento\CatalogSearch\Block\Advanced\Result" name="catalogsearch_advanced_result" template="advanced/result.phtml">
             <block class="Magento\Catalog\Block\Product\ListProduct" name="search_result_list" template="product/list.phtml">
                 <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="product/list/toolbar.phtml">
-                    <block class="Magento\Page\Block\Html\Pager" name="product_list_toolbar_pager"/>
+                    <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
                 </block>
                 <action method="setToolbarBlockName">
                     <argument name="name" xsi:type="string">product_list_toolbar</argument>

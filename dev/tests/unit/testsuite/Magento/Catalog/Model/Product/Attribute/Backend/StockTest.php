@@ -49,8 +49,13 @@ class StockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_inventory = $this->getMock('Magento\CatalogInventory\Model\Stock\Item',
-            array('getIsInStock', 'getQty', 'loadByProduct'), array(), '', false);
+        $this->_inventory = $this->getMock(
+            'Magento\CatalogInventory\Model\Stock\Item',
+            array('getIsInStock', 'getQty', 'loadByProduct', '__wakeup'),
+            array(),
+            '',
+            false
+        );
 
         $stockItemFactory = $this->getMock('Magento\CatalogInventory\Model\Stock\ItemFactory', array('create'),
             array(), '', false);

@@ -33,7 +33,7 @@
  */
 namespace Magento\Checkout\Block\Multishipping;
 
-class State extends \Magento\View\Block\Template
+class State extends \Magento\View\Element\Template
 {
     /**
      * @var \Magento\Checkout\Model\Type\Multishipping\State
@@ -41,19 +41,17 @@ class State extends \Magento\View\Block\Template
     protected $_multishippingState;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Type\Multishipping\State $multishippingState
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Type\Multishipping\State $multishippingState,
         array $data = array()
     ) {
         $this->_multishippingState = $multishippingState;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

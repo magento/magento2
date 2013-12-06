@@ -250,34 +250,32 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_addressTotalFactory;
 
     /**
-     * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param Address\ItemFactory $addressItemFactory
+     * @param \Magento\Sales\Model\Quote\Address\ItemFactory $addressItemFactory
      * @param \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollFactory
-     * @param Address\RateFactory $addressRateFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateFactory $addressRateFactory
      * @param \Magento\Shipping\Model\ShippingFactory $shippingFactory
      * @param \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollFactory
      * @param \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory
-     * @param Address\Total\CollectorFactory $totalCollectorFactory
-     * @param Address\TotalFactory $addressTotalFactory
+     * @param \Magento\Sales\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
+     * @param \Magento\Sales\Model\Quote\Address\TotalFactory $addressTotalFactory
      * @param \Magento\Object\Copy $objectCopyService
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
-     * 
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Directory\Helper\Data $directoryData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
@@ -309,9 +307,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $this->_addressTotalFactory = $addressTotalFactory;
         $this->_objectCopyService = $objectCopyService;
         parent::__construct(
-            $directoryData,
             $context,
             $registry,
+            $directoryData,
             $eavConfig,
             $addressConfig,
             $regionFactory,

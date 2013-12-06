@@ -76,7 +76,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
@@ -89,7 +88,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
@@ -106,7 +104,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_rateFactory = $rateFactory;
         $this->_rate = $rate;
         $this->_taxData = $taxData;
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     protected function _construct()
@@ -243,7 +241,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock('Magento\View\Block\Template')
+            $this->getLayout()->createBlock('Magento\View\Element\Template')
                 ->setTemplate('Magento_Tax::rate/js.phtml')
         );
 

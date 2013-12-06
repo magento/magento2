@@ -66,7 +66,13 @@ class TrackTest extends \PHPUnit_Framework_TestCase
             array('id' => $storeId)
         );
 
-        $shipmentMock = $this->getMock('Magento\Sales\Model\Order\Shipment', array('getStore'), array(), '', false);
+        $shipmentMock = $this->getMock(
+            'Magento\Sales\Model\Order\Shipment',
+            array('getStore', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $shipmentMock->expects($this->once())
             ->method('getStore')
             ->will($this->returnValue($storeObject));

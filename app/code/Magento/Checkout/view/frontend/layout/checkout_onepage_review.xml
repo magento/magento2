@@ -32,7 +32,7 @@
         <container name="checkout.onepage.review.info.items.before" as="items_before" label="Items Before"/>
         <container name="checkout.onepage.review.info.items.after" as="items_after" label="Items After"/>
         <block class="Magento\Checkout\Block\Agreements" name="checkout.onepage.agreements" as="agreements" template="agreements.phtml"/>
-        <block class="Magento\View\Block\Template" name="checkout.onepage.review.button" as="button" template="Magento_Checkout::onepage/review/button.phtml"/>
-        <block class="Magento\View\Block\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+        <block class="Magento\View\Element\Template" name="checkout.onepage.review.button" as="button" template="Magento_Checkout::onepage/review/button.phtml"/>
+        <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
     </block>
 </layout>

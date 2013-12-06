@@ -37,17 +37,17 @@ class Setup extends \Magento\Core\Model\Resource\Setup
 
     /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param string $resourceName
      * @param \Magento\GoogleShopping\Model\ConfigFactory $configFactory
      * @param \Magento\GoogleShopping\Helper\Data $googleShoppingData
-     * @param string $resourceName
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
+        $resourceName,
         \Magento\GoogleShopping\Model\ConfigFactory $configFactory,
         \Magento\GoogleShopping\Helper\Data $googleShoppingData,
-        $resourceName,
         $moduleName = 'Magento_GoogleShopping',
         $connectionName = ''
     ) {

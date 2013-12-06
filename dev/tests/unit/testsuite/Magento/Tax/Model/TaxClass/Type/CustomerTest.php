@@ -43,7 +43,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $customerGroupMock = $this->getMockBuilder('Magento\Customer\Model\Group')
-            ->setMethods(array('getCollection'))
+            ->setMethods(array('getCollection', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
         $customerGroupMock->expects($this->once())

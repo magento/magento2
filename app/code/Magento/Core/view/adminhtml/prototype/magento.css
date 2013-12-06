@@ -292,6 +292,11 @@
     float: right;
 }
 
+.insert-actions button {
+    float: left;
+    margin-left: 4px;
+}
+
 .insert-title-inner > .title {
     color: #666;
     display: inline-block;

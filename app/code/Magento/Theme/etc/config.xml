@@ -27,10 +27,59 @@
 -->
 <config>
     <default>
+        <design>
+            <head translate="default_description">
+                <default_title>Magento Commerce</default_title>
+                <default_description>Default Description</default_description>
+                <default_keywords>Magento, Varien, E-commerce</default_keywords>
+                <default_media_type>text/html</default_media_type>
+                <default_charset>utf-8</default_charset>
+            </head>
+            <search_engine_robots>
+                <default_robots>INDEX,FOLLOW</default_robots>
+                <default_custom_instructions>
+                    <![CDATA[
+User-agent: *
+Disallow: /index.php/
+Disallow: /*?
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /checkout/
+Disallow: /app/
+Disallow: /downloader/
+Disallow: /js/
+Disallow: /lib/
+Disallow: /*.php$
+Disallow: /pkginfo/
+Disallow: /report/
+Disallow: /var/
+Disallow: /catalog/
+Disallow: /customer/
+Disallow: /sendfriend/
+Disallow: /review/
+Disallow: /*SID=
+                    ]]>
+                </default_custom_instructions>
+            </search_engine_robots>
+            <header translate="welcome">
+                <logo_alt>Magento Commerce</logo_alt>
+                <welcome>Default welcome msg!</welcome>
+            </header>
+            <footer translate="copyright">
+                <copyright>&amp;copy; 2013 Magento Demo Store. All Rights Reserved.</copyright>
+            </footer>
+        </design>
         <theme>
             <customization>
                 <custom_css>Magento\Theme\Model\Theme\Customization\File\CustomCss</custom_css>
             </customization>
         </theme>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <site_favicons>favicon</site_favicons>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
     </default>
 </config>

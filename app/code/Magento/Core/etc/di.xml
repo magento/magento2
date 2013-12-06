@@ -32,7 +32,7 @@
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Authorization\RoleLocator\DefaultRoleLocator" />
     <preference for="Magento\Core\Model\Session\AbstractSession" type="Magento\Core\Model\Session" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Core\Model\Locale" />
-    <preference for="Magento\Core\Model\Page\Asset\MergeStrategyInterface" type="Magento\Core\Model\Page\Asset\MergeStrategy\Direct" />
+    <preference for="Magento\View\Asset\MergeStrategyInterface" type="Magento\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\Core\Model\DataService\ConfigInterface" type="Magento\Core\Model\DataService\Config" />
     <preference for="Magento\Core\Model\ConfigInterface" type="Magento\Core\Model\Config" />
     <preference for="Magento\Core\Model\Config\DataInterface" type="Magento\Core\Model\Config\Data" />
@@ -51,6 +51,7 @@
     <preference for="Magento\View\Design\Theme\ThemeProviderInterface" type="Magento\Core\Model\Theme\ThemeProvider" />
     <preference for="Magento\View\Design\Theme\FileProviderInterface" type="Magento\Core\Model\Theme\FileProvider" />
     <preference for="Magento\View\Design\Theme\Customization\ConfigInterface" type="Magento\Core\Model\Theme\Customization\Config" />
+    <preference for="Magento\View\Asset\ConfigInterface" type="Magento\Core\Model\Asset\Config" />
     <preference for="Magento\App\ViewInterface" type="Magento\App\View" />
     <preference for="Magento\TranslateInterface" type="Magento\Core\Model\Translate" />
     <preference for="Magento\App\Response\RedirectInterface" type="Magento\Core\App\Response\Redirect" />
@@ -165,7 +166,7 @@
             <instance type="Magento\Core\Model\Resource\Store\Collection\FetchStrategy" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Page\Asset\Collection" shared="false" />
+    <type name="Magento\View\Asset\Collection" shared="false" />
     <type name="Magento\Core\Model\Theme\Collection" shared="false" />
     <type name="Magento\Core\Model\Observer">
         <param name="config">
@@ -362,16 +363,15 @@
     </type>
     <type name="Magento\Core\Model\Session\Context">
         <param name="saveMethod">
-            <value type="argument">Magento\Core\Model\Session\AbstractSession::PARAM_SESSION_SAVE_METHOD</value>
+            <value type="argument">Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_METHOD</value>
         </param>
+    </type>
+    <type name="Magento\Core\Model\Session\Config">
         <param name="savePath">
-            <value type="argument">Magento\Core\Model\Session\AbstractSession::PARAM_SESSION_SAVE_PATH</value>
+            <value type="argument">Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_PATH</value>
         </param>
         <param name="cacheLimiter">
-            <value type="argument">Magento\Core\Model\Session\AbstractSession::PARAM_SESSION_CACHE_LIMITER</value>
-        </param>
-        <param name="url">
-            <instance type="Magento\Core\Model\Url\Proxy" />
+            <value type="argument">Magento\Core\Model\Session\Config::PARAM_SESSION_CACHE_LIMITER</value>
         </param>
     </type>
     <type name="Magento\Core\Model\StoreManager">
@@ -461,6 +461,7 @@
         </param>
     </type>
     <type name="Magento\App\FrontController">
+        <plugin name="install" type="Magento\Module\FrontController\Plugin\Install" sortOrder="40"/>
         <plugin name="dispatchExceptionHandler" type="Magento\Core\App\FrontController\Plugin\DispatchExceptionHandler" sortOrder="30"/>
         <plugin name="clickjacking" type="Magento\App\FrontController\Plugin\Clickjacking" sortOrder="0"/>
     </type>
@@ -474,5 +475,8 @@
         <param name="dateModel">
             <instance type="Magento\Core\Model\Date\Proxy" />
         </param>
+    </type>
+    <type name="Magento\View\Asset\MergeService">
+        <plugin name="cleanMergedJsCss" type="Magento\Core\Model\Asset\Plugin\CleanMergedJsCss"/>
     </type>
 </config>

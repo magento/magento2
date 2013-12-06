@@ -44,18 +44,16 @@ class Matrix extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Directory\Model\CurrencyFactory $dirCurrencyFactory,
         array $data = array()
     ) {
         $this->_dirCurrencyFactory = $dirCurrencyFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _prepareLayout()

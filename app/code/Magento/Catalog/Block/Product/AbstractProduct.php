@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-abstract class AbstractProduct extends \Magento\View\Block\Template
+abstract class AbstractProduct extends \Magento\View\Element\Template
 {
     protected $_priceBlock = array();
 
@@ -115,8 +115,7 @@ abstract class AbstractProduct extends \Magento\View\Block\Template
     protected $mathRandom;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -125,8 +124,7 @@ abstract class AbstractProduct extends \Magento\View\Block\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
@@ -139,7 +137,7 @@ abstract class AbstractProduct extends \Magento\View\Block\Template
         $this->_taxData = $taxData;
         $this->_catalogData = $catalogData;
         $this->mathRandom = $mathRandom;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -255,7 +253,7 @@ abstract class AbstractProduct extends \Magento\View\Block\Template
      * Prepares and returns block to render some product type
      *
      * @param string $productType
-     * @return \Magento\View\Block\Template
+     * @return \Magento\View\Element\Template
      */
     public function _preparePriceRenderer($productType)
     {
@@ -599,7 +597,7 @@ abstract class AbstractProduct extends \Magento\View\Block\Template
      */
     public function getPageLayout()
     {
-        return $this->helper('Magento\Page\Helper\Layout')->getCurrentPageLayout();
+        return $this->helper('Magento\Theme\Helper\Layout')->getCurrentPageLayout();
     }
 
     /**

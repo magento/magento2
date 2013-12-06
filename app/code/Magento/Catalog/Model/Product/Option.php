@@ -97,11 +97,9 @@ class Option extends \Magento\Core\Model\AbstractModel
     protected $string;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Product\Option\Value $productOptionValue
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Catalog\Model\Product\Option\Value $productOptionValue
      * @param \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -109,9 +107,9 @@ class Option extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\Option\Value $productOptionValue,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Catalog\Model\Product\Option\Value $productOptionValue,
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
         \Magento\Stdlib\String $string,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,

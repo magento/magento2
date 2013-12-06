@@ -46,6 +46,15 @@ class Element extends \Magento\Simplexml\Element
     const TYPE_MOVE = 'move';
     /**#@-*/
 
+    /**#@+
+     * Names of container options in layout
+     */
+    const CONTAINER_OPT_HTML_TAG = 'htmlTag';
+    const CONTAINER_OPT_HTML_CLASS = 'htmlClass';
+    const CONTAINER_OPT_HTML_ID = 'htmlId';
+    const CONTAINER_OPT_LABEL = 'label';
+    /**#@-*/
+
     /**
      * @return Element
      *

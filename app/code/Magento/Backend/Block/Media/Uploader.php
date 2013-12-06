@@ -48,18 +48,16 @@ class Uploader extends \Magento\Adminhtml\Block\Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\File\Size $fileSize
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\File\Size $fileSize,
         array $data = array()
     ) {
         $this->_fileSizeService = $fileSize;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _construct()
@@ -109,7 +107,7 @@ class Uploader extends \Magento\Adminhtml\Block\Widget
         if ($head) {
             $head->addChild(
                 'jquery-fileUploader-css-jquery-fileupload-ui-css',
-                'Magento\Page\Block\Html\Head\Css',
+                'Magento\Theme\Block\Html\Head\Css',
                 array(
                     'file' => 'jquery/fileUploader/css/jquery.fileupload-ui.css'
                 )

@@ -44,7 +44,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionHtmlNoRenderer()
     {
-        $option = $this->getMock('\Magento\Bundle\Model\Option', ['getType'], [], '', false);
+        $option = $this->getMock('\Magento\Bundle\Model\Option', ['getType', '__wakeup'], [], '', false);
         $option->expects($this->exactly(2))->method('getType')->will($this->returnValue('checkbox'));
 
         $this->assertEquals(
@@ -55,7 +55,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionHtml()
     {
-        $option = $this->getMock('\Magento\Bundle\Model\Option', ['getType'], [], '', false);
+        $option = $this->getMock('\Magento\Bundle\Model\Option', ['getType', '__wakeup'], [], '', false);
         $option->expects($this->exactly(1))->method('getType')->will($this->returnValue('checkbox'));
 
         $optionBlock = $this->getMock(

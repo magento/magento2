@@ -43,7 +43,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $items = array();
         if (!$allInvoiced) {
             $item = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
-                ->setMethods(array('getQtyToInvoice', 'isDeleted'))
+                ->setMethods(array('getQtyToInvoice', 'isDeleted', '__wakeup'))
                 ->disableOriginalConstructor()
                 ->getMock();
             $item->expects($this->any())
@@ -102,7 +102,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         /** @var $order \Magento\Sales\Model\Order */
         $order = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->setMethods(array('__wakeup'))
             ->getMock();
         foreach ($actionFlags as $action => $flag) {
             $order->setActionFlag($action, $flag);

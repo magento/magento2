@@ -211,7 +211,7 @@ interface LayoutInterface
     /**
      * Add a block to registry, create new object if needed
      *
-     * @param string|\Magento\View\Block\AbstractBlock $block
+     * @param string|\Magento\View\Element\AbstractBlock $block
      * @param string $name
      * @param string $parent
      * @param string $alias
@@ -258,7 +258,7 @@ interface LayoutInterface
     /**
      * Retrieve messages block
      *
-     * @return \Magento\View\Block\Messages
+     * @return \Magento\View\Element\Messages
      */
     public function getMessagesBlock();
 

@@ -121,21 +121,23 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     protected $_eventManager = null;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param mixed $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Event\ManagerInterface $eventManager,
+        $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($logger, $fetchStrategy, $entityFactory);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
         $this->_construct();
         $this->_resource = $resource;
         $this->setConnection($this->getResource()->getReadConnection());

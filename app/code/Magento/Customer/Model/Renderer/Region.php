@@ -112,7 +112,7 @@ class Region implements \Magento\Data\Form\Element\Renderer\RendererInterface
         if ($regionCollection && count($regionCollection) > 0) {
             $elementClass = $element->getClass();
             $html.= '<label class="label" for="' . $regionIdHtmlId . '"><span>' . $element->getLabel() . '</span>'
-                . '<span class="required" style="display:none">*</span></label>';
+                . '</label>';
             $html.= '<div class="control">';
 
             $html .= '<select id="' . $regionIdHtmlId . '" name="' . $regionIdHtmlName . '" '
@@ -132,9 +132,9 @@ class Region implements \Magento\Data\Form\Element\Renderer\RendererInterface
             $element->setClass($elementClass);
         } else {
             $element->setClass('input-text');
-            $html.= '<label class="label" for="' . $regionHtmlId . '"><label for="'.$element->getHtmlId().'">'
+            $html.= '<label class="label" for="' . $regionHtmlId . '"><span>'
                 . $element->getLabel()
-                . '</span><span class="required" style="display:none">*</span></label>';
+                . '</span></label>';
 
             $element->setRequired(false);
             $html.= '<div class="control">';

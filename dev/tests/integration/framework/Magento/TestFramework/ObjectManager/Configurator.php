@@ -36,7 +36,7 @@ class Configurator
     {
         return array(
             'preferences' => array(
-                'Magento\Core\Model\Cookie' => 'Magento\TestFramework\Cookie'
+                'Magento\Stdlib\Cookie' => 'Magento\TestFramework\Cookie'
             )
         );
     }

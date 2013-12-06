@@ -64,9 +64,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompareAttributes($attribute1Sort, $attribute2Sort, $expected)
     {
-        $attribute1 = $this->getMock('Magento\Eav\Model\Entity\Attribute', null, array(), '', false);
+        $attribute1 = $this->getMock('Magento\Eav\Model\Entity\Attribute', array('__wakeup'), array(), '', false);
         $attribute1->setAttributeSetInfo(array(0 => $attribute1Sort));
-        $attribute2 = $this->getMock('Magento\Eav\Model\Entity\Attribute', null, array(), '', false);
+        $attribute2 = $this->getMock('Magento\Eav\Model\Entity\Attribute', array('__wakeup'), array(), '', false);
         $attribute2->setAttributeSetInfo(array(0 => $attribute2Sort));
         $this->assertEquals($expected, $this->_model->attributesCompare($attribute1, $attribute2));
     }
@@ -122,7 +122,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         foreach ($codes as $code) {
             $mock = $this->getMock(
                 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-                array('getBackend', 'getBackendTable'),
+                array('getBackend', 'getBackendTable', '__wakeup'),
                 array(),
                 '',
                 false
@@ -207,7 +207,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            array('getBackend', 'getBackendTable', 'isInSet', 'getApplyTo', 'getAttributeCode'),
+            array('getBackend', 'getBackendTable', 'isInSet', 'getApplyTo', 'getAttributeCode', '__wakeup'),
             array(),
             '',
             false
@@ -240,7 +240,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave($attributeCode, $attributeSetId, $productData, $productOrigData)
     {
-        $object = $this->getMock('Magento\Catalog\Model\Product', array('getOrigData'), array(), '', false);
+        $object = $this->getMock('Magento\Catalog\Model\Product', array('getOrigData', '__wakeup'), array(), '', false);
         $object->setEntityTypeId(1);
         $object->setData($productData);
         $object->expects($this->any())

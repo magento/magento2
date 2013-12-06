@@ -55,5 +55,5 @@
             </container>
         </block>
     </referenceContainer>
-    <!-- <block class="Magento\View\Block\Template" name="additional.product.info" template="Magento_Core::template.phtml"/> -->
+    <!-- <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/> -->
 </layout>

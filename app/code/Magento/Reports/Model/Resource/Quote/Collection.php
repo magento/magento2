@@ -66,15 +66,16 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
     protected $_customerResource;
 
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Product\Collection $productResource,
         \Magento\Customer\Model\Resource\Customer $customerResource,
+        $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_productResource = $productResource;
         $this->_customerResource = $customerResource;
     }

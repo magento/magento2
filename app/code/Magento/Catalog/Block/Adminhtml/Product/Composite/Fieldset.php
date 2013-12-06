@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
 
-class Fieldset extends \Magento\View\Block\Text\ListText
+class Fieldset extends \Magento\View\Element\Text\ListText
 {
     /**
      *
@@ -47,7 +47,7 @@ class Fieldset extends \Magento\View\Block\Text\ListText
         $total = count($children);
         $i = 0;
         $this->setText('');
-        /** @var $block \Magento\View\Block\AbstractBlock  */
+        /** @var $block \Magento\View\Element\AbstractBlock  */
         foreach ($children as $block) {
             $i++;
             $block->setIsLastFieldset($i == $total);

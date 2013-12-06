@@ -26,6 +26,8 @@
 
 namespace Magento\Paygate\Block\Authorizenet\Info;
 
+use Magento\Payment\Block\Info;
+
 class Cc extends \Magento\Payment\Block\Info\Cc
 {
     /**
@@ -36,6 +38,27 @@ class Cc extends \Magento\Payment\Block\Info\Cc
     protected $_isCheckoutProgressBlockFlag = true;
 
     protected $_template = 'Magento_Paygate::info/cc.phtml';
+
+    /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreData;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Payment\Model\Config $paymentConfig
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Payment\Model\Config $paymentConfig,
+        \Magento\Core\Helper\Data $coreData,
+        array $data = array()
+    ) {
+        $this->_coreData = $coreData;
+        parent::__construct($context, $paymentConfig, $data);
+    }
 
     /**
      * Render as PDF

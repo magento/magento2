@@ -157,9 +157,9 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
     protected $mathRandom;
 
     /**
-     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\AddressFactory $addressFactory
      * @param \Magento\Sales\Model\Order\PaymentFactory $paymentFactory
@@ -168,13 +168,11 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\AddressFactory $addressFactory,
         \Magento\Sales\Model\Order\PaymentFactory $paymentFactory,
@@ -189,7 +187,7 @@ class Profile extends \Magento\Payment\Model\Recurring\Profile
         $this->_paymentFactory = $paymentFactory;
         $this->_orderItemFactory = $orderItemFactory;
         $this->mathRandom = $mathRandom;
-        parent::__construct($paymentData, $context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $paymentData, $resource, $resourceCollection, $data);
     }
 
     /**

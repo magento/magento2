@@ -56,9 +56,9 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     protected $_itemsFactory;
 
     /**
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\App\Dir $coreDir
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
@@ -68,9 +68,9 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Tax\Helper\Data $taxData,
         \Magento\App\Dir $coreDir,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
@@ -82,7 +82,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
-        parent::__construct($taxData, $context, $registry, $coreDir, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $taxData, $coreDir, $resource, $resourceCollection, $data);
     }
 
     /**

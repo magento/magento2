@@ -63,8 +63,12 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock('Magento\Sales\Model\Quote',
-            array('setWebsite', 'loadByCustomer', 'getId', 'setCustomerGroupId', 'collectTotals'), array(), '', false
+        $this->_quoteMock = $this->getMock(
+            'Magento\Sales\Model\Quote',
+            array('setWebsite', 'loadByCustomer', 'getId', 'setCustomerGroupId', 'collectTotals', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $this->_observerMock = $this->getMock('Magento\Event\Observer', array(), array(), '', false);
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);

@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-catalog-js-rating-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-catalog-js-rating-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Catalog::js/rating.js</argument>
             </arguments>

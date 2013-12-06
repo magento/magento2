@@ -149,13 +149,14 @@ class Redirect extends \Magento\App\Action\Action
 
     public function continueAction()
     {
+        /** @var \Magento\Checkout\Model\Session $session */
         $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
 
         if ($quoteId = $session->getGoogleCheckoutQuoteId()) {
             $quote = $this->_objectManager->create('Magento\Sales\Model\Quote')->load($quoteId)
                 ->setIsActive(false)->save();
         }
-        $session->clear();
+        $session->clearQuote();
 
         $hideCartContents = $this->_objectManager->get('Magento\Core\Model\Store\Config')
             ->getConfigFlag('google/checkout/hide_cart_contents');

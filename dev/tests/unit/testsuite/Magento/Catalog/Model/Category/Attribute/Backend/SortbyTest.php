@@ -47,8 +47,14 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
                 'coreStoreConfig' => $coreStoreConfig
             )
         );
-        $attribute = $this->getMockForAbstractClass('Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            array(), '', false, true, true, array('getName')
+        $attribute = $this->getMockForAbstractClass(
+            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('getName', '__wakeup')
         );
         $attribute->expects($this->any())
             ->method('getName')

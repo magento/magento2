@@ -24,13 +24,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-/** @var $this \Magento\Page\Block\Html\Head */
+/** @var $this \Magento\Theme\Block\Html\Head */
 ?>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" >
 <meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>"/>
 <title><?php echo htmlspecialchars(html_entity_decode($this->getTitle())) ?></title>
-<link rel="icon" href="<?php echo $this->getViewFileUrl('Magento_Page::favicon.ico') ?>" type="image/x-icon"/>
-<link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Magento_Page::favicon.ico') ?>" type="image/x-icon"/>
+<link rel="icon" href="<?php echo $this->getViewFileUrl('Magento_Theme::favicon.ico') ?>" type="image/x-icon"/>
+<link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Magento_Theme::favicon.ico') ?>" type="image/x-icon"/>
 
 <script type="text/javascript">
     var BLANK_URL = '<?php echo $this->getViewFileUrl('blank.html') ?>';

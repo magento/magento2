@@ -68,7 +68,7 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/integration/edit');
         $response = $this->getResponse()->getBody();
         $saveLink = 'integration/save/';
-            
+
         $this->assertContains('entry-edit form-inline', $response);
         $this->assertContains('Edit &quot;'. $this->_integration->getName() .'&quot; Integration', $response);
         $this->assertContains($saveLink, $response);
@@ -121,10 +121,21 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
     private function _createDummyIntegration()
     {
         /** @var $factory \Magento\Integration\Model\Integration\Factory */
-        $factory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Integration\Model\Integration\Factory');
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $factory = $objectManager->create('Magento\Integration\Model\Integration\Factory');
         $this->_integration = $factory->create()
             ->setName(md5(rand()))
             ->save();
+
+        /** Grant permissions to integrations */
+        /** @var \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory */
+        $userIdentifierFactory = $objectManager->create('Magento\Authz\Model\UserIdentifier\Factory');
+        /** @var \Magento\Authz\Service\AuthorizationV1 $authzService */
+        $userIdentifier = $userIdentifierFactory->create(
+            \Magento\Authz\Model\UserIdentifier::USER_TYPE_INTEGRATION,
+            $this->_integration->getId()
+        );
+        $authzService = $objectManager->create('Magento\Authz\Service\AuthorizationV1');
+        $authzService->grantAllPermissions($userIdentifier);
     }
 }

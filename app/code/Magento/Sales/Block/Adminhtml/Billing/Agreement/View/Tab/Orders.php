@@ -31,7 +31,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Billing\Agreement\View\Tab;
 
-class Orders extends \Magento\View\Block\Text\ListText
+class Orders extends \Magento\View\Element\Text\ListText
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
 

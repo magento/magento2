@@ -81,6 +81,8 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
 
     /**
      * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
@@ -90,6 +92,8 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
+        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
@@ -101,17 +105,8 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         $this->_customerSession = $customerSession;
         $this->_quoteFactory = $quoteFactory;
         $this->_remoteAddress = $remoteAddress;
-        parent::__construct($context, $data);
-        $this->init('checkout', $sessionName);
-    }
-
-    /**
-     * Unset all data associated with object
-     */
-    public function unsetAll()
-    {
-        parent::unsetAll();
-        $this->_quote = null;
+        parent::__construct($context, $sidResolver, $sessionConfig, $data);
+        $this->start('checkout', $sessionName);
     }
 
     /**
@@ -402,12 +397,31 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         return $this->addItemAdditionalMessage('quote_item' . $itemId, $message);
     }
 
-    public function clear()
+    /**
+     * Destroy/end a session
+     * Unset all data associated with object
+     *
+     * @return $this
+     */
+    public function clearQuote()
     {
-        $this->_eventManager->dispatch('checkout_quote_destroy', array('quote'=>$this->getQuote()));
+        $this->_eventManager->dispatch('checkout_quote_destroy', array('quote' => $this->getQuote()));
         $this->_quote = null;
         $this->setQuoteId(null);
         $this->setLastSuccessQuoteId(null);
+        return $this;
+    }
+
+    /**
+     * Unset all session data and quote
+     *
+     * @return $this
+     */
+    public function clearStorage()
+    {
+        parent::clearStorage();
+        $this->_quote = null;
+        return $this;
     }
 
     /**

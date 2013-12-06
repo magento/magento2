@@ -234,7 +234,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected function _getCustomerMock($customerId, $returnId = null)
     {
         $customerMock = $this->getMock('Magento\Customer\Model\Customer',
-            array('setResetPasswordUrl', 'changeResetPasswordLinkToken', 'sendPasswordReminderEmail', 'load', 'getId'),
+            array('setResetPasswordUrl', 'changeResetPasswordLinkToken', 'sendPasswordReminderEmail', 'load',
+                'getId', '__wakeup',
+            ),
             array(), '', false);
         $customerMock->expects($this->any())
             ->method('load')

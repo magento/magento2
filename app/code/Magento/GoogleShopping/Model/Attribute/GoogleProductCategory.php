@@ -50,35 +50,44 @@ class GoogleProductCategory extends \Magento\GoogleShopping\Model\Attribute\Defa
     protected $_typeFactory;
 
     /**
-     * @param \Magento\GoogleShopping\Model\TypeFactory $typeFactory
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\GoogleShopping\Helper\Data $gsData
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
      * @param \Magento\GoogleShopping\Helper\Price $gsPrice
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
+     * @param \Magento\GoogleShopping\Model\TypeFactory $typeFactory
+     * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\GoogleShopping\Model\TypeFactory $typeFactory,
+        \Magento\Core\Model\Context $context,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\GoogleShopping\Model\Config $config,
         \Magento\GoogleShopping\Helper\Data $gsData,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
         \Magento\GoogleShopping\Helper\Price $gsPrice,
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
+        \Magento\GoogleShopping\Model\TypeFactory $typeFactory,
+        \Magento\GoogleShopping\Model\Config $config,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_typeFactory = $typeFactory;
         $this->_config = $config;
-        parent::__construct($productFactory, $gsData, $gsProduct, $gsPrice, $context, $registry, $resource,
-            $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $productFactory,
+            $gsData,
+            $gsProduct,
+            $gsPrice,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**

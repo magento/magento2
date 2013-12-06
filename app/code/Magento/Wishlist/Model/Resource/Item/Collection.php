@@ -157,12 +157,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_appState;
 
     /**
-     * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\Sales\Helper\Admin $adminhtmlSales
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
+     * @param \Magento\Sales\Helper\Admin $adminhtmlSales
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Date $date
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
@@ -174,14 +174,17 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
      * @param \Magento\App\State $appState
+     * @param mixed $connection
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
-        \Magento\Sales\Helper\Admin $adminhtmlSales,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
+        \Magento\Sales\Helper\Admin $adminhtmlSales,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Date $date,
         \Magento\Wishlist\Model\Config $wishlistConfig,
@@ -192,7 +195,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory,
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\Resource\Item $resource,
-        \Magento\App\State $appState
+        \Magento\App\State $appState,
+        $connection = null
     ) {
         $this->_inventoryData = $catalogInventoryData;
         $this->_adminhtmlSales = $adminhtmlSales;
@@ -206,7 +210,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $this->_catalogConfFactory = $catalogConfFactory;
         $this->_catalogAttrFactory = $catalogAttrFactory;
         $this->_appState = $appState;
-        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**

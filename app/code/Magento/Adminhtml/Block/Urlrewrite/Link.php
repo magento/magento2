@@ -37,7 +37,7 @@
  */
 namespace Magento\Adminhtml\Block\Urlrewrite;
 
-class Link extends \Magento\View\Block\AbstractBlock
+class Link extends \Magento\View\Element\AbstractBlock
 {
     /**
      * Render output

@@ -50,7 +50,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\App\State')->setAreaCode('nonexisting');
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = $objectManager->get('Magento\View\LayoutInterface');
-        $layout->addBlock('Magento\View\Block\Text', 'head');
+        $layout->addBlock('Magento\View\Element\Text', 'head');
         /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs */
         $block = $layout->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs');
         $this->assertArrayHasKey(0, $block->getTabsIds());

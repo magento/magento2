@@ -58,8 +58,13 @@ class JsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
         $this->_themeContext = $this->getMock('Magento\DesignEditor\Model\Theme\Context', array(), array(), '', false);
-        $this->_theme = $this->getMock('Magento\Core\Model\Theme', array('getId', 'getCustomization'), array(), '',
-            false);
+        $this->_theme = $this->getMock(
+            'Magento\Core\Model\Theme',
+            array('getId', 'getCustomization', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(self::TEST_THEME_ID));
         $this->_themeContext->expects($this->any())->method('getEditableTheme')
             ->will($this->returnValue($this->_theme));

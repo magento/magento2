@@ -24,6 +24,9 @@
 
 namespace Magento\User\Model\Resource;
 
+use \Magento\User\Model\Acl\Role\Group as RoleGroup;
+use \Magento\User\Model\Acl\Role\User as RoleUser;
+
 /**
  * ACL user resource
  */
@@ -241,7 +244,7 @@ class User extends \Magento\Core\Model\Resource\Db\AbstractDb
                 'parent_id'  => $parentRole->getId(),
                 'tree_level' => $parentRole->getTreeLevel() + 1,
                 'sort_order' => 0,
-                'role_type'  => 'U',
+                'role_type'  => RoleUser::ROLE_TYPE,
                 'user_id'    => $user->getId(),
                 'role_name'  => $user->getFirstname()
             ));
@@ -318,7 +321,7 @@ class User extends \Magento\Core\Model\Resource\Db\AbstractDb
                     ->from($table, array())
                     ->joinLeft(
                         array('ar' => $table),
-                        "(ar.role_id = {$table}.parent_id and ar.role_type = 'G')",
+                        "(ar.role_id = {$table}.parent_id and ar.role_type = '" . RoleGroup::ROLE_TYPE ."')",
                         array('role_id'))
                     ->where("{$table}.user_id = :user_id");
 

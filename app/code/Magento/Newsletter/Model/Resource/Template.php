@@ -44,15 +44,11 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_date;
 
     /**
-     * Construct
-     *
      * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\Date $date
      */
-    public function __construct(
-        \Magento\Core\Model\Date $date,
-        \Magento\App\Resource $resource
-    ) {
+    public function __construct(\Magento\App\Resource $resource, \Magento\Core\Model\Date $date)
+    {
         parent::__construct($resource);
         $this->_date = $date;
     }

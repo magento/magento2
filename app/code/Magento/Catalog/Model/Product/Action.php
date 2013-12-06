@@ -51,21 +51,19 @@ class Action extends \Magento\Core\Model\AbstractModel
     protected $_productWebsiteFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory
-     * @param \Magento\Index\Model\Indexer $indexIndexer
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory
+     * @param \Magento\Index\Model\Indexer $indexIndexer
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory,
-        \Magento\Index\Model\Indexer $indexIndexer,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory,
+        \Magento\Index\Model\Indexer $indexIndexer,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

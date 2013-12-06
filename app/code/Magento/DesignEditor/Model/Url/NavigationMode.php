@@ -61,6 +61,7 @@ class NavigationMode extends \Magento\Core\Model\Url
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param string $areaCode
      * @param array $data
      */
@@ -73,6 +74,7 @@ class NavigationMode extends \Magento\Core\Model\Url
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Session $session,
+        \Magento\Session\SidResolverInterface $sidResolver,
         $areaCode,
         array $data = array()
     ) {
@@ -85,7 +87,16 @@ class NavigationMode extends \Magento\Core\Model\Url
             $this->_themeId = $data['themeId'];
         }
         parent::__construct(
-            $routeConfig, $request, $urlSecurityInfo, $coreStoreConfig, $app, $storeManager, $session, $areaCode, $data
+            $routeConfig,
+            $request,
+            $urlSecurityInfo,
+            $coreStoreConfig,
+            $app,
+            $storeManager,
+            $session,
+            $sidResolver,
+            $areaCode,
+            $data
         );
     }
 

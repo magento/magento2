@@ -41,22 +41,20 @@ class Grid extends \Magento\Sales\Block\Recurring\Profile\View
     protected $_config;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Sales\Model\Resource\Order\Collection $collection
      * @param \Magento\Sales\Model\Order\Config $config
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Sales\Model\Resource\Order\Collection $collection,
         \Magento\Sales\Model\Order\Config $config,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $registry, $data);
+        parent::__construct($context, $registry, $data);
         $this->_orderCollection = $collection;
         $this->_config = $config;
     }
@@ -92,7 +90,7 @@ class Grid extends \Magento\Sales\Block\Recurring\Profile\View
             'in' => $this->_config->getVisibleOnFrontStates()
         ));
 
-        $pager = $this->getLayout()->createBlock('Magento\Page\Block\Html\Pager')
+        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager')
             ->setCollection($this->_relatedOrders)->setIsOutputRequired(false);
         $this->setChild('pager', $pager);
 

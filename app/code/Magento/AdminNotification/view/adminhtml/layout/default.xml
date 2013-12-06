@@ -31,7 +31,7 @@
             <block class="Magento\AdminNotification\Block\Window" name="notification_window" as="notification_window" acl="Magento_AdminNotification::show_toolbar" template="notification/window.phtml"/>
         </container>
         <referenceBlock name="head">
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminnotification-system-notification-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminnotification-system-notification-js">
                 <arguments>
                     <argument name="file" xsi:type="string">Magento_AdminNotification::system/notification.js</argument>
                 </arguments>
@@ -42,12 +42,12 @@
         <block class="Magento\AdminNotification\Block\ToolbarEntry" template="toolbar_entry.phtml" before="-"/>
     </referenceBlock>
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
+        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminnotification-toolbar-entry-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminnotification-toolbar-entry-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_AdminNotification::toolbar_entry.js</argument>
             </arguments>

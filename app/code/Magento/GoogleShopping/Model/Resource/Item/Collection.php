@@ -50,26 +50,28 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\Config $config
+     * @param mixed $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
-        \Magento\Eav\Model\Config $config,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\Config $config,
+        $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_resourceHelper = $resourceHelper;
         $this->_eavConfig = $config;
-        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     protected function _construct()

@@ -390,13 +390,13 @@ class Product extends \Magento\App\Action\Action
         );
 
         if ($product->getPageLayout()) {
-            $this->_objectManager->get('Magento\Page\Helper\Layout')
+            $this->_objectManager->get('Magento\Theme\Helper\Layout')
                 ->applyHandle($product->getPageLayout());
         }
         $this->_view->loadLayoutUpdates();
 
         if ($product->getPageLayout()) {
-            $this->_objectManager->get('Magento\Page\Helper\Layout')
+            $this->_objectManager->get('Magento\Theme\Helper\Layout')
                 ->applyTemplate($product->getPageLayout());
         }
         $update->addUpdate($product->getCustomLayoutUpdate());

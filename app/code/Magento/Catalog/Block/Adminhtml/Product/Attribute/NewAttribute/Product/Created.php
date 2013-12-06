@@ -56,8 +56,13 @@ class Created extends \Magento\Backend\Block\Widget
     protected $_setFactory;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Core\Model\Registry $registry
@@ -65,16 +70,17 @@ class Created extends \Magento\Backend\Block\Widget
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_setFactory = $setFactory;
         $this->_attributeFactory = $attributeFactory;
         $this->_coreRegistry = $registry;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -138,6 +144,6 @@ class Created extends \Magento\Backend\Block\Widget
             );
         }
 
-        return $this->_coreData->jsonEncode($result);
+        return $this->_jsonEncoder->encode($result);
     }
 }

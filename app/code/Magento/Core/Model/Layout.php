@@ -34,6 +34,7 @@
 namespace Magento\Core\Model;
 
 use Magento\View\Element\BlockFactory;
+use Magento\View\Layout\Element;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -45,29 +46,6 @@ use Magento\View\Element\BlockFactory;
  */
 class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutInterface
 {
-    /**#@+
-     * Supported layout directives
-     */
-    const TYPE_BLOCK = 'block';
-    const TYPE_CONTAINER = 'container';
-    const TYPE_ACTION = 'action';
-    const TYPE_ARGUMENTS = 'arguments';
-    const TYPE_ARGUMENT = 'argument';
-    const TYPE_REFERENCE_BLOCK = 'referenceBlock';
-    const TYPE_REFERENCE_CONTAINER = 'referenceContainer';
-    const TYPE_REMOVE = 'remove';
-    const TYPE_MOVE = 'move';
-    /**#@-*/
-
-    /**#@+
-     * Names of container options in layout
-     */
-    const CONTAINER_OPT_HTML_TAG = 'htmlTag';
-    const CONTAINER_OPT_HTML_CLASS = 'htmlClass';
-    const CONTAINER_OPT_HTML_ID = 'htmlId';
-    const CONTAINER_OPT_LABEL = 'label';
-    /**#@-*/
-
     /**
      * Scheduled structure array index for name
      */
@@ -432,10 +410,10 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
             if (isset($node['output'])) {
                 $this->addOutputElement($elementName);
             }
-            if ($type == self::TYPE_BLOCK) {
+            if ($type == Element::TYPE_BLOCK) {
                 $this->_generateBlock($elementName);
             } else {
-                $this->_generateContainer($elementName, (string)$node[self::CONTAINER_OPT_LABEL], $attributes);
+                $this->_generateContainer($elementName, (string)$node[Element::CONTAINER_OPT_LABEL], $attributes);
                 $this->_scheduledStructure->unsetElement($elementName);
             }
         }
@@ -494,35 +472,35 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         foreach ($parent as $node) {
             /** @var $node \Magento\View\Layout\Element */
             switch ($node->getName()) {
-                case self::TYPE_CONTAINER:
+                case Element::TYPE_CONTAINER:
                     $this->_scheduleStructure($node, $parent);
                     $this->_mergeContainerAttributes($node);
                     $this->_readStructure($node);
                     break;
 
-                case self::TYPE_BLOCK:
+                case Element::TYPE_BLOCK:
                     $this->_initServiceCalls($node);
                     $this->_scheduleStructure($node, $parent);
                     $this->_readStructure($node);
                     break;
 
-                case self::TYPE_REFERENCE_CONTAINER:
+                case Element::TYPE_REFERENCE_CONTAINER:
                     $this->_mergeContainerAttributes($node);
                     $this->_readStructure($node);
                     break;
 
-                case self::TYPE_REFERENCE_BLOCK:
+                case Element::TYPE_REFERENCE_BLOCK:
                     $this->_readStructure($node);
                     break;
 
-                case self::TYPE_ACTION:
+                case Element::TYPE_ACTION:
                     $referenceName = $parent->getAttribute('name');
                     $element = $this->_scheduledStructure->getStructureElement($referenceName, array());
                     $element['actions'][] = array($node, $parent);
                     $this->_scheduledStructure->setStructureElement($referenceName, $element);
                     break;
 
-                case self::TYPE_ARGUMENTS:
+                case Element::TYPE_ARGUMENTS:
                     $referenceName = $parent->getAttribute('name');
                     $element = $this->_scheduledStructure->getStructureElement($referenceName, array());
                     $args = $this->_parseArguments($node);
@@ -531,11 +509,11 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
                     $this->_scheduledStructure->setStructureElement($referenceName, $element);
                     break;
 
-                case self::TYPE_MOVE:
+                case Element::TYPE_MOVE:
                     $this->_scheduleMove($node);
                     break;
 
-                case self::TYPE_REMOVE:
+                case Element::TYPE_REMOVE:
                     $this->_scheduledStructure->setElementToRemoveList((string)$node->getAttribute('name'));
                     break;
 
@@ -590,10 +568,10 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
             }
         } else {
             $element['attributes'] = array(
-                self::CONTAINER_OPT_HTML_TAG => (string)$node[self::CONTAINER_OPT_HTML_TAG],
-                self::CONTAINER_OPT_HTML_ID => (string)$node[self::CONTAINER_OPT_HTML_ID],
-                self::CONTAINER_OPT_HTML_CLASS => (string)$node[self::CONTAINER_OPT_HTML_CLASS],
-                self::CONTAINER_OPT_LABEL => (string)$node[self::CONTAINER_OPT_LABEL],
+                Element::CONTAINER_OPT_HTML_TAG => (string)$node[Element::CONTAINER_OPT_HTML_TAG],
+                Element::CONTAINER_OPT_HTML_ID => (string)$node[Element::CONTAINER_OPT_HTML_ID],
+                Element::CONTAINER_OPT_HTML_CLASS => (string)$node[Element::CONTAINER_OPT_HTML_CLASS],
+                Element::CONTAINER_OPT_LABEL => (string)$node[Element::CONTAINER_OPT_LABEL],
             );
         }
         $this->_scheduledStructure->setStructureElement($containerName, $element);
@@ -876,13 +854,13 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * Creates block object based on xml node data and add it to the layout
      *
      * @param string $elementName
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      * @throws \Magento\Exception
      */
     protected function _generateBlock($elementName)
     {
         list($type, $node, $actions, $args) = $this->_scheduledStructure->getElement($elementName);
-        if ($type !== self::TYPE_BLOCK) {
+        if ($type !== Element::TYPE_BLOCK) {
             throw new \Magento\Exception("Unexpected element type specified for generating block: {$type}.");
         }
 
@@ -909,7 +887,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
 
         if (!empty($node['template'])) {
             $templateFileName = (string)$node['template'];
-            if ($block instanceof \Magento\View\Block\Template) {
+            if ($block instanceof \Magento\View\Element\Template) {
                 $block->assign($dictionary);
             }
             $block->setTemplate($templateFileName);
@@ -941,21 +919,21 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      */
     protected function _generateContainer($name, $label = '', array $options)
     {
-        $this->_structure->setAttribute($name, self::CONTAINER_OPT_LABEL, $label);
-        unset($options[self::CONTAINER_OPT_LABEL]);
+        $this->_structure->setAttribute($name, Element::CONTAINER_OPT_LABEL, $label);
+        unset($options[Element::CONTAINER_OPT_LABEL]);
         unset($options['type']);
         $allowedTags = array(
             'dd', 'div', 'dl', 'fieldset', 'header', 'footer', 'hgroup', 'ol', 'p', 'section','table', 'tfoot', 'ul'
         );
-        if (!empty($options[self::CONTAINER_OPT_HTML_TAG])
-            && !in_array($options[self::CONTAINER_OPT_HTML_TAG], $allowedTags)
+        if (!empty($options[Element::CONTAINER_OPT_HTML_TAG])
+            && !in_array($options[Element::CONTAINER_OPT_HTML_TAG], $allowedTags)
         ) {
             throw new \Magento\Exception(
                 __('Html tag "%1" is forbidden for usage in containers. Consider to use one of the allowed: %2.',
-                $options[self::CONTAINER_OPT_HTML_TAG], implode(', ', $allowedTags)));
+                $options[Element::CONTAINER_OPT_HTML_TAG], implode(', ', $allowedTags)));
         }
-        if (empty($options[self::CONTAINER_OPT_HTML_TAG])
-            && (!empty($options[self::CONTAINER_OPT_HTML_ID]) || !empty($options[self::CONTAINER_OPT_HTML_CLASS]))
+        if (empty($options[Element::CONTAINER_OPT_HTML_TAG])
+            && (!empty($options[Element::CONTAINER_OPT_HTML_ID]) || !empty($options[Element::CONTAINER_OPT_HTML_CLASS]))
         ) {
             throw new \Magento\Exception('HTML ID or class will not have effect, if HTML tag is not specified.');
         }
@@ -1001,7 +979,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      *
      * @param string $parentName
      * @param string $alias
-     * @return bool|\Magento\View\Block\AbstractBlock
+     * @return bool|\Magento\View\Element\AbstractBlock
      */
     public function getChildBlock($parentName, $alias)
     {
@@ -1192,21 +1170,21 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         foreach ($children as $child) {
             $html .= $this->renderElement($child);
         }
-        if ($html == '' || !$this->_structure->getAttribute($name, self::CONTAINER_OPT_HTML_TAG)) {
+        if ($html == '' || !$this->_structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG)) {
             return $html;
         }
 
-        $htmlId = $this->_structure->getAttribute($name, self::CONTAINER_OPT_HTML_ID);
+        $htmlId = $this->_structure->getAttribute($name, Element::CONTAINER_OPT_HTML_ID);
         if ($htmlId) {
             $htmlId = ' id="' . $htmlId . '"';
         }
 
-        $htmlClass = $this->_structure->getAttribute($name, self::CONTAINER_OPT_HTML_CLASS);
+        $htmlClass = $this->_structure->getAttribute($name, Element::CONTAINER_OPT_HTML_CLASS);
         if ($htmlClass) {
             $htmlClass = ' class="'. $htmlClass . '"';
         }
 
-        $htmlTag = $this->_structure->getAttribute($name, self::CONTAINER_OPT_HTML_TAG);
+        $htmlTag = $this->_structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG);
 
         $html = sprintf('<%1$s%2$s%3$s>%4$s</%1$s>', $htmlTag, $htmlId, $htmlClass, $html);
 
@@ -1269,7 +1247,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     public function isBlock($name)
     {
         if ($this->_structure->hasElement($name)) {
-            return self::TYPE_BLOCK === $this->_structure->getAttribute($name, 'type');
+            return Element::TYPE_BLOCK === $this->_structure->getAttribute($name, 'type');
         }
         return false;
     }
@@ -1283,7 +1261,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     public function isContainer($name)
     {
         if ($this->_structure->hasElement($name)) {
-            return self::TYPE_CONTAINER === $this->_structure->getAttribute($name, 'type');
+            return Element::TYPE_CONTAINER === $this->_structure->getAttribute($name, 'type');
         }
         return false;
     }
@@ -1304,7 +1282,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * Save block in blocks registry
      *
      * @param string $name
-     * @param \Magento\View\Block\AbstractBlock $block
+     * @param \Magento\View\Element\AbstractBlock $block
      * @return \Magento\Core\Model\Layout
      */
     public function setBlock($name, $block)
@@ -1336,11 +1314,11 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * @param  string $type
      * @param  string $name
      * @param  array $attributes
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     public function createBlock($type, $name = '', array $attributes = array())
     {
-        $name = $this->_createStructuralElement($name, self::TYPE_BLOCK, $type);
+        $name = $this->_createStructuralElement($name, Element::TYPE_BLOCK, $type);
         $block = $this->_createBlock($type, $name, $attributes);
         return $block;
     }
@@ -1348,10 +1326,10 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     /**
      * Create block and add to layout
      *
-     * @param string|\Magento\View\Block\AbstractBlock $block
+     * @param string|\Magento\View\Element\AbstractBlock $block
      * @param string $name
      * @param array $attributes
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _createBlock($block, $name, array $attributes = array())
     {
@@ -1370,20 +1348,20 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     /**
      * Add a block to registry, create new object if needed
      *
-     * @param string|\Magento\View\Block\AbstractBlock $block
+     * @param string|\Magento\View\Element\AbstractBlock $block
      * @param string $name
      * @param string $parent
      * @param string $alias
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     public function addBlock($block, $name = '', $parent = '', $alias = '')
     {
-        if (empty($name) && $block instanceof \Magento\View\Block\AbstractBlock) {
+        if (empty($name) && $block instanceof \Magento\View\Element\AbstractBlock) {
             $name = $block->getNameInLayout();
         }
         $name = $this->_createStructuralElement(
             $name,
-            self::TYPE_BLOCK,
+            Element::TYPE_BLOCK,
             $name ?: (is_object($block) ? get_class($block) : $block)
         );
         if ($parent) {
@@ -1403,7 +1381,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      */
     public function addContainer($name, $label, array $options = array(), $parent = '', $alias = '')
     {
-        $name = $this->_createStructuralElement($name, self::TYPE_CONTAINER, $alias);
+        $name = $this->_createStructuralElement($name, Element::TYPE_CONTAINER, $alias);
         $this->_generateContainer($name, $label, $options);
         if ($parent) {
             $this->_structure->setAsChild($name, $parent, $alias);
@@ -1433,10 +1411,10 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     /**
      * Create block object instance based on block type
      *
-     * @param string|\Magento\View\Block\AbstractBlock $block
+     * @param string|\Magento\View\Element\AbstractBlock $block
      * @param array $attributes
      * @throws \Magento\Core\Exception
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _getBlockInstance($block, array $attributes = array())
     {
@@ -1445,7 +1423,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
                 $block = $this->_blockFactory->createBlock($block, $attributes);
             }
         }
-        if (!$block instanceof \Magento\View\Block\AbstractBlock) {
+        if (!$block instanceof \Magento\View\Element\AbstractBlock) {
             throw new \Magento\Core\Exception(__('Invalid block type: %1', $block));
         }
         return $block;
@@ -1466,7 +1444,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * Get block object by name
      *
      * @param string $name
-     * @return \Magento\View\Block\AbstractBlock|bool
+     * @return \Magento\View\Element\AbstractBlock|bool
      */
     public function getBlock($name)
     {
@@ -1546,7 +1524,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     /**
      * Retrieve messages block
      *
-     * @return \Magento\View\Block\Messages
+     * @return \Magento\View\Element\Messages
      */
     public function getMessagesBlock()
     {
@@ -1554,7 +1532,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         if ($block) {
             return $block;
         }
-        return $this->createBlock('Magento\View\Block\Messages', 'messages');
+        return $this->createBlock('Magento\View\Element\Messages', 'messages');
     }
 
     /**
@@ -1573,7 +1551,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
 
             $helper = $this->_blockFactory->createBlock($type);
             if ($helper) {
-                if ($helper instanceof \Magento\View\Block\AbstractBlock) {
+                if ($helper instanceof \Magento\View\Element\AbstractBlock) {
                     $helper->setLayout($this);
                 }
                 $this->_helpers[$type] = $helper;
@@ -1653,7 +1631,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
             if (!empty($options['dataServiceName'])) {
                 $dictionary = $this->_dataServiceGraph->get($options['dataServiceName']);
             }
-            /** @var $block \Magento\View\Block\Template */
+            /** @var $block \Magento\View\Element\Template */
             $block = $this->createBlock($options['type'], '')
                 ->setData($data)
                 ->assign($dictionary)

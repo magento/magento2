@@ -60,7 +60,7 @@ class ProTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($isReviewRequired));
         $payment = $this->getMockBuilder('Magento\Payment\Model\Info')
             ->disableOriginalConstructor()
-            ->setMethods(array('getAdditionalInformation'))
+            ->setMethods(array('getAdditionalInformation', '__wakeup'))
             ->getMock();
         $payment->expects($this->once())
             ->method('getAdditionalInformation')

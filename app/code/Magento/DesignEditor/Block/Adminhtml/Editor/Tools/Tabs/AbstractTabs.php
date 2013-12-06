@@ -31,7 +31,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs;
 
-abstract class AbstractTabs extends \Magento\View\Block\Template
+abstract class AbstractTabs extends \Magento\View\Element\Template
 {
     /**
      * Alias of tab handle block in layout

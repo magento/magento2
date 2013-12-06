@@ -46,7 +46,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $block = $layout->createBlock('Magento\Sales\Block\Order\PrintOrder\Creditmemo', 'block');
-        $childBlock = $layout->addBlock('Magento\View\Block\Text', 'creditmemo_totals', 'block');
+        $childBlock = $layout->addBlock('Magento\View\Element\Text', 'creditmemo_totals', 'block');
 
         $expectedHtml = '<b>Any html</b>';
         $creditmemo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

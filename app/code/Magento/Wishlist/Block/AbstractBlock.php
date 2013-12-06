@@ -82,8 +82,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $_productFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -95,8 +94,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
@@ -110,7 +108,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
         $this->_wishlistData = $wishlistData;
         $this->_customerSession = $customerSession;
         $this->_productFactory = $productFactory;
-        parent::__construct($context, $coreData, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
+        parent::__construct($context, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
     }
 
     /**
@@ -376,7 +374,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * Returns block to render item with some product type
      *
      * @param string $productType
-     * @return \Magento\View\Block\Template
+     * @return \Magento\View\Element\Template
      */
     protected function _getItemPriceBlock($productType)
     {

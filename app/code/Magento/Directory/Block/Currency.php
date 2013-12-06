@@ -29,7 +29,7 @@
  */
 namespace Magento\Directory\Block;
 
-class Currency extends \Magento\View\Block\Template
+class Currency extends \Magento\View\Element\Template
 {
     /**
      * Directory url
@@ -44,22 +44,20 @@ class Currency extends \Magento\View\Block\Template
     protected $_currencyFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Url $directoryUrl
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Directory\Helper\Url $directoryUrl,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         array $data = array()
     ) {
         $this->_directoryUrl = $directoryUrl;
         $this->_currencyFactory = $currencyFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

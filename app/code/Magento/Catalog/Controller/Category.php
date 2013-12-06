@@ -174,7 +174,7 @@ class Category extends \Magento\App\Action\Action
             $this->_view->generateLayoutBlocks();
             // apply custom layout (page) template once the blocks are generated
             if ($settings->getPageLayout()) {
-                $this->_objectManager->get('Magento\Page\Helper\Layout')->applyTemplate($settings->getPageLayout());
+                $this->_objectManager->get('Magento\Theme\Helper\Layout')->applyTemplate($settings->getPageLayout());
             }
 
             $root = $this->_view->getLayout()->getBlock('root');

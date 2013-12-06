@@ -80,18 +80,16 @@ class Category extends \Magento\App\Helper\AbstractHelper
     protected $_dataCollectionFactory;
 
     /**
-     * Construct
-     *
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Data\CollectionFactory $dataCollectionFactory
      */
     public function __construct(
+        \Magento\App\Helper\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Data\CollectionFactory $dataCollectionFactory
     ) {

@@ -32,27 +32,27 @@
             <action method="setTitle">
                 <argument translate="true" name="title" xsi:type="string">Magento Admin</argument>
             </action>
-            <block class="Magento\Page\Block\Html\Head\Script" name="prototype-prototype-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-prototype-js">
                 <arguments>
                     <argument name="file" xsi:type="string">prototype/prototype.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="prototype-window-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-window-js">
                 <arguments>
                     <argument name="file" xsi:type="string">prototype/window.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="prototype-deprecation-js" ifconfig="dev/js/deprecation">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-deprecation-js" ifconfig="dev/js/deprecation">
                 <arguments>
                     <argument name="file" xsi:type="string">prototype/deprecation.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\View\Block\Html\Calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+            <block class="Magento\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
         </block>
         <block class="Magento\Backend\Block\Page\Header" name="header" as="header"/>
         <block class="Magento\Backend\Block\Menu" name="menu" as="menu"/>
-        <block class="Magento\View\Block\Messages" name="messages" as="messages"/>
-        <block class="Magento\View\Block\Text" as="no_name"/>
+        <block class="Magento\View\Element\Messages" name="messages" as="messages"/>
+        <block class="Magento\View\Element\Text" as="no_name"/>
     </block>
     <update handle="layout_test_handle_sample"/>
     <remove name="header"/>
@@ -65,7 +65,7 @@
         </action>
     </referenceBlock>
     <referenceBlock name="some_element_1"/>
-    <block class="Magento\View\Block\Text\ListText" name="test.nonexisting.block"/>
+    <block class="Magento\View\Element\Text\ListText" name="test.nonexisting.block"/>
     <remove name="test.nonexisting.block"/>
     <referenceBlock name="test.nonexisting.block">
         <action method="getSomething"/>

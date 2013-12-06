@@ -42,8 +42,13 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_userRolesFactory;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\User\Model\Resource\Role\CollectionFactory $userRolesFactory
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -51,15 +56,16 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\User\Model\Resource\Role\CollectionFactory $userRolesFactory,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_userRolesFactory = $userRolesFactory;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     protected function _construct()
@@ -147,7 +153,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
             foreach ($uRoles as $urid) {
                 $jsonRoles[$urid] = 0;
             }
-            return $this->_coreData->jsonEncode((object)$jsonRoles);
+            return $this->_jsonEncoder->encode((object)$jsonRoles);
         } else {
             return $uRoles;
         }

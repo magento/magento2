@@ -42,13 +42,11 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $filterManager;
 
     /**
-     * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\App\Resource $resource
+     * @param \Magento\Filter\FilterManager $filterManager
      */
-    public function __construct(
-        \Magento\Filter\FilterManager $filterManager,
-        \Magento\App\Resource $resource
-    ) {
+    public function __construct(\Magento\App\Resource $resource, \Magento\Filter\FilterManager $filterManager)
+    {
         $this->filterManager = $filterManager;
         parent::__construct($resource);
     }

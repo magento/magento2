@@ -49,7 +49,6 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
@@ -58,7 +57,6 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Sales\Model\Order\ConfigFactory $orderConfig,
@@ -66,7 +64,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
         array $data = array()
     ) {
         $this->_reportRule = $reportRule;
-        parent::__construct($context, $coreData, $registry, $formFactory, $orderConfig, $data);
+        parent::__construct($context, $registry, $formFactory, $orderConfig, $data);
     }
 
     /**

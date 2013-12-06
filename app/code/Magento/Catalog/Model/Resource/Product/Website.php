@@ -51,16 +51,14 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_productResource;
 
     /**
-     * Class constructor
-     *
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Resource $resource
      */
     public function __construct(
+        \Magento\App\Resource $resource,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Resource $resource
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;

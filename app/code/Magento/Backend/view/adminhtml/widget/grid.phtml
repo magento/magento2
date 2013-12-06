@@ -50,7 +50,7 @@ $numColumns = sizeof($this->getColumns());
 
         <div id="<?php echo $this->getId() ?>">
     <?php else: ?>
-        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
         <?php endif; ?>
     <?php if ($this->getPagerVisibility() || $this->getExportTypes() || $this->getChildBlock('grid.columnSet')->getFilterVisibility()): ?>
         <div class="grid-actions">

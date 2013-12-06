@@ -45,22 +45,28 @@ class Packaging extends \Magento\Backend\Block\Template
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size $sourceSizeModel
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size $sourceSizeModel,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_sourceSizeModel = $sourceSizeModel;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -130,7 +136,7 @@ class Packaging extends \Magento\Backend\Block\Template
             'shipmentItemsOrderItemId'  => $itemsOrderItemId,
             'customizable'              => $this->_getCustomizableContainers(),
         );
-        return $this->_coreData->jsonEncode($data);
+        return $this->_jsonEncoder->encode($data);
     }
 
     /**

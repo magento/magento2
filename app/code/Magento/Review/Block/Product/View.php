@@ -46,8 +46,9 @@ class View extends \Magento\Catalog\Block\Product\View
     protected $_reviewsColFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -60,13 +61,14 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Math\Random $mathRandom,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Stdlib\String $string,
@@ -76,12 +78,13 @@ class View extends \Magento\Catalog\Block\Product\View
         $this->_reviewsColFactory = $collectionFactory;
         parent::__construct(
             $context,
-            $coreData,
             $catalogConfig,
             $registry,
             $taxData,
             $catalogData,
             $mathRandom,
+            $coreData,
+            $jsonEncoder,
             $productFactory,
             $taxCalculation,
             $string,

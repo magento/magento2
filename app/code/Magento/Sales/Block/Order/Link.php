@@ -27,26 +27,24 @@ namespace Magento\Sales\Block\Order;
 /**
  * Sales order link
  */
-class Link extends \Magento\Page\Block\Link\Current
+class Link extends \Magento\View\Element\Html\Link\Current
 {
     /** @var \Magento\Core\Model\Registry  */
     protected $_registry;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\App\DefaultPathInterface $defaultPath
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\App\DefaultPathInterface $defaultPath,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $defaultPath, $data);
+        parent::__construct($context, $defaultPath, $data);
         $this->_registry = $registry;
     }
 

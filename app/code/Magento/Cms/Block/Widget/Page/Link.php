@@ -35,7 +35,7 @@
 namespace Magento\Cms\Block\Widget\Page;
 
 class Link
-    extends \Magento\View\Block\Html\Link
+    extends \Magento\View\Element\Html\Link
     implements \Magento\Widget\Block\BlockInterface
 {
     /**
@@ -72,20 +72,18 @@ class Link
     protected $_cmsPage;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Cms\Model\Resource\Page $resourcePage
      * @param \Magento\Cms\Helper\Page $cmsPage
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Cms\Model\Resource\Page $resourcePage,
         \Magento\Cms\Helper\Page $cmsPage,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
         $this->_resourcePage = $resourcePage;
         $this->_cmsPage = $cmsPage;
     }
@@ -135,13 +133,13 @@ class Link
     }
 
     /**
-     * Prepare anchor text using passed text as parameter.
+     * Prepare label using passed text as parameter.
      * If anchor text was not specified use title instead and
      * if title will be blank string, page identifier will be used.
      *
      * @return string
      */
-    public function getAnchorText()
+    public function getLable()
     {
         if ($this->getData('anchor_text')) {
             $this->_anchorText = $this->getData('anchor_text');

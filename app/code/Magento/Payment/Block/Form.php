@@ -29,7 +29,7 @@
  */
 namespace Magento\Payment\Block;
 
-class Form extends \Magento\View\Block\Template
+class Form extends \Magento\View\Element\Template
 {
     /**
      * Retrieve payment method model

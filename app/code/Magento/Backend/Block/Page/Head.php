@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Block\Page;
 
-class Head extends \Magento\Page\Block\Html\Head
+class Head extends \Magento\Theme\Block\Html\Head
 {
     /**
      * @var string
@@ -46,34 +46,39 @@ class Head extends \Magento\Page\Block\Html\Head
     protected $_titles;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Data\Form\FormKey
+     */
+    protected $formKey;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Page $page
-     * @param \Magento\Core\Model\Page\Asset\MergeService $assetMergeService
-     * @param \Magento\Core\Model\Page\Asset\MinifyService $assetMinifyService
+     * @param \Magento\View\Asset\GroupedCollection $assets
+     * @param \Magento\View\Asset\MergeService $assetMergeService
+     * @param \Magento\View\Asset\MinifyService $assetMinifyService
      * @param \Magento\App\Action\Title $titles
+     * @param \Magento\Data\Form\FormKey $formKey
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase,
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Page $page,
-        \Magento\Core\Model\Page\Asset\MergeService $assetMergeService,
-        \Magento\Core\Model\Page\Asset\MinifyService $assetMinifyService,
+        \Magento\View\Asset\GroupedCollection $assets,
+        \Magento\View\Asset\MergeService $assetMergeService,
+        \Magento\View\Asset\MinifyService $assetMinifyService,
         \Magento\App\Action\Title $titles,
+        \Magento\Data\Form\FormKey $formKey,
         array $data = array()
     ) {
         $this->_titles = $titles;
+        $this->formKey = $formKey;
         parent::__construct(
             $context,
-            $coreData,
             $fileStorageDatabase,
             $objectManager,
-            $page,
+            $assets,
             $assetMergeService,
             $assetMinifyService,
             $data
@@ -87,7 +92,7 @@ class Head extends \Magento\Page\Block\Html\Head
      */
     public function getFormKey()
     {
-        return $this->_session->getFormKey();
+        return $this->formKey->getFormKey();
     }
 
     /**

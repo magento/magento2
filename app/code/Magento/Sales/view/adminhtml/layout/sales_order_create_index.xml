@@ -31,33 +31,33 @@
         </action>
     </referenceBlock>
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-sales-order-create-scripts-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-sales-order-create-scripts-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Sales::order/create/scripts.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-sales-order-create-giftmessage-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-sales-order-create-giftmessage-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Sales::order/create/giftmessage.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-composite-configure-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-composite-configure-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Catalog::catalog/product/composite/configure.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="varien-configurable-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="varien-configurable-js">
             <arguments>
                 <argument name="file" xsi:type="string">varien/configurable.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-sales-order-giftoptions-tooltip-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-sales-order-giftoptions-tooltip-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Sales::order/giftoptions_tooltip.js</argument>
             </arguments>
         </block>
         <block class="Magento\Backend\Block\Template" name="optional_zip_countries" as="optional_zip_countries" template="Magento_Directory::js/optional_zip_countries.phtml"/>
-        <block class="Magento\Page\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
+        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
             </arguments>
@@ -111,7 +111,7 @@
                     <block class="Magento\Backend\Block\Template" name="gift_options" template="Magento_Sales::order/giftoptions.phtml">
                         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage" template="order/create/giftmessage.phtml" name="giftmessage"/>
                     </block>
-                    <block class="Magento\View\Block\Text\ListText" name="order_item_extra_info"/>
+                    <block class="Magento\View\Element\Text\ListText" name="order_item_extra_info"/>
                 </block>
             </block>
         </block>

@@ -61,7 +61,7 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
 
         $this->_agreementMock = $this->getMock(
             'Magento\Sales\Model\Billing\Agreement',
-            array('getId'),
+            array('getId', '__wakeup'),
             array(),
             '',
             false

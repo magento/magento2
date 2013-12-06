@@ -31,24 +31,34 @@ class Collection
     extends \Magento\Webhook\Model\Resource\Subscription\Collection
 {
     /**
-     * @param \Magento\Webhook\Model\Subscription\Config $subscriptionConfig
-     * @param \Magento\Webhook\Model\Resource\Endpoint $endpointResource
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Core\Model\Resource\Db\Abstract $resource
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Webhook\Model\Resource\Endpoint $endpointResource
+     * @param \Magento\Webhook\Model\Subscription\Config $subscriptionConfig
+     * @param mixed $connection
+     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
-        \Magento\Webhook\Model\Subscription\Config $subscriptionConfig,
-        \Magento\Webhook\Model\Resource\Endpoint $endpointResource,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Webhook\Model\Resource\Endpoint $endpointResource,
+        \Magento\Webhook\Model\Subscription\Config $subscriptionConfig,
+        $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        parent::__construct($endpointResource, $eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $endpointResource,
+            $connection,
+            $resource
+        );
         $subscriptionConfig->updateSubscriptionCollection();
     }
 }

@@ -49,15 +49,13 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_customersFactory;
 
     /**
-     * Class constructor
-     *
-     * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\App\Resource $resource
+     * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
      */
     public function __construct(
-        \Magento\Customer\Helper\Data $customerData,
         \Magento\App\Resource $resource,
+        \Magento\Customer\Helper\Data $customerData,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
     ) {
         $this->_customerData = $customerData;

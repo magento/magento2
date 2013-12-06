@@ -42,7 +42,6 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -50,14 +49,13 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         array $data = array()
     ) {
         $this->_currencyFactory = $currencyFactory;
-        parent::__construct($context, $coreData, $sessionQuote, $orderCreate, $data);
+        parent::__construct($context, $sessionQuote, $orderCreate, $data);
     }
 
     /**

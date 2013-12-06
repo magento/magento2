@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
 
-class Error extends \Magento\View\Block\Template
+class Error extends \Magento\View\Element\Template
 {
     /**
      * Core registry
@@ -43,19 +43,25 @@ class Error extends \Magento\View\Block\Template
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $registry;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -67,6 +73,6 @@ class Error extends \Magento\View\Block\Template
     public function _toHtml()
     {
         $message = $this->_coreRegistry->registry('composite_configure_result_error_message');
-        return $this->_coreData->jsonEncode(array('error' => true, 'message' => $message));
+        return $this->_jsonEncoder->encode(array('error' => true, 'message' => $message));
     }
 }

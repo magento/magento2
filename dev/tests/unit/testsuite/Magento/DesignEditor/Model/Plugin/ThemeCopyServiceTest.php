@@ -58,10 +58,20 @@ class ThemeCopyServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($targetThemeId));
 
-        $sourceChangeMock = $this->getMock('Magento\DesignEditor\Model\Theme\Change',
-            array('getId', 'getChangeTime', 'loadByThemeId'), array(), '', false);
-        $targetChangeMock = $this->getMock('Magento\DesignEditor\Model\Theme\Change',
-            array('setThemeId', 'setChangeTime', 'loadByThemeId', 'save'), array(), '', false);
+        $sourceChangeMock = $this->getMock(
+            'Magento\DesignEditor\Model\Theme\Change',
+            array('getId', 'getChangeTime', 'loadByThemeId', '__wakeup'),
+            array(),
+            '',
+            false
+        );
+        $targetChangeMock = $this->getMock(
+            'Magento\DesignEditor\Model\Theme\Change',
+            array('setThemeId', 'setChangeTime', 'loadByThemeId', 'save', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_factoryMock->expects($this->at(0))
             ->method('create')
             ->will($this->returnValue($sourceChangeMock));

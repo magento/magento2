@@ -33,7 +33,7 @@
  */
 namespace Magento\Checkout\Block\Multishipping;
 
-class AbstractMultishipping extends \Magento\View\Block\Template
+class AbstractMultishipping extends \Magento\View\Element\Template
 {
     /**
      * @var \Magento\Checkout\Model\Type\Multishipping
@@ -41,19 +41,17 @@ class AbstractMultishipping extends \Magento\View\Block\Template
     protected $_multishipping;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Type\Multishipping $multishipping
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Type\Multishipping $multishipping,
         array $data = array()
     ) {
         $this->_multishipping = $multishipping;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

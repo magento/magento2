@@ -55,7 +55,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('isAvailable', 'getId'))
+            ->setMethods(array('isAvailable', 'getId', '__wakeup'))
             ->getMock();
         $product->expects($this->once())->method('getId')->will($this->returnValue(1));
         $product->expects($this->once())->method('isAvailable')->will($this->returnValue(false));

@@ -50,8 +50,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->_formMock = $this->getMock('Magento\Data\Form', array('setFieldNameSuffix', 'addFieldset'), array(), '',
             false);
         $this->_fieldsetMock = $this->getMock('Magento\Data\Form\Element\Fieldset', array(), array(), '', false);
-        $this->_experimentCodeMock = $this->getMock('Magento\GoogleOptimizer\Model\Code',
-            array('getExperimentScript', 'getCodeId'), array(), '', false);
+        $this->_experimentCodeMock = $this->getMock(
+            'Magento\GoogleOptimizer\Model\Code',
+            array('getExperimentScript', 'getCodeId', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
         $data = array(
             'context' => $context

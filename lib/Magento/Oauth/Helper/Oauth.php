@@ -60,7 +60,6 @@ class Oauth
 
     /**
      * @param \Magento\Math\Random $mathRandom
-     * @internal param \Magento\Core\Helper\Data $coreData
      */
     public function __construct(\Magento\Math\Random $mathRandom)
     {

@@ -57,7 +57,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Catalog\Model\ProductFactory $catalogProduct
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection
@@ -67,7 +66,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\Catalog\Model\ProductFactory $catalogProduct,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection,
@@ -79,7 +77,7 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_cpCollection = $cpCollection;
         $this->_eavAttSetCollection = $eavAttSetCollection;
         $this->_catalogProduct = $catalogProduct;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     protected function _construct()

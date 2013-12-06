@@ -87,21 +87,19 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected $_catalogResourceUrl;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Resource\Url $catalogResourceUrl
-     * @param \Magento\Catalog\Model\Url $catalogUrl
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Catalog\Model\Resource\Url $catalogResourceUrl
+     * @param \Magento\Catalog\Model\Url $catalogUrl
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Url $catalogResourceUrl,
-        \Magento\Catalog\Model\Url $catalogUrl,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Catalog\Model\Resource\Url $catalogResourceUrl,
+        \Magento\Catalog\Model\Url $catalogUrl,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

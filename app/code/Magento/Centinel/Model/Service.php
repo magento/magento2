@@ -90,13 +90,6 @@ class Service extends \Magento\Object
     protected $_centinelSession;
 
     /**
-     * Session
-     *
-     * @var \Magento\Core\Model\Session
-     */
-    protected $_session;
-
-    /**
      * State factory
      *
      * @var \Magento\Centinel\Model\StateFactory
@@ -116,12 +109,17 @@ class Service extends \Magento\Object
     protected $_urlPrefix;
 
     /**
+     * @var \Magento\Data\Form\FormKey
+     */
+    protected $formKey;
+    
+    /**
      * @param \Magento\Centinel\Model\Config $config
      * @param \Magento\Centinel\Model\Api $api
      * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\Session\AbstractSession $centinelSession
-     * @param \Magento\Core\Model\Session $session
      * @param \Magento\Centinel\Model\StateFactory $stateFactory
+     * @param \Magento\Data\Form\FormKey $formKey
      * @param string $urlPrefix
      * @param array $data
      */
@@ -130,8 +128,8 @@ class Service extends \Magento\Object
         \Magento\Centinel\Model\Api $api,
         \Magento\UrlInterface $url,
         \Magento\Core\Model\Session\AbstractSession $centinelSession,
-        \Magento\Core\Model\Session $session,
         \Magento\Centinel\Model\StateFactory $stateFactory,
+        \Magento\Data\Form\FormKey $formKey,
         $urlPrefix = 'centinel/index/',
         array $data = array()
     ) {
@@ -139,8 +137,8 @@ class Service extends \Magento\Object
         $this->_api = $api;
         $this->_url = $url;
         $this->_centinelSession = $centinelSession;
-        $this->_session = $session;
         $this->_stateFactory = $stateFactory;
+        $this->formKey = $formKey;
         $this->_urlPrefix = $urlPrefix;
         parent::__construct($data);
     }
@@ -184,7 +182,7 @@ class Service extends \Magento\Object
         $params = array(
             '_secure'  => true,
             '_current' => $current,
-            'form_key' => $this->_session->getFormKey(),
+            'form_key' => $this->formKey->getFormKey(),
             'isIframe' => true
         );
         return $this->_url->getUrl($this->_urlPrefix . $suffix, $params);

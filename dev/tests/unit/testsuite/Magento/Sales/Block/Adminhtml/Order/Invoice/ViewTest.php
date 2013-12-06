@@ -54,7 +54,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         // Create invoice mock
         $invoice = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
-            ->setMethods(array('getOrder'))
+            ->setMethods(array('getOrder', '__wakeup'))
             ->getMock();
         $invoice->expects($this->once())
             ->method('getOrder')

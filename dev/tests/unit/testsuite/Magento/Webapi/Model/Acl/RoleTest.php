@@ -109,7 +109,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $collection = $this->getMock(
             'Magento\Webapi\Model\Resource\Acl\Role\Collection',
             array('_initSelect', 'setModel'),
-            array($eventManager, $logger, $fetchStrategy, $entityFactory, $this->_roleService)
+            array($entityFactory, $logger, $fetchStrategy, $eventManager, null, $this->_roleService)
         );
 
         $collection->expects($this->any())->method('setModel')->with('Magento\Webapi\Model\Resource\Acl\Role');

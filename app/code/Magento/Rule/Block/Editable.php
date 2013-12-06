@@ -26,31 +26,12 @@
 
 namespace Magento\Rule\Block;
 
+use Magento\View\Element\AbstractBlock;
+
 class Editable
-    extends \Magento\View\Block\AbstractBlock
+    extends \Magento\View\Element\AbstractBlock
     implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
-    /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
-     * @param \Magento\View\Block\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\View\Block\Context $context,
-        \Magento\Core\Helper\Data $coreData,
-        array $data = array()
-    ) {
-        $this->_coreData = $coreData;
-        parent::__construct($context, $data);
-    }
-
     /**
      * Render element
      *

@@ -78,33 +78,43 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected $_reportOrderFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Resource\Helper $coreResourceHelper
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
+     * @param mixed $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Resource\Helper $coreResourceHelper,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
+        $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
-            $eventManager, $logger, $fetchStrategy, $entityFactory, $coreResourceHelper, $resource
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $coreResourceHelper,
+            $connection,
+            $resource
         );
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;

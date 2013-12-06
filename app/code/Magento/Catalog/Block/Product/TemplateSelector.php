@@ -31,7 +31,7 @@ namespace Magento\Catalog\Block\Product;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class TemplateSelector extends \Magento\View\Block\Template
+class TemplateSelector extends \Magento\View\Element\Template
 {
     /**
      * Core registry
@@ -55,16 +55,14 @@ class TemplateSelector extends \Magento\View\Block\Template
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory,
         \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
@@ -73,7 +71,7 @@ class TemplateSelector extends \Magento\View\Block\Template
         $this->_setColFactory = $setColFactory;
         $this->_coreRegistry = $registry;
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

@@ -58,12 +58,10 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     protected $_eavAttributeResourceFactory;
 
     /**
-     * Construct
-     * 
      * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param string $resourceName
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
-     * @param string $resourceName
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Index\Model\IndexerFactory $indexerFactory
      * @param \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeResourceFactory
@@ -72,9 +70,9 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
+        $resourceName,
         \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
-        $resourceName,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Index\Model\IndexerFactory $indexerFactory,
         \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeResourceFactory,
@@ -84,7 +82,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         $this->_categoryFactory = $categoryFactory;
         $this->_indexerFactory = $indexerFactory;
         $this->_eavAttributeResourceFactory = $eavAttributeResourceFactory;
-        parent::__construct($context, $cache, $attrGrCollFactory, $resourceName, $moduleName, $connectionName);
+        parent::__construct($context, $resourceName, $cache, $attrGrCollFactory, $moduleName, $connectionName);
     }
 
     /**

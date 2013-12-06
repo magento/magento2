@@ -124,7 +124,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $collection = $this->getMock(
             'Magento\Webapi\Model\Resource\Acl\Rule\Collection',
             array('_initSelect', 'setModel', 'getSelect'),
-            array($eventManager, $logger, $fetchStrategy, $entityFactory, $this->_ruleResource)
+            array($entityFactory, $logger, $fetchStrategy, $eventManager, null, $this->_ruleResource)
         );
         $collection->expects($this->any())->method('setModel')->with('Magento\Webapi\Model\Resource\Acl\Role');
         $collection->expects($this->any())

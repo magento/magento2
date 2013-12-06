@@ -51,20 +51,18 @@ class Filter extends \Magento\Adminhtml\Block\Widget\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\ImportExport\Helper\Data $importExportData,
         array $data = array()
     ) {
         $this->_importExportData = $importExportData;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     /**
@@ -101,9 +99,9 @@ class Filter extends \Magento\Adminhtml\Block\Widget\Grid
             'date_format'  => $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT),
             'image'        => $this->getViewFileUrl('images/grid-cal.gif')
         );
-        /** @var $selectBlock \Magento\View\Block\Html\Date */
+        /** @var $selectBlock \Magento\View\Element\Html\Date */
         $dateBlock = $this->_layout->getBlockFactory()->createBlock(
-            'Magento\View\Block\Html\Date', array('data' => $arguments)
+            'Magento\View\Element\Html\Date', array('data' => $arguments)
         );
         $fromValue = null;
         $toValue   = null;
@@ -163,9 +161,9 @@ class Filter extends \Magento\Adminhtml\Block\Widget\Grid
                 'class'        => 'multiselect multiselect-export-filter',
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size))
             );
-            /** @var $selectBlock \Magento\View\Block\Html\Select */
+            /** @var $selectBlock \Magento\View\Element\Html\Select */
             $selectBlock = $this->_layout->getBlockFactory()->createBlock(
-                'Magento\View\Block\Html\Select', array('data' => $arguments)
+                'Magento\View\Element\Html\Select', array('data' => $arguments)
             );
             return $selectBlock->setOptions($options)
                 ->setValue($value)
@@ -232,9 +230,9 @@ class Filter extends \Magento\Adminhtml\Block\Widget\Grid
                 'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
                 'class'        => 'select select-export-filter'
             );
-            /** @var $selectBlock \Magento\View\Block\Html\Select */
+            /** @var $selectBlock \Magento\View\Element\Html\Select */
             $selectBlock = $this->_layout->getBlockFactory()->createBlock(
-                'Magento\View\Block\Html\Select', array('data' => $arguments)
+                'Magento\View\Element\Html\Select', array('data' => $arguments)
             );
             return $selectBlock->setOptions($options)
                 ->setValue($value)

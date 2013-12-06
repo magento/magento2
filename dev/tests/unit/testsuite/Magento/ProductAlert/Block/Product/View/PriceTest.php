@@ -52,7 +52,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(array('getCanShowPrice', 'getId'))
+            ->setMethods(array('getCanShowPrice', 'getId', '__wakeup'))
             ->getMock();
         $product->expects($this->once())->method('getId')->will($this->returnValue(1));
         $product->expects($this->once())->method('getCanShowPrice')->will($this->returnValue(true));

@@ -26,7 +26,7 @@
 
 namespace Magento\Shipping\Block\Tracking;
 
-class Ajax extends \Magento\View\Block\Template
+class Ajax extends \Magento\View\Element\Template
 {
 
 }

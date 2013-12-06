@@ -44,7 +44,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\VariableFactory $variableFactory
@@ -53,7 +52,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\VariableFactory $variableFactory,
@@ -62,7 +60,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     ) {
         $this->_variableFactory = $variableFactory;
         $this->_variables = $variables;
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
@@ -76,28 +74,28 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if ($head = $this->getLayout()->getBlock('head')) {
             $head->addChild(
                 'prototype-window-js',
-                'Magento\Page\Block\Html\Head\Script',
+                'Magento\Theme\Block\Html\Head\Script',
                 array(
                     'file' => 'prototype/window.js'
                 )
             );
             $head->addChild(
                 'prototype-windows-themes-default-css',
-                'Magento\Page\Block\Html\Head\Css',
+                'Magento\Theme\Block\Html\Head\Css',
                 array(
                     'file' => 'prototype/windows/themes/default.css'
                 )
             );
             $head->addChild(
                 'magento-core-prototype-magento-css',
-                'Magento\Page\Block\Html\Head\Css',
+                'Magento\Theme\Block\Html\Head\Css',
                 array(
                     'file' => 'Magento_Core::prototype/magento.css'
                 )
             );
             $head->addChild(
                 'magento-adminhtml-variables-js',
-                'Magento\Page\Block\Html\Head\Script',
+                'Magento\Theme\Block\Html\Head\Script',
                 array(
                     'file' => 'Magento_Adminhtml::variables.js'
                 )

@@ -27,7 +27,7 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
-class Link extends \Magento\Page\Block\Link
+class Link extends \Magento\View\Element\Html\Link
 {
     /**
      * @var \Magento\Module\Manager
@@ -35,18 +35,16 @@ class Link extends \Magento\Page\Block\Link
     protected $_moduleManager;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Module\Manager $moduleManager,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
         $this->_moduleManager = $moduleManager;
     }
 

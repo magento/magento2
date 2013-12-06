@@ -86,7 +86,6 @@ class Option extends \Magento\Backend\Block\Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Model\Config\Source\Yesno $yesno
      * @param \Magento\Bundle\Model\Source\Option\Type $optionTypes
      * @param \Magento\Core\Model\Registry $registry
@@ -94,7 +93,6 @@ class Option extends \Magento\Backend\Block\Widget
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Type $optionTypes,
         \Magento\Core\Model\Registry $registry,
@@ -103,7 +101,7 @@ class Option extends \Magento\Backend\Block\Widget
         $this->_coreRegistry = $registry;
         $this->_optionTypes = $optionTypes;
         $this->_yesno = $yesno;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -260,7 +258,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     public function getTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{index}}_type',
                 'class' => 'select select-product-option-type required-option-select',
@@ -274,7 +272,7 @@ class Option extends \Magento\Backend\Block\Widget
 
     public function getRequireSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{index}}_required',
                 'class' => 'select'

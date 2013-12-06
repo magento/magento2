@@ -26,7 +26,7 @@
 
 namespace Magento\Rss\Block\Order;
 
-class Details extends \Magento\View\Block\Template
+class Details extends \Magento\View\Element\Template
 {
 
     protected $_template = 'order/details.phtml';

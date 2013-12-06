@@ -36,8 +36,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMock('Magento\SalesRule\Model\Validator',
-            array('_getRules', '_getItemOriginalPrice', '_getItemBaseOriginalPrice'), array(), '', false);
+        $this->_model = $this->getMock(
+            'Magento\SalesRule\Model\Validator',
+            array('_getRules', '_getItemOriginalPrice', '_getItemBaseOriginalPrice', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_model->expects($this->any())
             ->method('_getRules')
             ->will($this->returnValue(array()));
@@ -55,18 +60,36 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function _getQuoteItemMock()
     {
         $fixturePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
-        $itemDownloadable = $this->getMock('Magento\Sales\Model\Quote\Item', array('getAddress'), array(), '', false);
+        $itemDownloadable = $this->getMock(
+            'Magento\Sales\Model\Quote\Item',
+            array('getAddress', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $itemDownloadable->expects($this->any())
             ->method('getAddress')
             ->will($this->returnValue(new \stdClass()));
 
-        $itemSimple = $this->getMock('Magento\Sales\Model\Quote\Item', array('getAddress'), array(), '', false);
+        $itemSimple = $this->getMock(
+            'Magento\Sales\Model\Quote\Item',
+            array('getAddress', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $itemSimple->expects($this->any())
             ->method('getAddress')
             ->will($this->returnValue(new \stdClass()));
 
         /** @var $quote \Magento\Sales\Model\Quote */
-        $quote = $this->getMock('Magento\Sales\Model\Quote', array('hasNominalItems'), array(), '', false);
+        $quote = $this->getMock(
+            'Magento\Sales\Model\Quote',
+            array('hasNominalItems', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $quote->expects($this->any())
             ->method('hasNominalItems')
             ->will($this->returnValue(false));
@@ -102,7 +125,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessFreeShipping()
     {
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', array('getAddress'), array(), '', false);
+        $item = $this->getMock('Magento\Sales\Model\Quote\Item', array('getAddress', '__wakeup'), array(), '', false);
         $item->expects($this->once())
             ->method('getAddress')
             ->will($this->returnValue(true));
@@ -114,14 +137,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', array('getAddress'), array(), '', false);
+        $item = $this->getMock('Magento\Sales\Model\Quote\Item', array('getAddress', '__wakeup'), array(), '', false);
         $item->expects($this->once())
             ->method('getAddress')
             ->will($this->returnValue(true));
         $item->setDiscountCalculationPrice(-1);
         $item->setCalculationPrice(1);
 
-        $quote = $this->getMock('Magento\Sales\Model\Quote', null, array(), '', false);
+        $quote = $this->getMock('Magento\Sales\Model\Quote', array('__wakeup'), array(), '', false);
         $item->setQuote($quote);
 
         $this->assertInstanceOf('Magento\SalesRule\Model\Validator', $this->_model->process($item));

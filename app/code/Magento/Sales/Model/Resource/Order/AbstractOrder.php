@@ -100,15 +100,15 @@ abstract class AbstractOrder extends \Magento\Sales\Model\Resource\AbstractResou
     protected $_eavEntityTypeFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\App\Resource $resource
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\App\Resource $resource,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
     ) {
         $this->_eventManager = $eventManager;

@@ -33,7 +33,7 @@
  */
 namespace Magento\CatalogSearch\Block\Advanced;
 
-class Form extends \Magento\View\Block\Template
+class Form extends \Magento\View\Element\Template
 {
     /**
      * Currency factory
@@ -50,22 +50,20 @@ class Form extends \Magento\View\Block\Template
     protected $_catalogSearchAdvanced;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         array $data = array()
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
         $this->_currencyFactory = $currencyFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     public function _prepareLayout()
@@ -286,7 +284,7 @@ class Form extends \Magento\View\Block\Template
     {
         $block = $this->getData('_select_block');
         if (is_null($block)) {
-            $block = $this->getLayout()->createBlock('Magento\View\Block\Html\Select');
+            $block = $this->getLayout()->createBlock('Magento\View\Element\Html\Select');
             $this->setData('_select_block', $block);
         }
         return $block;
@@ -296,7 +294,7 @@ class Form extends \Magento\View\Block\Template
     {
         $block = $this->getData('_date_block');
         if (is_null($block)) {
-            $block = $this->getLayout()->createBlock('Magento\View\Block\Html\Date');
+            $block = $this->getLayout()->createBlock('Magento\View\Element\Html\Date');
             $this->setData('_date_block', $block);
         }
         return $block;

@@ -41,12 +41,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $coreStoreConfig = $this->getMockBuilder('Magento\Core\Model\Store\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->_model = new \Magento\TestFramework\Cookie(
-            $coreStoreConfig,
-            $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false),
             new \Magento\TestFramework\Request(
                 $this->getMock('\Magento\App\Route\ConfigInterface'),
                 $this->getMock('Magento\App\Request\PathInfoProcessorInterface'),
@@ -65,13 +60,5 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->_model->set(self::SAMPLE_COOKIE_NAME, $cookieValue);
         $this->assertEquals($cookieValue, $this->_model->get(self::SAMPLE_COOKIE_NAME));
         $this->assertEquals($cookieValue, $_COOKIE[self::SAMPLE_COOKIE_NAME]);
-    }
-
-    public function testDelete()
-    {
-        $this->_model->set(self::SAMPLE_COOKIE_NAME, 'some_value');
-        $this->_model->delete(self::SAMPLE_COOKIE_NAME);
-        $this->assertFalse($this->_model->get(self::SAMPLE_COOKIE_NAME));
-        $this->assertArrayNotHasKey(self::SAMPLE_COOKIE_NAME, $_COOKIE);
     }
 }

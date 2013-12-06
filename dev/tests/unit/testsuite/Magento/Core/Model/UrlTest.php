@@ -76,9 +76,15 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $controllerName = 'controllerName';
         $actionName = 'actionName';
 
-        $requestMock = $this->getMockForAbstractClass('Magento\App\Request\Http',
-            array(), '', false, false, true,
-            array('getRequestedRouteName', 'getRequestedControllerName', 'getRequestedActionName'));
+        $requestMock = $this->getMockForAbstractClass(
+            'Magento\App\Request\Http',
+            array(),
+            '',
+            false,
+            false,
+            true,
+            array('getRequestedRouteName', 'getRequestedControllerName', 'getRequestedActionName')
+        );
 
         $requestMock->expects($this->once())->method('getRequestedRouteName')
             ->will($this->returnValue($moduleFrontName));

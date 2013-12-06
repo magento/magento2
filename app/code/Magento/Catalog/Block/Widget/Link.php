@@ -35,7 +35,7 @@
 namespace Magento\Catalog\Block\Widget;
 
 class Link
-    extends \Magento\View\Block\Html\Link
+    extends \Magento\View\Element\Html\Link
     implements \Magento\Widget\Block\BlockInterface
 {
     /**
@@ -66,19 +66,17 @@ class Link
     protected $_urlRewrite;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite,
         array $data = array()
     ) {
         $this->_urlRewrite = $urlRewrite;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -118,15 +116,15 @@ class Link
     }
 
     /**
-     * Prepare anchor text using passed text as parameter.
+     * Prepare label using passed text as parameter.
      * If anchor text was not specified get entity name from DB.
      *
      * @return string
      */
-    public function getAnchorText()
+    public function getLabel()
     {
         if (!$this->_anchorText && $this->_entityResource) {
-            if (!$this->getData('anchor_text')) {
+            if (!$this->getData('label')) {
                 $idPath = explode('/', $this->_getData('id_path'));
                 if (isset($idPath[1])) {
                     $id = $idPath[1];
@@ -136,7 +134,7 @@ class Link
                     }
                 }
             } else {
-                $this->_anchorText = $this->getData('anchor_text');
+                $this->_anchorText = $this->getData('label');
             }
         }
 

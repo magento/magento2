@@ -45,17 +45,21 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
 
     /**
      * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Connect\Helper\Data $connectData
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
+        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Connect\Helper\Data $connectData,
         array $data = array()
     ) {
         $this->_connectData = $connectData;
-        parent::__construct($context, $data);
-        $this->init('adminhtml');
+        parent::__construct($context, $sidResolver, $sessionConfig, $data);
+        $this->start('adminhtml');
     }
 
     /**

@@ -74,7 +74,6 @@ class Related extends \Magento\Adminhtml\Block\Widget\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Catalog\Model\Product\LinkFactory $linkFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
@@ -87,7 +86,6 @@ class Related extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\Catalog\Model\Product\LinkFactory $linkFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
@@ -105,7 +103,7 @@ class Related extends \Magento\Adminhtml\Block\Widget\Grid
         $this->_status = $status;
         $this->_visibility = $visibility;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     /**

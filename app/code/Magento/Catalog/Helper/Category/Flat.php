@@ -74,8 +74,6 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
     protected $_catalogCategoryFlat;
 
     /**
-     * Construct
-     *
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param \Magento\Catalog\Model\Resource\Category\Flat $catalogCategoryFlat

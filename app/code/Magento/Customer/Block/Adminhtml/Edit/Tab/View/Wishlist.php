@@ -49,7 +49,6 @@ class Wishlist extends \Magento\Adminhtml\Block\Widget\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Wishlist\Model\Resource\Item\CollectionFactory $collectionFactory
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -57,7 +56,6 @@ class Wishlist extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\Wishlist\Model\Resource\Item\CollectionFactory $collectionFactory,
         \Magento\Core\Model\Registry $coreRegistry,
@@ -65,7 +63,7 @@ class Wishlist extends \Magento\Adminhtml\Block\Widget\Grid
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     /**

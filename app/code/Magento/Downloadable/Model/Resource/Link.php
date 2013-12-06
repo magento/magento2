@@ -59,15 +59,15 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\App\Resource $resource
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\App\Resource $resource,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Model\App $app,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager

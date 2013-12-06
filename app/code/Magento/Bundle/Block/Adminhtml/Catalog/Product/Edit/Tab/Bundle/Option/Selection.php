@@ -64,7 +64,6 @@ class Selection
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Model\Config\Source\Yesno $yesno
      * @param \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -73,7 +72,6 @@ class Selection
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Backend\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -84,7 +82,7 @@ class Selection
         $this->_coreRegistry = $registry;
         $this->_priceType = $priceType;
         $this->_yesno = $yesno;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
@@ -149,7 +147,7 @@ class Selection
      */
     public function getPriceTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
             ->setData(array(
                 'id'    => $this->getFieldId() . '_{{index}}_price_type',
                 'class' => 'select select-product-option-type required-option-select'
@@ -169,7 +167,7 @@ class Selection
      */
     public function getQtyTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
+        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
             ->setData(array(
                 'id' => $this->getFieldId().'_{{index}}_can_change_qty',
                 'class' => 'select'

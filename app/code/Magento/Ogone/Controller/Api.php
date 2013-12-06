@@ -159,7 +159,7 @@ class Api extends \Magento\App\Action\Action
         $this->_getCheckout()->getQuote()->setIsActive(false)->save();
         $this->_getCheckout()->setOgoneQuoteId($this->_getCheckout()->getQuoteId());
         $this->_getCheckout()->setOgoneLastSuccessQuoteId($this->_getCheckout()->getLastSuccessQuoteId());
-        $this->_getCheckout()->clear();
+        $this->_getCheckout()->clearQuote();
 
         $this->_view->loadLayout();
         $this->_view->renderLayout();

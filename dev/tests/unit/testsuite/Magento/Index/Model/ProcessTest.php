@@ -112,7 +112,12 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMockForAbstractClass(
             'Magento\Core\Model\Resource\Db\AbstractDb',
-            array(), '', false, false, true, array('getIdFieldName')
+            array(),
+            '',
+            false,
+            false,
+            true,
+            array('getIdFieldName', '__wakeup')
         );
         $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('process_id'));
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);

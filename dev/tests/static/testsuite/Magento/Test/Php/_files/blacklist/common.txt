@@ -10,6 +10,7 @@ app/code/Magento/Backend/view
 app/code/Magento/Core/Model/Config/Element.php
 app/code/Magento/DesignEditor/view
 app/code/Magento/Email/view
+app/code/Magento/Integration/view
 app/code/Magento/Theme/view
 app/code/Magento/User/view
 app/code/Magento/Webapi/view
@@ -30,6 +31,7 @@ dev/tests/unit/testsuite/Magento/Catalog/Model/Resource/Product/Option/MysqlStub
 dev/tests/unit/testsuite/Magento/Catalog/Model/Resource/Product/Option/ValueTest.php
 dev/tests/unit/testsuite/Magento/Code/Plugin/GeneratorTest/SimpleObjectManager.php
 dev/tests/unit/testsuite/Magento/Core/Model/Resource/Db/AbstractTest.php
+dev/tests/unit/testsuite/Magento/Core/Model/Session/ConfigTest.php
 dev/tests/unit/testsuite/Magento/View/TemplateEngine/_files
 dev/tools/Magento/Tools/I18n/Zend
 lib/Magento/Archive

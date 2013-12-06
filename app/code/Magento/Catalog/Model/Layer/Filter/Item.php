@@ -45,7 +45,7 @@ class Item extends \Magento\Object
     /**
      * Html pager block
      *
-     * @var \Magento\Page\Block\Html\Pager
+     * @var \Magento\Theme\Block\Html\Pager
      */
     protected $_htmlPagerBlock;
 
@@ -53,12 +53,12 @@ class Item extends \Magento\Object
      * Construct
      *
      * @param \Magento\UrlInterface $url
-     * @param \Magento\Page\Block\Html\Pager $htmlPagerBlock
+     * @param \Magento\Theme\Block\Html\Pager $htmlPagerBlock
      * @param array $data
      */
     public function __construct(
         \Magento\UrlInterface $url,
-        \Magento\Page\Block\Html\Pager $htmlPagerBlock,
+        \Magento\Theme\Block\Html\Pager $htmlPagerBlock,
         array $data = array()
     ) {
         $this->_url = $url;

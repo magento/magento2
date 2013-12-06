@@ -60,41 +60,39 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     protected $_configOptions = array();
 
     /**
+     * @var \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory
+     */
+    protected $_fieldFactory;
+
+    /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
+        array $data = array()
+    ) {
+        $this->_jsonEncoder = $jsonEncoder;
+        $this->_fieldFactory = $fieldFactory;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Add name => id mapping
      *
      * @param string $fieldId - element ID in DOM
      * @param string $fieldName - element name in their fieldset/form namespace
      * @return \Magento\Backend\Block\Widget\Form\Element\Dependence
      */
-    /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
-     * @var \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory
-     */
-    protected $_fieldFactory;
-
-    /**
-     * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
-        array $data = array()
-    ) {
-        $this->_coreData = $coreData;
-        $this->_fieldFactory = $fieldFactory;
-        parent::__construct($context, $data);
-    }
-
     public function addFieldMap($fieldId, $fieldName)
     {
         $this->_fields[$fieldName] = $fieldId;
@@ -146,7 +144,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         return '<script type="text/javascript"> new FormElementDependenceController('
             . $this->_getDependsJson()
             . ($this->_configOptions ? ', '
-            . $this->_coreData->jsonEncode($this->_configOptions) : '')
+            . $this->_jsonEncoder->encode($this->_configOptions) : '')
             . '); </script>';
     }
 
@@ -166,6 +164,6 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
                 );
             }
         }
-        return $this->_coreData->jsonEncode($result);
+        return $this->_jsonEncoder->encode($result);
     }
 }

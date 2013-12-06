@@ -53,7 +53,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
 
         $collection = new \Magento\Webhook\Model\Resource\Job\Collection(
-            $eventManager, $logger, $mockFetchStrategy, $entityFactory, $dateTime, $mockResourceEvent
+            $entityFactory, $logger, $mockFetchStrategy, $eventManager, $dateTime, null, $mockResourceEvent
         );
         $this->assertInstanceOf('Magento\Webhook\Model\Resource\Job\Collection', $collection);
         $this->assertEquals('Magento\Webhook\Model\Resource\Job', $collection->getResourceModelName());

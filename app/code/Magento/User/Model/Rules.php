@@ -18,11 +18,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_User
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\User\Model;
 
 /**
  * Admin Rules Model
@@ -37,17 +37,9 @@
  * @method \Magento\User\Model\Rules setPrivileges(string $value)
  * @method int getAssertId()
  * @method \Magento\User\Model\Rules setAssertId(int $value)
- * @method string getRoleType()
- * @method \Magento\User\Model\Rules setRoleType(string $value)
  * @method string getPermission()
  * @method \Magento\User\Model\Rules setPermission(string $value)
- *
- * @category    Magento
- * @package     Magento_User
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\User\Model;
-
 class Rules extends \Magento\Core\Model\AbstractModel
 {
     public function __construct(

@@ -24,16 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Install state block
- *
- * @category   Magento
- * @package    Magento_Install
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Install\Block;
 
-class State extends \Magento\View\Block\Template
+/**
+ * Install state block
+ */
+class State extends \Magento\View\Element\Template
 {
     /**
      * @var string
@@ -41,38 +37,18 @@ class State extends \Magento\View\Block\Template
     protected $_template = 'state.phtml';
 
     /**
-     * Install Wizard
-     *
-     * @var \Magento\Install\Model\Wizard
-     */
-    protected $_wizard;
-
-    /**
-     * Core Cookie
-     *
-     * @var \Magento\Core\Model\Cookie
-     */
-    protected $_cookie;
-
-    /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Wizard $wizard
-     * @param \Magento\Core\Model\Cookie $cookie
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Install\Model\Wizard $wizard,
-        \Magento\Core\Model\Cookie $cookie,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $data);
-        $this->_wizard = $wizard;
-        $this->_cookie = $cookie;
+        parent::__construct($context, $data);
 
-        $this->assign('steps', $this->_wizard->getSteps());
+        $this->assign('steps', $wizard->getSteps());
     }
 
     /**
@@ -101,7 +77,7 @@ class State extends \Magento\View\Block\Template
      */
     public function isDownloaderInstall()
     {
-        $session = $this->_cookie->get('magento_downloader_session');
+        $session = $this->_request->getCookie('magento_downloader_session', false);
         return $session ? true : false;
     }
 }

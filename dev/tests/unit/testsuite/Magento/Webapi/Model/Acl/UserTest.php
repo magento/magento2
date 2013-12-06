@@ -155,7 +155,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $collection = $this->getMock(
             'Magento\Webapi\Model\Resource\Acl\User\Collection',
             array('_initSelect', 'setModel'),
-            array($eventManager, $logger, $fetchStrategy, $entityFactory, $this->_userService)
+            array($entityFactory, $logger, $fetchStrategy, $eventManager, null, $this->_userService)
         );
 
         $collection->expects($this->any())->method('setModel')->with('Magento\Webapi\Model\Acl\User');

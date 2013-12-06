@@ -202,7 +202,7 @@ class Container extends \Magento\Backend\Block\Template
     /**
      * Preparing child blocks for each added button
      *
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {

@@ -42,26 +42,28 @@ class Scoped extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollecti
     protected $_scopeId;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Resource\Config\Data $resource
-     * @param $scope
-     * @param null $scopeId
+     * @param string $scope
+     * @param mixed $connection
+     * @param mixed $scopeId
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Resource\Config\Data $resource,
         $scope,
+        $connection = null,
         $scopeId = null
     ) {
         $this->_scope = $scope;
         $this->_scopeId = $scopeId;
-        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**

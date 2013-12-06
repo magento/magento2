@@ -71,9 +71,9 @@ class Agreement extends \Magento\Payment\Model\Billing\AbstractAgreement
     protected $_dateFactory;
 
     /**
-     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Sales\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory
      * @param \Magento\Core\Model\DateFactory $dateFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -81,16 +81,16 @@ class Agreement extends \Magento\Payment\Model\Billing\AbstractAgreement
      * @param array $data
      */
     public function __construct(
-        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory,
         \Magento\Core\Model\DateFactory $dateFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct($paymentData, $context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $paymentData, $resource, $resourceCollection, $data);
         $this->_billingAgreementFactory = $billingAgreementFactory;
         $this->_dateFactory = $dateFactory;
     }

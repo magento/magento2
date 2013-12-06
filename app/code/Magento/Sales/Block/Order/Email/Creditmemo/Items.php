@@ -39,10 +39,10 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Prepare item before output
      *
-     * @param \Magento\View\Block\AbstractBlock $renderer
+     * @param \Magento\View\Element\AbstractBlock $renderer
      * @return \Magento\Sales\Block\Items\AbstractItems
      */
-    protected function _prepareItem(\Magento\View\Block\AbstractBlock $renderer)
+    protected function _prepareItem(\Magento\View\Element\AbstractBlock $renderer)
     {
         $renderer->getItem()->setOrder($this->getOrder());
         $renderer->getItem()->setSource($this->getCreditmemo());

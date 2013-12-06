@@ -34,7 +34,7 @@
  */
 namespace Magento\Cms\Block\Widget;
 
-class Block extends \Magento\View\Block\Template implements \Magento\Widget\Block\BlockInterface
+class Block extends \Magento\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
@@ -56,20 +56,18 @@ class Block extends \Magento\View\Block\Template implements \Magento\Widget\Bloc
     protected $_blockFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
         \Magento\Cms\Model\BlockFactory $blockFactory,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
         $this->_filterProvider = $filterProvider;
         $this->_blockFactory = $blockFactory;
     }

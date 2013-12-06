@@ -32,4 +32,4 @@ ol {background: url(http://example.com/absolute.gif);}
 li {background: url("https://example.com/absolute.gif");}
 
 ol.valid {background: url(../../referenced/dir/Namespace_Module::absolute_valid_module.gif)} /* theme file modular */
-ol.favicon {background: url(../../referenced/dir/Magento_Page::favicon.ico)} /* base file */
+ol.favicon {background: url(../../referenced/dir/Magento_Theme::favicon.ico)} /* base file */

@@ -98,16 +98,14 @@ class Url extends \Magento\Core\Helper\Url
     );
 
     /**
-     * Check additional instruction for convertation table in configuration
-     *
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\Config $config
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Model\Config $config
     ) {
         parent::__construct($context, $storeManager);
         $convertConfig = $config->getValue('url/convert', 'default');

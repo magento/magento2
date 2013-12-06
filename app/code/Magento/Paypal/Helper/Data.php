@@ -49,13 +49,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_agreementFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\App\Helper\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
     ) {
         $this->_coreData = $coreData;

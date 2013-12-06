@@ -86,32 +86,21 @@ class Collection extends \Magento\Data\Collection\Db
      */
     protected $_storeManager;
 
-    /**
-     * Set sales order entity and establish read connection
-     *
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Sales\Model\Resource\Order $resource
-     * @param \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     */
+
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Order $resource,
         \Magento\Core\Model\Resource\Store\CollectionFactory $storeCollFactory,
-        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_eventManager = $eventManager;
         $this->_orderResource = $resource;
         $this->_storeCollFactory = $storeCollFactory;
         $this->_storeManager = $storeManager;
-        parent::__construct($logger, $fetchStrategy, $entityFactory, $this->_orderResource->getReadConnection());
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $this->_orderResource->getReadConnection());
     }
 
     /**
