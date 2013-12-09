@@ -47,24 +47,24 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
     protected $_updatedatFactory;
 
     /**
-     * @param \Magento\Logger $logger
      * @param \Magento\App\Resource $resource
+     * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param Rule\CreatedatFactory $createdatFactory
-     * @param Rule\UpdatedatFactory $updatedatFactory
+     * @param \Magento\SalesRule\Model\Resource\Report\Rule\CreatedatFactory $createdatFactory
+     * @param \Magento\SalesRule\Model\Resource\Report\Rule\UpdatedatFactory $updatedatFactory
      */
     public function __construct(
-        \Magento\Logger $logger,
         \Magento\App\Resource $resource,
+        \Magento\Logger $logger,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\SalesRule\Model\Resource\Report\Rule\CreatedatFactory $createdatFactory,
         \Magento\SalesRule\Model\Resource\Report\Rule\UpdatedatFactory $updatedatFactory
     ) {
-        parent::__construct($logger, $resource, $locale, $reportsFlagFactory, $dateTime);
+        parent::__construct($resource, $logger, $locale, $reportsFlagFactory, $dateTime);
         $this->_createdatFactory = $createdatFactory;
         $this->_updatedatFactory = $updatedatFactory;
     }

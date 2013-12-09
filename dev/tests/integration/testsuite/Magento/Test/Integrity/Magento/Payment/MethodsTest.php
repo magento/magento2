@@ -57,7 +57,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($model->getTitle());
         foreach (array($model->getFormBlockType(), $model->getInfoBlockType()) as $blockClass) {
             $message = "Block class: {$blockClass}";
-            /** @var $block \Magento\View\Block\Template */
+            /** @var $block \Magento\View\Element\Template */
             $block = $blockFactory->createBlock($blockClass);
             $block->setArea('frontend');
             $this->assertFileExists($block->getTemplateFile(), $message);

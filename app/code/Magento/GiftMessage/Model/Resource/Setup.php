@@ -38,28 +38,26 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
 
     /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param $resourceName
-     * @param string $moduleName
-     * @param string $connectionName
+     * @param string $resourceName
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Catalog\Model\Resource\SetupFactory $catalogSetupFactory
+     * @param string $moduleName
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
+        $resourceName,
         \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
         \Magento\Core\Model\Config $config,
         \Magento\Catalog\Model\Resource\SetupFactory $catalogSetupFactory,
-        $resourceName,
         $moduleName = 'Magento_GiftMessage',
         $connectionName = ''
     ) {
         $this->_catalogSetupFactory = $catalogSetupFactory;
-        parent::__construct(
-            $context, $cache, $attrGrCollFactory, $config, $resourceName, $moduleName, $connectionName
-        );
+        parent::__construct($context, $resourceName, $cache, $attrGrCollFactory, $config, $moduleName, $connectionName);
     }
 
     /**

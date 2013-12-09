@@ -58,14 +58,14 @@ class Collection extends \Magento\Data\Collection
     protected $_targetDirs = array();
 
     /**
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\App\Dir $dirs
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
      */
     public function __construct(
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Filesystem $filesystem,
-        \Magento\App\Dir $dirs,
-        \Magento\Core\Model\EntityFactory $entityFactory
+        \Magento\App\Dir $dirs
     ) {
         parent::__construct($entityFactory);
         $this->_filesystem = $filesystem;

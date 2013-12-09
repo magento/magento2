@@ -52,7 +52,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      */
     protected $_defaultModules = array(
         'default'   => 'Magento\Install',
-        'frontend'  => 'Magento\Page',
+        'frontend'  => 'Magento\Theme',
         'adminhtml' => 'Magento\Adminhtml',
     );
 

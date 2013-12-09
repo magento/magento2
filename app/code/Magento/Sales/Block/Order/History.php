@@ -29,7 +29,7 @@
  */
 namespace Magento\Sales\Block\Order;
 
-class History extends \Magento\View\Block\Template
+class History extends \Magento\View\Element\Template
 {
     /**
      * @var string
@@ -52,16 +52,14 @@ class History extends \Magento\View\Block\Template
     protected $_orderConfig;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
@@ -70,7 +68,7 @@ class History extends \Magento\View\Block\Template
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _construct()
@@ -91,13 +89,13 @@ class History extends \Magento\View\Block\Template
     }
 
     /**
-     * @return $this|\Magento\View\Block\AbstractBlock
+     * @return $this|\Magento\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
-        $pager = $this->getLayout()->createBlock('Magento\Page\Block\Html\Pager', 'sales.order.history.pager')
+        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'sales.order.history.pager')
             ->setCollection($this->getOrders());
         $this->setChild('pager', $pager);
         $this->getOrders()->load();

@@ -79,7 +79,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
         $this->_subscription = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
             ->setMethods(array('_init', '_hasModelChanged', '_getResource'))
-            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry, $dateTime))
+            ->setConstructorArgs(array($this->_mockContext, $coreRegistry, $this->_mockEndpoint, $dateTime))
             ->getMock();
 
         $subscriptionResource = $this->getMockBuilder('Magento\Webhook\Model\Resource\Subscription')
@@ -129,7 +129,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
         $this->_subscription = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
             ->setMethods(array('_init', '_hasModelChanged', '_getResource'))
-            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry, $dateTime))
+            ->setConstructorArgs(array($this->_mockContext, $coreRegistry, $this->_mockEndpoint, $dateTime))
             ->getMock();
 
         $this->_subscription->setTopics(array('restricted', 'allowed'));
@@ -151,7 +151,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
                     'setRegistrationMechanism', 'getEndpointId', 'setEndpointId', 'setUpdatedAt',
                     'hasDataChanges', '_init', '_hasModelChanged', '_getResource')
             )
-            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry, $dateTime))
+            ->setConstructorArgs(array($this->_mockContext, $coreRegistry, $this->_mockEndpoint, $dateTime))
             ->getMock();
 
         $mockResource = $this->getMockBuilder('Magento\Webhook\Model\Resource\Subscription')
@@ -189,7 +189,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
                 array('hasStatus', 'setStatus', 'hasRegistrationMechanism', 'setRegistrationMechanism', 'getEndpointId',
                       'setEndpointId', 'setUpdatedAt', 'hasDataChanges', '_init', '_hasModelChanged', '_getResource')
             )
-            ->setConstructorArgs(array($this->_mockEndpoint, $this->_mockContext, $coreRegistry, $dateTime))
+            ->setConstructorArgs(array($this->_mockContext, $coreRegistry, $this->_mockEndpoint, $dateTime))
             ->getMock();
 
         $mockResource = $this->getMockBuilder('Magento\Webhook\Model\Resource\Subscription')

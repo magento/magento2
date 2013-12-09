@@ -38,9 +38,6 @@ class FormTest extends \Magento\Test\Block\Adminhtml
     /** @var  \Magento\Core\Model\Registry */
     private $_registry;
 
-    /** @var  \Magento\Core\Helper\Data */
-    protected $_coreData;
-
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     private $_formatMock;
 
@@ -64,7 +61,6 @@ class FormTest extends \Magento\Test\Block\Adminhtml
         $this->_formFactoryMock = $this->getMock('Magento\Data\FormFactory', array('create'),
             array(), '', false, false);
         $this->_registry = new \Magento\Core\Model\Registry();
-        $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_formatMock = $this->_makeMock('Magento\Webhook\Model\Source\Format');
         $this->_authenticationMock = $this->_makeMock('Magento\Webhook\Model\Source\Authentication');
         $this->_hookMock = $this->_makeMock('Magento\Webhook\Model\Source\Hook');
@@ -85,7 +81,6 @@ class FormTest extends \Magento\Test\Block\Adminhtml
         // Arguments passed to UUT's constructor
         $arguments = array(
             $this->_context,
-            $this->_coreData,
             $this->_registry,
             $this->_formFactoryMock,
             $this->_formatMock,

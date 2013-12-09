@@ -106,11 +106,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($themeMock))
         ;
 
-        $this->_assetsMock = $this->getMock('Magento\Core\Model\Page\Asset\Collection');
+        $this->_assetsMock = $this->getMock('Magento\View\Asset\GroupedCollection',
+            array(), array(), '', false, false);
         $this->_configMock = $this->getMock('Magento\Core\Model\ConfigInterface',
             array(), array(), '', false, false);
 
-        $this->_assetFactory = $this->getMock('Magento\Core\Model\Page\Asset\PublicFileFactory',
+        $this->_assetFactory = $this->getMock('Magento\View\Asset\PublicFileFactory',
             array('create'), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -119,7 +120,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             array(
                 'cacheFrontendPool' => $this->_frontendPoolMock,
                 'design'            => $designMock,
-                'page'              => new \Magento\Core\Model\Page($this->_assetsMock),
+                'assets'            => $this->_assetsMock,
                 'config'            => $this->_configMock,
                 'assetFileFactory'  => $this->_assetFactory
             )
@@ -155,7 +156,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyThemeCustomization()
     {
-        $asset = new \Magento\Core\Model\Page\Asset\Remote('http://127.0.0.1/test.css');
+        $asset = new \Magento\View\Asset\Remote('http://127.0.0.1/test.css');
         $file = $this->getMock('Magento\Core\Model\Theme\File', array(), array(), '', false);
         $fileService = $this->getMock('Magento\View\Design\Theme\Customization\File\Css', array(), array(), '', false);
 

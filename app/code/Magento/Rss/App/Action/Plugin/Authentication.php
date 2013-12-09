@@ -33,7 +33,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
     protected $_httpAuthentication;
 
     /**
-     * @var \Magento\Core\Model\Logger
+     * @var \Magento\Logger
      */
     protected $_logger;
 

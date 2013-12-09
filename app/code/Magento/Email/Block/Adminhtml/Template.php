@@ -42,7 +42,7 @@ class Template extends \Magento\Backend\Block\Template
     /**
      * Create add button and grid blocks
      *
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {

@@ -41,7 +41,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
             if ($area === 'frontend' && in_array($module . '::' . $file, array(
                 'Magento_Reports::Magento_Catalog::product/list/items.phtml',
                 'Magento_Review::redirect.phtml',
-                'Magento_Page::blank.phtml',
+                'Magento_Theme::blank.phtml',
             ))) {
                 continue; // $this->markTestIncomplete('MAGETWO-9806');
             }

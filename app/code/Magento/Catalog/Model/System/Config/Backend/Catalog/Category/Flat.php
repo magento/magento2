@@ -39,23 +39,21 @@ class Flat extends \Magento\Core\Model\Config\Value
     protected $_indexerFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Index\Model\IndexerFactory $indexerFactory
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Index\Model\IndexerFactory $indexerFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Index\Model\IndexerFactory $indexerFactory,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Config $config,
+        \Magento\Index\Model\IndexerFactory $indexerFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

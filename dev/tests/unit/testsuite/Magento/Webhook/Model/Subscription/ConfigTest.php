@@ -165,7 +165,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         // of the magic methods, since they weren't explicitly defined.
         $methods = array('setData', 'getData', 'unsetData', 'save', 'setName', 'setTopics', 'setFormat',
                         'setEndpointUrl', 'getAuthenticationOptions', 'unsetAuthenticationOption',
-                        'setAuthenticationType');
+                        'setAuthenticationType', '__wakeup');
         $mock = $this->getMockBuilder('Magento\Webhook\Model\Subscription')
             ->disableOriginalConstructor()
             ->setMethods($methods)

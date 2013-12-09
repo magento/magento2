@@ -47,7 +47,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $customer->expects($this->once())->method('getId')->will($this->returnValue(1));
         $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
         $args = array(
-            'getIncrementId', 'getCreatedAt', 'getCustomerName', 'getBaseGrandTotal', 'getStatusLabel', 'getId'
+            'getIncrementId', 'getCreatedAt', 'getCustomerName', 'getBaseGrandTotal', 'getStatusLabel', 'getId',
+            '__wakeup'
         );
         $collectionElement = $this->getMock('Magento\Sales\Model\Recurring\Profile', $args, array(), '', false);
         $collectionElement->expects($this->once())->method('getIncrementId')
@@ -96,7 +97,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
                 'helperFactory' => $helperFactory
             )
         );
-        $pagerBlock = $this->getMockBuilder('Magento\Page\Block\Html\Pager')
+        $pagerBlock = $this->getMockBuilder('Magento\Theme\Block\Html\Pager')
             ->disableOriginalConstructor()
             ->setMethods(array('setCollection'))
             ->getMock();

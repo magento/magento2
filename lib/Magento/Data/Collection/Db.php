@@ -102,21 +102,21 @@ class Db extends \Magento\Data\Collection
     private $_fetchStrategy;
 
     /**
+     * @param \Magento\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param null $conn
+     * @param mixed $connection
      */
     public function __construct(
+        \Magento\Data\Collection\EntityFactoryInterface $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Data\Collection\EntityFactoryInterface $entityFactory,
-        $conn = null
+        $connection = null
     ) {
         parent::__construct($entityFactory);
         $this->_fetchStrategy = $fetchStrategy;
-        if (!is_null($conn)) {
-            $this->setConnection($conn);
+        if (!is_null($connection)) {
+            $this->setConnection($connection);
         }
         $this->_logger = $logger;
     }

@@ -49,11 +49,13 @@ class AbstractCollection extends \Magento\Data\Collection
     protected $dateTime;
 
     /**
-     * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Stdlib\DateTime $dateTime
      */
-    public function __construct(\Magento\Stdlib\DateTime $dateTime, \Magento\Core\Model\EntityFactory $entityFactory)
-    {
+    public function __construct(
+        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Stdlib\DateTime $dateTime
+    ) {
         $this->dateTime = $dateTime;
         parent::__construct($entityFactory);
     }

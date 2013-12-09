@@ -25,11 +25,4 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="adminhtml_integration_edit"/>
-    <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-integration-adminhtml-integration-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Integration::js/integration.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
 </layout>

@@ -70,13 +70,13 @@ class TabsTest extends \PHPUnit_Framework_TestCase
         // TODO: Move to unit tests after MAGETWO-4015 complete.
         /** @var \Magento\Webapi\Block\Adminhtml\User\Edit\Tab\Main $mainTabBlock */
         $mainTabBlock = $this->_layout->addBlock(
-            'Magento\View\Block\Text',
+            'Magento\View\Element\Text',
             'webapi.user.edit.tab.main',
             'webapi.user.edit.tabs'
         )->setText('Main Block Content');
 
         $this->_layout->addBlock(
-            'Magento\View\Block\Text',
+            'Magento\View\Element\Text',
             'webapi.user.edit.tab.roles.grid',
             'webapi.user.edit.tabs'
         )->setText('Grid Block Content');

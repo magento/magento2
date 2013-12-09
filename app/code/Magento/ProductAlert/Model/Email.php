@@ -124,9 +124,9 @@ class Email extends \Magento\Core\Model\AbstractModel
     protected $_templateFactory;
 
     /**
-     * @param \Magento\ProductAlert\Helper\Data $productAlertData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\ProductAlert\Helper\Data $productAlertData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
@@ -137,9 +137,9 @@ class Email extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\ProductAlert\Helper\Data $productAlertData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\ProductAlert\Helper\Data $productAlertData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\CustomerFactory $customerFactory,

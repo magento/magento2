@@ -43,6 +43,14 @@ jQuery(function($) {
                 hotkeys: {
                     space: this._changeState,
                     'return': this._changeState
+                },
+                types: {
+                    'types': {
+                        'disabled': {
+                            'check_node': false,
+                            'uncheck_node': false
+                        }
+                    }
                 }
             });
             this._bind();

@@ -48,7 +48,7 @@ class UrlrewriteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = $this->getMockBuilder('Magento\Cms\Model\Page\Urlrewrite')
-            ->setMethods(array('getResourceModelInstance'))
+            ->setMethods(array('getResourceModelInstance', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
         $this->_cmsPage = new \Magento\Object(array(

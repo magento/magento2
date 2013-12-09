@@ -50,7 +50,6 @@ class Main extends \Magento\Adminhtml\Block\Widget\Grid\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\Registry $registry
@@ -58,7 +57,6 @@ class Main extends \Magento\Adminhtml\Block\Widget\Grid\Container
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\Registry $registry,
@@ -67,7 +65,7 @@ class Main extends \Magento\Adminhtml\Block\Widget\Grid\Container
         $this->_coreRegistry = $registry;
         $this->_customerFactory = $customerFactory;
         $this->_productFactory = $productFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _construct()

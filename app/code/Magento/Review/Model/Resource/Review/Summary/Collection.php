@@ -42,20 +42,20 @@ class Collection extends \Magento\Data\Collection\Db
     protected $_summaryTable;
 
     /**
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\App\Resource $resource
      */
     public function __construct(
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\App\Resource $resource
     ) {
         $this->_setIdFieldName('primary_id');
 
-        parent::__construct($logger, $fetchStrategy, $entityFactory, $resource->getConnection('review_read'));
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $resource->getConnection('review_read'));
         $this->_summaryTable = $resource->getTableName('review_entity_summary');
 
         $this->_select->from($this->_summaryTable);

@@ -46,7 +46,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $block = $layout->createBlock('Magento\Sales\Block\Order\PrintOrder\Invoice', 'block');
-        $childBlock = $layout->addBlock('Magento\View\Block\Text', 'invoice_totals', 'block');
+        $childBlock = $layout->addBlock('Magento\View\Element\Text', 'invoice_totals', 'block');
 
         $expectedHtml = '<b>Any html</b>';
         $invoice = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

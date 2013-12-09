@@ -43,7 +43,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Widget\Model\WidgetFactory $widgetFactory
@@ -51,14 +50,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Widget\Model\WidgetFactory $widgetFactory,
         array $data = array()
     ) {
         $this->_widgetFactory = $widgetFactory;
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
@@ -78,6 +76,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'title'                 => __('Widget Type'),
             'name'                  => 'widget_type',
             'required'              => true,
+            'onchange'              => "wWidget.validateField()",
             'options'               => $this->_getWidgetSelectOptions(),
             'after_element_html'    => $this->_getWidgetSelectAfterHtml(),
         ));

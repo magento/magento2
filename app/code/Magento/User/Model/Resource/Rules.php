@@ -18,22 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_User
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\User\Model\Resource;
 
 /**
  * Admin rule resource model
- *
- * @category    Magento
- * @package     Magento_User
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\User\Model\Resource;
-
 class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -61,16 +54,16 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_logger;
 
     /**
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Acl\Builder $aclBuilder
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\Acl\RootResource $rootResource
      * @param \Magento\Acl\CacheInterface $aclCache
      */
     public function __construct(
+        \Magento\App\Resource $resource,
         \Magento\Acl\Builder $aclBuilder,
         \Magento\Logger $logger,
-        \Magento\App\Resource $resource,
         \Magento\Core\Model\Acl\RootResource $rootResource,
         \Magento\Acl\CacheInterface $aclCache
     ) {
@@ -112,7 +105,6 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
             $postedResources = $rule->getResources();
             if ($postedResources) {
                 $row = array(
-                    'role_type'   => 'G',
                     'resource_id' => $this->_rootResource->getId(),
                     'privileges'  => '', // not used yet
                     'role_id'     => $roleId,

@@ -33,12 +33,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
-        \Magento\App\ObjectManager::setInstance($mockObjectManager);
+
         $data = array(
             Info::DATA_NAME => 'nameTest',
             Info::DATA_ID => '1',
             Info::DATA_EMAIL => 'test@magento.com',
-            Info::DATA_AUTHENTICATION => 1,
             Info::DATA_ENDPOINT => 'http://magento.ll/endpoint'
         );
         $mockIntegration = $this->getMockBuilder('Magento\Integration\Model\Integration')

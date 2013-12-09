@@ -29,7 +29,7 @@
             <argument name="method" xsi:type="string">purchaseorder</argument>
             <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
         </action>
-        <block class="Magento\View\Block\Template" name="checkout.onepage.payment.methods.scripts" as="scripts"/>
-        <block class="Magento\View\Block\Template" name="checkout.onepage.payment.methods.additional" as="additional"/>
+        <block class="Magento\View\Element\Template" name="checkout.onepage.payment.methods.scripts" as="scripts"/>
+        <block class="Magento\View\Element\Template" name="checkout.onepage.payment.methods.additional" as="additional"/>
     </block>
 </layout>

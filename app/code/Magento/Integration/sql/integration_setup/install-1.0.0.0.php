@@ -238,22 +238,10 @@ $table = $installer->getConnection()
         'Email address of the contact person'
     )
     ->addColumn(
-        'authentication',
-        \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-        null,
-        array(
-            'unsigned' => true,
-            'nullable' => false
-        ),
-        'Authentication mechanism'
-    )
-    ->addColumn(
         'endpoint',
         \Magento\DB\Ddl\Table::TYPE_TEXT,
         255,
-        array(
-            'nullable' => false,
-        ),
+        array(),
         'Endpoint for Oauth handshake'
     )
     ->addColumn(
@@ -265,6 +253,15 @@ $table = $installer->getConnection()
             'nullable' => false
         ),
         'Integration status'
+    )
+    ->addColumn(
+        'consumer_id',
+        \Magento\DB\Ddl\Table::TYPE_INTEGER,
+        null,
+        array(
+            'unsigned' => true
+        ),
+        'Oauth consumer'
     )
     ->addColumn(
         'created_at',
@@ -282,13 +279,29 @@ $table = $installer->getConnection()
     )
     ->addIndex(
         $installer->getIdxName(
-            'integration',
+            $installer->getTable('integration'),
             array('name'),
             \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
         ),
         array('name'),
         array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-    );
+    )
+    ->addIndex(
+        $installer->getIdxName(
+            $installer->getTable('integration'),
+            array('consumer_id'),
+            \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        ),
+        array('consumer_id'),
+        array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE))
+    ->addForeignKey(
+        $installer->getFkName('integration', 'consumer_id', $installer->getTable('oauth_consumer'), 'entity_id'),
+        'consumer_id',
+        $installer->getTable('oauth_consumer'),
+        'entity_id',
+        \Magento\DB\Ddl\Table::ACTION_CASCADE,
+        \Magento\DB\Ddl\Table::ACTION_CASCADE);
+
 $installer->getConnection()->createTable($table);
 
 $installer->endSetup();

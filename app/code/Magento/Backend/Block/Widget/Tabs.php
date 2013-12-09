@@ -59,21 +59,26 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @var \Magento\Backend\Model\Auth\Session
      */
     protected $_authSession;
+    /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    private $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Auth\Session $authSession,
         array $data = array()
     ) {
         $this->_authSession = $authSession;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
+        $this->_jsonEncoder = $jsonEncoder;
     }
 
     /**
@@ -402,7 +407,7 @@ class Tabs extends \Magento\Backend\Block\Widget
             }
         }
         if ($asJson) {
-            return $this->_coreData->jsonEncode($result);
+            return $this->_jsonEncoder->encode($result);
         }
         return $result;
     }

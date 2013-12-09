@@ -49,22 +49,20 @@ class Grid extends \Magento\Sales\Block\Recurring\Profiles
     protected $_profiles = null;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\Recurring\Profile $profile
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Sales\Model\Recurring\Profile $profile,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_recurringProfile = $profile;
         $this->_registry = $registry;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
 
     }
 
@@ -91,7 +89,7 @@ class Grid extends \Magento\Sales\Block\Recurring\Profiles
         parent::_prepareLayout();
         $this->_prepareProfiles(array('reference_id', 'state', 'created_at', 'updated_at', 'method_code'));
 
-        $pager = $this->getLayout()->createBlock('Magento\Page\Block\Html\Pager')
+        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager')
             ->setCollection($this->_profiles)->setIsOutputRequired(false);
         $this->setChild('pager', $pager);
 

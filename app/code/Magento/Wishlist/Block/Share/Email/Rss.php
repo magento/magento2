@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Block\Share\Email;
 
-class Rss extends \Magento\View\Block\Template
+class Rss extends \Magento\View\Element\Template
 {
 
     protected $_template = 'email/rss.phtml';

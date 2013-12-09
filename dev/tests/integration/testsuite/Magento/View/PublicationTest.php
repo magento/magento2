@@ -281,9 +281,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
                 'frontend/test_default/en_US/images/logo_email.gif',
             ),
             'view modular file' => array(
-                'Magento_Page::favicon.ico',
+                'Magento_Theme::favicon.ico',
                 $designParams,
-                'frontend/test_default/en_US/Magento_Page/favicon.ico',
+                'frontend/test_default/en_US/Magento_Theme/favicon.ico',
             ),
         );
     }
@@ -307,7 +307,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
             'h1.gif',
             'images/h2.gif',
             'Namespace_Module/absolute_valid_module.gif',
-            'Magento_Page/favicon.ico', // non-fixture file from real module
+            'Magento_Theme/favicon.ico', // non-fixture file from real module
         );
         $publishedDir = $this->_viewService->getPublicDir() . '/frontend/vendor_default/en_US';
         $this->assertFileNotExists($publishedDir, 'Please verify isolation from previous test(s).');

@@ -193,6 +193,9 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testFindRestrictedTopics()
     {
+        /** TODO: This test should be rewritten after global ACL service introduction. */
+        $this->markTestIncomplete("This test should be rewritten after global ACL service introduction.");
+
         /** @var \Magento\Webhook\Model\Subscription $subscription */
         $subscription = $this->_objectManager->create('Magento\Webhook\Model\Subscription');
 
@@ -308,7 +311,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::VALUE_API_USER_ID, $subscription->getApiUserId());
 
     }
-    
+
     public function testSetGetMethods()
     {
 
@@ -397,7 +400,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(self::VALUE_TIMEOUT_IN_SECS, $loadedSubscription->getData(self::KEY_TIMEOUT_IN_SECS));
     }
-    
+
     public function testSetDataArray()
     {
         $data = array(
@@ -481,5 +484,5 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($value, $superSet[$key]);
         }
     }
-    
+
 }

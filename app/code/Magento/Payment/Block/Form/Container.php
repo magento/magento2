@@ -35,7 +35,7 @@
  */
 namespace Magento\Payment\Block\Form;
 
-class Container extends \Magento\View\Block\Template
+class Container extends \Magento\View\Element\Template
 {
     /**
      * Prepare children blocks

@@ -31,7 +31,7 @@
  */
 namespace Magento\Sales\Block\Billing;
 
-class Agreements extends \Magento\View\Block\Template
+class Agreements extends \Magento\View\Element\Template
 {
     /**
      * Payment methods array
@@ -58,33 +58,31 @@ class Agreements extends \Magento\View\Block\Template
     protected $_agreementCollection;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Resource\Billing\Agreement\CollectionFactory $agreementCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Resource\Billing\Agreement\CollectionFactory $agreementCollection,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
         $this->_agreementCollection = $agreementCollection;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
      * Set Billing Agreement instance
      *
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $pager = $this->getLayout()->createBlock('Magento\Page\Block\Html\Pager')
+        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager')
             ->setCollection($this->getBillingAgreements())->setIsOutputRequired(false);
         $this->setChild('pager', $pager)
             ->setBackUrl($this->getUrl('customer/account/'));

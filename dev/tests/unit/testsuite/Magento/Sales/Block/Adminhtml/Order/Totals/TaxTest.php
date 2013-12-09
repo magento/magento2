@@ -88,7 +88,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     protected function _getSalesOrderMock()
     {
         $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
-            ->setMethods(array('getItemsCollection'))
+            ->setMethods(array('getItemsCollection', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
         $orderMock->expects($this->any())

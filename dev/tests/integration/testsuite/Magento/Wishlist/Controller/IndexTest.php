@@ -39,7 +39,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         parent::setUp();
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->_customerSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Session', array($logger));
+            ->get('Magento\Customer\Model\Session', array($logger));
         $this->_customerSession->login('customer@example.com', 'password');
     }
 

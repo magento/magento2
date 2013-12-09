@@ -49,7 +49,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
@@ -58,7 +57,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
@@ -67,7 +65,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_catalogData = $catalogData;
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**

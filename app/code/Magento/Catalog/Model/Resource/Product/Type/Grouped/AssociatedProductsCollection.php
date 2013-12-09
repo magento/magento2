@@ -51,15 +51,14 @@ class AssociatedProductsCollection
     protected $_config;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
+     * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -69,21 +68,22 @@ class AssociatedProductsCollection
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
-     *
+     * @param mixed $connection
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
+        \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -93,16 +93,33 @@ class AssociatedProductsCollection
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
+        $connection = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_config = $config;
-        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $eavConfig, $resource,
-            $eavEntityFactory, $universalFactory, $storeManager, $catalogData, $catalogProductFlat, $coreStoreConfig,
-            $productOptionFactory, $catalogUrl, $locale, $customerSession, $resourceHelper, $dateTime
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $eavConfig,
+            $resource,
+            $eavEntityFactory,
+            $resourceHelper,
+            $universalFactory,
+            $storeManager,
+            $catalogData,
+            $catalogProductFlat,
+            $coreStoreConfig,
+            $productOptionFactory,
+            $catalogUrl,
+            $locale,
+            $customerSession,
+            $dateTime,
+            $connection
         );
     }
 

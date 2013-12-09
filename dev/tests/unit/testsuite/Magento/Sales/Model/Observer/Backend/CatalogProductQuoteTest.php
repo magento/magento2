@@ -65,7 +65,13 @@ class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveProduct($productId, $productStatus)
     {
-        $productMock = $this->getMock('Magento\Catalog\Model\Product', array('getId', 'getStatus'), array(), '', false);
+        $productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            array('getId', 'getStatus', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
         $productMock->expects($this->once())->method('getId')->will($this->returnValue($productId));
         $productMock->expects($this->once())->method('getStatus')->will($this->returnValue($productStatus));
@@ -96,7 +102,13 @@ class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
 
     public function testSubtractQtyFromQuotes()
     {
-        $productMock = $this->getMock('Magento\Catalog\Model\Product', array('getId', 'getStatus'), array(), '', false);
+        $productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            array('getId', 'getStatus', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
         $this->_quoteMock->expects($this->once())->method('substractProductFromQuotes')->with($productMock);
         $this->_model->subtractQtyFromQuotes($this->_observerMock);

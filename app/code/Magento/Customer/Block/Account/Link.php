@@ -24,7 +24,7 @@
 
 namespace Magento\Customer\Block\Account;
 
-class Link extends \Magento\Page\Block\Link
+class Link extends \Magento\View\Element\Html\Link
 {
     /**
      * @return string

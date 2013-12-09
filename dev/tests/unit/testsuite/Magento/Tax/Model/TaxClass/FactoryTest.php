@@ -38,7 +38,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate($classType, $className, $classTypeMock)
     {
-        $classMock = $this->getMock('Magento\Tax\Model\ClassModel', array('getClassType', 'getId'), array(), '', false);
+        $classMock = $this->getMock(
+            'Magento\Tax\Model\ClassModel',
+            array('getClassType', 'getId', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $classMock->expects($this->once())->method('getClassType')->will($this->returnValue($classType));
         $classMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
@@ -73,7 +79,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithWrongClassType()
     {
         $wrongClassType = 'TYPE';
-        $classMock = $this->getMock('Magento\Tax\Model\ClassModel', array('getClassType', 'getId'), array(), '', false);
+        $classMock = $this->getMock(
+            'Magento\Tax\Model\ClassModel',
+            array('getClassType', 'getId', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $classMock->expects($this->once())->method('getClassType')->will($this->returnValue($wrongClassType));
 
         $objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);

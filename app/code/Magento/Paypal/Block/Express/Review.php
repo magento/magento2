@@ -33,7 +33,7 @@
  */
 namespace Magento\Paypal\Block\Express;
 
-class Review extends \Magento\View\Block\Template
+class Review extends \Magento\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Model\Quote

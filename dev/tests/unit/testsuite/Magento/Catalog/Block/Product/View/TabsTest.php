@@ -28,7 +28,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddTab()
     {
-        $tabBlock = $this->getMock('Magento\View\Block\Template', array(), array(), '', false);
+        $tabBlock = $this->getMock('Magento\View\Element\Template', array(), array(), '', false);
         $tabBlock->expects($this->once())
             ->method('setTemplate')
             ->with('template')

@@ -38,7 +38,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Adminhtml\Block\Widget\Grid */
         $block = $layout->createBlock('Magento\Adminhtml\Block\Widget\Grid', 'block');
-        $child = $layout->addBlock('Magento\View\Block\Template', 'massaction', 'block');
+        $child = $layout->addBlock('Magento\View\Element\Template', 'massaction', 'block');
         $this->assertSame($child, $block->getMassactionBlock());
     }
 }

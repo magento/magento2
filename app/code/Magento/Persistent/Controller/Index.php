@@ -135,7 +135,7 @@ class Index extends \Magento\App\Action\Action
             ->setCustomerId(null)
             ->setCustomerGroupId(null);
         if ($this->_clearCheckoutSession) {
-            $this->_checkoutSession->unsetAll();
+            $this->_checkoutSession->clearStorage();
         }
         $this->_getHelper()->getSession()->removePersistentCookie();
         return $this;

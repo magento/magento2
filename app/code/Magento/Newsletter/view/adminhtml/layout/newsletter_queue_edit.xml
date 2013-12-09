@@ -26,22 +26,22 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="editor"/>
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
+        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
             <arguments>
                 <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-js">
             <arguments>
                 <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="jquery-fileuploader-load-image-min-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-load-image-min-js">
             <arguments>
                 <argument name="file" xsi:type="string">jquery/fileUploader/load-image.min.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-fp-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-fp-js">
             <arguments>
                 <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload-fp.js</argument>
             </arguments>

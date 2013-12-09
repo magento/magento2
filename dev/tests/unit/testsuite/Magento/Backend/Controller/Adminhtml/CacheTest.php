@@ -33,7 +33,13 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $objectManager = $this->getMock('Magento\ObjectManager');
         $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $backendHelper = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-        $session = $this->getMock('Magento\Adminhtml\Model\Session', array('addSuccess'), array(), '', false);
+        $session = $this->getMock(
+            'Magento\Core\Model\Session\AbstractSession',
+            array('addSuccess'),
+            array(),
+            '',
+            false
+        );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $controller = $helper->getObject('Magento\Backend\Controller\Adminhtml\Cache', array(
                 'objectManager' => $objectManager,
@@ -44,7 +50,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup expectations
-        $mergeService = $this->getMock('Magento\Core\Model\Page\Asset\MergeService', array(), array(), '', false);
+        $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
         $mergeService->expects($this->once())
             ->method('cleanMergedJsCss');
 
@@ -53,8 +59,8 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->with('The JavaScript/CSS cache has been cleaned.');
 
         $valueMap = array(
-            array('Magento\Core\Model\Page\Asset\MergeService', $mergeService),
-            array('Magento\Adminhtml\Model\Session', $session),
+            array('Magento\View\Asset\MergeService', $mergeService),
+            array('Magento\Core\Model\Session\AbstractSession', $session),
         );
         $objectManager->expects($this->any())
             ->method('get')

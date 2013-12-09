@@ -48,21 +48,19 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param \Magento\Core\Model\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
         $this->_ratingFactory = $ratingFactory;
         $this->_coreRegistry = $registry;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _construct()

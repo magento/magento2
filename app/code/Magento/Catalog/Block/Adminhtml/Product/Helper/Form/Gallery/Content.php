@@ -46,19 +46,25 @@ class Content extends \Magento\Backend\Block\Widget
     protected $_mediaConfig;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _prepareLayout()
@@ -127,7 +133,7 @@ class Content extends \Magento\Backend\Block\Widget
                 foreach ($value['images'] as &$image) {
                     $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
                 }
-                return $this->_coreData->jsonEncode($value['images']);
+                return $this->_jsonEncoder->encode($value['images']);
             }
         }
         return '[]';
@@ -142,7 +148,7 @@ class Content extends \Magento\Backend\Block\Widget
                 $attribute->getAttributeCode()
             );
         }
-        return $this->_coreData->jsonEncode($values);
+        return $this->_jsonEncoder->encode($values);
     }
 
     /**
@@ -189,7 +195,7 @@ class Content extends \Magento\Backend\Block\Widget
 
     public function getImageTypesJson()
     {
-        return $this->_coreData->jsonEncode($this->getImageTypes());
+        return $this->_jsonEncoder->encode($this->getImageTypes());
     }
 
 }

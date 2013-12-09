@@ -24,39 +24,39 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Page\Block\Html" name="root" output="1" template="empty.phtml">
+    <block class="Magento\Theme\Block\Html" name="root" output="1" template="empty.phtml">
         <block class="Magento\Backend\Block\Page\Head" name="head" as="head" template="page/head.phtml">
-            <block class="Magento\Page\Block\Html\Head\Css" name="mui-reset-css">
+            <block class="Magento\Theme\Block\Html\Head\Css" name="mui-reset-css">
                 <arguments>
                     <argument name="file" xsi:type="string">mui/reset.css</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Css" name="magento-webhook-css-boxes-css">
+            <block class="Magento\Theme\Block\Html\Head\Css" name="magento-webhook-css-boxes-css">
                 <arguments>
                     <argument name="file" xsi:type="string">Magento_Webhook::css/boxes.css</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Css" name="magento-webhook-css-webhook-css">
+            <block class="Magento\Theme\Block\Html\Head\Css" name="magento-webhook-css-webhook-css">
                 <arguments>
                     <argument name="file" xsi:type="string">Magento_Webhook::css/webhook.css</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="jquery-jquery-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-js">
                 <arguments>
                     <argument name="file" xsi:type="string">jquery/jquery.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="prototype-prototype-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-prototype-js">
                 <arguments>
                     <argument name="file" xsi:type="string">prototype/prototype.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-translate-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-translate-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/translate.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-tools-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-tools-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/tools.js</argument>
                 </arguments>

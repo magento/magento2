@@ -25,7 +25,7 @@
 -->
 <config>
     <event name="sales_quote_address_collect_totals_before">
-        <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Model\Observer" method="changeQuoteCustomerGroupId" />
+        <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals" method="dispatch" />
     </event>
     <event name="sales_quote_address_collect_totals_after">
         <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Model\Observer" method="restoreQuoteCustomerGroupId" />

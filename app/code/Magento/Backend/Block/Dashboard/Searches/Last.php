@@ -44,21 +44,27 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     protected $_queriesFactory;
 
     /**
+     * @var \Magento\Module\Manager
+     */
+    protected $_moduleManager;
+
+    /**
+     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queriesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Module\Manager $moduleManager,
         \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queriesFactory,
         array $data = array()
     ) {
+        $this->_moduleManager = $moduleManager;
         $this->_queriesFactory = $queriesFactory;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     protected function _construct()
@@ -69,7 +75,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
 
     protected function _prepareCollection()
     {
-        if (!$this->_coreData->isModuleEnabled('Magento_CatalogSearch')) {
+        if (!$this->_moduleManager->isEnabled('Magento_CatalogSearch')) {
             return parent::_prepareCollection();
         }
         $this->_collection = $this->_queriesFactory->create();

@@ -39,12 +39,12 @@ return array(
     array('adminhtml', 'Magento_Cms::images/placeholder_thumbnail.jpg'),
     array('adminhtml', 'Magento_Cms::images/wysiwyg_skin_image.png'),
     array('adminhtml', 'Magento_Core::fam_book_open.png'),
-    array('adminhtml', 'Magento_Page::favicon.ico'),
+    array('adminhtml', 'Magento_Theme::favicon.ico'),
     array('frontend', 'Magento_Cms::images/about_us_img.jpg'),
     array('frontend', 'Magento_Core::calendar.gif'),
     array('frontend', 'Magento_Core::fam_book_open.png'),
-    array('frontend', 'Magento_Page::favicon.ico'),
+    array('frontend', 'Magento_Theme::favicon.ico'),
     array('frontend', 'Magento_Catalog::images/product/placeholder/image.jpg'),
     array('frontend', 'Magento_Catalog::images/product/placeholder/small_image.jpg'),
-    array('install',  'Magento_Page::favicon.ico')
+    array('install',  'Magento_Theme::favicon.ico')
 );

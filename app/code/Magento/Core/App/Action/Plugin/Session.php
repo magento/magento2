@@ -32,7 +32,12 @@ class Session
     protected $_session;
 
     /**
-     * @var \Magento\Core\Model\Cookie
+     * @var \Magento\Session\SidResolverInterface
+     */
+    protected $_sidResolver;
+
+    /**
+     * @var \Magento\Stdlib\Cookie
      */
     protected $_cookie;
 
@@ -62,24 +67,27 @@ class Session
     protected $_storeConfig;
 
     /**
-     * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Core\Model\Cookie $cookie
-     * @param \Magento\Core\Model\Url $url
      * @param \Magento\App\ActionFlag $flag
+     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Stdlib\Cookie $cookie
+     * @param \Magento\Core\Model\Url $url
      * @param \Magento\Core\Model\Store\Config $storeConfig
+     * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param string $sessionNamespace
      * @param array $cookieCheckActions
      */
     public function __construct(
         \Magento\App\ActionFlag $flag,
         \Magento\Core\Model\Session $session,
-        \Magento\Core\Model\Cookie $cookie,
+        \Magento\Stdlib\Cookie $cookie,
         \Magento\Core\Model\Url $url,
         \Magento\Core\Model\Store\Config $storeConfig,
+        \Magento\Session\SidResolverInterface $sidResolver,
         $sessionNamespace = '',
         array $cookieCheckActions = array()
     ) {
         $this->_session = $session;
+        $this->_sidResolver = $sidResolver;
         $this->_cookie = $cookie;
         $this->_cookieCheckActions = $cookieCheckActions;
         $this->_url = $url;
@@ -100,23 +108,20 @@ class Session
             && !$request->getParam('nocookie', false);
 
         $cookies = $this->_cookie->get();
-        /** @var $session \Magento\Core\Model\Session */
-        $session = $this->_session->start();
 
         if (empty($cookies)) {
-            if ($session->getCookieShouldBeReceived()) {
-                $session->unsCookieShouldBeReceived();
-                $session->setSkipSessionIdFlag(true);
+            if ($this->_session->getCookieShouldBeReceived()) {
+                $this->_session->unsCookieShouldBeReceived();
                 if ($this->_storeConfig->getConfig('web/browser_capabilities/cookies')) {
                     $this->_forward($request);
                     return null;
                 }
             } elseif ($checkCookie) {
-                if (isset($_GET[$session->getSessionIdQueryParam()])
+                if ($request->getQuery($this->_sidResolver->getSessionIdQueryParam($this->_session), false)
                     && $this->_url->getUseSession()
                     && $this->_sessionNamespace != \Magento\Backend\App\AbstractAction::SESSION_NAMESPACE
                 ) {
-                    $session->setCookieShouldBeReceived(true);
+                    $this->_session->setCookieShouldBeReceived(true);
                 } else {
                     $this->_forward($request);
                     return null;

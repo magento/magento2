@@ -38,20 +38,18 @@ class Link
     extends \Magento\Catalog\Block\Widget\Link
 {
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite
      * @param \Magento\Catalog\Model\Resource\Category $resourceCategory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Core\Model\Resource\Url\Rewrite $urlRewrite,
         \Magento\Catalog\Model\Resource\Category $resourceCategory,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $urlRewrite, $data);
+        parent::__construct($context, $urlRewrite, $data);
         $this->_entityResource = $resourceCategory;
     }
 }

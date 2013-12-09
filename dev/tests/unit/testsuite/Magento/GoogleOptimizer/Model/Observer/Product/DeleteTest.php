@@ -49,7 +49,13 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $event = $this->getMock('Magento\Event', array('getProduct'), array(), '', false);
         $this->_eventObserverMock = $this->getMock('Magento\Event\Observer', array(), array(), '', false);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
-        $product = $this->getMock('Magento\Catalog\Model\Product', array('getId', 'getStoreId'), array(), '', false);
+        $product = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            array('getId', 'getStoreId', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $product->expects($this->once())->method('getId')->will($this->returnValue($entityId));
         $product->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
         $event->expects($this->once())->method('getProduct')->will($this->returnValue($product));

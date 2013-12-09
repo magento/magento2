@@ -43,7 +43,7 @@ class AssociatedProductUpdaterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $stockItem = $this->getMockBuilder('Magento\CatalogInventory\Model\Resource\Stock\Item')
             ->disableOriginalConstructor()
-            ->setMethods(array('addCatalogInventoryToProductCollection'))
+            ->setMethods(array('addCatalogInventoryToProductCollection', '__wakeup'))
             ->getMock();
         $stockItem->expects($this->any())
             ->method('addCatalogInventoryToProductCollection')

@@ -51,8 +51,8 @@
                         <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
                     </action>
                 </block>
-                <block class="Magento\View\Block\Template" name="checkout.onepage.payment.additional" as="additional"/>
-                <block class="Magento\View\Block\Template" name="checkout.onepage.payment.methods_additional" as="methods_additional"/>
+                <block class="Magento\View\Element\Template" name="checkout.onepage.payment.additional" as="additional"/>
+                <block class="Magento\View\Element\Template" name="checkout.onepage.payment.methods_additional" as="methods_additional"/>
             </block>
             <block class="Magento\Checkout\Block\Onepage\Review" name="checkout.onepage.review" as="review" template="onepage/review.phtml"/>
         </block>

@@ -50,7 +50,6 @@ abstract class AbstractTab
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\GoogleOptimizer\Helper\Data $helperData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\GoogleOptimizer\Helper\Code $codeHelper
@@ -60,7 +59,6 @@ abstract class AbstractTab
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\GoogleOptimizer\Helper\Data $helperData,
         \Magento\Core\Model\Registry $registry,
         \Magento\GoogleOptimizer\Helper\Code $codeHelper,
@@ -68,7 +66,7 @@ abstract class AbstractTab
         \Magento\Data\FormFactory $formFactory,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
 
         $this->_helperData = $helperData;
         $this->_registry = $registry;

@@ -39,13 +39,13 @@ class Admin extends \Magento\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Config $salesConfig
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\Helper\Context $context,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Config $salesConfig
     ) {
         $this->_storeManager = $storeManager;

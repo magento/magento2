@@ -65,24 +65,26 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     protected $_rulesIdsFilter;
 
     /**
-     * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
+     * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory
+     * @param mixed $connection
      */
     public function __construct(
-        \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Sales\Model\Resource\Report $resource
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Sales\Model\Resource\Report $resource,
+        \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory,
+        $connection = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $resource->init($this->_aggregationTable);
-        parent::__construct($eventManager, $logger, $fetchStrategy, $entityFactory, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
     }
 
     /**

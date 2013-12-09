@@ -61,6 +61,8 @@
     <preference for="Magento\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Core\Model\Theme\Domain\Physical" />
     <preference for="Magento\View\Design\Theme\Domain\VirtualInterface" type="Magento\Core\Model\Theme\Domain\Virtual" />
     <preference for="Magento\View\Design\Theme\Domain\StagingInterface" type="Magento\Core\Model\Theme\Domain\Staging" />
+    <preference for="Magento\Json\EncoderInterface" type="Magento\Json\Encoder" />
+    <preference for="Magento\Json\DecoderInterface" type="Magento\Json\Decoder" />
     <type name="Magento\View\BlockPool" shared="false" />
     <type name="Magento\App\Request\Http">
         <param name="pathInfoProcessor">
@@ -72,6 +74,8 @@
     <preference for="Magento\View\Design\Theme\CustomizationInterface" type="Magento\View\Design\Theme\Customization" />
     <preference for="Magento\Image\Adapter\ConfigInterface" type="Magento\Core\Model\Image\Adapter\Config" />
     <preference for="Magento\View\Design\Theme\Image\PathInterface" type="Magento\Core\Model\Theme\Image\Path" />
+    <preference for="Magento\Session\Config\ConfigInterface" type="Magento\Core\Model\Session\Config" />
+    <preference for="Magento\Session\SidResolverInterface" type="Magento\Core\Model\Session\SidResolver\Proxy" />
     <preference for="Magento\TranslateInterface" type="Magento\Core\Model\Translate" />
     <preference for="Magento\Config\ScopeListInterface" type="interceptionConfigScope" />
     <virtualType name="interceptionConfigScope" type="Magento\Config\Scope">
@@ -272,8 +276,5 @@
         <param name="alternativeHeaders">
             <value/>
         </param>
-    </type>
-    <type name="Magento\App\FrontController">
-        <plugin name="install" type="Magento\Module\FrontController\Plugin\Install" sortOrder="40"/>
     </type>
 </config>

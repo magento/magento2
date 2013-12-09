@@ -45,18 +45,16 @@ class Problem extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Newsletter\Model\Resource\Problem\Collection $problemCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Newsletter\Model\Resource\Problem\Collection $problemCollection,
         array $data = array()
     ) {
         $this->_problemCollection = $problemCollection;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _construct()

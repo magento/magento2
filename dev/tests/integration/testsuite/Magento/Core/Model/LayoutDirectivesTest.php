@@ -58,8 +58,8 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testGetBlockUnscheduled()
     {
         $layout = $this->_getLayoutModel('get_block.xml');
-        $this->assertInstanceOf('Magento\View\Block\Text', $layout->getBlock('block1'));
-        $this->assertInstanceOf('Magento\View\Block\Text', $layout->getBlock('block2'));
+        $this->assertInstanceOf('Magento\View\Element\Text', $layout->getBlock('block1'));
+        $this->assertInstanceOf('Magento\View\Element\Text', $layout->getBlock('block2'));
     }
 
     /**

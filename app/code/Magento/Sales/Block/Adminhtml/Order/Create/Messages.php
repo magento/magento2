@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
-class Messages extends \Magento\View\Block\Messages
+class Messages extends \Magento\View\Element\Messages
 {
     /**
      * @var \Magento\Adminhtml\Model\Session\Quote
@@ -41,27 +41,25 @@ class Messages extends \Magento\View\Block\Messages
     protected $sessionQuote;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Message\Factory $messageFactory
      * @param \Magento\Message\CollectionFactory $collectionFactory
      * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Message\Factory $messageFactory,
         \Magento\Message\CollectionFactory $collectionFactory,
         \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
         array $data = array()
     ) {
         $this->sessionQuote = $sessionQuote;
-        parent::__construct($context, $coreData, $messageFactory, $collectionFactory, $data);
+        parent::__construct($context, $messageFactory, $collectionFactory, $data);
     }
 
     /**
-     * @return \Magento\View\Block\Messages
+     * @return \Magento\View\Element\Messages
      */
     protected function _prepareLayout()
     {

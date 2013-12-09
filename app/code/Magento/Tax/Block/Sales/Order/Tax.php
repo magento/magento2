@@ -29,7 +29,7 @@
  */
 namespace Magento\Tax\Block\Sales\Order;
 
-class Tax extends \Magento\View\Block\Template
+class Tax extends \Magento\View\Element\Template
 {
     /**
      * Tax configuration model
@@ -41,19 +41,17 @@ class Tax extends \Magento\View\Block\Template
     protected $_source;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Tax\Model\Config $taxConfig,
         array $data = array()
     ) {
         $this->_config = $taxConfig;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

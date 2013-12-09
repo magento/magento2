@@ -4,7 +4,7 @@ pub/lib/mage/backend/editablemultiselect.js
 pub/lib/mage/captcha.js
 pub/lib/mage/directpost.js
 pub/lib/mage/jquery-no-conflict.js
-app/code/Magento/Page/view/frontend/menu.js
+app/code/Magento/Theme/view/frontend/menu.js
 app/code/Magento/Checkout/view/frontend/multishipping/payment.js
 app/code/Magento/Checkout/view/frontend/onepage/accordion.js
 app/code/Magento/Checkout/view/frontend/opcheckout.js

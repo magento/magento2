@@ -41,29 +41,42 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_calculationModel;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $jsonEncoder;
+
+    /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $coreData;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Tax\Model\Calculation $calculationModel
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Math\Random $mathRandom,
         \Magento\Tax\Model\Calculation $calculationModel,
+        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Core\Helper\Data $coreData,
         array $data = array()
     ) {
         $this->_calculationModel = $calculationModel;
-        parent::__construct($context, $coreData, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
+        $this->jsonEncoder = $jsonEncoder;
+        $this->coreData = $coreData;
+        parent::__construct($context, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
     }
 
     /**
@@ -161,13 +174,12 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     public function getJsonConfig()
     {
         $config = array();
-        $coreHelper = $this->_coreData;
 
         foreach ($this->getLinks() as $link) {
-            $config[$link->getId()] = $coreHelper->currency($link->getPrice(), false, false);
+            $config[$link->getId()] = $this->coreData->currency($link->getPrice(), false, false);
         }
 
-        return $coreHelper->jsonEncode($config);
+        return $this->jsonEncoder->encode($config);
     }
 
     public function getLinkSamlpeUrl($link)

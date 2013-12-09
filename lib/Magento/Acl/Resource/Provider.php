@@ -36,23 +36,15 @@ class Provider implements \Magento\Acl\Resource\ProviderInterface
     protected $_resourceTreeBuilder;
 
     /**
-     * @var \Magento\App\State
-     */
-    protected $_appState;
-
-    /**
      * @param \Magento\Config\ReaderInterface $configReader
      * @param \Magento\Acl\Resource\TreeBuilder $resourceTreeBuilder
-     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Config\ReaderInterface $configReader,
-        \Magento\Acl\Resource\TreeBuilder $resourceTreeBuilder,
-        \Magento\App\State $appState
+        \Magento\Acl\Resource\TreeBuilder $resourceTreeBuilder
     ) {
         $this->_configReader = $configReader;
         $this->_resourceTreeBuilder = $resourceTreeBuilder;
-        $this->_appState = $appState;
     }
 
     /**
@@ -60,7 +52,8 @@ class Provider implements \Magento\Acl\Resource\ProviderInterface
      */
     public function getAclResources()
     {
-        $aclResourceConfig = $this->_configReader->read($this->_appState->getAreaCode());
+        // TODO: As soon as all acl.xml files are moved to global scope, default ('global') scope should be used
+        $aclResourceConfig = $this->_configReader->read('adminhtml');
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
             return $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
         }

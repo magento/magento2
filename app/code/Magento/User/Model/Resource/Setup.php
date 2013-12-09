@@ -62,21 +62,21 @@ class Setup extends \Magento\Core\Model\Resource\Setup
 
     /**
      * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param string $resourceName
      * @param \Magento\User\Model\Resource\Role\CollectionFactory $roleCollectionFactory
      * @param \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\User\Model\RoleFactory $roleFactory
      * @param \Magento\User\Model\RulesFactory $rulesFactory
-     * @param $resourceName
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
+        $resourceName,
         \Magento\User\Model\Resource\Role\CollectionFactory $roleCollectionFactory,
         \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\User\Model\RoleFactory $roleFactory,
         \Magento\User\Model\RulesFactory $rulesFactory,
-        $resourceName,
         $moduleName = 'Magento_User',
         $connectionName = ''
     ) {

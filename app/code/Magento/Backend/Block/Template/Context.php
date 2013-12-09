@@ -28,7 +28,7 @@ namespace Magento\Backend\Block\Template;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Context extends \Magento\View\Block\Template\Context
+class Context extends \Magento\View\Element\Template\Context
 {
     /**
      * @var \Magento\AuthorizationInterface
@@ -46,6 +46,11 @@ class Context extends \Magento\View\Block\Template\Context
     protected $_backendSession;
 
     /**
+     * @var \Magento\Data\Form\FormKey
+     */
+    protected $formKey;
+    
+    /**
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -54,6 +59,7 @@ class Context extends \Magento\View\Block\Template\Context
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\FrontController $frontController
      * @param \Magento\App\Helper\HelperFactory $helperFactory
@@ -74,6 +80,7 @@ class Context extends \Magento\View\Block\Template\Context
      * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Data\Form\FormKey $formKey
      * @param array $data
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -87,6 +94,7 @@ class Context extends \Magento\View\Block\Template\Context
         \Magento\App\CacheInterface $cache,
         \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Session $session,
+        \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\App\FrontController $frontController,
         \Magento\App\Helper\HelperFactory $helperFactory,
@@ -107,11 +115,13 @@ class Context extends \Magento\View\Block\Template\Context
         \Magento\AuthorizationInterface $authorization,
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Math\Random $mathRandom,
+        \Magento\Data\Form\FormKey $formKey,
         array $data = array()
     ) {
         $this->_authorization = $authorization;
         $this->_backendSession = $backendSession;
         $this->mathRandom = $mathRandom;
+        $this->formKey = $formKey;
         parent::__construct(
             $request,
             $layout,
@@ -121,6 +131,7 @@ class Context extends \Magento\View\Block\Template\Context
             $cache,
             $design,
             $session,
+            $sidResolver,
             $storeConfig,
             $frontController,
             $helperFactory,
@@ -141,7 +152,6 @@ class Context extends \Magento\View\Block\Template\Context
             $data
         );
     }
-
 
     /**
      * Get store manager
@@ -185,5 +195,13 @@ class Context extends \Magento\View\Block\Template\Context
     public function getMathRandom()
     {
         return $this->mathRandom;
+    }
+
+    /**
+     * @return \Magento\Data\Form\FormKey
+     */
+    public function getFormKey()
+    {
+        return $this->formKey;
     }
 }

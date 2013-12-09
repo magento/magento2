@@ -33,7 +33,7 @@
  */
 namespace Magento\Review\Block;
 
-class Form extends \Magento\View\Block\Template
+class Form extends \Magento\View\Element\Template
 {
     /**
      * Review data
@@ -63,7 +63,12 @@ class Form extends \Magento\View\Block\Template
     protected $_reviewSession;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreData;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Session\Generic $reviewSession
      * @param \Magento\Review\Helper\Data $reviewData
@@ -73,7 +78,7 @@ class Form extends \Magento\View\Block\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Session\Generic $reviewSession,
         \Magento\Review\Helper\Data $reviewData,
@@ -82,12 +87,13 @@ class Form extends \Magento\View\Block\Template
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         array $data = array()
     ) {
+        $this->_coreData = $coreData;
         $this->_reviewSession = $reviewSession;
         $this->_reviewData = $reviewData;
         $this->_customerSession = $customerSession;
         $this->_productFactory = $productFactory;
         $this->_ratingFactory = $ratingFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _construct()

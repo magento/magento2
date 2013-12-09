@@ -37,6 +37,6 @@ class Tabs extends \Magento\Adminhtml\Block\Widget\Tabs
         parent::_construct();
         $this->setId('integration_edit_tabs');
         $this->setDestElementId('edit_form');
-        $this->setTitle(__('Integration Information'));
+        $this->setTitle(__('Basic Settings'));
     }
 }

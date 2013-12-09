@@ -56,7 +56,6 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Index\Model\Resource\Process\CollectionFactory $factory
      * @param \Magento\Index\Model\Process $indexProcess
@@ -65,14 +64,13 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\Index\Model\Resource\Process\CollectionFactory $factory,
         \Magento\Index\Model\Process $indexProcess,
         \Magento\Index\Model\EventRepository $eventRepository,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
         $this->_eventRepository = $eventRepository;
         $this->_indexProcess = $indexProcess;
         $this->_collectionFactory = $factory;

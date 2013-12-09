@@ -31,7 +31,7 @@ namespace Magento\Backend\Block;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractBlock extends \Magento\View\Block\AbstractBlock
+class AbstractBlock extends \Magento\View\Element\AbstractBlock
 {
     /**
      * @var \Magento\AuthorizationInterface

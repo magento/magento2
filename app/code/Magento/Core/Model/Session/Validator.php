@@ -78,7 +78,7 @@ class Validator
             $_SESSION[self::VALIDATOR_KEY] = $this->_getSessionEnvironment();
         } else {
             if (!$this->_validate()) {
-                $session->getCookie()->delete(session_name());
+                $session->destroy(array('clear_storage' => false));
                 // throw core session exception
                 throw new \Magento\Core\Model\Session\Exception('');
             }

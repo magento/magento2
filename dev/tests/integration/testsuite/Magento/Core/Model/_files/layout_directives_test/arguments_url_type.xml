@@ -24,7 +24,7 @@
  */
 -->
 <layout>
-    <block class="Magento\View\Block\Text" name="block_with_url_args">
+    <block class="Magento\View\Element\Text" name="block_with_url_args">
         <arguments>
             <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="one" xsi:type="url" path="customer/account/login">
                 <param name="_current">1</param>

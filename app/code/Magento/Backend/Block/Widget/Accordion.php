@@ -57,7 +57,7 @@ class Accordion extends \Magento\Backend\Block\Widget
             ->setData($config)
             ->setAccordion($this)
             ->setId($itemId);
-        if (isset($config['content']) && $config['content'] instanceof \Magento\View\Block\AbstractBlock) {
+        if (isset($config['content']) && $config['content'] instanceof \Magento\View\Element\AbstractBlock) {
             $this->_items[$itemId]->setChild($itemId.'_content', $config['content']);
         }
             

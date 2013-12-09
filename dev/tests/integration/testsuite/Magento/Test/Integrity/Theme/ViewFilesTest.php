@@ -171,7 +171,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
             ->create('Magento\View\Layout\ProcessorInterface', array('theme' => $theme));
         $fileLayoutUpdates = $layoutUpdate->getFileLayoutUpdatesXml();
         $elements = $fileLayoutUpdates->xpath(
-            '//block[@class="Magento\Page\Block\Html\Head\Css" or @class="Magento\Page\Block\Html\Head\Script"]'
+            '//block[@class="Magento\Theme\Block\Html\Head\Css" or @class="Magento\Theme\Block\Html\Head\Script"]'
                 . '/arguments/argument[@name="file"]'
         );
         if ($elements) {

@@ -70,7 +70,7 @@ class Cache extends \Magento\Backend\App\Action
      */
     protected function _getSession()
     {
-        return $this->_objectManager->get('Magento\Adminhtml\Model\Session');
+        return $this->_objectManager->get('Magento\Core\Model\Session\AbstractSession');
     }
 
     /**
@@ -125,6 +125,9 @@ class Cache extends \Magento\Backend\App\Action
         try {
             $types = $this->getRequest()->getParam('types');
             $updatedTypes = 0;
+            if (!is_array($types)) {
+                $types = array();
+            }
             $this->_validateTypes($types);
             foreach ($types as $code) {
                 if (!$this->_cacheState->isEnabled($code)) {
@@ -158,6 +161,9 @@ class Cache extends \Magento\Backend\App\Action
         try {
             $types = $this->getRequest()->getParam('types');
             $updatedTypes = 0;
+            if (!is_array($types)) {
+                $types = array();
+            }
             $this->_validateTypes($types);
             foreach ($types as $code) {
                 if ($this->_cacheState->isEnabled($code)) {
@@ -174,8 +180,7 @@ class Cache extends \Magento\Backend\App\Action
             }
         } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->_getSession()->addException(
                 $e,
                 __('An error occurred while disabling cache.')
@@ -192,6 +197,9 @@ class Cache extends \Magento\Backend\App\Action
         try {
             $types = $this->getRequest()->getParam('types');
             $updatedTypes = 0;
+            if (!is_array($types)) {
+                $types = array();
+            }
             $this->_validateTypes($types);
             foreach ($types as $type) {
                 $this->_cacheTypeList->cleanType($type);
@@ -199,18 +207,12 @@ class Cache extends \Magento\Backend\App\Action
                 $updatedTypes++;
             }
             if ($updatedTypes > 0) {
-                $this->_getSession()->addSuccess(
-                    __("%1 cache type(s) refreshed.", $updatedTypes)
-                );
+                $this->_getSession()->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
             }
         } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
-            $this->_getSession()->addException(
-                $e,
-                __('An error occurred while refreshing cache.')
-            );
+        } catch (\Exception $e) {
+            $this->_getSession()->addException($e, __('An error occurred while refreshing cache.'));
         }
         $this->_redirect('adminhtml/*');
     }
@@ -238,17 +240,13 @@ class Cache extends \Magento\Backend\App\Action
     public function cleanMediaAction()
     {
         try {
-            $this->_objectManager->get('Magento\Core\Model\Page\Asset\MergeService')
+            $this->_objectManager->get('Magento\View\Asset\MergeService')
                 ->cleanMergedJsCss();
             $this->_eventManager->dispatch('clean_media_cache_after');
-            $this->_getSession()->addSuccess(
-                __('The JavaScript/CSS cache has been cleaned.')
-            );
-        }
-        catch (\Magento\Core\Exception $e) {
+            $this->_getSession()->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
+        } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->_getSession()->addException(
                 $e,
                 __('An error occurred while clearing the JavaScript/CSS cache.')
@@ -268,11 +266,9 @@ class Cache extends \Magento\Backend\App\Action
             $this->_getSession()->addSuccess(
                 __('The image cache was cleaned.')
             );
-        }
-        catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Core\Exception $e) {
             $this->_getSession()->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->_getSession()->addException(
                 $e,
                 __('An error occurred while clearing the image cache.')

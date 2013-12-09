@@ -56,33 +56,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create mock for data helper and push it to registry
-     *
-     * @return \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _createDataHelperMock()
-    {
-        /** @var $helper \Magento\ImportExport\Helper\Data */
-        $helper = $this->getMock('Magento\ImportExport\Helper\Data', array(), array(), '', false);
-
-        $coreRegisterMock = $this->getMock('Magento\Core\Model\Registry');
-        $coreRegisterMock->expects($this->any())
-            ->method('registry')
-            ->with('_helper/Magento\ImportExport\Helper\Data')
-            ->will($this->returnValue($helper));
-
-        $objectManagerMock = $this->getMockBuilder('Magento\ObjectManager')->getMock();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->with('Magento\Core\Model\Registry')
-            ->will($this->returnValue($coreRegisterMock));
-
-        \Magento\App\ObjectManager::setInstance($objectManagerMock);
-
-        return $helper;
-    }
-
-    /**
      * Create source adapter mock and set it into model object which tested in this class
      *
      * @param array $columns value which will be returned by method getColNames()
@@ -111,7 +84,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateDataEmptyColumnName()
     {
-        $this->_createDataHelperMock();
         $this->_createSourceAdapterMock(array(''));
         $this->_model->validateData();
     }
@@ -125,7 +97,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateDataColumnNameWithWhitespaces()
     {
-        $this->_createDataHelperMock();
         $this->_createSourceAdapterMock(array('  '));
         $this->_model->validateData();
     }
@@ -139,7 +110,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateDataAttributeNames()
     {
-        $this->_createDataHelperMock();
         $this->_createSourceAdapterMock(array('_test1'));
         $this->_model->validateData();
     }
@@ -158,7 +128,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum, $expectedResult)
     {
-        $this->_createDataHelperMock();
         $this->_createSourceAdapterMock(array('_test1'));
         $this->assertEquals($expectedResult,
             $this->_model->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum));

@@ -47,18 +47,16 @@ class Items extends \Magento\Adminhtml\Block\Widget\Grid\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\GoogleShopping\Model\FlagFactory $flagFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\GoogleShopping\Model\FlagFactory $flagFactory,
         array $data = array()
     ) {
         $this->_flagFactory = $flagFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
 

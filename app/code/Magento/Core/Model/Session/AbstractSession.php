@@ -29,19 +29,28 @@ namespace Magento\Core\Model\Session;
 
 class AbstractSession extends \Magento\Object
 {
-    const XML_PATH_COOKIE_DOMAIN        = 'web/cookie/cookie_domain';
-    const XML_PATH_COOKIE_PATH          = 'web/cookie/cookie_path';
+    /**
+     * Configuration path to log exception file
+     */
+    const XML_PATH_LOG_EXCEPTION_FILE = 'dev/log/exception_file';
 
-    const PARAM_SESSION_SAVE_METHOD     = 'session_save';
-    const PARAM_SESSION_SAVE_PATH       = 'session_save_path';
-    const PARAM_SESSION_CACHE_LIMITER   = 'session_cache_limiter';
+    /**
+     * Session key for list of hosts
+     */
+    const HOST_KEY = '_session_hosts';
 
-    const XML_PATH_USE_FRONTEND_SID     = 'web/session/use_frontend_sid';
-
-    const XML_PATH_LOG_EXCEPTION_FILE   = 'dev/log/exception_file';
-
-    const HOST_KEY                      = '_session_hosts';
-    const SESSION_ID_QUERY_PARAM        = 'SID';
+    /**
+     * Default options when a call destroy()
+     *
+     * - send_expire_cookie: whether or not to send a cookie expiring the current session cookie
+     * - clear_storage: whether or not to empty the storage object of any stored values
+     *
+     * @var array
+     */
+    protected $defaultDestroyOptions = array(
+        'send_expire_cookie' => true,
+        'clear_storage'      => true,
+    );
 
     /**
      * URL host cache
@@ -49,20 +58,6 @@ class AbstractSession extends \Magento\Object
      * @var array
      */
     protected static $_urlHostCache = array();
-
-    /**
-     * Encrypted session id cache
-     *
-     * @var string
-     */
-    protected static $_encryptedSessionId;
-
-    /**
-     * Skip session id flag
-     *
-     * @var bool
-     */
-    protected $_skipSessionIdFlag   = false;
 
     /**
      * @var \Magento\Logger
@@ -74,7 +69,7 @@ class AbstractSession extends \Magento\Object
      *
      * @var \Magento\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Core\Model\Session\Validator
@@ -90,13 +85,6 @@ class AbstractSession extends \Magento\Object
      * @var string
      */
     protected $_saveMethod;
-
-    /**
-     * Core cookie
-     *
-     * @var \Magento\Core\Model\Cookie
-     */
-    protected $_cookie;
 
     /**
      * Core message
@@ -128,77 +116,48 @@ class AbstractSession extends \Magento\Object
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Session\SidResolverInterface
      */
-    protected $_dir;
+    protected $_sidResolver;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\Session\Config\ConfigInterface
      */
-    protected $_url;
-
-    /**
-     * @var string
-     */
-    protected $_savePath;
-
-    /**
-     * @var string
-     */
-    protected $_cacheLimiter;
-
-    /**
-     * @var array
-     */
-    protected $_sidNameMap;
+    protected $_sessionConfig;
 
     /**
      * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
+        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Session\Config\ConfigInterface $sessionConfig,
         array $data = array()
     ) {
         $this->_validator = $context->getValidator();
         $this->_eventManager = $context->getEventManager();
         $this->_logger = $context->getLogger();
         $this->_coreStoreConfig = $context->getStoreConfig();
-        $this->_savePath = $this->_savePath ?: $context->getSavePath();
         $this->_saveMethod = $this->_saveMethod ?: $context->getSaveMethod();
-        $this->_cacheLimiter = $this->_cacheLimiter ?: $context->getCacheLimiter();
-        $this->_sidNameMap = $context->getSidMap();
         $this->messagesFactory = $context->getMessagesFactory();
         $this->messageFactory = $context->getMessageFactory();
-        $this->_cookie = $context->getCookie();
         $this->_request = $context->getRequest();
         $this->_appState = $context->getAppState();
         $this->_storeManager = $context->getStoreManager();
-        $this->_dir = $context->getDir();
-        $this->_url = $context->getUrl();
+        $this->_sidResolver = $sidResolver;
+        $this->_sessionConfig = $sessionConfig;
         parent::__construct($data);
     }
 
     /**
-     * This method needs to support sessions with APC enabled
+     * Init session handler
      */
-    public function __destruct()
+    protected function _initSessionHandler()
     {
-        session_write_close();
-    }
-
-    /**
-     * Configure session handler and start session
-     *
-     * @param string $sessionName
-     * @return \Magento\Core\Model\Session\AbstractSession
-     */
-    public function start($sessionName = null)
-    {
-        if (isset($_SESSION) && !$this->getSkipEmptySessionCheck()) {
-            return $this;
-        }
-
+        \Magento\Profiler::start('session_start');
         switch($this->getSessionSaveMethod()) {
             case 'db':
                 ini_set('session.save_handler', 'user');
@@ -209,99 +168,71 @@ class AbstractSession extends \Magento\Object
                 break;
             case 'memcache':
                 ini_set('session.save_handler', 'memcache');
-                session_save_path($this->getSessionSavePath());
                 break;
             case 'memcached':
                 ini_set('session.save_handler', 'memcached');
-                session_save_path($this->getSessionSavePath());
                 break;
             case 'eaccelerator':
                 ini_set('session.save_handler', 'eaccelerator');
                 break;
             default:
                 session_module_name($this->getSessionSaveMethod());
-                if (is_writable($this->getSessionSavePath())) {
-                    session_save_path($this->getSessionSavePath());
-                }
                 break;
-        }
-        $cookie = $this->getCookie();
-
-        // session cookie params
-        $cookieParams = array(
-            'lifetime' => 0, // 0 is browser session lifetime
-            'path'     => $cookie->getPath(),
-            'domain'   => $cookie->getConfigDomain(),
-            'secure'   => $cookie->isSecure(),
-            'httponly' => $cookie->getHttponly()
-        );
-
-        if (!$cookieParams['httponly']) {
-            unset($cookieParams['httponly']);
-            if (!$cookieParams['secure']) {
-                unset($cookieParams['secure']);
-                if (!$cookieParams['domain']) {
-                    unset($cookieParams['domain']);
-                }
-            }
-        }
-
-        if (isset($cookieParams['domain'])) {
-            $cookieParams['domain'] = $cookie->getDomain();
-        }
-
-        call_user_func_array('session_set_cookie_params', $cookieParams);
-
-        if (!empty($sessionName)) {
-            $this->setSessionName($sessionName);
         }
 
         // potential custom logic for session id (ex. switching between hosts)
-        $this->setSessionId();
+        $this->setSessionId($this->_sidResolver->getSid($this));
 
-        \Magento\Profiler::start('session_start');
-
-        if ($this->_cacheLimiter) {
-            session_cache_limiter($this->_cacheLimiter);
-        }
         session_start();
+        register_shutdown_function(array($this, 'writeClose'));
 
         \Magento\Profiler::stop('session_start');
-
-        return $this;
     }
 
     /**
-     * Retrieve cookie object
-     *
-     * @return \Magento\Core\Model\Cookie
+     * This method needs to support sessions with APC enabled
      */
-    public function getCookie()
+    public function writeClose()
     {
-        return $this->_cookie;
+        session_write_close();
     }
 
     /**
-     * Init session with namespace
+     * Configure session handler and start session
      *
      * @param string $namespace
      * @param string $sessionName
      * @return \Magento\Core\Model\Session\AbstractSession
      */
-    public function init($namespace, $sessionName = null)
+    public function start($namespace = 'default', $sessionName = null)
     {
-        if (!isset($_SESSION)) {
-            $this->start($sessionName);
+        if (!$this->isSessionExists()) {
+            if (!empty($sessionName)) {
+                $this->setSessionName($sessionName);
+            }
+            $this->_initSessionHandler();
+            $this->_validator->validate($this);
+            $this->_addHost();
         }
+
         if (!isset($_SESSION[$namespace])) {
             $_SESSION[$namespace] = array();
         }
-
         $this->_data = &$_SESSION[$namespace];
-
-        $this->_validator->validate($this);
-        $this->_addHost();
         return $this;
+    }
+
+    /**
+     * Does a session exist
+     *
+     * @return bool
+     */
+    public function isSessionExists()
+    {
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -335,7 +266,7 @@ class AbstractSession extends \Magento\Object
      *
      * @return string
      */
-    public function getSessionName()
+    public function getName()
     {
         return session_name();
     }
@@ -353,24 +284,41 @@ class AbstractSession extends \Magento\Object
     }
 
     /**
-     * Unset all data
+     * Destroy/end a session
      *
-     * @return \Magento\Core\Model\Session\AbstractSession
+     * @param  array $options
      */
-    public function unsetAll()
+    public function destroy(array $options = null)
     {
-        $this->unsetData();
-        return $this;
+        if (null === $options) {
+            $options = $this->defaultDestroyOptions;
+        } else {
+            $options = array_merge($this->defaultDestroyOptions, $options);
+        }
+
+        if ($options['clear_storage']) {
+            $this->clearStorage();
+        }
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            return;
+        }
+
+        session_destroy();
+        if ($options['send_expire_cookie']) {
+            $this->expireSessionCookie();
+        }
     }
 
     /**
-     * Alias for unsetAll
+     * Unset all session data
      *
-     * @return \Magento\Core\Model\Session\AbstractSession
+     * @return $this
      */
-    public function clear()
+    public function clearStorage()
     {
-        return $this->unsetAll();
+        $this->unsetData();
+        return $this;
     }
 
     /**
@@ -380,7 +328,7 @@ class AbstractSession extends \Magento\Object
      */
     public function getCookieDomain()
     {
-        return $this->getCookie()->getDomain();
+        return $this->_sessionConfig->getCookieDomain();
     }
 
     /**
@@ -390,7 +338,7 @@ class AbstractSession extends \Magento\Object
      */
     public function getCookiePath()
     {
-        return $this->getCookie()->getPath();
+        return $this->_sessionConfig->getCookiePath();
     }
 
     /**
@@ -400,7 +348,7 @@ class AbstractSession extends \Magento\Object
      */
     public function getCookieLifetime()
     {
-        return $this->getCookie()->getLifetime();
+        return $this->_sessionConfig->getCookieLifetime();
     }
 
     /**
@@ -542,7 +490,7 @@ class AbstractSession extends \Magento\Object
         foreach ($items as $item) {
             if ($item instanceof \Magento\Message\AbstractMessage) {
                 $text = $item->getText();
-            } else if (is_string($item)) {
+            } elseif (is_string($item)) {
                 $text = $item;
             } else {
                 continue; // Some unknown object, do not put it in already existing messages
@@ -553,7 +501,7 @@ class AbstractSession extends \Magento\Object
         foreach ($messages as $message) {
             if ($message instanceof \Magento\Message\AbstractMessage) {
                 $text = $message->getText();
-            } else if (is_string($message)) {
+            } elseif (is_string($message)) {
                 $text = $message;
             } else {
                 $text = null; // Some unknown object, add it anyway
@@ -575,72 +523,16 @@ class AbstractSession extends \Magento\Object
     /**
      * Specify session identifier
      *
-     * @param   string|null $id
+     * @param   string|null $sessionId
      * @return  \Magento\Core\Model\Session\AbstractSession
      */
-    public function setSessionId($id = null)
+    public function setSessionId($sessionId)
     {
-        if (null === $id && $this->_isSidUsedFromQueryParam()) {
-            $_queryParam = $this->getSessionIdQueryParam();
-            if (isset($_GET[$_queryParam]) && $this->_url->isOwnOriginUrl()) {
-                $id = $_GET[$_queryParam];
-            }
-        }
         $this->_addHost();
-        if (!is_null($id) && preg_match('#^[0-9a-zA-Z,-]+$#', $id)) {
-            session_id($id);
+        if (!is_null($sessionId) && preg_match('#^[0-9a-zA-Z,-]+$#', $sessionId)) {
+            session_id($sessionId);
         }
         return $this;
-    }
-
-    /**
-     * Get encrypted session identifier.
-     * No reason use crypt key for session id encryption, we can use session identifier as is.
-     *
-     * @return string
-     */
-    public function getEncryptedSessionId()
-    {
-        if (!self::$_encryptedSessionId) {
-            self::$_encryptedSessionId = $this->getSessionId();
-        }
-        return self::$_encryptedSessionId;
-    }
-
-    /**
-     * Get session id query param
-     *
-     * @return string
-     */
-    public function getSessionIdQueryParam()
-    {
-        $sessionName = $this->getSessionName();
-        if ($sessionName && isset($this->_sidNameMap[$sessionName])) {
-            return $this->_sidNameMap[$sessionName];
-        }
-        return self::SESSION_ID_QUERY_PARAM;
-    }
-
-    /**
-     * Set skip flag if need skip generating of _GET session_id_key param
-     *
-     * @param bool $flag
-     * @return \Magento\Core\Model\Session\AbstractSession
-     */
-    public function setSkipSessionIdFlag($flag)
-    {
-        $this->_skipSessionIdFlag = $flag;
-        return $this;
-    }
-
-    /**
-     * Retrieve session id skip flag
-     *
-     * @return bool
-     */
-    public function getSkipSessionIdFlag()
-    {
-        return $this->_skipSessionIdFlag;
     }
 
     /**
@@ -651,10 +543,6 @@ class AbstractSession extends \Magento\Object
      */
     public function getSessionIdForHost($urlHost)
     {
-        if ($this->getSkipSessionIdFlag() === true) {
-            return '';
-        }
-
         $httpHost = $this->_request->getHttpHost();
         if (!$httpHost) {
             return '';
@@ -670,11 +558,11 @@ class AbstractSession extends \Magento\Object
             $urlHostArr = explode(':', $urlHost);
             $urlHost = $urlHostArr[0];
             $sessionId = $httpHost !== $urlHost && !$this->isValidForHost($urlHost)
-                ? $this->getEncryptedSessionId() : '';
+                ? $this->getSessionId() : '';
             self::$_urlHostCache[$urlHost] = $sessionId;
         }
 
-        return $this->isValidForPath($urlPath) ? self::$_urlHostCache[$urlHost] : $this->getEncryptedSessionId();
+        return $this->isValidForPath($urlPath) ? self::$_urlHostCache[$urlHost] : $this->getSessionId();
     }
 
     /**
@@ -747,16 +635,6 @@ class AbstractSession extends \Magento\Object
     }
 
     /**
-     * Whether to take session id from GET
-     *
-     * @return bool
-     */
-    protected function _isSidUsedFromQueryParam()
-    {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_USE_FRONTEND_SID);
-    }
-
-    /**
      * Retrieve session save method
      *
      * @return string
@@ -770,42 +648,68 @@ class AbstractSession extends \Magento\Object
     }
 
     /**
-     * Get session save path
+     * Renew session id and update session cookie
      *
-     * @return string
+     * @param bool $deleteOldSession
+     * @return \Magento\Core\Model\Session\AbstractSession
+     * @throws \LogicException
      */
-    public function getSessionSavePath()
+    public function regenerateId($deleteOldSession = true)
     {
-        if ($this->_appState->isInstalled() && $this->_savePath) {
-            return $this->_savePath;
+        if ($this->isSessionExists()) {
+            return $this;
         }
-        return $this->_dir->getDir('session');
+        session_regenerate_id($deleteOldSession);
+
+        if ($this->_sessionConfig->getUseCookies()) {
+            $this->clearSubDomainSessionCookie();
+        }
+        return $this;
     }
 
     /**
-     * Renew session id and update session cookie
-     *
-     * @return \Magento\Core\Model\Session\AbstractSession
+     * Expire the session cookie for sub domains
      */
-    public function renewSession()
+    protected function clearSubDomainSessionCookie()
     {
-        if (headers_sent()) {
-            $this->_logger->log('Can not regenerate session id because HTTP headers already sent.');
-            return $this;
-        }
-        session_regenerate_id(true);
-
-        $sessionHosts = $this->_getHosts();
-        $currentCookieDomain = $this->getCookie()->getDomain();
-        if (is_array($sessionHosts)) {
-            foreach (array_keys($sessionHosts) as $host) {
-                // Delete cookies with the same name for parent domains
-                if (strpos($currentCookieDomain, $host) > 0) {
-                    $this->getCookie()->delete($this->getSessionName(), null, $host);
-                }
+        foreach (array_keys($this->_getHosts()) as $host) {
+            // Delete cookies with the same name for parent domains
+            if (strpos($this->_sessionConfig->getCookieDomain(), $host) > 0) {
+                setcookie(
+                    $this->getName(),
+                    '',
+                    0,
+                    $this->_sessionConfig->getCookiePath(),
+                    $host,
+                    $this->_sessionConfig->getCookieSecure(),
+                    $this->_sessionConfig->getCookieHttpOnly()
+                );
             }
         }
+    }
 
-        return $this;
+    /**
+     * Expire the session cookie
+     *
+     * Sends a session cookie with no value, and with an expiry in the past.
+     *
+     * @return void
+     */
+    public function expireSessionCookie()
+    {
+        if (!$this->_sessionConfig->getUseCookies()) {
+            return;
+        }
+
+        setcookie(
+            $this->getName(),                 // session name
+            '',                               // value
+            0,                                // TTL for cookie
+            $this->_sessionConfig->getCookiePath(),
+            $this->_sessionConfig->getCookieDomain(),
+            $this->_sessionConfig->getCookieSecure(),
+            $this->_sessionConfig->getCookieHttpOnly()
+        );
+        $this->clearSubDomainSessionCookie();
     }
 }

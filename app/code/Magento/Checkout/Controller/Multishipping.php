@@ -518,7 +518,7 @@ class Multishipping extends \Magento\Checkout\Controller\Action
             $this->_getState()->setCompleteStep(
                 \Magento\Checkout\Model\Type\Multishipping\State::STEP_OVERVIEW
             );
-            $this->_getCheckout()->getCheckoutSession()->clear();
+            $this->_getCheckout()->getCheckoutSession()->clearQuote();
             $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
             $this->_redirect('*/*/success');
         } catch (\Magento\Payment\Model\Info\Exception $e) {
@@ -530,7 +530,7 @@ class Multishipping extends \Magento\Checkout\Controller\Action
         } catch (\Magento\Checkout\Exception $e) {
             $this->_objectManager->get('Magento\Checkout\Helper\Data')
                 ->sendPaymentFailedEmail($this->_getCheckout()->getQuote(), $e->getMessage(), 'multi-shipping');
-            $this->_getCheckout()->getCheckoutSession()->clear();
+            $this->_getCheckout()->getCheckoutSession()->clearQuote();
             $this->_getCheckoutSession()->addError($e->getMessage());
             $this->_redirect('*/cart');
         } catch (\Magento\Core\Exception $e) {

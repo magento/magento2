@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Product\Widget\Html;
 
-class Pager extends \Magento\Page\Block\Html\Pager
+class Pager extends \Magento\Theme\Block\Html\Pager
 {
     /**
      * Collection size

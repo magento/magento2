@@ -49,6 +49,7 @@ abstract class AbstractConversion extends \Magento\Core\Model\Config\Value
      * @param \Magento\GoogleAdwords\Model\Validator\Factory $validatorFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Context $context,
@@ -58,16 +59,10 @@ abstract class AbstractConversion extends \Magento\Core\Model\Config\Value
         \Magento\Validator\Composite\VarienObjectFactory $validatorCompositeFactory,
         \Magento\GoogleAdwords\Model\Validator\Factory $validatorFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null
+        \Magento\Data\Collection\Db $resourceCollection = null,
+        array $data = array()
     ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection
-        );
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
 
         $this->_validatorFactory = $validatorFactory;
         $this->_validatorComposite = $validatorCompositeFactory->create();

@@ -68,7 +68,7 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
             $filter->apply(
                 $request,
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                    ->createBlock('Magento\View\Block\Text')
+                    ->createBlock('Magento\View\Element\Text')
             );
             $interval = $filter->getInterval();
             if ($interval) {

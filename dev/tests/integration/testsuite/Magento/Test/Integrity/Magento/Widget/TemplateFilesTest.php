@@ -46,9 +46,9 @@ class TemplateFilesTest extends \PHPUnit_Framework_TestCase
         /** @var $blockFactory \Magento\View\Element\BlockFactory */
         $blockFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\View\Element\BlockFactory');
-        /** @var \Magento\View\Block\Template $block */
+        /** @var \Magento\View\Element\Template $block */
         $block = $blockFactory->createBlock($class);
-        $this->assertInstanceOf('Magento\View\Block\Template', $block);
+        $this->assertInstanceOf('Magento\View\Element\Template', $block);
         $block->setTemplate((string)$template);
         $this->assertFileExists($block->getTemplateFile());
     }
@@ -70,7 +70,7 @@ class TemplateFilesTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Widget\Model\Widget\Instance');
             $config = $instance->setType($row['type'])->getWidgetConfigAsArray();
             $class = $row['type'];
-            if (is_subclass_of($class, 'Magento\View\Block\Template')) {
+            if (is_subclass_of($class, 'Magento\View\Element\Template')) {
                 if (isset($config['parameters']) && isset($config['parameters']['template'])
                     && isset($config['parameters']['template']['values'])) {
                     $templates = $config['parameters']['template']['values'];

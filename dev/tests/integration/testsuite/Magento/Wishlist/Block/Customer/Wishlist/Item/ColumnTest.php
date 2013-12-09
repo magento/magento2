@@ -44,7 +44,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\View\LayoutInterface');
         $this->_block = $this->_layout->addBlock('Magento\Wishlist\Block\Customer\Wishlist\Item\Column', 'test');
-        $this->_layout->addBlock('Magento\View\Block\Text', 'child', 'test');
+        $this->_layout->addBlock('Magento\View\Element\Text', 'child', 'test');
     }
 
     /**

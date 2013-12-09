@@ -30,6 +30,9 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
 class LinksTest
     extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @magentoAppArea adminhtml
+     */
     public function testGetUploadButtonsHtml()
     {
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
@@ -40,9 +43,9 @@ class LinksTest
     /**
      * Reuse code for testing getUploadButtonHtml()
      *
-     * @param \Magento\View\Block\AbstractBlock $block
+     * @param \Magento\View\Element\AbstractBlock $block
      */
-    public static function performUploadButtonTest(\Magento\View\Block\AbstractBlock $block)
+    public static function performUploadButtonTest(\Magento\View\Element\AbstractBlock $block)
     {
         /** @var $layout \Magento\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -50,13 +53,14 @@ class LinksTest
         $layout->addBlock($block, 'links');
         $expected = uniqid();
         $text = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\View\Block\Text', '', array('data' => array('text' => $expected)));
+            ->createBlock('Magento\View\Element\Text', '', array('data' => array('text' => $expected)));
         $block->unsetChild('upload_button');
         $layout->addBlock($text, 'upload_button', 'links');
         self::assertEquals($expected, $block->getUploadButtonHtml());
     }
 
     /**
+     * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      */
     public function testGetLinkData()
@@ -77,6 +81,7 @@ class LinksTest
      * @magentoAppIsolation enabled
      * @dataProvider productLinksTitleDataProvider
      *
+     * @magentoAppArea adminhtml
      * @param string $productType
      * @param string $linksTitle
      * @param string $expectedResult

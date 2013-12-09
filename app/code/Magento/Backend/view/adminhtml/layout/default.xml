@@ -29,162 +29,162 @@
             <action method="setTitle">
                 <argument translate="true" name="title" xsi:type="string">Magento Admin</argument>
             </action>
-            <block class="Magento\Page\Block\Html\Head\Script" name="jquery-jquery-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-js">
                 <arguments>
                     <argument name="file" xsi:type="string">jquery/jquery.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-jquery-no-conflict-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-jquery-no-conflict-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/jquery-no-conflict.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="jquery-jquery-ui-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ui-js">
                 <arguments>
                     <argument name="file" xsi:type="string">jquery/jquery-ui.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="head-load-min-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="head-load-min-js">
                 <arguments>
                     <argument name="file" xsi:type="string">head.load.min.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="underscore-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="underscore-js">
                 <arguments>
                     <argument name="file" xsi:type="string">underscore.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-magento-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-magento-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/mage.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="jquery-jquery-tmpl-min-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-tmpl-min-js">
                 <arguments>
                     <argument name="file" xsi:type="string">jquery/jquery.tmpl.min.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="jquery-jquery-validate-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-validate-js">
                 <arguments>
                     <argument name="file" xsi:type="string">jquery/jquery.validate.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="jquery-jquery-hoverintent-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-hoverintent-js">
                 <arguments>
                     <argument name="file" xsi:type="string">jquery/jquery.hoverIntent.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-translate-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-translate-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/translate.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-backend-bootstrap-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-bootstrap-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/backend/bootstrap.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-backend-floating-header-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-floating-header-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/backend/floating-header.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="prototype-prototype-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-prototype-js">
                 <arguments>
                     <argument name="file" xsi:type="string">prototype/prototype.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="prototype-window-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-window-js">
                 <arguments>
                     <argument name="file" xsi:type="string">prototype/window.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="scriptaculous-builder-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-builder-js">
                 <arguments>
                     <argument name="file" xsi:type="string">scriptaculous/builder.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="scriptaculous-effects-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-effects-js">
                 <arguments>
                     <argument name="file" xsi:type="string">scriptaculous/effects.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="scriptaculous-dragdrop-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-dragdrop-js">
                 <arguments>
                     <argument name="file" xsi:type="string">scriptaculous/dragdrop.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="scriptaculous-controls-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-controls-js">
                 <arguments>
                     <argument name="file" xsi:type="string">scriptaculous/controls.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="scriptaculous-slider-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-slider-js">
                 <arguments>
                     <argument name="file" xsi:type="string">scriptaculous/slider.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="lib-ccard-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="lib-ccard-js">
                 <arguments>
                     <argument name="file" xsi:type="string">lib/ccard.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="prototype-validation-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-validation-js">
                 <arguments>
                     <argument name="file" xsi:type="string">prototype/validation.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="varien-js-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="varien-js-js">
                 <arguments>
                     <argument name="file" xsi:type="string">varien/js.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-hash-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-hash-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/hash.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-events-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-events-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/events.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-varienloader-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-varienloader-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/varienLoader.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-grid-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-grid-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/grid.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-backend-tabs-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-tabs-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/backend/tabs.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-form-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-form-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/form.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-accordion-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-accordion-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/accordion.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-tools-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-tools-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/tools.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-js">
                 <arguments>
                     <argument name="file" xsi:type="string">Magento_Catalog::catalog/product.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="lib-ds-sleight-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="lib-ds-sleight-js">
                 <arguments>
                     <argument name="file" xsi:type="string">lib/ds-sleight.js</argument>
                     <argument name="properties" xsi:type="array">
@@ -193,7 +193,7 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Css" name="magento-calendar-css">
+            <block class="Magento\Theme\Block\Html\Head\Css" name="magento-calendar-css">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/calendar.css</argument>
                     <argument name="properties" xsi:type="array">
@@ -201,17 +201,17 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="jquery-jquery-ui-timepicker-addon-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ui-timepicker-addon-js">
                 <arguments>
                     <argument name="file" xsi:type="string">jquery/jquery-ui-timepicker-addon.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-calendar-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-calendar-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/calendar.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="extjs-ext-tree-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="extjs-ext-tree-js">
                 <arguments>
                     <argument name="file" xsi:type="string">extjs/ext-tree.js</argument>
                     <argument name="properties" xsi:type="array">
@@ -221,7 +221,7 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="extjs-ext-tree-checkbox-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="extjs-ext-tree-checkbox-js">
                 <arguments>
                     <argument name="file" xsi:type="string">extjs/ext-tree-checkbox.js</argument>
                     <argument name="properties" xsi:type="array">
@@ -231,7 +231,7 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Css" name="extjs-resources-css-ext-all-css">
+            <block class="Magento\Theme\Block\Html\Head\Css" name="extjs-resources-css-ext-all-css">
                 <arguments>
                     <argument name="file" xsi:type="string">extjs/resources/css/ext-all.css</argument>
                     <argument name="properties" xsi:type="array">
@@ -241,7 +241,7 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Css" name="extjs-resources-css-ytheme-magento-css">
+            <block class="Magento\Theme\Block\Html\Head\Css" name="extjs-resources-css-ytheme-magento-css">
                 <arguments>
                     <argument name="file" xsi:type="string">extjs/resources/css/ytheme-magento.css</argument>
                     <argument name="properties" xsi:type="array">
@@ -251,7 +251,7 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-promo-rules-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-promo-rules-js">
                 <arguments>
                     <argument name="file" xsi:type="string">Magento_Rule::rules.js</argument>
                     <argument name="properties" xsi:type="array">
@@ -261,7 +261,7 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-wysiwyg-tiny-mce-setup-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-wysiwyg-tiny-mce-setup-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/wysiwyg/tiny_mce/setup.js</argument>
                     <argument name="properties" xsi:type="array">
@@ -271,8 +271,8 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Js\Components" name="head.components" as="components" template="Magento_Backend::page/js/components.phtml"/>
-            <block class="Magento\View\Block\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Backend::page/js/calendar.phtml"/>
+            <block class="Magento\View\Element\Js\Components" name="head.components" as="components" template="Magento_Backend::page/js/components.phtml"/>
+            <block class="Magento\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Backend::page/js/calendar.phtml"/>
         </block>
         <block class="Magento\Backend\Block\Menu" name="menu" as="menu" template="Magento_Backend::menu.phtml"/>
         <block class="Magento\Backend\Block\Page\Notices" name="global_notices" as="global_notices" template="page/notices.phtml"/>
@@ -282,14 +282,14 @@
         <block class="Magento\Adminhtml\Block\Widget\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
         <!--<update handle="formkey"/> this won't work, see the try/catch and a jammed exception in \Magento\Core\Model\Layout::createBlock() -->
         <block class="Magento\Backend\Block\Admin\Formkey" name="formkey" as="formkey" template="Magento_Backend::admin/formkey.phtml"/>
-        <!-- deprecated since 1.7.0.0 see \Magento\Page\Block\Js\Translate -->
-        <block class="Magento\Page\Block\Js\Translate" name="js_translate" as="js_translate" template="Magento_Backend::page/js/translate.phtml"/>
+        <!-- deprecated since 1.7.0.0 see \Magento\Theme\Block\Js\Translate -->
+        <block class="Magento\View\Element\Template" name="js_translate" as="js_translate" template="Magento_Backend::page/js/translate.phtml"/>
         <container name="main-top" label="main-top" as="main-top">
-            <block class="Magento\Page\Block\Html\Title" name="page-title" template="title.phtml"/>
+            <block class="Magento\Theme\Block\Html\Title" name="page-title" template="title.phtml"/>
         </container>
         <container name="left" as="left" label="Left Column"/>
         <container name="content" as="content" label="Content"/>
-        <block class="Magento\View\Block\Messages" name="messages" as="messages"/>
+        <block class="Magento\View\Element\Messages" name="messages" as="messages"/>
         <container name="js" as="js" label="JavaScript"/>
         <block class="Magento\Backend\Block\Page\Footer" name="footer" as="footer">
             <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>

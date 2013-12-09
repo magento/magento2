@@ -157,9 +157,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $mathRandom;
 
     /**
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Customer\Model\Session $customerSession
@@ -169,9 +169,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Math\Random $mathRandom
      */
     public function __construct(
+        \Magento\App\Helper\Context $context,
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Customer\Model\Session $customerSession,

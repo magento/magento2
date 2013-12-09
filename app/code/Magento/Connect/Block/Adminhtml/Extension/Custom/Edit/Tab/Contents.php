@@ -45,7 +45,6 @@ class Contents
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Connect\Model\Session $session
@@ -54,7 +53,6 @@ class Contents
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Connect\Model\Session $session,
@@ -62,7 +60,7 @@ class Contents
         array $data = array()
     ) {
         $this->_extensionFactory = $extensionFactory;
-        parent::__construct($context, $coreData, $registry, $formFactory, $session, $data);
+        parent::__construct($context, $registry, $formFactory, $session, $data);
     }
 
     /**

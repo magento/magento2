@@ -3280,8 +3280,8 @@ input.mage-error ~ .addafter {
   box-shadow: 0 0 8px rgba(82, 168, 236, 0.6);
 }
 .addon input ~ .addafter strong {
+  display: inline-block;
   background: #fff;
-  display: block;
   line-height: 24px;
   margin: 0 3px 0 -2px;
   padding-left: 4px;
@@ -5486,9 +5486,15 @@ table tbody tr:nth-child(odd):hover th {
 }
 .grid-actions .required:after {
   content: '*';
-  color: red;
+  color: #f00;
 }
-/* TODO: remove styles for images when images will be replaced by font icons */
+[class^=" reports-report-"] .grid-actions .required:after {
+  content: '';
+}
+[class^=" reports-report-"] .grid-actions .required .label span:after {
+  content: '*';
+  color: #f00;
+}
 .grid-actions img {
   vertical-align: middle;
   height: 22px;
@@ -5498,7 +5504,6 @@ table tbody tr:nth-child(odd):hover th {
   width: auto;
   height: auto;
 }
-/* TODO: refactor validation fields styles after approved design comes */
 .grid-actions .validation-advice {
   background: #f3dcd8;
   border: 1px solid #963535;
@@ -5526,6 +5531,10 @@ table tbody tr:nth-child(odd):hover th {
 }
 .grid-actions .link-feed {
   white-space: nowrap;
+}
+.grid-actions input[type="text"].validation-failed {
+  border-color: #fa7973;
+  box-shadow: 0 0 8px rgba(250, 121, 115, 0.6);
 }
 /*
     Grid - Headings
@@ -6070,6 +6079,7 @@ table .col-draggable .draggable-handle {
 .order-information .data-table tbody tr th,
 .order-account-information .data-table tbody tr th,
 .adminhtml-rma-new .data-table tbody tr th,
+.adminhtml-logging-details .log-details .data-table th,
 [class^=" sales-transactions-"] .data-table tbody tr th,
 [class^=" sales-"] .order-payment-method .data-table tbody tr th,
 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr th {
@@ -6081,6 +6091,8 @@ table .col-draggable .draggable-handle {
 .order-information .data-table tbody tr th,
 .order-account-information .data-table tbody tr td,
 .order-account-information .data-table tbody tr th,
+.adminhtml-logging-details .log-details .data-table td,
+.adminhtml-logging-details .log-details .data-table th,
 [class^=" adminhtml-rma-"] .data-table tbody tr td,
 [class^=" adminhtml-rma-"] .data-table tbody tr th,
 [class^=" sales-transactions-"] .data-table tbody tr th,
@@ -6101,6 +6113,8 @@ table .col-draggable .draggable-handle {
 .order-information .data-table tbody tr:nth-child(2n+1) th,
 .order-account-information .data-table tbody tr:nth-child(2n+1) td,
 .order-account-information .data-table tbody tr:nth-child(2n+1) th,
+.adminhtml-logging-details .log-details .data-table tr:nth-child(odd) td,
+.adminhtml-logging-details .log-details .data-table tr:nth-child(odd) th,
 [class^=" adminhtml-rma-"] .data-table tbody tr:nth-child(2n+1) td,
 [class^=" adminhtml-rma-"] .data-table tbody tr:nth-child(2n+1) th,
 [class^=" sales-transactions-"] .data-table tbody tr:nth-child(2n+1) th,
@@ -7833,6 +7847,10 @@ table .col-draggable .draggable-handle {
 #allow_open_amount {
   margin-top: 8px;
 }
+.catalog-product-new .user-defined.type-select select,
+.catalog-product-edit .user-defined.type-select select {
+  width: 100%;
+}
 /*
     Customer
 ---------------------------------------*/
@@ -8089,6 +8107,38 @@ table .col-draggable .draggable-handle {
   width: 100%;
 }
 /*
+    System -> Action Log -> Report
+-------------------------------------- */
+.adminhtml-logging-details .log-details-grid table th {
+  border: 1px solid #c9c2b8;
+  border-width: 0 0 1px;
+  padding: 6px 10px 7px;
+  background: #fff;
+  color: #676056;
+  font-size: 13px;
+  font-weight: 600;
+}
+.adminhtml-logging-details .log-details-grid table th span {
+  border: 0;
+  padding: 0;
+}
+.adminhtml-logging-details .log-details-grid table td {
+  border: none;
+  padding: 6px 10px 7px;
+  background: #fff;
+}
+.adminhtml-logging-details .log-details-grid table tr:last-child td {
+  border: 1px solid #eae8e4;
+  border-width: 0 0 1px;
+}
+.adminhtml-logging-details .log-details-grid table tr.on-mouse {
+  cursor: inherit;
+}
+.adminhtml-logging-details .log-details-grid table tr:nth-child(odd) td,
+.adminhtml-logging-details .log-details-grid table tr.on-mouse:nth-child(odd):hover td {
+  background: #fbfaf6;
+}
+/*
     System -> Export
 -------------------------------------- */
 #export_filter_grid .grid td .input-text-range-date {
@@ -8162,122 +8212,122 @@ table .col-draggable .draggable-handle {
 /*
     Reports - Customer Reviews
 -------------------------------------- */
-.adminhtml-report-review-customer .col-qty,
-.adminhtml-report-review-customer .col-actions {
+.reports-report-review-customer .col-qty,
+.reports-report-review-customer .col-actions {
   width: 85px;
 }
 /*
     Reports - Product Reviews
 -------------------------------------- */
-.adminhtml-report-review-product .col-id {
+.reports-report-review-product .col-id {
   width: 35px;
 }
-.adminhtml-report-review-product .col-qty,
-.adminhtml-report-review-product .col-rating,
-.adminhtml-report-review-product .col-avg-rating,
-.adminhtml-report-review-product .col-actions {
+.reports-report-review-product .col-qty,
+.reports-report-review-product .col-rating,
+.reports-report-review-product .col-avg-rating,
+.reports-report-review-product .col-actions {
   text-align: right;
   width: 85px;
 }
-.adminhtml-report-review-product .col-date {
+.reports-report-review-product .col-date {
   width: 140px;
 }
-.adminhtml-report-review-product .col-rating {
+.reports-report-review-product .col-rating {
   width: 104px;
 }
 /*
     Reports - New Accounts
 -------------------------------------- */
-.adminhtml-report-customer-accounts .col-period {
+.reports-report-customer-accounts .col-period {
   white-space: nowrap;
   width: 70px;
 }
 /*
     Reports - Refresh Statistics
 -------------------------------------- */
-.adminhtml-report-statistics-index .col-period {
+.reports-report-statistics-index .col-period {
   white-space: nowrap;
   width: 140px;
 }
-.adminhtml-report-statistics-index .col-select {
+.reports-report-statistics-index .col-select {
   width: 25px;
 }
 /*
     Reports - Products Ordered
 -------------------------------------- */
-.adminhtml-report-product-sold .col-period {
+.reports-report-product-sold .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-product-sold .col-qty {
+.reports-report-product-sold .col-qty {
   width: 110px;
 }
 /*
     Reports - Customers by Orders Total
 -------------------------------------- */
-.adminhtml-report-customer-totals .col-period {
+.reports-report-customer-totals .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-customer-totals .col-qty {
+.reports-report-customer-totals .col-qty {
   width: 65px;
 }
-.adminhtml-report-customer-totals .col-rating {
+.reports-report-customer-totals .col-rating {
   width: 100px;
 }
 /*
     Reports - Tag by popular
 -------------------------------------- */
-.adminhtml-report-tag-popular .col-qty,
-.adminhtml-report-tag-popular .col-actions {
+.reports-report-tag-popular .col-qty,
+.reports-report-tag-popular .col-actions {
   width: 80px;
 }
 /*
     Reports - Tag by customer
 -------------------------------------- */
-.adminhtml-report-tag-customer .col-id {
+.reports-report-tag-customer .col-id {
   width: 35px;
 }
-.adminhtml-report-tag-customer .col-qty,
-.adminhtml-report-tag-customer .col-actions {
+.reports-report-tag-customer .col-qty,
+.reports-report-tag-customer .col-actions {
   width: 80px;
 }
 /*
     Reports - Tag by product
 -------------------------------------- */
-.adminhtml-report-tag-product .col-id {
+.reports-report-tag-product .col-id {
   width: 35px;
 }
-.adminhtml-report-tag-product .col-actions {
+.reports-report-tag-product .col-actions {
   width: 70px;
 }
-.adminhtml-report-tag-product .col-unique-numbers,
-.adminhtml-report-tag-product .col-total-numbers {
+.reports-report-tag-product .col-unique-numbers,
+.reports-report-tag-product .col-total-numbers {
   text-align: right;
   width: 95px;
 }
 /*
     Reports - Customers by Number of Orders
 -------------------------------------- */
-.adminhtml-report-customer-orders .col-period {
+.reports-report-customer-orders .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-customer-orders .col-qty,
-.adminhtml-report-customer-orders .col-average,
-.adminhtml-report-customer-orders .col-total {
+.reports-report-customer-orders .col-qty,
+.reports-report-customer-orders .col-average,
+.reports-report-customer-orders .col-total {
   width: 105px;
 }
 /*
    Reports - Customers by Orders Total
 -------------------------------------- */
-.adminhtml-report-customer-totals .col-period {
+.reports-report-customer-totals .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-customer-totals .col-qty,
-.adminhtml-report-customer-totals .col-average,
-.adminhtml-report-customer-totals .col-total {
+.reports-report-customer-totals .col-qty,
+.reports-report-customer-totals .col-average,
+.reports-report-customer-totals .col-total {
   width: 105px;
 }
 /*
@@ -8298,151 +8348,151 @@ table .col-draggable .draggable-handle {
 /*
     Reports - Most Viewed
 -------------------------------------- */
-.adminhtml-report-product-viewed .col-period {
+.reports-report-product-viewed .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-product-viewed .col-qty,
-.adminhtml-report-product-viewed .col-price {
+.reports-report-product-viewed .col-qty,
+.reports-report-product-viewed .col-price {
   white-space: nowrap;
   width: 80px;
 }
 /*
     Reports - Search Terms
 -------------------------------------- */
-.adminhtml-report-search .col-id {
+.reports-index-search .col-id {
   width: 35px;
 }
-.adminhtml-report-search th.col-results,
-.adminhtml-report-search th.col-hits {
+.reports-index-search th.col-results,
+.reports-index-search th.col-hits {
   text-align: left;
   width: 117px;
 }
-.adminhtml-report-search td.col-results,
-.adminhtml-report-search td.col-hits {
+.reports-index-search td.col-results,
+.reports-index-search td.col-hits {
   text-align: right;
   width: 117px;
 }
-.adminhtml-report-search .col-results .range-line:first-child,
-.adminhtml-report-search .col-hits .range-line:first-child {
+.reports-index-search .col-results .range-line:first-child,
+.reports-index-search .col-hits .range-line:first-child {
   float: left;
   margin-right: 3px;
 }
 /*
     Reports - Bestsellers
 -------------------------------------- */
-.adminhtml-report-sales-bestsellers .col-period {
+.reports-report-sales-bestsellers .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-sales-bestsellers .col-qty,
-.adminhtml-report-sales-bestsellers .col-price {
+.reports-report-sales-bestsellers .col-qty,
+.reports-report-sales-bestsellers .col-price {
   width: 80px;
 }
 /*
     Reports - Downloads
 -------------------------------------- */
-.adminhtml-report-product-downloads .col-qty,
-.adminhtml-report-product-downloads .col-price {
+.reports-report-product-downloads .col-qty,
+.reports-report-product-downloads .col-price {
   width: 80px;
 }
 /*
     Reports - Abandoned Carts
 -------------------------------------- */
-.adminhtml-report-shopcart-abandoned .col-ip,
-.adminhtml-report-shopcart-abandoned .col-subtotal,
-.adminhtml-report-shopcart-abandoned .col-number,
-.adminhtml-report-shopcart-abandoned .col-coupon {
+.reports-report-shopcart-abandoned .col-ip,
+.reports-report-shopcart-abandoned .col-subtotal,
+.reports-report-shopcart-abandoned .col-number,
+.reports-report-shopcart-abandoned .col-coupon {
   text-align: right;
 }
-.adminhtml-report-shopcart-abandoned .col-ip {
+.reports-report-shopcart-abandoned .col-ip {
   width: 105px;
 }
-.adminhtml-report-shopcart-abandoned .col-subtotal {
+.reports-report-shopcart-abandoned .col-subtotal {
   width: 65px;
 }
 /*
     Reports - Products in Carts
 -------------------------------------- */
-.adminhtml-report-shopcart-product .col-id {
+.reports-report-shopcart-product .col-id {
   width: 35px;
 }
-.adminhtml-report-shopcart-product .col-carts,
-.adminhtml-report-shopcart-product .col-qty,
-.adminhtml-report-shopcart-product .col-price {
+.reports-report-shopcart-product .col-carts,
+.reports-report-shopcart-product .col-qty,
+.reports-report-shopcart-product .col-price {
   text-align: right;
   width: 80px;
 }
 /*
     Reports - Refunds
 -------------------------------------- */
-.adminhtml-report-sales-refunded .col-period {
+.reports-report-sales-refunded .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-sales-refunded .col-ref-total,
-.adminhtml-report-sales-refunded .col-ref-online,
-.adminhtml-report-sales-refunded .col-ref-offline {
+.reports-report-sales-refunded .col-ref-total,
+.reports-report-sales-refunded .col-ref-online,
+.reports-report-sales-refunded .col-ref-offline {
   text-align: right;
   width: 23%;
 }
 /*
     Reports - Shipping
 -------------------------------------- */
-.adminhtml-report-sales-shipping .col-period {
+.reports-report-sales-shipping .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-sales-shipping .col-qty,
-.adminhtml-report-sales-shipping .col-total-sales-shipping,
-.adminhtml-report-sales-shipping .col-total-shipping {
+.reports-report-sales-shipping .col-qty,
+.reports-report-sales-shipping .col-total-sales-shipping,
+.reports-report-sales-shipping .col-total-shipping {
   text-align: right;
   width: 115px;
 }
 /*
     Reports - Invoiced
 -------------------------------------- */
-.adminhtml-report-sales-invoiced .col-period {
+.reports-report-sales-invoiced .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-sales-invoiced .col-qty,
-.adminhtml-report-sales-invoiced .col-invoiced,
-.adminhtml-report-sales-invoiced .col-total-invoiced,
-.adminhtml-report-sales-invoiced .col-total-invoiced-paid,
-.adminhtml-report-sales-invoiced .col-total-invoiced-not-paid {
+.reports-report-sales-invoiced .col-qty,
+.reports-report-sales-invoiced .col-invoiced,
+.reports-report-sales-invoiced .col-total-invoiced,
+.reports-report-sales-invoiced .col-total-invoiced-paid,
+.reports-report-sales-invoiced .col-total-invoiced-not-paid {
   text-align: right;
   width: 19%;
 }
 /*
     Reports - Tax
 -------------------------------------- */
-.adminhtml-report-sales-tax .col-period {
+.reports-report-sales-tax .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-sales-tax .col-rate,
-.adminhtml-report-sales-tax .col-qty,
-.adminhtml-report-sales-tax .col-tax-amount {
+.reports-report-sales-tax .col-rate,
+.reports-report-sales-tax .col-qty,
+.reports-report-sales-tax .col-tax-amount {
   text-align: right;
   width: 105px;
 }
 /*
     Reports - Orders
 -------------------------------------- */
-.adminhtml-report-sales-sales .col-period {
+.reports-report-sales-sales .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-sales-sales .col-orders,
-.adminhtml-report-sales-sales .col-sales-items,
-.adminhtml-report-sales-sales .col-sales-total,
-.adminhtml-report-sales-sales .col-invoiced,
-.adminhtml-report-sales-sales .col-refunded,
-.adminhtml-report-sales-sales .col-sales-tax,
-.adminhtml-report-sales-sales .col-sales-shipping,
-.adminhtml-report-sales-sales .col-sales-discount,
-.adminhtml-report-sales-sales .col-canceled {
+.reports-report-sales-sales .col-orders,
+.reports-report-sales-sales .col-sales-items,
+.reports-report-sales-sales .col-sales-total,
+.reports-report-sales-sales .col-invoiced,
+.reports-report-sales-sales .col-refunded,
+.reports-report-sales-sales .col-sales-tax,
+.reports-report-sales-sales .col-sales-shipping,
+.reports-report-sales-sales .col-sales-discount,
+.reports-report-sales-sales .col-canceled {
   text-align: right;
   width: 10.5%;
 }
@@ -8450,32 +8500,32 @@ table .col-draggable .draggable-handle {
     Reports - Coupons
 -------------------------------------- */
 /* TODO: re-check styles for coupons table after coupons functionality will have been repaired */
-.adminhtml-report-sales-coupons .col-period {
+.reports-report-sales-coupons .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-sales-coupons .col-sales,
-.adminhtml-report-sales-coupons .col-users,
-.adminhtml-report-sales-coupons .col-sales-discount,
-.adminhtml-report-sales-coupons .col-total-amount,
-.adminhtml-report-sales-coupons .col-subtotal,
-.adminhtml-report-sales-coupons .col-discount,
-.adminhtml-report-sales-coupons .col-total {
+.reports-report-sales-coupons .col-sales,
+.reports-report-sales-coupons .col-users,
+.reports-report-sales-coupons .col-sales-discount,
+.reports-report-sales-coupons .col-total-amount,
+.reports-report-sales-coupons .col-subtotal,
+.reports-report-sales-coupons .col-discount,
+.reports-report-sales-coupons .col-total {
   text-align: right;
 }
 /*
     Reports - Low Stock
 -------------------------------------- */
-.adminhtml-report-product-lowstock .col-qty {
+.reports-report-product-lowstock .col-qty {
   width: 10%;
 }
-.adminhtml-report-product-lowstock .range-line {
+.reports-report-product-lowstock .range-line {
   display: inline-block;
 }
-.adminhtml-report-product-lowstock .col-product {
+.reports-report-product-lowstock .col-product {
   width: 65%;
 }
-.adminhtml-report-product-lowstock .col-sku {
+.reports-report-product-lowstock .col-sku {
   width: 25%;
 }
 /*
@@ -8863,6 +8913,28 @@ table .col-draggable .draggable-handle {
   float: right;
   width: 49%;
 }
+.order-gift-options .box-left:last-child,
+.order-gift-options .fieldset-wrapper-title + .box-right {
+  float: none;
+  width: auto;
+}
+.order-gift-options fieldset {
+  border-radius: 5px;
+}
+.order-gift-options .gift-wrapping-form select {
+  margin-left: 10px;
+}
+.order-gift-options .giftmessage-entire-order textarea {
+  height: 6em;
+  width: 100%;
+}
+.order-gift-options .giftmessage-whole-order-container textarea {
+  height: 6em;
+  width: 100%;
+}
+.order-gift-options .giftmessage-whole-order-container .actions {
+  margin-left: 20%;
+}
 .ui-dialog.gift-options-popup .ui-dialog-content {
   padding: 25px;
 }
@@ -8989,6 +9061,27 @@ table .col-draggable .draggable-handle {
 }
 .sales-order-create-index #order-data .fieldset-wrapper .actions .action-delete {
   margin: 11px 0 0;
+}
+.sales-order-create-index .ui-dialog .downloadable.information .link .label {
+  margin-left: 0;
+}
+.sales-order-create-index .ui-dialog .downloadable.information .link .nested {
+  margin-left: 8px;
+}
+.sales-order-create-index .ui-dialog .fieldset.bundle .nested {
+  padding-left: 6px;
+}
+.sales-order-create-index .ui-dialog .fieldset.bundle .nested .field {
+  margin: 0 0 5px;
+}
+.sales-order-create-index .ui-dialog .fieldset.bundle .nested .label {
+  font-size: 13px;
+  margin: 0;
+}
+.sales-order-create-index .ui-dialog .fieldset.bundle .nested .qty .control {
+  display: inline-block;
+  margin: 0 0 0 10px;
+  width: 60px;
 }
 /* ----------------------------------- */
 #order-data .page-actions {
@@ -9451,6 +9544,9 @@ table.items-to-invoice tbody tr:hover td {
 .col-product .product_to_add {
   float: right;
 }
+[class^=" adminhtml-extension-custom-"] #authors_fieldset .data-table td {
+  vertical-align: top;
+}
 /*
     Packaging for Shipping Popup
 -------------------------------------- */
@@ -9875,8 +9971,6 @@ table.items-to-invoice tbody tr:hover td {
 /*
     Clearfix
 -------------------------------------- */
-.order-gift-options:before,
-.order-gift-options:after,
 .image-panel:before,
 .image-panel:after,
 .images:before,
@@ -9888,7 +9982,6 @@ table.items-to-invoice tbody tr:hover td {
   content: "";
   display: table;
 }
-.order-gift-options:after,
 .image-panel:after,
 .images:after,
 .tax-rate-popup .field:after,

@@ -44,20 +44,20 @@ class Address extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     protected $_salesResourceFactory;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\App\Resource $resource
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
      * @param \Magento\Sales\Model\Resource\Factory $salesResourceFactory
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\App\Resource $resource,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory,
         \Magento\Sales\Model\Resource\Factory $salesResourceFactory
     ) {
-        parent::__construct($eventManager, $resource, $dateTime, $eavEntityTypeFactory);
+        parent::__construct($resource, $dateTime, $eventManager, $eavEntityTypeFactory);
         $this->_salesResourceFactory = $salesResourceFactory;
     }
 

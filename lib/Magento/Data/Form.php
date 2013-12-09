@@ -26,8 +26,6 @@
 
 namespace Magento\Data;
 
-use \Magento\Core\Model\Session;
-
 class Form extends \Magento\Data\Form\AbstractForm
 {
     /**
@@ -38,61 +36,36 @@ class Form extends \Magento\Data\Form\AbstractForm
     protected $_allElements;
 
     /**
-     * Session instance
-     *
-     * @var \Magento\Core\Model\Session\AbstractSession
-     */
-    protected $_session;
-
-    /**
      * form elements index
      *
      * @var array
      */
     protected $_elementsIndex;
 
+    /**
+     * @var Form\FormKey
+     */
+    protected $formKey;
+
     static protected $_defaultElementRenderer;
     static protected $_defaultFieldsetRenderer;
     static protected $_defaultFieldsetElementRenderer;
 
     /**
-     * @param Session $session
      * @param Form\Element\Factory $factoryElement
      * @param Form\Element\CollectionFactory $factoryCollection
+     * @param Form\FormKey $formKey
      * @param array $attributes
      */
     public function __construct(
-        Session $session,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Data\Form\FormKey $formKey,
         $attributes = array()
     ) {
-        $this->_session = $session;
         parent::__construct($factoryElement, $factoryCollection, $attributes);
         $this->_allElements = $this->_factoryCollection->create(array('container' => $this));
-    }
-
-    /**
-     * Set session instance
-     *
-     * @param \Magento\Core\Model\Session $session
-     * @return \Magento\Data\Form
-     */
-    public function setSession(Session $session)
-    {
-        $this->_session = $session;
-        return $this;
-    }
-
-    /**
-     * Get session instance
-     *
-     * @return \Magento\Core\Model\Session\AbstractSession
-     * @throws \Magento\Exception
-     */
-    protected function _getSession()
-    {
-        return $this->_session;
+        $this->formKey = $formKey;
     }
 
     public static function setElementRenderer(\Magento\Data\Form\Element\Renderer\RendererInterface $renderer = null)
@@ -319,9 +292,9 @@ class Form extends \Magento\Data\Form\AbstractForm
         if ($useContainer) {
             $html .= '<form ' . $this->serialize($this->getHtmlAttributes()) . '>';
             $html .= '<div>';
-            if (strtolower($this->getData('method')) == 'post' && null !== $this->_getSession()) {
+            if (strtolower($this->getData('method')) == 'post') {
                 $html .= '<input name="form_key" type="hidden" value="'
-                    . $this->_getSession()->getFormKey()
+                    . $this->formKey->getFormKey()
                     . '" />';
             }
             $html .= '</div>';

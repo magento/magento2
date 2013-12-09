@@ -62,8 +62,13 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_productFactory;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -73,18 +78,19 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Backend\Helper\Data $adminhtmlData,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_adminhtmlData = $adminhtmlData;
-        parent::__construct($context, $coreData, $categoryTree, $registry, $data);
+        parent::__construct($context, $categoryTree, $registry, $data);
     }
 
     /**
@@ -118,7 +124,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         }
 
         if ($asJson) {
-            return $this->_coreData->jsonEncode($result);
+            return $this->_jsonEncoder->encode($result);
         }
 
         $this->_allowedCategoryIds = null;

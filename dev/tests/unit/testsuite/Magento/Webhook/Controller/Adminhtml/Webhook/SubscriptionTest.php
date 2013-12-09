@@ -80,7 +80,9 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\TestFramework\Helper\ObjectManager $objectManagerHelper */
         $this->_objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_setMageObjectManager();
+        $this->_mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         // Initialize mocks which are used in several test cases
         $this->_mockApp = $this->getMockBuilder('Magento\Core\Model\App')
@@ -522,18 +524,6 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
         $subscriptionContr = $this->_createSubscriptionController();
         $subscriptionContr->activateAction();
-    }
-
-    /**
-     * Makes sure that Mage has a mock object manager set.
-     *
-     */
-    protected function _setMageObjectManager()
-    {
-        $this->_mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        \Magento\App\ObjectManager::setInstance($this->_mockObjectManager);
     }
 
     /**

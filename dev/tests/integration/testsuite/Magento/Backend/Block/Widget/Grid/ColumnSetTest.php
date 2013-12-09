@@ -62,7 +62,7 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         ));
 
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Block\Template\Context', array('layout' => $this->_layoutMock));
+            ->create('Magento\View\Element\Template\Context', array('layout' => $this->_layoutMock));
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock(
                 'Magento\Backend\Block\Widget\Grid\ColumnSet', '', array('context' => $context)

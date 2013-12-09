@@ -86,42 +86,46 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
 
     /**
      * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Customer\Model\Config\Share $configShare
      * @param \Magento\Core\Helper\Url $coreUrl
      * @param \Magento\Customer\Helper\Data $customerData
-     * @param \Magento\Core\Model\Session $session
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Core\Model\UrlFactory $urlFactory
+     * @param \Magento\Core\Model\Session $session
      * @param array $data
      * @param null $sessionName
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
+        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Customer\Model\Config\Share $configShare,
         \Magento\Core\Helper\Url $coreUrl,
         \Magento\Customer\Helper\Data $customerData,
-        \Magento\Core\Model\Session $session,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Core\Model\UrlFactory $urlFactory,
+        \Magento\Core\Model\Session $session,
         array $data = array(),
         $sessionName = null
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerData = $customerData;
         $this->_configShare = $configShare;
-        $this->_session = $session;
         $this->_customerResource = $customerResource;
         $this->_customerFactory = $customerFactory;
         $this->_urlFactory = $urlFactory;
-        parent::__construct($context, $data);
+        $this->_session = $session;
+        parent::__construct($context, $sidResolver, $sessionConfig, $data);
         $namespace = 'customer';
         if ($configShare->isWebsiteScope()) {
             $namespace .= '_' . ($this->_storeManager->getWebsite()->getCode());
         }
 
-        $this->init($namespace, $sessionName);
+        $this->start($namespace, $sessionName);
         $this->_eventManager->dispatch('customer_session_init', array('customer_session' => $this));
     }
 
@@ -271,7 +275,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
 
         if ($customer->authenticate($username, $password)) {
             $this->setCustomerAsLoggedIn($customer);
-            $this->renewSession();
+            $this->regenerateId();
             return true;
         }
         return false;
@@ -331,13 +335,13 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
             $action->getResponse()->setRedirect($loginUrl);
         } else {
             $arguments = $this->_customerData->getLoginUrlParams();
-            if ($this->_session->getCookieShouldBeReceived() && $this->_url->getUseSession()) {
+            if ($this->_session->getCookieShouldBeReceived() && $this->_createUrl()->getUseSession()) {
                 $arguments += array('_query' => array(
-                    $this->_session->getSessionIdQueryParam() => $this->_session->getSessionId()
+                    $this->_sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId()
                 ));
             }
             $action->getResponse()->setRedirect(
-                $this->_url->getUrl(\Magento\Customer\Helper\Data::ROUTE_ACCOUNT_LOGIN, $arguments)
+                $this->_createUrl()->getUrl(\Magento\Customer\Helper\Data::ROUTE_ACCOUNT_LOGIN, $arguments)
             );
         }
 
@@ -353,7 +357,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      */
     protected function _setAuthUrl($key, $url)
     {
-        $url = $this->_coreUrl->removeRequestParam($url, $this->_session->getSessionIdQueryParam());
+        $url = $this->_coreUrl->removeRequestParam($url, $this->_sidResolver->getSessionIdQueryParam($this));
         // Add correct session ID to URL if needed
         $url = $this->_createUrl()->getRebuiltUrl($url);
         return $this->setData($key, $url);
@@ -368,7 +372,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     {
         $this->setId(null);
         $this->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
-        $this->getCookie()->delete($this->getSessionName());
+        $this->destroy(array('clear_storage' => false));
         return $this;
     }
 
@@ -397,11 +401,12 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     /**
      * Reset core session hosts after reseting session ID
      *
+     * @param bool $deleteOldSession
      * @return \Magento\Customer\Model\Session
      */
-    public function renewSession()
+    public function regenerateId($deleteOldSession = true)
     {
-        parent::renewSession();
+        parent::regenerateId($deleteOldSession);
         $this->_cleanHosts();
         return $this;
     }

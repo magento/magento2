@@ -45,8 +45,19 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_adminhtmlAddresses = null;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreData;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Customer\Model\Renderer\RegionFactory $regionFactory
@@ -58,9 +69,10 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Customer\Model\Renderer\RegionFactory $regionFactory,
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Customer\Model\FormFactory $customerFactory,
@@ -68,12 +80,14 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Adminhtml\Helper\Addresses $adminhtmlAddresses,
         array $data = array()
     ) {
+        $this->_coreData = $coreData;
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_adminhtmlAddresses = $adminhtmlAddresses;
         $this->_regionFactory = $regionFactory;
         $this->_addressFactory = $addressFactory;
         $this->_customerFactory = $customerFactory;
         $this->_systemStore = $systemStore;
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     public function getRegionsUrl()
@@ -275,7 +289,7 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
                 );
         }
 
-        return $this->_coreData->jsonEncode($result);
+        return $this->_jsonEncoder->encode($result);
     }
 
     /**

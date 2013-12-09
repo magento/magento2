@@ -89,8 +89,7 @@ class Observer
             return;
         }
 
-        $this->_authSession->unsetAll();
-        $this->_authSession->getCookie()->delete($this->_authSession->getSessionName());
+        $this->_authSession->destroy();
 
         $route = $this->_backendData->getAreaFrontName();
 

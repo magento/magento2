@@ -93,7 +93,7 @@ class File extends \Magento\Backend\App\Action
             }
 
             $result['cookie'] = array(
-                'name'     => session_name(),
+                'name'     => $this->_getSession()->getName(),
                 'value'    => $this->_getSession()->getSessionId(),
                 'lifetime' => $this->_getSession()->getCookieLifetime(),
                 'path'     => $this->_getSession()->getCookiePath(),

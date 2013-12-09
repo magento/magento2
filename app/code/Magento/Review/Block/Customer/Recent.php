@@ -29,7 +29,7 @@ namespace Magento\Review\Block\Customer;
 /**
  * Recent Customer Reviews Block
  */
-class Recent extends \Magento\View\Block\Template
+class Recent extends \Magento\View\Element\Template
 {
     /**
      * @var string
@@ -49,22 +49,20 @@ class Recent extends \Magento\View\Block\Template
     protected $_customerSession;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_collection = $collectionFactory->create();
         $this->_customerSession = $customerSession;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

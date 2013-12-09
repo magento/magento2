@@ -39,7 +39,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Data\Collection\Db\FetchStrategyInterface');
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->_collection = new \Magento\Data\Collection\Db($logger, $fetchStrategy, $entityFactory);
+        $this->_collection = new \Magento\Data\Collection\Db($entityFactory, $logger, $fetchStrategy);
     }
 
     protected function tearDown()
@@ -256,7 +256,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $collection = $this->getMock(
             'Magento\Data\Collection\Db',
             array('_logQuery'),
-            array($logger, $fetchStrategy, $entityFactory)
+            array($entityFactory, $logger, $fetchStrategy)
         );
         $collection->setFlag('log_query', $logFlag);
         $collection->expects($this->exactly($expectedCalls))->method('_logQuery');

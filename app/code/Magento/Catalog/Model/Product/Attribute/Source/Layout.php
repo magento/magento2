@@ -38,17 +38,17 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * Page source layout
      *
-     * @var \Magento\Page\Model\Source\Layout
+     * @var \Magento\Theme\Model\Layout\Source\Layout
      */
     protected $_pageSourceLayout;
 
     /**
      * Construct
      *
-     * @param \Magento\Page\Model\Source\Layout $pageSourceLayout
+     * @param \Magento\Theme\Model\Layout\Source\Layout $pageSourceLayout
      */
     public function __construct(
-        \Magento\Page\Model\Source\Layout $pageSourceLayout
+        \Magento\Theme\Model\Layout\Source\Layout $pageSourceLayout
     ) {
         $this->_pageSourceLayout = $pageSourceLayout;
     }

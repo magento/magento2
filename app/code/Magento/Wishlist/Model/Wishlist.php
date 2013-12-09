@@ -122,16 +122,16 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
     protected $_useCurrentWebsite;
 
     /**
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Wishlist\Model\Resource\Wishlist $resource
-     * @param \Magento\Wishlist\Model\Resource\Wishlist\Collection $resourceCollection
+     * @param \Magento\Catalog\Helper\Product $catalogProduct
+     * @param \Magento\Wishlist\Helper\Data $wishlistData
+     * @param Resource\Wishlist $resource
+     * @param Resource\Wishlist\Collection $resourceCollection
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Date $date
-     * @param \Magento\Wishlist\Model\ItemFactory $wishlistItemFactory
-     * @param \Magento\Wishlist\Model\Resource\Item\CollectionFactory $wishlistCollFactory
+     * @param ItemFactory $wishlistItemFactory
+     * @param Resource\Item\CollectionFactory $wishlistCollFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Stdlib\DateTime $dateTime
@@ -139,10 +139,10 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Catalog\Helper\Product $catalogProduct,
+        \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Wishlist\Model\Resource\Wishlist $resource,
         \Magento\Wishlist\Model\Resource\Wishlist\Collection $resourceCollection,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

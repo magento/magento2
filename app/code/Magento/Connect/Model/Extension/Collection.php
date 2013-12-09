@@ -52,12 +52,10 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected $_baseDir = '';
 
     /**
-     * Set base dir
-     *
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\App\Dir $dirs
      */
-    public function __construct(\Magento\App\Dir $dirs, \Magento\Core\Model\EntityFactory $entityFactory)
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\App\Dir $dirs)
     {
         parent::__construct($entityFactory);
         $this->_baseDir = $dirs->getDir('var') . DS . 'connect';

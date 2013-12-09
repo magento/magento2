@@ -87,8 +87,13 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
         $testAttributeOptions = array('value' => 'option');
         /** @var $testAttribute \Magento\Eav\Model\Entity\Attribute */
         $testAttribute = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute', array(), '',
-            false
+            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            array(),
+            '',
+            false,
+            false,
+            false,
+            array('__wakeup')
         );
         $testAttribute->setAttributeCode($testAttributeCode);
 
@@ -100,9 +105,16 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeOptions')
             ->will($this->returnValue($testAttributeOptions));
 
-        /** @var $item \Magento\Core\Model\AbstractModel|PHPUnit_Framework_MockObject_MockObject */
-        $item = $this->getMockForAbstractClass('Magento\Core\Model\AbstractModel', array(), '', false, true, true,
-            array('getData'));
+        /** @var $item \Magento\Core\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
+        $item = $this->getMockForAbstractClass(
+            'Magento\Core\Model\AbstractModel',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('getData', '__wakeup')
+        );
         $item->expects($this->any())
             ->method('getData')
             ->will($this->returnValue($testAttributeValue));

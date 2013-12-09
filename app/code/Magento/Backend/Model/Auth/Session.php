@@ -63,6 +63,8 @@ class Session
 
     /**
      * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Acl\Builder $aclBuilder
      * @param \Magento\Backend\Model\Url $backendUrl
      * @param \Magento\Backend\App\ConfigInterface $config
@@ -70,6 +72,8 @@ class Session
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
+        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Acl\Builder $aclBuilder,
         \Magento\Backend\Model\Url $backendUrl,
         \Magento\Backend\App\ConfigInterface $config,
@@ -78,8 +82,8 @@ class Session
         $this->_config = $config;
         $this->_aclBuilder = $aclBuilder;
         $this->_backendUrl = $backendUrl;
-        parent::__construct($context, $data);
-        $this->init('admin');
+        parent::__construct($context, $sidResolver, $sessionConfig, $data);
+        $this->start('admin');
     }
 
     /**
@@ -95,9 +99,9 @@ class Session
      * @return \Magento\Backend\Model\Auth\Session
      * @see self::login()
      */
-    public function init($namespace, $sessionName = null)
+    public function start($namespace = 'default', $sessionName = null)
     {
-        parent::init($namespace, $sessionName);
+        parent::start($namespace, $sessionName);
         // @todo implement solution that keeps is_first_visit flag in session during redirects
         return $this;
     }
@@ -209,7 +213,7 @@ class Session
     public function processLogin()
     {
         if ($this->getUser()) {
-            $this->renewSession();
+            $this->regenerateId();
 
             if ($this->_backendUrl->useSecretKey()) {
                 $this->_backendUrl->renewSecretUrls();
@@ -229,8 +233,7 @@ class Session
      */
     public function processLogout()
     {
-        $this->unsetAll();
-        $this->getCookie()->delete($this->getSessionName());
+        $this->destroy();
         return $this;
     }
 
@@ -241,16 +244,6 @@ class Session
      * @return bool
      */
     public function isValidForPath($path)
-    {
-        return true;
-    }
-
-    /**
-     * Always try to get session id from query in backend area
-     *
-     * @return bool
-     */
-    protected function _isSidUsedFromQueryParam()
     {
         return true;
     }

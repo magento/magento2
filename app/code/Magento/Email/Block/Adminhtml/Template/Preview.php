@@ -47,21 +47,19 @@ class Preview extends \Magento\Adminhtml\Block\Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Input\Filter\MaliciousCode $maliciousCode
      * @param \Magento\Email\Model\TemplateFactory $emailFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Input\Filter\MaliciousCode $maliciousCode,
         \Magento\Email\Model\TemplateFactory $emailFactory,
         array $data = array()
     ) {
         $this->_maliciousCode = $maliciousCode;
         $this->_emailFactory = $emailFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

@@ -101,12 +101,12 @@ class RoleTest extends \PHPUnit_Framework_TestCase
             )));
 
 
-        $this->_groupFactoryMock->expects($this->once())->method('create')->with(array('roleId' => 'G1'));
-        $this->_roleFactoryMock->expects($this->once())->method('create')->with(array('roleId' => 'U1'));
+        $this->_groupFactoryMock->expects($this->once())->method('create')->with(array('roleId' => '1'));
+        $this->_roleFactoryMock->expects($this->once())->method('create')->with(array('roleId' => '2'));
 
         $aclMock = $this->getMock('Magento\Acl');
         $aclMock->expects($this->at(0))->method('addRole')->with($this->anything(), null);
-        $aclMock->expects($this->at(2))->method('addRole')->with($this->anything(), 'G1');
+        $aclMock->expects($this->at(2))->method('addRole')->with($this->anything(), '1');
 
         $this->_model->populateAcl($aclMock);
     }
@@ -116,16 +116,16 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $this->_adapterMock->expects($this->once())
             ->method('fetchAll')
             ->will($this->returnValue(array(
-            array('role_id' => 1, 'role_type' => 'U', 'parent_id' => 1, 'user_id' => 1),
+            array('role_id' => 1, 'role_type' => 'U', 'parent_id' => 2, 'user_id' => 3),
         )));
 
         $this->_roleFactoryMock->expects($this->never())->method('getModelInstance');
         $this->_groupFactoryMock->expects($this->never())->method('getModelInstance');
 
         $aclMock = $this->getMock('Magento\Acl');
-        $aclMock->expects($this->at(0))->method('hasRole')->with('U1')
+        $aclMock->expects($this->at(0))->method('hasRole')->with('1')
             ->will($this->returnValue(true));
-        $aclMock->expects($this->at(1))->method('addRoleParent')->with('U1', 'G1');
+        $aclMock->expects($this->at(1))->method('addRoleParent')->with('1', '2');
 
         $this->_model->populateAcl($aclMock);
     }

@@ -33,7 +33,7 @@
 <div class="page-head">
     <h3><?php echo __('Create Admin Account') ?></h3>
 </div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
 <form action="<?php echo $this->getPostUrl() ?>" method="post" id="form-validate">
     <fieldset class="group-select wide">
         <legend><?php echo __('Personal Information') ?></legend>

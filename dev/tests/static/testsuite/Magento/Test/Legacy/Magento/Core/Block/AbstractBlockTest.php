@@ -26,7 +26,7 @@
  */
 
 /**
- * Tests usage of \Magento\View\Block\AbstractBlock
+ * Tests usage of \Magento\View\Element\AbstractBlock
  */
 namespace Magento\Test\Legacy\Magento\Core\Block;
 

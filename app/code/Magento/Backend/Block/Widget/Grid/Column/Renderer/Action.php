@@ -33,28 +33,24 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-class Action
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
+class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
-
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Json\EncoderInterface
      */
-    protected $_coreData = null;
+    protected $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         array $data = array()
     ) {
-        $this->_coreData = $coreData;
+        $this->_jsonEncoder = $jsonEncoder;
         parent::__construct($context, $data);
     }
 
@@ -106,7 +102,7 @@ class Action
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
 
-        $htmlAttibutes = array('value'=>$this->escapeHtml($this->_coreData->jsonEncode($action)));
+        $htmlAttibutes = array('value'=>$this->escapeHtml($this->_jsonEncoder->encode($action)));
         $actionAttributes->setData($htmlAttibutes);
         return '<option ' . $actionAttributes->serialize() . '>' . $actionCaption . '</option>';
     }

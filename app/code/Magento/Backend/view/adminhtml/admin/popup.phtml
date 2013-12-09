@@ -26,13 +26,13 @@
 ?>
 <?php /*{
     "label":"Root page layout",
-    "type":"Magento\View\Block\Template",
+    "type":"Magento\View\Element\Template",
     "children":{
         "header":{ "label":"Header", "type":"Magento\Backend\Block\Page\Header" },
         "menu":{ "label":"Top navigation", "type":"Magento\Backend\Block\Menu" },
         "breadcrumbs":{ "label":"Breadcrumbs", "type":"Magento\Adminhtml\Block\Widget\Breadcrumbs" },
-        "content":{ "label":"Content block", "type":"Magento\View\Block\Template" },
-        "left":{ "label":"Left navigation", "type":"Magento\View\Block\Template" },
+        "content":{ "label":"Content block", "type":"Magento\View\Element\Template" },
+        "left":{ "label":"Left navigation", "type":"Magento\View\Element\Template" },
         "footer":{ "label":"Footer", "type":"Magento\Backend\Block\Page\Footer" }
     },
     "vars":{}
@@ -53,13 +53,13 @@
                 </div>
                 <div class="main-col" id="content">
                     <div class="main-col-inner">
-                        <div id="messages" data-container-for="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+                        <div id="messages" data-container-for="messages"><?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?></div>
                         <?php echo $this->getChildHtml('content') ?>
                     </div>
                 </div>
             </div>
       <?php else: ?>
-          <div id="messages" data-container-for="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+          <div id="messages" data-container-for="messages"><?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?></div>
           <?php echo $this->getChildHtml('content') ?>
       <?php endif; ?>
          </div>

@@ -58,16 +58,14 @@ class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * Class constructor
-     *
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\App\Resource $resource
      */
     public function __construct(
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\App\Resource $resource
+        \Magento\Catalog\Model\Config $catalogConfig
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogConfig = $catalogConfig;

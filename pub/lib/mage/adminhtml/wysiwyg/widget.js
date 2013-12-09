@@ -222,6 +222,10 @@ WysiwygWidget.Widget.prototype = {
         }
     },
 
+    validateField: function() {
+        jQuery(this.widgetEl).valid();
+    },
+
     insertWidget: function() {
         jQuery('#' + this.formEl).validate({
             ignore: ".skip-submit",

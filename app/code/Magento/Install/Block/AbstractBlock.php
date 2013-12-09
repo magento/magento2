@@ -31,7 +31,7 @@
  */
 namespace Magento\Install\Block;
 
-abstract class AbstractBlock extends \Magento\View\Block\Template
+abstract class AbstractBlock extends \Magento\View\Element\Template
 {
     /**
      * Installer model
@@ -55,22 +55,20 @@ abstract class AbstractBlock extends \Magento\View\Block\Template
     protected $_session;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
      * @param \Magento\Core\Model\Session\Generic $session
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
         \Magento\Core\Model\Session\Generic $session,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
         $this->_installer = $installer;
         $this->_installWizard = $installWizard;
         $this->_session = $session;

@@ -42,20 +42,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Newsletter\Model\Resource\Template\Collection $templateCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\Newsletter\Model\Resource\Template\Collection $templateCollection,
         array $data = array()
     ) {
         $this->_templateCollection = $templateCollection;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
         $this->setEmptyText(__('No Templates Found'));
     }
 

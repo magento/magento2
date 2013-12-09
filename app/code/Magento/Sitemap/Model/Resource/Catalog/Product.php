@@ -104,8 +104,8 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_mediaConfig;
 
     public function __construct(
-        \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\App\Resource $resource,
+        \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,

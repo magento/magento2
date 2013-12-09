@@ -201,7 +201,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct
                     ->setTotalLimit($this->getProductsCount())
                     ->setCollection($this->getProductCollection());
             }
-            if ($this->_pager instanceof \Magento\View\Block\AbstractBlock) {
+            if ($this->_pager instanceof \Magento\View\Element\AbstractBlock) {
                 return $this->_pager->toHtml();
             }
         }

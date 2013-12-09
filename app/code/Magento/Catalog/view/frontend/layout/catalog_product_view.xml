@@ -37,12 +37,12 @@
         </arguments>
     </referenceBlock>
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Script" name="mage-zoom-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="mage-zoom-js">
             <arguments>
                 <argument name="file" xsi:type="string">mage/zoom.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Css" name="mage-gallery-css">
+        <block class="Magento\Theme\Block\Html\Head\Css" name="mage-gallery-css">
             <arguments>
                 <argument name="file" xsi:type="string">mage/gallery.css</argument>
             </arguments>
@@ -53,7 +53,7 @@
         <container name="product.info.form.content" label="invisible" as="product_info_form_content">
             <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml"/>
         </container>
-        <block class="Magento\View\Block\Template" name="product.info.form.options" as="options_container">
+        <block class="Magento\View\Element\Template" name="product.info.form.options" as="options_container">
             <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper" as="product_options_wrapper" template="product/view/options/wrapper.phtml">
                 <block class="Magento\Catalog\Block\Product\View\Options" name="product.info.options" as="product_options" template="product/view/options.phtml">
                     <block class="Magento\Catalog\Block\Product\View\Options\Type\DefaultType" as="default" template="product/view/options/type/default.phtml"/>
@@ -62,7 +62,7 @@
                     <block class="Magento\Catalog\Block\Product\View\Options\Type\Select" as="select" template="product/view/options/type/select.phtml"/>
                     <block class="Magento\Catalog\Block\Product\View\Options\Type\Date" as="date" template="product/view/options/type/date.phtml"/>
                 </block>
-                <block class="Magento\View\Block\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Page::js/calendar.phtml"/>
+                <block class="Magento\View\Element\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Theme::js/calendar.phtml"/>
             </block>
             <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml">
                 <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.additional" as="product.info.addtocart" template="product/view/addtocart.phtml"/>

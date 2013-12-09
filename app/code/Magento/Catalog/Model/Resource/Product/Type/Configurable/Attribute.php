@@ -65,16 +65,14 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * Construct
-     *
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\App\Resource $resource
      */
     public function __construct(
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\App\Resource $resource
+        \Magento\Catalog\Helper\Data $catalogData
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogData = $catalogData;

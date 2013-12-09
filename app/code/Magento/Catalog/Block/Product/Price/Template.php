@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\Price;
 
-class Template extends \Magento\View\Block\AbstractBlock
+class Template extends \Magento\View\Element\AbstractBlock
 {
     /**
      * Product Price block types cache

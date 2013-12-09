@@ -41,7 +41,7 @@
             <module name="Magento_Eav"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Bundle"/>
-            <module name="Magento_Page"/>
+            <module name="Magento_Theme"/>
         </depends>
     </module>
 </config>

@@ -56,15 +56,15 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     protected $_escaper;
 
     /**
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Escaper $escaper
      */
     public function __construct(
+        \Magento\App\Helper\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $ctlgProdConfigur,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\App\Helper\Context $context,
         \Magento\Escaper $escaper
     ) {
         $this->_ctlgProdConfigur = $ctlgProdConfigur;

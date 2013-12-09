@@ -46,8 +46,7 @@ class Config extends \Magento\Install\Block\AbstractBlock
     protected $_installerConfig = null;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
      * @param \Magento\Core\Model\Session\Generic $session
@@ -55,15 +54,14 @@ class Config extends \Magento\Install\Block\AbstractBlock
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
         \Magento\Core\Model\Session\Generic $session,
         \Magento\Install\Model\Installer\Config $installerConfig,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $installer, $installWizard, $session, $data);
+        parent::__construct($context, $installer, $installWizard, $session, $data);
         $this->_installerConfig = $installerConfig;
     }
 
@@ -129,7 +127,7 @@ class Config extends \Magento\Install\Block\AbstractBlock
      */
     public function getSessionSaveSelect()
     {
-        $html = $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
+        $html = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
             ->setName('config[session_save]')
             ->setId('session_save')
             ->setTitle(__('Save Session Files In'))

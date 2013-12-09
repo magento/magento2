@@ -66,7 +66,6 @@ class Resource extends \Magento\Backend\Block\Widget\Form
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Acl\Resource\ProviderInterface $resourceProvider
      * @param \Magento\Webapi\Model\Resource\Acl\Rule $ruleResource
      * @param \Magento\Core\Model\Acl\RootResource $rootResource
@@ -74,13 +73,12 @@ class Resource extends \Magento\Backend\Block\Widget\Form
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Acl\Resource\ProviderInterface $resourceProvider,
         \Magento\Webapi\Model\Resource\Acl\Rule $ruleResource,
         \Magento\Core\Model\Acl\RootResource $rootResource,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
         $this->_resourceProvider = $resourceProvider;
         $this->_ruleResource = $ruleResource;
         $this->_rootResource = $rootResource;

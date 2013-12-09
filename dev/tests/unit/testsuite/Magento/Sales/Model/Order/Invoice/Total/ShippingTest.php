@@ -116,14 +116,19 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         );
         $orderConstructorArgs = $objectManager->getConstructArguments('Magento\Sales\Model\Order', $arguments);
         /** @var $order \Magento\Sales\Model\Order|PHPUnit_Framework_MockObject_MockObject */
-        $order = $this->getMock('Magento\Sales\Model\Order', array('_init', 'getInvoiceCollection'),
-            $orderConstructorArgs, '', false);
+        $order = $this->getMock(
+            'Magento\Sales\Model\Order',
+            array('_init', 'getInvoiceCollection', '__wakeup'),
+            $orderConstructorArgs,
+            '',
+            false
+        );
         $order->setData('shipping_amount', $orderShipping);
         $order->expects($this->any())
             ->method('getInvoiceCollection')
             ->will($this->returnValue($this->_getInvoiceCollection($prevInvoicesData)));
         /** @var $invoice \Magento\Sales\Model\Order\Invoice|PHPUnit_Framework_MockObject_MockObject */
-        $invoice = $this->getMock('Magento\Sales\Model\Order\Invoice', array('_init'), array(), '', false);
+        $invoice = $this->getMock('Magento\Sales\Model\Order\Invoice', array('_init', '__wakeup'), array(), '', false);
         $invoice->setData('shipping_amount', $invoiceShipping);
         $invoice->setOrder($order);
 

@@ -22,11 +22,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\User\Model\Resource;
+
+use Magento\User\Model\Acl\Role\User as RoleUser;
+
 /**
  * Admin role resource model
  */
-namespace Magento\User\Model\Resource;
-
 class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -177,7 +179,7 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         $binds = array(
             'role_id'   => $role->getId(),
-            'role_type' => 'U'
+            'role_type' => RoleUser::ROLE_TYPE
         );
 
         $select = $read->select()

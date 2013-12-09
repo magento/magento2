@@ -63,27 +63,25 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     protected $_mediaHelper;
 
     /**
-     * Class constructor
-     *
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
-     * @param \Magento\Core\Helper\File\Media $mediaHelper
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\Date $dateModel
      * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Helper\File\Media $mediaHelper
      * @param \Magento\Core\Model\Resource\File\Storage\Database $resource
-     * @param Directory\DatabaseFactory $directoryFactory
+     * @param \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param string|null $connectionName
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
-        \Magento\Core\Helper\File\Media $mediaHelper,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Model\Date $dateModel,
         \Magento\Core\Model\App $app,
+        \Magento\Core\Helper\File\Media $mediaHelper,
         \Magento\Core\Model\Resource\File\Storage\Database $resource,
         \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -93,9 +91,9 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
         $this->_directoryFactory = $directoryFactory;
         $this->_mediaHelper = $mediaHelper;
         parent::__construct(
-            $coreFileStorageDb,
             $context,
             $registry,
+            $coreFileStorageDb,
             $dateModel,
             $app,
             $resource,

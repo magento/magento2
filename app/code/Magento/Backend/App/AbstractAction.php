@@ -166,28 +166,28 @@ abstract class AbstractAction extends \Magento\App\Action\Action
     }
 
     /**
-     * @param \Magento\View\Block\AbstractBlock $block
+     * @param \Magento\View\Element\AbstractBlock $block
      * @return \Magento\Backend\App\AbstractAction
      */
-    protected function _addContent(\Magento\View\Block\AbstractBlock $block)
+    protected function _addContent(\Magento\View\Element\AbstractBlock $block)
     {
         return $this->_moveBlockToContainer($block, 'content');
     }
 
     /**
-     * @param \Magento\View\Block\AbstractBlock $block
+     * @param \Magento\View\Element\AbstractBlock $block
      * @return \Magento\Backend\App\AbstractAction
      */
-    protected function _addLeft(\Magento\View\Block\AbstractBlock $block)
+    protected function _addLeft(\Magento\View\Element\AbstractBlock $block)
     {
         return $this->_moveBlockToContainer($block, 'left');
     }
 
     /**
-     * @param \Magento\View\Block\AbstractBlock $block
+     * @param \Magento\View\Element\AbstractBlock $block
      * @return \Magento\Backend\App\AbstractAction
      */
-    protected function _addJs(\Magento\View\Block\AbstractBlock $block)
+    protected function _addJs(\Magento\View\Element\AbstractBlock $block)
     {
         return $this->_moveBlockToContainer($block, 'js');
     }
@@ -197,11 +197,11 @@ abstract class AbstractAction extends \Magento\App\Action\Action
      *
      * The block will be moved to the container from previous parent after all other elements
      *
-     * @param \Magento\View\Block\AbstractBlock $block
+     * @param \Magento\View\Element\AbstractBlock $block
      * @param string $containerName
      * @return \Magento\Backend\App\AbstractAction
      */
-    private function _moveBlockToContainer(\Magento\View\Block\AbstractBlock $block, $containerName)
+    private function _moveBlockToContainer(\Magento\View\Element\AbstractBlock $block, $containerName)
     {
         $this->_view->getLayout()->setChild($containerName, $block->getNameInLayout(), '');
         return $this;
@@ -218,9 +218,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
         }
 
         if ($request->isDispatched() && $request->getActionName() !== 'denied' && !$this->_isAllowed()) {
-            $this->_forward('denied');
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            return parent::dispatch($request);
+            return $this->_forward('denied');
         }
 
         if ($this->_isUrlChecked()) {

@@ -44,14 +44,14 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
     {
         $this->_orderItemMock = $this->getMock(
             'Magento\Sales\Model\Order\Item',
-            array('setGiftMessageId', 'setGiftMessageAvailable'),
+            array('setGiftMessageId', 'setGiftMessageAvailable', '__wakeup'),
             array(),
             '',
             false
         );
         $this->_quoteItemMock = $this->getMock(
             'Magento\Sales\Model\Quote\Item',
-            array('getGiftMessageId', 'getStoreId'),
+            array('getGiftMessageId', 'getStoreId', '__wakeup'),
             array(),
             '',
             false

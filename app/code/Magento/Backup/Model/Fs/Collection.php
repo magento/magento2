@@ -63,16 +63,16 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected $_backup = null;
 
     /**
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\App\Dir $dir
      * @param \Magento\Backup\Model\Backup $backup
      */
     public function __construct(
+        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Backup\Helper\Data $backupData,
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\App\Dir $dir,
         \Magento\Backup\Model\Backup $backup
     ) {

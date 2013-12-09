@@ -28,20 +28,20 @@
         <container name="my.account.wrapper" label="My Account Wrapper" htmlTag="div" htmlClass="my-account" after="-"/>
     </referenceContainer>
     <referenceContainer name="left">
-        <block class="Magento\Page\Block\Links" name="customer_account_navigation" before="-" template="Magento_Customer::account/navigation.phtml">
-            <block class="Magento\Page\Block\Link\Current" name="customer-account-navigation-account-link">
+        <block class="Magento\View\Element\Html\Links" name="customer_account_navigation" before="-" template="Magento_Customer::account/navigation.phtml">
+            <block class="Magento\View\Element\Html\Link\Current" name="customer-account-navigation-account-link">
                 <arguments>
                     <argument name="label" xsi:type="string">Account Dashboard</argument>
                     <argument name="path" xsi:type="string">customer/account</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Link\Current" name="customer-account-navigation-account-edit-link">
+            <block class="Magento\View\Element\Html\Link\Current" name="customer-account-navigation-account-edit-link">
                 <arguments>
                     <argument name="label" xsi:type="string">Account Information</argument>
                     <argument name="path" xsi:type="string">customer/account/edit</argument>
                 </arguments>
             </block>
-            <block class="Magento\Page\Block\Link\Current" name="customer-account-navigation-address-link">
+            <block class="Magento\View\Element\Html\Link\Current" name="customer-account-navigation-address-link">
                 <arguments>
                     <argument name="label" xsi:type="string">Address Book</argument>
                     <argument name="path" xsi:type="string">customer/address</argument>

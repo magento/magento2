@@ -33,8 +33,27 @@
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
-class Serializer extends \Magento\View\Block\Template
+class Serializer extends \Magento\View\Element\Template
 {
+    /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Json\EncoderInterface $jsonEncoder,
+        array $data = array()
+    ) {
+        $this->_jsonEncoder = $jsonEncoder;
+        parent::__construct($context, $data);
+    }
+
     /**
      * Preparing global layout
      *
@@ -72,7 +91,7 @@ class Serializer extends \Magento\View\Block\Template
     public function getColumnInputNames($asJSON = false)
     {
         if ($asJSON) {
-            return $this->_coreData->jsonEncode((array)$this->getInputNames());
+            return $this->_jsonEncoder->encode((array)$this->getInputNames());
         }
         return (array)$this->getInputNames();
     }
@@ -91,6 +110,6 @@ class Serializer extends \Magento\View\Block\Template
         } elseif (!empty($inputNames)) {
             return '{}';
         }
-        return $this->_coreData->jsonEncode($result);
+        return $this->_jsonEncoder->encode($result);
     }
 }

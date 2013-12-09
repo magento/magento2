@@ -52,7 +52,6 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
      * @param \Magento\Core\Model\Registry $registry
@@ -60,7 +59,6 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
         \Magento\Core\Model\Registry $registry,
@@ -69,7 +67,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
         $this->_coreRegistry = $registry;
         $this->_reviewActionPager = $reviewActionPager;
         $this->_reviewFactory = $reviewFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _construct()

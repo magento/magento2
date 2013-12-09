@@ -98,6 +98,11 @@
     margin-top: 8px;
 }
 
+.catalog-product-new .user-defined.type-select select,
+.catalog-product-edit .user-defined.type-select select {
+    width: 100%;
+}
+
 /*
     Customer
 ---------------------------------------*/
@@ -404,6 +409,44 @@
 
 .cms-manage-content-actions textarea {
     width: 100%;
+}
+
+/*
+    System -> Action Log -> Report
+-------------------------------------- */
+.adminhtml-logging-details .log-details-grid table {
+    th {
+        border: 1px solid #c9c2b8;
+        border-width: 0 0 1px;
+        padding: 6px 10px 7px;
+        background: #fff;
+        .style2();
+
+        span {
+            border: 0;
+            padding: 0;
+        }
+    }
+
+    td {
+        border: none;
+        padding: 6px 10px 7px;
+        background: #fff;
+    }
+
+    tr:last-child td {
+        border: 1px solid #eae8e4;
+        border-width: 0 0 1px;
+    }
+
+    tr.on-mouse {
+        cursor: inherit;
+    }
+
+    tr:nth-child(odd) td,
+    tr.on-mouse:nth-child(odd):hover td {
+        background: #fbfaf6;
+    }
 }
 
 /*
@@ -1335,6 +1378,37 @@
     width: 49%;
 }
 
+.order-gift-options .box-left:last-child,
+.order-gift-options .fieldset-wrapper-title + .box-right {
+    float: none;
+    width: auto;
+}
+
+.order-gift-options {
+    fieldset {
+        border-radius: 5px;
+    }
+
+    .gift-wrapping-form select {
+        margin-left: 10px;
+    }
+
+    .giftmessage-entire-order textarea {
+        height: 6em;
+        width: 100%;
+    }
+
+    .giftmessage-whole-order-container {
+        textarea {
+            height: 6em;
+            width: 100%;
+        }
+        .actions {
+            margin-left: 20%;
+        }
+    }
+}
+
 .ui-dialog.gift-options-popup .ui-dialog-content {
     padding: 25px;
 }
@@ -1487,6 +1561,39 @@
 
 .sales-order-create-index #order-data .fieldset-wrapper .actions .action-delete {
     margin: 11px 0 0;
+}
+
+.sales-order-create-index {
+    // Configure product popup
+    .ui-dialog {
+        // Virtual and downloadable product
+        .downloadable.information .link {
+            .label {
+                margin-left: 0;
+            }
+            .nested {
+                margin-left: 8px;
+            }
+        }
+        // Bundle product
+        .fieldset.bundle {
+            .nested {
+                padding-left: 6px;
+                .field {
+                    margin: 0 0 5px;
+                }
+                .label {
+                    font-size: 13px;
+                    margin: 0;
+                }
+                .qty .control {
+                    display: inline-block;
+                    margin: 0 0 0 10px;
+                    width: 60px;
+                }
+            }
+        }
+    }
 }
 
 /* ----------------------------------- */
@@ -2037,6 +2144,12 @@ table.items-to-invoice tbody tr:hover td {
     float: right;
 }
 
+[class^=" adminhtml-extension-custom-"] {
+    #authors_fieldset .data-table td {
+        vertical-align: top;
+    }
+}
+
 /*
     Packaging for Shipping Popup
 -------------------------------------- */
@@ -2550,8 +2663,6 @@ table.items-to-invoice tbody tr:hover td {
 /*
     Clearfix
 -------------------------------------- */
-.order-gift-options:before,
-.order-gift-options:after,
 .image-panel:before,
 .image-panel:after,
 .images:before,
@@ -2564,7 +2675,6 @@ table.items-to-invoice tbody tr:hover td {
     display: table;
 }
 
-.order-gift-options:after,
 .image-panel:after,
 .images:after,
 .tax-rate-popup .field:after,

@@ -50,7 +50,6 @@ class Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Bundle\Helper\Data $bundleData
@@ -58,7 +57,6 @@ class Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Bundle\Helper\Data $bundleData,
@@ -66,7 +64,7 @@ class Grid
     ) {
         $this->_bundleData = $bundleData;
         $this->_productFactory = $productFactory;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     protected function _construct()

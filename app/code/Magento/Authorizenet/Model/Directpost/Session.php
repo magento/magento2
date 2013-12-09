@@ -37,16 +37,20 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
 {
     /**
      * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param array $data
      * @param string|null $sessionName
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
+        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Session\Config\ConfigInterface $sessionConfig,
         array $data = array(),
         $sessionName = null
     ) {
-        parent::__construct($context, $data);
-        $this->init('authorizenet_directpost', $sessionName);
+        parent::__construct($context, $sidResolver, $sessionConfig, $data);
+        $this->start('authorizenet_directpost', $sessionName);
     }
 
     /**

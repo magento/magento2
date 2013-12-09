@@ -38,31 +38,29 @@ class Design
     protected $_labelFactory;
 
     /**
-     * @var \Magento\Page\Model\Source\Layout
+     * @var \Magento\Theme\Model\Layout\Source\Layout
      */
     protected $_pageLayout;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Page\Model\Source\Layout $pageLayout
+     * @param \Magento\Theme\Model\Layout\Source\Layout $pageLayout
      * @param \Magento\Core\Model\Theme\LabelFactory $labelFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Page\Model\Source\Layout $pageLayout,
+        \Magento\Theme\Model\Layout\Source\Layout $pageLayout,
         \Magento\Core\Model\Theme\LabelFactory $labelFactory,
         array $data = array()
     ) {
         $this->_labelFactory = $labelFactory;
         $this->_pageLayout = $pageLayout;
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**

@@ -45,7 +45,6 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url\RewriteFactory $rewriteFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Cms\Model\PageFactory $pageFactory
@@ -53,14 +52,13 @@ class Edit extends \Magento\Adminhtml\Block\Urlrewrite\Edit
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url\RewriteFactory $rewriteFactory,
         \Magento\Backend\Helper\Data $adminhtmlData,
         \Magento\Cms\Model\PageFactory $pageFactory,
         array $data = array()
     ) {
         $this->_pageFactory = $pageFactory;
-        parent::__construct($context, $coreData, $rewriteFactory, $adminhtmlData, $data);
+        parent::__construct($context, $rewriteFactory, $adminhtmlData, $data);
     }
 
     /**

@@ -36,7 +36,7 @@ namespace Magento\Cms\Block\Adminhtml\Page\Widget;
 class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
 {
     /**
-     * @var \Magento\Page\Model\Source\Layout
+     * @var \Magento\Theme\Model\Layout\Source\Layout
      */
     protected $_pageLayout;
 
@@ -57,9 +57,8 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
-     * @param \Magento\Page\Model\Source\Layout $pageLayout
+     * @param \Magento\Theme\Model\Layout\Source\Layout $pageLayout
      * @param \Magento\Cms\Model\Page $cmsPage
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Cms\Model\Resource\Page\CollectionFactory $collectionFactory
@@ -67,9 +66,8 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
-        \Magento\Page\Model\Source\Layout $pageLayout,
+        \Magento\Theme\Model\Layout\Source\Layout $pageLayout,
         \Magento\Cms\Model\Page $cmsPage,
         \Magento\Cms\Model\PageFactory $pageFactory,
         \Magento\Cms\Model\Resource\Page\CollectionFactory $collectionFactory,
@@ -79,7 +77,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
         $this->_cmsPage = $cmsPage;
         $this->_pageFactory = $pageFactory;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     /**

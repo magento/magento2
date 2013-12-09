@@ -26,7 +26,7 @@
 
 namespace Magento\Customer\Block\Widget;
 
-class AbstractWidget extends \Magento\View\Block\Template
+class AbstractWidget extends \Magento\View\Element\Template
 {
     /**
      * @var \Magento\Eav\Model\Config
@@ -34,19 +34,17 @@ class AbstractWidget extends \Magento\View\Block\Template
     protected $_eavConfig;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         array $data = array()
     ) {
         $this->_eavConfig = $eavConfig;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     public function getConfig($key)

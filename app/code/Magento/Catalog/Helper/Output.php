@@ -62,17 +62,15 @@ class Output extends \Magento\App\Helper\AbstractHelper
     protected $_escaper;
 
     /**
-     * Construct
-     *
+     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\App\Helper\Context $context
      * @param \Magento\Escaper $escaper
      */
     public function __construct(
+        \Magento\App\Helper\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\App\Helper\Context $context,
         \Magento\Escaper $escaper
     ) {
         $this->_eavConfig = $eavConfig;

@@ -53,7 +53,6 @@ namespace Magento\User\Model;
  * @method \Magento\User\Model\User setIsActive(int $value)
  * @method string getExtra()
  * @method \Magento\User\Model\User setExtra(string $value)
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
@@ -518,7 +517,7 @@ class User
      */
     public function getAclRole()
     {
-        return 'U' . $this->getUserId();
+        return $this->getRole()->getId();
     }
 
     /**

@@ -114,20 +114,20 @@ class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
+     * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product $catalogProduct
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Resource $resource
      */
     public function __construct(
+        \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product $catalogProduct,
         \Magento\Catalog\Model\Category $catalogCategory,
-        \Magento\Logger $logger,
-        \Magento\App\Resource $resource
+        \Magento\Logger $logger
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;

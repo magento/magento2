@@ -63,7 +63,6 @@ abstract class AbstractMain
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Eav\Helper\Data $eavData
@@ -74,7 +73,6 @@ abstract class AbstractMain
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Eav\Helper\Data $eavData,
@@ -87,7 +85,7 @@ abstract class AbstractMain
         $this->_yesnoFactory = $yesnoFactory;
         $this->_inputTypeFactory = $inputTypeFactory;
         $this->_attributeConfig = $attributeConfig;
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     public function setAttributeObject($attribute)

@@ -32,7 +32,7 @@ $numColumns = sizeof($this->getColumns());
 <?php if ($this->canDisplayContainer()): ?>
     <div id="<?php echo $this->getId() ?>">
 <?php else: ?>
-    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
 <?php endif; ?>
 <?php if ($this->getStoreSwitcherVisibility() || $this->getDateFilterVisibility()): ?>
     <?php if ($this->getStoreSwitcherVisibility()): ?>
@@ -44,21 +44,30 @@ $numColumns = sizeof($this->getColumns());
             <?php echo $this->getChildHtml('grid.export');?>
         </div>
         <?php endif; ?>
-
         <?php if ($this->getDateFilterVisibility()): ?>
-        <div class="filter" id="<?php echo $this->getSuffixId('period_date_range')?>">
-            <div class="date">
-                <label class="required"><?php echo __('From') ?>:
-                    <input class="input-text no-changes required-entry" type="text" id="<?php echo $this->getSuffixId('period_date_from')?>" name="report_from" value="<?php echo $this->getFilter('report_from') ?>">
+        <div class="filter required" id="<?php echo $this->getSuffixId('period_date_range')?>">
+            <div class="field date">
+                <label class="label">
+                    <span><?php echo __('From') ?>:</span>
+                    <input class="input-text no-changes required-entry"
+                           type="text"
+                           id="<?php echo $this->getSuffixId('period_date_from') ?>"
+                           name="report_from"
+                           value="<?php echo $this->getFilter('report_from') ?>">
+                    <div id="<?php echo $this->getSuffixId('period_date_from_advice')?>"></div>
                 </label>
-                <div id="<?php echo $this->getSuffixId('period_date_from_advice')?>"></div>
             </div>
 
-            <div class="date">
-                <label class="required"><?php echo __('To') ?>:
-                    <input class="input-text no-changes required-entry" type="text" id="<?php echo $this->getSuffixId('period_date_to')?>" name="report_to" value="<?php echo $this->getFilter('report_to') ?>" />
+            <div class="field date">
+                <label class="label">
+                    <span><?php echo __('To') ?>:</span>
+                    <input class="input-text no-changes required-entry"
+                           type="text"
+                           id="<?php echo $this->getSuffixId('period_date_to') ?>"
+                           name="report_to"
+                           value="<?php echo $this->getFilter('report_to') ?>"/>
+                    <div id="<?php echo $this->getSuffixId('period_date_to_advice')?>"></div>
                 </label>
-                <div id="<?php echo $this->getSuffixId('period_date_to_advice')?>"></div>
             </div>
 
             <div class="show-by">
@@ -117,7 +126,7 @@ $numColumns = sizeof($this->getColumns());
             if (period_date_from && period_date_to) {
                 var valid = true;
                 jQuery(period_date_from).add(period_date_to).each(function() {
-                    valid = jQuery.validator.validateElement(this) && valid;
+                    valid = Validation.validate(this) && valid;
                 });
                 return valid;
             }

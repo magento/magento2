@@ -54,7 +54,12 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_resourceIterator;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreData;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -64,19 +69,20 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Core\Model\Resource\Iterator $resourceIterator,
         array $data = array()
     ) {
+        $this->_coreData = $coreData;
         $this->_productFactory = $productFactory;
         $this->_rssFactory = $rssFactory;
         $this->_resourceIterator = $resourceIterator;
-        parent::__construct($context, $coreData, $customerSession, $catalogData, $data);
+        parent::__construct($context, $customerSession, $catalogData, $data);
     }
 
     protected function _construct()

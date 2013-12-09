@@ -126,7 +126,7 @@ class Observer
             if ($payment && $payment->getMethod() == $this->_modelFactory->create()->getCode()) {
                 $request = $observer->getEvent()->getRequest();
                 $response = $observer->getEvent()->getResponse();
-                $result = $this->_coreData->jsonDecode($response->getBody('default'), \Zend_Json::TYPE_ARRAY);
+                $result = $this->_coreData->jsonDecode($response->getBody('default'));
 
                 if (empty($result['error'])) {
                     $payment = $order->getPayment();

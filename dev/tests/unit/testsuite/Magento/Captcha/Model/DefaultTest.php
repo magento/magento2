@@ -310,8 +310,10 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         $resourceModel = $this->getMock(
             'Magento\Captcha\Model\Resource\Log',
-            array('countAttemptsByRemoteAddress', 'countAttemptsByUserLogin', 'logAttempt'),
-            array(), '', false
+            array('countAttemptsByRemoteAddress', 'countAttemptsByUserLogin', 'logAttempt', '__wakeup'),
+            array(),
+            '',
+            false
         );
 
         $resourceModel->expects($this->any())

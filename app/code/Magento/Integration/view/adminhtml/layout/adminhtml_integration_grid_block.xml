@@ -27,7 +27,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="integration.grid.container">
-        <block class="Magento\Backend\Block\Widget\Grid" name="integration.grid" as="grid">
+        <block class="Magento\Integration\Block\Adminhtml\Integration\Grid" name="integration.grid" as="grid">
             <arguments>
                 <argument name="id" xsi:type="string">integrationGrid</argument>
                 <argument name="dataSource" xsi:type="object">\Magento\Integration\Model\Resource\Integration\Collection</argument>
@@ -41,10 +41,7 @@
             <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="integration.grid.columnSet">
                 <arguments>
                     <argument name="rowUrl" xsi:type="array">
-                        <item name="path" xsi:type="string">*/*/edit</item>
-                        <item name="extraParamsTemplate" xsi:type="array">
-                            <item name="id" xsi:type="string">getId</item>
-                        </item>
+                        <item name="path" xsi:type="string"></item>
                     </argument>
                     <argument name="empty_text" xsi:type="string" translate="true">No Integrations Found</argument>
                 </arguments>
@@ -61,9 +58,46 @@
                         <argument name="header" xsi:type="string" translate="true">Status</argument>
                         <argument name="type" xsi:type="string">options</argument>
                         <argument name="options" xsi:type="options" model="Magento\Integration\Model\Integration\Source\Status"/>
-                        <argument name="width" xsi:type="string">50px</argument>
                         <argument name="index" xsi:type="string">status</argument>
                         <argument name="id" xsi:type="string">status</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="reauthorize">
+                    <arguments>
+                        <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Reauthorize</argument>
+                        <argument name="index" xsi:type="string">reauthorize</argument>
+                        <argument name="id" xsi:type="string">reauthorize</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="filter" xsi:type="string">0</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="activate">
+                    <arguments>
+                        <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate</argument>
+                        <argument name="index" xsi:type="string">activate</argument>
+                        <argument name="id" xsi:type="string">activate</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="filter" xsi:type="string">0</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="edit">
+                    <arguments>
+                        <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Edit</argument>
+                        <argument name="class" xsi:type="string">action edit</argument>
+                        <argument name="index" xsi:type="string">edit</argument>
+                        <argument name="id" xsi:type="string">edit</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="filter" xsi:type="string">0</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="delete">
+                    <arguments>
+                        <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Delete</argument>
+                        <argument name="class" xsi:type="string">action delete</argument>
+                        <argument name="index" xsi:type="string">delete</argument>
+                        <argument name="id" xsi:type="string">delete</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="filter" xsi:type="string">0</argument>
                     </arguments>
                 </block>
             </block>

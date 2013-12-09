@@ -40,4 +40,28 @@
             </value>
         </param>
     </type>
+    <type name="Magento\Theme\Model\Layout\Config\Reader">
+        <param name="fileName">
+            <value>page_layouts.xml</value>
+        </param>
+        <param name="converter">
+            <instance type="Magento\Theme\Model\Layout\Config\Converter" />
+        </param>
+        <param name="schemaLocator">
+            <instance type="Magento\Theme\Model\Layout\Config\SchemaLocator" />
+        </param>
+    </type>
+    <virtualType name="Magento\Theme\Model\Layout\Config\Data" type="Magento\Config\Data">
+        <param name='reader'>
+            <instance type="Magento\Theme\Model\Layout\Config\Reader" />
+        </param>
+        <param name="cacheId">
+            <value>page_layouts_config</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Theme\Model\Layout\Config">
+        <param name="dataStorage">
+            <instance type="Magento\Theme\Model\Layout\Config\Data" />
+        </param>
+    </type>
 </config>

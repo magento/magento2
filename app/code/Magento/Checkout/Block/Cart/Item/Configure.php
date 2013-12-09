@@ -35,7 +35,7 @@
  */
 namespace Magento\Checkout\Block\Cart\Item;
 
-class Configure extends \Magento\View\Block\Template
+class Configure extends \Magento\View\Element\Template
 {
 
     /**

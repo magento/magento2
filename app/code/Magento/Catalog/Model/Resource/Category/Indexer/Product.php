@@ -86,15 +86,11 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
     protected $_eavConfig;
 
     /**
-     * Class constructor
-     *
-     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\App\Resource $resource
+     * @param \Magento\Eav\Model\Config $eavConfig
      */
-    public function __construct(
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource
-    ) {
+    public function __construct(\Magento\App\Resource $resource, \Magento\Eav\Model\Config $eavConfig)
+    {
         $this->_eavConfig = $eavConfig;
         parent::__construct($resource);
     }

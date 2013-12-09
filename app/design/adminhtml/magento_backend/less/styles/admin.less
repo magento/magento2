@@ -1644,8 +1644,8 @@ input.mage-error ~ .addafter {
 }
 
 .addon input ~ .addafter strong {
+    display: inline-block;
     background: #fff;
-    display: block;
     line-height: 24px;
     margin: 0 3px 0 -2px;
     padding-left: 4px;
@@ -4142,10 +4142,19 @@ table tbody tr:nth-child(odd):hover th {
 
 .grid-actions .required:after {
     content: '*';
-    color: red;
+    color: #f00;
 }
 
-/* TODO: remove styles for images when images will be replaced by font icons */
+[class^=" reports-report-"] {
+    .grid-actions .required:after {
+        content: '';
+    }
+    .grid-actions .required .label span:after {
+        content: '*';
+        color: #f00;
+    }
+}
+
 .grid-actions img {
     vertical-align: middle;
     height: 22px;
@@ -4157,7 +4166,6 @@ table tbody tr:nth-child(odd):hover th {
     height: auto;
 }
 
-/* TODO: refactor validation fields styles after approved design comes */
 .grid-actions .validation-advice {
     background: #f3dcd8;
     border: 1px solid #963535;
@@ -4185,6 +4193,11 @@ table tbody tr:nth-child(odd):hover th {
 
 .grid-actions .link-feed {
     white-space: nowrap;
+}
+
+.grid-actions input[type="text"].validation-failed {
+    border-color: #fa7973;
+    box-shadow: 0 0 8px rgba(250, 121, 115, 0.6);
 }
 
 /*
@@ -4803,6 +4816,7 @@ table .col-draggable .draggable-handle {
 .order-information .data-table tbody tr th,
 .order-account-information .data-table tbody tr th,
 .adminhtml-rma-new .data-table tbody tr th,
+.adminhtml-logging-details .log-details .data-table th,
 [class^=" sales-transactions-"] .data-table tbody tr th,
 [class^=" sales-"] .order-payment-method .data-table tbody tr th,
 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr th {
@@ -4815,6 +4829,8 @@ table .col-draggable .draggable-handle {
 .order-information .data-table tbody tr th,
 .order-account-information .data-table tbody tr td,
 .order-account-information .data-table tbody tr th,
+.adminhtml-logging-details .log-details .data-table td,
+.adminhtml-logging-details .log-details .data-table th,
 [class^=" adminhtml-rma-"] .data-table tbody tr td,
 [class^=" adminhtml-rma-"] .data-table tbody tr th,
 [class^=" sales-transactions-"] .data-table tbody tr th,
@@ -4836,6 +4852,8 @@ table .col-draggable .draggable-handle {
 .order-information .data-table tbody tr:nth-child(2n+1) th,
 .order-account-information .data-table tbody tr:nth-child(2n+1) td,
 .order-account-information .data-table tbody tr:nth-child(2n+1) th,
+.adminhtml-logging-details .log-details .data-table tr:nth-child(odd) td,
+.adminhtml-logging-details .log-details .data-table tr:nth-child(odd) th,
 [class^=" adminhtml-rma-"] .data-table tbody tr:nth-child(2n+1) td,
 [class^=" adminhtml-rma-"] .data-table tbody tr:nth-child(2n+1) th,
 [class^=" sales-transactions-"] .data-table tbody tr:nth-child(2n+1) th,

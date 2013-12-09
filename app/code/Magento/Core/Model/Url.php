@@ -152,6 +152,11 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     protected $_session;
 
     /**
+     * @var \Magento\Session\SidResolverInterface
+     */
+    protected $_sidResolver;
+
+    /**
      * Constructor
      *
      * @var \Magento\App\Route\ConfigInterface
@@ -171,6 +176,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
      * @param App $app
      * @param StoreManager $storeManager
      * @param Session $session
+     * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param null $areaCode
      * @param array $data
      */
@@ -182,6 +188,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Session $session,
+        \Magento\Session\SidResolverInterface $sidResolver,
         $areaCode = null,
         array $data = array()
     ) {
@@ -192,6 +199,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         $this->_app = $app;
         $this->_storeManager = $storeManager;
         $this->_session = $session;
+        $this->_sidResolver = $sidResolver;
         $this->_areaCode = $areaCode;
         parent::__construct($data);
     }
@@ -844,12 +852,14 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     {
         $hostArr = explode(':', $this->getRequest()->getServer('HTTP_HOST'));
         if ($hostArr[0] !== $this->getHost()) {
-            $session = $this->_session;
-            if (!$session->isValidForHost($this->getHost())) {
+            if (!$this->_session->isValidForHost($this->getHost())) {
                 if (!self::$_encryptedSessionId) {
-                    self::$_encryptedSessionId = $session->getEncryptedSessionId();
+                    self::$_encryptedSessionId = $this->_session->getSessionId();
                 }
-                $this->setQueryParam($session->getSessionIdQueryParam(), self::$_encryptedSessionId);
+                $this->setQueryParam(
+                    $this->_sidResolver->getSessionIdQueryParam($this->_session),
+                    self::$_encryptedSessionId
+                );
             }
         }
         return $this;
@@ -863,9 +873,9 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     public function addSessionParam()
     {
         if (!self::$_encryptedSessionId) {
-            self::$_encryptedSessionId = $this->_session->getEncryptedSessionId();
+            self::$_encryptedSessionId = $this->_session->getSessionId();
         }
-        $this->setQueryParam($this->_session->getSessionIdQueryParam(), self::$_encryptedSessionId);
+        $this->setQueryParam($this->_sidResolver->getSessionIdQueryParam($this->_session), self::$_encryptedSessionId);
         return $this;
     }
 
@@ -1120,7 +1130,7 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
         if ($this->_app->getUseSessionVar() && !$sessionId) {
             $this->setQueryParam('___SID', $this->isSecure() ? 'S' : 'U'); // Secure/Unsecure
         } else if ($sessionId) {
-            $this->setQueryParam($this->_session->getSessionIdQueryParam(), $sessionId);
+            $this->setQueryParam($this->_sidResolver->getSessionIdQueryParam($this->_session), $sessionId);
         }
         return $this;
     }
@@ -1230,8 +1240,8 @@ class Url extends \Magento\Object implements \Magento\UrlInterface
     {
         if ($this->useSessionIdForUrl($match[2] == 'S' ? true : false)) {
             return $match[1]
-                . $this->_session->getSessionIdQueryParam()
-                . '=' . $this->_session->getEncryptedSessionId()
+                . $this->_sidResolver->getSessionIdQueryParam($this->_session)
+                . '=' . $this->_session->getSessionId()
                 . (isset($match[3]) ? $match[3] : '');
         } else {
             if ($match[1] == '?' && isset($match[3])) {

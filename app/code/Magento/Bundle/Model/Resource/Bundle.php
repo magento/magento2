@@ -42,14 +42,12 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_productRelation;
 
     /**
-     * Class constructor
-     *
-     * @param \Magento\Catalog\Model\Resource\Product\Relation $productRelation
      * @param \Magento\App\Resource $resource
+     * @param \Magento\Catalog\Model\Resource\Product\Relation $productRelation
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Relation $productRelation,
-        \Magento\App\Resource $resource
+        \Magento\App\Resource $resource,
+        \Magento\Catalog\Model\Resource\Product\Relation $productRelation
     ) {
         parent::__construct($resource);
         $this->_productRelation = $productRelation;

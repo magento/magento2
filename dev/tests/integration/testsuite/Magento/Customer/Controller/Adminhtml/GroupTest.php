@@ -67,7 +67,9 @@ class GroupTest extends \Magento\Backend\Utility\Controller
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(array('The customer group has been deleted.')), \Magento\Message\Factory::SUCCESS
+            $this->equalTo(array('The customer group has been deleted.')), 
+            \Magento\Message\Factory::SUCCESS,
+            'Magento\Core\Model\Session\AbstractSession'
         );
     }
 

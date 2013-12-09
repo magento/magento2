@@ -29,17 +29,17 @@
     </referenceContainer>
     <referenceBlock name="head">
         <block class="Magento\Backend\Block\Template" name="optional_zip_countries" as="optional_zip_countries" template="Magento_Directory::js/optional_zip_countries.phtml"/>
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-composite-configure-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-composite-configure-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Catalog::catalog/product/composite/configure.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="varien-configurable-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="varien-configurable-js">
             <arguments>
                 <argument name="file" xsi:type="string">varien/configurable.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-adminhtml-customer-edit-tab-js-addresses.js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-customer-edit-tab-js-addresses.js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Customer::edit/tab/js/addresses.js</argument>
             </arguments>

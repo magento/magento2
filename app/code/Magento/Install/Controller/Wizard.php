@@ -511,6 +511,6 @@ class Wizard extends \Magento\Install\Controller\Action
 
         $this->_view->getLayout()->addBlock('Magento\Install\Block\End', 'install.end', 'content');
         $this->_view->renderLayout();
-        $this->_session->clear();
+        $this->_session->clearStorage();
     }
 }

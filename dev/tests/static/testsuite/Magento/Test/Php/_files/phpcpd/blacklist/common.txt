@@ -56,6 +56,7 @@ Magento/DesignEditor/Model/Url
 Magento/GiftMessage/Block/Adminhtml/Sales/Order
 Magento/ImportExport/Model
 Magento/Index/Model/Process
+Magento/Integration/Controller/Adminhtml
 Magento/Install/Block/Db
 Magento/Newsletter/Block/Adminhtml/Template/Preview
 Magento/Newsletter/Block/Adminhtml/Queue/Preview
@@ -84,6 +85,7 @@ Magento/Tax/Block/Checkout
 Magento/Tax/Model/Sales/Pdf
 Magento/Tax/Model/Config/Price
 Magento/Usa/Model/Shipping/Carrier
+Magento/Webapi/Block/Adminhtml
 Magento/Webapi/Model
 Magento/Webhook/Model
 Magento/Widget/Model/Widget/Instance
@@ -107,4 +109,6 @@ Magento/User/Block/User/Edit
 var/generation
 Magento/Newsletter/Block/Adminhtml/Template/Grid/Renderer
 Magento/Newsletter/Model/Template/Filter
+Magento/Newsletter/Model/Resource/Subscriber
+Magento/CatalogInventory/Model/Resource/Stock/Item
 

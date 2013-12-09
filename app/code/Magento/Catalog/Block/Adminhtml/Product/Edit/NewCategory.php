@@ -39,8 +39,13 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
@@ -48,13 +53,14 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $registry, $formFactory, $data);
+        $this->_jsonEncoder = $jsonEncoder;
+        parent::__construct($context, $registry, $formFactory, $data);
         $this->setUseContainer(true);
         $this->_categoryFactory = $categoryFactory;
     }
@@ -135,7 +141,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getAfterElementHtml()
     {
-        $widgetOptions = $this->_coreData->jsonEncode(array(
+        $widgetOptions = $this->_jsonEncoder->encode(array(
             'suggestOptions' => array(
                 'source' => $this->getUrl('catalog/category/suggestCategories'),
                 'valueField' => '#new_category_parent',

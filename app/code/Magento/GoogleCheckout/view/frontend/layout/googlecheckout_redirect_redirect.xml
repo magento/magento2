@@ -30,6 +30,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\GoogleCheckout\Block\Redirect" name="googlecheckout_redirect" template="Magento_Page::redirect.phtml"/>
+        <block class="Magento\GoogleCheckout\Block\Redirect" name="googlecheckout_redirect"/>
     </referenceContainer>
 </layout>

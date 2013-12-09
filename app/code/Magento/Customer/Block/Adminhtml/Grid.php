@@ -52,7 +52,6 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
@@ -61,7 +60,6 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory,
@@ -71,7 +69,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
         $this->_systemStore = $systemStore;
         $this->_customersFactory = $customersFactory;
         $this->_groupsFactory = $groupsFactory;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
     }
 
     protected function _construct()

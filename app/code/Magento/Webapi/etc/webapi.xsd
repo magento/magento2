@@ -53,7 +53,7 @@
                     </xs:simpleType>
                 </xs:attribute>
                 <xs:attribute type="xs:string" name="method"/>
-                <xs:attribute type="xs:boolean" name="secure" default="false"/>
+                <xs:attribute type="xs:boolean" name="isSecure" default="false"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

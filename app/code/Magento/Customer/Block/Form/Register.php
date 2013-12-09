@@ -44,8 +44,15 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerSession;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
+     * @var \Magento\Module\Manager
+     */
+    protected $_moduleManager;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
@@ -54,18 +61,23 @@ class Register extends \Magento\Directory\Block\Data
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
+        \Magento\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\AddressFactory $addressFactory,
         array $data = array()
     ) {
+        $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
         $this->_addressFactory = $addressFactory;
-        parent::__construct($context, $coreData, $configCacheType, $regionCollFactory, $countryCollFactory, $data);
+        parent::__construct(
+            $context, $coreData, $jsonEncoder, $configCacheType, $regionCollFactory, $countryCollFactory, $data
+        );
     }
 
     /**
@@ -168,7 +180,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function isNewsletterEnabled()
     {
-        return $this->_coreData->isModuleOutputEnabled('Magento_Newsletter');
+        return $this->_moduleManager->isOutputEnabled('Magento_Newsletter');
     }
 
     /**

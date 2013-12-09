@@ -114,26 +114,26 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     protected $_escaper;
 
     /**
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Core\Model\Translate $translate
      * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
+        \Magento\Core\Model\Context $context,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Core\Model\Translate $translate,
         \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
         \Magento\Escaper $escaper,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -271,7 +271,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     /**
      * Set cookie instance
      *
-     * @param \Magento\Core\Model\Cookie $product
+     * @param \Magento\Stdlib\Cookie $cookie
      * @return \Magento\Sendfriend\Model\Sendfriend
      */
     public function setCookie($cookie)
@@ -283,12 +283,12 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      * Retrieve Cookie instance
      *
      * @throws \Magento\Core\Exception
-     * @return \Magento\Core\Model\Cookie
+     * @return \Magento\Stdlib\Cookie
      */
     public function getCookie()
     {
         $cookie = $this->_getData('_cookie');
-        if (!$cookie instanceof \Magento\Core\Model\Cookie) {
+        if (!$cookie instanceof \Magento\Stdlib\Cookie) {
             throw new \Magento\Core\Exception(__('Please define a correct Cookie instance.'));
         }
         return $cookie;

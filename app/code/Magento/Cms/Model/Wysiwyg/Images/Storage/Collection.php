@@ -41,15 +41,11 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected $_filesystem;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Filesystem $filesystem
      */
-    public function __construct(
-        \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\EntityFactory $entityFactory
-    ) {
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Filesystem $filesystem)
+    {
         $this->_filesystem = $filesystem;
         parent::__construct($entityFactory);
     }

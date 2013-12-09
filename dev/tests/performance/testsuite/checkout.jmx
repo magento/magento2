@@ -198,7 +198,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract product name" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">product_name</stringProp>
-            <stringProp name="RegexExtractor.regex">&lt;h1 class=&quot;title&quot;&gt;&lt;span class=&quot;base&quot;&gt;(.+?)&lt;/span&gt;&lt;/h1&gt;</stringProp>
+            <stringProp name="RegexExtractor.regex">&lt;h1 class=&quot;title&quot;&gt;&lt;span class=&quot;base&quot;[^&gt;]*&gt;(.+?)&lt;/span&gt;&lt;/h1&gt;</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"></stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>

@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="head.components">
-        <block class="Magento\Page\Block\Js\Components" name="checkout_page_head_components" template="Magento_Checkout::js/components.phtml"/>
+        <block class="Magento\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Checkout::js/components.phtml"/>
     </referenceBlock>
     <referenceContainer name="header">
         <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="cart/minicart.phtml">

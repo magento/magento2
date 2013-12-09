@@ -93,8 +93,6 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
     protected $_coreStoreConfig;
 
     /**
-     * Construct
-     *
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig

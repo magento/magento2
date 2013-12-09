@@ -34,24 +34,11 @@
     </xs:complexType>
     <xs:complexType name="integrationType">
         <xs:sequence>
-            <xs:element name="name" type="integrationNameType"/>
             <xs:element name="email" type="emailType"/>
-            <xs:element name="authentication" type="authenticationType"/>
-        </xs:sequence>
-        <xs:attribute name="id" type="integrationIdType" use="required"/>
-    </xs:complexType>
-    <xs:complexType name="authenticationType">
-        <xs:sequence>
             <xs:element name="endpoint_url" type="urlType" minOccurs="0"/>
         </xs:sequence>
-        <xs:attribute name="type" type="authenticationTypeType" use="required"/>
+        <xs:attribute name="name" type="integrationNameType" use="required"/>
     </xs:complexType>
-    <xs:simpleType name="authenticationTypeType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="oauth"/>
-            <xs:enumeration value="manual"/>
-        </xs:restriction>
-    </xs:simpleType>
     <xs:simpleType name="urlType">
         <xs:restriction base="xs:anyURI">
             <xs:minLength value="4"/>
@@ -65,11 +52,6 @@
     <xs:simpleType name="emailType">
         <xs:restriction base="xs:string">
             <xs:pattern value="[^@]+@[^\.]+\..+"/>
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:simpleType name="integrationIdType">
-        <xs:restriction base="xs:string">
-            <xs:minLength value="2"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

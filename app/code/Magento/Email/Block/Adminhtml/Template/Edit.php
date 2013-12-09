@@ -64,8 +64,13 @@ class Edit extends \Magento\Adminhtml\Block\Widget
     protected $_template = 'template/edit.phtml';
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Backend\Model\Config\Structure $configStructure
@@ -74,18 +79,19 @@ class Edit extends \Magento\Adminhtml\Block\Widget
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Model\Registry $registry,
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Email\Model\Template\Config $emailConfig,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_registryManager = $registry;
         $this->_menuConfig = $menuConfig;
         $this->_configStructure = $configStructure;
         $this->_emailConfig = $emailConfig;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     protected function _prepareLayout()
@@ -386,7 +392,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
         $paths = $template->getSystemConfigPathsWhereUsedCurrently();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);
         if ($asJSON) {
-            return $this->_coreData->jsonEncode($pathsParts);
+            return $this->_jsonEncoder->encode($pathsParts);
         }
         return $pathsParts;
     }

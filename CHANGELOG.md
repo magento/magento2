@@ -1,3 +1,17 @@
+2.0.0.0-dev55
+=============
+* Modularity improvements:
+  * Session configuration moved to library
+  * FormKey logic was moved from Session
+  * SessionIdFlags from Session was removed
+  * Move Page logic to the Theme module and library
+* Created integration module UX
+* Created authorization service (Magento_Authz module)
+* Fixed bugs:
+  * Fixed the issue that prevented a customer group's shopping cart rules from applying properly to prices. The issue occurred when a customer was manually assigned to a customer group and automatic group assignment was enabled.
+  * Fixed the bug with schema upgrade scripts not running after installation
+  * Fixed the error with a blank page when user tries to get access to a restricted resource via URL (add Secret Key for URL set to "No")
+
 2.0.0.0-dev54
 =============
 * Modularity improvements:

@@ -30,6 +30,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\View\Block\Template" name="default_home_page" template="Magento_Cms::default/home.phtml"/>
+        <block class="Magento\View\Element\Template" name="default_home_page" template="Magento_Cms::default/home.phtml"/>
     </referenceContainer>
 </layout>

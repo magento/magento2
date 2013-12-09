@@ -52,7 +52,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\Calculation $taxCalculation
@@ -61,7 +60,6 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\Calculation $taxCalculation,
@@ -71,7 +69,7 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
         $this->_taxHelper = $taxHelper;
         $this->_taxCalculation = $taxCalculation;
         $this->_taxOrderFactory = $taxOrderFactory;
-        parent::__construct($context, $coreData, $taxConfig, $data);
+        parent::__construct($context, $taxConfig, $data);
     }
 
     /**

@@ -43,7 +43,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(array('getCollection'))
+            ->setMethods(array('getCollection', '__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
         $productMock->expects($this->once())

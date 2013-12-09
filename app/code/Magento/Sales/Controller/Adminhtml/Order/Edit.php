@@ -40,7 +40,7 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Create
      */
     public function startAction()
     {
-        $this->_getSession()->clear();
+        $this->_getSession()->clearStorage();
         $orderId = $this->getRequest()->getParam('order_id');
         $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
 
@@ -49,8 +49,7 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Create
                 $this->_getSession()->setUseOldShippingMethod(true);
                 $this->_getOrderCreateModel()->initFromOrder($order);
                 $this->_redirect('sales/*');
-            }
-            else {
+            } else {
                 $this->_redirect('sales/order/');
             }
         } catch (\Magento\Core\Exception $e) {

@@ -28,7 +28,7 @@ namespace Magento\Payment\Model\Config;
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Page\Model\Config\Converter
+     * @var \Magento\Payment\Model\Config\Converter
      */
     protected $_model;
 

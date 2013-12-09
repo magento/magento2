@@ -40,17 +40,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testCleanJs($area, $designMode, $expectedAssets)
     {
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
-        /** @var $headBlock \Magento\Page\Block\Html\Head */
-        $headBlock = $layout->createBlock('Magento\Page\Block\Html\Head', 'head');
+        /** @var $headBlock \Magento\Theme\Block\Html\Head */
+        $headBlock = $layout->createBlock('Magento\Theme\Block\Html\Head', 'head');
         $headBlock->setData('vde_design_mode', $designMode);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var $page \Magento\Core\Model\Page */
-        $page = $objectManager->get('Magento\Core\Model\Page');
-
-        /** @var $pageAssets \Magento\Page\Model\Asset\GroupedCollection */
-        $pageAssets = $page->getAssets();
+        /** @var $pageAssets \Magento\View\Asset\GroupedCollection */
+        $pageAssets = $objectManager->get('Magento\View\Asset\GroupedCollection');
 
         $fixtureAssets = array(
             array('name'   => 'test_css', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
@@ -66,7 +63,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         foreach ($fixtureAssets as $asset) {
             $pageAssets->add(
                 $asset['name'],
-                $objectManager->create('Magento\Core\Model\Page\Asset\ViewFile', array(
+                $objectManager->create('Magento\View\Asset\ViewFile', array(
                     'file' => 'some_file',
                     'contentType' => $asset['type'],
                 )),

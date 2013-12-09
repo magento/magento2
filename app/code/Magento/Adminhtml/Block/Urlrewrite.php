@@ -52,18 +52,16 @@ class Urlrewrite extends \Magento\Adminhtml\Block\Widget\Grid\Container
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Adminhtml\Block\Urlrewrite\Selector $urlrewriteSelector
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Adminhtml\Block\Urlrewrite\Selector $urlrewriteSelector,
         array $data = array()
     ) {
         $this->_urlrewriteSelector = $urlrewriteSelector;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

@@ -33,7 +33,7 @@
  */
 namespace Magento\Review\Block;
 
-class Helper extends \Magento\View\Block\Template
+class Helper extends \Magento\View\Element\Template
 {
     protected $_availableTemplates = array(
         'default' => 'helper/summary.phtml',
@@ -46,19 +46,17 @@ class Helper extends \Magento\View\Block\Template
     protected $_reviewFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         array $data = array()
     ) {
         $this->_reviewFactory = $reviewFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     public function getSummaryHtml($product, $templateType, $displayIfNoReviews)

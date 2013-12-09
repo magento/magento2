@@ -92,9 +92,9 @@ class TabsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_block->setApiRole($apiRole);
 
-        $mainBlock = $this->_helper->getObject('Magento\View\Block\Text');
-        $resourceBlock = $this->_helper->getObject('Magento\View\Block\Text');
-        $userBlock = $this->_helper->getObject('Magento\View\Block\Text');
+        $mainBlock = $this->_helper->getObject('Magento\View\Element\Text');
+        $resourceBlock = $this->_helper->getObject('Magento\View\Element\Text');
+        $userBlock = $this->_helper->getObject('Magento\View\Element\Text');
 
         $this->_layout->expects($this->any())
             ->method('getBlock')

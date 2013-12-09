@@ -54,18 +54,16 @@ class Wishlist extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Reports\Model\Resource\Wishlist\CollectionFactory $wishlistFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Reports\Model\Resource\Wishlist\CollectionFactory $wishlistFactory,
         array $data = array()
     ) {
         $this->_wishlistFactory = $wishlistFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     public function _beforeToHtml()

@@ -48,30 +48,28 @@ class Services extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Directory\Model\Currency\Import\Source\ServiceFactory $srcCurrencyFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Directory\Model\Currency\Import\Source\ServiceFactory $srcCurrencyFactory,
         array $data = array()
     ) {
         $this->_srcCurrencyFactory = $srcCurrencyFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**
      * Create import services form select element
      *
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
         $this->setChild(
             'import_services',
-            $this->getLayout()->createBlock('Magento\View\Block\Html\Select')
+            $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
                 ->setOptions($this->_srcCurrencyFactory->create()->toOptionArray())
                 ->setId('rate_services')
                 ->setName('rate_services')

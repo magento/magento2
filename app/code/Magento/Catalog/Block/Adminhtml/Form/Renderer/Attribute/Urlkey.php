@@ -52,21 +52,19 @@ class Urlkey
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Data\Form\Element\Factory $elementFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Data\Form\Element\Factory $elementFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         array $data = array()
     ) {
         $this->_elementFactory = $elementFactory;
         $this->_catalogData = $catalogData;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     public function getElementHtml()

@@ -66,10 +66,21 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_websiteMock = $this->getMock('Magento\Core\Model\Website',
-            array('getCode', 'getId'), array(), '', false, false);
+        $this->_websiteMock = $this->getMock(
+            'Magento\Core\Model\Website',
+            array('getCode', 'getId', '__wakeup'),
+            array(),
+            '',
+            false,
+            false
+        );
         $this->_groupMock = $this->getMock('Magento\Core\Model\Store\Group',
-            array('getCode', 'getId'), array(), '', false, false);
+            array('getCode', 'getId', '__wakeup'),
+            array(),
+            '',
+            false,
+            false
+        );
         $this->_storeFactoryMock = $this->getMock('Magento\Core\Model\StoreFactory',
             array('create'), array(), '', false, false);
         $this->_websiteFactoryMock = $this->getMock('Magento\Core\Model\Website\Factory',

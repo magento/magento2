@@ -68,7 +68,7 @@ try {
     $dirs = new \Magento\App\Dir($config->getSourceDir());
     $objectManager = new \Magento\ObjectManager\ObjectManager();
     $entityFactory = new Magento\Core\Model\EntityFactory($objectManager);
-    $themes = new \Magento\Core\Model\Theme\Collection($filesystem, $dirs, $entityFactory);
+    $themes = new \Magento\Core\Model\Theme\Collection($entityFactory, $filesystem, $dirs);
     $themes->setItemObjectClass('\Magento\Tools\View\Generator\ThemeLight');
     $themes->addDefaultPattern('*');
 

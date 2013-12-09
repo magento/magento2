@@ -50,7 +50,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $context = $objectManager->getObject(
-            'Magento\View\Block\Template\Context',
+            'Magento\View\Element\Template\Context',
             array(
                 'layout' => $layout,
                 'helperFactory' => $helperFactory

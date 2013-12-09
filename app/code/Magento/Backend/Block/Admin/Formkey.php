@@ -38,6 +38,6 @@ class Formkey extends \Magento\Backend\Block\Template
      */
     public function getFormKey()
     {
-        return $this->_session->getFormKey();
+        return $this->formKey->getFormKey();
     }
 }

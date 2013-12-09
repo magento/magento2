@@ -34,7 +34,7 @@
  */
 namespace Magento\GiftMessage\Block\Message;
 
-class Inline extends \Magento\View\Block\Template
+class Inline extends \Magento\View\Element\Template
 {
     protected $_entity = null;
     protected $_type   = null;
@@ -55,22 +55,20 @@ class Inline extends \Magento\View\Block\Template
     protected $_customerSession;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage,
         array $data = array()
     ) {
         $this->_giftMessageMessage = $giftMessageMessage;
         $this->_customerSession = $customerSession;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

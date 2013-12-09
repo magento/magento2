@@ -43,8 +43,6 @@ class Inventory extends \Magento\Adminhtml\Block\Widget
     protected $_catalogData = null;
 
     /**
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Helper\Data $coreData
      * Core registry
      *
      * @var \Magento\Core\Model\Registry
@@ -63,7 +61,6 @@ class Inventory extends \Magento\Adminhtml\Block\Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Model\Source\Stock $stock
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -72,7 +69,6 @@ class Inventory extends \Magento\Adminhtml\Block\Widget
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\CatalogInventory\Model\Source\Backorders $backorders,
         \Magento\CatalogInventory\Model\Source\Stock $stock,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -83,7 +79,7 @@ class Inventory extends \Magento\Adminhtml\Block\Widget
         $this->_backorders = $backorders;
         $this->_catalogData = $catalogData;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     public function getBackordersOption()

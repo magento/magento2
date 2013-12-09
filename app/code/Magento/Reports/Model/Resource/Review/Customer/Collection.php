@@ -42,31 +42,40 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     protected $_customerResource;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Logger $logger
-     * @param \Magento\Review\Helper\Data $reviewData
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Logger $logger
+     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
+     * @param mixed $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Logger $logger,
-        \Magento\Review\Helper\Data $reviewData,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Logger $logger,
+        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Review\Helper\Data $reviewData,
         \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
+        $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_customerResource = $customerResource;
         parent::__construct(
-            $eventManager, $logger, $reviewData, $fetchStrategy,
-            $entityFactory, $voteFactory, $storeManager, $resource
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $reviewData,
+            $voteFactory,
+            $storeManager,
+            $connection,
+            $resource
         );
     }
 

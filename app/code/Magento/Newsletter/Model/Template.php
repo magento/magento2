@@ -114,32 +114,32 @@ class Template extends \Magento\Core\Model\Template
     protected $_filterManager;
 
     /**
-     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Context $context
+     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
-     * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Filter\FilterManager $filterManager
      * @param array $data
      */
     public function __construct(
-        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Context $context,
+        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
-        \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Filter\FilterManager $filterManager,
         array $data = array()
     ) {
-        parent::__construct($design, $context, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->_filter = $filter;

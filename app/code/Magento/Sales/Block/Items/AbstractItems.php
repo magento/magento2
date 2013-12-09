@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Items;
 
-class AbstractItems extends \Magento\View\Block\Template
+class AbstractItems extends \Magento\View\Element\Template
 {
     /**
      * Block alias fallback
@@ -59,7 +59,7 @@ class AbstractItems extends \Magento\View\Block\Template
      * Retrieve item renderer block
      *
      * @param string $type
-     * @return \Magento\View\Block\AbstractBlock
+     * @return \Magento\View\Element\AbstractBlock
      * @throws \RuntimeException
      */
     public function getItemRenderer($type)
@@ -75,10 +75,10 @@ class AbstractItems extends \Magento\View\Block\Template
     /**
      * Prepare item before output
      *
-     * @param \Magento\View\Block\AbstractBlock $renderer
+     * @param \Magento\View\Element\AbstractBlock $renderer
      * @return \Magento\Sales\Block\Items\AbstractItems
      */
-    protected function _prepareItem(\Magento\View\Block\AbstractBlock $renderer)
+    protected function _prepareItem(\Magento\View\Element\AbstractBlock $renderer)
     {
         return $this;
     }

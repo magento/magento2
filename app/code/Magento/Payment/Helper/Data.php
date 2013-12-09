@@ -177,7 +177,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Retrieve payment information block
      *
      * @param  \Magento\Payment\Model\Info $info
-     * @return \Magento\View\Block\Template
+     * @return \Magento\View\Element\Template
      */
     public function getInfoBlock(\Magento\Payment\Model\Info $info)
     {

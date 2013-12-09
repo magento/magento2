@@ -44,8 +44,13 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_roleFactory;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\User\Model\RoleFactory $roleFactory
@@ -53,13 +58,14 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\User\Model\RoleFactory $roleFactory,
         array $data = array()
     ) {
-        parent::__construct($context, $coreData, $urlModel, $data);
+        parent::__construct($context, $urlModel, $data);
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_roleFactory = $roleFactory;
     }
@@ -200,7 +206,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
                 foreach ($users as $usrid) {
                     $jsonUsers[$usrid] = 0;
                 }
-                return $this->_coreData->jsonEncode((object)$jsonUsers);
+                return $this->_jsonEncoder->encode((object)$jsonUsers);
             } else {
                 return array_values($users);
             }

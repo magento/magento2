@@ -33,6 +33,8 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Edit;
 
+use Magento\Backend\Block\Template;
+
 class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
@@ -47,12 +49,35 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     protected $_template = 'catalog/category/edit/form.phtml';
 
+    /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
+     * @param \Magento\Core\Model\Registry $registry
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Json\EncoderInterface $jsonEncoder,
+        array $data = array()
+    ) {
+        $this->_jsonEncoder = $jsonEncoder;
+        parent::__construct($context, $categoryTree, $registry, $data);
+    }
+
     protected function _prepareLayout()
     {
         if ($head = $this->getLayout()->getBlock('head')) {
             $head->addChild(
                 'magento-adminhtml-catalog-category-edit-js',
-                'Magento\Page\Block\Html\Head\Script',
+                'Magento\Theme\Block\Html\Head\Script',
                 array(
                     'file' => 'Magento_Catalog::catalog/category/edit.js'
                 )
@@ -224,7 +249,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     {
         $products = $this->getCategory()->getProductsPosition();
         if (!empty($products)) {
-            return $this->_coreData->jsonEncode($products);
+            return $this->_jsonEncoder->encode($products);
         }
         return '{}';
     }

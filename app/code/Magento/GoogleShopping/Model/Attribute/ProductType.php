@@ -43,32 +43,41 @@ class ProductType extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribu
     protected $_categoryFactory;
 
     /**
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\GoogleShopping\Helper\Data $gsData
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
      * @param \Magento\GoogleShopping\Helper\Price $gsPrice
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Core\Model\Context $context,
+        \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\GoogleShopping\Helper\Data $gsData,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
         \Magento\GoogleShopping\Helper\Price $gsPrice,
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_categoryFactory = $categoryFactory;
-        parent::__construct($productFactory, $gsData, $gsProduct, $gsPrice, $context, $registry, $resource,
-            $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $productFactory,
+            $gsData,
+            $gsProduct,
+            $gsPrice,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
 

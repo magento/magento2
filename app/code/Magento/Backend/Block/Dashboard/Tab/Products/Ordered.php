@@ -42,21 +42,27 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
     protected $_collectionFactory;
 
     /**
+     * @var \Magento\Module\Manager
+     */
+    protected $_moduleManager;
+
+    /**
+     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Module\Manager $moduleManager,
         \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $coreData, $urlModel, $data);
+        $this->_moduleManager = $moduleManager;
+        parent::__construct($context, $urlModel, $data);
     }
 
     protected function _construct()
@@ -67,7 +73,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
 
     protected function _prepareCollection()
     {
-        if (!$this->_coreData->isModuleEnabled('Magento_Sales')) {
+        if (!$this->_moduleManager->isEnabled('Magento_Sales')) {
             return $this;
         }
         if ($this->getParam('website')) {

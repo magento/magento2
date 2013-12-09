@@ -107,8 +107,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_taxItemFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Tax\Model\Config $taxConfig
@@ -119,8 +119,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\App\Helper\Context $context,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Tax\Model\Config $taxConfig,

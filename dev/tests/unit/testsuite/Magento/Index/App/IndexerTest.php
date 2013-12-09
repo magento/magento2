@@ -61,8 +61,13 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($value)
     {
-        $process = $this->getMock('Magento\Index\Model\Process',
-            array('getIndexer', 'reindexEverything'), array(), '', false);
+        $process = $this->getMock(
+            'Magento\Index\Model\Process',
+            array('getIndexer', 'reindexEverything', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $indexer = $this->getMock('Magento\Index\Model\Indexer',
             array('getProcessesCollection'), array(), '', false);
         $indexerInterface = $this->getMock('Magento\Index\Model\IndexerInterface');

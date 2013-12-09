@@ -36,13 +36,24 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMock('Magento\Sales\Model\Quote\Item', null, array(), '', false);
+        $this->_model = $this->getMock(
+            'Magento\Sales\Model\Quote\Item',
+            array('__wakeup'),
+            array(),
+            '',
+            false
+        );
     }
 
     public function testGetAddress()
     {
-        $quote = $this->getMock('Magento\Sales\Model\Quote',
-            array('getShippingAddress', 'getBillingAddress'), array(), '', false);
+        $quote = $this->getMock(
+            'Magento\Sales\Model\Quote',
+            array('getShippingAddress', 'getBillingAddress', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $quote->expects($this->once())
             ->method('getShippingAddress')
             ->will($this->returnValue('shipping'));

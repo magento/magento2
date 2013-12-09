@@ -82,8 +82,7 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
                 'type' => 'Magento\TestFramework\Db\ConnectionAdapter'
             ),
             'preferences' => array(
-                'Magento\Core\Model\Cookie' => 'Magento\TestFramework\Cookie',
-                'Magento\Backend\Model\Cookie' => 'Magento\TestFramework\Cookie',
+                'Magento\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
                 'Magento\App\RequestInterface' => 'Magento\TestFramework\Request',
                 'Magento\App\ResponseInterface' => 'Magento\TestFramework\Response',
             ),

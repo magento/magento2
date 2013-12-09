@@ -25,12 +25,12 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="head">
-        <block class="Magento\Page\Block\Html\Head\Css" name="magento-webhook-css-modal-css">
+        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-webhook-css-modal-css">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Webhook::css/modal.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Page\Block\Html\Head\Script" name="magento-webhook-js-webhook-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-webhook-js-webhook-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Webhook::js/webhook.js</argument>
             </arguments>

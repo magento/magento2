@@ -49,17 +49,11 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_eventManager = null;
 
     /**
-     * Class constructor
-     *
-     *
-     *
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\App\Resource $resource
+     * @param \Magento\Event\ManagerInterface $eventManager
      */
-    public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\App\Resource $resource
-    ) {
+    public function __construct(\Magento\App\Resource $resource, \Magento\Event\ManagerInterface $eventManager)
+    {
         $this->_eventManager = $eventManager;
         parent::__construct($resource);
     }

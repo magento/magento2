@@ -30,7 +30,7 @@ $shippingAddress = $this->getShippingAddress();
 <hgroup class="page title">
     <h1 class="title"><span class="base"><?php echo __('Review Order') ?></span></h1>
 </hgroup>
-<?php echo $this->getMessagesBlock()->toHtml() ?>
+<?php echo $this->getLayout()->getMessagesBlock()->toHtml() ?>
 <div class="paypal review view">
     <div class="paypal subtitle caption"><strong>Please confirm your addresses</strong></div>
 

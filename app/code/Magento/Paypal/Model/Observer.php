@@ -156,10 +156,7 @@ class Observer
             if ($payment && in_array($payment->getMethod(), $this->_paypalHss->getHssMethods())) {
                 /* @var $controller \Magento\App\Action\Action */
                 $controller = $observer->getEvent()->getData('controller_action');
-                $result = $this->_coreData->jsonDecode(
-                    $controller->getResponse()->getBody('default'),
-                    \Zend_Json::TYPE_ARRAY
-                );
+                $result = $this->_coreData->jsonDecode($controller->getResponse()->getBody('default'));
 
                 if (empty($result['error'])) {
                     $this->_view->loadLayout('checkout_onepage_review');

@@ -48,7 +48,6 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Website\Factory $websiteFactory
      * @param \Magento\Core\Model\Store\Group\Factory $storeGroupFactory
      * @param \Magento\Core\Model\StoreFactory $storeFactory
@@ -57,7 +56,6 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Website\Factory $websiteFactory,
         \Magento\Core\Model\Store\Group\Factory $storeGroupFactory,
         \Magento\Core\Model\StoreFactory $storeFactory,
@@ -65,7 +63,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $coreData, $websiteFactory, $storeGroupFactory, $storeFactory, $data);
+        parent::__construct($context, $websiteFactory, $storeGroupFactory, $storeFactory, $data);
     }
 
     /**

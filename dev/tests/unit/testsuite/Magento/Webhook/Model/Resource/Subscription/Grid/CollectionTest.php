@@ -56,7 +56,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         new \Magento\Webhook\Model\Resource\Subscription\Grid\Collection(
-            $configMock, $endpointResMock, $eventManager, $logger, $fetchStrategyMock, $entityFactory, $resourceMock);
+            $entityFactory, $logger, $fetchStrategyMock,
+            $eventManager, $endpointResMock, $configMock, null, $resourceMock
+        );
     }
 
     /**

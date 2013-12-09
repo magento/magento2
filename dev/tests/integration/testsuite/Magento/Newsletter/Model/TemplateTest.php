@@ -55,12 +55,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetProcessedTemplate($area, $store, $design)
     {
         $this->markTestIncomplete('Test partially fails bc of MAGETWO-557.');
-        $this->_model->setTemplateText('{{view url="Magento_Page::favicon.ico"}}');
-        $this->assertStringEndsWith('theme/frontend/magento_blank/en_US/Magento_Page/favicon.ico',
+        $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
+        $this->assertStringEndsWith('theme/frontend/magento_blank/en_US/Magento_Theme/favicon.ico',
             $this->_model->getProcessedTemplate()
         );
         $this->_model->emulateDesign($store, $area);
-        $expectedTemplateText = "theme/{$area}/{$design}/en_US/Magento_Page/favicon.ico";
+        $expectedTemplateText = "theme/{$area}/{$design}/en_US/Magento_Theme/favicon.ico";
         $this->assertStringEndsWith($expectedTemplateText, $this->_model->getProcessedTemplate());
         $this->_model->revertDesign();
     }

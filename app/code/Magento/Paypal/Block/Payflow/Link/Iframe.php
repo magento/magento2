@@ -39,23 +39,21 @@ class Iframe extends \Magento\Paypal\Block\Iframe
     protected $_paymentData = null;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Payment\Helper\Data $paymentData,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
-        parent::__construct($context, $coreData, $orderFactory, $checkoutSession, $data);
+        parent::__construct($context, $orderFactory, $checkoutSession, $data);
     }
 
     /**

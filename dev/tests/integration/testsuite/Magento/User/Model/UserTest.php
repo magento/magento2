@@ -195,12 +195,12 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('firstname///lastname', $this->_model->getName('///'));
     }
 
-    public function testGetAclRole()
+    public function testGetUninitializedAclRole()
     {
         $newuser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\User\Model\User');
         $newuser->setUserId(10);
-        $this->assertNotEquals($this->_model->getAclRole(), $newuser->getAclRole());
+        $this->assertNull($newuser->getAclRole(), "User role was not initialized and is expected to be empty.");
     }
 
     /**

@@ -54,7 +54,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
         $method = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Payment\Model\Method\Free');
 
-        $block = $this->_block->getLayout()->createBlock('Magento\View\Block\Text')
+        $block = $this->_block->getLayout()->createBlock('Magento\View\Element\Text')
             ->setMethodTitle($expectedTitle)
             ->setMethodLabelAfterHtml($expectedLabel);
 

@@ -58,8 +58,17 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $_productPrice;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $coreData;
+
+    /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $jsonEncoder;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -68,11 +77,12 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Bundle\Model\Product\PriceFactory $productPrice
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
@@ -81,13 +91,16 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Bundle\Model\Product\PriceFactory $productPrice,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         array $data = array()
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_productPrice = $productPrice;
+        $this->coreData = $coreData;
+        $this->jsonEncoder = $jsonEncoder;
         parent::__construct(
             $context,
-            $coreData,
             $catalogConfig,
             $registry,
             $taxData,
@@ -140,12 +153,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $options      = array();
         $selected     = array();
         $currentProduct = $this->getProduct();
-        /* @var $coreHelper \Magento\Core\Helper\Data */
-        $coreHelper   = $this->_coreData;
-        /* @var $catalogHelper \Magento\Catalog\Helper\Data */
-        $catalogHelper = $this->_catalogData;
-        /* @var $taxHelper \Magento\Tax\Helper\Data */
-        $taxHelper = $this->_taxData;
         /* @var $bundlePriceModel \Magento\Bundle\Model\Product\Price */
         $bundlePriceModel = $this->_productPrice->create();
 
@@ -178,7 +185,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 // recalculate currency
                 $tierPrices = $_selection->getTierPrice();
                 foreach ($tierPrices as &$tierPriceInfo) {
-                    $tierPriceInfo['price'] = $coreHelper->currency($tierPriceInfo['price'], false, false);
+                    $tierPriceInfo['price'] = $this->coreData->currency($tierPriceInfo['price'], false, false);
                 }
                 unset($tierPriceInfo); // break the reference with the last element
 
@@ -188,21 +195,23 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
                 $canApplyMAP = false;
 
-                $_priceInclTax = $taxHelper->getPrice($_selection, $itemPrice, true);
-                $_priceExclTax = $taxHelper->getPrice($_selection, $itemPrice);
+                $_priceInclTax = $this->_taxData->getPrice($_selection, $itemPrice, true);
+                $_priceExclTax = $this->_taxData->getPrice($_selection, $itemPrice);
 
                 if ($currentProduct->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
-                    $_priceInclTax = $taxHelper->getPrice($currentProduct, $itemPrice, true);
-                    $_priceExclTax = $taxHelper->getPrice($currentProduct, $itemPrice);
+                    $_priceInclTax = $this->_taxData->getPrice($currentProduct, $itemPrice, true);
+                    $_priceExclTax = $this->_taxData->getPrice($currentProduct, $itemPrice);
                 }
 
                 $selection = array (
                     'qty'              => $_qty,
                     'customQty'        => $_selection->getSelectionCanChangeQty(),
-                    'price'            => $coreHelper->currency($_selection->getFinalPrice(), false, false),
-                    'priceInclTax'     => $coreHelper->currency($_priceInclTax, false, false),
-                    'priceExclTax'     => $coreHelper->currency($_priceExclTax, false, false),
-                    'priceValue'       => $coreHelper->currency($_selection->getSelectionPriceValue(), false, false),
+                    'price'            => $this->coreData->currency($_selection->getFinalPrice(), false, false),
+                    'priceInclTax'     => $this->coreData->currency($_priceInclTax, false, false),
+                    'priceExclTax'     => $this->coreData->currency($_priceExclTax, false, false),
+                    'priceValue'       => $this->coreData->currency(
+                            $_selection->getSelectionPriceValue(), false, false
+                        ),
                     'priceType'        => $_selection->getSelectionPriceType(),
                     'tierPrice'        => $tierPrices,
                     'name'             => $_selection->getName(),
@@ -237,25 +246,26 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 }
             }
         }
+        $isFixedPrice = $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED;
 
         $config = array(
             'options'       => $options,
             'selected'      => $selected,
             'bundleId'      => $currentProduct->getId(),
             'priceFormat'   => $this->_locale->getJsPriceFormat(),
-            'basePrice'     => $coreHelper->currency($currentProduct->getPrice(), false, false),
+            'basePrice'     => $this->coreData->currency($currentProduct->getPrice(), false, false),
             'priceType'     => $currentProduct->getPriceType(),
             'specialPrice'  => $currentProduct->getSpecialPrice(),
-            'includeTax'    => $taxHelper->priceIncludesTax() ? 'true' : 'false',
-            'isFixedPrice'  => $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED,
-            'isMAPAppliedDirectly' => $catalogHelper->canApplyMsrp($this->getProduct(), null, false)
+            'includeTax'    => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
+            'isFixedPrice'  => $isFixedPrice,
+            'isMAPAppliedDirectly' => $this->_catalogData->canApplyMsrp($this->getProduct(), null, false)
         );
 
         if ($preConfiguredFlag && !empty($defaultValues)) {
             $config['defaultValues'] = $defaultValues;
         }
 
-        return $coreHelper->jsonEncode($config);
+        return $this->jsonEncoder->encode($config);
     }
 
     /**

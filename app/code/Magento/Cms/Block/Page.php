@@ -34,7 +34,9 @@
  */
 namespace Magento\Cms\Block;
 
-class Page extends \Magento\View\Block\AbstractBlock
+use Magento\View\Element\AbstractBlock;
+
+class Page extends \Magento\View\Element\AbstractBlock
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider
@@ -63,7 +65,7 @@ class Page extends \Magento\View\Block\AbstractBlock
     /**
      * Construct
      *
-     * @param \Magento\View\Block\Context $context
+     * @param \Magento\View\Element\Context $context
      * @param \Magento\Cms\Model\Page $page
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -71,7 +73,7 @@ class Page extends \Magento\View\Block\AbstractBlock
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Context $context,
+        \Magento\View\Element\Context $context,
         \Magento\Cms\Model\Page $page,
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

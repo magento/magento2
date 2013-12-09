@@ -72,9 +72,23 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_observer = null;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     */
+    protected function getProductMock()
+    {
+        return $this->getMock(
+            'Magento\Catalog\Model\Product',
+            array('getTypeId', 'getTypeInstance', '__wakeup'),
+            array(),
+            '',
+            false
+        );
+    }
+
     public function testDuplicateProductNotDownloadable()
     {
-        $currentProduct = $this->getMock('Magento\Catalog\Model\Product', array('getTypeId'), array(), '', false);
+        $currentProduct = $this->getProductMock();
 
         $currentProduct->expects($this->once())
             ->method('getTypeId')
@@ -89,13 +103,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testDuplicateProductEmptyLinks()
     {
-        $currentProduct = $this->getMock('Magento\Catalog\Model\Product',
-            array('getTypeId', 'getTypeInstance'), array(), '', false);
+        $currentProduct = $this->getProductMock();
         $currentProduct->expects($this->once())
             ->method('getTypeId')
             ->will($this->returnValue(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE));
-        $newProduct = $this->getMock('Magento\Catalog\Model\Product',
-            array('getTypeId', 'getTypeInstance'), array(), '', false);
+        $newProduct = $this->getProductMock();
 
         $typeInstance = $this->getMock('Magento\Downloadable\Model\Product\Type',
             array('getLinks', 'getSamples'), array(), '', false);
@@ -119,14 +131,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testDuplicateProductTypeFile()
     {
-        $currentProduct = $this->getMock('Magento\Catalog\Model\Product',
-            array('getTypeId', 'getTypeInstance'), array(), '', false);
+        $currentProduct = $this->getProductMock();
         $currentProduct->expects($this->once())
             ->method('getTypeId')
             ->will($this->returnValue(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE));
 
-        $newProduct = $this->getMock('Magento\Catalog\Model\Product',
-            array('getTypeId', 'getTypeInstance'), array(), '', false);
+        $newProduct = $this->getProductMock();
 
         $links = $this->_getLinks();
 

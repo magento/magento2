@@ -25,7 +25,7 @@
  */
 namespace Magento\Checkout\Block;
 
-class Agreements extends \Magento\View\Block\Template
+class Agreements extends \Magento\View\Element\Template
 {
     /**
      * @var \Magento\Checkout\Model\Resource\Agreement\CollectionFactory
@@ -33,19 +33,17 @@ class Agreements extends \Magento\View\Block\Template
     protected $_agreementCollFactory;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory,
         array $data = array()
     ) {
         $this->_agreementCollFactory = $agreementCollFactory;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Layer;
 
-class View extends \Magento\View\Block\Template
+class View extends \Magento\View\Element\Template
 {
     /**
      * State block name
@@ -78,19 +78,17 @@ class View extends \Magento\View\Block\Template
     protected $_catalogLayer;
 
     /**
-     * @param \Magento\View\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Layer $catalogLayer,
         array $data = array()
     ) {
         $this->_catalogLayer = $catalogLayer;
-        parent::__construct($context, $coreData, $data);
+        parent::__construct($context, $data);
     }
 
     /**

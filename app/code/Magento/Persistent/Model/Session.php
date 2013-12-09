@@ -82,7 +82,7 @@ class Session extends \Magento\Core\Model\AbstractModel
     /**
      * Cookie model
      *
-     * @var \Magento\Core\Model\Cookie
+     * @var \Magento\Stdlib\Cookie
      */
     protected $_cookie;
 
@@ -99,7 +99,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Persistent\Helper\Data $persistentData
-     * @param \Magento\Core\Model\Cookie $cookie
+     * @param \Magento\Stdlib\Cookie $cookie
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -112,7 +112,7 @@ class Session extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Core\Model\Cookie $cookie,
+        \Magento\Stdlib\Cookie $cookie,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Math\Random $mathRandom,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
@@ -268,7 +268,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      */
     public function removePersistentCookie()
     {
-        $this->_cookie->delete(\Magento\Persistent\Model\Session::COOKIE_NAME);
+        $this->_cookie->set(\Magento\Persistent\Model\Session::COOKIE_NAME, null);
         return $this;
     }
 
@@ -305,8 +305,9 @@ class Session extends \Magento\Core\Model\AbstractModel
      *
      * @return \Magento\Core\Model\AbstractModel
      */
-    protected function _afterDeleteCommit() {
-        $this->_cookie->delete(\Magento\Persistent\Model\Session::COOKIE_NAME);
+    protected function _afterDeleteCommit()
+    {
+        $this->_cookie->set(\Magento\Persistent\Model\Session::COOKIE_NAME, null, 0);
         return parent::_afterDeleteCommit();
     }
 

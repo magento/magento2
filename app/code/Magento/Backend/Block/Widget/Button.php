@@ -113,7 +113,7 @@ class Button extends \Magento\Backend\Block\Widget
             'onclick'   => $this->getOnClick(),
             'style'     => $this->getStyle(),
             'value'     => $this->getValue(),
-            'disabled'  => $disabled
+            'disabled'  => $disabled,
         );
         if ($this->getDataAttribute()) {
             foreach ($this->getDataAttribute() as $key => $attr) {

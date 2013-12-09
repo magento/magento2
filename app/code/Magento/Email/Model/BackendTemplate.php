@@ -43,16 +43,16 @@ class BackendTemplate extends \Magento\Email\Model\Template
 
     /**
      * @param \Magento\Core\Model\Context $context
+     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\FileSystem $viewFileSystem
-     * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\Dir $dir
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Backend\Model\Config\Structure $structure
@@ -62,16 +62,16 @@ class BackendTemplate extends \Magento\Email\Model\Template
      */
     public function __construct(
         \Magento\Core\Model\Context $context,
+        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Filesystem $filesystem,
         \Magento\View\Url $viewUrl,
         \Magento\View\FileSystem $viewFileSystem,
-        \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\Dir $dir,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Backend\Model\Config\Structure $structure,
@@ -79,16 +79,16 @@ class BackendTemplate extends \Magento\Email\Model\Template
     ) {
         parent::__construct(
             $context,
+            $design,
             $registry,
             $appEmulation,
+            $storeManager,
             $filesystem,
             $viewUrl,
             $viewFileSystem,
-            $design,
             $coreStoreConfig,
             $coreConfig,
             $emailFilterFactory,
-            $storeManager,
             $dir,
             $emailConfig,
             $data

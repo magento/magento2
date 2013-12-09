@@ -56,8 +56,13 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_helperPool;
 
     /**
+     * @var \Magento\Json\EncoderInterface
+     */
+    protected $_jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Resource\HelperPool $helperPool
@@ -67,18 +72,19 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Model\Resource\HelperPool $helperPool,
         \Magento\Backend\Model\Auth\Session $backendSession,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         array $data = array()
     ) {
+        $this->_jsonEncoder = $jsonEncoder;
         $this->_helperPool = $helperPool;
         $this->_backendSession = $backendSession;
         $this->_categoryFactory = $categoryFactory;
-        parent::__construct($context, $coreData, $categoryTree, $registry, $data);
+        parent::__construct($context, $categoryTree, $registry, $data);
     }
 
     protected function _construct()
@@ -193,7 +199,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             $categoryById[$category->getParentId()]['children'][] = &$categoryById[$category->getId()];
         }
 
-        return $this->_coreData->jsonEncode(
+        return $this->_jsonEncoder->encode(
             $categoryById[\Magento\Catalog\Model\Category::TREE_ROOT_ID]['children']
         );
     }
@@ -267,7 +273,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getTreeJson($parenNodeCategory=null)
     {
         $rootArray = $this->_getNodeJson($this->getRoot($parenNodeCategory));
-        $json = $this->_coreData->jsonEncode(
+        $json = $this->_jsonEncoder->encode(
             isset($rootArray['children']) ? $rootArray['children'] : array()
         );
         return $json;
@@ -296,7 +302,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         }
         return
             '<script type="text/javascript">'
-            . $javascriptVarName . ' = ' . $this->_coreData->jsonEncode($categories) . ';'
+            . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode($categories) . ';'
             . ($this->canAddSubCategory()
                 ? '$("add_subcategory_button").show();'
                 : '$("add_subcategory_button").hide();')

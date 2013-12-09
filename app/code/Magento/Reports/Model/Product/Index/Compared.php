@@ -61,7 +61,6 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
     protected $_productCompare = null;
 
     /**
-     * @param \Magento\Catalog\Helper\Product\Compare $productCompare
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -70,12 +69,12 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      * @param \Magento\Core\Model\Session\Generic $reportSession
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Catalog\Helper\Product\Compare $productCompare
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product\Compare $productCompare,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -84,13 +83,23 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
         \Magento\Core\Model\Session\Generic $reportSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Catalog\Helper\Product\Compare $productCompare,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct(
-            $context, $registry, $storeManager, $logVisitor, $customerSession,
-            $reportSession, $productVisibility, $dateTime, $resource, $resourceCollection, $data
+            $context,
+            $registry,
+            $storeManager,
+            $logVisitor,
+            $customerSession,
+            $reportSession,
+            $productVisibility,
+            $dateTime,
+            $resource,
+            $resourceCollection,
+            $data
         );
         $this->_productCompare = $productCompare;
     }

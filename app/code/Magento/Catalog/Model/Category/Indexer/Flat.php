@@ -79,21 +79,19 @@ class Flat extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected $_resourceCategoryFlat;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Resource\Category\Flat $resourceCategoryFlat
-     * @param \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Catalog\Model\Resource\Category\Flat $resourceCategoryFlat
+     * @param \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Category\Flat $resourceCategoryFlat,
-        \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat,
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Catalog\Model\Resource\Category\Flat $resourceCategoryFlat,
+        \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
