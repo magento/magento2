@@ -3,6 +3,7 @@
 "API Users",所有API用户
 "Add New API Role",添加新的API角色
 "Add New API User",添加新的API用户
+"Available APIs",可用的APIs
 "Company Name",公司名
 "Contact Email",联络邮件
 "Content-Type header is empty.",空的Content-Type头。
@@ -16,6 +17,7 @@
 "Enable WSDL Cache",启用WSDL缓存
 "If empty, UTF-8 will be used.","如果为空， 将使用UTF-8."
 "Incorrect format of WSDL request URI or Requested services are missing.",WSDL请求不正确或者请求的服务不存在。
+"Integrations API Configuration",集成API配置
 "Internal Error. Details are available in Magento log file. Report ID: %1","内不错误。详细信息请查看Magento日志文件。 报表ID： %1"
 "Invalid XML",无效的XML
 "Invalid XML: Detected use of illegal DOCTYPE","无效的XML： 检测到不合法的DOCTYPE"

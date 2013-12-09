@@ -1,0 +1,3 @@
+"Error happened while getting a list of allowed resources. Check exception log for details.",当查询允许资源列表时发生错误。检查异常日志查询详细原因。
+"Error happened while granting permissions. Check exception log for details.",当授权时发生错误。检查异常日志查询详细原因。
+"The role associated with the specified user cannot be found.",未发现与指定用户关联的角色。

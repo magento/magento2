@@ -6,15 +6,19 @@
 "Add New Integration",添加新集成
 "An error occurred validating the nonce",当前校验发生错误
 Authentication,认证
+"Callback URL",回调URL
 "Cannot convert to access token due to token is not request type",由于令牌不是请求类型不能转成换存取令牌
 "Cannot create request token because consumer token is not a verifier token",由于消费者令牌不是核验者令牌，所以不能创建请求令牌
 "Cannot get access token because consumer token is not a request token",因为消费者令牌不是一个请求令牌所以不能得到存取令牌
 "Cleanup Probability",清除几率
 "Cleanup Settings",清除设置
 "Cleanup entries older than X minutes.",清除早于X非整的条目.
+"Client ID",客户ID
+"Client Secret",客户密钥
 "Consumer Settings",消费者设置
 "Consumer key has expired",消费者密钥已经过期
 "Consumer key is not the correct length",消费者密钥长度错误。
+Deactivate,钝化
 "Disable consumer key/secret credentials if not used within X seconds.",如果X分钟内未使用则禁止消费者密钥证书。
 "Edit ""%1"" Integration","编辑""%1""集成"
 "Expiration Period",过期时间
@@ -26,7 +30,9 @@ Integration,集成
 "Integration Info",集成信息
 "Integration Information",集成信息
 "Integration Name",集成名
+"Integration Tokens for Extensions",扩展的集成令牌
 Integrations,集成
+"Integrations Configuration",继承配置
 "Invalid Callback URL",无效的回调URL
 "Invalid Rejected Callback URL",无效的拒绝回调URL
 "New Integration",新集成
@@ -39,9 +45,12 @@ OAuth,OAuth
 "Request token is not associated with the specified consumer",请求令牌与指定的消费者未关联。
 "Specified token does not exist",指定的令牌不存在
 "The integration '%1' has been saved.",集成'%1'已经被存储。
+"The integration was not saved.",该集成未被存储。
+"The integration you selected asks you to approve access to the following:",你选择的集成要求批准存取以下：
 "The nonce is already being used by the consumer with ID %1",当前正在被ID为%1的消费者使用
 "This integration no longer exists.",集成不存在。
 "Timeout for OAuth consumer credentials Post request within X seconds.",在X秒内的OAuth消费者凭证发送请求超时。
+"Token Secret",令牌密钥
 "Token is already authorized",令牌已经被授权
 "Token is already being used",令牌正在被使用
 "Token is not an access token",令牌不是一个存取令牌
@@ -51,6 +60,8 @@ OAuth,OAuth
 "Token verifier and verifier token do not match",令牌核验者与核验者令牌不匹配
 "Unable to post data to consumer due to an unexpected error",由于不期望的错误导致不能发送数据到消费者
 "Unexpected error. Unable to create OAuth Consumer account.",不期望的错误。不能创建OAuth消费者账号。
+"Uninstall the extension to remove this integration",卸载扩展来移除集成
 "User type is unknown",未知的用户类型
 "Verifier is invalid",核验者是无效的
 "Verifier is not the correct length",核验者长度不正确
+"When using Oauth for token exchange, enter URL where Oauth credentials can be POST-ed. We strongly recommend you to use https://",当使用令牌交换的Oauth，输入Oauth证书能被发布的URL。我们强烈推荐你使用https：//
