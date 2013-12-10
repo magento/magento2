@@ -164,8 +164,8 @@ Package,包裹
 "Please enter a valid year (1900-%1).",请输入有效的年（1900-%1）。
 "Please enter a valid zip code.",请输入有效的邮政编码。
 "Please enter a valid zip code. For example 90602 or 90602-1234.",请输入有效邮编，例如90602或90602-1234。
-"Please enter a value greater than or equal to %s.",请输入一个大于等于%1的值。
-"Please enter a value less than or equal to %s.",请输入一个小于等于%s的值。
+"Please enter a value greater than or equal to %1.",请输入一个大于等于%1的值。
+"Please enter a value less than or equal to %1.",请输入一个小于等于%1的值。
 "Please enter issue number or start date for switch/solo card type.",请输入Switch/Solo类卡的颁发号或开始日期。
 "Please input a valid CSS-length. For example 100px or 77pt or 20em or .5ex or 50%.","请输入有效 CSS长度。例如， 100px 或 77pt 或 20em 或 。5ex 或 50%。"
 "Please make sure your passwords match.",请确保密码匹配。

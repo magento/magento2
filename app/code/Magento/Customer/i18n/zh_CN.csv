@@ -310,7 +310,7 @@ Text,文字
 "Thank you for registering with %1.","感谢您注册 %1。"
 "The Date of Birth is required.",需提供生日。
 "The TAX/VAT number is required.","需提供 TAX/VAT 号码。"
-"The VAT ID entered (%s) is not a valid VAT ID.",输入的增值税ID：%s无效。
+"The VAT ID entered (%1) is not a valid VAT ID.",输入的增值税ID：%1无效。
 "The VAT ID is valid. The current Customer Group will be used.","VAT ID 有效。将使用当前的顾客群体。"
 "The account information has been saved.",账户信息已保存。
 "The address does not belong to this customer.",该地址不输入此用户。
@@ -320,7 +320,7 @@ Text,文字
 "The customer does not have default billing address.",顾客未设置默认账单地址。
 "The customer group has been deleted.",顾客组已删除。
 "The customer group has been saved.",顾客组已保存。
-"The customer is currently assigned to Customer Group %s.",该顾客当前被分配到顾客组%1。
+"The customer is currently assigned to Customer Group %1.",该顾客当前被分配到顾客组%1。
 "The first name cannot be empty.",名字不能为空。
 "The group ""%1"" cannot be deleted","组 ""%1"" 无法删除"
 "The last name cannot be empty.",姓氏不能为空。

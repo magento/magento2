@@ -369,18 +369,18 @@ Order,订单
 "Order does not allow to be canceled.",订单不允许取消。
 "Order invoice",订单发票
 "Order is suspended as its capture amount %1 is suspected to be fraudulent.","订单被暂停，因为它的接受金额 %1 被怀疑为欺诈。"
-"Order is suspended as its capture amount %s is suspected to be fraudulent.","订单被暂停，因为它的接受金额 %s 被怀疑为欺诈。"
+"Order is suspended as its capture amount %1 is suspected to be fraudulent.","订单被暂停，因为它的接受金额 %1 被怀疑为欺诈。"
 "Order object is not specified.",订单对象未指定。
 "Order saving error: %1",订单保存错误：%1
-"Order saving error: %s",订单保存错误：%s
+"Order saving error: %1",订单保存错误：%1
 "Order shipments",订单运送
 "Order status does not exist.",订单状态不存在。
 "Order status with the same status code already exist.",具有相同订单代码的订单状态已存在。
-"Order was placed using %s","使用 %s 下订单"
+"Order was placed using %1","使用 %1 下订单"
 Ordered,已下单
 "Ordered amount of %1",%1的订购总额
-"Ordered amount of %s.","%s 的已下单数量。"
-"Ordering amount of %s is pending approval on gateway.",%s的订单数量正在网站上挂起供审批。
+"Ordered amount of %1.","%1 的已下单数量。"
+"Ordering amount of %1 is pending approval on gateway.",%1的订单数量正在网站上挂起供审批。
 Orders,订单
 "Orders Based on This Profile",基于该配置的订单
 "Orders and Returns",订单与退货
