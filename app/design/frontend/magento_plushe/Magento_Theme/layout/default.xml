@@ -29,56 +29,7 @@
             <argument name="theme_name" xsi:type="string">plushe</argument>
         </arguments>
     </referenceBlock>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="css-styles-css">
-            <arguments>
-                <argument name="file" xsi:type="string">css/styles.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-matchmedia-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/matchMedia.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-responsive-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/responsive.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-head-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/head.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-jquery-dropdowns-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/jquery.dropdowns.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-tabs-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/tabs.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-navigation-menu-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/navigation-menu.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-theme-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/theme.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-selectivizr-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/selectivizr.js</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="ie_condition" xsi:type="string">lt IE 9</item>
-                </argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+
     <referenceContainer name="header">
         <block class="Magento\View\Element\Html\Links" name="header.links" after="minicart">
             <arguments>

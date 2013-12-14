@@ -24,6 +24,7 @@
  */
 -->
 <config>
+    <preference for="Magento\View\Design\Theme\ListInterface" type="Magento\Core\Model\Theme\Collection" />
     <virtualType name="Magento\Install\Model\Session" type="Magento\Core\Model\Session\Generic">
         <param name="sessionNamespace">
             <value>install</value>

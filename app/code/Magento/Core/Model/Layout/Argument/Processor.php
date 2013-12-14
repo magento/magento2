@@ -36,7 +36,7 @@ namespace Magento\Core\Model\Layout\Argument;
 class Processor
 {
     /**
-     * @var \Magento\Core\Model\Layout\Argument\HandlerFactory
+     * @var \Magento\View\Layout\Argument\HandlerFactory
      */
     protected $_handlerFactory;
 
@@ -54,11 +54,11 @@ class Processor
 
     /**
      * @param \Magento\Core\Model\Layout\Argument\Updater $argumentUpdater
-     * @param \Magento\Core\Model\Layout\Argument\HandlerFactory $handlerFactory
+     * @param \Magento\View\Layout\Argument\HandlerFactory $handlerFactory
      */
     public function __construct(
         \Magento\Core\Model\Layout\Argument\Updater $argumentUpdater,
-        \Magento\Core\Model\Layout\Argument\HandlerFactory $handlerFactory
+        \Magento\View\Layout\Argument\HandlerFactory $handlerFactory
     ) {
         $this->_handlerFactory  = $handlerFactory;
         $this->_argumentUpdater = $argumentUpdater;

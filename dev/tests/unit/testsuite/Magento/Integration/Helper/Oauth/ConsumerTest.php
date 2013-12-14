@@ -50,8 +50,8 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Helper\Oauth\Data */
     protected $_dataHelper;
 
-    /** @var \Magento\Integration\Helper\Oauth\Consumer */
-    protected $_consumerHelper;
+    /** @var \Magento\Integration\Service\OauthV1Interface */
+    protected $_oauthService;
 
     /** @var \Magento\Logger */
     protected $_loggerMock;
@@ -91,6 +91,15 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->_dataHelper = $this->getMockBuilder('Magento\Integration\Helper\Oauth\Data')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $oauthHelperMock = $this->getMockBuilder('Magento\Oauth\Helper\Oauth')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $tokenProviderMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token\Provider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_httpClientMock = $this->getMockBuilder('Magento\HTTP\ZendClient')
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,13 +108,15 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('logException'))
             ->getMock();
 
-        $this->_consumerHelper = new \Magento\Integration\Helper\Oauth\Consumer(
+        $this->_oauthService = new \Magento\Integration\Service\OauthV1(
             $this->_storeManagerMock,
             $this->_consumerFactory,
             $this->_tokenFactory,
             $this->_dataHelper,
             $this->_httpClientMock,
-            $this->_loggerMock
+            $this->_loggerMock,
+            $oauthHelperMock,
+            $tokenProviderMock
         );
     }
 
@@ -117,7 +128,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         unset($this->_dataHelper);
         unset($this->_httpClientMock);
         unset($this->_loggerMock);
-        unset($this->_consumerHelper);
+        unset($this->_oauthService);
     }
 
     public function testCreateConsumer()
@@ -130,18 +141,14 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             'key' => $key,
             'secret' => $secret
         );
-
         $this->_consumerMock->expects($this->once())
             ->method('save')
             ->will($this->returnSelf());
-        $this->_consumerMock->expects($this->once())
-            ->method('getData')
-            ->will($this->returnValue($consumerData));
 
-        $responseData = $this->_consumerHelper->createConsumer($consumerData);
+        /** @var \Magento\Integration\Model\Oauth\Consumer $consumer */
+        $consumer = $this->_oauthService->createConsumer($consumerData);
 
-        $this->assertEquals($key, $responseData['key'], 'Checking Oauth Consumer Key');
-        $this->assertEquals($secret, $responseData['secret'], 'Checking Oauth Consumer Secret');
+        $this->assertEquals($consumer, $this->_consumerMock, 'Consumer object was expected to be returned');
     }
 
     public function testPostToConsumer()
@@ -189,7 +196,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             ->method('getConsumerPostTimeout')
             ->will($this->returnValue(120));
 
-        $verifier = $this->_consumerHelper->postToConsumer($consumerId, 'http://www.magento.com');
+        $verifier = $this->_oauthService->postToConsumer($consumerId, 'http://www.magento.com');
 
         $this->assertEquals($oauthVerifier, $verifier, 'Checking Oauth Verifier');
     }

@@ -25,12 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">2columns-left.phtml</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="my.account.wrapper">
+    <referenceContainer name="content">
         <block class="Magento\Sales\Block\Recurring\Profiles" name="sales.recurring.profiles" template="recurring/profiles.phtml">
             <block class="Magento\Sales\Block\Recurring\Profile\Grid" name="sales.recurring.profiles.grid" as="grid" template="recurring/grid.phtml">
                 <action method="setEmptyGridMessage">

@@ -28,7 +28,7 @@ namespace Magento\Backend\Block\System\Design\Edit\Tab;
 class General extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * @var \Magento\Core\Model\Theme\LabelFactory
+     * @var \Magento\View\Design\Theme\LabelFactory
      */
     protected $_labelFactory;
 
@@ -41,7 +41,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\Theme\LabelFactory $labelFactory
+     * @param \Magento\View\Design\Theme\LabelFactory $labelFactory
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param array $data
      */
@@ -49,7 +49,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\Theme\LabelFactory $labelFactory,
+        \Magento\View\Design\Theme\LabelFactory $labelFactory,
         \Magento\Core\Model\System\Store $systemStore,
         array $data = array()
     ) {
@@ -90,7 +90,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
             ));
         }
 
-        /** @var $label \Magento\Core\Model\Theme\Label */
+        /** @var $label \Magento\View\Design\Theme\Label */
         $label = $this->_labelFactory->create();
         $options = $label->getLabelsCollection(__('-- Please Select --'));
         $fieldset->addField('design', 'select', array(

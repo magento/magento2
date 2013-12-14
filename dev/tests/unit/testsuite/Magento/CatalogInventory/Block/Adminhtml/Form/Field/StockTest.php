@@ -76,7 +76,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
                 'factoryElement' => $this->_factoryElementMock,
                 'factoryCollection' => $this->_collectionFactoryMock,
                 'factoryText' => $this->_factoryTextMock,
-                'attributes' => array(
+                'data' => array(
                     'qty' => $this->_qtyMock,
                     'name' => self::ATTRIBUTE_NAME,
                 ),

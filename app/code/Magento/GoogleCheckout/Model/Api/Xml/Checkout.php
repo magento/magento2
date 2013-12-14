@@ -93,25 +93,25 @@ class Checkout extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     protected $_eventManager = null;
 
     /**
+     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\GoogleCheckout\Helper\Data $googleCheckoutData
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Weee\Helper\Data $weeeData
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Translate $translator
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param array $data
      */
     public function __construct(
+        \Magento\ObjectManager $objectManager,
+        \Magento\Core\Model\Translate $translator,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\GoogleCheckout\Helper\Data $googleCheckoutData,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Weee\Helper\Data $weeeData,
-        \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Translate $translator,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;

@@ -24,21 +24,4 @@
  */
 -->
 <config>
-    <global>
-        <webhook>
-            <webhooks>
-                <testinstance>
-                    <created>
-                        <label>Webhooks Test Instance Created</label>
-                    </created>
-                    <updated>
-                        <label>Webhooks Test Instance Updated</label>
-                    </updated>
-                    <deleted>
-                        <label>Webhooks Test Instance Deleted</label>
-                    </deleted>
-                </testinstance>
-            </webhooks>
-        </webhook>
-    </global>
 </config>

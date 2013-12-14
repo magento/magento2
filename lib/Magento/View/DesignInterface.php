@@ -35,6 +35,11 @@ interface DesignInterface
     const DEFAULT_AREA = 'frontend';
 
     /**
+     * Common node path to theme design configuration
+     */
+    const XML_PATH_THEME_ID = 'design/theme/theme_id';
+
+    /**
      * Set package area
      *
      * @deprecated

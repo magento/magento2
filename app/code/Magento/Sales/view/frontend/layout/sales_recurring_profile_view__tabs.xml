@@ -29,7 +29,7 @@
             <argument name="template" xsi:type="string">2columns-left.phtml</argument>
         </action>
     </referenceBlock>
-    <referenceContainer name="my.account.wrapper">
+    <referenceContainer name="content">
         <block class="Magento\Sales\Block\Recurring\Profile\View\Data" name="sales.recurring.profile.view" template="recurring/profile/view.phtml">
             <action method="setShouldPrepareInfoTabs">
                 <argument name="value" xsi:type="string">1</argument>

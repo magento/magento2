@@ -46,6 +46,7 @@ class Config
     const KEY_CLASS = 'class';
     const KEY_METHOD = 'method';
     const KEY_ROUTE_PATH = 'routePath';
+    const KEY_ACL_RESOURCES = 'resources';
     /*#@-*/
 
     /** @var \Magento\Webapi\Model\Config  */
@@ -88,7 +89,8 @@ class Config
 
         $route->setServiceClass($routeData[self::KEY_CLASS])
             ->setServiceMethod($routeData[self::KEY_METHOD])
-            ->setSecure($routeData[self::KEY_IS_SECURE]);
+            ->setSecure($routeData[self::KEY_IS_SECURE])
+            ->setAclResources($routeData[self::KEY_ACL_RESOURCES]);
         return $route;
     }
 
@@ -130,12 +132,14 @@ class Config
                 if (strtoupper($methodInfo[Converter::KEY_HTTP_METHOD]) == strtoupper($httpMethod)) {
                     $secure = $methodInfo[Converter::KEY_IS_SECURE];
                     $methodRoute = $methodInfo[Converter::KEY_METHOD_ROUTE];
+                    $aclResources = $methodInfo[Converter::KEY_ACL_RESOURCES];
                     $routes[] = $this->_createRoute(
                         array(
                             self::KEY_ROUTE_PATH => $serviceData[Converter::KEY_BASE_URL] . $methodRoute,
                             self::KEY_CLASS => $serviceName,
                             self::KEY_METHOD => $methodName,
-                            self::KEY_IS_SECURE => $secure
+                            self::KEY_IS_SECURE => $secure,
+                            self::KEY_ACL_RESOURCES => $aclResources
                         )
                     );
                 }

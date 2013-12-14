@@ -105,18 +105,18 @@ class Url extends \Magento\Core\Model\Url
      * @var \Magento\Data\Form\FormKey
      */
     protected $formKey;
-    
+
     /**
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param Menu\Config $menuConfig
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param Menu\Config $menuConfig
      * @param \Magento\App\CacheInterface $cache
      * @param Auth\Session $authSession
      * @param \Magento\Encryption\EncryptorInterface $encryptor
@@ -126,18 +126,20 @@ class Url extends \Magento\Core\Model\Url
      * @param \Magento\Data\Form\FormKey $formKey
      * @param null $areaCode
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\App\Route\ConfigInterface $routeConfig,
         \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Core\Model\Session $session,
-        \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Model\Session $session,
+        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Backend\Helper\Data $backendHelper,
+        \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\App\CacheInterface $cache,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Encryption\EncryptorInterface $encryptor,

@@ -41,23 +41,23 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Shipping\Model\Carrier\Factory $carrierFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Math\Division $mathDivision
+     * @param \Magento\Backend\Model\Auth\Session $authSession
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Shipping\Model\Carrier\Factory $carrierFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Math\Division $mathDivision
+        \Magento\Math\Division $mathDivision,
+        \Magento\Backend\Model\Auth\Session $authSession
     ) {
         $this->_authSession = $authSession;
         parent::__construct(

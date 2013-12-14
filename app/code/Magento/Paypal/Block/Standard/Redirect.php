@@ -87,7 +87,7 @@ class Redirect extends \Magento\View\Element\AbstractBlock
             $form->addField($field, 'hidden', array('name' => $field, 'value' => $value));
         }
         $idSuffix = $this->mathRandom->getUniqueHash();
-        $submitButton = $this->_elementFactory->create('submit', array('attributes' => array(
+        $submitButton = $this->_elementFactory->create('submit', array('data' => array(
             'value' => __('Click here if you are not redirected within 10 seconds.'),
         )));
         $id = "submit_to_paypal_button_{$idSuffix}";

@@ -42,7 +42,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param   \Magento\Catalog\Model\Product $product
      * @return  double
      */
-    public function getFinalPrice($qty=null, $product)
+    public function getFinalPrice($qty, $product)
     {
         if (is_null($qty) && !is_null($product->getCalculatedFinalPrice())) {
             return $product->getCalculatedFinalPrice();

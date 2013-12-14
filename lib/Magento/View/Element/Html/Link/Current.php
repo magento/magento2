@@ -110,12 +110,18 @@ class Current extends \Magento\View\Element\Template
             return parent::_toHtml();
         }
 
+        $highlight = '';
+
+        if ($this->getIsHighlighted()) {
+            $highlight = ' current';
+        }
+
         if ($this->isCurrent()) {
             $html = '<li class="nav item current">';
             $html .= '<strong>' . $this->escapeHtml(__($this->getLabel())) . '</strong>';
             $html .= '</li>';
         } else {
-            $html = '<li class="nav item"><a href="'. $this->escapeHtml($this->getHref()) . '"';
+            $html = '<li class="nav item' . $highlight . '"><a href="'. $this->escapeHtml($this->getHref()) . '"';
             $html .= ($this->getTitle()?' title="' . $this->escapeHtml(__($this->getTitle())) . '"':'');
             $html .= '>' . $this->escapeHtml(__($this->getLabel())) . '</a></li>';
         }

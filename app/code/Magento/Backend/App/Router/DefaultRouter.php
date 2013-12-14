@@ -44,22 +44,22 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected $_coreConfig;
 
     /**
-     * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\App\ActionFactory $actionFactory
      * @param \Magento\App\DefaultPathInterface $defaultPath
      * @param \Magento\App\ResponseFactory $responseFactory
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\Url|\Magento\UrlInterface $url
-     * @param \Magento\Core\Model\StoreManager|\Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\UrlInterface $url
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
-     * @param $routerId
+     * @param string $routerId
+     * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @throws \InvalidArgumentException
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Config $coreConfig,
         \Magento\App\ActionFactory $actionFactory,
         \Magento\App\DefaultPathInterface $defaultPath,
         \Magento\App\ResponseFactory $responseFactory,
@@ -70,11 +70,20 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
+        \Magento\Core\Model\Config $coreConfig,
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
         parent::__construct(
-            $actionFactory, $defaultPath, $responseFactory, $routeConfig, $appState, $url, $storeManager, $storeConfig,
-            $urlSecurityInfo, $routerId
+            $actionFactory,
+            $defaultPath,
+            $responseFactory,
+            $routeConfig,
+            $appState,
+            $url,
+            $storeManager,
+            $storeConfig,
+            $urlSecurityInfo,
+            $routerId
         );
         $this->_coreConfig = $coreConfig;
         $this->_backendConfig = $backendConfig;

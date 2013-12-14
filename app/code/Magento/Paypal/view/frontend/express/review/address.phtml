@@ -44,7 +44,7 @@
         <label for="<?php echo $prefix ?>:email" class="label"><span><?php echo __('Email Address') ?></span></label>
 
         <div class="control">
-            <input type="text" name="<?php echo $prefix ?>[email]" id="<?php echo $prefix ?>:email"
+            <input type="email" name="<?php echo $prefix ?>[email]" id="<?php echo $prefix ?>:email"
                    value="<?php echo $this->escapeHtml($this->getAddress()->getEmail()) ?>"
                    title="<?php echo __('Email Address') ?>" class="input-text validate-email required-entry"/>
         </div>

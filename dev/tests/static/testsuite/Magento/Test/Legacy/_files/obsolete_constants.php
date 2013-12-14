@@ -392,8 +392,6 @@ return array(
         '\Magento\Image\Adapter\AdapterInterface::ADAPTER_GD2'
     ),
     array('XML_PATH_IMAGE_TYPES', 'Magento\Adminhtml\Block\Catalog\Product\Frontend\Product\Watermark'),
-    array('XML_PATH_WEBHOOK', 'Magento\Webhook\Model\Source\Hook'),
-    array('XML_PATH_SUBSCRIPTIONS', 'Magento\Webhook\Model\Subscription\Config'),
     array('PAYMENT_INFO_TRANSPORT_SHIPPING_OVERRIDEN', 'Magento\Paypal\Model\Express\Checkout'),
     array(
         'XML_PATH_USE_FRONTEND_SID',
@@ -446,10 +444,26 @@ return array(
         'Magento\Theme\Helper\Robots',
         'Magento\Adminhtml\Block\Page\System\Config\Robots::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS',
     ),
-    array('XML_PATH_MERGE_CSS_FILES', 'Magento\View\Asset\MergeService'),
-    array('XML_PATH_MERGE_JS_FILES', 'Magento\View\Asset\MergeService'),
-    array('XML_PATH_MINIFICATION_ENABLED', 'Magento\View\Asset\MinifyService'),
-    array('XML_PATH_MINIFICATION_ADAPTER', 'Magento\View\Asset\MinifyService'),
+    array(
+        'XML_PATH_MERGE_CSS_FILES',
+        'Magento\View\Asset\MergeService',
+        'Magento\Core\Model\Asset\Config::XML_PATH_MERGE_CSS_FILES'
+    ),
+    array(
+        'XML_PATH_MERGE_JS_FILES',
+        'Magento\View\Asset\MergeService',
+        'Magento\Core\Model\Asset\Config::XML_PATH_MERGE_JS_FILES'
+    ),
+    array(
+        'XML_PATH_MINIFICATION_ENABLED',
+        'Magento\View\Asset\MinifyService',
+        'Magento\Core\Model\Asset\Config::XML_PATH_MINIFICATION_ENABLED'
+    ),
+    array(
+        'XML_PATH_MINIFICATION_ADAPTER',
+        'Magento\View\Asset\MinifyService',
+        'Magento\Core\Model\Asset\Config::XML_PATH_MINIFICATION_ADAPTER'
+    ),
     array('TYPE_BLOCK', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('TYPE_CONTAINER', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('TYPE_ACTION', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
@@ -463,4 +477,9 @@ return array(
     array('CONTAINER_OPT_HTML_CLASS', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('CONTAINER_OPT_HTML_ID', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('CONTAINER_OPT_LABEL', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
+    array(
+        'XML_PATH_THEME_ID',
+        '\Magento\Core\Model\View\Design',
+        '\Magento\View\DesignInterface::XML_PATH_THEME_ID',
+    ),
 );

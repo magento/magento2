@@ -48,17 +48,15 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_locale;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Core\Model\LocaleInterface $locale,
         array $data = array()
     ) {
         $this->_locale = $locale;

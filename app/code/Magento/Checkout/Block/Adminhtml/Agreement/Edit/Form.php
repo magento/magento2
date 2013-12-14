@@ -72,7 +72,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $model  = $this->_coreRegistry->registry('checkout_agreement');
         /** @var \Magento\Data\Form $form */
         $form   = $this->_formFactory->create(array(
-            'attributes' => array(
+            'data' => array(
                 'id'        => 'edit_form',
                 'action'    => $this->getData('action'),
                 'method'    => 'post',

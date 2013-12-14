@@ -49,6 +49,6 @@ class ElementFactory
      */
     public function create($elementClass, array $data = array())
     {
-        return $this->_objectManager->create($elementClass, array('attributes' => $data));
+        return $this->_objectManager->create($elementClass, array('data' => $data));
     }
 }

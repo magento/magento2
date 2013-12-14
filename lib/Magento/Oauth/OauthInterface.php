@@ -138,7 +138,7 @@ interface OauthInterface
      * </pre>
      * @param string $requestUrl - The request Url.
      * @param string $httpMethod - (default: 'POST')
-     * @return bool - True if the access token request is valid.
+     * @return int Consumer ID.
      * @throws \Magento\Oauth\Exception - Validation errors.
      */
     public function validateAccessTokenRequest($params, $requestUrl, $httpMethod = 'POST');
@@ -147,7 +147,7 @@ interface OauthInterface
      * Validate an access token string.
      *
      * @param string $accessToken - The access token.
-     * @return bool - True if the access token is valid.
+     * @return int - Consumer ID if the access token is valid.
      * @throws \Magento\Oauth\Exception - Validation errors.
      */
     public function validateAccessToken($accessToken);

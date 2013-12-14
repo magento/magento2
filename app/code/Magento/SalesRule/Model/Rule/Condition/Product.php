@@ -42,8 +42,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected $_productFactory;
 
     /**
-     * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Rule\Model\Condition\Context $context
+     * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Resource\Product $productResource
@@ -52,8 +52,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $backendData,
         \Magento\Rule\Model\Condition\Context $context,
+        \Magento\Backend\Helper\Data $backendData,
         \Magento\Eav\Model\Config $config,
         \Magento\Catalog\Model\Product $product,
         \Magento\Catalog\Model\Resource\Product $productResource,
@@ -61,7 +61,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array()
     ) {
-        parent::__construct($backendData, $context, $config, $product, $productResource, $attrSetCollection, $data);
+        parent::__construct($context, $backendData, $config, $product, $productResource, $attrSetCollection, $data);
         $this->_productFactory = $productFactory;
     }
 

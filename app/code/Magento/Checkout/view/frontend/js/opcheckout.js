@@ -51,35 +51,40 @@
         },
 
         _create: function() {
-            var _this = this;
             this.checkoutPrice = this.options.quoteBaseGrandTotal;
             if (this.options.checkout.suggestRegistration) {
                 $(this.options.checkout.loginGuestSelector).prop('checked', false);
                 $(this.options.checkout.loginRegisterSelector).prop('checked', true);
             }
-            this.element
-                .on('click', this.options.checkout.continueSelector, function() {
-                    $.proxy(_this._continue($(this)), _this);
-                })
-                .on('gotoSection', function(event, section) {
-                    $.proxy(_this._ajaxUpdateProgress(section), _this);
-                    _this.element.trigger('enableSection', {selector: _this.options.sectionSelectorPrefix + section});
-                })
-                .on('ajaxError', $.proxy(this._ajaxError, this))
-                .on('showAjaxLoader', $.proxy(this._ajaxSend, this))
-                .on('hideAjaxLoader', $.proxy(this._ajaxComplete, this))
-                .on('click', this.options.backSelector, function() {
-                    _this.element.trigger('enableSection', {selector: '#' + _this.element.find('.active').prev().attr('id')});
-                })
-                .on('click', '[data-action="login-form-submit"]', function() {
-                    $(_this.options.checkout.loginFormSelector).submit();
-                });
-            $(this.options.checkoutProgressContainer).on('click', '[data-goto-section]', $.proxy(function(e) {
-                var gotoSection = $(e.target).data('goto-section');
-                this._ajaxUpdateProgress(gotoSection);
-                this.element.trigger('enableSection', {selector: _this.options.sectionSelectorPrefix + gotoSection});
-                return false;
-            }, this));
+            var events = {};
+            events['click ' + this.options.checkout.continueSelector] = function(e) {
+                this._continue($(e.target));
+            };
+            events['click ' + this.options.backSelector] = function() {
+                this.element.trigger('enableSection', {selector: '#' + this.element.find('.active').prev().attr('id')});
+            };
+            $.extend(events, {
+                ajaxError: '_ajaxError',
+                showAjaxLoader: '_ajaxSend',
+                hideAjaxLoader: '_ajaxComplete',
+                gotoSection: function(e, section) {
+                    this._ajaxUpdateProgress(section);
+                    this.element.trigger('enableSection', {selector: this.options.sectionSelectorPrefix + section});
+                },
+                'click [data-action=login-form-submit]': function() {
+                    $(this.options.checkout.loginFormSelector).submit();
+                }
+            });
+            this._on(events);
+
+            this._on($(this.options.checkoutProgressContainer), {
+                'click [data-goto-section]' : function(e) {
+                    var gotoSection = $(e.target).data('goto-section');
+                    this._ajaxUpdateProgress(gotoSection);
+                    this.element.trigger('enableSection', {selector: this.options.sectionSelectorPrefix + gotoSection});
+                    return false;
+                }
+            });
         },
 
         /**
@@ -236,16 +241,18 @@
 
         _create: function() {
             this._super();
-            this.element
-                .on('change', this.options.billing.addressDropdownSelector, $.proxy(function(e) {
-                    this.element.find(this.options.billing.newAddressFormSelector).toggle(!$(e.target).val());
-                }, this))
-                .on('click', this.options.billing.continueSelector, $.proxy(function() {
-                    if ($(this.options.billing.form).validation && $(this.options.billing.form).validation('isValid')) {
-                        this._billingSave();
-                    }
-                }, this))
-                .find(this.options.billing.form).validation();
+            var events = {};
+            events['change ' + this.options.billing.addressDropdownSelector] = function(e) {
+                this.element.find(this.options.billing.newAddressFormSelector).toggle(!$(e.target).val());
+            };
+            events['click ' + this.options.billing.continueSelector] = function() {
+                if ($(this.options.billing.form).validation && $(this.options.billing.form).validation('isValid')) {
+                    this._billingSave();
+                }
+            };
+            this._on(events);
+
+            this.element.find(this.options.billing.form).validation();
         } ,
 
         _billingSave: function() {
@@ -271,27 +278,31 @@
 
         _create: function() {
             this._super();
-            this.element
-                .on('change', this.options.shipping.addressDropdownSelector, $.proxy(function(e) {
-                    $(this.options.shipping.newAddressFormSelector).toggle(!$(e.target).val());
-                }, this))
-                .on('input propertychange', this.options.shipping.form + ' :input[name]', $.proxy(function() {
-                    $(this.options.shipping.copyBillingSelector).prop('checked', false);
-                }, this))
-                .on('click', this.options.shipping.copyBillingSelector, $.proxy(function(e) {
-                    if ($(e.target).is(':checked')) {
-                        this._billingToShipping();
-                    }
-                }, this))
-                .on('click', this.options.shipping.continueSelector, $.proxy(function() {
-                    if ($(this.options.shipping.form).validation && $(this.options.shipping.form).validation('isValid')) {
+            var events = {};
+            events['change ' + this.options.shipping.addressDropdownSelector] = function(e) {
+                $(this.options.shipping.newAddressFormSelector).toggle(!$(e.target).val());
+            };
+            var onInputPropChange = function() {
+                $(this.options.shipping.copyBillingSelector).prop('checked', false);
+            };
+            events['input ' + this.options.shipping.form + ' :input[name]'] = onInputPropChange;
+            events['propertychange ' + this.options.shipping.form + ' :input[name]'] = onInputPropChange;
+            events['click ' + this.options.shipping.copyBillingSelector] = function(e) {
+                if ($(e.target).is(':checked')) {
+                    this._billingToShipping();
+                }
+            };
+            events['click ' + this.options.shipping.continueSelector] = function() {
+                if ($(this.options.shipping.form).validation && $(this.options.shipping.form).validation('isValid')) {
                     this._ajaxContinue(this.options.shipping.saveUrl, $(this.options.shipping.form).serialize(), false, function() {
                         //Trigger indicating shipping save. eg. GiftMessage listens to this to inject gift options
                         this.element.trigger('shippingSave');
                     });
-                    }
-                }, this))
-                .find(this.options.shipping.form).validation();
+                }
+            };
+            this._on(events);
+
+            this.element.find(this.options.shipping.form).validation();
         },
 
         /**
@@ -321,26 +332,29 @@
 
         _create: function() {
             this._super();
-            var _this = this;
-            this.element
-                .on('click', this.options.shippingMethod.continueSelector, $.proxy(function() {
-                    if (this._validateShippingMethod()&&
-                        $(this.options.shippingMethod.form).validation &&
-                        $(this.options.shippingMethod.form).validation('isValid')) {
-                        this._ajaxContinue(this.options.shippingMethod.saveUrl, $(this.options.shippingMethod.form).serialize());
-                    }
-                }, this))
-                .on('click', 'input[name="shipping_method"]', function() {
-                    var selectedPrice = _this.shippingCodePrice[$(this).val()] || 0,
-                        oldPrice = _this.shippingCodePrice[_this.currentShippingMethod] || 0;
-                    _this.checkoutPrice = _this.checkoutPrice - oldPrice + selectedPrice;
-                    _this.currentShippingMethod = $(this).val();
-                })
-                .on('contentUpdated', $.proxy(function() {
+            var events = {};
+            events['click ' + this.options.shippingMethod.continueSelector] = function() {
+                if (this._validateShippingMethod()&&
+                    $(this.options.shippingMethod.form).validation &&
+                    $(this.options.shippingMethod.form).validation('isValid')) {
+                    this._ajaxContinue(this.options.shippingMethod.saveUrl, $(this.options.shippingMethod.form).serialize());
+                }
+            };
+            $.extend(events, {
+                'click input[name=shipping_method]': function(e) {
+                    var selectedPrice = this.shippingCodePrice[$(e.target).val()] || 0,
+                        oldPrice = this.shippingCodePrice[this.currentShippingMethod] || 0;
+                    this.checkoutPrice = this.checkoutPrice - oldPrice + selectedPrice;
+                    this.currentShippingMethod = $(e.target).val();
+                },
+                'contentUpdated': function() {
                     this.currentShippingMethod = this.element.find('input[name="shipping_method"]:checked').val();
                     this.shippingCodePrice = this.element.find('[data-shipping-code-price]').data('shipping-code-price');
-                }, this))
-                .find(this.options.shippingMethod.form).validation();
+                }
+            });
+            this._on(events);
+
+            this.element.find(this.options.shippingMethod.form).validation();
         },
 
         /**
@@ -378,15 +392,30 @@
 
         _create: function() {
             this._super();
-            this.element
-                .on('click', this.options.payment.continueSelector, $.proxy(function() {
-                    if (this._validatePaymentMethod() &&
-                        $(this.options.payment.form).validation &&
-                        $(this.options.payment.form).validation('isValid')) {
-                        this._ajaxContinue(this.options.payment.saveUrl, $(this.options.payment.form).serialize());
-                    }
-                }, this))
-                .on('updateCheckoutPrice', $.proxy(function(event, data) {
+            var events = {};
+            events['click ' + this.options.payment.continueSelector] = function() {
+                if (this._validatePaymentMethod() &&
+                    $(this.options.payment.form).validation &&
+                    $(this.options.payment.form).validation('isValid')) {
+                    this._ajaxContinue(this.options.payment.saveUrl, $(this.options.payment.form).serialize());
+                }
+            };
+            events['contentUpdated ' + this.options.payment.form] = function() {
+                $(this.options.payment.form).find('dd [name^="payment["]').prop('disabled', true);
+                var checkoutPrice = this.element.find(this.options.payment.form).find('[data-checkout-price]').data('checkout-price');
+                if ($.isNumeric(checkoutPrice)) {
+                    this.checkoutPrice = checkoutPrice;
+                }
+                if (this.checkoutPrice < this.options.minBalance) {
+                    this._disablePaymentMethods();
+                } else {
+                    this._enablePaymentMethods();
+                }
+            };
+            events['click ' + this.options.payment.form + ' dt input:radio'] = '_paymentMethodHandler';
+
+            $.extend(events, {
+                updateCheckoutPrice: function(event, data) {
                     if (data.price) {
                         this.checkoutPrice += data.price;
                     }
@@ -400,21 +429,12 @@
                         // Remove free input field, show all payment method
                         this._enablePaymentMethods();
                     }
-                }, this))
-                .on('contentUpdated', this.options.payment.form, $.proxy(function() {
-                    $(this.options.payment.form).find('dd [name^="payment["]').prop('disabled', true);
-                    var checkoutPrice = this.element.find(this.options.payment.form).find('[data-checkout-price]').data('checkout-price');
-                    if ($.isNumeric(checkoutPrice)) {
-                        this.checkoutPrice = checkoutPrice;
-                    }
-                    if (this.checkoutPrice < this.options.minBalance) {
-                        this._disablePaymentMethods();
-                    } else {
-                        this._enablePaymentMethods();
-                    }
-                }, this))
-                .on('click', this.options.payment.form + ' dt input:radio', $.proxy(this._paymentMethodHandler, this))
-                .find(this.options.payment.form).validation({
+                }
+            });
+
+            this._on(events);
+
+            this.element.find(this.options.payment.form).validation({
                     errorPlacement: function(error, element) {
                         if (element.attr('data-validate') && element.attr('data-validate').indexOf('validate-cc-ukss') >= 0) {
                             element.parents('form').find('[data-validation-msg="validate-cc-ukss"]').html(error);
@@ -499,26 +519,27 @@
 
         _create: function() {
             this._super();
-            this.element
-                .on('click', this.options.review.continueSelector, $.proxy(this._saveOrder, this))
-                .on('saveOrder', this.options.review.container, $.proxy(this._saveOrder, this))
-                .on('contentUpdated', this.options.review.container, $.proxy(function() {
-                    var paypalIframe = this.element.find(this.options.review.container)
-                        .find('[data-container="paypal-iframe"]');
-                    if (paypalIframe.length) {
-                        paypalIframe.show();
-                        $(this.options.review.submitContainer).hide();
-                    }
-                }, this));
+            var events = {};
+            events['click ' + this.options.review.continueSelector] = this._saveOrder;
+            events['saveOrder' + this.options.review.container] = this._saveOrder;
+            events['contentUpdated' + this.options.review.container] = function() {
+                var paypalIframe = this.element.find(this.options.review.container)
+                    .find('[data-container="paypal-iframe"]');
+                if (paypalIframe.length) {
+                    paypalIframe.show();
+                    $(this.options.review.submitContainer).hide();
+                }
+            };
+            this._on(events);
         },
 
         _saveOrder: function() {
-                    if ($(this.options.payment.form).validation &&
-                        $(this.options.payment.form).validation('isValid')) {
-                        this._ajaxContinue(
-                            this.options.review.saveUrl,
+            if ($(this.options.payment.form).validation &&
+                $(this.options.payment.form).validation('isValid')) {
+                this._ajaxContinue(
+                    this.options.review.saveUrl,
                     $(this.options.payment.form).serialize() + '&' + $(this.options.review.agreementFormSelector).serialize());
-                    }
+            }
         }
     });
 })(jQuery, window);

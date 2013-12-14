@@ -55,10 +55,6 @@ class Locale extends \Magento\Core\Model\Locale
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Backend\Model\Locale\Manager $localeManager
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Core\Model\Locale\Validator $localeValidator
      * @param \Magento\Core\Helper\Translate $translate
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\State $appState
@@ -67,16 +63,16 @@ class Locale extends \Magento\Core\Model\Locale
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Date $dateModel
-     * @param string $locale
-     *
+     * @param \Magento\Backend\Model\Session $session
+     * @param \Magento\Backend\Model\Locale\Manager $localeManager
+     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Core\Model\Locale\Validator $localeValidator
+     * @param mixed $locale
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Backend\Model\Session $session,
-        \Magento\Backend\Model\Locale\Manager $localeManager,
-        \Magento\App\RequestInterface $request,
-        \Magento\Core\Model\Locale\Validator $localeValidator,
         \Magento\Core\Helper\Translate $translate,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\State $appState,
@@ -85,6 +81,10 @@ class Locale extends \Magento\Core\Model\Locale
         \Magento\Core\Model\App $app,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Date $dateModel,
+        \Magento\Backend\Model\Session $session,
+        \Magento\Backend\Model\Locale\Manager $localeManager,
+        \Magento\App\RequestInterface $request,
+        \Magento\Core\Model\Locale\Validator $localeValidator,
         $locale = null
     ) {
         $this->_session = $session;

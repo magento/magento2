@@ -82,6 +82,7 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
             case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON:
             case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_ARRAY:
                 $output = $values;
+            // fall-through intentional
             default:
                 $output = array();
                 foreach ($values as $value) {

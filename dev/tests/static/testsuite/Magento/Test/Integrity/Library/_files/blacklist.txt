@@ -61,4 +61,5 @@ lib/Magento/Oauth/Exception.php
 lib/Magento/App/Helper/AbstractHelper.php
 lib/Magento/App/Helper/Context.php
 
+lib/Magento/View/DesignLoader.php
 lib/Magento/Session/SidResolverInterface.php

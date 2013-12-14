@@ -49,31 +49,10 @@
         </block>
     </referenceBlock>
     <update handle="page_calendar"/>
-    <block class="Magento\Catalog\Block\Product\View" name="product.info" template="product/view/form.phtml">
-        <container name="product.info.form.content" label="invisible" as="product_info_form_content">
-            <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml"/>
-        </container>
-        <block class="Magento\View\Element\Template" name="product.info.form.options" as="options_container">
-            <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper" as="product_options_wrapper" template="product/view/options/wrapper.phtml">
-                <block class="Magento\Catalog\Block\Product\View\Options" name="product.info.options" as="product_options" template="product/view/options.phtml">
-                    <block class="Magento\Catalog\Block\Product\View\Options\Type\DefaultType" as="default" template="product/view/options/type/default.phtml"/>
-                    <block class="Magento\Catalog\Block\Product\View\Options\Type\Text" as="text" template="product/view/options/type/text.phtml"/>
-                    <block class="Magento\Catalog\Block\Product\View\Options\Type\File" as="file" template="product/view/options/type/file.phtml"/>
-                    <block class="Magento\Catalog\Block\Product\View\Options\Type\Select" as="select" template="product/view/options/type/select.phtml"/>
-                    <block class="Magento\Catalog\Block\Product\View\Options\Type\Date" as="date" template="product/view/options/type/date.phtml"/>
-                </block>
-                <block class="Magento\View\Element\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Theme::js/calendar.phtml"/>
-            </block>
-            <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml">
-                <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.additional" as="product.info.addtocart" template="product/view/addtocart.phtml"/>
-                <block class="Magento\Catalog\Block\Product\View" name="product.clone_prices" as="prices" template="product/view/price_clone.phtml"/>
-            </block>
-        </block>
-    </block>
     <referenceContainer name="content">
         <container name="product.info.main" label="invisible" htmlTag="div" htmlClass="product info main" before="-">
-            <block class="Magento\Catalog\Block\Product\View" name="product.price" template="product/view/price.phtml"/>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml">
+            <block class="Magento\Catalog\Block\Product\View" name="product.price" template="product/view/price.phtml" before="-"/>
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.price">
                 <arguments>
                     <argument name="at_call" xsi:type="string">getSku</argument>
                     <argument name="at_code" xsi:type="string">sku</argument>
@@ -82,8 +61,10 @@
                     <argument name="add_attribute" xsi:type="string">itemprop="sku"</argument>
                 </arguments>
             </block>
-            <block class="Magento\Catalog\Block\Product\View" name="product.info.rating" template="product/view/rating.phtml"/>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.overview" template="product/view/attribute.phtml" group="detailed_info">
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.rating" template="product/view/rating.phtml" after="product.info.sku"/>
+            <container name="alert.urls" as="alert_urls" label="Alert Urls" after="product.info.rating"/>
+            <container name="product.info.type" label="invisible" after="product.info.overview"/>
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.overview" template="product/view/attribute.phtml" group="detailed_info" after="alert.urls">
                 <arguments>
                     <argument name="at_call" xsi:type="string">getShortDescription</argument>
                     <argument name="at_code" xsi:type="string">short_description</argument>
@@ -93,12 +74,31 @@
                     <argument name="add_attribute" xsi:type="string">itemprop="description"</argument>
                 </arguments>
             </block>
-            <container name="alert.urls" as="alert_urls" label="Alert Urls"/>
-            <container name="product.info.type" label="invisible"/>
-            <block class="Magento\Catalog\Block\Product\View" name="product.tierprices" as="tierprices" template="product/view/tierprices.phtml"/>
+            <block class="Magento\Catalog\Block\Product\View" name="product.tierprices" template="product/view/tierprices.phtml" before="product.info"/>
+            <block class="Magento\Catalog\Block\Product\View" name="product.info" template="product/view/form.phtml">
+                <container name="product.info.form.content" label="invisible" as="product_info_form_content">
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml"/>
+                </container>
+                <block class="Magento\View\Element\Template" name="product.info.form.options" as="options_container">
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper" as="product_options_wrapper" template="product/view/options/wrapper.phtml">
+                        <block class="Magento\Catalog\Block\Product\View\Options" name="product.info.options" as="product_options" template="product/view/options.phtml">
+                            <block class="Magento\Catalog\Block\Product\View\Options\Type\DefaultType" as="default" template="product/view/options/type/default.phtml"/>
+                            <block class="Magento\Catalog\Block\Product\View\Options\Type\Text" as="text" template="product/view/options/type/text.phtml"/>
+                            <block class="Magento\Catalog\Block\Product\View\Options\Type\File" as="file" template="product/view/options/type/file.phtml"/>
+                            <block class="Magento\Catalog\Block\Product\View\Options\Type\Select" as="select" template="product/view/options/type/select.phtml"/>
+                            <block class="Magento\Catalog\Block\Product\View\Options\Type\Date" as="date" template="product/view/options/type/date.phtml"/>
+                        </block>
+                        <block class="Magento\View\Element\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Theme::js/calendar.phtml"/>
+                    </block>
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml">
+                        <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.additional" as="product.info.addtocart" template="product/view/addtocart.phtml"/>
+                        <block class="Magento\Catalog\Block\Product\View" name="product.clone_prices" as="prices" template="product/view/price_clone.phtml"/>
+                    </block>
+                </block>
+            </block>
             <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
             <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
-            <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="social links product">
+            <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="social links product" after="product.info.addto">
                 <block class="Magento\Catalog\Block\Product\View" name="product.info.mailto" template="product/view/mailto.phtml"/>
             </container>
         </container>

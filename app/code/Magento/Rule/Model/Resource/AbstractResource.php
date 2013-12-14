@@ -163,7 +163,7 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      *
      * @return \Magento\Rule\Model\Resource\AbstractResource
      */
-    public function unbindRuleFromEntity($ruleIds = array(), $entityIds = array(), $entityType)
+    public function unbindRuleFromEntity($ruleIds, $entityIds, $entityType)
     {
         $writeAdapter = $this->_getWriteAdapter();
         $entityInfo   = $this->_getAssociatedEntityInfo($entityType);

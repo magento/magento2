@@ -46,6 +46,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_ratingCollectionF;
 
     /**
+     * Add store data flag
+     * @var bool
+     */
+    protected $_addStoreDataFlag = false;
+
+    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -112,7 +118,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * set order by position field
+     * Set order by position field
      *
      * @param   string $dir
      * @return  \Magento\Rating\Model\Resource\Rating\Collection
@@ -126,7 +132,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Set store filter
      *
-     * @param int_type $storeId
+     * @param int $storeId
      * @return \Magento\Rating\Model\Resource\Rating\Collection
      */
     public function setStoreFilter($storeId)
@@ -152,11 +158,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                 ;
             $this->_isStoreJoined = true;
         }
-        $inCond = $adapter->prepareSqlCondition('store.store_id', array(
+        $inCondition = $adapter->prepareSqlCondition('store.store_id', array(
             'in' => $storeId
         ));
         $this->getSelect()
-            ->where($inCond);
+            ->where($inCondition);
         $this->setPositionOrder();
         return $this;
     }
@@ -266,19 +272,52 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         return $this;
     }
 
+
     /**
-     * Add stores to collection
+     * Add stores data to collection
      *
      * @return \Magento\Rating\Model\Resource\Rating\Collection
      */
-    public function addStoresToCollection()
+    public function addStoreData()
     {
-        if ($this->_storeManager->isSingleStoreMode()) {
+        if (!$this->_storeManager->isSingleStoreMode()) {
+            if (!$this->_isCollectionLoaded) {
+                $this->_addStoreDataFlag = true;
+            } elseif (!$this->_addStoreDataFlag) {
+                $this->_addStoreData();
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Load data
+     *
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     */
+    public function load($printQuery = false, $logQuery = false)
+    {
+        if ($this->isLoaded()) {
             return $this;
         }
-        if (!$this->_isCollectionLoaded) {
-            return $this;
+        $this->_eventManager->dispatch('rating_rating_collection_load_before', array('collection' => $this));
+        parent::load($printQuery, $logQuery);
+        if ($this->_addStoreDataFlag) {
+            $this->_addStoreData();
         }
+        return $this;
+    }
+
+    /**
+     * Add store data
+     *
+     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     */
+    protected function _addStoreData()
+    {
         $ratingIds = array();
         foreach ($this as $item) {
             $ratingIds[] = $item->getId();
@@ -289,14 +328,14 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         }
         $adapter = $this->getConnection();
 
-        $inCond = $adapter->prepareSqlCondition('rating_id', array(
+        $inCondition = $adapter->prepareSqlCondition('rating_id', array(
             'in' => $ratingIds
         ));
 
         $this->_select = $adapter
             ->select()
             ->from($this->getTable('rating_store'))
-            ->where($inCond);
+            ->where($inCondition);
 
         $data = $adapter->fetchAll($this->_select);
         if (is_array($data) && count($data) > 0) {

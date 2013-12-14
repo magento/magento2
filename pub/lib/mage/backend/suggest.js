@@ -447,9 +447,17 @@
                     this._search(e, term, {});
                 } else {
                     this._selectedItem = this._nonSelectedItem;
-                    this.valueField.val(this._selectedItem.id);
+                    this._resetSuggestValue();
                 }
             }
+        },
+
+        /*
+         * Clear suggest hidden input
+         * @private
+         */
+        _resetSuggestValue: function() {
+            this.valueField.val(this._nonSelectedItem.id);
         },
 
         /**
@@ -875,6 +883,17 @@
                 $.each(this.options.selectedItems, $.proxy(function(i, item) {
                     this._addOption(item);
                 }, this));
+            }
+        },
+
+        /**
+         * If "multiselect" option is set, then do not need to clear value for hidden select, to avoid losing of
+         *      previously selected items
+         * @override
+         */
+        _resetSuggestValue: function() {
+            if (!this.options.multiselect) {
+                this._super();
             }
         },
 

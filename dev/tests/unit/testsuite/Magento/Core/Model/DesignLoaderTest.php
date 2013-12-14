@@ -27,7 +27,7 @@ namespace Magento\Core\Model;
 class DesignLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\DesignLoader
+     * @var \Magento\View\DesignLoader
      */
     protected $_model;
 
@@ -51,7 +51,7 @@ class DesignLoaderTest extends \PHPUnit_Framework_TestCase
         $this->_appMock = $this->getMock('\Magento\Core\Model\App', array(), array(), '', false);
         $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->_layoutMock = $this->getMock('Magento\View\LayoutInterface');
-        $this->_model = new \Magento\Core\Model\DesignLoader(
+        $this->_model = new \Magento\View\DesignLoader(
             $this->_requestMock,
             $this->_appMock,
             $this->_layoutMock

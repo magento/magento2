@@ -35,18 +35,18 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 class Layout extends \Magento\View\Element\Html\Select
 {
     /**
-     * @var \Magento\Core\Model\Layout\PageType\Config
+     * @var \Magento\View\Layout\PageType\Config
      */
     protected $_config;
 
     /**
      * @param \Magento\View\Element\Context $context
-     * @param \Magento\Core\Model\Layout\PageType\Config $config
+     * @param \Magento\View\Layout\PageType\Config $config
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Context $context,
-        \Magento\Core\Model\Layout\PageType\Config $config,
+        \Magento\View\Layout\PageType\Config $config,
         array $data = array()
     ) {
         $this->_config = $config;

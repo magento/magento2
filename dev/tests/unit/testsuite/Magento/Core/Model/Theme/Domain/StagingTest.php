@@ -49,7 +49,7 @@ class StagingTest extends \PHPUnit_Framework_TestCase
         );
         $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
 
-        $themeCopyService = $this->getMock('Magento\Core\Model\Theme\CopyService', array('copy'), array(), '', false);
+        $themeCopyService = $this->getMock('Magento\Theme\Model\CopyService', array('copy'), array(), '', false);
         $themeCopyService->expects($this->once())->method('copy')->with($theme, $parentTheme);
 
         $object = new \Magento\Core\Model\Theme\Domain\Staging($theme, $themeCopyService);

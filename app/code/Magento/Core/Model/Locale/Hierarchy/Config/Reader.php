@@ -35,25 +35,34 @@ class Reader extends \Magento\Config\Reader\Filesystem
     );
 
     /**
-     * @param \Magento\Core\Model\Locale\Hierarchy\Config\FileResolver $fileResolver
-     * @param \Magento\Core\Model\Locale\Hierarchy\Config\Converter $converter
-     * @param \Magento\Core\Model\Locale\Hierarchy\Config\SchemaLocator $schemeLocator
+     * @param FileResolver $fileResolver
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
+     * @param string $defaultScope
      */
     public function __construct(
         \Magento\Core\Model\Locale\Hierarchy\Config\FileResolver $fileResolver,
         \Magento\Core\Model\Locale\Hierarchy\Config\Converter $converter,
-        \Magento\Core\Model\Locale\Hierarchy\Config\SchemaLocator $schemeLocator,
+        \Magento\Core\Model\Locale\Hierarchy\Config\SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'config.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Config\Dom'
+        $domDocumentClass = 'Magento\Config\Dom',
+        $defaultScope = 'global'
     ) {
         parent::__construct(
-            $fileResolver, $converter, $schemeLocator, $validationState, $fileName, $idAttributes, $domDocumentClass
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
         );
     }
 }

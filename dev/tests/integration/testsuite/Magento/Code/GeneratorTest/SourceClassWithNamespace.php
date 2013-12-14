@@ -74,7 +74,7 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function publicMethodWithReference(ClassGenerator &$classGenerator, &$param1 = "'", array &$array)
+    public function publicMethodWithReference(ClassGenerator &$classGenerator, &$param1, array &$array)
     {
     }
 

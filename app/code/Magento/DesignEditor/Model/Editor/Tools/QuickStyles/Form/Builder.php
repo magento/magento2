@@ -103,7 +103,7 @@ class Builder
         if ($isFilePresent) {
             /** @var $form \Magento\Data\Form */
             $form = $this->_formFactory->create(array(
-                'attributes' => $data,
+                'data' => $data,
             ));
 
             $this->_addElementTypes($form);
@@ -112,7 +112,7 @@ class Builder
             $this->_populateColumns($columns, $data['tab']);
         } else {
             $form = $this->_formFactory->create(array(
-                'attributes' => array(
+                'data' => array(
                     'action' => '#',
                 ))
             );

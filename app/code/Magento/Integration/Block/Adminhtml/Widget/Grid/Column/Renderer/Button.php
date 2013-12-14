@@ -25,7 +25,8 @@
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
-use \Magento\Object;
+use Magento\Integration\Model\Integration;
+use Magento\Object;
 
 /**
  * Render HTML <button> tag.
@@ -42,6 +43,18 @@ class Button extends AbstractRenderer
         /** @var array $attributes */
         $attributes = $this->_prepareAttributes($row);
         return sprintf('<button %s>%s</button>', $this->_getAttributesStr($attributes), $this->_getValue($row));
+    }
+
+    /**
+     * Determine whether current integration came from config file
+     *
+     * @param \Magento\Object $row
+     * @return bool
+     */
+    protected function _isConfigBasedIntegration(Object $row)
+    {
+        return ($row->hasData(Integration::SETUP_TYPE)
+            && $row->getData(Integration::SETUP_TYPE) == Integration::TYPE_CONFIG);
     }
 
     /**

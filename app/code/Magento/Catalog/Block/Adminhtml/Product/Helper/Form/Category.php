@@ -49,39 +49,34 @@ class Category extends \Magento\Data\Form\Element\Multiselect
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * @var \Magento\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
+     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\View\LayoutInterface $layout
-     * @param array $attributes
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory,
-        \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
+        \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\View\LayoutInterface $layout,
-        array $attributes = array()
+        \Magento\Json\EncoderInterface $jsonEncoder,
+        array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_collectionFactory = $collectionFactory;
         $this->_backendData = $backendData;
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->_layout = $layout;
     }
 

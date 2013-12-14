@@ -38,11 +38,9 @@
             </arguments>
         </block>
     </referenceBlock>
+    <update handle="adminhtml_integration_grid_block"/>
     <referenceBlock name="content">
         <block class="Magento\Backend\Block\Template" name="integration.popup.container" template="Magento_Integration::integration/popup_container.phtml" before="-"/>
-    </referenceBlock>
-    <update handle="adminhtml_integration_grid_block"/>
-    <referenceContainer name="content">
         <block class="Magento\Integration\Block\Adminhtml\Integration" name="integration.grid.container"/>
-    </referenceContainer>
+    </referenceBlock>
 </layout>

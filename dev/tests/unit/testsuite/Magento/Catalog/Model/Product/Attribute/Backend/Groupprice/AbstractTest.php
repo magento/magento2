@@ -60,9 +60,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 'logger' => $loggerMock,
                 'currencyFactory' => $currencyFactoryMock,
                 'storeManager' => $storeManagerMock,
-                'catalogProductType' => $productTypeMock,
                 'catalogData' => $this->_helper,
                 'config' => $configMock,
+                'catalogProductType' => $productTypeMock,
             )
         );
         $resource = $this->getMock('StdClass', array('getMainTable'));

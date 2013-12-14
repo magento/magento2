@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <module name="Magento_Webapi" version="1.0.0.3" active="true">
+    <module name="Magento_Webapi" version="1.0.0.4" active="true">
         <sequence>
             <module name="Magento_Core"/>
             <module name="Magento_Integration"/>

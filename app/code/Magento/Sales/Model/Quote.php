@@ -1769,7 +1769,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * @param array $params
      * @return \Magento\Sales\Model\Quote
      */
-    public function removeErrorInfosByParams($type = 'error', $params)
+    public function removeErrorInfosByParams($type, $params)
     {
         if ($type && !isset($this->_errorInfoGroups[$type])) {
             return $this;
@@ -1812,7 +1812,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * @param string $text
      * @return \Magento\Sales\Model\Quote
      */
-    public function removeMessageByText($type = 'error', $text)
+    public function removeMessageByText($type, $text)
     {
         $messages = $this->getData('messages');
         if (null === $messages) {

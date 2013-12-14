@@ -29,12 +29,12 @@
     <xs:element name="config" type="configType"/>
     <xs:complexType name="configType">
         <xs:sequence>
-            <xs:element type="serviceType" name="service" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="serviceType" name="service" maxOccurs="unbounded" minOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="serviceType">
         <xs:sequence>
-            <xs:element type="restRouteType" name="rest-route" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="restRouteType" name="rest-route" maxOccurs="unbounded" minOccurs="1"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="class"/>
         <xs:attribute type="xs:string" name="baseUrl"/>
@@ -53,8 +53,14 @@
                     </xs:simpleType>
                 </xs:attribute>
                 <xs:attribute type="xs:string" name="method"/>
+                <xs:attribute type="resourcesType" name="resources"/>
                 <xs:attribute type="xs:boolean" name="isSecure" default="false"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
+    <xs:simpleType name="resourcesType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value=".+::.+(, ?.+::.+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>

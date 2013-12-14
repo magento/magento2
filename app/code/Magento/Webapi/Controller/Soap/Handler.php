@@ -1,9 +1,5 @@
 <?php
 /**
- * Handler of requests to SOAP server.
- *
- * The main responsibility is to instantiate proper action controller (service) and execute requested method on it.
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,36 +21,54 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Webapi\Controller\Soap;
 
+use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
+use Magento\Webapi\Model\Soap\Config as SoapConfig;
+use Magento\Webapi\Controller\Soap\Request as SoapRequest;
+use Magento\Webapi\Exception as WebapiException;
+use Magento\Service\AuthorizationException;
+
+/**
+ * Handler of requests to SOAP server.
+ *
+ * The main responsibility is to instantiate proper action controller (service) and execute requested method on it.
+ */
 class Handler
 {
     const RESULT_NODE_NAME = 'result';
 
-    /** @var \Magento\Webapi\Controller\Soap\Request */
+    /** @var SoapRequest */
     protected $_request;
 
     /** @var \Magento\ObjectManager */
     protected $_objectManager;
 
-    /** @var \Magento\Webapi\Model\Soap\Config */
+    /** @var SoapConfig */
     protected $_apiConfig;
+
+    /** @var AuthorizationService */
+    protected $_authorizationService;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Webapi\Controller\Soap\Request $request
+     * @param SoapRequest $request
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Webapi\Model\Soap\Config $apiConfig
+     * @param SoapConfig $apiConfig
+     * @param AuthorizationService $authorizationService
      */
     public function __construct(
-        \Magento\Webapi\Controller\Soap\Request $request,
+        SoapRequest $request,
         \Magento\ObjectManager $objectManager,
-        \Magento\Webapi\Model\Soap\Config $apiConfig
+        SoapConfig $apiConfig,
+        AuthorizationService $authorizationService
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
         $this->_apiConfig = $apiConfig;
+        $this->_authorizationService = $authorizationService;
     }
 
     /**
@@ -63,20 +77,33 @@ class Handler
      * @param string $operation
      * @param array $arguments
      * @return \stdClass|null
-     * @throws \Magento\Webapi\Exception|\LogicException
+     * @throws WebapiException
+     * @throws \LogicException
+     * @throws AuthorizationException
      */
     public function __call($operation, $arguments)
     {
         $requestedServices = $this->_request->getRequestedServices();
         $serviceMethodInfo = $this->_apiConfig->getServiceMethodInfo($operation, $requestedServices);
-        $serviceClass = $serviceMethodInfo[\Magento\Webapi\Model\Soap\Config::KEY_CLASS];
-        $serviceMethod = $serviceMethodInfo[\Magento\Webapi\Model\Soap\Config::KEY_METHOD];
+        $serviceClass = $serviceMethodInfo[SoapConfig::KEY_CLASS];
+        $serviceMethod = $serviceMethodInfo[SoapConfig::KEY_METHOD];
 
         // check if the operation is a secure operation & whether the request was made in HTTPS
-        if ($serviceMethodInfo[\Magento\Webapi\Model\Soap\Config::KEY_IS_SECURE] && !$this->_request->isSecure()) {
-            throw new \Magento\Webapi\Exception(__("Operation allowed only in HTTPS"));
+        if ($serviceMethodInfo[SoapConfig::KEY_IS_SECURE] && !$this->_request->isSecure()) {
+            throw new WebapiException(__("Operation allowed only in HTTPS"));
         }
 
+        if (!$this->_authorizationService->isAllowed($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])) {
+            // TODO: Consider passing Integration ID instead of Consumer ID
+            throw new AuthorizationException(
+                "Not Authorized.",
+                0,
+                null,
+                array(),
+                'authorization',
+                "Consumer ID = {$this->_request->getConsumerId()}",
+                implode($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES], ', '));
+        }
         $service = $this->_objectManager->get($serviceClass);
         $outputData = $service->$serviceMethod($this->_prepareParameters($arguments));
         if (!is_array($outputData)) {

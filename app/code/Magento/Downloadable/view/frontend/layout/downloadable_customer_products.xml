@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
-    <referenceContainer name="my.account.wrapper">
+    <referenceContainer name="content">
         <block class="Magento\Downloadable\Block\Customer\Products\ListProducts" name="downloadable_customer_products_list" template="customer/products/list.phtml"/>
     </referenceContainer>
     <referenceBlock name="root">

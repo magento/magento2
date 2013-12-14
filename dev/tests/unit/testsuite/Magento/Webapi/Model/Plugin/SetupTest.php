@@ -128,20 +128,20 @@ class SetupTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $integrationsData1 = array(
-            Integration::ID => 1,
+        $integrationsData1 = new \Magento\Object(array(
+            'id' => 1,
             Integration::NAME => 'TestIntegration1',
             Integration::EMAIL => 'test-integration1@magento.com',
             Integration::ENDPOINT => 'http://endpoint.com',
             Integration::SETUP_TYPE => 1,
-        );
+        ));
 
-        $integrationsData2 = array(
-            Integration::ID => 2,
+        $integrationsData2 = new \Magento\Object(array(
+            'id' => 2,
             Integration::NAME => 'TestIntegration2',
             Integration::EMAIL => 'test-integration2@magento.com',
             Integration::SETUP_TYPE => 1,
-        );
+        ));
 
         $this->_integrationServiceMock->expects($this->at(0))
             ->method('findByName')

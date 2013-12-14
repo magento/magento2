@@ -40,21 +40,21 @@ class Image extends \Magento\Data\Form\Element\AbstractElement
      */
     protected $_urlBuilder;
     /**
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
      * @param \Magento\UrlInterface $urlBuilder
-     * @param array $attributes
+     * @param array $data
      */
     public function __construct(
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
         \Magento\UrlInterface $urlBuilder,
-        $attributes = array()
+        $data = array()
     ) {
         $this->_urlBuilder = $urlBuilder;
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('file');
     }
 

@@ -140,12 +140,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected $_websiteFactory;
 
     /**
-     * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger $logger
+     * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Centinel\Model\Service $centinelService
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -157,16 +157,16 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\App\RequestInterface $requestHttp
      * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
      * @param array $data
-     *
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger $logger,
+        \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Centinel\Model\Service $centinelService,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -185,12 +185,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         $this->_requestHttp = $requestHttp;
         $this->_websiteFactory = $websiteFactory;
         parent::__construct(
-            $logger,
             $eventManager,
-            $coreStoreConfig,
-            $moduleList,
             $paymentData,
+            $coreStoreConfig,
             $logAdapterFactory,
+            $logger,
+            $moduleList,
             $locale,
             $centinelService,
             $storeManager,

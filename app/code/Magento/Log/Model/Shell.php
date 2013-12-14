@@ -41,16 +41,16 @@ class Shell extends \Magento\Core\Model\AbstractShell
     protected $_commandFactory;
 
     /**
-     * @param \Magento\Log\Model\Shell\Command\Factory $commandFactory
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\App\Dir $entryPoint
+     * @param string $entryPoint
      * @param \Magento\App\Dir $dir
+     * @param \Magento\Log\Model\Shell\Command\Factory $commandFactory
      */
     public function __construct(
-        \Magento\Log\Model\Shell\Command\Factory $commandFactory,
         \Magento\Filesystem $filesystem,
         $entryPoint,
-        \Magento\App\Dir $dir
+        \Magento\App\Dir $dir,
+        \Magento\Log\Model\Shell\Command\Factory $commandFactory
     ) {
         parent::__construct($filesystem, $entryPoint, $dir);
         $this->_commandFactory = $commandFactory;

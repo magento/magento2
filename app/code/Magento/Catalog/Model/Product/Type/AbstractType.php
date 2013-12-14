@@ -899,7 +899,7 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product\Type\AbstractType
      */
-    public function setStoreFilter($store = null, $product)
+    public function setStoreFilter($store, $product)
     {
         $cacheKey = '_cache_instance_store_filter';
         $product->setData($cacheKey, $store);

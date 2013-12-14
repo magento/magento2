@@ -313,4 +313,13 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetAnnotations()
+    {
+        $class = new \ReflectionClass('\ClassWithSuppressWarnings');
+        $expected = array(
+            'SuppressWarnings' => 'Magento.TypeDuplication',
+        );
+        $this->assertEquals($expected, $this->_model->getAnnotations($class));
+    }
 }
+

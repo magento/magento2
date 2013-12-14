@@ -135,7 +135,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $theme->load('magento_blank', 'theme_path');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
             ->getStore('fixturestore')->setConfig(
-                \Magento\Core\Model\View\Design::XML_PATH_THEME_ID,
+                \Magento\View\DesignInterface::XML_PATH_THEME_ID,
                 $theme->getId()
             );
     }

@@ -36,22 +36,22 @@ namespace Magento\Data\Form\Element;
 class Fieldset extends \Magento\Data\Form\Element\AbstractElement
 {
     /**
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param array $attributes
+     * @param \Magento\Escaper $escaper
+     * @param array $data
      */
     public function __construct(
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        $attributes = array()
+        \Magento\Escaper $escaper,
+        $data = array()
     ) {
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->_renderer = \Magento\Data\Form::getFieldsetRenderer();
         $this->setType('fieldset');
-        if (isset($attributes['advancedSection'])) {
-            $this->setAdvancedLabel($attributes['advancedSection']);
+        if (isset($data['advancedSection'])) {
+            $this->setAdvancedLabel($data['advancedSection']);
         }
     }
 

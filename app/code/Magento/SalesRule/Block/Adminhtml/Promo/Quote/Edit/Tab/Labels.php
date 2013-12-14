@@ -31,23 +31,6 @@ class Labels
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\Registry $coreRegistry,
-        array $data = array()
-    ) {
-        parent::__construct($context, $registry, $formFactory, $data);
-    }
-
-    /**
      * Prepare content for tab
      *
      * @return string

@@ -55,26 +55,24 @@ class Stock extends \Magento\Data\Form\Element\Select
     protected $_factoryText;
 
     /**
-     * Construct
-     * 
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\TextFactory $factoryText
-     * @param array $attributes
+     * @param array $data
      */
     public function __construct(
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\TextFactory $factoryText,
-        array $attributes = array()
+        array $data = array()
     ) {
         $this->_factoryText = $factoryText;
-        $this->_qty = isset($attributes['qty']) ? $attributes['qty'] : $this->_createQtyElement();
-        unset($attributes['qty']);
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
-        $this->setName($attributes['name']);
+        $this->_qty = isset($data['qty']) ? $data['qty'] : $this->_createQtyElement();
+        unset($data['qty']);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $this->setName($data['name']);
     }
 
     /**

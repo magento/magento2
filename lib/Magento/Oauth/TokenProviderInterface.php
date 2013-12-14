@@ -99,7 +99,7 @@ interface TokenProviderInterface
      * Validate an access token string.
      *
      * @param string - The 'oauth_token' access token string.
-     * @return bool - True if the access token is valid.
+     * @return int - Consumer ID if the access token is valid.
      * @throws \Magento\Oauth\Exception - Validation errors.
      */
     public function validateAccessToken($accessToken);

@@ -24,76 +24,25 @@
  */
 -->
 <config>
+    <preference for="Magento\Authz\Model\UserLocatorInterface" type="Magento\Webapi\Model\Authz\UserLocator"/>
+    <type name="Magento\Webapi\Model\Authz\UserLocator">
+        <param name="request">
+            <instance type="Magento\Webapi\Controller\Soap\Request"/>
+        </param>
+    </type>
     <preference for="Magento\App\FrontControllerInterface" type="Magento\Webapi\Controller\Soap" />
-    <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\Acl" />
-    <preference for="Magento\Authorization\RoleLocator" type="Magento\Webapi\Model\Authorization\RoleLocator" />
-    <preference for="Magento\Webapi\Model\Acl\Resource\ProviderInterface" type="Magento\Webapi\Model\Acl\Resource\Provider"/>
-    <type name="Magento\Acl\Builder">
-        <param name="resourceLoader">
-            <instance type="Magento\Webapi\Model\Authorization\Loader\Resource" />
-        </param>
-        <param name="roleLoader">
-            <instance type="Magento\Webapi\Model\Authorization\Loader\Role" />
-        </param>
-        <param name="ruleLoader">
-            <instance type="Magento\Webapi\Model\Authorization\Loader\Rule" />
-        </param>
-    </type>
-    <type name="Magento\Webapi\Model\Acl\Builder">
-        <param name="cache">
-            <instance type="Magento\Webapi\Model\Acl\Cache" />
-        </param>
-        <param name="resourceLoader">
-            <instance type="Magento\Webapi\Model\Authorization\Loader\Resource" />
-        </param>
-        <param name="roleLoader">
-            <instance type="Magento\Webapi\Model\Authorization\Loader\Role" />
-        </param>
-        <param name="ruleLoader">
-            <instance type="Magento\Webapi\Model\Authorization\Loader\Rule" />
-        </param>
-    </type>
-    <type name="Magento\Webapi\Model\Authorization\Policy\Acl">
-        <param name="aclBuilder">
-            <instance type="Magento\Webapi\Model\Acl\Builder" />
-        </param>
-    </type>
-    <type name="Magento\Webapi\Model\Acl\Cache">
-        <param name="cacheKey">
-            <value>api_acl_resources</value>
-        </param>
-    </type>
-    <type name="Magento\Core\Model\Acl\RootResource">
-        <param name="identifier">
-            <value>Magento_Webapi</value>
-        </param>
-    </type>
     <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
-    <type name="Magento\Xml\Generator" shared="false" />
-    <type name="Magento\Xml\Parser" shared="false" />
-    <type name="Magento\Code\Scanner\DirectoryScanner" shared="false" />
-    <type name="Magento\Server\Reflection" shared="false" />
-    <type name="Magento\Webapi\Model\Authorization\Loader\Resource">
-        <param name="resourceProvider">
-            <instance type="Magento\Webapi\Model\Acl\Resource\Provider" />
-        </param>
-    </type>
-    <type name="Magento\Webapi\Model\Acl\Resource\Provider">
-        <param name="configReader">
-            <instance type="Magento\Webapi\Model\Acl\Resource\Config\Reader\Filesystem" />
-        </param>
-    </type>
-    <type name="Magento\Webapi\Model\Acl\Resource\Config\Reader\Filesystem">
-        <param name="converter">
-            <instance type="Magento\Webapi\Model\Acl\Resource\Config\Converter\Dom" />
-        </param>
-    </type>
     <type name="Magento\Webapi\Controller\Soap">
         <param name="soapServer">
             <instance type="Magento\Webapi\Model\Soap\Server\Proxy"/>
         </param>
         <param name="errorProcessor">
             <instance type="Magento\Webapi\Controller\ErrorProcessor\Proxy"/>
+        </param>
+    </type>
+    <type name="Magento\Webapi\Controller\Soap\Handler">
+        <param name="authorizationService">
+            <instance type="Magento\Authz\Service\AuthorizationV1Interface\Proxy" />
         </param>
     </type>
 </config>

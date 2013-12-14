@@ -90,30 +90,28 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_itemOptionFactory;
 
     /**
-     * Construct
-     *
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
      * @param \Magento\UrlInterface $url
      * @param \Magento\App\Dir $dir
-     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\File\Size $fileSize
      * @param array $data
      */
     public function __construct(
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\UrlInterface $url,
         \Magento\App\Dir $dir,
-        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Escaper $escaper,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Filesystem $filesystem,
         \Magento\File\Size $fileSize,
-        $data = array()
+        array $data = array()
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_url = $url;

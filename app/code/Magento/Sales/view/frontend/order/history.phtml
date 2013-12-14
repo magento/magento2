@@ -62,5 +62,5 @@
 </table>
 <div class="order toolbar bottom"><?php echo $this->getPagerHtml(); ?></div>
 <?php else: ?>
-    <p><?php echo __('You have placed no orders.'); ?></p>
+    <div class="message info empty"><span><?php echo __('You have placed no orders.'); ?></span></div>
 <?php endif ?>

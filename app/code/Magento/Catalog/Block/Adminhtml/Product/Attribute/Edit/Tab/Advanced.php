@@ -79,7 +79,7 @@ class Advanced
     {
         $attributeObject = $this->getAttributeObject();
 
-        $form = $this->_formFactory->create(array('attributes' => array(
+        $form = $this->_formFactory->create(array('data' => array(
             'id' => 'edit_form',
             'action' => $this->getData('action'),
             'method' => 'post'

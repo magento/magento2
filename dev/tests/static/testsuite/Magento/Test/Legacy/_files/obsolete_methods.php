@@ -1077,10 +1077,12 @@ return array(
     array('_isEnabled', 'Magento\View\Asset\MinifyService', 'isEnabled'),
     array('_getAdapter', 'Magento\View\Asset\MinifyService', 'getAdapter'),
     array('getShowPerPage', 'Magento\Theme\Block\Html\Pager', 'isShowPerPage'),
+    array('getPackageByUserAgent', '\Magento\Core\Model\View\Design'),
     array('setFrameTags', 'Magento\View\Element\AbstractBlock'),
     array('getMessagesBlock', 'Magento\View\Element\AbstractBlock'),
     array('setMessagesBlock', 'Magento\View\Element\AbstractBlock'),
     array('getUrlEncoded', 'Magento\View\Element\AbstractBlock'),
     array('getUrlBase64', 'Magento\View\Element\AbstractBlock'),
     array('getMessagesBlock', 'Magento\MultipleWishlist\Block\Info'),
+    array('addStoresToCollection', '\Magento\Rating\Model\Resource\Rating\Collection')
 );

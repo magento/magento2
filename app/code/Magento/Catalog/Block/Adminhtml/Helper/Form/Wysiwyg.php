@@ -60,30 +60,30 @@ class Wysiwyg extends \Magento\Data\Form\Element\Textarea
     protected $_layout;
 
     /**
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
+     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
+     * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Backend\Helper\Data $backendData
-     * @param array $attributes
+     * @param array $data
      */
     public function __construct(
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
-        \Magento\View\LayoutInterface $layout,
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
+        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
+        \Magento\View\LayoutInterface $layout,
         \Magento\Module\Manager $moduleManager,
         \Magento\Backend\Helper\Data $backendData,
-        array $attributes = array()
+        array $data = array()
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_layout = $layout;
         $this->_moduleManager = $moduleManager;
         $this->_backendData = $backendData;
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
     /**

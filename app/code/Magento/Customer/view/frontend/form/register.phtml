@@ -42,7 +42,7 @@
         <div class="field required">
             <label for="email_address" class="label"><span><?php echo __('Email Address') ?></span></label>
             <div class="control">
-                <input type="text" name="email" id="email_address" value="<?php echo $this->escapeHtml($this->getFormData()->getEmail()) ?>" title="<?php echo __('Email Address') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
+                <input type="email" name="email" id="email_address" value="<?php echo $this->escapeHtml($this->getFormData()->getEmail()) ?>" title="<?php echo __('Email Address') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
             </div>
         </div>
         <?php if ($this->isNewsletterEnabled()): ?>

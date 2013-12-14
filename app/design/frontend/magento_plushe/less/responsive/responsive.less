@@ -23,6 +23,8 @@
 //  */
 
 @breakPoint1: 640px;
+@icon-expand-mobile: "+";
+@icon-collapse-mobile: "–";
 
 .mobileAction {
     .box-sizing();
@@ -36,6 +38,7 @@
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
+    border: none;
     span {
         font-size: 18px;
     }
@@ -239,6 +242,12 @@ and (max-width : @breakPoint1) {
                     visibility: visible;
                     width: 100%;
                 }
+                .action.tocart {
+                    padding: 10px 11px
+                }
+                .primary {
+                    margin: 12px 0;
+                }
             }
             .secondary {
                 margin-left: 0;
@@ -319,9 +328,6 @@ and (max-width : @breakPoint1) {
             .box-sizing();
             .secondary {
                 background: transparent;
-                .action.tocompare {
-                    display: none;
-                }
             }
         }
         .products.wrapper.list .products.list .item.product {
@@ -402,7 +408,7 @@ and (max-width : @breakPoint1) {
             display: block;
             height: 35px;
             padding: 0;
-            margin: 15px 12px 0 0;
+            margin: 15px -15px 0 0;
             float: none;
             text-align: left;
             position: relative;
@@ -444,7 +450,7 @@ and (max-width : @breakPoint1) {
                     &:focus {
                         margin-right: 0;
                         width: 100%;
-                        padding: 0 65px 0 0;
+                        padding: 0 38px 0 0;
                         border-color: @primary3;
                     }
                 }
@@ -470,6 +476,7 @@ and (max-width : @breakPoint1) {
             .search.autocomplete {
                 top: 35px !important;
                 width: 100% !important;
+                border: none;
             }
         }
         .minicart.wrapper {
@@ -743,9 +750,12 @@ and (max-width : @breakPoint1) {
             .amount,
             td:first-child strong {
                 font-size: 18px;
+                line-height: 30px;
+                vertical-align: bottom;
             }
             td:not(:first-child) strong {
                 font-size: 30px;
+                vertical-align: bottom;
             }
         }
 
@@ -774,16 +784,23 @@ and (max-width : @breakPoint1) {
                     min-height: 60px;
                     .product.name {
                         font-size: 18px;
-                        margin: 0 0 2px;
+                        margin: 0 0 10px;
                     }
                     dl {
                         margin: 0;
+                        padding-bottom: 12px;
+                        clear: both;
+                        dt,
+                        dd {
+                            line-height: 1.1;
+                        }
+                        dd {
+                            margin-bottom: 12px;
+                            margin-left: 0;
+                        }
                     }
-                    dd {
-                        margin-bottom: 0;
-                    }
-                }
 
+                }
                 &.price,
                 &.subtotal {
                     display: block;
@@ -802,7 +819,9 @@ and (max-width : @breakPoint1) {
                         margin-right: 7px;
                     }
                 }
-
+                &.price {
+                    margin-top: -30px;
+                }
                 &.price.excl.tax + .col.price.incl.tax {
                     &:before {
                         visibility: hidden;
@@ -1020,7 +1039,7 @@ and (max-width : @breakPoint1) {
         }
 
         // Payment methods
-        .sp-methods {
+        .items.methods.payment {
             dt {
                 font-weight: normal;
                 margin: 0 0 10px;
@@ -1064,23 +1083,20 @@ and (max-width : @breakPoint1) {
                 margin-bottom: 10px;
             }
             .order.review.data {
-                th.col.item,
-                td:first-child {
+                th,
+                td {
                     padding-left: 0;
-                    padding-right: 10px;
-                }
-                .items.data td {
-                    padding: 10px 5px 5px;
+                    padding-right: 5px;
+                    text-align: left;
+                    &.qty {
+                        text-align: center;
+                    }
                 }
             }
             th.col.item,
             th.col.price,
             th.col.subtotal {
                 white-space: nowrap;
-            }
-            th.col.price,
-            th.col.subtotal {
-                text-align: center;
             }
             th.excl.tax span,
             th.col.incl.tax span {
@@ -1151,16 +1167,17 @@ and (max-width : @breakPoint1) {
                 font-weight: 600;
             }
             &:before {
-                content: @icon-expand;
-                font-family: "icons";
+                content: @icon-expand-mobile;
+                font-family: Arial, sans-serif;
                 font-weight: 400;
-                font-size: 20px;
+                font-size: 30px;
                 position: absolute;
                 right: 20px;
-                top: 9px;
+                top: 2px;
             }
             &.active:before {
-                content: "\e03a";
+                top: 1px;
+                content: @icon-collapse-mobile;
             }
         }
         > .content {
@@ -1177,13 +1194,16 @@ and (max-width : @breakPoint1) {
             font-weight: 200;
             > a {
                 font-weight: 400;
+                font-size: 14px;
                 margin-left: 20px;
                 text-decoration: underline;
             }
         }
-        dd {
+        dd,
+        .complete .payment .title {
             font-size: 16px;
             line-height: 1.4;
+            font-weight: 400;
             &:last-child {
                 margin: 0;
             }
@@ -1533,10 +1553,37 @@ Multishipping
             display: block;
             width: 100%;
             float: none;
+            margin-top: 20px;
         }
     }
 
-    .my-account > .actions,
+    .account {
+        .column.main {
+            .my-account,
+            .block,
+            .form {
+                .actions {
+                    .primary,
+                    .secondary {
+                        float: none;
+                    }
+                    .secondary {
+                        margin-bottom: 15px;
+                        .action.back {
+                            display: block;
+                            float: none;
+                            text-align: left;
+                        }
+                    }
+                }
+            }
+        }
+        > .block,
+        .my-account > .block {
+            margin-bottom: 20px;
+        }
+    }
+
     .billing-agreements > .actions,
     .recurring-profiles .buttons-set,
     .newsletter.manage > .actions {
@@ -1630,6 +1677,7 @@ Multishipping
     /* Address book */
 
     .block.addresses:not(.dashboard) {
+        margin-bottom: 20px;
         .content {
             padding: 20px;
             margin: 0 -20px;
@@ -1650,10 +1698,12 @@ Multishipping
         }
     }
 
-    .my-account {
-        .tags.items.cloud {
-            .item {
-                font-size: 18px;
+    .account {
+        .column.main {
+            .tags.items.cloud {
+                .item {
+                    font-size: 18px;
+                }
             }
         }
     }
@@ -1675,16 +1725,7 @@ Multishipping
      My Account -> Downloadable products
      -------------------------------------- */
     .downloadable-customer-products {
-        .my-account {
-            overflow-x: scroll;
-        }
-    }
-
-    /*
-    My Account -> Wishlist
-    -------------------------------------- */
-    .review-customer-index {
-        .my-account {
+        .column.main {
             overflow-x: scroll;
         }
     }
@@ -1692,20 +1733,30 @@ Multishipping
     /*
     My Account -> My Reviews
     -------------------------------------- */
-    .my-account {
-        .form.wishlist.items {
+    .review-customer-index {
+        .column.main {
             overflow-x: scroll;
+        }
+    }
+
+    /*
+    My Account -> Wishlist
+    -------------------------------------- */
+    .account {
+        .form.wishlist.items {
+            .wishlist.table.wrapper {
+                overflow-x: scroll;
+                thead {
+                    display: none;
+                }
+                textarea {
+                    width: 15em;
+                }
+            }
             .actions {
                 .primary {
-                    float: none;
                     .action {
                         .mobilePrimaryAction();
-                    }
-                }
-                .secondary {
-                    float: none;
-                    .action {
-                        .mobileSecondaryAction();
                     }
                 }
             }
@@ -1717,7 +1768,7 @@ Multishipping
    *
   ----------------------------------------------------------------------------- */
     .sales-order-history {
-        .my-account {
+        .column.main {
             overflow-x: scroll;
         }
     }
@@ -1779,7 +1830,6 @@ Multishipping
             }
         }
         > .actions {
-            text-align: center;
             margin-bottom: 20px;
         }
         &.items {
@@ -1874,9 +1924,18 @@ Multishipping
         .stock {
             clear: right;
             float: right;
+            &.alert {
+                float: none;
+            }
         }
         .prices.tier  {
             clear: both;
+        }
+        .product.alert {
+            margin: 10px 0;
+        }
+        .product.attibute.sku {
+            margin-bottom: 10px;
         }
         .product.add.form {
             clear: both;
@@ -2047,9 +2106,13 @@ Multishipping
             .field:not(.ratings) {
                 width: 100%;
             }
-            .actions {
-                text-align: left;
+            .action.submit {
+                .mobilePrimaryAction();
+                margin-bottom: 10px;
             }
+        }
+        .block.reviews.list {
+            margin-left: 0;
         }
     }
 
@@ -2193,6 +2256,9 @@ Multishipping
     .bundle.options.container {
         margin: 0;
         padding: 0;
+        &:before {
+            display: none;
+        }
         .product.add.form {
             margin: 0 -18px;
             padding: 20px 18px 280px;
@@ -2201,6 +2267,10 @@ Multishipping
         .product.options.bottom {
             float: none;
             width: auto;
+            > .fieldset {
+                margin-left: 0;
+                margin-right: 0;
+            }
         }
         .product.options.bottom {
             .price-box {
@@ -2222,11 +2292,13 @@ Multishipping
     .block.bundle.summary {
         background: @primary1;
         margin: 0;
+        padding: 0 20px;
         float: none;
         position: absolute;
         margin: -280px 0 0;
         top: 100% !important;
         width: 90%;
+        .box-sizing();
         .content {
             padding: 0;
         }
@@ -2239,6 +2311,8 @@ Multishipping
             display: none !important;
         }
         .price-box {
+            float: left;
+            width: 80%;
             .price-label {
                 display: block;
                 float: none;
@@ -2254,22 +2328,21 @@ Multishipping
         .box.tocart {
             padding-bottom: 0;
             border: none;
-            .field,
-            .actions {
-                display: inline-block;
-            }
             .control {
                 width: auto;
             }
             .field.qty {
                 .box-sizing();
                 width: 18%;
+                float: right;
+                padding-right: 0;
             }
             input.qty {
                 height: 49px;
             }
             .actions {
-                width: 80%;
+                clear: both;
+                margin-right: 0;
                 .action.primary.tocart {
                     padding: 18px 10px 14px;
                     width: 100%;
@@ -2279,12 +2352,20 @@ Multishipping
     }
 
     .fieldset.bundle.options {
+        .legend {
+            margin-left: 0;
+        }
         > .field {
             margin: 0 0 20px;
             .label {
                 display: inline-block;
                 font-size: 16px;
                 width: 90%;
+            }
+            input[type="checkbox"],
+            input[type="radio"] {
+                margin-top: 3px;
+                vertical-align: top;
             }
             > .label {
                 font-size: 22px;
@@ -2339,6 +2420,15 @@ Multishipping
             .action.cancel {
                 .mobileSecondaryAction();
             }
+        }
+    }
+
+    /*
+    Magento_Catalog Compare
+-------------------------------------- */
+    .catalog-product-compare-index {
+        .action.print {
+            margin: -20px 0 20px;
         }
     }
 

@@ -36,15 +36,15 @@ namespace Magento\Core\Model\Layout\Argument\Handler;
 class ArrayHandler extends \Magento\Core\Model\Layout\Argument\AbstractHandler
 {
     /**
-     * @var \Magento\Core\Model\Layout\Argument\HandlerFactory
+     * @var \Magento\View\Layout\Argument\HandlerFactory
      */
     protected $_handlerFactory;
 
     /**
-     * @param \Magento\Core\Model\Layout\Argument\HandlerFactory $handlerFactory
+     * @param \Magento\View\Layout\Argument\HandlerFactory $handlerFactory
      */
     public function __construct(
-        \Magento\Core\Model\Layout\Argument\HandlerFactory $handlerFactory
+        \Magento\View\Layout\Argument\HandlerFactory $handlerFactory
     ) {
         $this->_handlerFactory = $handlerFactory;
     }

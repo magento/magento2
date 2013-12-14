@@ -63,18 +63,16 @@ class Uploader extends \Magento\File\Uploader
     protected $_validator;
 
     /**
-     * Init upload
-     *
+     * @param string $fileId
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Helper\File\Storage $coreFileStorage
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $validator
-     * @param $fileId
      */
     public function __construct(
+        $fileId,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Helper\File\Storage $coreFileStorage,
-        \Magento\Core\Model\File\Validator\NotProtectedExtension $validator,
-        $fileId
+        \Magento\Core\Model\File\Validator\NotProtectedExtension $validator
     ) {
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;

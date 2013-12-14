@@ -27,6 +27,9 @@ namespace Magento\Webapi\Controller;
 
 class Request extends \Zend_Controller_Request_Http implements \Magento\App\RequestInterface
 {
+    /** @var int */
+    protected $_consumerId = 0;
+
     /**
      * Modify pathInfo: strip down the front name and query parameters.
      *
@@ -46,5 +49,25 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\App\Requ
         $this->_pathInfo = preg_replace("#.*?/{$areaFrontName}/?#", '/', $this->_pathInfo);
         /** Remove GET parameters from path */
         $this->_pathInfo = preg_replace('#\?.*#', '', $this->_pathInfo);
+    }
+
+    /**
+     * Set consumer ID.
+     *
+     * @param int $consumerId
+     */
+    public function setConsumerId($consumerId)
+    {
+        $this->_consumerId = $consumerId;
+    }
+
+    /**
+     * Get consumer ID.
+     *
+     * @return int
+     */
+    public function getConsumerId()
+    {
+        return $this->_consumerId;
     }
 }

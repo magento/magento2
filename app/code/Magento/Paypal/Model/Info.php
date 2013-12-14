@@ -522,6 +522,7 @@ class Info
                 break;
             case self::BUYER_TAX_ID_TYPE :
                 $value = $this->_getBuyerIdTypeValue($value);
+            // fall-through intentional
             default:
                 return $value;
         }

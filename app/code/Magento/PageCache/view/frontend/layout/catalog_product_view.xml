@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="content">
+    <referenceContainer name="page.bottom">
         <block class="Magento\View\Element\Template" name="external.pagecache.cookie" template="Magento_PageCache::cookie.phtml"/>
     </referenceContainer>
 </layout>

@@ -48,6 +48,6 @@ class Factory
      */
     public function create($className, array $data = array())
     {
-        return $this->_objectManager->create($className, array('attributes' => $data));
+        return $this->_objectManager->create($className, array('data' => $data));
     }
 }

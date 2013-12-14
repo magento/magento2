@@ -60,15 +60,15 @@ class Base extends \Magento\Sales\Model\Config\Ordered
     /**
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Logger $logger
+     * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory
-     * @param \Magento\Sales\Model\Config $salesConfig,
-     * @param null $sourceData
+     * @param mixed $sourceData
      */
     public function __construct(
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Logger $logger,
-        \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory,
         \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory,
         $sourceData = null
     ) {
         parent::__construct($configCacheType, $logger, $salesConfig, $sourceData);

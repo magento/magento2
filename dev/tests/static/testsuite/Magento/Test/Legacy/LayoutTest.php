@@ -296,6 +296,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setInList',
             'setInfoTemplate',
             'setIsCollapsed',
+            'setIsDisabled',
             'setIsEnabled',
             'setIsGuestNote',
             'setIsHandle',

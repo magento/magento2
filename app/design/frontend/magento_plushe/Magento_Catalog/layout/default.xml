@@ -24,7 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <!-- <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.link" template="Magento_Catalog::product/compare/link.phtml"/> -->
     <referenceBlock name="header.links">
         <block class="Magento\View\Element\Template" name="catalog.compare.link" before="-" template="Magento_Catalog::product/compare/link.phtml"/>
     </referenceBlock>

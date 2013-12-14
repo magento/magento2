@@ -39,17 +39,17 @@ class Staging implements \Magento\View\Design\Theme\Domain\StagingInterface
     protected $_theme;
 
     /**
-     * @var \Magento\Core\Model\Theme\CopyService
+     * @var \Magento\Theme\Model\CopyService
      */
     protected $_themeCopyService;
 
     /**
      * @param \Magento\View\Design\ThemeInterface $theme
-     * @param \Magento\Core\Model\Theme\CopyService $themeCopyService
+     * @param \Magento\Theme\Model\CopyService $themeCopyService
      */
     public function __construct(
         \Magento\View\Design\ThemeInterface $theme,
-        \Magento\Core\Model\Theme\CopyService $themeCopyService
+        \Magento\Theme\Model\CopyService $themeCopyService
     ) {
         $this->_theme = $theme;
         $this->_themeCopyService = $themeCopyService;

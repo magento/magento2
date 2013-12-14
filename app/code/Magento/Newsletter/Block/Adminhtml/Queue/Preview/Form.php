@@ -44,7 +44,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(array(
-            'attributes' => array(
+            'data' => array(
                 'id' => 'preview_form',
                 'action' => $this->getUrl('*/*/drop', array('_current' => true)),
                 'method' => 'post',
@@ -56,7 +56,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $mapper = array('preview_store_id' => 'store_id');
 
             foreach ($data as $key => $value) {
-                if(array_key_exists($key, $mapper)) {
+                if (array_key_exists($key, $mapper)) {
                     $name = $mapper[$key];
                 } else {
                     $name = $key;

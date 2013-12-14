@@ -54,7 +54,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $themeFactory = $this->getMock('Magento\Core\Model\ThemeFactory', array('create'), array(), '', false);
         $themeFactory->expects($this->never())->method('create');
 
-        $themeCopyService = $this->getMock('Magento\Core\Model\Theme\CopyService', array('copy'), array(), '', false);
+        $themeCopyService = $this->getMock('Magento\Theme\Model\CopyService', array('copy'), array(), '', false);
         $themeCopyService->expects($this->never())->method('copy');
 
         $customizationConfig = $this->getMock('Magento\Theme\Model\Config\Customization', array(), array(), '', false);
@@ -121,7 +121,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $themeFactory = $this->getMock('Magento\Core\Model\ThemeFactory', array('create'), array(), '', false);
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeStaging));
 
-        $themeCopyService = $this->getMock('Magento\Core\Model\Theme\CopyService', array('copy'), array(), '', false);
+        $themeCopyService = $this->getMock('Magento\Theme\Model\CopyService', array('copy'), array(), '', false);
         $themeCopyService->expects($this->once())->method('copy')->with($theme, $themeStaging);
 
         $customizationConfig = $this->getMock('Magento\Theme\Model\Config\Customization', array(), array(), '', false);

@@ -28,50 +28,53 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
 
 <?php if ($this->hasWishlistItems()): ?>
     <form class="form shared wishlist" action="<?php echo $this->getUrl('*/*/update') ?>" method="post">
-        <table class="table data wishlist" id="wishlist-table">
-            <thead>
-            <tr>
-                <th class="col product"><?php echo __('Product') ?></th>
-                <th class="col comment"><?php echo __('Comment') ?></th>
-                <th class="col actions"><?php echo __('Add to Cart') ?></th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach($this->getWishlistItems() as $item): ?>
-                <?php
-                $product = $item->getProduct();
-                $isVisibleProduct = $product->isVisibleInSiteVisibility();
-                ?>
+        <div class="wishlist table wrapper">
+            <table class="table data wishlist" id="wishlist-table">
+                <thead>
                 <tr>
-                    <td class="col product">
-                        <a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
-                            <?php echo $imageBlock->init($product, 'customer_shared_wishlist')->toHtml() ?>
-                        </a>
-                        <strong class="product name">
-                            <a href="<?php echo $this->getProductUrl($item) ?>">
-                                <?php echo $this->escapeHtml($product->getName()) ?>
-                            </a>
-                        </strong>
-                        <?php echo $this->getPriceHtml($product) ?>
-                        <?php echo $this->getDetailsHtml($item) ?>
-                    </td>
-                    <td class="col comment"><?php echo $this->getEscapedDescription($item) ?></td>
-                    <td class="col actions">
-                        <?php if ($product->isSaleable()): ?>
-                            <?php if ($isVisibleProduct): ?>
-                                <button type="button" title="<?php echo __('Add to Cart') ?>" onclick="setLocation('<?php echo $this->getSharedItemAddToCartUrl($item) ?>')" class="action tocart">
-                                    <span><?php echo __('Add to Cart') ?></span>
-                                </button>
-                            <?php endif ?>
-                        <?php endif; ?>
-                        <a href="<?php echo $this->getAddToWishlistUrl($item) ?>" onclick="setLocation(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
-                            <span><?php echo __('Add to Wishlist') ?></span>
-                        </a>
-                    </td>
+                    <th class="col product"><?php echo __('Product') ?></th>
+                    <th class="col comment"><?php echo __('Comment') ?></th>
+                    <th class="col actions"><?php echo __('Add to Cart') ?></th>
                 </tr>
-            <?php endforeach ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <?php foreach($this->getWishlistItems() as $item): ?>
+                    <?php
+                    $product = $item->getProduct();
+                    $isVisibleProduct = $product->isVisibleInSiteVisibility();
+                    ?>
+                    <tr>
+                        <td class="col product">
+                            <a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
+                                <?php echo $imageBlock->init($product, 'customer_shared_wishlist')->toHtml() ?>
+                            </a>
+                            <strong class="product name">
+                                <a href="<?php echo $this->getProductUrl($item) ?>">
+                                    <?php echo $this->escapeHtml($product->getName()) ?>
+                                </a>
+                            </strong>
+                            <?php echo $this->getPriceHtml($product) ?>
+                            <?php echo $this->getDetailsHtml($item) ?>
+                        </td>
+                        <td class="col comment"><?php echo $this->getEscapedDescription($item) ?></td>
+                        <td class="col actions">
+                            <?php if ($product->isSaleable()): ?>
+                                <?php if ($isVisibleProduct): ?>
+                                    <button type="button" title="<?php echo __('Add to Cart') ?>" onclick="setLocation('<?php echo $this->getSharedItemAddToCartUrl($item) ?>')" class="action tocart">
+                                        <span><?php echo __('Add to Cart') ?></span>
+                                    </button>
+                                <?php endif ?>
+                            <?php endif; ?>
+                            <a href="<?php echo $this->getAddToWishlistUrl($item) ?>" onclick="setLocation(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
+                                <span><?php echo __('Add to Wishlist') ?></span>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+
         <div class="actions">
             <?php if($this->isSaleable()):?>
                 <div class="primary">

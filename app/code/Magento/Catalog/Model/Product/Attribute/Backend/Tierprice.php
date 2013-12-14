@@ -45,28 +45,25 @@ class Tierprice
     protected $_productAttributeBackendTierprice;
 
     /**
-     * Construct
-     *
      * @param \Magento\Logger $logger
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice $productAttributeTierprice
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Catalog\Model\Product\Type $catalogProductType
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice $productAttributeTierprice
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice $productAttributeTierprice,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Config $config
+        \Magento\Core\Model\Config $config,
+        \Magento\Catalog\Model\Product\Type $catalogProductType,
+        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice $productAttributeTierprice
     ) {
         $this->_productAttributeBackendTierprice = $productAttributeTierprice;
-        parent::__construct($logger, $currencyFactory, $storeManager, $catalogProductType, $catalogData,
-            $config);
+        parent::__construct($logger, $currencyFactory, $storeManager, $catalogData, $config, $catalogProductType);
     }
 
     /**

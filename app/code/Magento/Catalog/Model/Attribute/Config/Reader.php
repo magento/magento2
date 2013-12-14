@@ -28,22 +28,44 @@ namespace Magento\Catalog\Model\Attribute\Config;
 class Reader extends \Magento\Config\Reader\Filesystem
 {
     /**
+     * List of id attributes for merge
+     *
+     * @var array
+     */
+    protected $_idAttributes = array(
+        '/config/group' => 'name',
+        '/config/group/attribute' => 'name',
+    );
+
+    /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Catalog\Model\Attribute\Config\Converter $converter
-     * @param \Magento\Catalog\Model\Attribute\Config\SchemaLocator $schemaLocator
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param string $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
         \Magento\Catalog\Model\Attribute\Config\Converter $converter,
         \Magento\Catalog\Model\Attribute\Config\SchemaLocator $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState
+        \Magento\Config\ValidationStateInterface $validationState,
+        $fileName = 'catalog_attributes.xml',
+        $idAttributes = array(),
+        $domDocumentClass = 'Magento\Config\Dom',
+        $defaultScope = 'global'
     ) {
-        $fileName = 'catalog_attributes.xml';
-        $idAttributes = array(
-            '/config/group' => 'name',
-            '/config/group/attribute' => 'name',
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
         );
-        parent::__construct($fileResolver, $converter, $schemaLocator, $validationState, $fileName, $idAttributes);
     }
 }

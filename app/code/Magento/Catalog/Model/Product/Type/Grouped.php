@@ -99,38 +99,38 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_appState;
 
     /**
-     * Construct
-     *
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
-     * @param \Magento\Catalog\Model\Resource\Product\Link $catalogProductLink
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Product\Status $catalogProductStatus
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Logger $logger
+     * @param \Magento\Catalog\Model\Resource\Product\Link $catalogProductLink
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\Product\Status $catalogProductStatus
      * @param \Magento\App\State $appState
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        \Magento\Catalog\Model\Resource\Product\Link $catalogProductLink,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Product\Status $catalogProductStatus,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Logger $logger,
+        \Magento\Catalog\Model\Resource\Product\Link $catalogProductLink,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Product\Status $catalogProductStatus,
         \Magento\App\State $appState,
         array $data = array()
     ) {
@@ -138,8 +138,19 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_storeManager = $storeManager;
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_appState = $appState;
-        parent::__construct($productFactory, $catalogProductOption, $eavConfig, $catalogProductType,
-            $eventManager, $coreData, $fileStorageDb, $filesystem, $coreRegistry, $logger, $data);
+        parent::__construct(
+            $productFactory,
+            $catalogProductOption,
+            $eavConfig,
+            $catalogProductType,
+            $eventManager,
+            $coreData,
+            $fileStorageDb,
+            $filesystem,
+            $coreRegistry,
+            $logger,
+            $data
+        );
     }
 
     /**

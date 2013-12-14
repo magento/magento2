@@ -52,6 +52,7 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
+     * @param string $defaultScope
      * @param array $allowedModules
      */
     public function __construct(
@@ -62,10 +63,18 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
         $fileName = 'module.xml',
         $idAttributes = array(),
         $domDocumentClass = 'Magento\Config\Dom',
+        $defaultScope = 'global',
         array $allowedModules = array()
     ) {
         parent::__construct(
-            $fileResolver, $converter, $schemaLocator, $validationState, $fileName, $idAttributes, $domDocumentClass
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
         );
         $this->_allowedModules = $allowedModules;
     }

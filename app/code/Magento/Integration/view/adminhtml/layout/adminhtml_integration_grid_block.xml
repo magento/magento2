@@ -30,7 +30,7 @@
         <block class="Magento\Integration\Block\Adminhtml\Integration\Grid" name="integration.grid" as="grid">
             <arguments>
                 <argument name="id" xsi:type="string">integrationGrid</argument>
-                <argument name="dataSource" xsi:type="object">\Magento\Integration\Model\Resource\Integration\Collection</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Integration\Model\Resource\Integration\Collection</argument>
                 <argument name="use_ajax" xsi:type="string">1</argument>
                 <argument name="default_sort" xsi:type="string">integration_id</argument>
                 <argument name="default_dir" xsi:type="string">asc</argument>
@@ -83,7 +83,6 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="edit">
                     <arguments>
                         <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Edit</argument>
-                        <argument name="class" xsi:type="string">action edit</argument>
                         <argument name="index" xsi:type="string">edit</argument>
                         <argument name="id" xsi:type="string">edit</argument>
                         <argument name="sortable" xsi:type="string">0</argument>

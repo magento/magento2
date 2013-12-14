@@ -103,14 +103,6 @@
                 <argument name="file" xsi:type="string">mage/popup-window.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-page-css-tabs-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::css/tabs.css</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string"/>
-                </argument>
-            </arguments>
-        </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-loader-js">
             <arguments>
                 <argument name="file" xsi:type="string">mage/loader.js</argument>

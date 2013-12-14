@@ -26,6 +26,5 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <move element="product.info" destination="product.info.main" after="product.tierprices"/>
     <move element="page.main.title" destination="product.info.main" before="-"/>
-    <!-- <remove name="product.info.sku"/> -->
     <move element="product.info.overview" destination="product.info.details" before="-" as="product_overview"/>
 </layout>

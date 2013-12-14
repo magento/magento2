@@ -42,14 +42,14 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     protected $_conditionAddress;
 
     /**
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Rule\Model\Condition\Context $context
+     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Rule\Model\Condition\Context $context,
+        \Magento\Event\ManagerInterface $eventManager,
         \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress,
         array $data = array()
     ) {

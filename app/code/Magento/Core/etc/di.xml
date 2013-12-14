@@ -415,31 +415,31 @@
             <instance type="Magento\Image\Adapter\Gd2"/>
         </param>
     </type>
-    <type name="Magento\Core\Model\Layout\PageType\Config\Reader">
+    <type name="Magento\View\Layout\PageType\Config\Reader">
         <param name="fileName">
             <value>page_types.xml</value>
         </param>
         <param name="converter">
-            <instance type="Magento\Core\Model\Layout\PageType\Config\Converter" />
+            <instance type="Magento\View\Layout\PageType\Config\Converter" />
         </param>
         <param name="schemaLocator">
-            <instance type="Magento\Core\Model\Layout\PageType\Config\SchemaLocator" />
+            <instance type="Magento\View\Layout\PageType\Config\SchemaLocator" />
         </param>
         <param name="defaultScope">
             <value>frontend</value>
         </param>
     </type>
-    <virtualType name="Magento\Core\Model\Layout\PageType\Config\Data" type="Magento\Config\Data">
+    <virtualType name="Magento\View\Layout\PageType\Config\Data" type="Magento\Config\Data">
         <param name='reader'>
-            <instance type="Magento\Core\Model\Layout\PageType\Config\Reader" />
+            <instance type="Magento\View\Layout\PageType\Config\Reader" />
         </param>
         <param name="cacheId">
             <value>page_types_config</value>
         </param>
     </virtualType>
-    <type name="Magento\Core\Model\Layout\PageType\Config">
+    <type name="Magento\View\Layout\PageType\Config">
         <param name="dataStorage">
-            <instance type="Magento\Core\Model\Layout\PageType\Config\Data" />
+            <instance type="Magento\View\Layout\PageType\Config\Data" />
         </param>
     </type>
     <type name="Magento\Core\Model\Store\Storage\Db">

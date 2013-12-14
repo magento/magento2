@@ -52,15 +52,13 @@ class Image
     protected $_fileUploaderFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\App\Dir $dir
      * @param \Magento\Logger $logger
+     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
-        \Magento\App\Dir $dir,
         \Magento\Logger $logger,
+        \Magento\App\Dir $dir,
         \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_dir = $dir;

@@ -24,9 +24,12 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Customer My Account (All Pages)" design_abstraction="custom">
-    <referenceContainer name="content">
-        <container name="my.account.wrapper" label="My Account Wrapper" htmlTag="div" htmlClass="my-account" after="-"/>
-    </referenceContainer>
+    <update handle="page_two_columns_left"/>
+    <referenceBlock name="root">
+        <action method="addBodyClass">
+            <argument name="class" xsi:type="string">account</argument>
+        </action>
+    </referenceBlock>
     <referenceContainer name="left">
         <block class="Magento\View\Element\Html\Links" name="customer_account_navigation" before="-" template="Magento_Customer::account/navigation.phtml">
             <block class="Magento\View\Element\Html\Link\Current" name="customer-account-navigation-account-link">

@@ -64,24 +64,24 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     protected $string;
 
     /**
+     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\GoogleCheckout\Helper\Data $googleCheckoutData
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Translate $translator
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
+        \Magento\ObjectManager $objectManager,
+        \Magento\Core\Model\Translate $translator,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\GoogleCheckout\Helper\Data $googleCheckoutData,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Translate $translator,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Stdlib\String $string,
         array $data = array()
     ) {

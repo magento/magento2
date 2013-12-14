@@ -33,6 +33,7 @@
         </block>
         <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link-login"/>
     </referenceBlock>
+    <move element="register-link" destination="header.links"/>
     <move element="top.links" destination="customer"/>
     <move element="authorization-link" destination="top.links" after="-"/>
 </layout>

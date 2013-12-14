@@ -51,14 +51,14 @@ class Context extends \Magento\View\Element\Context
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
      * @param \Magento\App\Cache\StateInterface $cacheState
-     * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\AuthorizationInterface $authorization
      * @param array $data
-     *
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -77,12 +77,12 @@ class Context extends \Magento\View\Element\Context
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
         \Magento\App\Cache\StateInterface $cacheState,
-        \Magento\AuthorizationInterface $authorization,
         \Magento\Logger $logger,
         \Magento\Core\Model\App $app,
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filterManager,
         \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\AuthorizationInterface $authorization,
         array $data = array()
     ) {
         $this->_authorization = $authorization;

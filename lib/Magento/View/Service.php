@@ -85,7 +85,7 @@ class Service
      */
     public function extractScope($fileId, array &$params)
     {
-        if (preg_match('/\.\//', str_replace('\\', '/', $fileId))) {
+        if (strpos(str_replace('\\', '/', $fileId), './') !== false) {
             throw new \Magento\Exception("File name '{$fileId}' is forbidden for security reasons.");
         }
         if (strpos($fileId, self::SCOPE_SEPARATOR) === false) {

@@ -917,7 +917,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * @param array $options
      * @throws \Magento\Exception if any of arguments are invalid
      */
-    protected function _generateContainer($name, $label = '', array $options)
+    protected function _generateContainer($name, $label, array $options)
     {
         $this->_structure->setAttribute($name, Element::CONTAINER_OPT_LABEL, $label);
         unset($options[Element::CONTAINER_OPT_LABEL]);

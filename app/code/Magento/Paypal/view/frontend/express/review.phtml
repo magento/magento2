@@ -45,7 +45,7 @@ $shippingAddress = $this->getShippingAddress();
                     <label for="customer:email" class="label"><?php echo __('Email Address') ?></label>
 
                     <div class="control">
-                        <input type="text" name="customer-email" id="customer:email"
+                        <input type="email" name="customer-email" id="customer:email"
                                value="<?php echo $this->escapeHtml($billingBlock->getAddress()->getEmail()) ?>"
                                title="<?php echo __('Email Address') ?>" class="input-text"/>
                     </div>

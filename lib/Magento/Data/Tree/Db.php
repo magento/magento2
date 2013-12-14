@@ -176,7 +176,7 @@ class Db extends \Magento\Data\Tree
         return $node;
     }
 
-    public function appendChild($data=array(), $parentNode, $prevNode=null)
+    public function appendChild($data, $parentNode, $prevNode=null)
     {
         $orderSelect = $this->_conn->select();
         $orderSelect->from($this->_table, new \Zend_Db_Expr('MAX('.$this->_conn->quoteIdentifier($this->_orderField).')'))

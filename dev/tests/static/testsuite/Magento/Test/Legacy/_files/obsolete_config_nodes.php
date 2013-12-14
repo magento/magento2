@@ -29,8 +29,6 @@ return array(
     '/config/global/fieldsets'                 => '',
     '/config/global/cache/betatypes'           => '',
     '/config/admin/fieldsets'                  => '',
-    '/config/global/webhook'                   =>
-        'This configuration moved to Di configuration of \Magento\Webhook module models',
     '/config/general/locale'                   =>
         'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
     '/config/global/can_use_base_url'          =>

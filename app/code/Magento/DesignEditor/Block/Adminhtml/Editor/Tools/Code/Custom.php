@@ -71,7 +71,7 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
     {
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(array(
-            'attributes' => array(
+            'data' => array(
                 'action'   => '#',
                 'method'   => 'post',
             ))

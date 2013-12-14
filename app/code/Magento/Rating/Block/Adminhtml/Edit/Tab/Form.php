@@ -57,7 +57,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Rating\Model\Rating\OptionFactory $optionFactory
      * @param \Magento\Core\Model\Session\AbstractSession $session
      * @param \Magento\Core\Model\System\Store $systemStore
-     * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -67,7 +66,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Rating\Model\Rating\OptionFactory $optionFactory,
         \Magento\Core\Model\Session\AbstractSession $session,
         \Magento\Core\Model\System\Store $systemStore,
-        \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_optionFactory = $optionFactory;

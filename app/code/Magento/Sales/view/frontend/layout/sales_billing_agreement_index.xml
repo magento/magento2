@@ -25,12 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">2columns-left.phtml</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="my.account.wrapper">
+    <referenceContainer name="content">
         <block class="Magento\Sales\Block\Billing\Agreements" name="customer.account.billing.agreement" template="billing/agreements.phtml"/>
     </referenceContainer>
 </layout>

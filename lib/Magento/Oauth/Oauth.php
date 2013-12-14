@@ -143,7 +143,7 @@ class Oauth implements OauthInterface
             $tokenSecret
         );
 
-        return true;
+        return $consumer->getId();
     }
 
     /**

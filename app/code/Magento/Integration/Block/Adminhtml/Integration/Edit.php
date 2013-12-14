@@ -1,5 +1,7 @@
 <?php
 /**
+ * Integration edit container.
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -61,6 +63,40 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
         parent::_construct();
         $this->_removeButton('reset');
         $this->_removeButton('delete');
+
+        if ($this->_isNewIntegration()) {
+            $this->removeButton('save')->addButton(
+                'save',
+                [
+                    'id' => 'save-split-button',
+                    'label' => __('Save'),
+                    'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
+                    'button_class' => 'PrimarySplitButton',
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'button' => ['event' => 'save', 'target' => '#edit_form'],
+                        ],
+                    ],
+                    'options' => [
+                        'save_activate' => [
+                            'id' => 'activate',
+                            'label' => __('Save & Activate'),
+                            'data_attribute' => [
+                                'mage-init' => [
+                                    'button' => [
+                                        'event' => 'saveAndActivate',
+                                        'target' => '#edit_form',
+                                    ],
+                                    'integration' => [
+                                        'gridUrl' => $this->getUrl('*/*/'),
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
     }
 
     /**
@@ -70,15 +106,15 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        if (isset($this->_registry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION)[Info::DATA_ID])) {
+        if ($this->_isNewIntegration()) {
+            return __('New Integration');
+        } else {
             return __(
                 "Edit Integration '%1'",
                 $this->escapeHtml(
                     $this->_registry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION)[Info::DATA_NAME]
                 )
             );
-        } else {
-            return __('New Integration');
         }
     }
 
@@ -88,5 +124,15 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
     public function getFormActionUrl()
     {
         return $this->getUrl('*/*/save');
+    }
+
+    /**
+     * Determine whether we create new integration or editing an existing one.
+     *
+     * @return bool
+     */
+    protected function _isNewIntegration()
+    {
+        return !isset($this->_registry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION)[Info::DATA_ID]);
     }
 }
