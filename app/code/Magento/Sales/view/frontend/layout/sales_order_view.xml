@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
-    <referenceContainer name="my.account.wrapper">
+    <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
             <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons"/>
         </block>

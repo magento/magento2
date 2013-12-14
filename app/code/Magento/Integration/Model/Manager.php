@@ -84,11 +84,11 @@ class Manager
             }
             $integrationData[Integration::SETUP_TYPE] = Integration::TYPE_CONFIG;
             // If it already exists, update it
-            $data = $this->_integrationService->findByName($name);
-            if (isset($data[Integration::ID])) {
+            $integration = $this->_integrationService->findByName($name);
+            if ($integration->getId()) {
                 //If Integration already exists, update it.
                 //For now we will just overwrite the integration with same name but we will need a long term solution
-                $integrationData[Integration::ID] = $data[Integration::ID];
+                $integrationData[Integration::ID] = $integration->getId();
                 $this->_integrationService->update($integrationData);
             } else {
                 $this->_integrationService->create($integrationData);

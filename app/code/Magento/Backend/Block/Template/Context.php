@@ -66,16 +66,16 @@ class Context extends \Magento\View\Element\Template\Context
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
      * @param \Magento\App\Cache\StateInterface $cacheState
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\Logger $logger
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\View\FileSystem $viewFileSystem
-     * @param \Magento\View\TemplateEnginePool $enginePool
      * @param \Magento\Core\Model\App $app
-     * @param \Magento\App\State $appState
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\App\Dir $dirs
+     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\View\FileSystem $viewFileSystem
+     * @param \Magento\View\TemplateEnginePool $enginePool
+     * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\Backend\Model\Session $backendSession
@@ -101,16 +101,16 @@ class Context extends \Magento\View\Element\Template\Context
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
         \Magento\App\Cache\StateInterface $cacheState,
-        \Magento\App\Dir $dirs,
         \Magento\Logger $logger,
-        \Magento\Filesystem $filesystem,
-        \Magento\View\FileSystem $viewFileSystem,
-        \Magento\View\TemplateEnginePool $enginePool,
         \Magento\Core\Model\App $app,
-        \Magento\App\State $appState,
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filterManager,
         \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\App\Dir $dirs,
+        \Magento\Filesystem $filesystem,
+        \Magento\View\FileSystem $viewFileSystem,
+        \Magento\View\TemplateEnginePool $enginePool,
+        \Magento\App\State $appState,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\AuthorizationInterface $authorization,
         \Magento\Backend\Model\Session $backendSession,
@@ -138,16 +138,16 @@ class Context extends \Magento\View\Element\Template\Context
             $viewUrl,
             $viewConfig,
             $cacheState,
-            $dirs,
             $logger,
-            $filesystem,
-            $viewFileSystem,
-            $enginePool,
             $app,
-            $appState,
             $escaper,
             $filterManager,
             $locale,
+            $dirs,
+            $filesystem,
+            $viewFileSystem,
+            $enginePool,
+            $appState,
             $storeManager,
             $data
         );

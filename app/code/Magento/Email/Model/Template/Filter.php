@@ -121,7 +121,6 @@ class Filter extends \Magento\Filter\Template
     protected $_appState;
 
     /**
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Logger $logger
      * @param \Magento\Escaper $escaper
@@ -132,6 +131,9 @@ class Filter extends \Magento\Filter\Template
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\View\LayoutFactory $layoutFactory
      * @param \Magento\App\State $appState
+     * @param array $variables
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Stdlib\String $string,
@@ -143,7 +145,8 @@ class Filter extends \Magento\Filter\Template
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\View\LayoutInterface $layout,
         \Magento\View\LayoutFactory $layoutFactory,
-        \Magento\App\State $appState
+        \Magento\App\State $appState,
+        $variables = array()
     ) {
         $this->_escaper = $escaper;
         $this->_viewUrl = $viewUrl;
@@ -155,7 +158,7 @@ class Filter extends \Magento\Filter\Template
         $this->_layout = $layout;
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
-        parent::__construct($string);
+        parent::__construct($string, $variables);
     }
 
     /**

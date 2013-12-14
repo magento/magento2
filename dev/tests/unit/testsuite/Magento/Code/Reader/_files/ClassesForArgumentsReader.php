@@ -206,3 +206,31 @@ class ArgumentsOnSeparateLines extends firstClassForParentCall
         $this->_secondClass = $secondClass;
     }
 }
+
+class ClassWithSuppressWarnings
+{
+    /**
+     * @var stdClass
+     */
+    protected $argumentOne;
+
+    /**
+     * @var ClassExtendsDefaultPhpType
+     */
+    protected $argumentTwo;
+
+    /**
+     * @param stdClass $stdClassObject
+     * @param ClassExtendsDefaultPhpType $secondClass
+     *
+     * @SuppressWarnings(Magento.TypeDuplication)
+     */
+    public function __construct(
+        \stdClass $stdClassObject,
+        \ClassExtendsDefaultPhpType $secondClass
+    ) {
+        $this->argumentOne = $stdClassObject;
+        $this->argumentTwo = $secondClass;
+    }
+}
+

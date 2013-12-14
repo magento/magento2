@@ -25,6 +25,11 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
+    <referenceBlock name="customer-account-navigation-address-link">
+        <arguments>
+            <argument name="is_highlighted" xsi:type="boolean">true</argument>
+        </arguments>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="address/edit.phtml"/>
     </referenceContainer>

@@ -55,7 +55,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $testData = array ('name' => 'test_name', 'html_id' => 'test_html_id');
         $testHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject('Magento\Backend\Block\System\Config\Form\Field\Import', array(
-            'attributes' => $testData
+            'data' => $testData
         ));
         $this->_object->setForm($this->_formMock);
     }

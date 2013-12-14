@@ -38,7 +38,7 @@
             <?php $this->getChildBlock('items')->setItems($this->getWishlistItems()); ?>
             <?php echo $this->getChildHtml('items');?>
         <?php else: ?>
-            <p class="empty"><?php echo __('You have no items in your wish list.') ?></p>
+            <div class="message info empty"><span><?php echo __('You have no items in your wish list.') ?></span></div>
         <?php endif ?>
         <?php echo $this->getChildHtml('bottom'); ?>
         <div class="actions">

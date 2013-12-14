@@ -31,17 +31,17 @@ class Collection extends \Magento\Rule\Model\Action\Collection
 {
     /**
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\Rule\Model\ActionFactory $actionFactory
      * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Rule\Model\ActionFactory $actionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\View\Url $viewUrl,
-        \Magento\Rule\Model\ActionFactory $actionFactory,
         \Magento\View\LayoutInterface $layout,
+        \Magento\Rule\Model\ActionFactory $actionFactory,
         array $data = array()
     ) {
-        parent::__construct($viewUrl, $actionFactory, $layout, $data);
+        parent::__construct($viewUrl, $layout, $actionFactory, $data);
         $this->setType('Magento\CatalogRule\Model\Rule\Action\Collection');
     }
 

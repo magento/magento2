@@ -30,7 +30,8 @@ return array(
                 'httpMethod' => 'GET',
                 'method' => 'item',
                 'route' => '/:id',
-                'isSecure' => false
+                'isSecure' => false,
+                'resources' => array('Magento_Test1::resource1')
             )
         )
     ),
@@ -42,19 +43,22 @@ return array(
                 'httpMethod' => 'GET',
                 'method' => 'item',
                 'route' => '/:id',
-                'isSecure' => false
+                'isSecure' => false,
+                'resources' => array('Magento_Test1::resource1', 'Magento_Test1::resource2')
             ),
             'create' => array(
                 'httpMethod' => 'POST',
                 'method' => 'create',
                 'route' => '',
-                'isSecure' => false
+                'isSecure' => false,
+                'resources' => array('Magento_Test1::resource1', 'Magento_Test1::resource2')
             ),
             'delete' => array(
                 'httpMethod' => 'DELETE',
                 'method' => 'delete',
                 'route' => '/:id',
-                'isSecure' => true
+                'isSecure' => true,
+                'resources' => array('Magento_Test1::resource2')
             ),
         )
     ),

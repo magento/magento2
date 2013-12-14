@@ -40,18 +40,33 @@ class Reader extends \Magento\Config\Reader\Filesystem
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Webapi\Model\Config\Integration\Converter $converter
-     * @param \Magento\Webapi\Model\Config\Integration\SchemaLocator $schemeLocator
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
      * @param string $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
         \Magento\Webapi\Model\Config\Integration\Converter $converter,
-        \Magento\Webapi\Model\Config\Integration\SchemaLocator $schemeLocator,
+        \Magento\Webapi\Model\Config\Integration\SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
-        $fileName = 'integration\api.xml'
+        $fileName = 'integration\api.xml',
+        $idAttributes = array(),
+        $domDocumentClass = 'Magento\Config\Dom',
+        $defaultScope = 'global'
     ) {
-        parent::__construct($fileResolver, $converter, $schemeLocator, $validationState, $fileName);
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
+        );
     }
 }

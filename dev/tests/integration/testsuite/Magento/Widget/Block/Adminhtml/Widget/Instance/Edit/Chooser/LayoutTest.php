@@ -43,7 +43,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $config = $this->getMockBuilder('Magento\Core\Model\Layout\PageType\Config')
+        $config = $this->getMockBuilder('Magento\View\Layout\PageType\Config')
                             ->setMethods(array('getPageTypes'))
                             ->disableOriginalConstructor()
                             ->getMock();

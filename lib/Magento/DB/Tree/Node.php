@@ -44,7 +44,7 @@ class Node {
     public $numChild = 0;
 
 
-    function __construct($nodeData = array(), $keys) {
+    function __construct($nodeData, $keys) {
         if (empty($nodeData)) {
             throw new \Magento\DB\Tree\Node\NodeException('Empty array of node information');
         }

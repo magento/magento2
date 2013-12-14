@@ -82,8 +82,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             $this->_converterMock,
             $this->_schemaLocatorMock,
             $this->_validationStateMock,
-            $this->_configLocalMock,
-            'cacheId'
+            $this->_configLocalMock
         );
     }
 

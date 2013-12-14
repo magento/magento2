@@ -41,23 +41,23 @@ class Image extends \Magento\Data\Form\Element\Image
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
      * @param \Magento\UrlInterface $urlBuilder
-     * @param array $attributes
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
         \Magento\UrlInterface $urlBuilder,
-        $attributes = array()
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        $data = array()
     ) {
         $this->_storeManager = $storeManager;
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $urlBuilder, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $urlBuilder, $data);
     }
 
     protected function _getUrl()

@@ -43,8 +43,10 @@ class ArgumentSequenceTest extends \PHPUnit_Framework_TestCase
         $this->_fixturePath = realpath(__DIR__)
             . DIRECTORY_SEPARATOR . '_files'
             . DIRECTORY_SEPARATOR . 'ClassesForArgumentSequence.php';
-        $this->_validator = $this->getMock('Magento\Code\Validator\ArgumentSequence', array('_isAllowedType'));
-        $this->_validator->expects($this->any())->method('_isAllowedType')->will($this->returnValue(true));
+        $this->_validator = new \Magento\Code\Validator\ArgumentSequence();
+
+        /** Build internal cache */
+        $this->_validator->validate('\ArgumentSequence\ParentClass');
     }
 
     public function testValidSequence()

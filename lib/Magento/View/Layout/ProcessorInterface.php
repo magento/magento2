@@ -88,19 +88,25 @@ interface ProcessorInterface
     /**
      * Retrieve all design abstractions that exist in the system.
      *
-     * Result format:
-     * array(
-     *     'handle_name_1' => array(
-     *         'name'     => 'handle_name_1',
-     *         'label'    => 'Handle Name 1',
-     *         'design_abstraction' => self::DESIGN_ABSTRACTION_PAGE_LAYOUT or self::DESIGN_ABSTRACTION_CUSTOM
-     *     ),
-     *     // ...
-     * )
-     *
      * @return array
      */
     public function getAllDesignAbstractions();
+
+    /**
+     * Check page_layout design abstractions that exist in the system
+     *
+     * @param array $abstraction
+     * @return bool
+     */
+    public function isPageLayoutDesignAbstraction(array $abstraction);
+
+    /**
+     * Check custom design abstractions that exist in the system
+     *
+     * @param array $abstraction
+     * @return bool
+     */
+    public function isCustomerDesignAbstraction(array $abstraction);
 
     /**
      * Load layout updates by handles

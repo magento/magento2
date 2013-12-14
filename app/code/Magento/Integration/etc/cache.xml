@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <type name="config_integration" translate="label,description" instance="Magento\Webapi\Model\Cache\Type">
+    <type name="config_integration" translate="label,description" instance="Magento\Integration\Model\Cache\Type">
         <label>Integrations Configuration</label>
         <description>Integration configuration file.</description>
     </type>

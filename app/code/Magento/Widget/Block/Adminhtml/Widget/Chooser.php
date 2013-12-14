@@ -171,7 +171,7 @@ class Chooser extends \Magento\Backend\Block\Template
         ));
         $hiddenHtml = '';
         if ($this->getHiddenEnabled()) {
-            $hidden = $this->_elementFactory->create('hidden', array('attributes' => $element->getData()));
+            $hidden = $this->_elementFactory->create('hidden', array('data' => $element->getData()));
             $hidden->setId("{$chooserId}value")->setForm($element->getForm());
             if ($element->getRequired()) {
                 $hidden->addClass('required-entry');

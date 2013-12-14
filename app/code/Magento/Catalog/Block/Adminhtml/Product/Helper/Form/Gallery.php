@@ -47,24 +47,24 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     protected $_layout;
 
     /**
-     * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param array $attributes
+     * @param \Magento\Escaper $escaper
+     * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param array $data
      */
     public function __construct(
-        \Magento\View\LayoutInterface $layout,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        $attributes = array()
+        \Magento\Escaper $escaper,
+        \Magento\View\LayoutInterface $layout,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        $data = array()
     ) {
         $this->_layout = $layout;
         $this->_storeManager = $storeManager;
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
     public function getElementHtml()

@@ -107,10 +107,9 @@ class Observer
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Backend\Model\Session $backendSession
-     * @param Rule\Product\Price $productPrice
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Stdlib\DateTime $dateTime
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -124,7 +123,6 @@ class Observer
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Backend\Model\Session $backendSession,
-        \Magento\CatalogRule\Model\Rule\Product\Price $productPrice,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Stdlib\DateTime $dateTime
     ) {

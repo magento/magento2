@@ -48,18 +48,16 @@ class Weee extends \Magento\Tax\Model\Sales\Total\Quote\Tax
     protected $_isTaxAffected;
 
     /**
-     * Initialize Weee totals collector
-     *
-     * @param \Magento\Weee\Helper\Data $weeeData
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Model\Calculation $calculation
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param \Magento\Weee\Helper\Data $weeeData
      */
     public function __construct(
-        \Magento\Weee\Helper\Data $weeeData,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Tax\Model\Calculation $calculation,
-        \Magento\Tax\Model\Config $taxConfig
+        \Magento\Tax\Model\Config $taxConfig,
+        \Magento\Weee\Helper\Data $weeeData
     ) {
         $this->_weeeData = $weeeData;
         parent::__construct($taxData, $calculation, $taxConfig);

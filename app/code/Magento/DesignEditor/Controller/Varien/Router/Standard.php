@@ -63,10 +63,12 @@ class Standard extends \Magento\Core\App\Router\Base
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param string $routerId
      * @param \Magento\App\RouterListInterface $routerList
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Core\App\Request\RewriteService $urlRewriteService
-     * @param $routerId
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\App\ActionFactory $actionFactory,
@@ -78,14 +80,22 @@ class Standard extends \Magento\Core\App\Router\Base
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        $routerId,
         \Magento\App\RouterListInterface $routerList,
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\App\Request\RewriteService $urlRewriteService,
-        $routerId
+        \Magento\Core\App\Request\RewriteService $urlRewriteService
     ) {
         parent::__construct(
-            $actionFactory, $defaultPath, $responseFactory, $routeConfig, $appState, $url, $storeManager, $storeConfig,
-            $urlSecurityInfo, $routerId
+            $actionFactory,
+            $defaultPath,
+            $responseFactory,
+            $routeConfig,
+            $appState,
+            $url,
+            $storeManager,
+            $storeConfig,
+            $urlSecurityInfo,
+            $routerId
         );
         $this->_urlRewriteService = $urlRewriteService;
         $this->_objectManager = $objectManager;

@@ -68,6 +68,10 @@
     content: '\e05b';
 }
 
+#integrationGrid_table .action.info:before {
+    content: '\e07e';    /* TOFIX: Need to get the proper character code */
+}
+
 #integrationGrid_table .action.delete:before {
     content: '\e07f';
 }
@@ -84,6 +88,10 @@
 
 .ui-dialog .ui-dialog-buttonpane {
     text-align: right;
+}
+
+.no-close .ui-dialog-titlebar-close {
+    display: none;
 }
 
 #integration_token_base_fieldset input[readonly] {

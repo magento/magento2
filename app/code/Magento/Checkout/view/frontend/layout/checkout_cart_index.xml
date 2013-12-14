@@ -24,6 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <update handle="page_one_column"/>
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml">
             <container name="checkout.cart.items" label="invisible" as="with-items">

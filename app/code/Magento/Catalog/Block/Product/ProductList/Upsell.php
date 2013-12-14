@@ -79,7 +79,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Checkout\Model\Resource\Cart $checkoutCart
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -92,7 +91,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Checkout\Model\Resource\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_checkoutCart = $checkoutCart;
@@ -194,7 +192,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * Set how many items we need to show in upsell block
-     * Notice: this parametr will be also applied
+     * Notice: this parameter will be also applied
      *
      * @param string $type
      * @param int $limit

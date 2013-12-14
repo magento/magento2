@@ -37,7 +37,7 @@ class Context
     protected $_themeFactory;
 
     /**
-     * @var \Magento\Core\Model\Theme\CopyService
+     * @var \Magento\Theme\Model\CopyService
      */
     protected $_copyService;
 
@@ -55,11 +55,11 @@ class Context
      * Initialize dependencies
      *
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
-     * @param \Magento\Core\Model\Theme\CopyService $copyService
+     * @param \Magento\Theme\Model\CopyService $copyService
      */
     public function __construct(
         \Magento\Core\Model\ThemeFactory $themeFactory,
-        \Magento\Core\Model\Theme\CopyService $copyService
+        \Magento\Theme\Model\CopyService $copyService
     ) {
         $this->_themeFactory = $themeFactory;
         $this->_copyService = $copyService;

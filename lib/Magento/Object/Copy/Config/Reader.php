@@ -47,6 +47,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
+     * @param string $defaultScope
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
@@ -55,7 +56,8 @@ class Reader extends \Magento\Config\Reader\Filesystem
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'fieldset.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Config\Dom'
+        $domDocumentClass = 'Magento\Config\Dom',
+        $defaultScope = 'global'
     ) {
         parent::__construct(
             $fileResolver,
@@ -64,7 +66,8 @@ class Reader extends \Magento\Config\Reader\Filesystem
             $validationState,
             $fileName,
             $idAttributes,
-            $domDocumentClass
+            $domDocumentClass,
+            $defaultScope
         );
     }
 }

@@ -45,15 +45,11 @@ class Urlkey
     protected $_catalogUrl;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Url $catalogUrl
      * @param \Magento\Logger $logger
+     * @param \Magento\Catalog\Model\Url $catalogUrl
      */
-    public function __construct(
-        \Magento\Catalog\Model\Url $catalogUrl,
-        \Magento\Logger $logger
-    ) {
+    public function __construct(\Magento\Logger $logger, \Magento\Catalog\Model\Url $catalogUrl)
+    {
         $this->_catalogUrl = $catalogUrl;
         parent::__construct($logger);
     }

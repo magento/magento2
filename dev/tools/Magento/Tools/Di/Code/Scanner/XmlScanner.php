@@ -79,7 +79,7 @@ class XmlScanner implements ScannerInterface
         foreach ($output as $className) {
             $entityName = substr($className, -6) === '\Proxy' ? substr($className, 0, -6) : $className;
             if (false === class_exists($className)) {
-                if (class_exists($entityName)) {
+                if (class_exists($entityName) || interface_exists($entityName)) {
                     array_push($filteredEntities, $className);
                 } else {
                     $this->_log->add(

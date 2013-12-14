@@ -124,7 +124,7 @@
                 <label>Design Theme</label>
                 <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Design Theme</label>
-                    <source_model>Magento\Core\Model\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
+                    <source_model>Magento\View\Design\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
                     <backend_model>Magento\Core\Model\Design\Backend\Theme</backend_model>
                     <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
                 </field>

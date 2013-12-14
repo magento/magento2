@@ -42,7 +42,7 @@
                 <div class="field required email">
                     <label class="label" for="billing:email"><span><?php echo __('Email Address') ?></span></label>
                     <div class="control">
-                        <input type="text" name="billing[email]" id="billing:email" value="<?php echo $this->escapeHtml($this->getAddress()->getEmail()) ?>" title="<?php echo __('Email Address') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}"/>
+                        <input type="email" name="billing[email]" id="billing:email" value="<?php echo $this->escapeHtml($this->getAddress()->getEmail()) ?>" title="<?php echo __('Email Address') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}"/>
                     </div>
                 </div>
         <?php endif; ?>

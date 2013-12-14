@@ -55,15 +55,15 @@ class Form extends \Magento\Data\Form\AbstractForm
      * @param Form\Element\Factory $factoryElement
      * @param Form\Element\CollectionFactory $factoryCollection
      * @param Form\FormKey $formKey
-     * @param array $attributes
+     * @param array $data
      */
     public function __construct(
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Data\Form\FormKey $formKey,
-        $attributes = array()
+        $data = array()
     ) {
-        parent::__construct($factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $data);
         $this->_allElements = $this->_factoryCollection->create(array('container' => $this));
         $this->formKey = $formKey;
     }

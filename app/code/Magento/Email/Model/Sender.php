@@ -68,7 +68,7 @@ class Sender
      * @param int $storeId
      * @return \Magento\Email\Model\Sender
      */
-    public function send($email, $name, $template, $sender, $templateParams = array(), $storeId)
+    public function send($email, $name, $template, $sender, $templateParams, $storeId)
     {
         $this->_store->load($storeId);
         $this->_emailInfo->addTo($email, $name);

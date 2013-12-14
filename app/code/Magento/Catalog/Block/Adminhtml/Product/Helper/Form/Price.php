@@ -53,27 +53,27 @@ class Price extends \Magento\Data\Form\Element\Text
     protected $_locale;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param array $attributes
+     * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Tax\Helper\Data $taxData,
-        array $attributes = array()
+        array $data = array()
     ) {
         $this->_locale = $locale;
         $this->_storeManager = $storeManager;
         $this->_taxData = $taxData;
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
     protected function _construct()

@@ -174,7 +174,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         // Prepare form
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(array(
-            'attributes' => array(
+            'data' => array(
                 'id'            => 'edit_form',
                 'use_container' => true,
                 'method'        => 'post',

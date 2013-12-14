@@ -24,58 +24,68 @@
 
 namespace Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab;
 
-use Magento\Backend\Block\Widget\Tab\TabInterface;
-use Magento\View\Element\Template;
-use Magento\Acl\Resource\ProviderInterface;
-use Magento\Core\Helper\Data as CoreHelper;
-use Magento\Core\Model\Acl\RootResource;
-use Magento\View\Element\Template\Context;
-use Magento\Integration\Helper\Data as IntegrationHelper;
+use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
+use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
+use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Webapi\Helper\Data as WebapiHelper;
 
 /**
  * API permissions tab for integration activation dialog.
+ *
+ * TODO: Fix warnings suppression
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Webapi extends Template implements TabInterface
+class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
+    implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /** @var string[] */
     protected $_selectedResources;
 
-    /** @var RootResource */
+    /** @var \Magento\Core\Model\Acl\RootResource */
     protected $_rootResource;
 
-    /** @var ProviderInterface */
+    /** @var \Magento\Acl\Resource\ProviderInterface */
     protected $_resourceProvider;
 
-    /** @var IntegrationHelper */
+    /** @var \Magento\Integration\Helper\Data */
     protected $_integrationData;
 
     /** @var WebapiHelper */
     protected $_webapiHelper;
 
+    /** @var \Magento\Core\Helper\Data  */
+    protected $_coreHelper;
+
     /**
      * Initialize dependencies.
      *
-     * @param Context $context
-     * @param RootResource $rootResource
-     * @param ProviderInterface $resourceProvider
-     * @param IntegrationHelper $integrationData
-     * @param WebapiHelper $webapiData
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Core\Model\Acl\RootResource $rootResource
+     * @param \Magento\Acl\Resource\ProviderInterface $resourceProvider
+     * @param \Magento\Integration\Helper\Data $integrationData
+     * @param \Magento\Webapi\Helper\Data $webapiData
      * @param array $data
      */
     public function __construct(
-        Context $context,
-        RootResource $rootResource,
-        ProviderInterface $resourceProvider,
-        IntegrationHelper $integrationData,
-        WebapiHelper $webapiData,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Data\FormFactory $formFactory,
+        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Core\Model\Acl\RootResource $rootResource,
+        \Magento\Acl\Resource\ProviderInterface $resourceProvider,
+        \Magento\Integration\Helper\Data $integrationData,
+        \Magento\Webapi\Helper\Data $webapiData,
         array $data = array()
     ) {
         $this->_rootResource = $rootResource;
-        $this->_webapiHelper = $webapiData;
         $this->_resourceProvider = $resourceProvider;
         $this->_integrationData = $integrationData;
-        parent::__construct($context, $data);
+        $this->_webapiHelper = $webapiData;
+        $this->_coreHelper = $coreHelper;
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
@@ -93,7 +103,9 @@ class Webapi extends Template implements TabInterface
      */
     public function canShowTab()
     {
-        return true;
+        $integrationData = $this->_coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
+        return isset($integrationData[Info::DATA_SETUP_TYPE])
+            && ($integrationData[Info::DATA_SETUP_TYPE] == IntegrationModel::TYPE_CONFIG);
     }
 
     /**
@@ -140,7 +152,7 @@ class Webapi extends Template implements TabInterface
         $resources = $this->_resourceProvider->getAclResources();
         $aclResourcesTree = $this->_integrationData->mapResources($resources[1]['children']);
 
-        return $this->_coreData->jsonEncode($aclResourcesTree);
+        return $this->_coreHelper->jsonEncode($aclResourcesTree);
     }
 
     /**
@@ -157,7 +169,17 @@ class Webapi extends Template implements TabInterface
              $resources = $this->_resourceProvider->getAclResources();
              $selectedResources = $this->_getAllResourceIds($resources[1]['children']);
         }
-        return $this->_coreData->jsonEncode($selectedResources);
+        return $this->_coreHelper->jsonEncode($selectedResources);
+    }
+
+    /**
+     * Whether tree has any resources.
+     *
+     * @return bool
+     */
+    public function isTreeEmpty()
+    {
+        return $this->_selectedResources === [];
     }
 
     /**

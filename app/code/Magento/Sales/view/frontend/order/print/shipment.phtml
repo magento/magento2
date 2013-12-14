@@ -111,9 +111,6 @@
             <?php endforeach; ?>
         </table>
     </div>
-    <script type="text/javascript">(function ($) {
-        $('#my-shipment-table-<?php echo $this->getObjectData($shipment, 'id')?>').decorate('table', {'tbody':['odd', 'even'], 'tbody tr':['first', 'last']})
-    })(jQuery)</script>
     <?php endforeach; ?>
 <?php endif; ?>
 <script type="text/javascript">window.print();</script>

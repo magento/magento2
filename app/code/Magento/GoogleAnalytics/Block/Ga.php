@@ -99,7 +99,7 @@ class Ga extends \Magento\View\Element\Template
     {
         $pageName   = trim($this->getPageName());
         $optPageURL = '';
-        if ($pageName && preg_match('/^\/.*/i', $pageName)) {
+        if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
             $optPageURL = ", '{$this->escapeJsQuote($pageName)}'";
         }
         return "

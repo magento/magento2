@@ -65,7 +65,7 @@ class Checkbox
     public function render(\Magento\Data\Form\Element\AbstractElement $element)
     {
         /** @var \Magento\Data\Form\Element\Checkbox $checkbox */
-        $checkbox = $this->_elementFactory->create('checkbox', array('attributes' => $element->getData()));
+        $checkbox = $this->_elementFactory->create('checkbox', array('data' => $element->getData()));
         $checkbox->setForm($element->getForm());
 
         $elementHtml = sprintf(

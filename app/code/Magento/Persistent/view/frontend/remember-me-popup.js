@@ -28,10 +28,10 @@
         options: {
             closeBtn: '.action.close',
             windowOverlayTemplate: '<div class="window overlay"></div>',
-            popupBlockTemplate: '<div class="popup block remember tip active">' +
+            popupBlockTemplate: '<div class="popup block remember tip active">'  +
+                                '<span class="action close"></span>' +
                                 '<div class="title">' +
-                                    '<strong>${title}</strong>' +
-                                    '<div class="action close"></div>' +
+                                    '<strong>${title}</strong>'+
                                 '</div>' +
                                 '<div class="content">' +
                                     '<p>${content}</p>' +

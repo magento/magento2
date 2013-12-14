@@ -47,7 +47,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(array(
-            'attributes' => array(
+            'data' => array(
                 'id' => 'edit_form',
                 'action' => $this->getUrl('sales_rule/promo_quote/save'),
                 'method' => 'post',

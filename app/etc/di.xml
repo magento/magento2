@@ -78,6 +78,7 @@
     <preference for="Magento\Session\SidResolverInterface" type="Magento\Core\Model\Session\SidResolver\Proxy" />
     <preference for="Magento\TranslateInterface" type="Magento\Core\Model\Translate" />
     <preference for="Magento\Config\ScopeListInterface" type="interceptionConfigScope" />
+    <preference for="Magento\View\Design\Theme\Label\ListInterface" type="Magento\Core\Model\Resource\Theme\Collection" />
     <virtualType name="interceptionConfigScope" type="Magento\Config\Scope">
         <param name="defaultScope">
             <value>global</value>
@@ -275,6 +276,23 @@
     <type name="Magento\HTTP\PhpEnvironment\RemoteAddress">
         <param name="alternativeHeaders">
             <value/>
+        </param>
+    </type>
+    <type name="Magento\App\FrontController">
+        <plugin name="install" type="Magento\Module\FrontController\Plugin\Install" sortOrder="40"/>
+    </type>
+    <type name="Magento\View\Layout\Argument\HandlerFactory">
+        <param name="handlerFactories">
+            <value>
+                <object>Magento\Core\Model\Layout\Argument\Handler\Object</object>
+                <options>Magento\Core\Model\Layout\Argument\Handler\Options</options>
+                <url>Magento\Core\Model\Layout\Argument\Handler\Url</url>
+                <array>Magento\Core\Model\Layout\Argument\Handler\ArrayHandler</array>
+                <boolean>Magento\Core\Model\Layout\Argument\Handler\Boolean</boolean>
+                <helper>Magento\Core\Model\Layout\Argument\Handler\Helper</helper>
+                <number>Magento\Core\Model\Layout\Argument\Handler\Number</number>
+                <string>Magento\Core\Model\Layout\Argument\Handler\String</string>
+            </value>
         </param>
     </type>
 </config>

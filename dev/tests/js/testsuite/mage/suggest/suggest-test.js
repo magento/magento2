@@ -458,6 +458,27 @@ SuggestTest.prototype.testSelectItemMultiselect = function() {
     assertFalse(selectedElement.hasClass(suggestInstance.options.selectedClass));
     assertTrue(suggestInstance.dropdown.is(':hidden'));
 };
+SuggestTest.prototype.testResetSuggestValue = function() {
+    var suggestInstance = this.suggestCreate();
+    suggestInstance.valueField.val('test');
+    suggestInstance._resetSuggestValue();
+    assertEquals(suggestInstance.valueField.val(), suggestInstance._nonSelectedItem.id);
+};
+SuggestTest.prototype.testResetSuggestValueMultiselect = function() {
+    var suggestInstance = this.suggestCreate({multiselect: true});
+    suggestInstance._focused = this.uiHash.item;
+    var selectedElement = jQuery('<div></div>');
+    var event = $.Event('select');
+    event.target = selectedElement[0];
+
+    suggestInstance._selectItem(event);
+    suggestInstance._resetSuggestValue();
+
+    var suggestValue = suggestInstance.valueField.val();
+    assertArray(suggestValue);
+    assertNotUndefined(suggestValue[0]);
+    assertEquals(suggestValue[0], this.uiHash.item.id);
+};
 SuggestTest.prototype.testReadItemData = function() {
     var testElement = jQuery('<div></div>'),
         suggestInstance = this.suggestCreate();

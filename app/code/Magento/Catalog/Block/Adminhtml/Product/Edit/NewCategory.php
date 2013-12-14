@@ -72,7 +72,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     {
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(array(
-            'attributes' => array(
+            'data' => array(
                 'id' => 'new_category_form',
             ))
         );

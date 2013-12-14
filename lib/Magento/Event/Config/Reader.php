@@ -39,24 +39,33 @@ class Reader extends \Magento\Config\Reader\Filesystem
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param Converter $converter
-     * @param SchemaLocator $schemaLocator
+     * @param \Magento\Event\Config\Converter $converter
+     * @param \Magento\Event\Config\SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
+     * @param string $defaultScope
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        Converter $converter,
-        SchemaLocator $schemaLocator,
+        \Magento\Event\Config\Converter $converter,
+        \Magento\Event\Config\SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'events.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Config\Dom'
+        $domDocumentClass = 'Magento\Config\Dom',
+        $defaultScope = 'global'
     ) {
         parent::__construct(
-            $fileResolver, $converter, $schemaLocator, $validationState, $fileName, $idAttributes, $domDocumentClass
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
         );
     }
 

@@ -56,19 +56,19 @@ abstract class AbstractElement extends \Magento\Data\Form\AbstractForm
     protected $_escaper;
 
     /**
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param array $attributes
+     * @param \Magento\Escaper $escaper
+     * @param array $data
      */
     public function __construct(
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        $attributes = array()
+        \Magento\Escaper $escaper,
+        $data = array()
     ) {
         $this->_escaper = $escaper;
-        parent::__construct($factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $data);
         $this->_renderer = \Magento\Data\Form::getElementRenderer();
     }
 

@@ -40,7 +40,7 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
             'theme_title' => 'Test Theme'
         ));
 
-        $copyService = $this->getMock('Magento\Core\Model\Theme\CopyService', array('copy'), array(), '', false, false);
+        $copyService = $this->getMock('Magento\Theme\Model\CopyService', array('copy'), array(), '', false, false);
         $copyService->expects($this->once())
             ->method('copy')
             ->will($this->returnValue($copyService));

@@ -25,6 +25,9 @@
  */
 namespace Magento\Webapi\Controller;
 
+use Magento\Webapi\Exception as WebapiException;
+use Magento\Service\AuthorizationException;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -114,7 +117,7 @@ class Soap implements \Magento\App\FrontControllerInterface
         $request->setPathInfo('/' . implode('/', $pathParts));
         try {
             if (!$this->_appState->isInstalled()) {
-                throw new \Magento\Webapi\Exception(__('Magento is not yet installed'));
+                throw new WebapiException(__('Magento is not yet installed'));
             }
             if ($this->_isWsdlRequest()) {
                 $responseBody = $this->_wsdlGenerator->generate(
@@ -123,7 +126,8 @@ class Soap implements \Magento\App\FrontControllerInterface
                 );
                 $this->_setResponseContentType(self::CONTENT_TYPE_WSDL_REQUEST);
             } else {
-                $this->_oauthService->validateAccessToken($this->_getAccessToken());
+                $consumerId = $this->_oauthService->validateAccessToken($this->_getAccessToken());
+                $this->_request->setConsumerId($consumerId);
                 $responseBody = $this->_soapServer->handle();
                 $this->_setResponseContentType(self::CONTENT_TYPE_SOAP_CALL);
             }
@@ -145,15 +149,21 @@ class Soap implements \Magento\App\FrontControllerInterface
     }
 
     /**
-     * Parse the Authorization header and return the access token
-     * eg Authorization: Bearer <access-token>
+     * Parse the Authorization header and return the access token e.g. Authorization: Bearer <access-token>
      *
      * @return string Access token
+     * @throws AuthorizationException
      */
     protected function _getAccessToken()
     {
-        $token = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
-        return $token[1];
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $token = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
+            if (isset($token[1]) && is_string($token[1])) {
+                return $token[1];
+            }
+            throw new AuthorizationException(__('Authentication header format is invalid.'));
+        }
+        throw new AuthorizationException(__('Authentication header is absent.'));
     }
 
     /**

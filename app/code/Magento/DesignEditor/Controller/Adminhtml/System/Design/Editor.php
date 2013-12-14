@@ -272,8 +272,8 @@ class Editor extends \Magento\Backend\App\Action
         $themeId = (int)$this->getRequest()->getParam('theme_id');
         /** @var $themeCopy \Magento\View\Design\ThemeInterface */
         $themeCopy = $this->_objectManager->create('Magento\View\Design\ThemeInterface');
-        /** @var $copyService \Magento\Core\Model\Theme\CopyService */
-        $copyService = $this->_objectManager->get('Magento\Core\Model\Theme\CopyService');
+        /** @var $copyService \Magento\Theme\Model\CopyService */
+        $copyService = $this->_objectManager->get('Magento\Theme\Model\CopyService');
         try {
             $theme = $this->_loadThemeById($themeId);
             if (!$theme->isVirtual()) {
@@ -314,8 +314,8 @@ class Editor extends \Magento\Backend\App\Action
         }
 
         try {
-            /** @var $copyService \Magento\Core\Model\Theme\CopyService */
-            $copyService = $this->_objectManager->get('Magento\Core\Model\Theme\CopyService');
+            /** @var $copyService \Magento\Theme\Model\CopyService */
+            $copyService = $this->_objectManager->get('Magento\Theme\Model\CopyService');
             $stagingTheme = $virtualTheme->getDomainModel(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)
                 ->getStagingTheme();
             switch ($revertTo) {

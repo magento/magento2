@@ -32,25 +32,6 @@ namespace Magento\Core\Model\View;
 class Design implements \Magento\View\DesignInterface
 {
     /**
-     * Common node path to theme design configuration
-     */
-    const XML_PATH_THEME_ID = 'design/theme/theme_id';
-
-    /**
-     * Regular expressions matches cache
-     *
-     * @var array
-     */
-    private static $_regexMatchCache      = array();
-
-    /**
-     * Custom theme type cache
-     *
-     * @var array
-     */
-    private static $_customThemeTypeCache = array();
-
-    /**
      * Package area
      *
      * @var string
@@ -251,33 +232,6 @@ class Design implements \Magento\View\DesignInterface
             $this->_theme = $this->_themeFactory->create();
         }
         return $this->_theme;
-    }
-
-    /**
-     * Return package name based on design exception rules
-     *
-     * @param array $rules - design exception rules
-     * @param string $regexpsConfigPath
-     * @return bool|string
-     */
-    public static function getPackageByUserAgent(array $rules, $regexpsConfigPath = 'path_mock')
-    {
-        foreach ($rules as $rule) {
-            if (!empty(self::$_regexMatchCache[$rule['regexp']][$_SERVER['HTTP_USER_AGENT']])) {
-                self::$_customThemeTypeCache[$regexpsConfigPath] = $rule['value'];
-                return $rule['value'];
-            }
-
-            $regexp = '/' . trim($rule['regexp'], '/') . '/';
-
-            if (@preg_match($regexp, $_SERVER['HTTP_USER_AGENT'])) {
-                self::$_regexMatchCache[$rule['regexp']][$_SERVER['HTTP_USER_AGENT']] = true;
-                self::$_customThemeTypeCache[$regexpsConfigPath] = $rule['value'];
-                return $rule['value'];
-            }
-        }
-
-        return false;
     }
 
     /**

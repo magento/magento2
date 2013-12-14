@@ -41,7 +41,7 @@
                 <div class="field email required">
                     <label class="label" for="login-email"><span><?php echo __('Email Address') ?></span></label>
                     <div class="control">
-                        <input type="text" class="input-text" id="login-email" name="login[username]" data-validate="{required:true, 'validate-email':true}" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" />
+                        <input type="email" class="input-text" id="login-email" name="login[username]" data-validate="{required:true, 'validate-email':true}" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" />
                     </div>
                 </div>
                 <div class="field password required">

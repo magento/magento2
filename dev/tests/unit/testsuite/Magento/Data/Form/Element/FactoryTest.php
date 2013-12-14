@@ -70,7 +70,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreatePositiveWithNotEmptyConfig($type)
     {
-        $config = array('attributes' => array('attr1' => 'attr1', 'attr2' => 'attr2'));
+        $config = array('data' => array('attr1' => 'attr1', 'attr2' => 'attr2'));
         $className = 'Magento\Data\Form\Element\\' . ucfirst($type);
         $elementMock = $this->getMock($className, array(), array(), '', false);
         $this->_objectManagerMock->expects($this->once())

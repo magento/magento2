@@ -28,10 +28,13 @@
 ?>
 <script type="text/javascript">
     window.integration = new Integration(
-        '<?php echo $this->getUrl('*/*/activate', ['id' => ':id', '_query' => 'popup_dialog=permissions']); ?>',
-        '<?php echo $this->getUrl('*/*/activate', ['id' => ':id', '_query' => 'popup_dialog=tokens']); ?>',
+        '<?php echo $this->getUrl('*/*/permissionsDialog', ['id' => ':id']); ?>',
+        '<?php echo $this->getUrl('*/*/tokensDialog', ['id' => ':id']); ?>',
         '', // Not implemented
         '' // Not implemented
     );
 </script>
 <div id="integration-popup-container" style="display:none;"></div>
+<div id="integration-delete-container" style="display:none;" title="<?php echo __('Are you sure ?'); ?>">
+    <p><?php echo __("Are you sure you want to delete this integration? You can't undo this action."); ?></p>
+</div>

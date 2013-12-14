@@ -64,20 +64,20 @@ class Filter extends \Magento\Filter\Template
     protected $_storeManager;
 
     /**
-     * Construct
-     *
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\Url $viewUrl
+     * @param array $variables
      */
     public function __construct(
         \Magento\Stdlib\String $string,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\View\Url $viewUrl
+        \Magento\View\Url $viewUrl,
+        $variables = array()
     ) {
         $this->_storeManager = $storeManager;
         $this->_viewUrl = $viewUrl;
-        parent::__construct($string);
+        parent::__construct($string, $variables);
     }
 
     /**

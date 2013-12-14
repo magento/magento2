@@ -712,4 +712,26 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
         $this->_updates = array();
         $this->_layoutUpdatesCache = null;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function isCustomerDesignAbstraction(array $abstraction)
+    {
+        if (!isset($abstraction['design_abstraction'])) {
+            return false;
+        }
+        return $abstraction['design_abstraction'] === self::DESIGN_ABSTRACTION_CUSTOM;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isPageLayoutDesignAbstraction(array $abstraction)
+    {
+        if (!isset($abstraction['design_abstraction'])) {
+            return false;
+        }
+        return $abstraction['design_abstraction'] === self::DESIGN_ABSTRACTION_PAGE_LAYOUT;
+    }
 }

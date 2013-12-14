@@ -98,11 +98,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                     )
                 )
             );
-        $intLookupData1 = array(
-            Integration::ID => 1,
+        $intLookupData1 = new \Magento\Object(array(
+            'id' => 1,
             Integration::NAME => 'TestIntegration1',
             Integration::SETUP_TYPE => 1,
-        );
+        ));
 
         $intUpdateData1 = array(
             Integration::ID => 1,
@@ -129,7 +129,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->_integrationServiceMock->expects($this->at(2))
             ->method('findByName')
             ->with('TestIntegration2')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue(new \Magento\Object(array())));
         $this->_integrationServiceMock->expects($this->once())
             ->method('update')
             ->with($intUpdateData1);

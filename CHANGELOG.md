@@ -1,12 +1,40 @@
+2.0.0.0-dev56
+=============
+* Fixed bugs:
+  * Fixed placing order with PayPal Payments Advanced and Payflow Link
+  * Fixed losing previously assigned categories after saving the product with changed category selector field
+  * Fixed losing of a newly created category assignment after variations generation during Configurable product or Gift Card creation
+  * Fixed the error in order placement with Recurring profile payment
+* GitHub requests:
+  * [#299](https://github.com/magento/magento2/pull/299) -- Fix for issue Refactor Mage_Rating_Model_Resource_Rating_Collection
+  * [#341](https://github.com/magento/magento2/pull/341) -- Replacing simple preg calls with less expensive alternates
+* Modularity improvements:
+  * Layout page type config moved to library
+  * Design loader moved to library
+  * Theme label moved to library
+* Themes update:
+  * Reduced amount of templates and layouts in magento_plushe theme
+  * Responsive design improvements
+* Integrity improvements:
+  * Covered all Magento classes with argument sequence validator
+  * Added arguments type duplication validator
+* Implemented API Integration UX flows:
+  * Ability to create and edit API Integrations
+  * Ability to delete API integrations that were not created using configuration files
+* Removed System REST menu item and all associated UX flows:
+  * Users, Roles, and Webhook Subscriptions sub-menu items were removed
+* Removed the Webhook module
+
 2.0.0.0-dev55
 =============
 * Modularity improvements:
-  * Session configuration moved to library
-  * FormKey logic was moved from Session
-  * SessionIdFlags from Session was removed
+  * Session configuration is moved to library
+  * FormKey logic is moved out from Session model
+  * SessionIdFlags is removed from Session model
   * Move Page logic to the Theme module and library
-* Created integration module UX
+* Created UX for the Integration module
 * Created authorization service (Magento_Authz module)
+  * Implemented an API Authz check in the Webapi framework
 * Fixed bugs:
   * Fixed the issue that prevented a customer group's shopping cart rules from applying properly to prices. The issue occurred when a customer was manually assigned to a customer group and automatic group assignment was enabled.
   * Fixed the bug with schema upgrade scripts not running after installation

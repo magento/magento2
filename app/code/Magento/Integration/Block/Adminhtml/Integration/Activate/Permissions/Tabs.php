@@ -1,6 +1,6 @@
 <?php
 /**
- * API permissions tab for integration activation dialog.
+ * Permissions tab for integration activation dialog.
  *
  * Magento
  *

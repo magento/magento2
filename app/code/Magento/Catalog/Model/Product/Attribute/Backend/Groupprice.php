@@ -42,28 +42,25 @@ class Groupprice
     protected $_productAttributeBackendGroupprice;
 
     /**
-     * Construct
-     *
      * @param \Magento\Logger $logger
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice $productAttributeBackendGroupprice
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Catalog\Model\Product\Type $catalogProductType
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice $productAttributeBackendGroupprice
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice $productAttributeBackendGroupprice,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Config $config
+        \Magento\Core\Model\Config $config,
+        \Magento\Catalog\Model\Product\Type $catalogProductType,
+        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice $productAttributeBackendGroupprice
     ) {
         $this->_productAttributeBackendGroupprice = $productAttributeBackendGroupprice;
-        parent::__construct($logger, $currencyFactory, $storeManager, $catalogProductType, $catalogData,
-            $config);
+        parent::__construct($logger, $currencyFactory, $storeManager, $catalogData, $config, $catalogProductType);
     }
 
     /**

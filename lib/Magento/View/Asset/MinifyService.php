@@ -29,13 +29,6 @@ namespace Magento\View\Asset;
  */
 class MinifyService
 {
-    /**#@+
-     * XPaths to minification configuration
-     */
-    const XML_PATH_MINIFICATION_ENABLED = 'dev/%s/minify_files';
-    const XML_PATH_MINIFICATION_ADAPTER = 'dev/%s/minify_adapter';
-    /**#@-*/
-
     /**
      * @var ConfigInterface
      */

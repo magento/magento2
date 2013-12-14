@@ -27,10 +27,6 @@ return array (
     'admin_rule' => 'Magento_Adminhtml',
     'admin_user' => 'Magento_Adminhtml',
     'adminnotification_inbox' => 'Magento_AdminNotification',
-    'webapi_acl_attribute' => 'Magento_Webapi',
-    'webapi_acl_role' => 'Magento_Webapi',
-    'webapi_acl_rule' => 'Magento_Webapi',
-    'webapi_acl_user' => 'Magento_Webapi',
     'catalog_category_entity_datetime' => 'Magento_Catalog',
     'catalog_category_entity_decimal' => 'Magento_Catalog',
     'catalog_category_entity_int' => 'Magento_Catalog',
@@ -360,8 +356,5 @@ return array (
     'core_theme' => 'Magento_Core',
     'core_theme_files' => 'Magento_Core',
     'core_theme_files_link' => 'Magento_Core',
-    'vde_theme_change' => 'Magento_DesignEditor',
-    'webapi_role' => 'Magento_Webapi',
-    'webapi_user' => 'Magento_Webapi',
-    'webapi_rule' => 'Magento_Webapi',
+    'vde_theme_change' => 'Magento_DesignEditor'
 );

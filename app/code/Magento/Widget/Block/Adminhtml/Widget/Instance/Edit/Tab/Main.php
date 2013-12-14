@@ -43,7 +43,7 @@ class Main
     protected $_store;
 
     /**
-     * @var \Magento\Core\Model\Theme\LabelFactory
+     * @var \Magento\View\Design\Theme\LabelFactory
      */
     protected $_themeLabelFactory;
 
@@ -52,7 +52,7 @@ class Main
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\System\Store $store
-     * @param \Magento\Core\Model\Theme\LabelFactory $themeLabelFactory
+     * @param \Magento\View\Design\Theme\LabelFactory $themeLabelFactory
      * @param array $data
      */
     public function __construct(
@@ -60,7 +60,7 @@ class Main
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\System\Store $store,
-        \Magento\Core\Model\Theme\LabelFactory $themeLabelFactory,
+        \Magento\View\Design\Theme\LabelFactory $themeLabelFactory,
         array $data = array()
     ) {
         $this->_store = $store;
@@ -139,7 +139,7 @@ class Main
 
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(array(
-            'attributes' => array(
+            'data' => array(
                 'id' => 'edit_form',
                 'action' => $this->getData('action'),
                 'method' => 'post',
@@ -167,7 +167,7 @@ class Main
             'disabled' => true
         ));
 
-        /** @var $label \Magento\Core\Model\Theme\Label */
+        /** @var $label \Magento\View\Design\Theme\Label */
         $label = $this->_themeLabelFactory->create();
         $options = $label->getLabelsCollection(__('-- Please Select --'));
         $fieldset->addField('theme_id', 'select', array(

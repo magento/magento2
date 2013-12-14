@@ -37,13 +37,13 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     protected $_productFactory;
 
     /**
-     * @param \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory
      * @param \Magento\Rule\Model\Condition\Context $context
+     * @param \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory,
         \Magento\Rule\Model\Condition\Context $context,
+        \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory,
         array $data = array()
     ) {
         $this->_productFactory = $conditionFactory;

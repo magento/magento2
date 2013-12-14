@@ -89,7 +89,7 @@ class Tree
      * @param \Magento\Data\Tree\Node $prevNode
      * @return \Magento\Data\Tree\Node
      */
-    public function appendChild($data=array(), $parentNode, $prevNode=null)
+    public function appendChild($data, $parentNode, $prevNode=null)
     {
         if (is_array($data)) {
             $node = $this->addNode(

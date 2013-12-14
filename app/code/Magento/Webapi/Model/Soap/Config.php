@@ -37,6 +37,7 @@ class Config
     const KEY_IS_SECURE = 'isSecure';
     const KEY_METHOD = 'method';
     const KEY_IS_REQUIRED = 'inputRequired';
+    const KEY_ACL_RESOURCES = 'resources';
     /**#@-*/
 
     /** @var \Magento\Filesystem */
@@ -110,7 +111,8 @@ class Config
                     $this->_soapOperations[$operationName] = array(
                         self::KEY_CLASS => $class,
                         self::KEY_METHOD => $method,
-                        self::KEY_IS_SECURE => $methodData[Converter::KEY_IS_SECURE]
+                        self::KEY_IS_SECURE => $methodData[Converter::KEY_IS_SECURE],
+                        self::KEY_ACL_RESOURCES => $methodData[Converter::KEY_ACL_RESOURCES]
                     );
                 }
             }
@@ -132,16 +134,14 @@ class Config
             $this->_soapServices = array();
             foreach ($this->_config->getServices() as $serviceData) {
                 $serviceClass = $serviceData[Converter::KEY_SERVICE_CLASS];
-                $reflection = new \ReflectionClass($serviceClass);
-                foreach ($reflection->getMethods() as $method) {
-                    // find if method is secure, assume operation is not secure by default
-                    $methodName = $method->getName();
-                    $isSecure = $serviceData[Converter::KEY_SERVICE_METHODS][$methodName][Converter::KEY_IS_SECURE];
+                foreach ($serviceData[Converter::KEY_SERVICE_METHODS] as $methodMetadata) {
                     // TODO: Simplify the structure in SOAP. Currently it is unified in SOAP and REST
+                    $methodName = $methodMetadata[Converter::KEY_SERVICE_METHOD];
                     $this->_soapServices[$serviceClass]['methods'][$methodName] = array(
                         self::KEY_METHOD => $methodName,
-                        self::KEY_IS_REQUIRED => (bool)$method->getNumberOfParameters(),
-                        self::KEY_IS_SECURE => $isSecure
+                        self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_IS_SECURE],
+                        self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_IS_SECURE],
+                        self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES]
                     );
                     $this->_soapServices[$serviceClass][self::KEY_CLASS] = $serviceClass;
                 };
@@ -171,7 +171,8 @@ class Config
         return array(
             self::KEY_CLASS => $soapOperations[$soapOperation][self::KEY_CLASS],
             self::KEY_METHOD => $soapOperations[$soapOperation][self::KEY_METHOD],
-            self::KEY_IS_SECURE => $soapOperations[$soapOperation][self::KEY_IS_SECURE]
+            self::KEY_IS_SECURE => $soapOperations[$soapOperation][self::KEY_IS_SECURE],
+            self::KEY_ACL_RESOURCES => $soapOperations[$soapOperation][self::KEY_ACL_RESOURCES]
         );
     }
 

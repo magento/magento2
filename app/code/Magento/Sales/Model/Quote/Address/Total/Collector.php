@@ -82,26 +82,24 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     protected $_totalFactory;
 
     /**
-     * Init corresponding total models
-     *
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Sales\Model\Config $salesConfig
+     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Quote\Address\TotalFactory $totalFactory
-     * @param \Magento\Core\Model\Store|null $store
-     * @param \Magento\Simplexml\Element|null $sourceData
+     * @param mixed $sourceData
+     * @param mixed $store
      */
     public function __construct(
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Logger $logger,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Quote\Address\TotalFactory $totalFactory,
-        $store = null,
-        $sourceData = null
+        $sourceData = null,
+        $store = null
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_totalFactory = $totalFactory;

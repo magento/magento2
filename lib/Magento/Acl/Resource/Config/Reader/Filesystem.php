@@ -33,6 +33,7 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
+     * @param string $defaultScope
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
@@ -41,10 +42,18 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'acl.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Acl\Resource\Config\Dom'
+        $domDocumentClass = 'Magento\Acl\Resource\Config\Dom',
+        $defaultScope = 'global'
     ) {
         parent::__construct(
-            $fileResolver, $converter, $schemaLocator, $validationState, $fileName, $idAttributes, $domDocumentClass
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
         );
     }
 }

@@ -131,10 +131,9 @@ class Fedex
     protected $_productCollFactory;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Module\Dir\Reader $configReader
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
+     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory
@@ -145,17 +144,18 @@ class Fedex
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger $logger
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Module\Dir\Reader $configReader
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
      * @param array $data
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Module\Dir\Reader $configReader,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
+        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory,
@@ -166,17 +166,29 @@ class Fedex
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger $logger,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Module\Dir\Reader $configReader,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
         $this->_productCollFactory = $productCollFactory;
         parent::__construct(
-            $xmlElFactory, $rateFactory, $rateMethodFactory, $trackFactory, $trackErrorFactory, $trackStatusFactory,
-            $regionFactory, $countryFactory, $currencyFactory, $directoryData, $coreStoreConfig, $rateErrorFactory,
-            $logAdapterFactory, $data
+            $coreStoreConfig,
+            $rateErrorFactory,
+            $logAdapterFactory,
+            $xmlElFactory,
+            $rateFactory,
+            $rateMethodFactory,
+            $trackFactory,
+            $trackErrorFactory,
+            $trackStatusFactory,
+            $regionFactory,
+            $countryFactory,
+            $currencyFactory,
+            $directoryData,
+            $data
         );
         $wsdlBasePath = $configReader->getModuleDir('etc', 'Magento_Usa')  . DS . 'wsdl' . DS . 'FedEx' . DS;
         $this->_shipServiceWsdl = $wsdlBasePath . 'ShipService_v10.wsdl';

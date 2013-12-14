@@ -50,11 +50,11 @@ class PluginList extends \Magento\Interception\PluginList\PluginList
         \Magento\ObjectManager\Config $omConfig,
         \Magento\Interception\Definition $definitions,
         array $scopePriorityScheme,
-        \Magento\ObjectManager\Definition\Compiled $classDefinitions = null,
-        $cacheId = 'plugins'
+        $cacheId = 'plugins',
+        \Magento\ObjectManager\Definition\Compiled $classDefinitions = null
     ) {
         parent::__construct($reader, $configScope, $cache, $relations, $omConfig,
-            $definitions, $scopePriorityScheme, $classDefinitions, $cacheId);
+            $definitions, $scopePriorityScheme, $cacheId, $classDefinitions);
         $this->_originScopeScheme = $this->_scopePriorityScheme;
     }
 

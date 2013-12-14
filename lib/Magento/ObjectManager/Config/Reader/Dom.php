@@ -47,21 +47,30 @@ class Dom extends \Magento\Config\Reader\Filesystem
      * @param \Magento\ObjectManager\Config\Mapper\Dom $converter
      * @param \Magento\ObjectManager\Config\SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param string $fileName
      * @param array $idAttributes
-     * @param string $filename
      * @param string $domDocumentClass
+     * @param string $defaultScope
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
         \Magento\ObjectManager\Config\Mapper\Dom $converter,
         \Magento\ObjectManager\Config\SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
+        $fileName = 'di.xml',
         $idAttributes = array(),
-        $filename = 'di.xml',
-        $domDocumentClass = 'Magento\Config\Dom'
+        $domDocumentClass = 'Magento\Config\Dom',
+        $defaultScope = 'global'
     ) {
         parent::__construct(
-            $fileResolver, $converter, $schemaLocator, $validationState, $filename, $idAttributes, $domDocumentClass
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
         );
     }
 }

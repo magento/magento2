@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Webapi\Model\Plugin;
 
 use Magento\Authz\Model\UserIdentifier;
@@ -65,8 +66,8 @@ class Setup
      * Construct Setup plugin instance
      *
      * @param \Magento\Webapi\Model\IntegrationConfig $integrationConfig
-     * @param \Magento\Integration\Service\IntegrationV1Interface $integrationService
      * @param \Magento\Authz\Service\AuthorizationV1 $authzService
+     * @param \Magento\Integration\Service\IntegrationV1Interface $integrationService
      * @param \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
      */
     public function __construct(
@@ -96,11 +97,11 @@ class Setup
         $integrations = $this->_integrationConfig->getIntegrations();
         foreach ($integrationNames as $name) {
             if (isset($integrations[$name])) {
-                $integrationData = $this->_integrationService->findByName($name);
-                if (isset($integrationData[Integration::ID])) {
+                $integration = $this->_integrationService->findByName($name);
+                if ($integration->getId()) {
                     $userIdentifier = $this->_userIdentifierFactory->create(
                         UserIdentifier::USER_TYPE_INTEGRATION,
-                        (int)$integrationData[Integration::ID]
+                        $integration->getId()
                     );
                     $this->_authzService->grantPermissions(
                         $userIdentifier,

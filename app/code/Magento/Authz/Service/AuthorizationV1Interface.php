@@ -69,4 +69,12 @@ interface AuthorizationV1Interface
      * @throws ServiceException
      */
     public function getAllowedResources(UserIdentifier $userIdentifier);
+
+    /**
+     * Remove user role and associated permissions.
+     *
+     * @param UserIdentifier $userIdentifier
+     * @throws ServiceException
+     */
+    public function removePermissions(UserIdentifier $userIdentifier);
 }

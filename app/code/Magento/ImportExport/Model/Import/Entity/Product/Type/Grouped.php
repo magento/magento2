@@ -70,20 +70,19 @@ class Grouped
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param array $params
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $productLinkFactory
      * @param \Magento\App\Resource $resource
-     * @param array $params
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
+        array $params,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\Catalog\Model\Resource\Product\LinkFactory $productLinkFactory,
-        \Magento\App\Resource $resource,
-        array $params
-    )
-    {
+        \Magento\App\Resource $resource
+    ) {
         $this->_importFactory = $importFactory;
         $this->_resource = $resource;
         $this->_productLinkFactory = $productLinkFactory;

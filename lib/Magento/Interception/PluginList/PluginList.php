@@ -74,8 +74,8 @@ class PluginList
      * @param \Magento\ObjectManager\Config $omConfig
      * @param \Magento\Interception\Definition $definitions
      * @param array $scopePriorityScheme
-     * @param \Magento\ObjectManager\Definition\Compiled $classDefinitions
      * @param string $cacheId
+     * @param \Magento\ObjectManager\Definition\Compiled $classDefinitions
      */
     public function __construct(
         \Magento\Config\ReaderInterface $reader,
@@ -85,8 +85,8 @@ class PluginList
         \Magento\ObjectManager\Config $omConfig,
         \Magento\Interception\Definition $definitions,
         array $scopePriorityScheme,
-        \Magento\ObjectManager\Definition\Compiled $classDefinitions = null,
-        $cacheId = 'plugins'
+        $cacheId = 'plugins',
+        \Magento\ObjectManager\Definition\Compiled $classDefinitions = null
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);
         $this->_omConfig = $omConfig;

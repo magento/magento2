@@ -25,10 +25,11 @@
  * @var $this \Magento\View\Element\Html\Link
  */
 ?>
+<?php if(!$this->getIsDisabled()): ?>
 <li>
     <a href="<?php echo $this->escapeHtml($this->getHref())?>"
-        <?php if ($title = $this->getTitle()):?> title="<?php echo $this->escapeHtml(__($title))?>"<?php endif;?>
-    >
+        <?php if ($title = $this->getTitle()):?> title="<?php echo $this->escapeHtml(__($title))?>"<?php endif;?>>
         <?php echo $this->escapeHtml(__($this->getLabel()))?>
     </a>
 </li>
+<?php endif; ?>

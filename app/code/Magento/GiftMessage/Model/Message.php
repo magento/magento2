@@ -63,8 +63,8 @@ class Message extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\GiftMessage\Model\Resource\Message $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\GiftMessage\Model\Resource\Message $resource,
+        \Magento\Data\Collection\Db $resourceCollection,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
         array $data = array()
     ) {

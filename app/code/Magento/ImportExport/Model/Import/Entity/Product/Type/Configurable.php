@@ -153,20 +153,20 @@ class Configurable
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param array $params
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\App\Resource $resource
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
-     * @param array $params
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
+        array $params,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\App\Resource $resource,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac,
-        array $params
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $_productColFac
     ) {
         $this->_productTypesConfig = $productTypesConfig;
         $this->_resourceHelper = $resourceHelper;

@@ -57,6 +57,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Oauth\Helper\Request */
     protected $_oauthHelperMock;
 
+    /** @var \Magento\Authz\Service\AuthorizationV1Interface */
+    protected $_authzServiceMock;
+
     const SERVICE_METHOD = \Magento\Webapi\Model\Rest\Config::KEY_METHOD;
     const SERVICE_ID = \Magento\Webapi\Model\Rest\Config::KEY_CLASS;
 
@@ -103,6 +106,10 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->_authzServiceMock = $this->getMockBuilder('Magento\Authz\Service\AuthorizationV1Interface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         /** Init SUT. */
         $this->_restController = new \Magento\Webapi\Controller\Rest(
             $this->_requestMock,
@@ -111,7 +118,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
             $this->_objectManagerMock,
             $this->_appStateMock,
             $this->_oauthServiceMock,
-            $this->_oauthHelperMock
+            $this->_oauthHelperMock,
+            $this->_authzServiceMock
         );
 
         // Set default expectations used by all tests
@@ -157,18 +165,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test dispatch method with \Exception throwing.
-     */
-    public function testDispatchAuthenticationException()
-    {
-        $this->markTestIncomplete(
-            "Test should be fixed after \Magento\Webapi\Controller\Rest::dispatch() enforces authentication"
-        );
-        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
-        $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(array()));
-    }
-
-    /**
      * Test Secure Request and Secure route combinations
      *
      * @dataProvider dataProviderSecureRequestSecureRoute
@@ -180,6 +176,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(array()));
         $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
         $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
+        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
         $this->_restController->dispatch($this->_requestMock);
         $this->assertFalse($this->_responseMock->isException());
     }
@@ -218,6 +215,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(array()));
         $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue(true));
         $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
+        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
 
         // Override default prepareResponse. It should never be called in this case
         $this->_responseMock->expects($this->never())->method('prepareResponse');
@@ -238,6 +236,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue("invalid"));
         $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
         $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
+        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
 
         // Override default prepareResponse. It should never be called in this case
         $this->_responseMock->expects($this->never())->method('prepareResponse');
@@ -246,6 +245,19 @@ class RestTest extends \PHPUnit_Framework_TestCase
             . self::SERVICE_ID . '" must return an array.';
 
         $this->_restController->dispatch($this->_requestMock);
+        $this->assertTrue($this->_responseMock->isException());
+        $exceptionArray = $this->_responseMock->getException();
+        $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
+    }
+
+    public function testAuthorizationFailed()
+    {
+        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
+        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
+
+        $this->_restController->dispatch($this->_requestMock);
+        /** Ensure that response contains proper error message. */
+        $expectedMsg = 'Not Authorized.';
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());

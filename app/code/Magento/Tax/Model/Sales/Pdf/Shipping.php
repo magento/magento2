@@ -36,15 +36,15 @@ class Shipping extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
     /**
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory
+     * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory,
+        \Magento\Tax\Model\Config $taxConfig,
         array $data = array()
     ) {
         $this->_taxConfig = $taxConfig;

@@ -29,7 +29,9 @@
  */
 namespace Magento\Core\Model\Resource\Theme;
 
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection
+    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+    implements \Magento\View\Design\Theme\Label\ListInterface, \Magento\View\Design\Theme\ListInterface
 {
     /**
      * Default page size
@@ -215,5 +217,17 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     ) {
         $this->addAreaFilter($area)->addTypeFilter($type);
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLabels()
+    {
+        $this->_reset()->clear();
+        $labels = $this->setOrder('theme_title', \Magento\Data\Collection::SORT_ORDER_ASC)
+            ->filterVisibleThemes()
+            ->addAreaFilter(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        return $labels->toOptionArray();
     }
 }

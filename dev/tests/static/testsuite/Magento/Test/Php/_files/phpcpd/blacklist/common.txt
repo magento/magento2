@@ -87,7 +87,6 @@ Magento/Tax/Model/Config/Price
 Magento/Usa/Model/Shipping/Carrier
 Magento/Webapi/Block/Adminhtml
 Magento/Webapi/Model
-Magento/Webhook/Model
 Magento/Widget/Model/Widget/Instance
 Magento/Wishlist/Block
 Magento/Wishlist/Model

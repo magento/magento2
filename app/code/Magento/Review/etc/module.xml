@@ -37,7 +37,6 @@
             <module name="Magento_Rating"/>
             <module name="Magento_Theme"/>
             <module name="Magento_Backend"/>
-            <module name="Magento_Paypal"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Newsletter"/>
         </depends>

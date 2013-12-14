@@ -32,6 +32,12 @@
             <argument name="block" xsi:type="string">integration_edit_tab_webapi</argument>
             <argument name="after" xsi:type="string">info_section</argument>
         </action>
+        <block class="Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi" name="integration_config_edit_tab_webapi" template="integration/activate/permissions/tab/webapi.phtml"/>
+        <action method="addTabAfter">
+            <argument name="name" xsi:type="string">api_config_section</argument>
+            <argument name="block" xsi:type="string">integration_config_edit_tab_webapi</argument>
+            <argument name="after" xsi:type="string">api_section</argument>
+        </action>
     </referenceBlock>
     <referenceContainer name="js">
         <block class="Magento\Backend\Block\Template" name="adminhtml.integration.webapi.tree.js" template="Magento_User::user/roles_grid_js.phtml"/>

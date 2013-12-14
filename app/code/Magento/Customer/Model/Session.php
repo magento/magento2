@@ -88,15 +88,15 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      * @param \Magento\Core\Model\Session\Context $context
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
-     * @param \Magento\Customer\Model\Config\Share $configShare
+     * @param Config\Share $configShare
      * @param \Magento\Core\Helper\Url $coreUrl
      * @param \Magento\Customer\Helper\Data $customerData
-     * @param \Magento\Customer\Model\Resource\Customer $customerResource
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param Resource\Customer $customerResource
+     * @param CustomerFactory $customerFactory
      * @param \Magento\Core\Model\UrlFactory $urlFactory
      * @param \Magento\Core\Model\Session $session
-     * @param array $data
      * @param null $sessionName
+     * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
@@ -109,8 +109,8 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Core\Model\UrlFactory $urlFactory,
         \Magento\Core\Model\Session $session,
-        array $data = array(),
-        $sessionName = null
+        $sessionName = null,
+        array $data = array()        
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerData = $customerData;

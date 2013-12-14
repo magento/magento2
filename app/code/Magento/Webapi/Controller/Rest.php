@@ -1,7 +1,5 @@
 <?php
 /**
- * Front controller for WebAPI REST area.
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,8 +21,17 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Webapi\Controller;
 
+use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
+
+/**
+ * Front controller for WebAPI REST area.
+ *
+ * TODO: Fix coupling between objects
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Rest implements \Magento\App\FrontControllerInterface
 {
     /** @var \Magento\Webapi\Controller\Rest\Router */
@@ -48,6 +55,9 @@ class Rest implements \Magento\App\FrontControllerInterface
     /** @var  \Magento\Oauth\Helper\Request */
     protected $_oauthHelper;
 
+    /** @var AuthorizationService */
+    protected $_authorizationService;
+
     /**
      * @param Rest\Request $request
      * @param Rest\Response $response
@@ -56,6 +66,7 @@ class Rest implements \Magento\App\FrontControllerInterface
      * @param \Magento\App\State $appState
      * @param \Magento\Oauth\OauthInterface $oauthService
      * @param \Magento\Oauth\Helper\Request $oauthHelper
+     * @param AuthorizationService $authorizationService
      */
     public function __construct(
         \Magento\Webapi\Controller\Rest\Request $request,
@@ -64,7 +75,8 @@ class Rest implements \Magento\App\FrontControllerInterface
         \Magento\ObjectManager $objectManager,
         \Magento\App\State $appState,
         \Magento\Oauth\OauthInterface $oauthService,
-        \Magento\Oauth\Helper\Request $oauthHelper
+        \Magento\Oauth\Helper\Request $oauthHelper,
+        AuthorizationService $authorizationService
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -73,6 +85,7 @@ class Rest implements \Magento\App\FrontControllerInterface
         $this->_appState = $appState;
         $this->_oauthService = $oauthService;
         $this->_oauthHelper = $oauthHelper;
+        $this->_authorizationService = $authorizationService;
     }
 
     /**
@@ -100,14 +113,29 @@ class Rest implements \Magento\App\FrontControllerInterface
             if (!$this->_appState->isInstalled()) {
                 throw new \Magento\Webapi\Exception(__('Magento is not yet installed'));
             }
+            // TODO: Consider changing service interface to operate with objects to avoid overhead
             $requestUrl = $this->_oauthHelper->getRequestUrl($this->_request);
             $oauthRequest = $this->_oauthHelper->prepareRequest(
                 $this->_request, $requestUrl, $this->_request->getRequestData()
             );
-            $this->_oauthService->validateAccessTokenRequest(
+            $consumerId = $this->_oauthService->validateAccessTokenRequest(
                 $oauthRequest, $requestUrl, $this->_request->getMethod()
             );
+            $this->_request->setConsumerId($consumerId);
+
             $route = $this->_router->match($this->_request);
+
+            if (!$this->_authorizationService->isAllowed($route->getAclResources())) {
+                // TODO: Consider passing Integration ID instead of Consumer ID
+                throw new \Magento\Service\AuthorizationException(
+                    "Not Authorized.",
+                    0,
+                    null,
+                    array(),
+                    'authorization',
+                    "Consumer ID = {$consumerId}",
+                    implode($route->getAclResources(), ', '));
+            }
 
             if ($route->isSecure() && !$this->_request->isSecure()) {
                 throw new \Magento\Webapi\Exception(__('Operation allowed only in HTTPS'));

@@ -82,7 +82,7 @@ class Urlkey
             'disabled' => true,
         );
         /** @var \Magento\Data\Form\Element\Hidden $hidden */
-        $hidden = $this->_elementFactory->create('hidden', array('attributes' => $data));
+        $hidden = $this->_elementFactory->create('hidden', array('data' => $data));
         $hidden->setForm($element->getForm());
 
         $storeId = $element->getForm()->getDataObject()->getStoreId();
@@ -91,7 +91,7 @@ class Urlkey
         $data['value'] = $element->getValue();
         $data['checked'] = $this->_catalogData->shouldSaveUrlRewritesHistory($storeId);
         /** @var \Magento\Data\Form\Element\Checkbox $checkbox */
-        $checkbox = $this->_elementFactory->create('checkbox', array('attributes' => $data));
+        $checkbox = $this->_elementFactory->create('checkbox', array('data' => $data));
         $checkbox->setForm($element->getForm());
 
         return parent::getElementHtml() . '<br/>' . $hidden->getElementHtml() . $checkbox->getElementHtml() . $checkbox->getLabelHtml();

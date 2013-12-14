@@ -69,7 +69,7 @@ class Content
     {
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(array(
-            'attributes' => array(
+            'data' => array(
                 'id' => 'wysiwyg_edit_form',
                 'action' => $this->getData('action'),
                 'method' => 'post',

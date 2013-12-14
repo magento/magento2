@@ -613,7 +613,7 @@ class Index
             $item = $cart->getQuote()->getItemById($itemId);
             if (!$item) {
                 throw new \Magento\Core\Exception(
-                    __("The requested cart item doesn\'t exist.")
+                    __("The requested cart item doesn't exist.")
                 );
             }
 

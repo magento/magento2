@@ -119,7 +119,6 @@ app/code/Magento/Sales/Model/Observer
 app/code/Magento/SalesRule/Model/Plugin
 app/code/Magento/Theme
 app/code/Magento/Webapi
-app/code/Magento/Webhook
 app/code/Magento/Wishlist/Block/Link.php
 dev/shell
 dev/tests/integration

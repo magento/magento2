@@ -70,25 +70,25 @@ abstract class AbstractComposite
     protected $_elementsFactory;
 
     /**
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
      * @param \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element\Factory $elementsFactory
      * @param \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer\Factory $rendererFactory
-     * @param array $attributes
+     * @param array $data
      */
     public function __construct(
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
         \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element\Factory $elementsFactory,
         \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer\Factory $rendererFactory,
-        $attributes = array()
+        $data = array()
     ) {
         $this->_elementsFactory = $elementsFactory;
         $this->_rendererFactory = $rendererFactory;
 
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
     /**

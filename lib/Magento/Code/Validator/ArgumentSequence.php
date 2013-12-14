@@ -39,20 +39,6 @@ class ArgumentSequence implements ValidatorInterface
     protected $_argumentsReader;
 
     /**
-     * List of allowed type to validate
-     * @var array
-     */
-    protected $_allowedTypes = array(
-        '\Magento\App\Action\Action',
-        '\Magento\View\Element\BlockInterface',
-        '\Magento\App\Helper\AbstractHelper',
-        '\Magento\Module\Updater\SetupInterface',
-        '\Magento\Core\Model\Resource\AbstractResource',
-        '\Magento\Core\Model\AbstractModel',
-        '\Magento\Data\Collection',
-    );
-
-    /**
      * @var array
      */
     protected $_cache;
@@ -74,11 +60,6 @@ class ArgumentSequence implements ValidatorInterface
      */
     public function validate($className)
     {
-        /** Temporary solution. Need to be removed since all AC of MAGETWO-14343 will be covered */
-        if (!$this->_isAllowedType($className)) {
-            return true;
-        }
-
         $class = new \ReflectionClass($className);
         $classArguments = $this->_argumentsReader->getConstructorArguments($class);
 
@@ -94,12 +75,11 @@ class ArgumentSequence implements ValidatorInterface
                 $parentClass = '\\' . $parentClass;
             }
 
-            $parentCall = $this->_argumentsReader->getParentCall($class, array());
-
-            if ($parentCall) {
-                $parentArguments = isset($this->_cache[$parentClass])
-                    ? $this->_cache[$parentClass]
-                    : $this->_argumentsReader->getConstructorArguments($parent, false, true);
+            if (isset($this->_cache[$parentClass])) {
+                $parentCall = $this->_argumentsReader->getParentCall($class, array());
+                if ($parentCall) {
+                    $parentArguments = $this->_cache[$parentClass];
+                }
             }
         }
 
@@ -117,23 +97,6 @@ class ArgumentSequence implements ValidatorInterface
         }
 
         return true;
-    }
-
-    /**
-     * Check whether type can be validated
-     *
-     * @param string $className
-     * @return bool
-     */
-    protected function _isAllowedType($className)
-    {
-        foreach ($this->_allowedTypes as $type) {
-            if (is_subclass_of($className, $type)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

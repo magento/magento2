@@ -45,20 +45,20 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Config $config
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax $attributeTax
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Config $config,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Core\Model\Config $config,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax $attributeTax
     ) {
         $this->_directoryHelper = $directoryHelper;

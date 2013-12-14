@@ -51,7 +51,7 @@ class Virtual implements \Magento\View\Design\Theme\Domain\VirtualInterface
     protected $_stagingTheme;
 
     /**
-     * @var \Magento\Core\Model\Theme\CopyService
+     * @var \Magento\Theme\Model\CopyService
      */
     protected $_themeCopyService;
 
@@ -65,13 +65,13 @@ class Virtual implements \Magento\View\Design\Theme\Domain\VirtualInterface
     /**
      * @param \Magento\View\Design\ThemeInterface $theme
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
-     * @param \Magento\Core\Model\Theme\CopyService $themeCopyService
+     * @param \Magento\Theme\Model\CopyService $themeCopyService
      * @param \Magento\Theme\Model\Config\Customization $customizationConfig
      */
     public function __construct(
         \Magento\View\Design\ThemeInterface $theme,
         \Magento\Core\Model\ThemeFactory $themeFactory,
-        \Magento\Core\Model\Theme\CopyService $themeCopyService,
+        \Magento\Theme\Model\CopyService $themeCopyService,
         \Magento\Theme\Model\Config\Customization $customizationConfig
     ) {
         $this->_theme = $theme;

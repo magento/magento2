@@ -49,24 +49,24 @@ class File extends \Magento\Data\Form\Element\AbstractElement
     protected $_adminhtmlData = null;
 
     /**
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\View\Url $viewUrl
-     * @param array $attributes
+     * @param array $data
      */
-    public  function __construct(
-        \Magento\Escaper $escaper,
+    public function __construct(
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
         \Magento\Backend\Helper\Data $adminhtmlData,
         \Magento\View\Url $viewUrl,
-        $attributes = array()
+        $data = array()
     ) {
         $this->_adminhtmlData = $adminhtmlData;
         $this->_viewUrl = $viewUrl;
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('file');
     }
 

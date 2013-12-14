@@ -33,25 +33,36 @@ class Reader extends \Magento\Config\Reader\Filesystem
     private $_moduleDirResolver;
 
     /**
-     * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Email\Model\Template\Config\Converter $converter
-     * @param \Magento\Email\Model\Template\Config\SchemaLocator $schemaLocator
-     * @param \Magento\Config\ValidationStateInterface $validationState
-     * @param \Magento\Module\Dir\ReverseResolver $moduleDirResolver
+     * List of id attributes for merge
+     *
+     * @var array
      */
+    protected $_idAttributes =  array(
+        '/config/template' => 'id',
+    );
+
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
         \Magento\Email\Model\Template\Config\Converter $converter,
         \Magento\Email\Model\Template\Config\SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
-        \Magento\Module\Dir\ReverseResolver $moduleDirResolver
+        \Magento\Module\Dir\ReverseResolver $moduleDirResolver,
+        $fileName = 'email_templates.xml',
+        $idAttributes = array(),
+        $domDocumentClass = 'Magento\Config\Dom',
+        $defaultScope = 'global'
     ) {
-        $fileName = 'email_templates.xml';
-        $idAttributes = array(
-            '/config/template' => 'id',
-        );
-        parent::__construct($fileResolver, $converter, $schemaLocator, $validationState, $fileName, $idAttributes);
         $this->_moduleDirResolver = $moduleDirResolver;
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
+        );
     }
 
     /**

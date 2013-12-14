@@ -210,6 +210,7 @@ class Flat extends \Magento\Index\Model\Indexer\AbstractIndexer
                     $this->_registerCoreStoreEvent($event);
                     break;
                 }
+            // fall-through intentional
             case \Magento\Core\Model\Store\Group::ENTITY:
                 $event->addNewData('catalog_category_flat_skip_call_event_handler', true);
                 $process = $event->getProcess();

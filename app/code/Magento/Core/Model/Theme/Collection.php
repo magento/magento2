@@ -29,7 +29,7 @@
  */
 namespace Magento\Core\Model\Theme;
 
-class Collection extends \Magento\Data\Collection
+class Collection extends \Magento\Data\Collection implements \Magento\View\Design\Theme\ListInterface
 {
     /**
      * @var \Magento\Filesystem
@@ -349,5 +349,20 @@ class Collection extends \Magento\Data\Collection
     {
         $themeItems = $this->getItems();
         return $theme->getThemePath() && isset($themeItems[$theme->getFullPath()]);
+    }
+
+    /**
+     * Get theme from file system by area and theme_path
+     *
+     * @param string $fullPath
+     * @return \Magento\View\Design\ThemeInterface
+     */
+    public function getThemeByFullPath($fullPath)
+    {
+        list($area, $themePath) = explode('/', $fullPath, 2);
+        $this->addDefaultPattern($area)
+            ->addFilter('theme_path', $themePath);
+
+        return $this->getFirstItem();
     }
 }

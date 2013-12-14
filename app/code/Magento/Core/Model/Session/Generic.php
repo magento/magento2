@@ -30,16 +30,16 @@ class Generic extends \Magento\Core\Model\Session\AbstractSession
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param string $sessionNamespace
+     * @param mixed $sessionName
      * @param array $data
-     * @param null $sessionName
      */
     public function __construct(
         \Magento\Core\Model\Session\Context $context,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
         $sessionNamespace,
-        array $data = array(),
-        $sessionName = null
+        $sessionName = null,
+        array $data = array()
     ) {
         parent::__construct($context, $sidResolver, $sessionConfig, $data);
         $this->start($sessionNamespace, $sessionName);

@@ -44,21 +44,21 @@ class Config
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param array $attributes
+     * @param array $data
      */
     public function __construct(
-        \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Escaper $escaper,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        $attributes = array()
+        $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
-        parent::__construct($escaper, $factoryElement, $factoryCollection, $attributes);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
     /**

@@ -29,7 +29,7 @@
  */
 namespace Magento\Core\Model\Theme\Source;
 
-use Magento\Core\Model\Theme\Label;
+use Magento\View\Design\Theme\Label;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 /**
@@ -40,12 +40,12 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 class Theme extends AbstractSource
 {
     /**
-     * @var Label
+     * @var \Magento\View\Design\Theme\Label
      */
     protected $themeLabel;
 
     /**
-     * @param Label $themeLabel
+     * @param \Magento\View\Design\Theme\Label $themeLabel
      */
     public function __construct(Label $themeLabel)
     {

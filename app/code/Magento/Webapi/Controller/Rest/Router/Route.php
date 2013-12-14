@@ -36,6 +36,9 @@ class Route extends \Zend_Controller_Router_Route
     /** @var boolean */
     protected $_secure;
 
+    /** @var array */
+    protected $_aclResources = array();
+
     /**
      * Set service class.
      *
@@ -100,6 +103,26 @@ class Route extends \Zend_Controller_Router_Route
     public function isSecure()
     {
         return $this->_secure;
+    }
+
+    /**
+     * Set ACL resources list.
+     *
+     * @param array $aclResources
+     */
+    public function setAclResources($aclResources)
+    {
+        $this->_aclResources = $aclResources;
+    }
+
+    /**
+     * Get ACL resources list.
+     *
+     * @return array
+     */
+    public function getAclResources()
+    {
+        return $this->_aclResources;
     }
 
     /**

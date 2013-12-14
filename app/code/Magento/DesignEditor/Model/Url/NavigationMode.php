@@ -56,25 +56,27 @@ class NavigationMode extends \Magento\Core\Model\Url
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
-     * @param \Magento\DesignEditor\Helper\Data $helper
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\DesignEditor\Helper\Data $helper
      * @param string $areaCode
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\App\Route\ConfigInterface $routeConfig,
         \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
-        \Magento\DesignEditor\Helper\Data $helper,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Session $session,
         \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\DesignEditor\Helper\Data $helper,
         $areaCode,
         array $data = array()
     ) {

@@ -54,19 +54,9 @@ class Directpost extends \Magento\Paygate\Model\Authorizenet
     protected $_storeManager;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
-     */
-    protected $_orderFactory;
-
-    /**
      * @var \Magento\Sales\Model\QuoteFactory
      */
     protected $_quoteFactory;
-
-    /**
-     * @var \Magento\Authorizenet\Model\Directpost\RequestFactory
-     */
-    protected $_requestFactory;
 
     /**
      * @var \Magento\Authorizenet\Model\Directpost\Response
@@ -74,58 +64,69 @@ class Directpost extends \Magento\Paygate\Model\Authorizenet
     protected $_response;
 
     /**
-     * Construct
-     *
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger $logger
+     * @param \Magento\Module\ModuleListInterface $moduleList
+     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Centinel\Model\Service $centinelService
      * @param \Magento\Paygate\Model\Authorizenet\CardsFactory $cardsFactory
-     * @param \Magento\Paygate\Model\Authorizenet\RequestFactory $parentRequestFactory
+     * @param \Magento\Paygate\Model\Authorizenet\RequestFactory $requestFactory
      * @param \Magento\Paygate\Model\Authorizenet\ResultFactory $resultFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Core\Model\Session\AbstractSession $session
-     * @param \Magento\Logger $logger
-     * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Paygate\Helper\Data $paygateData
-     * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Centinel\Model\Service $centinelService
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
-     * @param \Magento\Authorizenet\Model\Directpost\RequestFactory $requestFactory
+     * @param \Magento\Authorizenet\Model\Directpost\RequestFactory $directRequestFactory
      * @param \Magento\Authorizenet\Model\Directpost\Response $response
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger $logger,
+        \Magento\Module\ModuleListInterface $moduleList,
+        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Centinel\Model\Service $centinelService,
         \Magento\Paygate\Model\Authorizenet\CardsFactory $cardsFactory,
-        \Magento\Paygate\Model\Authorizenet\RequestFactory $parentRequestFactory,
+        \Magento\Paygate\Model\Authorizenet\RequestFactory $requestFactory,
         \Magento\Paygate\Model\Authorizenet\ResultFactory $resultFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Core\Model\Session\AbstractSession $session,
-        \Magento\Logger $logger,
-        \Magento\Event\ManagerInterface $eventManager,
         \Magento\Paygate\Helper\Data $paygateData,
-        \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Centinel\Model\Service $centinelService,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
-        \Magento\Authorizenet\Model\Directpost\RequestFactory $requestFactory,
+        \Magento\Authorizenet\Model\Directpost\RequestFactory $directRequestFactory,
         \Magento\Authorizenet\Model\Directpost\Response $response,
         array $data = array()
     ) {
-        parent::__construct($cardsFactory, $parentRequestFactory, $resultFactory, $orderFactory, $session,
-            $logger, $eventManager, $paygateData, $moduleList, $coreStoreConfig, $paymentData,
-            $logAdapterFactory, $locale, $centinelService, $data);
+        parent::__construct(
+            $eventManager,
+            $paymentData,
+            $coreStoreConfig,
+            $logAdapterFactory,
+            $logger,
+            $moduleList,
+            $locale,
+            $centinelService,
+            $cardsFactory,
+            $requestFactory,
+            $resultFactory,
+            $orderFactory,
+            $session,
+            $paygateData,
+            $data
+        );
         $this->_storeManager = $storeManager;
-        $this->_orderFactory = $orderFactory;
         $this->_quoteFactory = $quoteFactory;
-        $this->_requestFactory = $requestFactory;
+        $this->_requestFactory = $directRequestFactory;
         $this->_response = $response;
     }
 

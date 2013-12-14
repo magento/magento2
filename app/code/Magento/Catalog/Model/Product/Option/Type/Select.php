@@ -50,16 +50,16 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Escaper $escaper
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Stdlib\String $string,
         \Magento\Escaper $escaper,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
         array $data = array()
     ) {
         $this->string = $string;

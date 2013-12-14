@@ -736,6 +736,7 @@ class Flat extends \Magento\Index\Model\Resource\AbstractResource
                     } else {
                         break;
                     }
+                // fall-through intentional
                 case \Magento\DB\Ddl\Table::TYPE_DECIMAL:
                     $options = $column['PRECISION'] . ',' . $column['SCALE'];
                     $_is_unsigned = null;

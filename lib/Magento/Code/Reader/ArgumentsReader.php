@@ -186,4 +186,25 @@ class ArgumentsReader
             return var_export($var, true);
         }
     }
+
+    /**
+     * Get constructor annotations
+     *
+     * @param \ReflectionClass $class
+     * @return array
+     */
+    public function getAnnotations(\ReflectionClass $class)
+    {
+        $regexp = '(@([a-z_][a-z0-9_]+)\(([^\)]+)\))i';
+        $docBlock = $class->getConstructor()->getDocComment();
+        $annotations = array();
+        preg_match_all($regexp, $docBlock, $matches);
+        foreach (array_keys($matches[0]) as $index) {
+            $name  = $matches[1][$index];
+            $value = trim($matches[2][$index], '" ');
+            $annotations[$name] = $value;
+        }
+
+        return $annotations;
+    }
 } 

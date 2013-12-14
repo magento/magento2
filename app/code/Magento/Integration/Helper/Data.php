@@ -24,6 +24,8 @@
 
 namespace Magento\Integration\Helper;
 
+use Magento\Integration\Model\Integration as IntegrationModel;
+
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
@@ -47,5 +49,17 @@ class Data extends \Magento\App\Helper\AbstractHelper
             $output[] = $item;
         }
         return $output;
+    }
+
+    /**
+     * Check if integration is created using config file
+     *
+     * @param $integrationData
+     * @return bool true if integration is created using Config file
+     */
+    public function isConfigType($integrationData)
+    {
+        return isset($integrationData[IntegrationModel::SETUP_TYPE])
+                    && $integrationData[IntegrationModel::SETUP_TYPE] == IntegrationModel::TYPE_CONFIG;
     }
 }
