@@ -33,7 +33,7 @@
  */
 namespace Magento\Rating\Block\Adminhtml\Edit;
 
-class Tabs extends \Magento\Adminhtml\Block\Widget\Tabs
+class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
 
     protected function _construct()

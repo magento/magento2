@@ -63,8 +63,7 @@ class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
     public function parseDataProvider()
     {
         $layout = simplexml_load_file(
-            __DIR__ . DIRECTORY_SEPARATOR . 'Handler' . DIRECTORY_SEPARATOR
-            . '_files' . DIRECTORY_SEPARATOR . 'arguments.xml',
+            __DIR__ . '/Handler/_files/arguments.xml',
             'Magento\View\Layout\Element'
         );
         $withoutUpdater = $layout->xpath('//argument[@name="testParseWithoutUpdater"]');

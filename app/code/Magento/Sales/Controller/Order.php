@@ -38,7 +38,7 @@ class Order extends \Magento\Sales\Controller\AbstractController
      * Check customer authentication for some actions
      *
      * @param RequestInterface $request
-     * @return mixed
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
@@ -56,7 +56,7 @@ class Order extends \Magento\Sales\Controller\AbstractController
     public function historyAction()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages('Magento\Catalog\Model\Session');
+        $this->_view->getLayout()->initMessages();
 
         $this->_view->getLayout()->getBlock('head')->setTitle(__('My Orders'));
 

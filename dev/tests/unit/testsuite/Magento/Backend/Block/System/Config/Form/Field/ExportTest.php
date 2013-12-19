@@ -34,20 +34,14 @@ class ExportTest extends \PHPUnit_Framework_TestCase
      */
     protected $_object;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_helperFactoryMock;
-
     protected function setUp()
     {
-        $this->_helperFactoryMock = $this->getMock('Magento\App\Helper\HelperFactory',
-            array(), array(), '', false, false
-        );
+        $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
+        $helperMock->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", array('website' => 1));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_object = $objectManager->getObject('Magento\Backend\Block\System\Config\Form\Field\Export', array(
-            'helperFactory' => $this->_helperFactoryMock)
+            'helper' => $helperMock)
         );
     }
 
@@ -65,12 +59,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
 
         $requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
         $requestMock->expects($this->once())->method('getParam')->with('website')->will($this->returnValue(1));
-
-        $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
-        $helperMock->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", array('website' => 1));
-
-        $this->_helperFactoryMock->expects($this->any())
-            ->method('get')->with('Magento\Backend\Helper\Data')->will($this->returnValue($helperMock));
 
         $mockData = $this->getMock('StdClass', array('toHtml'));
         $mockData->expects($this->once())->method('toHtml')->will($this->returnValue($expected));

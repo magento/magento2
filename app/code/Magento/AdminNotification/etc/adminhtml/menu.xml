@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Magento_AdminNotification::system_adminnotification" title="Notifications" module="Magento_AdminNotification" sortOrder="10" parent="Magento_Adminhtml::system_other_settings" action="adminhtml/notification" resource="Magento_AdminNotification::adminnotification"/>
+        <add id="Magento_AdminNotification::system_adminnotification" title="Notifications" module="Magento_AdminNotification" sortOrder="10" parent="Magento_Backend::system_other_settings" action="adminhtml/notification" resource="Magento_AdminNotification::adminnotification"/>
     </menu>
 </config>

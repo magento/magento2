@@ -42,19 +42,27 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
     protected $_giftMessageSave;
 
     /**
+     * @var \Magento\GiftMessage\Helper\Message
+     */
+    protected $_messageHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
+     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\GiftMessage\Model\Save $giftMessageSave
+     * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
+        \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         \Magento\GiftMessage\Model\Save $giftMessageSave,
+        \Magento\GiftMessage\Helper\Message $messageHelper,
         array $data = array()
     ) {
+        $this->_messageHelper = $messageHelper;
         $this->_giftMessageSave = $giftMessageSave;
         parent::__construct($context, $sessionQuote, $orderCreate, $data);
     }
@@ -88,7 +96,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
 
         foreach ($allItems as $item) {
             if($this->_getGiftmessageSaveModel()->getIsAllowedQuoteItem($item)
-               && $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('item',
+               && $this->_messageHelper->getIsMessagesAvailable('item',
                         $item, $this->getStore())) {
                 // if item allowed
                 $items[] = $item;

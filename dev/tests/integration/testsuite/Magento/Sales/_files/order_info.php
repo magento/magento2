@@ -47,7 +47,7 @@ $product->setTypeId('virtual')
     ->save();
 $product->load(1);
 
-$addressData = include(__DIR__ . DIRECTORY_SEPARATOR . 'address_data.php');
+$addressData = include(__DIR__ . '/address_data.php');
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Sales\Model\Quote\Address',

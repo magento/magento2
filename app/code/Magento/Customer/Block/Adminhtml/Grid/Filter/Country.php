@@ -34,7 +34,7 @@
 namespace Magento\Customer\Block\Adminhtml\Grid\Filter;
 
 class Country
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Filter\Select
+    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory

@@ -24,9 +24,14 @@
  */
 -->
 <config>
-    <virtualType name="Magento\PaypalUk\Model\Session" type="Magento\Core\Model\Session\Generic">
-        <param name="sessionNamespace">
+    <virtualType name="Magento\PaypalUk\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
             <value>paypaluk</value>
+        </param>
+    </virtualType>
+    <virtualType name="Magento\PaypalUk\Model\Session" type="Magento\Session\Generic">
+        <param name="storage">
+            <instance type="Magento\PaypalUk\Model\Session\Storage" />
         </param>
         <param name="sessionName">
             <value>frontend</value>

@@ -26,25 +26,24 @@
  */
 
 // Copy images to tmp media path
-/** @var \Magento\Catalog\Model\Product\Media\Config $config */
-$config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Catalog\Model\Product\Media\Config');
-$baseTmpMediaPath = $config->getBaseTmpMediaPath();
 
-/** @var \Magento\Filesystem $filesystem */
-$filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Filesystem');
-$filesystem->setIsAllowCreateDirectories(true);
-$filesystem->copy(__DIR__ . '/product_image.png', $baseTmpMediaPath . '/product_image.png');
+$obectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var \Magento\Catalog\Model\Product\Media\Config $config */
+$config = $obectManager->get('Magento\Catalog\Model\Product\Media\Config');
+/** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+$mediaDirectory = $obectManager->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+
+$baseTmpMediaPath = $config->getBaseTmpMediaPath();
+$mediaDirectory->create($baseTmpMediaPath);
+copy(__DIR__ . '/product_image.png', $mediaDirectory->getAbsolutePath($baseTmpMediaPath . '/product_image.png'));
 
 /** @var $productOne \Magento\Catalog\Model\Product */
-$productOne = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+$productOne = $obectManager->create('Magento\Catalog\Model\Product');
 $productOne->setId(1)
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds(array(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->getWebsiteId()
+            $obectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
     ))
     ->setSku('simple_product_1')
     ->setName('Simple Product 1 Name')
@@ -71,14 +70,12 @@ $productOne->setId(1)
     ->save();
 
 /** @var $productTwo \Magento\Catalog\Model\Product */
-$productTwo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+$productTwo = $obectManager->create('Magento\Catalog\Model\Product');
 $productTwo->setId(2)
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds(array(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->getWebsiteId()
+        $obectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
     ))
     ->setSku('simple_product_2')
     ->setName('Simple Product 2 Name')

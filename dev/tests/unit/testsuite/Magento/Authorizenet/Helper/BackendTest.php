@@ -44,9 +44,13 @@ class BackendTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', array('getUrl'), array(), '', false);
+        $contextMock = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
+        $contextMock->expects($this->any())
+            ->method('getUrlBuilder')
+            ->will($this->returnValue($this->_urlBuilder));
         $this->_orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', array('create'), array(), '', false);
         $this->_model = new Backend(
-            $this->getMock('Magento\App\Helper\Context', array(), array(), '', false),
+            $contextMock,
             $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false),
             $this->_orderFactory,
             $this->_urlBuilder

@@ -59,10 +59,10 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         if (!extension_loaded('xsl')) {
             $this->markTestSkipped('XSL extension needed for XSLT Processor test');
         }
-        $this->_testDir = realpath(__DIR__ . DS . '_files') . DS;
+        $this->_testDir = realpath(__DIR__ . '/_files') . '/';
 
-        $dir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir');
-        $this->_varDir = $dir->getDir(\Magento\App\Dir::VAR_DIR) . DS . 'references' . DS;
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
+        $this->_varDir = $filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/references/';
         mkdir($this->_varDir, 0777, true);
 
         $this->_formatter = new Formatter();

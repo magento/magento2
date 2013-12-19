@@ -59,8 +59,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('address_formats.xml', 'scope')
             ->will($this->returnValue(array(
-                __DIR__ . '/_files/formats_one.xml',
-                __DIR__ . '/_files/formats_two.xml',
+                file_get_contents(__DIR__ . '/_files/formats_one.xml'),
+                file_get_contents(__DIR__ . '/_files/formats_two.xml'),
             )));
 
         $this->_converter = $this->getMock('Magento\Customer\Model\Address\Config\Converter', array('convert'));

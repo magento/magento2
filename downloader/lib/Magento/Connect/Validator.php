@@ -472,7 +472,7 @@ class Validator
 
         $targetPath = rtrim($config->magento_root, "\\/");
         foreach ($contents as $file) {
-            $dest = $targetPath . DS . $file;
+            $dest = $targetPath . '/' . $file;
             if (file_exists($dest)) {
                 $this->addError("'{$file}' already exists");
                 return false;

@@ -61,6 +61,11 @@ class ObjectManager extends \Magento\App\ObjectManager
         if (isset($this->_sharedInstances['Magento\Config\Scope'])) {
             $sharedInstances['Magento\Config\Scope'] = $this->_sharedInstances['Magento\Config\Scope'];
         }
+
+        if (isset($this->_sharedInstances['Magento\Core\Model\Session\Config'])) {
+            $sharedInstances['Magento\Core\Model\Session\Config'] =
+                $this->_sharedInstances['Magento\Core\Model\Session\Config'];
+        }
         $this->_sharedInstances = $sharedInstances;
         $this->_config->clean();
 

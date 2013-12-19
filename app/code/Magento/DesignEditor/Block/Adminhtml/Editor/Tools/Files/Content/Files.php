@@ -37,11 +37,30 @@ class Files
     extends \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files
 {
     /**
+     * @var \Magento\Theme\Helper\Storage
+     */
+    protected $_storageHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Theme\Helper\Storage $storageHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Theme\Helper\Storage $storageHelper,
+        array $data = array()
+    ) {
+        $this->_storageHelper = $storageHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * @return string
      */
     public function getStorageType()
     {
-        return __($this->helper('Magento\Theme\Helper\Storage')->getStorageType());
+        return __($this->_storageHelper->getStorageType());
     }
 
 }

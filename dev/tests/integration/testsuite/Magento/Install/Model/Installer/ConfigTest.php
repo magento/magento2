@@ -30,16 +30,23 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_tmpDir = '';
 
+    /**
+     * @var \Magento\Filesystem\Directory\Write
+     */
+    protected static $_varDirectory;
+
     public static function setUpBeforeClass()
     {
-        self::$_tmpDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
-            ->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . "ConfigTest";
-        mkdir(self::$_tmpDir);
+        /** @var \Magento\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
+        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        self::$_tmpDir = self::$_varDirectory->getAbsolutePath('ConfigTest');
+        self::$_varDirectory->create(self::$_varDirectory->getRelativePath(self::$_tmpDir));
     }
 
     public static function tearDownAfterClass()
     {
-        \Magento\Io\File::rmdirRecursive(self::$_tmpDir);
+        self::$_varDirectory->delete(self::$_varDirectory->getRelativePath(self::$_tmpDir));
     }
 
     public function testInstall()
@@ -57,18 +64,25 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $request->expects($this->once())->method('getDistroBaseUrl')->will($this->returnValue('http://example.com/'));
         $expectedContents = "test; <![CDATA[d-d-d-d-d]]>; <![CDATA[http://example.com/]]>; {{unknown}}";
-        $dirs = new \Magento\App\Dir(
-            self::$_tmpDir,
-            array(),
-            array(\Magento\App\Dir::CONFIG => self::$_tmpDir)
-        );
 
         $this->assertFileNotExists($expectedFile);
-        $filesystem = new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local);
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Install\Model\Installer\Config', array(
-            'request' => $request, 'dirs' => $dirs, 'filesystem' => $filesystem
-        ));
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $directoryList = $objectManager->create(
+            'Magento\Filesystem\DirectoryList',
+            array(
+                'root' => self::$_tmpDir,
+                'directories' => array(
+                    \Magento\Filesystem::CONFIG => array('path' => self::$_tmpDir)
+                ),
+            )
+        );
+        $filesystem = $objectManager->create('Magento\Filesystem', array('directoryList' => $directoryList));
+        $model = $objectManager->create(
+            'Magento\Install\Model\Installer\Config',
+            array('request' => $request, 'filesystem' => $filesystem)
+        );
+
         $model->install();
         $this->assertFileExists($expectedFile);
         $this->assertStringEqualsFile($expectedFile, $expectedContents);

@@ -131,4 +131,9 @@
     <type name="Magento\App\Action\Action">
         <plugin name="storeCheck" disabled="true" />
     </type>
+    <type name="Magento\Message\Manager">
+        <param name="defaultGroup">
+            <value>backend</value>
+        </param>
+    </type>
 </config>

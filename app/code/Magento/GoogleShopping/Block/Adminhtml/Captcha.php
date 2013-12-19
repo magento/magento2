@@ -46,7 +46,7 @@ class Captcha extends \Magento\Backend\Block\Template
      */
     public function getConfirmButtonHtml()
     {
-        $confirmButton = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        $confirmButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'label'     => __('Confirm'),
                 'onclick'   => "if($('user_confirm').value != '')

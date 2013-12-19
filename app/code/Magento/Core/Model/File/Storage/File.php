@@ -298,7 +298,7 @@ class File
         ) {
             try {
                 $filename = (isset($file['directory']) && !empty($file['directory']))
-                    ? $file['directory'] . DS . $file['filename']
+                    ? $file['directory'] . '/' . $file['filename']
                     : $file['filename'];
 
                 return $this->_fileUtility

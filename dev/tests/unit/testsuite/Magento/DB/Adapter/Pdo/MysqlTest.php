@@ -65,7 +65,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
         $this->_adapter = $this->getMock(
             'Magento\DB\Adapter\Pdo\Mysql',
-            array('_connect', '_beginTransaction', '_commit', '_rollBack', 'query'),
+            array('_connect', '_beginTransaction', '_commit', '_rollBack', 'query', '_debugWriteToFile'),
             array(
                 'dbname' => 'not_exists',
                 'username' => 'not_valid',

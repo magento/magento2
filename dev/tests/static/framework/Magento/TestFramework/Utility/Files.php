@@ -618,7 +618,7 @@ class Files
         $classParts = explode('\\', $class);
         $className = array_pop($classParts);
         $namespace = implode('\\', $classParts);
-        $path = implode(DIRECTORY_SEPARATOR, explode('\\', $class)) . '.php';
+        $path = implode('/', explode('\\', $class)) . '.php';
         $directories = array(
             '/app/code/', '/lib/', '/downloader/app/', '/downloader/lib/', '/dev/tools/',
             '/dev/tests/api-functional/framework/', '/dev/tests/integration/framework/',
@@ -629,7 +629,7 @@ class Files
         );
 
         foreach ($directories as $dir) {
-            $fullPath = str_replace('/', DIRECTORY_SEPARATOR, $this->_path . $dir . $path);
+            $fullPath = $this->_path . $dir . $path;
             /**
              * Use realpath() instead of file_exists() to avoid incorrect work on Windows because of case insensitivity
              * of file names
@@ -678,12 +678,7 @@ class Files
      */
     public function getModuleFile($namespace, $module, $file)
     {
-        return $this->_path . DIRECTORY_SEPARATOR
-            . 'app'. DIRECTORY_SEPARATOR
-            . 'code'. DIRECTORY_SEPARATOR
-            . $namespace . DIRECTORY_SEPARATOR
-            . $module . DIRECTORY_SEPARATOR
-            . $file;
+        return $this->_path . '/app/code/' . $namespace . '/' . $module . '/' . $file;
     }
 
     /**

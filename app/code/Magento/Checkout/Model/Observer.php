@@ -41,11 +41,20 @@ class Observer
     protected $_checkoutSession;
 
     /**
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @var \Magento\Message\ManagerInterface
      */
-    public function __construct(\Magento\Checkout\Model\Session $checkoutSession)
-    {
+    protected $messageManager;
+
+    /**
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Message\ManagerInterface $messageManager
+     */
+    public function __construct(
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Message\ManagerInterface $messageManager
+    ) {
         $this->_checkoutSession = $checkoutSession;
+        $this->messageManager = $messageManager;
     }
 
     public function unsetAll()
@@ -57,15 +66,10 @@ class Observer
     {
         try {
             $this->_checkoutSession->loadCustomerQuote();
-        }
-        catch (\Magento\Core\Exception $e) {
-            $this->_checkoutSession->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
-            $this->_checkoutSession->addException(
-                $e,
-                __('Load customer quote error')
-            );
+        } catch (\Magento\Core\Exception $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Load customer quote error'));
         }
     }
 

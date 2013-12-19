@@ -26,34 +26,35 @@ namespace Magento\App\Config\FileResolver;
 class PrimaryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\App\Config\FileResolver\Primary
-     */
-    protected $_model;
-
-    protected function setUp()
-    {
-        $appConfigDir = __DIR__ . DIRECTORY_SEPARATOR
-            . '_files' . DIRECTORY_SEPARATOR . 'primary'
-            . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'etc';
-
-        $applicationDirsMock = $this->getMock('Magento\App\Dir', array(), array('getDir'), '', false);
-        $applicationDirsMock->expects($this->any())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::CONFIG)
-            ->will($this->returnValue($appConfigDir));
-
-        $this->_model = new \Magento\App\Config\FileResolver\Primary($applicationDirsMock);
-    }
-
-    /**
-     * @param array $expectedResult
+     * @param array $fileList
      * @param string $scope
      * @param string $filename
      * @dataProvider getMethodDataProvider
      */
-    public function testGet(array $expectedResult, $scope, $filename)
+    public function testGet(array $fileList, $scope, $filename)
     {
-        $this->assertEquals($expectedResult, $this->_model->get($filename, $scope));
+        $directory = $this->getMock('Magento\Filesystem\Directory\Read', array('search'), array(), '', false);
+        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $iteratorFactory = $this->getMock(
+            'Magento\Config\FileIteratorFactory', array('create'), array(), '', false
+        );
+
+        $filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Filesystem::CONFIG)
+            ->will($this->returnValue($directory));
+
+        $directory->expects($this->once())
+            ->method('search')
+            ->will($this->returnValue($fileList));
+
+        $iteratorFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue(true));
+
+        $model = new \Magento\App\Config\FileResolver\Primary($filesystem, $iteratorFactory);
+
+        $this->assertTrue($model->get($filename, $scope));
     }
 
     /**
@@ -61,14 +62,11 @@ class PrimaryTest extends \PHPUnit_Framework_TestCase
      */
     public function getMethodDataProvider()
     {
-        $appConfigDir = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'primary'
-            . DIRECTORY_SEPARATOR .  'app' . DIRECTORY_SEPARATOR . 'etc';
-
         return array(
             array(
                 array(
-                    $appConfigDir . DIRECTORY_SEPARATOR . 'di.xml',
-                    $appConfigDir . DIRECTORY_SEPARATOR . 'some_config' .DIRECTORY_SEPARATOR.  'di.xml',
+                    'config/di.xml',
+                    'config/some_config/di.xml',
                 ),
                 'primary',
                 'di.xml',

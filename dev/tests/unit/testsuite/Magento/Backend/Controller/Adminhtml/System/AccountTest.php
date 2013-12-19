@@ -41,8 +41,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ObjectManager\ObjectManager */
     protected $_objectManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Session */
-    protected $_sessionMock;
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Message\ManagerInterface */
+    protected $_messagesMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Helper\Data */
     protected $_helperMock;
@@ -84,10 +84,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('getUrl'))
             ->getMock();
-        $this->_sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
+        $this->_messagesMock = $this->getMockBuilder('Magento\Message\Manager')
             ->disableOriginalConstructor()
             ->setMethods(array('addSuccess'))
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->_authSessionMock = $this->getMockBuilder('Magento\Backend\Model\Auth\Session')
             ->disableOriginalConstructor()
@@ -125,7 +125,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($frontControllerMock));
 
         $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($this->_helperMock));
-        $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->_sessionMock));
+        $contextMock->expects($this->any())
+            ->method('getMessageManager')->will($this->returnValue($this->_messagesMock));
         $contextMock->expects($this->any())->method('getTranslator')->will($this->returnValue($this->_translatorMock));
 
         $args = array('context' => $contextMock);
@@ -182,7 +183,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
 
         $this->_requestMock->setParams($requestParams);
 
-        $this->_sessionMock->expects($this->once())->method('addSuccess')->with($this->equalTo($testedMessage));
+        $this->_messagesMock->expects($this->once())->method('addSuccess')->with($this->equalTo($testedMessage));
 
         $this->_controller->saveAction();
     }

@@ -24,18 +24,20 @@
  */
 -->
 <config>
-    <virtualType name="Magento\Paypal\Model\Session" type="Magento\Core\Model\Session\Generic">
-        <param name="sessionNamespace">
+    <virtualType name="Magento\Paypal\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
             <value>paypal</value>
+        </param>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Model\Session" type="Magento\Session\Generic">
+        <param name="storage">
+            <instance type="Magento\Paypal\Model\Session\Storage" />
         </param>
         <param name="sessionName">
             <value>adminhtml</value>
         </param>
     </virtualType>
-    <type name="Magento\Core\Model\Session\Generic">
-        <param name="sessionNamespace">
-            <value>paypal</value>
-        </param>
+    <type name="Magento\Session\Generic">
         <param name="sessionName">
             <value>adminhtml</value>
         </param>

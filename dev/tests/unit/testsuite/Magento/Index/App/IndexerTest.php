@@ -45,7 +45,14 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+        $directoryMock->expects($this->any())
+            ->method('getRelativePath')
+            ->will($this->returnArgument(0));
+        $this->_filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->will($this->returnValue($directoryMock));
         $this->_indexFactoryMock = $this->getMock('Magento\Index\Model\IndexerFactory',
             array('create'), array(), '', false);
         $this->_entryPoint = new \Magento\Index\App\Indexer(

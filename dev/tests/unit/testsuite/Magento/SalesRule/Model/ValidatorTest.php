@@ -30,7 +30,7 @@ namespace Magento\SalesRule\Model;
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Validator|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -55,11 +55,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Sales\Model\Quote\Item|PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getQuoteItemMock()
     {
-        $fixturePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
+        $fixturePath = __DIR__ . '/_files/';
         $itemDownloadable = $this->getMock(
             'Magento\Sales\Model\Quote\Item',
             array('getAddress', '__wakeup'),

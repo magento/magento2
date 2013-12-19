@@ -92,7 +92,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         // Make buttons to be rendered in opposite order of addition. This makes "Add products" the last one.
         $this->_buttons = array_reverse($this->_buttons);
         foreach ($this->_buttons as $buttonData) {
-            $html .= $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')->setData($buttonData)->toHtml();
+            $html .= $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData($buttonData)->toHtml();
         }
 
         return $html;

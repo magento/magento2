@@ -58,6 +58,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param \Magento\Customer\Model\GroupFactory $groupFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -67,6 +68,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Sales\Helper\Admin $adminHelper,
         \Magento\Customer\Model\GroupFactory $groupFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Eav\Model\Config $eavConfig,
@@ -77,7 +79,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         $this->_groupFactory = $groupFactory;
         $this->_eavConfig = $eavConfig;
         $this->_attrDataFactory = $attrDataFactory;
-        parent::__construct($context, $registry, $data);
+        parent::__construct($context, $registry, $adminHelper, $data);
     }
 
     /**

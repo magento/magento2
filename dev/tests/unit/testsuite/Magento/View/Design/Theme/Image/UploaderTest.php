@@ -33,7 +33,7 @@ namespace Magento\View\Design\Theme\Image;
 class UploaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\View\Design\Theme\Image\Uploader|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\View\Design\Theme\Image\Uploader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -96,7 +96,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'isValid'               => true,
                 'checkAllowedExtension' => true,
                 'save'                  => true,
-                'result'                => '/tmp' . DIRECTORY_SEPARATOR . 'test_filename',
+                'result'                => '/tmp/test_filename',
                 'exception'             => null
             ),
             array(
@@ -156,8 +156,8 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test_filename'));
 
         $this->assertEquals(
-            \Magento\Filesystem::fixSeparator($result),
-            \Magento\Filesystem::fixSeparator($this->_model->uploadPreviewImage($testScope, '/tmp'))
+            $result,
+            $this->_model->uploadPreviewImage($testScope, '/tmp')
         );
     }
 }

@@ -43,12 +43,29 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $dirs = new \Magento\App\Dir(__DIR__, array(), array(
-            \Magento\App\Dir::THEMES => 'themes',
-            \Magento\App\Dir::MODULES => 'modules',
-            \Magento\App\Dir::PUB_LIB => 'pub_lib',
-        ));
-        $this->model = new Factory($dirs);
+        $filesystemMock = $this->getMock(
+            '\Magento\Filesystem',
+            array('getPath', 'getDirectoryRead', '__wakeup'),
+            array('dir' => array(
+                \Magento\Filesystem::THEMES => 'themes',
+                \Magento\Filesystem::MODULES => 'modules',
+                \Magento\Filesystem::PUB_LIB => 'pub_lib',
+                )
+            ),
+            '',
+            false
+        );
+        $filesystemMock ->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValueMap(
+                array(
+                    (\Magento\Filesystem::THEMES) => 'themes',
+                    (\Magento\Filesystem::MODULES) => 'modules',
+                    (\Magento\Filesystem::PUB_LIB) => 'pub_lib',
+                ))
+            );
+
+        $this->model = new Factory($filesystemMock);
 
         $parentTheme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('parent_theme_path'));
@@ -82,8 +99,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateLocaleFileRuleGetPatternDirs()
     {
         $expectedResult = array(
-            'themes/area/current_theme_path/i18n/en_US',
-            'themes/area/parent_theme_path/i18n/en_US',
+            '/area/current_theme_path/i18n/en_US',
+            '/area/parent_theme_path/i18n/en_US',
         );
         $this->assertSame(
             $expectedResult,
@@ -150,16 +167,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'modular' => array(
                 array(),
                 array(
-                    'themes/area/current_theme_path/namespace_module',
-                    'themes/area/parent_theme_path/namespace_module',
-                    'modules/namespace/module/view/area',
+                    '/area/current_theme_path/namespace_module',
+                    '/area/parent_theme_path/namespace_module',
+                    '/namespace/module/view/area',
                 ),
             ),
             'non-modular' => array(
                 array('namespace' => null, 'module' => null),
                 array(
-                    'themes/area/current_theme_path',
-                    'themes/area/parent_theme_path',
+                    '/area/current_theme_path',
+                    '/area/parent_theme_path',
                 ),
             ),
         );
@@ -203,38 +220,38 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'modular localized' => array(
                 array(),
                 array(
-                    'themes/area/current_theme_path/i18n/en_US/namespace_module',
-                    'themes/area/current_theme_path/namespace_module',
-                    'themes/area/parent_theme_path/i18n/en_US/namespace_module',
-                    'themes/area/parent_theme_path/namespace_module',
-                    'modules/namespace/module/view/area/i18n/en_US',
-                    'modules/namespace/module/view/area',
+                    '/area/current_theme_path/i18n/en_US/namespace_module',
+                    '/area/current_theme_path/namespace_module',
+                    '/area/parent_theme_path/i18n/en_US/namespace_module',
+                    '/area/parent_theme_path/namespace_module',
+                    '/namespace/module/view/area/i18n/en_US',
+                    '/namespace/module/view/area',
                 ),
             ),
             'modular non-localized' => array(
                 array('locale' => null),
                 array(
-                    'themes/area/current_theme_path/namespace_module',
-                    'themes/area/parent_theme_path/namespace_module',
-                    'modules/namespace/module/view/area',
+                    '/area/current_theme_path/namespace_module',
+                    '/area/parent_theme_path/namespace_module',
+                    '/namespace/module/view/area',
                 ),
             ),
             'non-modular localized' => array(
                 array('module' => null, 'namespace' => null),
                 array(
-                    'themes/area/current_theme_path/i18n/en_US',
-                    'themes/area/current_theme_path',
-                    'themes/area/parent_theme_path/i18n/en_US',
-                    'themes/area/parent_theme_path',
-                    'pub_lib',
+                    '/area/current_theme_path/i18n/en_US',
+                    '/area/current_theme_path',
+                    '/area/parent_theme_path/i18n/en_US',
+                    '/area/parent_theme_path',
+                    '',
                 ),
             ),
             'non-modular non-localized' => array(
                 array('module' => null, 'namespace' => null, 'locale' => null),
                 array(
-                    'themes/area/current_theme_path',
-                    'themes/area/parent_theme_path',
-                    'pub_lib',
+                    '/area/current_theme_path',
+                    '/area/parent_theme_path',
+                    '',
                 ),
             ),
         );

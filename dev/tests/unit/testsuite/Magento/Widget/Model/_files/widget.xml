@@ -58,7 +58,7 @@
             </parameter>
             <parameter name="id_path" xsi:type="block" visible="true" required="true" sort_order="10">
                 <label translate="true">Product</label>
-                <block class="Magento\Adminhtml\Block\Catalog\Product\Widget\Chooser">
+                <block class="Magento\Backend\Block\Catalog\Product\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
                             <item name="open" xsi:type="string">Select Product...</item>

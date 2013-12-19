@@ -26,42 +26,64 @@ namespace Magento\Module\Declaration;
 class FileResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Module\Declaration\FileResolver
+     * Test for get method
+     *
+     * @dataProvider providerGet
+     * @param $baseDir
+     * @param $file
+     * @param $scope
+     * @param $expectedFileList
      */
-    protected $_model;
-
-    protected function setUp()
+    public function testGet($baseDir, $file, $scope, $expectedFileList)
     {
-        $baseDir = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/FileResolver/_files');
+        $fileResolver = $this->getFileResolver($baseDir);
 
-        $applicationDirs = $this->getMock('Magento\App\Dir', array(), array('getDir'), '', false);
-        $applicationDirs->expects($this->any())
-            ->method('getDir')
-            ->will($this->returnValueMap(array(
-                array(
-                    \Magento\App\Dir::CONFIG,
-                    $baseDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR .'etc',
-                ),
-                array(
-                    \Magento\App\Dir::MODULES,
-                    $baseDir . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR .'code',
-                ),
-            )));
-        $this->_model = new \Magento\Module\Declaration\FileResolver($applicationDirs);
+        $fileIterator = $fileResolver->get($file, $scope);
+        $fileList = array();
+        foreach ($fileIterator as $filePath) {
+            $fileList[] = $filePath;
+        }
+        $this->assertEquals(sort($fileList), sort($expectedFileList));
     }
 
-    public function testGet()
+    /**
+     * Data provider for testGet
+     *
+     * @return array
+     */
+    public function providerGet()
     {
-        $expectedResult = array(
-            __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/FileResolver/_files/app/code/Module/Four/etc/module.xml'),
-            __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/FileResolver/_files/app/code/Module/One/etc/module.xml'),
-            __DIR__ . str_replace(
-                '/', DIRECTORY_SEPARATOR, '/FileResolver/_files/app/code/Module/Three/etc/module.xml'
-            ),
-            __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/FileResolver/_files/app/code/Module/Two/etc/module.xml'),
-            __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/FileResolver/_files/app/etc/custom/module.xml'),
+        return array(
+            array(
+                __DIR__ . '/FileResolver/_files',
+                'module.xml',
+                'global',
+                array(
+                    file_get_contents(__DIR__ . '/FileResolver/_files/app/code/Module/Four/etc/module.xml'),
+                    file_get_contents(__DIR__ . '/FileResolver/_files/app/code/Module/One/etc/module.xml'),
+                    file_get_contents(__DIR__ . '/FileResolver/_files/app/code/Module/Three/etc/module.xml'),
+                    file_get_contents(__DIR__ . '/FileResolver/_files/app/code/Module/Two/etc/module.xml'),
+                    file_get_contents(__DIR__ . '/FileResolver/_files/app/etc/custom/module.xml')
+                )
+            )
         );
-        $this->assertEquals($expectedResult, $this->_model->get('module.xml', 'global'));
     }
 
+    /**
+     * Get file resolver instance
+     *
+     * @param string $baseDir
+     * @return FileResolver
+     */
+    protected function getFileResolver($baseDir)
+    {
+        $filesystem = new \Magento\Filesystem(
+            new \Magento\Filesystem\DirectoryList($baseDir),
+            new \Magento\Filesystem\Directory\ReadFactory(),
+            new \Magento\Filesystem\Directory\WriteFactory()
+        );
+        $iteratorFactory = new \Magento\Config\FileIteratorFactory();
+
+        return  new \Magento\Module\Declaration\FileResolver($filesystem, $iteratorFactory);
+    }
 }

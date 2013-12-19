@@ -57,7 +57,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     /**
      * Model under test
      *
-     * @var \Magento\Core\Model\Resource\Session
+     * @var \Magento\Session\SaveHandler\DbTable
      */
     protected $_model;
 
@@ -107,9 +107,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($connection));
 
-        $this->_model = new \Magento\Core\Model\Resource\Session(
-            $resource, $this->getMock('Magento\App\Dir', array(), array(), '', false, false)
-        );
+        $this->_model = new \Magento\Session\SaveHandler\DbTable($resource);
     }
 
     /**
@@ -120,8 +118,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected function _prepareMockForRead($isDataEncoded)
     {
         $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql',
-            array('select', 'from', 'where', 'fetchOne'), array(), '', false
+            array('select', 'from', 'where', 'fetchOne', 'isTableExists'), array(), '', false
         );
+        $connection->expects($this->atLeastOnce())
+            ->method('isTableExists')
+            ->will($this->returnValue(true));
         $connection->expects($this->once())
             ->method('select')
             ->will($this->returnSelf());
@@ -178,8 +179,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected function _prepareMockForWrite($sessionExists)
     {
         $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql',
-            array('select', 'from', 'where', 'fetchOne', 'update', 'insert'), array(), '', false
+            array('select', 'from', 'where', 'fetchOne', 'update', 'insert', 'isTableExists'), array(), '', false
         );
+        $connection->expects($this->atLeastOnce())
+            ->method('isTableExists')
+            ->will($this->returnValue(true));
         $connection->expects($this->once())
             ->method('select')
             ->will($this->returnSelf());

@@ -81,7 +81,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
                     }
                 }
                 // @codingStandardsIgnoreStart
-                $this->_getSession()
+                $this->messageManager
                     ->addSuccess(__('If there is an account associated with %1 you will receive an email with a link to reset your password.', $this->_objectManager->get('Magento\Escaper')->escapeHtml($email)));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
@@ -89,10 +89,10 @@ class Auth extends \Magento\Backend\App\AbstractAction
                 );
                 return;
             } else {
-                $this->_getSession()->addError(__('Please correct this email address:'));
+                $this->messageManager->addError(__('Please correct this email address:'));
             }
         } elseif (!empty($params)) {
-            $this->_getSession()->addError(__('The email address is empty.'));
+            $this->messageManager->addError(__('The email address is empty.'));
         }
         $this->_view->loadLayout();
         $this->_view->renderLayout();
@@ -120,7 +120,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
 
             $this->_view->renderLayout();
         } catch (\Exception $exception) {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('Your password reset link has expired.')
             );
             $this->_redirect('adminhtml/auth/forgotpassword', array('_nosecret' => true));
@@ -143,7 +143,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);
         } catch (\Exception $exception) {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('Your password reset link has expired.')
             );
             $this->getResponse()->setRedirect(
@@ -165,14 +165,14 @@ class Auth extends \Magento\Backend\App\AbstractAction
         $user->setRpTokenCreatedAt(null);
         try {
             $user->save();
-            $this->_getSession()->addSuccess(
+            $this->messageManager->addSuccess(
                 __('Your password has been updated.')
             );
             $this->getResponse()->setRedirect(
                 $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
             );
         } catch (\Magento\Core\Exception $exception) {
-            $this->_getSession()->addMessages($exception->getMessages());
+            $this->messageManager->addMessages($exception->getMessages());
             $this->_redirect('adminhtml/auth/resetpassword', array(
                 '_nosecret' => true,
                 '_query' => array(

@@ -18,13 +18,6 @@ namespace Magento\View\Element\Template;
 class Context extends \Magento\View\Element\Context
 {
     /**
-     * Dirs instance
-     *
-     * @var \Magento\App\Dir
-     */
-    protected $_dirs;
-
-    /**
      * Logger instance
      *
      * @var \Magento\Logger
@@ -66,11 +59,10 @@ class Context extends \Magento\View\Element\Context
      * @param \Magento\TranslateInterface $translator
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\FrontController $frontController
-     * @param \Magento\App\Helper\HelperFactory $helperFactory
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
      * @param \Magento\App\Cache\StateInterface $cacheState
@@ -79,7 +71,6 @@ class Context extends \Magento\View\Element\Context
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\View\TemplateEnginePool $enginePool
@@ -97,11 +88,10 @@ class Context extends \Magento\View\Element\Context
         \Magento\TranslateInterface $translator,
         \Magento\App\CacheInterface $cache,
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Session $session,
+        \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\App\FrontController $frontController,
-        \Magento\App\Helper\HelperFactory $helperFactory,
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
         \Magento\App\Cache\StateInterface $cacheState,
@@ -110,7 +100,6 @@ class Context extends \Magento\View\Element\Context
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filterManager,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\App\Dir $dirs,
         \Magento\Filesystem $filesystem,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\View\TemplateEnginePool $enginePool,
@@ -130,7 +119,6 @@ class Context extends \Magento\View\Element\Context
             $sidResolver,
             $storeConfig,
             $frontController,
-            $helperFactory,
             $viewUrl,
             $viewConfig,
             $cacheState,
@@ -144,21 +132,10 @@ class Context extends \Magento\View\Element\Context
 
         $this->_storeManager = $storeManager;
         $this->_appState = $appState;
-        $this->_dirs = $dirs;
         $this->_logger = $logger;
         $this->_filesystem = $filesystem;
         $this->_viewFileSystem = $viewFileSystem;
         $this->enginePool = $enginePool;
-    }
-
-    /**
-     * Get dirs instance
-     *
-     * @return \Magento\App\Dir
-     */
-    public function getDirs()
-    {
-        return $this->_dirs;
     }
 
     /**

@@ -106,13 +106,13 @@ class Edit extends \Magento\Backend\Block\Template
             $this->getLayout()->getBlock('head')->setCanLoadTinyMce(true);
         }
 
-        $this->addChild('preview_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('preview_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Preview Template'),
             'onclick'   => 'queueControl.preview();',
             'class'     => 'preview'
         ));
 
-        $this->addChild('save_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Save Newsletter'),
             'class'     => 'save primary',
             'data_attribute'  => array(
@@ -122,7 +122,7 @@ class Edit extends \Magento\Backend\Block\Template
             ),
         ));
 
-        $this->addChild('save_and_resume', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('save_and_resume', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Save and Resume'),
             'class'     => 'save',
             'data_attribute' => array(
@@ -140,12 +140,12 @@ class Edit extends \Magento\Backend\Block\Template
             ),
         ));
 
-        $this->addChild('reset_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Reset'),
             'onclick'   => 'window.location = window.location'
         ));
 
-        $this->addChild('back_button','Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('back_button','Magento\Backend\Block\Widget\Button', array(
             'label'   => __('Back'),
             'onclick' => "window.location.href = '" . $this->getUrl((
                 $this->getTemplateId() ? '*/template' : '*/*')) . "'",

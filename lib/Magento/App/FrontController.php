@@ -33,18 +33,11 @@ class FrontController implements FrontControllerInterface
     protected $_routerList;
 
     /**
-     * @var \Magento\App\ResponseInterface
-     */
-    protected $_response;
-
-    /**
-     * @param \Magento\App\ResponseInterface $response
      * @param RouterList $routerList
      */
-    public function __construct(ResponseInterface $response, RouterList $routerList)
+    public function __construct(RouterList $routerList)
     {
         $this->_routerList = $routerList;
-        $this->_response = $response;
     }
 
     /**
@@ -58,13 +51,14 @@ class FrontController implements FrontControllerInterface
     {
         \Magento\Profiler::start('routers_match');
         $routingCycleCounter = 0;
+        $response = null;
         while (!$request->isDispatched() && $routingCycleCounter++ < 100) {
             foreach ($this->_routerList as $router) {
                 try {
                     $actionInstance = $router->match($request);
                     if ($actionInstance) {
                         $request->setDispatched(true);
-                        $actionInstance->dispatch($request);
+                        $response = $actionInstance->dispatch($request);
                         break;
                     }
                 } catch (Action\NotFoundException $e) {
@@ -79,6 +73,6 @@ class FrontController implements FrontControllerInterface
         if ($routingCycleCounter > 100) {
             throw new \LogicException('Front controller reached 100 router match iterations');
         }
-        return $this->_response;
+        return $response;
     }
 }

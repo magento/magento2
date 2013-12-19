@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
 
-class Configure extends \Magento\Adminhtml\Block\Widget
+class Configure extends \Magento\Backend\Block\Widget
 {
     /**
      * @var \Magento\Catalog\Model\Product

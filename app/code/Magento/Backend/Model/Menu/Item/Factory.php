@@ -33,20 +33,11 @@ class Factory
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\Helper\HelperFactory
-     */
-    protected $_helperFactory;
-
-    /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\App\Helper\HelperFactory $helperFactory
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager,
-        \Magento\App\Helper\HelperFactory $helperFactory
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManager)
+    {
         $this->_objectManager = $objectManager;
-        $this->_helperFactory = $helperFactory;
     }
 
     /**
@@ -57,13 +48,6 @@ class Factory
      */
     public function create(array $data = array())
     {
-        $module = 'Magento\Backend\Helper\Data';
-        if (isset($data['module'])) {
-            $module = $data['module'];
-            unset($data['module']);
-        }
-        $data = array('data' => $data);
-        $data['helper'] = $this->_helperFactory->get($module);
-        return $this->_objectManager->create('Magento\Backend\Model\Menu\Item', $data);
+        return $this->_objectManager->create('Magento\Backend\Model\Menu\Item', array('data' => $data));
     }
 }

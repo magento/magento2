@@ -61,14 +61,15 @@ class Checksum implements \Magento\View\Asset\MergeStrategyInterface
 
         // Check whether we have already merged these files
         $filesMTimeData = '';
+        $directory = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
         foreach ($publicFiles as $file) {
-            $filesMTimeData .= $this->filesystem->getMTime($file);
+            $filesMTimeData .= $directory->stat($file)['mtime'];
         }
-        if (!($this->filesystem->has($destinationFile) && $this->filesystem->has($mergedMTimeFile)
-            && (strcmp($filesMTimeData, $this->filesystem->read($mergedMTimeFile)) == 0))
+        if (!($directory->isExist($destinationFile) && $directory->isExist($mergedMTimeFile)
+            && (strcmp($filesMTimeData, $directory->readFile($mergedMTimeFile)) == 0))
         ) {
             $this->strategy->mergeFiles($publicFiles, $destinationFile, $contentType);
-            $this->filesystem->write($mergedMTimeFile, $filesMTimeData);
+            $directory->writeFile($mergedMTimeFile, $filesMTimeData);
         }
     }
 }

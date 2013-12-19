@@ -74,8 +74,8 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
-        $fixtureConfigData = include($this->_fixtureDir . DIRECTORY_SEPARATOR . 'config_data.php');
+        $this->_fixtureDir = __DIR__ . '/_files';
+        $fixtureConfigData = include($this->_fixtureDir . '/config_data.php');
 
         $shell = $this->getMock('Magento\Shell', array('execute'));
         $this->_config = new \Magento\TestFramework\Performance\Config(
@@ -87,7 +87,8 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
             'Magento\TestFramework\Application', array('applyFixtures'), array($this->_config, $shell)
         );
         $this->_handler = $this->getMockForAbstractClass(
-            'Magento\TestFramework\Performance\Scenario\HandlerInterface');
+            'Magento\TestFramework\Performance\Scenario\HandlerInterface'
+        );
         $this->_object =
             new \Magento\TestFramework\Performance\Testsuite($this->_config, $this->_application, $this->_handler);
     }
@@ -114,7 +115,7 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
     protected function _expectScenarioWarmUp(
         $scenarioTitle, $scenarioFile, $invocationIndex, \PHPUnit_Framework_MockObject_Stub $returnStub = null
     ) {
-        $scenarioFilePath = $this->_fixtureDir . DIRECTORY_SEPARATOR . $scenarioFile;
+        $scenarioFilePath = $this->_fixtureDir . '/' . $scenarioFile;
 
         /** @var $invocationMocker \PHPUnit_Framework_MockObject_Builder_InvocationMocker */
         $invocationMocker = $this->_handler->expects($this->at($invocationIndex));
@@ -145,7 +146,7 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
     protected function _expectScenarioRun(
         $scenarioTitle, $scenarioFile, $invocationIndex, \PHPUnit_Framework_MockObject_Stub $returnStub = null
     ) {
-        $scenarioFilePath = $this->_fixtureDir . DIRECTORY_SEPARATOR . $scenarioFile;
+        $scenarioFilePath = $this->_fixtureDir . '/' . $scenarioFile;
         $reportFile = basename($scenarioFile, '.jmx') . '.jtl';
 
         /** @var $invocationMocker \PHPUnit_Framework_MockObject_Builder_InvocationMocker */
@@ -158,7 +159,7 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
                     $this->objectHasAttribute('_title', $scenarioTitle),
                     $this->objectHasAttribute('_file', $scenarioFilePath)
                 ),
-                $this->_fixtureDir . DIRECTORY_SEPARATOR . 'report' . DIRECTORY_SEPARATOR . $reportFile
+                $this->_fixtureDir . '/report/' . $reportFile
             )
         ;
         if ($returnStub) {
@@ -198,9 +199,9 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
         });
         $this->_object->run();
         $this->assertEquals(array(
-            $this->_fixtureDir . DIRECTORY_SEPARATOR . 'scenario_error.jmx',
-            $this->_fixtureDir . DIRECTORY_SEPARATOR . 'scenario_failure.jmx',
-            $this->_fixtureDir . DIRECTORY_SEPARATOR . 'scenario.jmx'
+            $this->_fixtureDir . '/scenario_error.jmx',
+            $this->_fixtureDir . '/scenario_failure.jmx',
+            $this->_fixtureDir . '/scenario.jmx'
         ), $notifications);
     }
 

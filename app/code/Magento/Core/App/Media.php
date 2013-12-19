@@ -89,15 +89,26 @@ class Media implements AppInterface
     protected $_response;
 
     /**
+     * @var \Magento\Filesystem $filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var \Magento\Filesystem\Directory\Read $directory
+     */
+    protected $directory;
+
+    /**
      * @param State $applicationState
      * @param ObjectManager $objectManager
      * @param Request $request
      * @param Response $response
      * @param callable $isAllowed
-     * @param string $workingDirectory
-     * @param string $mediaDirectory
-     * @param string $configCacheFile
-     * @param string $relativeFileName
+     * @param $workingDirectory
+     * @param $mediaDirectory
+     * @param $configCacheFile
+     * @param $relativeFileName
+     * @param \Magento\Filesystem $filesytem
      */
     public function __construct(
         State $applicationState,
@@ -108,7 +119,8 @@ class Media implements AppInterface
         $workingDirectory,
         $mediaDirectory,
         $configCacheFile,
-        $relativeFileName
+        $relativeFileName,
+        \Magento\Filesystem $filesystem
     ) {
         $this->_applicationState = $applicationState;
         $this->_objectManager = $objectManager;
@@ -119,6 +131,8 @@ class Media implements AppInterface
         $this->_mediaDirectory = $mediaDirectory;
         $this->_configCacheFile = $configCacheFile;
         $this->_relativeFileName = $relativeFileName;
+        $this->filesystem = $filesystem;
+        $this->directory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
     }
 
     /**
@@ -158,7 +172,7 @@ class Media implements AppInterface
             $sync = $this->_objectManager->get('Magento\Core\Model\File\Storage\Synchronization');
             $sync->synchronize($this->_relativeFileName, $this->_request->getFilePath());
 
-            if (is_readable($this->_request->getFilePath())) {
+            if ($this->directory->isReadable($this->directory->getRelativePath($this->_request->getFilePath()))) {
                 $this->_response->sendFile($this->_request->getFilePath());
                 return 0;
             } else {

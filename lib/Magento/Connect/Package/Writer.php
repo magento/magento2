@@ -125,11 +125,11 @@ class Writer
             if (is_dir($file) || is_file($file)) {
                 $fileName = basename($file);
                 $filePath = dirname($file);
-                @mkdir($root . DS . $filePath, 0777, true);
+                @mkdir($root . '/' . $filePath, 0777, true);
                 if (is_file($file)) {
-                    copy($file, $root . DS . $filePath . DS . $fileName);
+                    copy($file, $root . '/' . $filePath . '/' . $fileName);
                 } else {
-                    @mkdir($root . DS . $filePath . $fileName, 0777);
+                    @mkdir($root . '/' . $filePath . $fileName, 0777);
                 }
             }
         }
@@ -150,18 +150,18 @@ class Writer
         @mkdir(self::PATH_TO_TEMPORARY_DIRECTORY, 0777, true);
         $root = self::PATH_TO_TEMPORARY_DIRECTORY . basename($this->_namePackage);
         @mkdir($root, 0777, true);
-        $packageFilesDir = $root . DS . basename($this->_namePackage);
+        $packageFilesDir = $root . '/' . basename($this->_namePackage);
         @mkdir($packageFilesDir, 0777, true);
         foreach ($this->_files as $index => $file) {
             $destinationFile = $destinationFiles[$index];
             if (is_dir($file) || is_file($file)) {
                 $fileName = basename($destinationFile);
                 $filePath = dirname($destinationFile);
-                @mkdir($packageFilesDir . DS . $filePath, 0777, true);
+                @mkdir($packageFilesDir . '/' . $filePath, 0777, true);
                 if (is_file($file)) {
-                    copy($file, $packageFilesDir . DS . $filePath . DS . $fileName);
+                    copy($file, $packageFilesDir . '/' . $filePath . '/' . $fileName);
                 } else {
-                    @mkdir($packageFilesDir . DS . $filePath . $fileName, 0777);
+                    @mkdir($packageFilesDir . '/' . $filePath . $fileName, 0777);
                 }
             }
         }
@@ -177,7 +177,7 @@ class Writer
     */
     public function addPackageXml($content)
     {
-        file_put_contents($this->_temporaryPackageDir . DS . self::DEFAULT_NAME_PACKAGE_CONFIG, $content);
+        file_put_contents($this->_temporaryPackageDir . '/' . self::DEFAULT_NAME_PACKAGE_CONFIG, $content);
         return $this;
     }
 

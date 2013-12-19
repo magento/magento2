@@ -75,7 +75,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         $data['shipment_id'] = $this->getShipment()->getId();
         $url = $this->getUrl('sales/order_shipment/createLabel', $data);
         return $this->getLayout()
-            ->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            ->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'label'   => __('Create Shipping Label...'),
                 'onclick' => 'packaging.showWindow();',
@@ -93,7 +93,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         $data['shipment_id'] = $this->getShipment()->getId();
         $url = $this->getUrl('sales/order_shipment/printLabel', $data);
         return $this->getLayout()
-            ->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            ->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'label'   => __('Print Shipping Label'),
                 'onclick' => 'setLocation(\'' . $url . '\')'
@@ -109,7 +109,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     public function getShowPackagesButton()
     {
         return $this->getLayout()
-            ->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            ->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'label'   => __('Show Packages'),
                 'onclick' => 'showPackedWindow();'

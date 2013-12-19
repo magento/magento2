@@ -34,7 +34,7 @@
 
 namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
-class Blanknumber extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Number
+class Blanknumber extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Number
 {
     protected function _getValue(\Magento\Object $row)
     {

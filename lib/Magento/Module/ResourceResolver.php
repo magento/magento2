@@ -59,13 +59,13 @@ class ResourceResolver implements \Magento\Module\ResourceResolverInterface
             // Process sub-directories within modules sql directory
             $moduleSqlDir = $this->_moduleReader->getModuleDir('sql', $moduleName);
             $sqlResources = array();
-            foreach (glob($moduleSqlDir . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR) as $resourceDir) {
+            foreach (glob($moduleSqlDir . '/*', GLOB_ONLYDIR) as $resourceDir) {
                 $sqlResources[] = basename($resourceDir);
             }
             $moduleDataDir = $this->_moduleReader->getModuleDir('data', $moduleName);
             // Process sub-directories within modules data directory
             $dataResources = array();
-            foreach (glob($moduleDataDir . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR) as $resourceDir) {
+            foreach (glob($moduleDataDir . '/*', GLOB_ONLYDIR) as $resourceDir) {
                 $dataResources[] = basename($resourceDir);
             }
             $this->_moduleResources[$moduleName] = array_unique(array_merge(

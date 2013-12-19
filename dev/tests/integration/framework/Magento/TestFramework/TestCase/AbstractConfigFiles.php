@@ -72,8 +72,8 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
                 )
             );
 
-            $dirs = $this->_objectManager->get('Magento\App\Dir');
-            $modulesDir = $dirs->getDir(\Magento\App\Dir::MODULES);
+            $filesystem = $this->_objectManager->get('Magento\Filesystem');
+            $modulesDir = $filesystem->getPath(\Magento\Filesystem::MODULES);
             $this->_schemaFile = $modulesDir . $this->_getXsdPath();
         }
     }
@@ -91,7 +91,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
         if ($skip) {
             $this->markTestSkipped('There are no xml files in the system for this test.');
         }
-        $domConfig = new \Magento\Config\Dom(file_get_contents($file));
+        $domConfig = new \Magento\Config\Dom($file);
         $result = $domConfig->validate($this->_schemaFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
@@ -108,7 +108,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('There are no xml files in the system for this test.');
         }
         // have the file resolver return all relevant xml files
-        $this->_fileResolverMock->expects($this->once())->method('get')
+        $this->_fileResolverMock->expects($this->any())->method('get')
             ->will($this->returnValue($this->getXmlConfigFiles()));
         try {
             // this will merge all xml files and validate them
@@ -129,27 +129,24 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     public function xmlConfigFileProvider()
     {
         $fileList = $this->getXmlConfigFiles();
-        if (empty($fileList)) {
-            return array(array(false, true));
+        foreach ($fileList as $fileContent) {
+            $result[] = array($fileContent);
         }
-
-        $dataProviderResult = array();
-        foreach ($fileList as $file) {
-            $dataProviderResult[$file] = array($file);
-        }
-        return $dataProviderResult;
+        return $result;
     }
 
     /**
      * Finds all config xml files based on a path glob.
      *
-     * @return array
+     * @return \Magento\Config\FileIterator
      */
     public function getXmlConfigFiles()
     {
-        return glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('app')
-                . $this->_getConfigFilePathGlob()
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $directory = $objectManager->get('Magento\Filesystem')->getDirectoryRead(\Magento\Filesystem::MODULES);
+        return $objectManager->get('\Magento\Config\FileIteratorFactory')->create(
+            $directory,
+            $directory->search($this->_getConfigFilePathRegex())
         );
     }
 
@@ -167,7 +164,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected abstract function _getConfigFilePathGlob();
+    protected abstract function _getConfigFilePathRegex();
 
     /**
      * Returns a path to the per file XSD file, relative to the modules directory.

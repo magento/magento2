@@ -39,6 +39,7 @@ class Types extends \Magento\Backend\App\Action
      * @var \Magento\Core\Model\Registry
      */
     protected $_coreRegistry = null;
+
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -55,13 +56,13 @@ class Types extends \Magento\Backend\App\Action
      * Dispatches controller_action_postdispatch_adminhtml Event
      *
      * @param RequestInterface $request
-     * @return $this|mixed|void
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
         parent::dispatch($request);
         if ($this->_actionFlag->get('', self::FLAG_NO_POST_DISPATCH)) {
-            return;
+            return $this->_response;
         }
         $this->_eventManager->dispatch('controller_action_postdispatch_adminhtml', array('controller_action' => $this));
     }
@@ -137,7 +138,7 @@ class Types extends \Magento\Backend\App\Action
             $this->_view->renderLayout();
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->_getSession()->addError(__("We can't create Attribute Set Mapping."));
+            $this->messageManager->addError(__("We can't create Attribute Set Mapping."));
             $this->_redirect('adminhtml/*/index', array('store' => $this->_getStore()->getId()));
         }
     }
@@ -175,7 +176,7 @@ class Types extends \Magento\Backend\App\Action
             $this->_view->renderLayout();
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->_getSession()->addError(__("We can't edit Attribute Set Mapping."));
+            $this->messageManager->addError(__("We can't edit Attribute Set Mapping."));
             $this->_redirect('adminhtml/*/index');
         }
     }
@@ -226,16 +227,14 @@ class Types extends \Magento\Backend\App\Action
                 }
             }
 
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addSuccess(__('The attribute mapping has been saved.'));
+            $this->messageManager->addSuccess(__('The attribute mapping has been saved.'));
             if (!empty($requiredAttributes)) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
+                $this->messageManager
                     ->addSuccess($this->_objectManager->get('Magento\GoogleShopping\Helper\Category')->getMessage());
             }
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addError(__("We can't save Attribute Set Mapping."));
+            $this->messageManager->addError(__("We can't save Attribute Set Mapping."));
         }
         $this->_redirect('adminhtml/*/index', array('store' => $this->_getStore()->getId()));
     }
@@ -252,10 +251,10 @@ class Types extends \Magento\Backend\App\Action
             if ($model->getTypeId()) {
                 $model->delete();
             }
-            $this->_getSession()->addSuccess(__('Attribute set mapping was deleted'));
+            $this->messageManager->addSuccess(__('Attribute set mapping was deleted'));
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->_getSession()->addError(__("We can't delete Attribute Set Mapping."));
+            $this->messageManager->addError(__("We can't delete Attribute Set Mapping."));
         }
         $this->_redirect('adminhtml/*/index', array('store' => $this->_getStore()->getId()));
     }
@@ -276,7 +275,7 @@ class Types extends \Magento\Backend\App\Action
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             // just need to output text with error
-            $this->_getSession()->addError(__("We can't load attributes."));
+            $this->messageManager->addError(__("We can't load attributes."));
         }
     }
 
@@ -294,7 +293,7 @@ class Types extends \Magento\Backend\App\Action
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             // just need to output text with error
-            $this->_getSession()->addError(__("We can't load attribute sets."));
+            $this->messageManager->addError(__("We can't load attribute sets."));
         }
     }
 

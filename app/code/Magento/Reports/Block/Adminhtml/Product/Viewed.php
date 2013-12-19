@@ -34,7 +34,7 @@
 
 namespace Magento\Reports\Block\Adminhtml\Product;
 
-class Viewed extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Viewed extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected $_template = 'report/grid/container.phtml';
 

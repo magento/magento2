@@ -63,7 +63,6 @@ class CssTest extends \PHPUnit_Framework_TestCase
             array(
                 'formFactory'      => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
                 'objectManager'   => $this->_objectManager,
-                'dirs'            => new \Magento\App\Dir(__DIR__),
                 'uploaderService' => $this->getMock(
                     'Magento\Theme\Model\Uploader\Service', array(), array(), '', false
                 ),

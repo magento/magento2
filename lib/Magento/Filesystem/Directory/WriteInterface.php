@@ -28,42 +28,42 @@ interface WriteInterface extends ReadInterface
     /**
      * Create directory if it does not exists
      *
-     * @param string $path
+     * @param string $path [optional]
      * @return bool
      * @throws \Magento\Filesystem\FilesystemException
      */
-    public function create($path);
+    public function create($path = null);
 
     /**
-     * Renames a source to into new name
+     * Delete given path
+     *
+     * @param string $path [optional]
+     * @return bool
+     * @throws \Magento\Filesystem\FilesystemException
+     */
+    public function delete($path = null);
+
+    /**
+     * Rename a file
      *
      * @param string $path
      * @param string $newPath
-     * @param WriteInterface $targetDirectory
+     * @param WriteInterface $targetDirectory [optional]
      * @return bool
      * @throws \Magento\Filesystem\FilesystemException
      */
-    public function rename($path, $newPath, WriteInterface $targetDirectory = null);
+    public function renameFile($path, $newPath, WriteInterface $targetDirectory = null);
 
     /**
      * Copy a file
      *
      * @param string $path
      * @param string $destination
-     * @param WriteInterface $targetDirectory
+     * @param WriteInterface $targetDirectory [optional]
      * @return bool
      * @throws \Magento\Filesystem\FilesystemException
      */
-    public function copy($path, $destination, WriteInterface $targetDirectory = null);
-
-    /**
-     * Delete given path
-     *
-     * @param string $path
-     * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
-     */
-    public function delete($path);
+    public function copyFile($path, $destination, WriteInterface $targetDirectory = null);
 
     /**
      * Change permissions of given path
@@ -79,7 +79,7 @@ interface WriteInterface extends ReadInterface
      * Sets access and modification time of file.
      *
      * @param string $path
-     * @param int|null $modificationTime
+     * @param int $modificationTime [optional]
      * @return bool
      * @throws \Magento\Filesystem\FilesystemException
      */
@@ -88,26 +88,27 @@ interface WriteInterface extends ReadInterface
     /**
      * Check if given path is writable
      *
-     * @param string $path
+     * @param string $path [optional]
      * @return bool
      */
-    public function isWritable($path);
+    public function isWritable($path = null);
 
     /**
      * Open file in given mode
      *
      * @param string $path
-     * @param string|null $mode
+     * @param string $mode
+     * @param string|null $protocol
      * @return \Magento\Filesystem\File\WriteInterface
      */
-    public function openFile($path, $mode = 'w');
+    public function openFile($path, $mode = 'w', $protocol = null);
 
     /**
      * Open file in given path
      *
      * @param string $path
      * @param string $content
-     * @param string|null $mode
+     * @param string $mode [optional]
      * @return int The number of bytes that were written.
      * @throws \Magento\Filesystem\FilesystemException
      */

@@ -616,7 +616,16 @@ return array(
     array('Mage_Core_Controller_Magento_Router_Admin', 'Magento\Backend\App\Router\DefaultRouter'),
     array('Mage_Core_Model_Convert'),
     array('Mage_Core_Model_Config_Fieldset', 'Magento\Core\Model\Fieldset\Config'),
-    array('Mage_Core_Model_Config_Options', 'Magento\App\Dir'),
+    array('Mage_Core_Model_Config_Options', 'Magento\Filesystem'),
+    array('Magento\App\Dir', 'Magento\Filesystem'),
+    array('Magento\Filesystem\Adapter\Local', 'Magento\Filesystem\Driver\File'),
+    array('Magento\Filesystem\Adapter\Zlib', 'Magento\Filesystem\Driver\Zlib'),
+    array('Magento\Filesystem\AdapterInterface'),
+    array('Magento\Filesystem\Stream\FactoryInterface'),
+    array('Magento\Filesystem\Stream\Local'),
+    array('Magento\Filesystem\Stream\Mode'),
+    array('Magento\Filesystem\Stream\Zlib'),
+    array('Magento\Filesystem\Stream\Mode\Zlib'),
     array('Mage_Core_Model_Config_Module'),
     array('Mage_Core_Model_Config_System'),
     array('Mage_Core_Model_Design_Source_Apply'),
@@ -655,7 +664,7 @@ return array(
     array('Mage_DesignEditor_Block_Page_Html_Head'),
     array('Mage_Directory_Model_Resource_Currency_Collection'),
     array('Mage_Downloadable_FileController', 'Magento\Downloadable\Controller\Adminhtml\Downloadable\File'),
-    array('Mage_Downloadable_Product_EditController', 'Magento\Adminhtml\Controller\Catalog\Product'),
+    array('Mage_Downloadable_Product_EditController', 'Magento\Backend\Controller\Catalog\Product'),
     array('Mage_Eav_Model_Convert_Adapter_Entity'),
     array('Mage_Eav_Model_Convert_Adapter_Grid'),
     array('Mage_Eav_Model_Convert_Parser_Abstract'),
@@ -833,7 +842,7 @@ return array(
     array(
         'Magento\Catalog\Block\Product\View\Media',
         'Decomposed into \Magento\Catalog\Block\Product\View\Gallery'
-            . ' and \Magento\Catalog\Block\Product\View\BaseImage classes'
+        . ' and \Magento\Catalog\Block\Product\View\BaseImage classes'
     ),
     array('Magento\Wishlist\Block\Links', 'Magento\Wishlist\Block\Link'),
     array('Mage_Adminhtml_Block_Api_Tab_Userroles'),
@@ -1446,7 +1455,7 @@ return array(
     array('Magento\Core\Model\Fieldset\Config\Converter', 'Magento\Object\Copy\Config\Converter'),
     array('Magento\Core\Model\Fieldset\Config\Data', 'Magento\Object\Copy\Config\Data'),
     array('Magento\Core\Model\Fieldset\Config\Reader', 'Magento\Object\Copy\Config\Reader'),
-    array('Magento\Core\Model\Fieldset\Config\SchemaLocator', 'Magento\Object\Copy\Config\SchemaLocator'),    
+    array('Magento\Core\Model\Fieldset\Config\SchemaLocator', 'Magento\Object\Copy\Config\SchemaLocator'),
     array('Magento\Core\Model\ModuleManager', 'Magento\Module\Manager'),
     array('Magento\Core\Model\EntryPoint\Media', 'Magento\Core\App\Media'),
     array('Magento\Core\Controller\Varien\Action', 'Magento\App\Action\Action'),
@@ -1474,7 +1483,8 @@ return array(
     array('Magento\Core\Block\Html\Calendar', 'Magento\View\Element\Html\Calendar'),
     array('Magento\Core\Block\Html\Link', 'Magento\View\Element\Html\Link'),
     array('Magento\Core\Block\Context', 'Magento\View\Element\Context'),
-    array('Magento\Core\Model\Factory\Helper', 'Magento\App\Helper\HelperFactory'),
+    array('Magento\Core\Model\Factory\Helper'),
+    array('Magento\App\Helper\HelperFactory'),
     array('Magento\Core\Helper\AbstractHelper', 'Magento\App\Helper\AbstractHelper'),
     array('Magento\Core\Helper\Context', 'Magento\App\Helper\Context'),
     array(
@@ -1689,6 +1699,10 @@ return array(
         'Magento\Adminhtml\Block\Report\Wishlist',
         'Magento\Reports\Block\Adminhtml\Wishlist'
     ),
+    array(
+        'Magento\App\Dir\Verification',
+        'Magento\Filesystem\DirectoryList\Verification'
+    ),
     array('Magento\Core\Model\Cookie', 'Magento\Stdlib\Cookie'),
     array('Magento\Core\Model\Logger', 'Magento\Logger'),
     array('Magento\Core\Block\Template\Context', 'Magento\View\Element\Template\Context'),
@@ -1755,4 +1769,8 @@ return array(
         'Magento\View\Layout\PageType\Config\SchemaLocator'
     ),
     array('Magento\Core\Model\Theme\CopyService', 'Magento\Theme\Model\CopyService'),
+    array('Magento\Core\Model\Resource\Session', 'Magento\Session\SaveHandler\DbTable'),
+    array('Magento\Core\Model\Session\Exception', 'Magento\Session\Exception'),
+    array('Magento\Core\Model\Session\Context'),
+    array('Magento\Core\Model\Session\AbstractSession', 'Magento\Session\SessionManager'),
 );

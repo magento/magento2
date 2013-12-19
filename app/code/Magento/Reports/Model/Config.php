@@ -59,7 +59,7 @@ class Config extends \Magento\Object
     public function getGlobalConfig()
     {
         $dom = new \DOMDocument();
-        $dom->load($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . DS . 'flexConfig.xml');
+        $dom->load($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexConfig.xml');
 
         $baseUrl = $dom->createElement('baseUrl');
         $baseUrl->nodeValue = $this->_storeManager->getBaseUrl();
@@ -72,14 +72,14 @@ class Config extends \Magento\Object
     public function getLanguage()
     {
         return file_get_contents(
-            $this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . DS . 'flexLanguage.xml'
+            $this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexLanguage.xml'
         );
     }
 
     public function getDashboard()
     {
         return file_get_contents(
-            $this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . DS . 'flexDashboard.xml'
+            $this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexDashboard.xml'
         );
     }
 }

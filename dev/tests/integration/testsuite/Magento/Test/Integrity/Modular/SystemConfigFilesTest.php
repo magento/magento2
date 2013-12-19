@@ -38,9 +38,7 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
         $cacheState = $objectManager->get('Magento\App\Cache\StateInterface');
         $cacheState->setEnabled(\Magento\App\Cache\Type\Config::TYPE_IDENTIFIER, false);
 
-        /** @var $dirs \Magento\App\Dir */
-        $dirs = $objectManager->get('Magento\App\Dir');
-        $modulesDir = $dirs->getDir(\Magento\App\Dir::MODULES);
+        $modulesDir = $objectManager->get('Magento\Filesystem')->getPath(\Magento\Filesystem::MODULES);
 
         $fileList = glob($modulesDir . '/*/*/etc/adminhtml/system.xml');
 

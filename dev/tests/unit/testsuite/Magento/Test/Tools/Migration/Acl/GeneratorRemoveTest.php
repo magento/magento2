@@ -65,8 +65,8 @@ class GeneratorRemoveTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $fixturePath = realpath(__DIR__) . DIRECTORY_SEPARATOR . '_files';
-        $path = $fixturePath . DIRECTORY_SEPARATOR . 'remove' . DIRECTORY_SEPARATOR;
+        $fixturePath = realpath(__DIR__) . '/_files';
+        $path = $fixturePath . '/remove/';
 
         $this->_emptyFile = $path . 'empty.xml';
         $this->_notEmptyFile = $path . 'not_empty.xml';

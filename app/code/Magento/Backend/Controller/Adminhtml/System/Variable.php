@@ -136,8 +136,8 @@ class Variable extends \Magento\Backend\App\Action
         $variable->addData($this->getRequest()->getPost('variable'));
         $result = $variable->validate();
         if ($result !== true && is_string($result)) {
-            $this->_getSession()->addError($result);
-            $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
+            $this->messageManager->addError($result);
+            $this->_view->getLayout()->initMessages();
             $response->setError(true);
             $response->setMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
         }
@@ -157,7 +157,7 @@ class Variable extends \Magento\Backend\App\Action
             $variable->setData($data);
             try {
                 $variable->save();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('You saved the custom variable.')
                 );
                 if ($back) {
@@ -167,7 +167,7 @@ class Variable extends \Magento\Backend\App\Action
                 }
                 return;
             } catch (\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $this->_redirect('adminhtml/*/edit', array('_current' => true, ));
                 return;
             }
@@ -185,11 +185,11 @@ class Variable extends \Magento\Backend\App\Action
         if ($variable->getId()) {
             try {
                 $variable->delete();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('You deleted the customer.')
                 );
             } catch (\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $this->_redirect('adminhtml/*/edit', array('_current' => true, ));
                 return;
             }

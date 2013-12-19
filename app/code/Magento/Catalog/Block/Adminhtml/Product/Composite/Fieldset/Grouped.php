@@ -40,15 +40,28 @@ class Grouped
     protected $_priceBlockDefaultTemplate = 'catalog/product/price.phtml';
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
+     * @param \Magento\Theme\Helper\Layout $layoutHelper
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Tax\Model\Calculation $taxCalculation
+     * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
@@ -57,13 +70,32 @@ class Grouped
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Math\Random $mathRandom,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Wishlist\Helper\Data $wishlistHelper,
+        \Magento\Catalog\Helper\Product\Compare $compareProduct,
+        \Magento\Theme\Helper\Layout $layoutHelper,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Tax\Model\Calculation $taxCalculation,
+        \Magento\Core\Helper\Data $coreHelper,
         array $data = array()
     ) {
+        $this->_coreHelper = $coreHelper;
         $this->_taxCalculation = $taxCalculation;
         parent::__construct(
-            $context, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $arrayUtils, $data
+            $context,
+            $catalogConfig,
+            $registry,
+            $taxData,
+            $catalogData,
+            $mathRandom,
+            $cartHelper,
+            $wishlistHelper,
+            $compareProduct,
+            $layoutHelper,
+            $imageHelper,
+            $arrayUtils,
+            $data
         );
     }
 
@@ -177,6 +209,6 @@ class Grouped
     public function getCurrencyPrice($price)
     {
         $store = $this->getProduct()->getStore();
-        return $this->helper('Magento\Core\Helper\Data')->currencyByStore($price, $store, false);
+        return $this->_coreHelper->currencyByStore($price, $store, false);
     }
 }

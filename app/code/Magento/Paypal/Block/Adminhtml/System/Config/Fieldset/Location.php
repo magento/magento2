@@ -357,6 +357,6 @@ class Location
                 });
             });
         ';
-        return $this->toHtml() . $this->helper('Magento\Adminhtml\Helper\Js')->getScript($js);
+        return $this->toHtml() . $this->_jsHelper->getScript($js);
     }
 }

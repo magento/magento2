@@ -157,6 +157,14 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array()));
 
         $contextMock = $this->getMock('Magento\Core\Model\Resource\Setup\Context', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $contextMock->expects($this->any())
+            ->method('getFilesystem')
+            ->will($this->returnValue($filesystemMock));
+        $modulesDirMock = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $filesystemMock->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($modulesDirMock));
 
         $contextMock->expects($this->once())
             ->method('getEventManager')
@@ -179,9 +187,8 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $setupModel = new \Magento\Core\Model\Resource\Setup\Migration(
             $contextMock,
             'core_setup',
-            $this->getMock('Magento\Filesystem', array(), array(), '', false),
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->getMock('Magento\App\Dir', array(), array(), '', false),
+            $this->getMock('Magento\Filesystem', array(), array(), '', false),
             ''
         );
 
@@ -236,7 +243,6 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\App\Resource', array(), array(), '', false, false),
             $this->getMock('Magento\Filesystem', array(), array(), '', false),
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->getMock('Magento\App\Dir', array(), array(), '', false),
             $this->getMock('Magento\Logger', array(), array(), '', false),
             $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\Config', array(), array(), '', false, false),

@@ -62,7 +62,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filePath = __DIR__ . '/_files' . DIRECTORY_SEPARATOR;
+        $this->_filePath = __DIR__ . '/_files/';
 
         $this->_fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
         $this->_validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
@@ -107,7 +107,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->_fileResolverMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(array($this->_filePath .  'resources.xml')));
+            ->will($this->returnValue(array(file_get_contents($this->_filePath .  'resources.xml'))));
 
         $this->_converterMock->expects($this->once())
             ->method('convert')

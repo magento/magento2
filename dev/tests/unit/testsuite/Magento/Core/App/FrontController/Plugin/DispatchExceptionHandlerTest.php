@@ -38,15 +38,15 @@ class DispatchExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dirMock;
+    protected $_filesystemMock;
 
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock('\Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $this->_dirMock = $this->getMock('\Magento\App\Dir', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('\Magento\Filesystem', array(), array(), '', false);
         $this->_model = new DispatchExceptionHandler(
             $this->_storeManagerMock,
-            $this->_dirMock
+            $this->_filesystemMock
         );
     }
 

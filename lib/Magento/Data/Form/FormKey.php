@@ -39,19 +39,17 @@ class FormKey
     protected $mathRandom;
 
     /**
-     * @var \Magento\Core\Model\Session\AbstractSession
+     * @var \Magento\Session\SessionManagerInterface
      */
     protected $session;
 
     /**
-     * @todo Abstract session will be moved into libraries. Dependency from core module will be replaced.
-     *
      * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SessionManagerInterface $session
      */
     public function __construct(
         \Magento\Math\Random $mathRandom,
-        \Magento\Core\Model\Session\AbstractSession $session
+        \Magento\Session\SessionManagerInterface $session
     ) {
         $this->mathRandom = $mathRandom;
         $this->session = $session;

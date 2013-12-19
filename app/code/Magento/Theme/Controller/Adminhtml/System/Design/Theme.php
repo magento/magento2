@@ -112,10 +112,10 @@ class Theme extends \Magento\Backend\App\Action
             $this->_setActiveMenu('Magento_Theme::system_design_theme');
             $this->_view->renderLayout();
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*/');
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('We cannot find the theme.'));
+            $this->messageManager->addError(__('We cannot find the theme.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_redirect('adminhtml/*/');
         }
@@ -162,15 +162,15 @@ class Theme extends \Magento\Backend\App\Action
                 $customization->reorder(\Magento\View\Design\Theme\Customization\File\Js::TYPE, $reorderJsFiles);
                 $customization->delete($removeJsFiles);
                 $singleFile->update($theme, $customCssData);
-                $this->_getSession()->addSuccess(__('You saved the theme.'));
+                $this->messageManager->addSuccess(__('You saved the theme.'));
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setThemeData($themeData);
             $this->_getSession()->setThemeCustomCssData($customCssData);
             $redirectBack = true;
         } catch (\Exception $e) {
-            $this->_getSession()->addError('The theme was not saved');
+            $this->messageManager->addError('The theme was not saved');
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $redirectBack
@@ -198,12 +198,12 @@ class Theme extends \Magento\Backend\App\Action
                     );
                 }
                 $theme->delete();
-                $this->_getSession()->addSuccess(__('You deleted the theme.'));
+                $this->messageManager->addSuccess(__('You deleted the theme.'));
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('We cannot delete the theme.'));
+            $this->messageManager->addException($e, __('We cannot delete the theme.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         /**
@@ -291,7 +291,7 @@ class Theme extends \Magento\Backend\App\Action
             /** @var $customCssFile \Magento\View\Design\Theme\FileInterface */
             $customCssFile = reset($customCssFiles);
             if ($customCssFile && $customCssFile->getContent()) {
-                $this->_fileFactory->create(
+                return $this->_fileFactory->create(
                     $customCssFile->getFileName(),
                     array(
                         'type'  => 'filename',
@@ -300,7 +300,7 @@ class Theme extends \Magento\Backend\App\Action
                 );
             }
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('We cannot find file'));
+            $this->messageManager->addException($e, __('We cannot find file'));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
@@ -331,12 +331,12 @@ class Theme extends \Magento\Backend\App\Action
                 );
             }
 
-            $this->_fileFactory->create($fileName, array(
+            return $this->_fileFactory->create($fileName, array(
                 'type'  => 'filename',
                 'value' => $themeCss[$fileName]['path']
             ));
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('We cannot find file "%1".', $fileName));
+            $this->messageManager->addException($e, __('We cannot find file "%1".', $fileName));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }

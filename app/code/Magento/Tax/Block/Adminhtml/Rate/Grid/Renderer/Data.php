@@ -34,7 +34,7 @@
 
 namespace Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer;
 
-class Data extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Data extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     protected function _getValue (\Magento\Object $row)
     {

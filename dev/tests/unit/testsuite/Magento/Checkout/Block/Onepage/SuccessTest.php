@@ -40,12 +40,14 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtmlPreparesRecurringProfiles()
     {
+        $checkoutSessionArgs = $this->objectManager->getConstructArguments(
+            'Magento\Checkout\Model\Session',
+            array('storage' => new \Magento\Session\Storage('checkout'))
+        );
         $checkoutSession = $this->getMock(
             'Magento\Checkout\Model\Session',
             ['getLastRecurringProfileIds'],
-            [],
-            '',
-            false
+            $checkoutSessionArgs
         );
         $checkoutSession->expects($this->once())
             ->method('getLastRecurringProfileIds')

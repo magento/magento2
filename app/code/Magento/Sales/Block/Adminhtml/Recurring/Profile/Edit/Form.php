@@ -134,7 +134,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
         $form = $this->_formFactory->create();
 
         $form->setFieldsetRenderer(
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Form\Renderer\Fieldset')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Renderer\Fieldset')
         );
         $form->setFieldsetElementRenderer(
             $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element')

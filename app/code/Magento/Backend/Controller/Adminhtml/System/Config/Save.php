@@ -102,16 +102,16 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
             $configModel = $this->_configFactory->create(array('data' => $configData));
             $configModel->save();
 
-            $this->_session->addSuccess(
+            $this->messageManager->addSuccess(
                 __('You saved the configuration.')
             );
         } catch (\Magento\Core\Exception $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
-                $this->_session->addError($message);
+                $this->messageManager->addError($message);
             }
         } catch (\Exception $e) {
-            $this->_session->addException(
+            $this->messageManager->addException(
                 $e,
                 __('An error occurred while saving this configuration:') . ' ' . $e->getMessage()
             );

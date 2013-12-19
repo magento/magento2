@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Page cache admin controller
- *
- * @category    Magento
- * @package     Magento_PageCache
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\PageCache\Controller\Adminhtml;
 
+/**
+ * Page cache admin controller
+ */
 class PageCache extends \Magento\Backend\App\Action
 {
     /**
@@ -46,16 +42,14 @@ class PageCache extends \Magento\Backend\App\Action
             $pageCacheData = $this->_objectManager->get('Magento\PageCache\Helper\Data');
             if ($pageCacheData->isEnabled()) {
                 $pageCacheData->getCacheControlInstance()->clean();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('The external full page cache has been cleaned.')
                 );
             }
-        }
-        catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
-            $this->_getSession()->addException(
+        } catch (\Magento\Core\Exception $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException(
                 $e,
                 __('Something went wrong while clearing the external full page cache.')
             );

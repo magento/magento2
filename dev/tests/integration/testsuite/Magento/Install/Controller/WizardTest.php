@@ -41,17 +41,15 @@ class WizardTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public static function setUpBeforeClass()
     {
-        $tmpDir =
-            \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir()
-                . DIRECTORY_SEPARATOR . 'WizardTest';
-        if (is_file($tmpDir)) {
-            unlink($tmpDir);
-        } elseif (is_dir($tmpDir)) {
-            \Magento\Io\File::rmdirRecursive($tmpDir);
-        }
+        /** @var \Magento\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
+        $varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $tmpDir =  'WizardTest';
+        $varDirectory->delete($tmpDir);
         // deliberately create a file instead of directory to emulate broken access to static directory
-        touch($tmpDir);
-        self::$_tmpDir = $tmpDir;
+        $varDirectory->touch($tmpDir);
+
+        self::$_tmpDir = $varDirectory->getAbsolutePath($tmpDir);
     }
 
     public function testPreDispatch()
@@ -68,50 +66,5 @@ class WizardTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('install/wizard');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $appState->setInstallDate(date('r', strtotime('now')));
-    }
-
-    /**
-     * @param string $action
-     * @dataProvider actionsDataProvider
-     * @expectedException \Magento\BootstrapException
-     */
-    public function testPreDispatchImpossibleToRenderPage($action)
-    {
-        $params = self::$_params;
-        $params[\Magento\App\Dir::PARAM_APP_DIRS][\Magento\App\Dir::STATIC_VIEW] = self::$_tmpDir;
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize($params);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
-            'preferences' => array(
-                'Magento\App\RequestInterface' => 'Magento\TestFramework\Request',
-                'Magento\App\Response\Http' => 'Magento\TestFramework\Response'
-            )
-        ));
-        $this->dispatch("install/wizard/{$action}");
-    }
-
-    /**
-     * @return array
-     */
-    public function actionsDataProvider()
-    {
-        return array(
-            array('index'),
-            array('begin'),
-            array('beginPost'),
-            array('locale'),
-            array('localeChange'),
-            array('localePost'),
-            array('download'),
-            array('downloadPost'),
-            array('downloadAuto'),
-            array('install'),
-            array('downloadManual'),
-            array('config'),
-            array('configPost'),
-            array('installDb'),
-            array('administrator'),
-            array('administratorPost'),
-            array('end'),
-        );
     }
 }

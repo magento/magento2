@@ -117,7 +117,9 @@ class AbstractShipment extends \Magento\Backend\App\Action
                 $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Shipment')
                     ->getPdf(array($shipment));
                 $date = $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s');
-                $this->_fileFactory->create('packingslip' . $date . '.pdf', $pdf->render(), 'application/pdf');
+                return $this->_fileFactory->create(
+                    'packingslip' . $date . '.pdf', $pdf->render(), 'application/pdf'
+                );
             }
         } else {
             $this->_forward('noroute');

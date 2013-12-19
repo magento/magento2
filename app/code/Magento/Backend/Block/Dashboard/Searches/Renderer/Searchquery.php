@@ -31,7 +31,7 @@
 namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
 
 class Searchquery
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * String helper

@@ -51,6 +51,54 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     protected $_showSingle = null;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Tax\Helper\Data $taxData
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Tax\Model\Calculation $taxCalc
+     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Tax\Helper\Data $taxData,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Stdlib\String $string,
+        \Magento\Math\Random $mathRandom,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Tax\Model\Calculation $taxCalc,
+        \Magento\Core\Helper\Data $coreHelper,
+        array $data = array()
+    ) {
+        $this->_coreHelper = $coreHelper;
+        parent::__construct(
+            $context,
+            $jsonEncoder,
+            $catalogData,
+            $taxData,
+            $registry,
+            $string,
+            $mathRandom,
+            $cartHelper,
+            $taxCalc,
+            $data
+        );
+    }
+
+    /**
      * Check if option has a single selection
      *
      * @return bool
@@ -205,7 +253,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
             $price = $this->getProduct()->getPriceModel()
                 ->getSelectionPreFinalPrice($this->getProduct(), $_selection, 1);
             if (is_numeric($price)) {
-                $price = $this->helper('Magento\Core\Helper\Data')->currencyByStore($price, $store, false);
+                $price = $this->_coreHelper->currencyByStore($price, $store, false);
             }
         }
         return is_numeric($price) ? $price : 0;
@@ -251,7 +299,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     public function formatPriceString($price, $includeContainer = true)
     {
         $taxHelper  = $this->_taxData;
-        $coreHelper = $this->helper('Magento\Core\Helper\Data');
+        $coreHelper = $this->_coreHelper;
         $currentProduct = $this->getProduct();
         if ($currentProduct->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
             && $this->getFormatProduct()

@@ -114,7 +114,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
 
         /** @var $model \Magento\View\Design\Theme\Customization\AbstractFile */
         /** @var $file \Magento\Core\Model\Theme\File */
-        $this->assertEquals('/path' . DIRECTORY_SEPARATOR . 'file.path', $model->getFullPath($file));
+        $this->assertEquals('/path' . '/' . 'file.path', $model->getFullPath($file));
     }
 
     /**
@@ -256,10 +256,14 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
             'sort_order' => 12
         ));
         $model->expects($this->once())->method('getFullPath')->with($file)->will($this->returnValue('test_path'));
-        $this->_filesystem->expects($this->once())->method('delete')->with('test_path');
-        $this->_filesystem->expects($this->once())->method('setIsAllowCreateDirectories')->with(true)
-            ->will($this->returnSelf());
-        $this->_filesystem->expects($this->once())->method('write')->with('test_path', 'test content');
+
+        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write',
+            array('writeFile', 'delete', 'getRelativePath'), array(), '', false);
+        $directoryMock->expects($this->once())->method('writeFile')->will($this->returnValue(true));
+        $directoryMock->expects($this->once())->method('delete')->will($this->returnValue(true));
+
+        $this->_filesystem->expects($this->any())->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::ROOT)->will($this->returnValue($directoryMock));
         /** @var $model \Magento\View\Design\Theme\Customization\AbstractFile */
         /** @var $file \Magento\Core\Model\Theme\File */
         $model->save($file);
@@ -280,8 +284,14 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
             'content'    => 'test content',
             'sort_order' => 12
         ));
-        $this->_filesystem->expects($this->once())->method('has')->with('test_path')->will($this->returnValue(true));
-        $this->_filesystem->expects($this->once())->method('delete')->with('test_path');
+        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write',
+            array('touch', 'delete', 'getRelativePath'), array(), '', false);
+        $directoryMock->expects($this->once())->method('touch')->will($this->returnValue(true));
+        $directoryMock->expects($this->once())->method('delete')->will($this->returnValue(true));
+
+        $this->_filesystem->expects($this->any())->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::ROOT)->will($this->returnValue($directoryMock));
+
         $model->expects($this->once())->method('getFullPath')->with($file)->will($this->returnValue('test_path'));
         /** @var $model \Magento\View\Design\Theme\Customization\AbstractFile */
         /** @var $file \Magento\Core\Model\Theme\File */

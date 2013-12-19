@@ -27,18 +27,26 @@ namespace Magento\Core\Model\Locale\Hierarchy\Config;
 
 class FileResolver implements \Magento\Config\FileResolverInterface
 {
+    /**
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $directoryRead;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Config\FileIteratorFactory
      */
-    protected $_applicationDirs;
+    protected $iteratorFactory;
 
     /**
-     * @param \Magento\App\Dir $applicationDirs
+     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Config\FileIteratorFactory $iteratorFactory
      */
-    public function __construct(\Magento\App\Dir $applicationDirs)
-    {
-        $this->_applicationDirs = $applicationDirs;
+    public function __construct(
+        \Magento\Filesystem $filesystem,
+        \Magento\Config\FileIteratorFactory $iteratorFactory
+    ) {
+        $this->directoryRead = $filesystem->getDirectoryRead(\Magento\Filesystem::APP);
+        $this->iteratorFactory = $iteratorFactory;
     }
 
     /**
@@ -46,10 +54,13 @@ class FileResolver implements \Magento\Config\FileResolverInterface
      */
     public function get($filename, $scope)
     {
-        $appLocaleDir = $this->_applicationDirs->getDir(\Magento\App\Dir::LOCALE);
-        // Create pattern similar to app/locale/*/config.xml
-        $filePattern = $appLocaleDir . DIRECTORY_SEPARATOR . '*' . DIRECTORY_SEPARATOR . $filename;
-        $fileList = glob($filePattern, GLOB_BRACE);
-        return $fileList;
+        $result = array();
+        if ($this->directoryRead->isExist('locale')) {
+            $result = $this->iteratorFactory->create(
+                $this->directoryRead,
+                $this->directoryRead->search('#' . preg_quote($filename) . '$#', 'locale')
+            );
+        }
+        return $result;
     }
 }

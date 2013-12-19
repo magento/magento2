@@ -57,12 +57,26 @@ class Cards
     public function setPayment(\Magento\Payment\Model\Info $payment)
     {
         $this->_payment = $payment;
+        $this->_initCards();
+        return $this;
+    }
+
+    /**
+     * Init cards data
+     */
+    protected function _initCards()
+    {
         $paymentCardsInformation = $this->_payment->getAdditionalInformation(self::CARDS_NAMESPACE);
         if ($paymentCardsInformation) {
+            $additionalInfo = $this->_payment->getAdditionalInformation();
+            unset($additionalInfo[self::CARDS_NAMESPACE]);
+
+            foreach ($paymentCardsInformation as $cardId => $data) {
+                $paymentCardsInformation[$cardId]['additional_information'] = $additionalInfo;
+            }
+
             $this->_cards = $paymentCardsInformation;
         }
-
-        return $this;
     }
 
     /**

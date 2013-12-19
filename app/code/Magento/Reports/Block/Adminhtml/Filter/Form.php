@@ -194,7 +194,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize form fileds values
      * Method will be called after prepareForm and can be used for field values initialization
      *
-     * @return \Magento\Adminhtml\Block\Widget\Form
+     * @return \Magento\Backend\Block\Widget\Form
      */
     protected function _initFormValues()
     {
@@ -211,7 +211,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * This method is called before rendering HTML
      *
-     * @return \Magento\Adminhtml\Block\Widget\Form
+     * @return \Magento\Backend\Block\Widget\Form
      */
     protected function _beforeToHtml()
     {

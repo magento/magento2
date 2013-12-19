@@ -51,12 +51,12 @@ class ResourceResolverTest extends \PHPUnit_Framework_TestCase
                 array(
                     'data',
                     $moduleName,
-                    __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/_files/Module/data'),
+                    __DIR__ . '/_files/Module/data',
                 ),
                 array(
                     'sql',
                     $moduleName,
-                    __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/_files/Module/sql'),
+                    __DIR__ . '/_files/Module/sql',
                 ),
             )));
 

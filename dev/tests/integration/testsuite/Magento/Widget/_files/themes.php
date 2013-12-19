@@ -30,6 +30,6 @@
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Core\Model\Theme\Registration');
 $registration->register(
-    __DIR__ . DIRECTORY_SEPARATOR . 'design',
-    implode(DIRECTORY_SEPARATOR, array('*', '*', 'theme.xml'))
+    __DIR__ . '/design',
+    '*/*/theme.xml'
 );

@@ -304,7 +304,7 @@ class Layout
      */
     public function getAddLayoutButtonHtml()
     {
-        $button = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'label'     => __('Add Layout Update'),
                 'onclick'   => 'WidgetInstance.addPageGroup({})',
@@ -320,7 +320,7 @@ class Layout
      */
     public function getRemoveLayoutButtonHtml()
     {
-        $button = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'label'     => $this->escapeJsQuote(__('Remove Layout Update')),
                 'onclick'   => 'WidgetInstance.removePageGroup(this)',

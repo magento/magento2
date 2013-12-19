@@ -48,7 +48,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getMockBuilder('Magento\Email\Model\Template')
             ->setMethods(array('_getMail'))
             ->setConstructorArgs(array(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Context'),
+                $objectManager->get('Magento\Core\Model\Context'),
                 $objectManager->get('Magento\View\DesignInterface'),
                 $objectManager->get('Magento\Core\Model\Registry'),
                 $objectManager->get('Magento\Core\Model\App\Emulation'),
@@ -59,11 +59,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->create('Magento\Core\Model\Store\Config'),
                 $objectManager->create('Magento\Core\Model\Config'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
-                $objectManager->get('Magento\App\Dir'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
             ))
             ->getMock();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
         $this->_model->expects($this->any())->method('_getMail')->will($this->returnCallback(array($this, 'getMail')));
         $this->_model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
     }

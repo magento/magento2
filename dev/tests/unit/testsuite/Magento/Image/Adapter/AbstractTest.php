@@ -37,18 +37,42 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Filesystem\Directory\Write
+     */
+    protected $directoryWriteMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Filesystem
+     */
+    protected $filesystemMock;
+
+
     protected function setUp()
     {
-        parent::setUp();
-        $ioFile = $this->getMock('Magento\Io\File', array('mkdir'));
-        $ioFile->expects($this->any())
-            ->method('mkdir')
-            ->will($this->returnValue(true));
+        $this->directoryWriteMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+        $this->filesystemMock = $this->getMock(
+            'Magento\Filesystem',
+            array('getDirectoryWrite', 'createDirectory'),
+            array(),
+            '',
+            false
+        );
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->will($this->returnValue($this->directoryWriteMock));
 
-        $data = array('io' => $ioFile);
-        $this->_model = $this->getMockForAbstractClass('Magento\Image\Adapter\AbstractAdapter', array($data));
+        $this->_model = $this->getMockForAbstractClass('Magento\Image\Adapter\AbstractAdapter',
+            array($this->filesystemMock)
+        );
     }
 
+    protected function tearDown()
+    {
+        $this->directoryWriteMock   = null;
+        $this->_model               = null;
+        $this->filesystemMock       = null;
+    }
     /**
      * Test adaptResizeValues with null as a value one of parameters
      *
@@ -117,10 +141,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function prepareDestinationDataProvider()
     {
         return array(
-            array(__DIR__, 'name.txt', __DIR__ . DIRECTORY_SEPARATOR . 'name.txt'),
-            array(__DIR__ . DIRECTORY_SEPARATOR . 'name.txt', null, __DIR__ . DIRECTORY_SEPARATOR . 'name.txt'),
-            array(null, 'name.txt', '_fileSrcPath' . DIRECTORY_SEPARATOR . 'name.txt'),
-            array(null, null, '_fileSrcPath' . DIRECTORY_SEPARATOR . '_fileSrcName'),
+            array(__DIR__, 'name.txt', __DIR__ . '/name.txt'),
+            array(__DIR__ . '/name.txt', null, __DIR__ . '/name.txt'),
+            array(null, 'name.txt', '_fileSrcPath' . '/name.txt'),
+            array(null, null, '_fileSrcPath' . '/_fileSrcName'),
         );
     }
 

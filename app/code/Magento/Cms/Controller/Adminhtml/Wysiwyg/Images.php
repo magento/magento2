@@ -72,7 +72,7 @@ class Images extends \Magento\Backend\App\Action
         try {
             $this->_objectManager->get('Magento\Cms\Helper\Wysiwyg\Images')->getCurrentPath();
         } catch (\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         }
         $this->_initAction();
         $this->_view->loadLayout('overlay_popup');
@@ -151,13 +151,13 @@ class Images extends \Magento\Backend\App\Action
             $path = $this->getStorage()->getSession()->getCurrentPath();
             foreach ($files as $file) {
                 $file = $helper->idDecode($file);
-                $_filePath = $path . DS . $file;
                 /** @var \Magento\Filesystem $filesystem */
                 $filesystem = $this->_objectManager->get('Magento\Filesystem');
-                $filesystem->setWorkingDirectory($helper->getStorageRoot());
-                if ($filesystem->isFile($_filePath)) {
-                    $this->getStorage()->deleteFile($_filePath);
-                }
+                $dir = $filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+                $filePath = $path . '/' . $file;
+                if ($dir->isFile($dir->getRelativePath($filePath))) {
+                    $this->getStorage()->deleteFile($filePath);
+                } 
             }
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());

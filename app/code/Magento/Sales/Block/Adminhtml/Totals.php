@@ -29,6 +29,27 @@ namespace Magento\Sales\Block\Adminhtml;
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
+     * @var \Magento\Sales\Helper\Admin
+     */
+    protected $_adminHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Sales\Helper\Admin $adminHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Sales\Helper\Admin $adminHelper,
+        array $data = array()
+    ) {
+        $this->_adminHelper = $adminHelper;
+        parent::__construct($context, $registry, $data);
+    }
+
+    /**
      * Format total value based on order currency
      *
      * @param   \Magento\Object $total
@@ -37,7 +58,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     public function formatValue($total)
     {
         if (!$total->getIsFormated()) {
-            return $this->helper('Magento\Sales\Helper\Admin')->displayPrices(
+            return $this->_adminHelper->displayPrices(
                 $this->getOrder(),
                 $total->getBaseValue(),
                 $total->getValue()

@@ -31,9 +31,14 @@
             </value>
         </param>
     </type>
-    <type name="Magento\Install\Model\Session">
-        <param name="sessionNamespace">
+    <virtualType name="Magento\Install\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
             <value>install</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Install\Model\Session">
+        <param name="storage">
+            <instance type="Magento\Install\Model\Session\Storage" />
         </param>
     </type>
 </config>

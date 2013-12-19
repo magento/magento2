@@ -34,7 +34,7 @@
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
 
 class Element
-    extends \Magento\Adminhtml\Block\Widget\Form\Renderer\Fieldset\Element
+    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
      * Initialize block template

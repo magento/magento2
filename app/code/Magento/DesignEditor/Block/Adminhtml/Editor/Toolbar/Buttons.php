@@ -43,6 +43,25 @@ class Buttons
     protected $_themeId;
 
     /**
+     * @var \Magento\Backend\Helper\Data
+     */
+    protected $_backendHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Helper\Data $backendHelper,
+        array $data = array()
+    ) {
+        $this->_backendHelper = $backendHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Get current theme id
      *
      * @return int
@@ -72,6 +91,6 @@ class Buttons
      */
     public function getHomeLink()
     {
-        return $this->helper('Magento\Backend\Helper\Data')->getHomePageUrl();
+        return $this->_backendHelper->getHomePageUrl();
     }
 }

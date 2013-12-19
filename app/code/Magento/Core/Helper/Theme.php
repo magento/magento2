@@ -32,11 +32,11 @@ namespace Magento\Core\Helper;
 class Theme extends \Magento\App\Helper\AbstractHelper
 {
     /**
-     * Directories
+     * Filesystem facade
      *
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem
      */
-    protected $_dirs;
+    protected $_filesystem;
 
     /**
      * Layout merge factory
@@ -58,20 +58,20 @@ class Theme extends \Magento\App\Helper\AbstractHelper
     protected $_viewFileSystem;
 
     /**
-     * @param Context $context
-     * @param \Magento\App\Dir $dirs
+     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\Collection $themeCollection
      * @param \Magento\View\FileSystem $viewFileSystem
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\App\Dir $dirs,
+        \Magento\Filesystem $filesystem,
         \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\Collection $themeCollection,
         \Magento\View\FileSystem $viewFileSystem
     ) {
-        $this->_dirs = $dirs;
+        $this->_filesystem = $filesystem;
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_themeCollection = $themeCollection;
         $this->_viewFileSystem = $viewFileSystem;
@@ -118,16 +118,16 @@ class Theme extends \Magento\App\Helper\AbstractHelper
             'skipProxy'  => true
         );
 
-        $basePath = $this->_dirs->getDir(\Magento\App\Dir::ROOT);
+        $rootDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
         $files = array();
         foreach ($elements as $fileId) {
             $fileId = (string)$fileId;
             $path = $this->_viewFileSystem->getViewFile($fileId, $params);
             $file = array(
                 'id'       => $fileId,
-                'path'     => \Magento\Filesystem::fixSeparator($path),
+                'path'     => $path,
             );
-            $file['safePath'] = $this->getSafePath($file['path'], $basePath);
+            $file['safePath'] = $rootDirectory->getRelativePath($file['path']);
 
             //keys are used also to remove duplicates
             $files[$fileId] = $file;
@@ -145,9 +145,9 @@ class Theme extends \Magento\App\Helper\AbstractHelper
      */
     public function getGroupedCssFiles($theme)
     {
-        $jsDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\App\Dir::PUB_LIB));
-        $codeDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\App\Dir::MODULES));
-        $designDir = \Magento\Filesystem::fixSeparator($this->_dirs->getDir(\Magento\App\Dir::THEMES));
+        $jsDir = $this->_filesystem->getPath(\Magento\Filesystem::PUB_LIB);
+        $codeDir = $this->_filesystem->getPath(\Magento\Filesystem::MODULES);
+        $designDir = $this->_filesystem->getPath(\Magento\Filesystem::THEMES);
 
         $groups = array();
         $themes = array();
@@ -210,8 +210,8 @@ class Theme extends \Magento\App\Helper\AbstractHelper
 
         $relativePath = substr($file['path'], strlen($designDir));
 
-        $area = strtok($relativePath, \Magento\Filesystem::DIRECTORY_SEPARATOR);
-        $theme = strtok(\Magento\Filesystem::DIRECTORY_SEPARATOR);
+        $area = strtok($relativePath, '/');
+        $theme = strtok('/');
 
         if ($area === false || $theme === false) {
             throw new \LogicException(__('Theme path "%1/%2" is incorrect', $area, $theme));
@@ -370,19 +370,5 @@ class Theme extends \Magento\App\Helper\AbstractHelper
             $parentTheme = $parentTheme->getParentTheme();
         }
         return 1;
-    }
-
-    /**
-     * Get relative file path cut to be safe for public sharing
-     *
-     * Path is considered from the base Magento directory
-     *
-     * @param string $filePath
-     * @param string $basePath
-     * @return string
-     */
-    public function getSafePath($filePath, $basePath)
-    {
-        return ltrim(str_ireplace($basePath, '', $filePath), '\\/');
     }
 }

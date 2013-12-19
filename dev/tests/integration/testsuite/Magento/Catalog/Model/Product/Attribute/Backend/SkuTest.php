@@ -68,9 +68,7 @@ class SkuTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateUniqueLongSku($product)
     {
-        $existedProduct = clone $product;
-        $existedProduct->setId(2);
-        $existedProduct->save();
+        $product->duplicate();
         $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
         $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $product->getSku());

@@ -34,7 +34,7 @@ class Factory
     /**
      * Default translate inline class name
      */
-    const DEFAULT_CLASS_NAME = 'Magento\Core\Model\Translate\Inline';
+    const DEFAULT_CLASS_NAME = 'Magento\Core\Model\Translate\InlineInterface';
 
     /**
      * Object Manager

@@ -196,6 +196,13 @@ class International
     protected $dateTime;
 
     /**
+     * Modules directory with read permissions
+     *
+     * @var \Magento\Filesystem\Directory\Read
+     */
+    protected $modulesDirectory;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
@@ -211,15 +218,14 @@ class International
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Usa\Helper\Data $usaData
      * @param \Magento\Core\Model\Date $coreDate
-     * @param \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\PdfFactory $pdfFactory
+     * @param Label\PdfFactory $pdfFactory
      * @param \Magento\Module\Dir\Reader $configReader
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Division $mathDivision
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Filesystem $filesystem
      * @param array $data
-     * 
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
@@ -243,8 +249,10 @@ class International
         \Magento\Stdlib\String $string,
         \Magento\Math\Division $mathDivision,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Filesystem $filesystem,
         array $data = array()
     ) {
+        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
         $this->_usaData = $usaData;
         $this->_coreDate = $coreDate;
         $this->_pdfFactory = $pdfFactory;
@@ -484,6 +492,7 @@ class International
      * Get allowed shipping methods
      *
      * @return array
+     * @throws \Magento\Core\Exception
      */
     public function getAllowedMethods()
     {
@@ -515,7 +524,7 @@ class International
     /**
      * Get configuration data of carrier
      *
-     * @param strin $type
+     * @param string $type
      * @param string $code
      * @return array|bool
      */
@@ -1149,6 +1158,7 @@ class International
      * Returns weight unit (kg or pound)
      *
      * @return string
+     * @throws \Magento\Core\Exception
      */
     protected function _getWeightUnit()
     {
@@ -1171,8 +1181,12 @@ class International
     protected function getCountryParams($countryCode)
     {
         if (empty($this->_countryParams)) {
-            $dhlConfigPath = $this->_configReader->getModuleDir('etc', 'Magento_Usa')  . DS . 'dhl' . DS;
-            $countriesXml = file_get_contents($dhlConfigPath . 'international' . DS . 'countries.xml');
+
+            $usaEtcPath = $this->_configReader->getModuleDir('etc', 'Magento_Usa');
+            $countriesXmlPath = $this->modulesDirectory->getRelativePath(
+                $usaEtcPath  . '/dhl/international/countries.xml'
+            );
+            $countriesXml = $this->modulesDirectory->readFile($countriesXmlPath);
             $this->_countryParams = new \Magento\Simplexml\Element($countriesXml);
         }
         if (isset($this->_countryParams->$countryCode)) {

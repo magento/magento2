@@ -38,6 +38,25 @@ namespace Magento\Payment\Block\Form;
 class Container extends \Magento\View\Element\Template
 {
     /**
+     * @var \Magento\Payment\Helper\Data
+     */
+    protected $_paymentHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Payment\Helper\Data $paymentHelper,
+        array $data = array()
+    ) {
+        $this->_paymentHelper = $paymentHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Prepare children blocks
      */
     protected function _prepareLayout()
@@ -48,7 +67,7 @@ class Container extends \Magento\View\Element\Template
         foreach ($this->getMethods() as $method) {
             $this->setChild(
                'payment.method.'.$method->getCode(),
-               $this->helper('Magento\Payment\Helper\Data')->getMethodFormBlock($method)
+               $this->_paymentHelper->getMethodFormBlock($method)
             );
         }
 
@@ -112,7 +131,7 @@ class Container extends \Magento\View\Element\Template
             $quote = $this->getQuote();
             $store = $quote ? $quote->getStoreId() : null;
             $methods = array();
-            foreach ($this->helper('Magento\Payment\Helper\Data')->getStoreMethods($store, $quote) as $method) {
+            foreach ($this->_paymentHelper->getStoreMethods($store, $quote) as $method) {
                 if ($this->_canUseMethod($method) && $method->isApplicableToQuote(
                     $quote,
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL

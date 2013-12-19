@@ -36,6 +36,25 @@ class Region
     implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $_directoryHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        \Magento\Directory\Helper\Data $directoryHelper,
+        array $data = array()
+    ) {
+        $this->_directoryHelper = $directoryHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Output the region element and javasctipt that makes it dependent from country element
      *
      * @param \Magento\Data\Form\Element\AbstractElement $element
@@ -68,7 +87,7 @@ class Region
         $html .= '<script type="text/javascript">' . "\n";
         $html .= '$("' . $selectId . '").setAttribute("defaultValue", "' . $regionId.'");' . "\n";
         $html .= 'new regionUpdater("' . $country->getHtmlId() . '", "' . $element->getHtmlId()
-            . '", "' . $selectId . '", ' . $this->helper('Magento\Directory\Helper\Data')->getRegionJson() . ');' . "\n";
+            . '", "' . $selectId . '", ' . $this->_directoryHelper->getRegionJson() . ');' . "\n";
         $html .= '</script>' . "\n";
 
         $html .= '</div></div>' . "\n";

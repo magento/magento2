@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <template id="newsletter_subscription_confirm_email_template" label="Subscription Confirmation" file="subscr_confirm.html" type="html"/>
-    <template id="newsletter_subscription_success_email_template" label="Subscription Success" file="subscr_success.html" type="html"/>
-    <template id="newsletter_subscription_un_email_template" label="Unsubscription Success" file="unsub_success.html" type="html"/>
+    <template id="newsletter_subscription_confirm_email_template" label="Subscription Confirmation" file="subscr_confirm.html" type="html" module="Magento_Newsletter"/>
+    <template id="newsletter_subscription_success_email_template" label="Subscription Success" file="subscr_success.html" type="html" module="Magento_Newsletter"/>
+    <template id="newsletter_subscription_un_email_template" label="Unsubscription Success" file="unsub_success.html" type="html" module="Magento_Newsletter"/>
 </config>

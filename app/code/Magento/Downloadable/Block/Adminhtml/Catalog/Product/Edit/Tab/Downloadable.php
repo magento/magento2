@@ -34,7 +34,7 @@
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 class Downloadable
-    extends \Magento\Adminhtml\Block\Widget implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
+    extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Reference to product objects that is being edited
@@ -143,7 +143,7 @@ class Downloadable
      */
     protected function _toHtml()
     {
-        $accordion = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Accordion')
+        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')
             ->setId('downloadableInfo');
 
         $accordion->addItem('samples', array(

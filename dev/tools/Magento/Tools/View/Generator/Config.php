@@ -47,27 +47,28 @@ class Config
     private $_isDryRun;
 
     /**
-     * @param string $appBaseDir
+     * @param \Magento\Filesystem $filesystem
      * @param array $cmdOptions
      * @throws \Magento\Exception
      */
-    public function __construct($appBaseDir, $cmdOptions)
+    public function __construct(\Magento\Filesystem $filesystem, $cmdOptions)
     {
-        $sourceDir = isset($cmdOptions['source']) ? $cmdOptions['source'] : $appBaseDir;
-        if (!is_dir($sourceDir)) {
+        $rootDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $sourceDir = isset($cmdOptions['source']) ? $cmdOptions['source'] : $rootDirectory->getAbsolutePath();
+        if (!$rootDirectory->isDirectory($rootDirectory->getRelativePath($sourceDir))) {
             throw new \Magento\Exception('Source directory does not exist: ' . $sourceDir);
         }
 
         if (isset($cmdOptions['destination'])) {
             $destinationDir = $cmdOptions['destination'];
         } else {
-            $dirs = new \Magento\App\Dir($sourceDir);
-            $destinationDir = $dirs->getDir(\Magento\App\Dir::STATIC_VIEW);
+            $destinationDir = $filesystem->getPath(\Magento\Filesystem::STATIC_VIEW);
         }
-        if (!is_dir($destinationDir)) {
+        $destinationDirRelative = $rootDirectory->getRelativePath($destinationDir);
+        if (!$rootDirectory->isDirectory($destinationDirRelative)) {
             throw new \Magento\Exception('Destination directory does not exist: ' . $destinationDir);
         }
-        if (glob($destinationDir . DIRECTORY_SEPARATOR . '*')) {
+        if ($rootDirectory->read($destinationDirRelative)) {
             throw new \Magento\Exception("Destination directory must be empty: {$destinationDir}");
         }
 

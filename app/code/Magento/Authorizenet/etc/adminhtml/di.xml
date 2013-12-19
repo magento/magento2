@@ -32,7 +32,7 @@
     </type>
     <type name="Magento\Authorizenet\Model\Directpost">
         <param name="session">
-            <instance type="Magento\Adminhtml\Model\Session\Quote" />
+            <instance type="Magento\Backend\Model\Session\Quote" />
         </param>
     </type>
 </config>

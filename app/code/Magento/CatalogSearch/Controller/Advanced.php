@@ -53,7 +53,7 @@ class Advanced extends \Magento\App\Action\Action
     /**
      * Catalog search session
      *
-     * @var \Magento\Core\Model\Session\Generic
+     * @var \Magento\Session\Generic
      */
     protected $_catalogSearchSession;
 
@@ -61,13 +61,13 @@ class Advanced extends \Magento\App\Action\Action
      * Construct
      *
      * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Session\Generic $catalogSearchSession
+     * @param \Magento\Session\Generic $catalogSearchSession
      * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
      * @param \Magento\Core\Model\UrlFactory $urlFactory
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Session\Generic $catalogSearchSession,
+        \Magento\Session\Generic $catalogSearchSession,
         \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
         \Magento\Core\Model\UrlFactory $urlFactory
     ) {
@@ -80,7 +80,7 @@ class Advanced extends \Magento\App\Action\Action
     public function indexAction()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages('Magento\CatalogSearch\Model\Session');
+        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 
@@ -90,13 +90,13 @@ class Advanced extends \Magento\App\Action\Action
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQuery());
         } catch (\Magento\Core\Exception $e) {
-            $this->_catalogSearchSession->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $defaultUrl = $this->_urlFactory->create()
                 ->setQueryParams($this->getRequest()->getQuery())
                 ->getUrl('*/*/');
             $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
         }
-        $this->_view->getLayout()->initMessages('Magento\Catalog\Model\Session');
+        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 }

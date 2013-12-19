@@ -38,15 +38,15 @@ class Integration extends Action
     /** Param Key for extracting integration id from Request */
     const PARAM_INTEGRATION_ID = 'id';
 
-    /** Keys used for registering data into the registry */
+    /** Reauthorize flag is used to distinguish activation from reauthorization */
+    const PARAM_REAUTHORIZE = 'reauthorize';
+
     const REGISTRY_KEY_CURRENT_INTEGRATION = 'current_integration';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_registry = null;
+    protected $_registry;
 
     /** @var \Magento\Logger */
     protected $_logger;
@@ -57,7 +57,7 @@ class Integration extends Action
     /** @var IntegrationOauthService */
     protected $_oauthService;
 
-    /** @var \Magento\Core\Helper\Data  */
+    /** @var \Magento\Core\Helper\Data */
     protected $_coreHelper;
 
     /** @var \Magento\Integration\Helper\Data */
@@ -152,12 +152,12 @@ class Integration extends Action
                 $integrationData = $this->_integrationService->get($integrationId)->getData();
                 $originalName = $integrationData[Info::DATA_NAME];
             } catch (IntegrationException $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $this->_redirect('*/*/');
                 return;
             } catch (\Exception $e) {
                 $this->_logger->logException($e);
-                $this->_getSession()->addError(__('Internal error. Check exception log for details.'));
+                $this->messageManager->addError(__('Internal error. Check exception log for details.'));
                 $this->_redirect('*/*');
                 return;
             }
@@ -166,7 +166,7 @@ class Integration extends Action
                 $integrationData = array_merge($integrationData, $restoredIntegration);
             }
         } else {
-            $this->_getSession()->addError(__('Integration ID is not specified or is invalid.'));
+            $this->messageManager->addError(__('Integration ID is not specified or is invalid.'));
             $this->_redirect('*/*/');
             return;
         }
@@ -174,11 +174,15 @@ class Integration extends Action
         $this->_view->loadLayout();
         $this->_getSession()->setIntegrationData(array());
         $this->_setActiveMenu('Magento_Integration::system_integrations');
-        $this->_addBreadcrumb(
-            __('Edit "%1" Integration', $integrationData[Info::DATA_NAME]),
-            __('Edit "%1" Integration', $integrationData[Info::DATA_NAME])
-        );
-        $this->_title->add(__('Edit "%1" Integration', $originalName));
+
+        if ($this->_integrationData->isConfigType($integrationData)) {
+            $title = __('View "%1" Integration', $originalName);
+        } else {
+            $title = __('Edit "%1" Integration', $originalName);
+        }
+
+        $this->_addBreadcrumb($title, $title);
+        $this->_title->add($title);
         $this->_view->renderLayout();
     }
 
@@ -198,12 +202,12 @@ class Integration extends Action
                 try {
                     $integrationData = $this->_integrationService->get($integrationId)->getData();
                 } catch (IntegrationException $e) {
-                    $this->_getSession()->addError($e->getMessage());
+                    $this->messageManager->addError($e->getMessage());
                     $this->_redirect('*/*/');
                     return;
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
-                    $this->_getSession()->addError(__('Internal error. Check exception log for details.'));
+                    $this->messageManager->addError(__('Internal error. Check exception log for details.'));
                     $this->_redirect('*/*');
                     return;
                 }
@@ -217,33 +221,36 @@ class Integration extends Action
                 }
                 $integrationData = array_merge($integrationData, $data);
                 if (!isset($integrationData[Info::DATA_ID])) {
-                    $integrationData = $this->_integrationService->create($integrationData);
+                    $integration = $this->_integrationService->create($integrationData);
                 } else {
-                    $integrationData = $this->_integrationService->update($integrationData);
+                    $integration = $this->_integrationService->update($integrationData);
                 }
                 if (!$this->getRequest()->isXmlHttpRequest()) {
-                    $this->_getSession()
-                        ->addSuccess(__('The integration \'%1\' has been saved.', $integrationData[Info::DATA_NAME]));
+                    $this->messageManager
+                        ->addSuccess(__('The integration \'%1\' has been saved.', $integration->getName()));
+                }
+                if ($this->getRequest()->isXmlHttpRequest()) {
+                    $isTokenExchange = ($integration->getEndpoint() && $integration->getIdentityLinkUrl()) ? '1' : '0';
+                    $this->getResponse()->setBody(
+                        $this->_coreHelper->jsonEncode(
+                            ['integrationId' => $integration->getId(), 'isTokenExchange' => $isTokenExchange]
+                        )
+                    );
+                } else {
+                    $this->_redirect('*/*/');
                 }
             } else {
-                $this->_getSession()->addError(__('The integration was not saved.'));
-            }
-            if ($this->getRequest()->isXmlHttpRequest()) {
-                $this->getResponse()->setBody(
-                    $this->_coreHelper->jsonEncode(['integrationId' => $integrationData[Info::DATA_ID]])
-                );
-            } else {
-                $this->_redirect('*/*/');
+                $this->messageManager->addError(__('The integration was not saved.'));
             }
         } catch (IntegrationException $e) {
-            $this->_getSession()->addError($e->getMessage())->setIntegrationData($integrationData);
+            $this->messageManager->addError($e->getMessage())->setIntegrationData($integrationData);
             $this->_redirectOnSaveError();
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirectOnSaveError();
         } catch (\Exception $e) {
             $this->_logger->logException($e);
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirectOnSaveError();
         }
     }
@@ -254,23 +261,22 @@ class Integration extends Action
     public function permissionsDialogAction()
     {
         $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
-
         if ($integrationId) {
             try {
                 $integrationData = $this->_integrationService->get($integrationId)->getData();
                 $this->_registry->register(self::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
             } catch (IntegrationException $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $this->_redirect('*/*/');
                 return;
             } catch (\Exception $e) {
                 $this->_logger->logException($e);
-                $this->_getSession()->addError(__('Internal error. Check exception log for details.'));
+                $this->messageManager->addError(__('Internal error. Check exception log for details.'));
                 $this->_redirect('*/*');
                 return;
             }
         } else {
-            $this->_getSession()->addError(__('Integration ID is not specified or is invalid.'));
+            $this->messageManager->addError(__('Integration ID is not specified or is invalid.'));
             $this->_redirect('*/*/');
             return;
         }
@@ -298,7 +304,7 @@ class Integration extends Action
             if ($integrationId) {
                 $integrationData = $this->_integrationService->get($integrationId);
                 if ($this->_integrationData->isConfigType($integrationData)) {
-                    $this->_getSession()->addError(
+                    $this->messageManager->addError(
                         __("Uninstall the extension to remove integration '%1'.", $integrationData[Info::DATA_NAME])
                     );
                     $this->_redirect('*/*/');
@@ -306,21 +312,21 @@ class Integration extends Action
                 }
                 $integrationData = $this->_integrationService->delete($integrationId);
                 if (!$integrationData[Info::DATA_ID]) {
-                    $this->_getSession()->addError(__('This integration no longer exists.'));
+                    $this->messageManager->addError(__('This integration no longer exists.'));
                 } else {
                     //Integration deleted successfully, now safe to delete the associated consumer data
                     if (isset($integrationData[Info::DATA_CONSUMER_ID])) {
                         $this->_oauthService->deleteConsumer($integrationData[Info::DATA_CONSUMER_ID]);
                     }
                     $this->_registry->register(self::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
-                    $this->_getSession()
+                    $this->messageManager
                         ->addSuccess(__("The integration '%1' has been deleted.", $integrationData[Info::DATA_NAME]));
                 }
             } else {
-                $this->_getSession()->addError(__('Integration ID is not specified or is invalid.'));
+                $this->messageManager->addError(__('Integration ID is not specified or is invalid.'));
             }
         } catch (\Magento\Integration\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_logger->logException($e);
         }
@@ -328,30 +334,85 @@ class Integration extends Action
     }
 
     /**
-     * Show tokens popup.
+     * Show tokens popup for simple tokens
      */
     public function tokensDialogAction()
     {
         try {
-            $integrationId = $this->getRequest()->getParam('id');
+            $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
             $integration = $this->_integrationService->get($integrationId);
-            $this->_oauthService->createAccessToken($integration->getConsumerId());
+            $clearExistingToken = (int)$this->getRequest()->getParam(self::PARAM_REAUTHORIZE, 0);
+            if ($this->_oauthService->createAccessToken($integration->getConsumerId(), $clearExistingToken)) {
+                $integration->setStatus(IntegrationModel::STATUS_ACTIVE)->save();
+            }
             $this->_registry->register(
                 self::REGISTRY_KEY_CURRENT_INTEGRATION,
+                // Important to call get() once again - that will pull newly generated token
                 $this->_integrationService->get($integrationId)->getData()
             );
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*');
             return;
         } catch (\Exception $e) {
             $this->_logger->logException($e);
-            $this->_getSession()->addError(__('Internal error. Check exception log for details.'));
+            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');
             return;
         }
         $this->_view->loadLayout(false);
+        //This cannot precede loadlayout(false) else the messages will be removed
+        $this->_setActivationSuccessMsg($clearExistingToken, $integration->getName());
         $this->_view->renderLayout();
+    }
+
+    /**
+     * Post consumer credentials for Oauth integration.
+     */
+    public function tokensExchangeAction()
+    {
+        try {
+            $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
+            $isReauthorize = (bool)$this->getRequest()->getParam(self::PARAM_REAUTHORIZE, 0);
+            $integration = $this->_integrationService->get($integrationId);
+            if ($isReauthorize) {
+                /** Remove existing token associated with consumer before issuing a new one. */
+                $this->_oauthService->deleteToken($integration->getConsumerId());
+                $integration->setStatus(IntegrationModel::STATUS_INACTIVE)->save();
+            }
+            //Integration chooses to use Oauth for token exchange
+            $this->_oauthService->postToConsumer($integration->getConsumerId(), $integration->getEndpoint());
+            /** Generate JS popup content */
+            $this->_view->loadLayout(false);
+            // Activation or authorization is done only when the Oauth token exchange completes
+            $this->_setActivationInProcessMsg($isReauthorize, $integration->getName());
+            $this->_view->renderLayout();
+            $popupContent = $this->_response->getBody();
+            /** Initialize response body */
+            $result = [
+                IntegrationModel::IDENTITY_LINK_URL => $integration->getIdentityLinkUrl(),
+                IntegrationModel::CONSUMER_ID => $integration->getConsumerId(),
+                'popup_content' => $popupContent
+            ];
+            $this->getResponse()->setBody($this->_coreHelper->jsonEncode($result));
+        } catch (\Magento\Core\Exception $e) {
+            $this->messageManager->addError($e->getMessage());
+            $this->_redirect('*/*');
+            return;
+        } catch (\Exception $e) {
+            $this->_logger->logException($e);
+            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
+            $this->_redirect('*/*');
+            return;
+        }
+    }
+
+    /**
+     * Close window after callback has succeeded
+     */
+    public function loginSuccessCallbackAction()
+    {
+        $this->getResponse()->setBody('<script type="text/javascript">setTimeout("self.close()",1000);</script>');
     }
 
     /**
@@ -384,5 +445,44 @@ class Integration extends Action
         } else {
             return parent::_redirect($path, $arguments);
         }
+    }
+
+    /**
+     * Set success message based on Integration activation or re-authorization.
+     *
+     * @param boolean $isReauthorize Is a re-authorization flow
+     * @param string $integrationName Integration name
+     */
+    protected function _setActivationSuccessMsg($isReauthorize, $integrationName)
+    {
+        $successMsg = $isReauthorize ? __("The integration '%1' has been re-authorized.", $integrationName)
+            : __("The integration '%1' has been activated.", $integrationName);
+        $this->messageManager->addSuccess($successMsg);
+    }
+
+    /**
+     * Let the admin know that activation was failed.
+     *
+     * @param bool   $isReauthorize
+     * @param string $integrationName
+     */
+    protected function _setActivationFailedMsg($isReauthorize, $integrationName)
+    {
+        $msg = $isReauthorize ? __("Integration '%1' re-authorization has been failed.", $integrationName)
+            : __("Integration '%1' activation has been failed.", $integrationName);
+        $this->messageManager->addError($msg);
+    }
+
+    /**
+     * Let the admin know that integration has been sent for activation and token exchange is in process.
+     *
+     * @param bool   $isReauthorize
+     * @param string $integrationName
+     */
+    protected function _setActivationInProcessMsg($isReauthorize, $integrationName)
+    {
+        $msg = $isReauthorize ? __("Integration '%1' has been sent for re-authorization.", $integrationName)
+            : __("Integration '%1' has been sent for activation.", $integrationName);
+        $this->messageManager->addNotice($msg);
     }
 }

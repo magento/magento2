@@ -58,7 +58,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Transactions\Grid
     /**
      * Add filter by parent transaction ID
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {

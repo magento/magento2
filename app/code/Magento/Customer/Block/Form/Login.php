@@ -43,15 +43,23 @@ class Login extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
+     * @var \Magento\Customer\Helper\Data
+     */
+    protected $_customerHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {
+        $this->_customerHelper = $customerHelper;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
     }
@@ -69,7 +77,7 @@ class Login extends \Magento\View\Element\Template
      */
     public function getPostActionUrl()
     {
-        return $this->helper('Magento\Customer\Helper\Data')->getLoginPostUrl();
+        return $this->_customerHelper->getLoginPostUrl();
     }
 
     /**
@@ -81,7 +89,7 @@ class Login extends \Magento\View\Element\Template
     {
         $url = $this->getData('create_account_url');
         if (is_null($url)) {
-            $url = $this->helper('Magento\Customer\Helper\Data')->getRegisterUrl();
+            $url = $this->_customerHelper->getRegisterUrl();
         }
         return $url;
     }
@@ -93,7 +101,7 @@ class Login extends \Magento\View\Element\Template
      */
     public function getForgotPasswordUrl()
     {
-        return $this->helper('Magento\Customer\Helper\Data')->getForgotPasswordUrl();
+        return $this->_customerHelper->getForgotPasswordUrl();
     }
 
     /**

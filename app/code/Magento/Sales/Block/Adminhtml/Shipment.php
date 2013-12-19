@@ -34,7 +34,7 @@
 
 namespace Magento\Sales\Block\Adminhtml;
 
-class Shipment extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Shipment extends \Magento\Backend\Block\Widget\Grid\Container
 {
 
     protected function _construct()

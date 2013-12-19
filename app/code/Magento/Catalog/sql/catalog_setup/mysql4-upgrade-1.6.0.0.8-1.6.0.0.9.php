@@ -24,13 +24,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$installFile = __DIR__ . DS . 'upgrade-1.6.0.0.8-1.6.0.0.9.php';
-if (file_exists($installFile)) {
+/** @var $this \Magento\Catalog\Model\Resource\Setup */
+$installFile = __DIR__ . '/upgrade-1.6.0.0.8-1.6.0.0.9.php';
+
+/** @var \Magento\Filesystem\Directory\Read $modulesDirectory */
+$modulesDirectory = $this->getFilesystem()->getDirectoryRead(\Magento\Filesystem::MODULES);
+
+if ($modulesDirectory->isExist($modulesDirectory->getRelativePath($installFile))) {
     include $installFile;
 }
 
-/** @var $installer \Magento\Catalog\Model\Resource\Setup */
-$installer = $this;
 /** @var $connection \Magento\DB\Adapter\Pdo\Mysql */
 $connection = $installer->getConnection();
 $memoryTables = array(
@@ -49,5 +52,5 @@ $memoryTables = array(
 );
 
 foreach ($memoryTables as $table) {
-    $connection->changeTableEngine($installer->getTable($table), \Magento\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY);
+    $connection->changeTableEngine($this->getTable($table), \Magento\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY);
 }

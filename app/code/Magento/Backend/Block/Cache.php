@@ -26,7 +26,7 @@
 
 namespace Magento\Backend\Block;
 
-class Cache extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Cache extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Class constructor

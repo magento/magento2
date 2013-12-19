@@ -26,6 +26,7 @@
 namespace Magento\App\Action;
 
 use Magento\App\RequestInterface;
+use Magento\App\ResponseInterface;
 
 class Action extends \Magento\App\Action\AbstractAction
 {
@@ -75,6 +76,11 @@ class Action extends \Magento\App\Action\AbstractAction
     protected $_url;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param Context $context
      */
     public function __construct(\Magento\App\Action\Context $context)
@@ -86,11 +92,14 @@ class Action extends \Magento\App\Action\AbstractAction
         $this->_actionFlag        = $context->getActionFlag();
         $this->_redirect          = $context->getRedirect();
         $this->_view              = $context->getView();
+        $this->messageManager     = $context->getMessageManager();
     }
 
     /**
+     * Dispatch request
+     *
      * @param RequestInterface $request
-     * @return mixed
+     * @return ResponseInterface
      * @throws NotFoundException
      */
     public function dispatch(RequestInterface $request)
@@ -125,6 +134,7 @@ class Action extends \Magento\App\Action\AbstractAction
             \Magento\Profiler::stop('action_body');
         }
         \Magento\Profiler::stop($profilerKey);
+        return $this->_response;
     }
 
     /**
@@ -163,11 +173,11 @@ class Action extends \Magento\App\Action\AbstractAction
      *
      * @param   string $path
      * @param   array $arguments
-     * @return  \Magento\App\ActionInterface
+     * @return  \Magento\App\ResponseInterface
      */
     protected function _redirect($path, $arguments = array())
     {
         $this->_redirect->redirect($this->getResponse(), $path, $arguments);
-        return $this;
+        return $this->getResponse();
     }
 }

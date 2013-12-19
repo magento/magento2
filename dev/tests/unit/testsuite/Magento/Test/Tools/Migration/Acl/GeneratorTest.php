@@ -71,18 +71,16 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_fileManagerMock = $this->getMock('Magento\Tools\Migration\Acl\FileManager');
         $this->_model = new \Magento\Tools\Migration\Acl\Generator($this->_xmlFormatterMock, $this->_fileManagerMock);
 
-        $this->_fixturePath = realpath(__DIR__) . DIRECTORY_SEPARATOR . '_files';
+        $this->_fixturePath = realpath(__DIR__) . '/_files';
 
-        $prefix = $this->_fixturePath . DIRECTORY_SEPARATOR
-            . 'app' . DIRECTORY_SEPARATOR
-            . 'code' . DIRECTORY_SEPARATOR;
-        $suffix = DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'adminhtml.xml';
+        $prefix = $this->_fixturePath . '/app/code/';
+        $suffix = '/etc/adminhtml.xml';
 
         $this->_adminhtmlFiles = array(
-            $prefix . 'local' . DIRECTORY_SEPARATOR . 'Namespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'community' . DIRECTORY_SEPARATOR . 'Namespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'core' . DIRECTORY_SEPARATOR . 'ANamespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'core' . DIRECTORY_SEPARATOR . 'BNamespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
+            $prefix . 'local/Namespace/Module' . $suffix,
+            $prefix . 'community/Namespace/Module' . $suffix,
+            $prefix . 'core/ANamespace/Module' . $suffix,
+            $prefix . 'core/BNamespace/Module' . $suffix,
         );
 
         $this->_model->setAdminhtmlFiles($this->_adminhtmlFiles);
@@ -108,25 +106,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'filePath' => DIRECTORY_SEPARATOR
-                    . 'app' . DIRECTORY_SEPARATOR
-                    . 'code' . DIRECTORY_SEPARATOR
-                    . 'core' . DIRECTORY_SEPARATOR
-                    . 'ANamespace' . DIRECTORY_SEPARATOR
-                    . 'ModuleOne' . DIRECTORY_SEPARATOR
-                    . 'etc' . DIRECTORY_SEPARATOR
-                    . 'adminhtml.xml',
+                'filePath' => '/app/code/core/ANamespace/ModuleOne/etc/adminhtml.xml',
                 'moduleName' => 'ANamespace_ModuleOne',
             ),
             array(
-                'filePath' => DIRECTORY_SEPARATOR
-                    . 'app' . DIRECTORY_SEPARATOR
-                    . 'code' . DIRECTORY_SEPARATOR
-                    . 'core' . DIRECTORY_SEPARATOR
-                    . 'BNamespace' . DIRECTORY_SEPARATOR
-                    . 'ModuleOne' . DIRECTORY_SEPARATOR
-                    . 'etc' . DIRECTORY_SEPARATOR
-                    . 'adminhtml.xml',
+                'filePath' => '/app/code/core/BNamespace/ModuleOne/etc/adminhtml.xml',
                 'moduleName' => 'BNamespace_ModuleOne',
             ),
         );
@@ -177,24 +161,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'expectedPath' => DIRECTORY_SEPARATOR
-                    . 'app' . DIRECTORY_SEPARATOR
-                    . 'code' . DIRECTORY_SEPARATOR
-                    . '*' . DIRECTORY_SEPARATOR
-                    . '*' . DIRECTORY_SEPARATOR
-                    . '*' . DIRECTORY_SEPARATOR
-                    . 'etc' . DIRECTORY_SEPARATOR,
+                'expectedPath' => '/app/code/*/*/*/etc/',
                 'codePool' => '*',
                 'namespace' => '*',
             ),
             array(
-                'expectedPath' => DIRECTORY_SEPARATOR
-                    . 'app' . DIRECTORY_SEPARATOR
-                    . 'code' . DIRECTORY_SEPARATOR
-                    . 'core' . DIRECTORY_SEPARATOR
-                    . 'Magento' . DIRECTORY_SEPARATOR
-                    . '*' . DIRECTORY_SEPARATOR
-                    . 'etc' . DIRECTORY_SEPARATOR,
+                'expectedPath' => '/app/code/core/Magento/*/etc/',
                 'codePool' => 'core',
                 'namespace' => 'Magento',
             ),
@@ -265,11 +237,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $moduleName = 'Module_Name';
 
         $sourceDom = new \DOMDocument();
-        $sourceDom->load($this->_fixturePath . DIRECTORY_SEPARATOR . 'parse_node_source.xml');
+        $sourceDom->load($this->_fixturePath . '/parse_node_source.xml');
         $nodeList = $sourceDom->getElementsByTagName('resources');
         $this->_model->parseNode($nodeList->item(0), $dom, $parentNode, $moduleName);
         $expectedDom = new \DOMDocument();
-        $expectedDom->load($this->_fixturePath . DIRECTORY_SEPARATOR . 'parse_node_result.xml');
+        $expectedDom->load($this->_fixturePath . '/parse_node_result.xml');
         $this->assertEquals($expectedDom->saveXML($expectedDom->documentElement), $dom->saveXML($dom->documentElement));
     }
 
@@ -326,8 +298,8 @@ TEMPLATE;
     public function testUpdateChildAclNodes()
     {
         $dom = new \DOMDocument();
-        $fileActual = $this->_fixturePath . DIRECTORY_SEPARATOR . 'update_child_acl_nodes_source.xml';
-        $fileExpected = $this->_fixturePath . DIRECTORY_SEPARATOR . 'update_child_acl_nodes_result.xml';
+        $fileActual = $this->_fixturePath . '/update_child_acl_nodes_source.xml';
+        $fileExpected = $this->_fixturePath . '/update_child_acl_nodes_result.xml';
         $dom->load($fileActual);
         $rootNode = $dom->getElementsByTagName('resources')->item(0);
 

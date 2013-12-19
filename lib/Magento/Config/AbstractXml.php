@@ -48,10 +48,10 @@ abstract class AbstractXml
     /**
      * Instantiate with the list of files to merge
      *
-     * @param array $configFiles
+     * @param $configFiles
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $configFiles)
+    public function __construct($configFiles)
     {
         if (empty($configFiles)) {
             throw new \InvalidArgumentException('There must be at least one configuration file specified.');
@@ -93,14 +93,11 @@ abstract class AbstractXml
      */
     protected function _merge($configFiles)
     {
-        foreach ($configFiles as $file) {
-            if (!file_exists($file)) {
-                throw new \Magento\Exception("File does not exist: {$file}");
-            }
+        foreach ($configFiles as $key => $content) {
             try {
-                $this->_getDomConfigModel()->merge(file_get_contents($file));
+                $this->_getDomConfigModel()->merge($content);
             } catch (\Magento\Config\Dom\ValidationException $e) {
-                throw new \Magento\Exception("Invalid XML in file " . $file . ":\n" . $e->getMessage());
+                throw new \Magento\Exception("Invalid XML in file " . $key . ":\n" . $e->getMessage());
             }
         }
         if ($this->_isRuntimeValidated()) {

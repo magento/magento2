@@ -35,7 +35,6 @@
             <module name="Magento_Sales"/>
             <module name="Magento_Core"/>
             <module name="Magento_Customer"/>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_Payment"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Tax"/>

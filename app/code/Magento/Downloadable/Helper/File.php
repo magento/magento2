@@ -43,22 +43,57 @@ class File extends \Magento\App\Helper\AbstractHelper
     protected $_coreFileStorageDatabase = null;
 
     /**
+     * Filesystem object.
+     *
+     * @var \Magento\Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * Media Directory object (writable).
+     *
+     * @var \Magento\Filesystem\Directory\WriteInterface
+     */
+    protected $_mediaDirectory;
+
+    /**
+     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\Filesystem $filesystem
      * @param array $mimeTypes
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\Filesystem $filesystem,
         array $mimeTypes = array()
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
+        $this->_filesystem = $filesystem;
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite($filesystem::MEDIA);
         parent::__construct($context);
         if (!empty($mimeTypes)) {
             foreach ($mimeTypes as $key => $value) {
                 self::$_mimeTypes[$key] = $value;
             }
         }
+    }
+
+    /**
+     * Upload file from temporary folder.
+     * @param $tmpPath
+     * @param \Magento\Core\Model\File\Uploader $uploader
+     * @return array | bool
+     */
+    public function uploadFromTmp($tmpPath, \Magento\Core\Model\File\Uploader $uploader)
+    {
+        $uploader->setAllowRenameFiles(true);
+        $uploader->setFilesDispersion(true);
+        $absoluteTmpPath = $this->_mediaDirectory->getAbsolutePath($tmpPath);
+        $result = $uploader->save($absoluteTmpPath);
+
+        return $result;
     }
 
     /**
@@ -73,7 +108,7 @@ class File extends \Magento\App\Helper\AbstractHelper
     {
         if (isset($file[0])) {
             $fileName = $file[0]['file'];
-            if ($file[0]['status'] == 'new') {
+            if ($file[0]['status'] === 'new') {
                 try {
                     $fileName = $this->_moveFileFromTmp(
                         $baseTmpPath, $basePath, $file[0]['file']
@@ -88,6 +123,21 @@ class File extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
+     * Check if file exist in filesystem and try to re-create it from database record if negative.
+     * @param $file
+     * @return bool|int
+     */
+    public function ensureFileInFilesystem($file)
+    {
+        $result = true;
+        if (!$this->_mediaDirectory->isFile($file)) {
+            $result = $this->_coreFileStorageDatabase->saveFileToFilesystem($file);
+        }
+
+        return $result;
+    }
+
+    /**
      * Move file from tmp path to base path
      *
      * @param string $baseTmpPath
@@ -97,20 +147,11 @@ class File extends \Magento\App\Helper\AbstractHelper
      */
     protected function _moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
-        $ioObject = new \Magento\Io\File();
-        $destDirectory = dirname($this->getFilePath($basePath, $file));
-        try {
-            $ioObject->open(array('path'=>$destDirectory));
-        } catch (\Exception $e) {
-            $ioObject->mkdir($destDirectory, 0777, true);
-            $ioObject->open(array('path'=>$destDirectory));
-        }
-
         if (strrpos($file, '.tmp') == strlen($file)-4) {
             $file = substr($file, 0, strlen($file)-4);
         }
 
-        $destFile = dirname($file) . $ioObject->dirsep()
+        $destFile = dirname($file) . '/'
                   . \Magento\Core\Model\File\Uploader::getNewFileName($this->getFilePath($basePath, $file));
 
         $this->_coreFileStorageDatabase->copyFile(
@@ -118,11 +159,12 @@ class File extends \Magento\App\Helper\AbstractHelper
             $this->getFilePath($basePath, $destFile)
         );
 
-        $result = $ioObject->mv(
+        $this->_mediaDirectory->renameFile(
             $this->getFilePath($baseTmpPath, $file),
             $this->getFilePath($basePath, $destFile)
         );
-        return str_replace($ioObject->dirsep(), '/', $destFile);
+
+        return str_replace('\\', '/', $destFile);
     }
 
     /**
@@ -134,24 +176,10 @@ class File extends \Magento\App\Helper\AbstractHelper
      */
     public function getFilePath($path, $file)
     {
-        $file = $this->_prepareFileForPath($file);
+        $path = rtrim($path, '/');
+        $file = ltrim($file, '/');
 
-        if(substr($file, 0, 1) == DS) {
-            return $path . DS . substr($file, 1);
-        }
-
-        return $path . DS . $file;
-    }
-
-    /**
-     * Replace slashes with directory separator
-     *
-     * @param string $file
-     * @return string
-     */
-    protected function _prepareFileForPath($file)
-    {
-        return str_replace('/', DS, $file);
+        return $path . '/' . $file;
     }
 
     /**
@@ -162,11 +190,19 @@ class File extends \Magento\App\Helper\AbstractHelper
      */
     public function getFileFromPathFile($pathFile)
     {
-        $file = '';
-
-        $file = substr($pathFile, strrpos($this->_prepareFileForPath($pathFile), DS)+1);
+        $file = substr($pathFile, strrpos($pathFile, '/')+1);
 
         return $file;
+    }
+
+    /**
+     * Get filesize in bytes.
+     * @param $file
+     * @return int
+     */
+    public function getFileSize($file)
+    {
+        return $this->_mediaDirectory->stat($file)['size'];
     }
 
     public function getFileType($filePath)

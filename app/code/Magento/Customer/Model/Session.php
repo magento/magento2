@@ -24,12 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Customer\Model;
+
 /**
  * Customer session model
  */
-namespace Magento\Customer\Model;
-
-class Session extends \Magento\Core\Model\Session\AbstractSession
+class Session extends \Magento\Session\SessionManager
 {
     /**
      * Customer object
@@ -85,9 +85,22 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     protected $_urlFactory;
 
     /**
-     * @param \Magento\Core\Model\Session\Context $context
+     * @var \Magento\Event\ManagerInterface
+     */
+    protected $_eventManager;
+
+    /**
+     * @var \Magento\Core\Model\Store\StorageInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
+     * @param \Magento\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Session\ValidatorInterface $validator
+     * @param \Magento\Session\StorageInterface $storage
      * @param Config\Share $configShare
      * @param \Magento\Core\Helper\Url $coreUrl
      * @param \Magento\Customer\Helper\Data $customerData
@@ -95,13 +108,18 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      * @param CustomerFactory $customerFactory
      * @param \Magento\Core\Model\UrlFactory $urlFactory
      * @param \Magento\Core\Model\Session $session
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param null $sessionName
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Session\Context $context,
+        \Magento\App\RequestInterface $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
+        \Magento\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Session\ValidatorInterface $validator,
+        \Magento\Session\StorageInterface $storage,
         \Magento\Customer\Model\Config\Share $configShare,
         \Magento\Core\Helper\Url $coreUrl,
         \Magento\Customer\Helper\Data $customerData,
@@ -109,8 +127,10 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Core\Model\UrlFactory $urlFactory,
         \Magento\Core\Model\Session $session,
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         $sessionName = null,
-        array $data = array()        
+        array $data = array()
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerData = $customerData;
@@ -119,13 +139,10 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         $this->_customerFactory = $customerFactory;
         $this->_urlFactory = $urlFactory;
         $this->_session = $session;
-        parent::__construct($context, $sidResolver, $sessionConfig, $data);
-        $namespace = 'customer';
-        if ($configShare->isWebsiteScope()) {
-            $namespace .= '_' . ($this->_storeManager->getWebsite()->getCode());
-        }
-
-        $this->start($namespace, $sessionName);
+        $this->_eventManager = $eventManager;
+        $this->_storeManager = $storeManager;
+        parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
+        $this->start($sessionName);
         $this->_eventManager->dispatch('customer_session_init', array('customer_session' => $this));
     }
 
@@ -191,7 +208,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      */
     public function setCustomerId($id)
     {
-        $this->setData('customer_id', $id);
+        $this->storage->setData('customer_id', $id);
         return $this;
     }
 
@@ -202,8 +219,8 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      */
     public function getCustomerId()
     {
-        if ($this->getData('customer_id')) {
-            return $this->getData('customer_id');
+        if ($this->storage->getData('customer_id')) {
+            return $this->storage->getData('customer_id');
         }
         return ($this->isLoggedIn()) ? $this->getId() : null;
     }
@@ -216,7 +233,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      */
     public function setCustomerGroupId($id)
     {
-        $this->setData('customer_group_id', $id);
+        $this->storage->setData('customer_group_id', $id);
         return $this;
     }
 
@@ -228,8 +245,8 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      */
     public function getCustomerGroupId()
     {
-        if ($this->getData('customer_group_id')) {
-            return $this->getData('customer_group_id');
+        if ($this->storage->getData('customer_group_id')) {
+            return $this->storage->getData('customer_group_id');
         }
         if ($this->isLoggedIn() && $this->getCustomer()) {
             return $this->getCustomer()->getGroupId();
@@ -284,7 +301,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     public function setCustomerAsLoggedIn($customer)
     {
         $this->setCustomer($customer);
-        $this->_eventManager->dispatch('customer_login', array('customer'=>$customer));
+        $this->_eventManager->dispatch('customer_login', array('customer' => $customer));
         return $this;
     }
 
@@ -299,6 +316,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
         $customer = $this->_createCustomer()->load($customerId);
         if ($customer->getId()) {
             $this->setCustomerAsLoggedIn($customer);
+            $this->regenerateId();
             return true;
         }
         return false;
@@ -312,7 +330,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     public function logout()
     {
         if ($this->isLoggedIn()) {
-            $this->_eventManager->dispatch('customer_logout', array('customer' => $this->getCustomer()) );
+            $this->_eventManager->dispatch('customer_logout', array('customer' => $this->getCustomer()));
             $this->_logout();
         }
         return $this;
@@ -337,7 +355,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
             $arguments = $this->_customerData->getLoginUrlParams();
             if ($this->_session->getCookieShouldBeReceived() && $this->_createUrl()->getUseSession()) {
                 $arguments += array('_query' => array(
-                    $this->_sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId()
+                    $this->sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId()
                 ));
             }
             $action->getResponse()->setRedirect(
@@ -357,10 +375,10 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
      */
     protected function _setAuthUrl($key, $url)
     {
-        $url = $this->_coreUrl->removeRequestParam($url, $this->_sidResolver->getSessionIdQueryParam($this));
+        $url = $this->_coreUrl->removeRequestParam($url, $this->sidResolver->getSessionIdQueryParam($this));
         // Add correct session ID to URL if needed
         $url = $this->_createUrl()->getRebuiltUrl($url);
-        return $this->setData($key, $url);
+        return $this->storage->setData($key, $url);
     }
 
     /**

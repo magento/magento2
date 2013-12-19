@@ -47,16 +47,16 @@ try {
     ));
     $opt->parse();
 
-    $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . DS . 'var/generation';
+    $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
     \Magento\Autoload\IncludePath::addIncludePath($generationDir);
 
-    $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . DS . 'var/di';
-    $compiledFile = $diDir . DS . 'definitions.php';
-    $relationsFile = $diDir . DS . 'relations.php';
-    $pluginDefFile = $diDir . DS . 'plugins.php';
+    $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
+    $compiledFile = $diDir . '/definitions.php';
+    $relationsFile = $diDir . '/relations.php';
+    $pluginDefFile = $diDir . '/plugins.php';
 
     $compilationDirs = array(
-        $rootDir . DS . 'app/code',
+        $rootDir . '/app/code',
         $rootDir . '/lib/Magento',
         $generationDir,
     );
@@ -91,7 +91,11 @@ try {
     $entities['interceptors'] = $interceptorScanner->collectEntities($files['di']);
 
     // 1.2 Generation of Factory and Additional Classes
-    $generatorIo = new \Magento\Code\Generator\Io(null, null, $generationDir);
+    $generatorIo = new \Magento\Code\Generator\Io(
+        new \Magento\Filesystem\Driver\File(),
+        null,
+        $generationDir
+    );
     $generator = new \Magento\Code\Generator(null, null, $generatorIo);
     foreach (array('php', 'additional') as $type) {
         sort($entities[$type]);

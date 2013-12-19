@@ -54,8 +54,8 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                include __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'converted_valid_acl.php',
-                file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'valid_acl.xml'),
+                include __DIR__ . '/_files/converted_valid_acl.php',
+                file_get_contents(__DIR__ . '/_files/valid_acl.xml'),
             ),
         );
     }

@@ -37,31 +37,17 @@ namespace Magento\Catalog\Model\Product\Media;
 class Config implements ConfigInterface
 {
     /**
-     * Dir
-     *
-     * @var \Magento\App\Dir
-     */
-    protected $_dir;
-
-    /**
      * Store manager
      *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
-     * Construct
-     *
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\App\Dir $dir
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\App\Dir $dir
-    ) {
-        $this->_storeManager = $storeManager;
-        $this->_dir = $dir;
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager) {
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -72,7 +58,7 @@ class Config implements ConfigInterface
      */
     public function getBaseMediaPathAddition()
     {
-        return 'catalog' . DIRECTORY_SEPARATOR . 'product';
+        return 'catalog/product';
     }
 
     /**
@@ -87,135 +73,107 @@ class Config implements ConfigInterface
     }
 
     /**
+     * @return string
+     */
+    public function getBaseMediaPath()
+    {
+        return 'catalog/product';
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseMediaUrl()
+    {
+        return $this->storeManager->getStore()
+            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . 'catalog/product';
+    }
+
+    /**
      * Filesystem directory path of temporary product images
      * relatively to media folder
      *
      * @return string
      */
-    public function getBaseTmpMediaPathAddition()
+    public function getBaseTmpMediaPath()
     {
-        return 'tmp' . DIRECTORY_SEPARATOR . $this->getBaseMediaPathAddition();
+        return 'tmp/' . $this->getBaseMediaPathAddition();
     }
 
     /**
-     * Web-based directory path of temporary product images
-     * relatively to media folder
-     *
      * @return string
      */
-    public function getBaseTmpMediaUrlAddition()
-    {
-        return 'tmp/' . $this->getBaseMediaUrlAddition();
-    }
-
-    public function getBaseMediaPath()
-    {
-        return $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DIRECTORY_SEPARATOR
-            . 'catalog' . DIRECTORY_SEPARATOR . 'product';
-    }
-
-    public function getBaseMediaUrl()
-    {
-        return $this->_storeManager->getStore()
-            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . 'catalog/product';
-    }
-
-    public function getBaseTmpMediaPath()
-    {
-        return $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DIRECTORY_SEPARATOR
-            . $this->getBaseTmpMediaPathAddition();
-    }
-
     public function getBaseTmpMediaUrl()
     {
-        return $this->_storeManager->getStore()
-            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . $this->getBaseTmpMediaUrlAddition();
+        return $this->storeManager->getStore()
+            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . 'tmp/' . $this->getBaseMediaUrlAddition();
     }
 
+    /**
+     * @param string $file
+     * @return string
+     */
     public function getMediaUrl($file)
     {
-        $file = $this->_prepareFileForUrl($file);
-
-        if(substr($file, 0, 1) == '/') {
-            return $this->getBaseMediaUrl() . $file;
-        }
-
-        return $this->getBaseMediaUrl() . '/' . $file;
+        return $this->getBaseMediaUrl() . '/' . $this->_prepareFile($file);
     }
 
+    /**
+     * @param string $file
+     * @return string
+     */
     public function getMediaPath($file)
     {
-        $file = $this->_prepareFileForPath($file);
-
-        if(substr($file, 0, 1) == DIRECTORY_SEPARATOR) {
-            return $this->getBaseMediaPath() . DIRECTORY_SEPARATOR . substr($file, 1);
-        }
-
-        return $this->getBaseMediaPath() . DIRECTORY_SEPARATOR . $file;
+        return $this->getBaseMediaPath() . '/' . $this->_prepareFile($file);
     }
 
+    /**
+     * @param $file
+     * @return string
+     */
     public function getTmpMediaUrl($file)
     {
-        $file = $this->_prepareFileForUrl($file);
-
-        if(substr($file, 0, 1) == '/') {
-            $file = substr($file, 1);
-        }
-
-        return $this->getBaseTmpMediaUrl() . '/' . $file;
+        return $this->getBaseTmpMediaUrl() . '/' . $this->_prepareFile($file);
     }
 
     /**
      * Part of URL of temporary product images
      * relatively to media folder
      *
+     * @param string $file
      * @return string
      */
     public function getTmpMediaShortUrl($file)
     {
-        $file = $this->_prepareFileForUrl($file);
-
-        if(substr($file, 0, 1) == '/') {
-            $file = substr($file, 1);
-        }
-
-        return $this->getBaseTmpMediaUrlAddition() . '/' . $file;
+        return 'tmp/' . $this->getBaseMediaUrlAddition() . '/' . $this->_prepareFile($file);
     }
 
     /**
      * Part of URL of product images relatively to media folder
      *
+     * @param string $file
      * @return string
      */
     public function getMediaShortUrl($file)
     {
-        $file = $this->_prepareFileForUrl($file);
-
-        if(substr($file, 0, 1) == '/') {
-            $file = substr($file, 1);
-        }
-
-        return $this->getBaseMediaUrlAddition() . '/' . $file;
+        return $this->getBaseMediaUrlAddition() . '/' . $this->_prepareFile($file);
     }
 
+    /**
+     * @param $file
+     * @return string
+     */
     public function getTmpMediaPath($file)
     {
-        $file = $this->_prepareFileForPath($file);
-
-        if(substr($file, 0, 1) == DIRECTORY_SEPARATOR) {
-            return $this->getBaseTmpMediaPath() . DIRECTORY_SEPARATOR . substr($file, 1);
-        }
-
-        return $this->getBaseTmpMediaPath() . DIRECTORY_SEPARATOR . $file;
+        return $this->getBaseTmpMediaPath() . '/' . $this->_prepareFile($file);
     }
 
-    protected function _prepareFileForUrl($file)
+    /**
+     * @param $file
+     * @return string
+     */
+    protected function _prepareFile($file)
     {
-        return str_replace(DIRECTORY_SEPARATOR, '/', $file);
-    }
-
-    protected function _prepareFileForPath($file)
-    {
-        return str_replace('/', DIRECTORY_SEPARATOR, $file);
+        return ltrim(str_replace('\\', '/', $file), '/');
     }
 }

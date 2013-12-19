@@ -26,7 +26,7 @@
 
 namespace Magento\Sales\Block\Adminhtml\Order\Status;
 
-class NewStatus extends \Magento\Adminhtml\Block\Widget\Form\Container
+class NewStatus extends \Magento\Backend\Block\Widget\Form\Container
 {
 
     protected function _construct()

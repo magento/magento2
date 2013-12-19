@@ -77,10 +77,14 @@ class ArgumentSequence implements ValidatorInterface
 
             if (isset($this->_cache[$parentClass])) {
                 $parentCall = $this->_argumentsReader->getParentCall($class, array());
-                if ($parentCall) {
+                if (empty($classArguments) || $parentCall) {
                     $parentArguments = $this->_cache[$parentClass];
                 }
             }
+        }
+
+        if (empty($classArguments)) {
+            $classArguments = $parentArguments;
         }
 
         $requiredSequence = $this->_buildsSequence($classArguments, $parentArguments);
@@ -89,8 +93,9 @@ class ArgumentSequence implements ValidatorInterface
         }
 
         if (false == $this->_checkArgumentSequence($classArguments, $requiredSequence)) {
+            $classPath = str_replace('\\', '/', $class->getFileName());
             throw new ValidationException(
-                'Incorrect argument sequence in class ' . $className . ' in ' . $class->getFileName() . PHP_EOL
+                'Incorrect argument sequence in class ' . $className . ' in ' . $classPath . PHP_EOL
                 . 'Required: $' . implode(', $', array_keys($requiredSequence)) . PHP_EOL
                 . 'Actual  : $' . implode(', $', array_keys($classArguments)) . PHP_EOL
             );
@@ -142,7 +147,7 @@ class ArgumentSequence implements ValidatorInterface
     {
         $output = array();
         if (empty($classArguments)) {
-            return $output;
+            return $parentArguments;
         }
 
         $classArgumentList = $this->_sortArguments($classArguments);

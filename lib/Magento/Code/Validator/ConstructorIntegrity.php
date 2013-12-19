@@ -89,8 +89,9 @@ class ConstructorIntegrity implements ValidatorInterface
                     continue;
                 }
 
+                $classPath = str_replace('\\', '/', $class->getFileName());
                 throw new \Magento\Code\ValidationException('Missed required argument ' . $requiredArgument['name']
-                    . ' in parent::__construct call. File: ' . $class->getFileName()
+                    . ' in parent::__construct call. File: ' . $classPath
                 );
             }
 
@@ -99,9 +100,10 @@ class ConstructorIntegrity implements ValidatorInterface
                 $actualArgument['type']
             );
             if (false == $isCompatibleTypes) {
+                $classPath = str_replace('\\', '/', $class->getFileName());
                 throw new \Magento\Code\ValidationException('Incompatible argument type: Required type: '
                     . $requiredArgument['type'] . '. Actual type: ' . $actualArgument['type']
-                    . '; File: ' . PHP_EOL .$class->getFileName() . PHP_EOL
+                    . '; File: ' . PHP_EOL . $classPath . PHP_EOL
                 );
             }
         }
@@ -117,10 +119,11 @@ class ConstructorIntegrity implements ValidatorInterface
                 $names[] = '$' . $param['name'];
             }
 
+            $classPath = str_replace('\\', '/', $class->getFileName());
             throw new \Magento\Code\ValidationException(
                 'Extra parameters passed to parent construct: '
                 . implode(', ', $names)
-                . '. File: ' . $class->getFileName()
+                . '. File: ' . $classPath
             );
         }
         return true;

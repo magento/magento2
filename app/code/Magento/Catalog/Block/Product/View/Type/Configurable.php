@@ -70,17 +70,29 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $_imageHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
+     * @param \Magento\Theme\Helper\Layout $layoutHelper
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
@@ -89,17 +101,35 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Math\Random $mathRandom,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Wishlist\Helper\Data $wishlistHelper,
+        \Magento\Catalog\Helper\Product\Compare $compareProduct,
+        \Magento\Theme\Helper\Layout $layoutHelper,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Catalog\Helper\Product $catalogProduct,
         array $data = array()
     ) {
+        $this->_imageHelper = $imageHelper;
         $this->_taxCalculation = $taxCalculation;
         $this->_catalogProduct = $catalogProduct;
         $this->_jsonEncoder = $jsonEncoder;
         parent::__construct(
-            $context, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $arrayUtils, $data
+            $context,
+            $catalogConfig,
+            $registry,
+            $taxData,
+            $catalogData,
+            $mathRandom,
+            $cartHelper,
+            $wishlistHelper,
+            $compareProduct,
+            $layoutHelper,
+            $imageHelper,
+            $arrayUtils,
+            $data
         );
     }
 
@@ -196,7 +226,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
         foreach ($this->getAllowProducts() as $product) {
             $productId  = $product->getId();
-            $image = $this->helper('Magento\Catalog\Helper\Image')->init($product, 'image');
+            $image = $this->_imageHelper->init($product, 'image');
 
             foreach ($this->getAllowAttributes() as $attribute) {
                 $productAttribute   = $attribute->getProductAttribute();

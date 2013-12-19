@@ -46,7 +46,7 @@ class Save extends \Magento\Object
     protected $_giftMessageMessage = null;
 
     /**
-     * @var \Magento\Adminhtml\Model\Session\Quote
+     * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_session;
 
@@ -63,13 +63,13 @@ class Save extends \Magento\Object
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\GiftMessage\Model\MessageFactory $messageFactory
-     * @param \Magento\Adminhtml\Model\Session\Quote $session
+     * @param \Magento\Backend\Model\Session\Quote $session
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\GiftMessage\Model\MessageFactory $messageFactory,
-        \Magento\Adminhtml\Model\Session\Quote $session,
+        \Magento\Backend\Model\Session\Quote $session,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage
     ) {
         $this->_productFactory = $productFactory;

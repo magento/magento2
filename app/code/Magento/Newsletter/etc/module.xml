@@ -35,7 +35,6 @@
             <module name="Magento_Core"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Widget"/>
-            <module name="Magento_Catalog"/>
             <module name="Magento_Backend"/>
         </depends>
     </module>

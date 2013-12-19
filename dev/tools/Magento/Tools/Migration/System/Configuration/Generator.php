@@ -196,7 +196,7 @@ class Generator
      */
     protected function _getPathToSave($fileName)
     {
-        return dirname($fileName) . DIRECTORY_SEPARATOR . 'adminhtml' . DIRECTORY_SEPARATOR . 'system.xml';
+        return dirname($fileName) . '/adminhtml/system.xml';
     }
 
     /**
@@ -207,6 +207,6 @@ class Generator
      */
     protected function _removeBasePath($filename)
     {
-        return str_replace($this->_basePath . DIRECTORY_SEPARATOR, '', $filename);
+        return str_replace($this->_basePath . '/', '', $filename);
     }
 }

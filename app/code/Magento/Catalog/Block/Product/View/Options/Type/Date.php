@@ -51,17 +51,19 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Tax\Helper\Data $taxData
+     * @param \Magento\Core\Helper\Data $coreHelper
      * @param \Magento\Catalog\Model\Product\Option\Type\Date $catalogProductOptionTypeDate
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Tax\Helper\Data $taxData,
+        \Magento\Core\Helper\Data $coreHelper,
         \Magento\Catalog\Model\Product\Option\Type\Date $catalogProductOptionTypeDate,
         array $data = array()
     ) {
         $this->_catalogProductOptionTypeDate = $catalogProductOptionTypeDate;
-        parent::__construct($context, $taxData, $data);
+        parent::__construct($context, $taxData, $coreHelper, $data);
     }
 
     protected function _prepareLayout()

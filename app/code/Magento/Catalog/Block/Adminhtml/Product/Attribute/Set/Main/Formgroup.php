@@ -75,7 +75,7 @@ class Formgroup
 
         $fieldset->addField('submit', 'note',
                             array(
-                                'text' => $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+                                'text' => $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                                             ->setData(array(
                                                 'label'     => __('Add Group'),
                                                 'onclick'   => 'this.form.submit();',

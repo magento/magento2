@@ -36,7 +36,6 @@ Packaging.prototype = {
         this.errorQtyOverLimit = params.errorQtyOverLimit;
         this.titleDisabledSaveBtn = params.titleDisabledSaveBtn;
         this.window = $('packaging_window');
-        this.windowMask = $('popup-window-mask');
         this.messages = this.window.select('.messages')[0];
         this.packagesContent = $('packages_content');
         this.template = $('package_template');
@@ -92,14 +91,10 @@ Packaging.prototype = {
         this.window.show().setStyle({
             'marginLeft': -this.window.getDimensions().width/2 + 'px'
         });
-        this.windowMask.setStyle({
-            height: $('html-body').getHeight() + 'px'
-        }).show();
     },
 
     cancelPackaging: function() {
         packaging.window.hide();
-        packaging.windowMask.hide();
         if (Object.isFunction(this.cancelCallback)) {
             this.cancelCallback();
         }

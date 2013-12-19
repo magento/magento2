@@ -24,6 +24,8 @@
 
 namespace Magento\View\Design\Theme;
 
+use Magento\Filesystem\Directory\WriteInterface;
+
 /**
  * Theme Image model class
  */
@@ -38,11 +40,6 @@ class Image
      * Preview image height
      */
     const PREVIEW_IMAGE_HEIGHT = 800;
-
-    /**
-     * @var \Magento\Filesystem
-     */
-    protected $_filesystem;
 
     /**
      * @var \Magento\Image\Factory
@@ -70,6 +67,13 @@ class Image
     protected $_theme;
 
     /**
+     * @var WriteInterface
+     */
+    protected $_mediaDirectory;
+
+    /**
+     * Initialize dependencies
+     *
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Image\Factory $imageFactory
      * @param Image\Uploader $uploader
@@ -85,7 +89,7 @@ class Image
         \Magento\Logger $logger,
         \Magento\View\Design\ThemeInterface $theme = null
     ) {
-        $this->_filesystem = $filesystem;
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
         $this->_imageFactory = $imageFactory;
         $this->_uploader = $uploader;
         $this->_themeImagePath = $themeImagePath;
@@ -124,17 +128,19 @@ class Image
     public function createPreviewImageCopy($previewImagePath)
     {
         $previewDir = $this->_themeImagePath->getImagePreviewDirectory();
-        $destinationFilePath = $previewDir . DIRECTORY_SEPARATOR . $previewImagePath;
-        if (empty($previewImagePath) && !$this->_filesystem->has($destinationFilePath)) {
+        $destinationFilePath = $previewDir . '/' . $previewImagePath;
+        $destinationFileRelative = $this->_mediaDirectory->getRelativePath($destinationFilePath);
+        if (empty($previewImagePath) && !$this->_mediaDirectory->isExist($destinationFileRelative)) {
             return false;
         }
 
         $isCopied = false;
         try {
             $destinationFileName = \Magento\File\Uploader::getNewFileName($destinationFilePath);
-            $isCopied = $this->_filesystem->copy(
-                $destinationFilePath,
-                $previewDir . DIRECTORY_SEPARATOR . $destinationFileName
+            $targetRelative =  $this->_mediaDirectory->getRelativePath($previewDir . '/' . $destinationFileName);
+            $isCopied = $this->_mediaDirectory->copyFile(
+                $destinationFileRelative,
+                $targetRelative
             );
             $this->_theme->setPreviewImage($destinationFileName);
         } catch (\Exception $e) {
@@ -153,9 +159,9 @@ class Image
         $previewImage = $this->_theme->getPreviewImage();
         $this->_theme->setPreviewImage(null);
         if ($previewImage) {
-            return $this->_filesystem->delete(
-                $this->_themeImagePath->getImagePreviewDirectory() . DIRECTORY_SEPARATOR . $previewImage
-            );
+            return $this->_mediaDirectory->delete($this->_mediaDirectory->getRelativePath(
+                $this->_themeImagePath->getImagePreviewDirectory() . '/' . $previewImage
+            ));
         }
         return false;
     }
@@ -175,7 +181,7 @@ class Image
                 $this->removePreviewImage();
             }
             $this->createPreviewImage($tmpFilePath);
-            $this->_filesystem->delete($tmpFilePath);
+            $this->_mediaDirectory->delete($tmpFilePath);
         }
         return $this;
     }

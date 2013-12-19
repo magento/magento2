@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Magento_CatalogSearch::catalog_search" title="Search Terms" module="Magento_CatalogSearch" sortOrder="10" parent="Magento_Adminhtml::marketing_seo" action="catalog/search/" resource="Magento_CatalogSearch::search"/>
+        <add id="Magento_CatalogSearch::catalog_search" title="Search Terms" module="Magento_CatalogSearch" sortOrder="10" parent="Magento_Backend::marketing_seo" action="catalog/search/" resource="Magento_CatalogSearch::search"/>
     </menu>
 </config>

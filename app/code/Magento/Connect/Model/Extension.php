@@ -48,14 +48,7 @@ class Extension extends \Magento\Object
     /**
      * @var \Magento\Filesystem $filesystem
      */
-    protected $_filesystem;
-
-    /**
-     * Connect data
-     *
-     * @var \Magento\Connect\Helper\Data
-     */
-    protected $_connectData;
+    protected $filesystem;
 
     /**
      * @var \Magento\Convert\ConvertArray
@@ -70,24 +63,38 @@ class Extension extends \Magento\Object
     protected $_session;
 
     /**
+     * @var \Magento\Filesystem\Directory\Write
+     */
+    protected $writeDirectory;
+
+    /**
+     * @var \Magento\Logger
+     */
+    protected $logger;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Convert\ConvertArray $convertArray
-     * @param \Magento\Connect\Helper\Data $connectData
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Connect\Model\Session $session
-     * @param array $data
+     * @param \Magento\Filesystem           $filesystem
+     * @param Session                       $session
+     * @param \Magento\Logger               $logger
+     * @param array                         $data
      */
     public function __construct(
-        \Magento\Convert\ConvertArray $convertArray,
-        \Magento\Connect\Helper\Data $connectData,
-        \Magento\Filesystem $filesystem,
-        \Magento\Connect\Model\Session $session,
+        \Magento\Convert\ConvertArray   $convertArray,
+        \Magento\Filesystem             $filesystem,
+        \Magento\Connect\Model\Session  $session,
+        \Magento\Logger                 $logger,
         array $data = array()
     ) {
-        $this->_convertArray = $convertArray;
-        $this->_connectData = $connectData;
-        $this->_session = $session;
+        $this->_convertArray    = $convertArray;
+        $this->_session         = $session;
+        $this->filesystem       = $filesystem;
+        $this->writeDirectory   = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->logger           = $logger;
         parent::__construct($data);
-        $this->_filesystem = $filesystem;
+
     }
 
     /**
@@ -185,7 +192,7 @@ class Extension extends \Magento\Object
             $filesArray = preg_split("/[\n\r]+/", $filesString);
             foreach ($filesArray as $file) {
                 $file = trim($file, "/");
-                $res = explode(DIRECTORY_SEPARATOR, $file, 2);
+                $res = explode('/', $file, 2);
                 array_map('trim', $res);
                 if (2 == count($res)) {
                     $packageFiles[] = array('target' => $res[0], 'path' => $res[1]);
@@ -296,24 +303,25 @@ class Extension extends \Magento\Object
         }
 
         try {
-            $path = $this->_connectData->getLocalPackagesPath();
-            $this->_filesystem->write($path . 'package.xml', $this->getPackageXml());
-
+//            $path = $this->writeDirectory->getAbsolutePath();
+            $this->writeDirectory->writeFile(sprintf('connect/%s','package.xml'), $this->getPackageXml());
             $this->unsPackageXml();
             $this->unsTargets();
             $xml = $this->_convertArray->assocToXml($this->getData());
             $xml = new \Magento\Simplexml\Element($xml->asXML());
 
             // prepare dir to save
-            $parts = explode(DS, $fileName);
+            $parts = explode('/', $fileName);
             array_pop($parts);
-            $newDir = implode(DS, $parts);
+            $directoryPath = implode('/', $parts);
 
-            if (!empty($newDir) && !$this->_filesystem->isDirectory($path . $newDir)) {
-                $this->_filesystem->ensureDirectoryExists($path, $newDir, 0777);
+            if (!empty($directoryPath)) {
+                $this->writeDirectory->create(sprintf('connect/%s', $directoryPath));
             }
-            $this->_filesystem->write($path . $fileName . '.xml', $xml->asNiceXml());
+            $this->writeDirectory->writeFile(sprintf('connect/%s.xml', $fileName), $xml->asNiceXml());
         } catch (\Magento\Filesystem\FilesystemException $e) {
+            $this->logger->addStreamLog(\Magento\Logger::LOGGER_EXCEPTION);
+            $this->logger->log($e->getMessage());
             return false;
         }
         return true;
@@ -326,16 +334,17 @@ class Extension extends \Magento\Object
      */
     public function createPackage()
     {
-        $path = $this->_connectData->getLocalPackagesPath();
-        if (!is_dir($path)) {
-            if (!mkdir($path)) {
-                return false;
-            }
+        try {
+            $this->writeDirectory->create('connect/');
+        } catch (\Magento\Filesystem\FilesystemException $e) {
+            $this->logger->addStreamLog(\Magento\Logger::LOGGER_EXCEPTION);
+            $this->logger->log($e->getMessage());
+            return false;
         }
         if (!$this->getPackageXml()) {
             $this->generatePackageXml();
         }
-        $this->getPackage()->save($path);
+        $this->getPackage()->save($this->writeDirectory->getAbsolutePath('connect/'));
         return true;
     }
 
@@ -346,16 +355,18 @@ class Extension extends \Magento\Object
      */
     public function createPackageV1x()
     {
-        $path = $this->_connectData->getLocalPackagesPathV1x();
-        if (!is_dir($path)) {
-            if (!mkdir($path)) {
-                return false;
-            }
+        try {
+            $this->writeDirectory->create('pear/');
+        } catch (\Magento\Filesystem\FilesystemException $e) {
+            $this->logger->addStreamLog(\Magento\Logger::LOGGER_EXCEPTION);
+            $this->logger->log($e->getMessage());
+            return false;
         }
+
         if (!$this->getPackageXml()) {
             $this->generatePackageXml();
         }
-        $this->getPackage()->saveV1x($path);
+        $this->getPackage()->saveV1x($this->writeDirectory->getAbsolutePath('pear/'));
         return true;
     }
 

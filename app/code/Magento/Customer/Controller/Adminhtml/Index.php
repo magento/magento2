@@ -138,7 +138,7 @@ class Index extends \Magento\Backend\App\Action
         $customer = $this->_coreRegistry->registry('current_customer');
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getCustomerData(true);
+        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getCustomerData(true);
 
         // restore data from SESSION
         if ($data) {
@@ -216,10 +216,10 @@ class Index extends \Magento\Backend\App\Action
         if ($customer->getId()) {
             try {
                 $customer->delete();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('You deleted the customer.'));
             } catch (\Exception $exception){
-                $this->_getSession()->addError($exception->getMessage());
+                $this->messageManager->addError($exception->getMessage());
             }
         }
         $this->_redirect('customer/index');
@@ -269,7 +269,7 @@ class Index extends \Magento\Backend\App\Action
                 }
 
                 $this->_objectManager->get('Magento\Core\Model\Registry')->register('current_customer', $customer);
-                $this->_getSession()->addSuccess(__('You saved the customer.'));
+                $this->messageManager->addSuccess(__('You saved the customer.'));
 
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
                 $customerId = $customer->getId();
@@ -278,7 +278,7 @@ class Index extends \Magento\Backend\App\Action
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Magento\Core\Exception $exception) {
-                $messages = $exception->getMessages(\Magento\Message\Factory::ERROR);
+                $messages = $exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR);
                 if (!count($messages)) {
                     $messages = $exception->getMessage();
                 }
@@ -286,7 +286,7 @@ class Index extends \Magento\Backend\App\Action
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->_getSession()->addException($exception,
+                $this->messageManager->addException($exception,
                     __('An error occurred while saving the customer.'));
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
@@ -331,16 +331,15 @@ class Index extends \Magento\Backend\App\Action
                 );
             $customer->setResetPasswordUrl($resetUrl);
             $customer->sendPasswordReminderEmail();
-            $this->_getSession()
-                ->addSuccess(__('Customer will receive an email with a link to reset password.'));
+            $this->messageManager->addSuccess(__('Customer will receive an email with a link to reset password.'));
         } catch (\Magento\Core\Exception $exception) {
-            $messages = $exception->getMessages(\Magento\Message\Factory::ERROR);
+            $messages = $exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR);
             if (!count($messages)) {
                 $messages = $exception->getMessage();
             }
             $this->_addSessionErrorMessages($messages);
         } catch (\Exception $exception) {
-            $this->_getSession()->addException($exception,
+            $this->messageManager->addException($exception,
                 __('An error occurred while resetting customer password.'));
         }
 
@@ -361,7 +360,7 @@ class Index extends \Magento\Backend\App\Action
             if (!($error instanceof \Magento\Message\Error)) {
                 $error = new \Magento\Message\Error($error);
             }
-            $session->addMessage($error);
+            $this->messageManager->addMessage($error);
         };
         array_walk_recursive($messages, $callback);
     }
@@ -632,7 +631,7 @@ class Index extends \Magento\Backend\App\Action
         }
 
         if ($response->getError()) {
-            $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
+            $this->_view->getLayout()->initMessages();
             $response->setMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
         }
 
@@ -680,14 +679,14 @@ class Index extends \Magento\Backend\App\Action
             $errors = $customer->validate();
         } catch (\Magento\Core\Exception $exception) {
             /* @var $error \Magento\Message\Error */
-            foreach ($exception->getMessages(\Magento\Message\Factory::ERROR) as $error) {
-                $errors[] = $error->getCode();
+            foreach ($exception->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR) as $error) {
+                $errors[] = $error->getText();
             }
         }
 
         if ($errors !== true && !empty($errors)) {
             foreach ($errors as $error) {
-                $this->_getSession()->addError($error);
+                $this->messageManager->addError($error);
             }
             $response->setError(1);
         }
@@ -724,7 +723,7 @@ class Index extends \Magento\Backend\App\Action
                 $errors = $addressForm->validateData($formData);
                 if ($errors !== true) {
                     foreach ($errors as $error) {
-                        $this->_getSession()->addError($error);
+                        $this->messageManager->addError($error);
                     }
                     $response->setError(1);
                 }
@@ -739,7 +738,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $customersIds = $this->getRequest()->getParam('customer');
         if (!is_array($customersIds)) {
-             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Please select customer(s).'));
+            $this->messageManager->addError(__('Please select customer(s).'));
         } else {
             try {
                 foreach ($customersIds as $customerId) {
@@ -747,11 +746,9 @@ class Index extends \Magento\Backend\App\Action
                     $customer->setIsSubscribed(true);
                     $customer->save();
                 }
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('A total of %1 record(s) were updated.', count($customersIds))
-                );
+                $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', count($customersIds)));
             } catch (\Exception $exception) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($exception->getMessage());
+                $this->messageManager->addError($exception->getMessage());
             }
         }
         $this->_redirect('customer/*/index');
@@ -764,7 +761,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $customersIds = $this->getRequest()->getParam('customer');
         if (!is_array($customersIds)) {
-             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Please select customer(s).'));
+            $this->messageManager->addError(__('Please select customer(s).'));
         } else {
             try {
                 foreach ($customersIds as $customerId) {
@@ -772,11 +769,9 @@ class Index extends \Magento\Backend\App\Action
                     $customer->setIsSubscribed(false);
                     $customer->save();
                 }
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('A total of %1 record(s) were updated.', count($customersIds))
-                );
+                $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', count($customersIds)));
             } catch (\Exception $exception) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($exception->getMessage());
+                $this->messageManager->addError($exception->getMessage());
             }
         }
 
@@ -790,7 +785,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $customersIds = $this->getRequest()->getParam('customer');
         if (!is_array($customersIds)) {
-             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Please select customer(s).'));
+            $this->messageManager->addError(__('Please select customer(s).'));
         } else {
             try {
                 $customer = $this->_objectManager->create('Magento\Customer\Model\Customer');
@@ -799,11 +794,9 @@ class Index extends \Magento\Backend\App\Action
                         ->load($customerId)
                         ->delete();
                 }
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('A total of %1 record(s) were deleted.', count($customersIds))
-                );
+                $this->messageManager->addSuccess(__('A total of %1 record(s) were deleted.', count($customersIds)));
             } catch (\Exception $exception) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($exception->getMessage());
+                $this->messageManager->addError($exception->getMessage());
             }
         }
 
@@ -817,7 +810,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $customersIds = $this->getRequest()->getParam('customer');
         if (!is_array($customersIds)) {
-             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Please select customer(s).'));
+            $this->messageManager->addError(__('Please select customer(s).'));
         } else {
             try {
                 foreach ($customersIds as $customerId) {
@@ -825,11 +818,9 @@ class Index extends \Magento\Backend\App\Action
                     $customer->setGroupId($this->getRequest()->getParam('group'));
                     $customer->save();
                 }
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('A total of %1 record(s) were updated.', count($customersIds))
-                );
+                $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', count($customersIds)));
             } catch (\Exception $exception) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($exception->getMessage());
+                $this->messageManager->addError($exception->getMessage());
             }
         }
 
@@ -858,21 +849,20 @@ class Index extends \Magento\Backend\App\Action
             throw new NotFoundException();
         }
 
-        $path = $this->_objectManager->get('Magento\App\Dir')->getDir('media') . DS . 'customer';
-
         /** @var \Magento\Filesystem $filesystem */
         $filesystem = $this->_objectManager->get('Magento\Filesystem');
-        $filesystem->setWorkingDirectory($path);
-        $fileName   = $path . $file;
-        if (!$filesystem->isFile($fileName)
+        $directory = $filesystem->getDirectoryRead(\Magento\Filesystem:: MEDIA);
+        $fileName = 'customer/' . $file;
+        $path = $directory->getAbsolutePath($fileName);
+        if (!$directory->isFile($fileName)
             && !$this->_objectManager->get('Magento\Core\Helper\File\Storage')
-                ->processStorageFile(str_replace('/', DS, $fileName))
+                ->processStorageFile($path)
         ) {
             throw new NotFoundException();
         }
 
         if ($plain) {
-            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+            $extension = pathinfo($path, PATHINFO_EXTENSION);
             switch (strtolower($extension)) {
                 case 'gif':
                     $contentType = 'image/gif';
@@ -887,9 +877,9 @@ class Index extends \Magento\Backend\App\Action
                     $contentType = 'application/octet-stream';
                     break;
             }
-
-            $contentLength = $filesystem->getFileSize($fileName);
-            $contentModify = $filesystem->getMTime($fileName);
+            $stat = $directory->stat($fileName);
+            $contentLength = $stat['size'];
+            $contentModify = $stat['mtime'];
 
             $this->getResponse()
                 ->setHttpResponseCode(200)
@@ -900,13 +890,13 @@ class Index extends \Magento\Backend\App\Action
                 ->clearBody();
             $this->getResponse()->sendHeaders();
 
-            echo $filesystem->read($fileName);
+            echo $directory->readFile($fileName);
         } else {
-            $name = pathinfo($fileName, PATHINFO_BASENAME);
+            $name = pathinfo($path, PATHINFO_BASENAME);
             $this->_fileFactory->create($name, array(
                 'type'  => 'filename',
                 'value' => $fileName
-            ));
+            ))->sendResponse();
         }
 
         exit();

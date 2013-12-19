@@ -74,7 +74,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_actionFlag;
 
@@ -88,6 +88,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $_customerData;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_messageManager;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -97,13 +102,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->_getResourceModelStub()));
 
-        $this->_session = $this->getMock('Magento\Core\Model\Session\AbstractSession', array(), array(), '', false);
+        $this->_session = $this->getMock('Magento\Session\SessionManager', array(), array(), '', false);
         $this->_typeOnepage = $this->getMock('Magento\Checkout\Model\Type\Onepage', array(), array(), '', false);
         $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_customerData = $this->getMock('Magento\Customer\Helper\Data', array(), array(), '', false);
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', array(), array(), '', false);
         $this->_urlManager = $this->getMock('Magento\Core\Model\Url', array(), array(), '', false);
         $this->_actionFlag = $this->getMock('Magento\App\ActionFlag', array(), array(), '', false);
+        $this->_messageManager = $this->getMock('\Magento\Message\ManagerInterface', array(), array(), '', false);
         $this->_observer = $this->_objectManager->getObject(
             'Magento\Captcha\Model\Observer',
             array(
@@ -114,7 +120,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'customerData' => $this->_customerData,
                 'helper' => $this->_helper,
                 'urlManager' => $this->_urlManager,
-                'actionFlag' => $this->_actionFlag
+                'actionFlag' => $this->_actionFlag,
+                'messageManager' => $this->_messageManager
             )
         );
 
@@ -185,7 +192,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_helper->expects($this->any())->method('getCaptcha')
             ->with($formId)
             ->will($this->returnValue($this->_captcha));
-        $this->_session->expects($this->once())->method('addError')->with($warningMessage);
+        $this->_messageManager->expects($this->once())->method('addError')->with($warningMessage);
         $this->_actionFlag->expects($this->once())->method('set')
             ->with('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
 

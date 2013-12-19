@@ -93,7 +93,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
         // Save button
         if (!$category->isReadonly()) {
-            $this->addChild('save_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+            $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label'     => __('Save Category'),
                 'onclick'   => "categorySubmit('" . $this->getSaveUrl() . "', true)",
                 'class' => 'save'
@@ -102,7 +102,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
         // Delete button
         if (!in_array($categoryId, $this->getRootIds()) && $category->isDeleteable()) {
-            $this->addChild('delete_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+            $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label'     => __('Delete Category'),
                 'onclick'   => "categoryDelete('" . $this->getUrl('catalog/*/delete', array('_current' => true)) . "', true, {$categoryId})",
                 'class' => 'delete'
@@ -112,7 +112,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         // Reset button
         if (!$category->isReadonly()) {
             $resetPath = $categoryId ? 'catalog/*/edit' : 'catalog/*/add';
-            $this->addChild('reset_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+            $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label'     => __('Reset'),
                 'onclick'   => "categoryReset('".$this->getUrl($resetPath, array('_current'=>true))."',true)"
             ));
@@ -182,7 +182,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             $config['element_name'] = $config['name'];
         }
         $this->setChild($alias . '_button',
-                        $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')->addData($config));
+                        $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->addData($config));
         $this->_additionalButtons[$alias] = $alias . '_button';
         return $this;
     }

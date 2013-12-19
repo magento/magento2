@@ -106,9 +106,10 @@ class Theme extends \Magento\Core\Model\AbstractModel implements \Magento\View\D
      */
     protected $_customFactory;
 
+
     /**
      * Initialize dependencies
-     * 
+     *
      * @param Context $context
      * @param Registry $registry
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
@@ -116,7 +117,6 @@ class Theme extends \Magento\Core\Model\AbstractModel implements \Magento\View\D
      * @param \Magento\View\Design\Theme\ImageFactory $imageFactory
      * @param \Magento\View\Design\Theme\Validator $validator
      * @param \Magento\View\Design\Theme\CustomizationFactory $customizationFactory
-     * @param \Magento\App\State $appState
      * @param Resource\Theme $resource
      * @param Resource\Theme\Collection $resourceCollection
      * @param array $data
@@ -301,7 +301,9 @@ class Theme extends \Magento\Core\Model\AbstractModel implements \Magento\View\D
      */
     public function getFullPath()
     {
-        return $this->getThemePath() ? $this->getArea() . self::PATH_SEPARATOR . $this->getThemePath() : null;
+        return $this->getThemePath()
+            ? $this->getArea() . self::PATH_SEPARATOR . $this->getThemePath()
+            : null;
     }
 
     /**

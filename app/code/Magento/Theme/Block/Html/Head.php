@@ -102,7 +102,6 @@ class Head extends \Magento\View\Element\Template
         $this->_assetMinifyService = $assetMinifyService;
         $this->_pageAssets = $assets;
     }
-
     /**
      * Add RSS element to HEAD entity
      *
@@ -386,10 +385,10 @@ class Head extends \Magento\View\Element\Template
     {
         $folderName = \Magento\Backend\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
         $storeConfig = $this->_storeConfig->getConfig('design/head/shortcut_icon');
-        $faviconFile = $this->_storeManager->getStore()->getBaseUrl('media') . $folderName . '/' . $storeConfig;
-        $absolutePath = $this->_dirs->getDir('media') . '/' . $folderName . '/' . $storeConfig;
+        $path = $folderName . '/' . $storeConfig;
+        $faviconFile = $this->_storeManager->getStore()->getBaseUrl('media') . $path;
 
-        if (!is_null($storeConfig) && $this->_isFile($absolutePath)) {
+        if (!is_null($storeConfig) && $this->_isFile($path)) {
             $url = $faviconFile;
         } else {
             $url = $this->getViewFileUrl('Magento_Theme::favicon.ico');
@@ -400,15 +399,15 @@ class Head extends \Magento\View\Element\Template
     /**
      * If DB file storage is on - find there, otherwise - just file_exists
      *
-     * @param string $filename
+     * @param string $filename relative file path
      * @return bool
      */
     protected function _isFile($filename)
     {
-        if ($this->_fileStorageDatabase->checkDbUsage() && !is_file($filename)) {
+        if ($this->_fileStorageDatabase->checkDbUsage() && !$this->mediaDirectory->isFile($filename)) {
             $this->_fileStorageDatabase->saveFileToFilesystem($filename);
         }
-        return is_file($filename);
+        return $this->mediaDirectory->isFile($filename);
     }
 
     /**

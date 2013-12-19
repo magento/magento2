@@ -34,7 +34,7 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer;
 
-class Checkbox extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Checkbox
+class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
 {
     /**
      * @var \Magento\Json\EncoderInterface

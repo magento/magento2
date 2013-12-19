@@ -50,19 +50,17 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_mediaTmpDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Product\Media\Config')->getBaseTmpMediaPath();
-        $fixtureDir = realpath(__DIR__.'/../../../../_files');
-        self::$_mediaDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Product\Media\Config')->getBaseMediaPath();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $mediaDirectory = $objectManager->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
 
-        $ioFile = new \Magento\Io\File();
-        if (!is_dir(self::$_mediaTmpDir)) {
-            $ioFile->mkdir(self::$_mediaTmpDir, 0777, true);
-        }
-        if (!is_dir(self::$_mediaDir)) {
-            $ioFile->mkdir(self::$_mediaDir, 0777, true);
-        }
+        self::$_mediaTmpDir = $mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath());
+        self::$_mediaDir = $mediaDirectory->getAbsolutePath($config->getBaseMediaPath());
+        $fixtureDir = realpath(__DIR__.'/../../../../_files');
+
+        $mediaDirectory->create($config->getBaseTmpMediaPath());
+        $mediaDirectory->create($config->getBaseMediaPath());
 
         copy($fixtureDir . "/magento_image.jpg", self::$_mediaTmpDir . "/magento_image.jpg");
         copy($fixtureDir . "/magento_image.jpg", self::$_mediaDir . "/magento_image.jpg");
@@ -71,8 +69,20 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        \Magento\Io\File::rmdirRecursive(self::$_mediaTmpDir);
-        \Magento\Io\File::rmdirRecursive(self::$_mediaDir);
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Catalog\Model\Product\Media\Config $config */
+        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+
+        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        $mediaDirectory = $objectManager->get('Magento\Filesystem')
+            ->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+
+        if ($mediaDirectory->isExist($config->getBaseMediaPath())) {
+            $mediaDirectory->delete($config->getBaseMediaPath());
+        }
+        if ($mediaDirectory->isExist($config->getBaseTmpMediaPath())) {
+            $mediaDirectory->delete($config->getBaseTmpMediaPath());
+        }
     }
 
     protected function setUp()

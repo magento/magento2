@@ -21,20 +21,24 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
+    \Magento\Filesystem::PARAM_APP_DIRS => array(
+        \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/_files/design')
+    )
+));
+$objectManger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManger->get('Magento\Core\Model\App')
     ->loadAreaPart(
         \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
         \Magento\Core\Model\App\Area::PART_CONFIG
     );
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
+$objectManger->configure(array(
     'preferences' => array(
         'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'
     )
 ));
 /** @var $registration \Magento\Core\Model\Theme\Registration */
-$registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Core\Model\Theme\Registration');
+$registration = $objectManger->create('Magento\Core\Model\Theme\Registration');
 $registration->register(
-    __DIR__ . DIRECTORY_SEPARATOR . 'design',
-    implode(DIRECTORY_SEPARATOR, array('*', '*', 'theme.xml'))
+    implode('/', array('*', '*', 'theme.xml'))
 );

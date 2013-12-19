@@ -50,25 +50,25 @@ class Service
     protected $themeFactory;
 
     /**
-     * @var \Magento\App\Dir
+     * @var string
      */
-    protected $_dir;
+    protected $_pubDirectory;
 
     /**
      * @param \Magento\App\State $appState
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\App\Dir $dir
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\State $appState,
         \Magento\View\DesignInterface $design,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\App\Dir $dir
+        \Magento\Filesystem $filesystem
     ) {
         $this->_appState = $appState;
         $this->_design = $design;
-        $this->_dir = $dir;
+        $this->_pubDirectory = $filesystem->getPath(\Magento\Filesystem::STATIC_VIEW);
         $this->themeFactory = $themeFactory;
     }
 
@@ -128,7 +128,7 @@ class Service
      */
     public function getPublicDir()
     {
-        return $this->_dir->getDir(\Magento\App\Dir::STATIC_VIEW);
+        return $this->_pubDirectory;
     }
 
     /**

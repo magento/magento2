@@ -67,7 +67,7 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="qty">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Stock Quantity</argument>
-                        <argument name="filter" xsi:type="string">Magento\Adminhtml\Block\Widget\Grid\Column\Filter\Range</argument>
+                        <argument name="filter" xsi:type="string">Magento\Backend\Block\Widget\Grid\Column\Filter\Range</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                         <argument name="index" xsi:type="string">qty</argument>
                         <argument name="type" xsi:type="string">number</argument>

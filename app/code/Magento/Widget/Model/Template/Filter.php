@@ -65,9 +65,9 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\View\LayoutInterface $layout,
         \Magento\View\LayoutFactory $layoutFactory,
+        \Magento\App\State $appState,
         \Magento\Widget\Model\Resource\Widget $widgetResource,
-        \Magento\Widget\Model\Widget $widget,
-        \Magento\App\State $appState
+        \Magento\Widget\Model\Widget $widget
     ) {
         $this->_widgetResource = $widgetResource;
         $this->_widget = $widget;

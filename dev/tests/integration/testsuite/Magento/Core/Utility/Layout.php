@@ -98,7 +98,6 @@ class Layout
             'themeFactory'       => $objectManager->get('Magento\Core\Model\Resource\Theme\CollectionFactory'),
             'logger'             => $objectManager->get('Magento\Logger'),
             'eventManager'       => $objectManager->get('Magento\Event\ManagerInterface'),
-            'factoryHelper'      => $objectManager->get('Magento\App\Helper\HelperFactory'),
             'coreData'           => $objectManager->get('Magento\Core\Helper\Data'),
             'design'             => $objectManager->get('Magento\View\DesignInterface'),
             'blockFactory'       => $objectManager->create('Magento\View\Element\BlockFactory', array()),
@@ -108,6 +107,7 @@ class Layout
             'dataServiceGraph'   => $objectManager->create('Magento\Core\Model\DataService\Graph', array()),
             'coreStoreConfig'    => $objectManager->create('Magento\Core\Model\Store\Config'),
             'appState'           => $objectManager->get('Magento\App\State'),
+            'messageManager'     => $objectManager->get('Magento\Message\ManagerInterface'),
             'objectManager'      => $objectManager
         );
     }

@@ -33,6 +33,8 @@
  */
 namespace Magento\Core\Model;
 
+use Magento\Filesystem\Directory\ReadInterface;
+
 abstract class AbstractShell
 {
     /**
@@ -57,32 +59,25 @@ abstract class AbstractShell
     protected $_entryPoint = null;
 
     /**
-     * @var \Magento\Filesystem
+     * @var ReadInterface
      */
-    protected $_filesystem;
-
-    /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dir;
+    protected $rootDirectory;
 
     /**
      * Initializes application and parses input parameters
      *
      * @param \Magento\Filesystem $filesystem
      * @param string $entryPoint
-     * @param \Magento\App\Dir $dir
      * @throws \Exception
      */
-    public function __construct(\Magento\Filesystem $filesystem, $entryPoint, \Magento\App\Dir $dir)
+    public function __construct(\Magento\Filesystem $filesystem, $entryPoint)
     {
         if (isset($_SERVER['REQUEST_METHOD'])) {
             throw new \Exception('This script cannot be run from Browser. This is the shell script.');
         }
 
-        $this->_filesystem = $filesystem;
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
         $this->_entryPoint = $entryPoint;
-        $this->_dir = $dir;
         $this->_rawArgs = $_SERVER['argv'];
         $this->_applyPhpVariables();
         $this->_parseArgs();
@@ -101,17 +96,6 @@ abstract class AbstractShell
         return $this;
     }
 
-
-    /**
-     * Gets Magento root path (with last directory separator)
-     *
-     * @return string
-     */
-    protected function _getRootPath()
-    {
-        return $this->_dir->getDir(\Magento\App\Dir::ROOT);
-    }
-
     /**
      * Parses .htaccess file and apply php settings to shell script
      *
@@ -119,10 +103,10 @@ abstract class AbstractShell
      */
     protected function _applyPhpVariables()
     {
-        $htaccess = $this->_getRootPath() . '.htaccess';
-        if ($this->_filesystem->isFile($htaccess)) {
+        $htaccess = '.htaccess';
+        if ($this->rootDirectory->isFile($htaccess)) {
             // parse htaccess file
-            $data = $this->_filesystem->read($htaccess);
+            $data = $this->rootDirectory->readFile($htaccess);
             $matches = array();
             preg_match_all('#^\s+?php_value\s+([a-z_]+)\s+(.+)$#siUm', $data, $matches, PREG_SET_ORDER);
             if ($matches) {

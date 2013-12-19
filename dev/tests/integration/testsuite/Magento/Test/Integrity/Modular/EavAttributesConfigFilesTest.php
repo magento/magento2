@@ -32,12 +32,12 @@ class EavAttributesConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        // List of all available import.xml
-        $xmlFiles = \Magento\TestFramework\Utility\Files::init()->getConfigFiles(
-            '{*/eav_attributes.xml,eav_attributes.xml}',
-            array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'),
-            false
-        );
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $filesystem \Magento\Filesystem */
+        $filesystem = $objectManager->get('Magento\Filesystem');
+        $appDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::APP);
+        $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
+        $xmlFiles = $fileIteratorFactory->create($appDirectory, $appDirectory->search('#/eav_attributes\.xml$#'));
 
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
         $validationStateMock->expects($this->any())->method('isValidated')

@@ -41,11 +41,11 @@
             <span><?php echo sprintf(__('Credit Card %s'), $key + 1); ?></span>
         <?php endif;?>
 
-        <table class="info-table<?php if ($showCount):?> offset<?php endif;?>">
+        <table class="data-table<?php if ($showCount):?> offset<?php endif;?>">
             <tbody>
             <?php foreach ($card as $_label => $_value):?>
             <tr>
-                <td><?php echo $this->escapeHtml($_label)?>:</td>
+                <th><?php echo $this->escapeHtml($_label)?>:</th>
                 <td><?php echo nl2br(implode($this->getValueAsArray($_value, true), "\n"))?></td>
             </tr>
             <?php endforeach; ?>

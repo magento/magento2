@@ -58,7 +58,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'url'                     => $objectManager->get('Magento\Core\Model\Url'),
             'request'                 => $objectManager->get('Magento\App\RequestInterface'),
             'configDataResource'      => $objectManager->get('Magento\Core\Model\Resource\Config\Data'),
-            'dir'                     => $objectManager->get('Magento\App\Dir'),
+            'filesystem'              => $objectManager->get('Magento\Filesystem'),
             'coreStoreConfig'         => $objectManager->get('Magento\Core\Model\Store\Config'),
             'coreConfig'              => $objectManager->get('Magento\Core\Model\Config'),
             'resource'                => $objectManager->get('Magento\Core\Model\Resource\Store'),
@@ -199,21 +199,21 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrlInPub()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Dir::PARAM_APP_URIS => array(\Magento\App\Dir::PUB => '')
+                \Magento\Filesystem::PARAM_APP_DIRS => array(\Magento\Filesystem::PUB => array('uri' => ''))
         ));
         $this->_model = $this->_getStoreModel();
         $this->_model->load('default');
 
         $this->assertEquals(
-            'http://localhost/static/',
+            'http://localhost/pub/static/',
             $this->_model->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_STATIC)
         );
         $this->assertEquals(
-            'http://localhost/lib/',
+            'http://localhost/pub/lib/',
             $this->_model->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_LIB)
         );
         $this->assertEquals(
-            'http://localhost/media/',
+            'http://localhost/pub/media/',
             $this->_model->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA)
         );
     }

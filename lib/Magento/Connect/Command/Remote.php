@@ -179,7 +179,7 @@ extends \Magento\Connect\Command
             }
             $version = $cache->detectVersionFromRestArray($c);
             $dir = $config->getChannelCacheDir($channel);
-            $file = $dir.DIRECTORY_SEPARATOR.$package."-".$version.".tgz";
+            $file = $dir . '/' . $package."-".$version.".tgz";
             $rest->downloadPackageFileOfRelease($package, $version, $file);
             if($ftp) {
                 @unlink($config->getFilename());

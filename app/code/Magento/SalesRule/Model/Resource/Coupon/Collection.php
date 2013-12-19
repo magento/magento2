@@ -94,7 +94,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Callback function that filters collection by field "Used" from grid
      *
      * @param \Magento\Core\Model\Resource\Db\Collection\AbstractCollection $collection
-     * @param \Magento\Adminhtml\Block\Widget\Grid\Column $column
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
      */
     public function addIsUsedFilterCallback($collection, $column)
     {

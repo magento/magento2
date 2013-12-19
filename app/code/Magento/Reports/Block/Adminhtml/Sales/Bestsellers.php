@@ -34,7 +34,7 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales;
 
-class Bestsellers extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Bestsellers extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected $_template = 'report/grid/container.phtml';
 

@@ -51,11 +51,17 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
     protected $_taxOrderFactory;
 
     /**
+     * @var \Magento\Sales\Helper\Admin
+     */
+    protected $_salesAdminHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Tax\Model\Sales\Order\TaxFactory $taxOrderFactory
+     * @param \Magento\Sales\Helper\Admin $salesAdminHelper
      * @param array $data
      */
     public function __construct(
@@ -64,11 +70,13 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Tax\Model\Sales\Order\TaxFactory $taxOrderFactory,
+        \Magento\Sales\Helper\Admin $salesAdminHelper,
         array $data = array()
     ) {
         $this->_taxHelper = $taxHelper;
         $this->_taxCalculation = $taxCalculation;
         $this->_taxOrderFactory = $taxOrderFactory;
+        $this->_salesAdminHelper = $salesAdminHelper;
         parent::__construct($context, $taxConfig, $data);
     }
 
@@ -103,7 +111,7 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      */
     public function displayAmount($amount, $baseAmount)
     {
-        return $this->_helperFactory->get('Magento\Sales\Helper\Admin')->displayPrices(
+        return $this->_salesAdminHelper->displayPrices(
             $this->getSource(), $baseAmount, $amount, false, '<br />'
         );
     }

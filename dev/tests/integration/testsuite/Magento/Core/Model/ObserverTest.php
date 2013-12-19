@@ -56,10 +56,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testThemeRegistration()
     {
-        $baseDir = 'base_dir';
         $pattern = 'path_pattern';
 
-        $this->_eventObserver->getEvent()->setBaseDir($baseDir);
         $this->_eventObserver->getEvent()->setPathPattern($pattern);
 
         $themeRegistration = $this->getMock(
@@ -67,12 +65,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             array('register'),
             array(
                 $this->_objectManager->create('Magento\Core\Model\Resource\Theme\CollectionFactory'),
-                $this->_objectManager->create('Magento\Core\Model\Theme\Collection')
+                $this->_objectManager->create('Magento\Core\Model\Theme\Collection'),
+                $this->_objectManager->create('Magento\Filesystem')
             )
         );
         $themeRegistration->expects($this->once())
             ->method('register')
-            ->with($baseDir, $pattern);
+            ->with($this->equalTo($pattern));
         $this->_objectManager->addSharedInstance($themeRegistration, 'Magento\Core\Model\Theme\Registration');
 
         /** @var $observer \Magento\Core\Model\Observer */

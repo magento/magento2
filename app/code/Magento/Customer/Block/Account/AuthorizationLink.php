@@ -37,17 +37,25 @@ class AuthorizationLink extends \Magento\View\Element\Html\Link
     protected $_customerSession;
 
     /**
+     * @var \Magento\Customer\Helper\Data
+     */
+    protected $_customerHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $session
+     * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $session,
+        \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {
         parent::__construct($context, $data);
         $this->_customerSession = $session;
+        $this->_customerHelper = $customerHelper;
     }
 
     /**
@@ -55,8 +63,9 @@ class AuthorizationLink extends \Magento\View\Element\Html\Link
      */
     public function getHref()
     {
-        $helper = $this->_helperFactory->get('Magento\Customer\Helper\Data');
-        return $this->_customerSession->isLoggedIn() ? $helper->getLogoutUrl() : $helper->getLoginUrl();
+        return $this->_customerSession->isLoggedIn()
+            ? $this->_customerHelper->getLogoutUrl()
+            : $this->_customerHelper->getLoginUrl();
     }
 
     /**

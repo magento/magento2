@@ -34,7 +34,7 @@
 
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
-class Search extends \Magento\Adminhtml\Block\Widget
+class Search extends \Magento\Backend\Block\Widget
 {
     /**
      * @var string

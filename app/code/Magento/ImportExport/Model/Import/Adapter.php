@@ -39,11 +39,12 @@ class Adapter
      * Adapter factory. Checks for availability, loads and create instance of import adapter object.
      *
      * @param string $type Adapter type ('csv', 'xml' etc.)
+     * @param \Magento\Filesystem\Directory\Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
      * @throws \Exception
      * @return \Magento\ImportExport\Model\Import\AbstractSource
      */
-    public static function factory($type, $options = null)
+    public static function factory($type, $directory, $options = null)
     {
         if (!is_string($type) || !$type) {
             throw new \Magento\Core\Exception(__('The adapter type must be a non empty string.'));
@@ -53,7 +54,7 @@ class Adapter
         if (!class_exists($adapterClass)) {
             throw new \Magento\Core\Exception("'{$type}' file extension is not supported");
         }
-        $adapter = new $adapterClass($options);
+        $adapter = new $adapterClass($options, $directory);
 
         if (! $adapter instanceof \Magento\ImportExport\Model\Import\AbstractSource) {
             throw new \Magento\Core\Exception(
@@ -67,10 +68,11 @@ class Adapter
      * Create adapter instance for specified source file.
      *
      * @param string $source Source file path.
+     * @param \Magento\Filesystem\Directory\Write $directory
      * @return \Magento\ImportExport\Model\Import\AbstractSource
      */
-    public static function findAdapterFor($source)
+    public static function findAdapterFor($source, $directory)
     {
-        return self::factory(pathinfo($source, PATHINFO_EXTENSION), $source);
+        return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source);
     }
 }

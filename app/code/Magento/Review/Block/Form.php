@@ -68,23 +68,30 @@ class Form extends \Magento\View\Element\Template
     protected $_coreData;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\Session\Generic $reviewSession
+     * @param \Magento\Session\Generic $reviewSession
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
+     * @param \Magento\Message\ManagerInterface $messageManager
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\Session\Generic $reviewSession,
+        \Magento\Session\Generic $reviewSession,
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
+        \Magento\Message\ManagerInterface $messageManager,
         array $data = array()
     ) {
         $this->_coreData = $coreData;
@@ -93,6 +100,7 @@ class Form extends \Magento\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->_productFactory = $productFactory;
         $this->_ratingFactory = $ratingFactory;
+        $this->messageManager = $messageManager;
         parent::__construct($context, $data);
     }
 
@@ -127,7 +135,7 @@ class Form extends \Magento\View\Element\Template
 
         $this->setTemplate('form.phtml')
             ->assign('data', $data)
-            ->assign('messages', $this->_reviewSession->getMessages(true));
+            ->assign('messages', $this->messageManager->getMessages(true));
     }
 
     public function getProductInfo()

@@ -173,25 +173,20 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnCallback($processFrontendFunc));
 
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-        $filesystem->expects($this->any())
-            ->method('isDirectory')
-            ->will($this->returnValue(true));
-        $filesystem->expects($this->any())
-            ->method('isWritable')
-            ->will($this->returnValue(true));
-
         $map = array(
-            array(\Magento\App\Dir::CACHE, 'CACHE_DIR'),
-            array(\Magento\App\Dir::CONFIG, 'CONFIG_DIR'),
+            array(\Magento\Filesystem::CACHE, 'CACHE_DIR'),
+            array(\Magento\Filesystem::CONFIG, 'CONFIG_DIR'),
         );
-        $dirs = $this->getMock('Magento\App\Dir', array('getDir'), array(), '', false);
-        $resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
-        $dirs->expects($this->any())
-            ->method('getDir')
+
+        $filesystem = $this->getMock('Magento\Filesystem', array('getPath'), array(), '', false);
+
+        $filesystem->expects($this->any())
+            ->method('getPath')
             ->will($this->returnValueMap($map));
 
-        $model = new \Magento\App\Cache\Frontend\Factory($objectManager, $filesystem, $dirs, $resource,
+        $resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
+
+        $model = new \Magento\App\Cache\Frontend\Factory($objectManager, $filesystem, $resource,
             $enforcedOptions, $decorators);
 
         return $model;

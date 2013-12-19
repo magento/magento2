@@ -107,8 +107,7 @@ class Sitemap extends  \Magento\Backend\App\Action
         if ($id) {
             $model->load($id);
             if (! $model->getId()) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(
-                    __('This sitemap no longer exists.'));
+                $this->messageManager->addError(__('This sitemap no longer exists.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             }
@@ -117,7 +116,7 @@ class Sitemap extends  \Magento\Backend\App\Action
         $this->_title->add($model->getId() ? $model->getSitemapFilename() : __('New Site Map'));
 
         // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getFormData(true);
+        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
         if (!empty($data)) {
             $model->setData($data);
         }
@@ -150,7 +149,7 @@ class Sitemap extends  \Magento\Backend\App\Action
             //validate path to generate
             if (!empty($data['sitemap_filename']) && !empty($data['sitemap_path'])) {
                 $path = rtrim($data['sitemap_path'], '\\/')
-                      . DS . $data['sitemap_filename'];
+                      . '/' . $data['sitemap_filename'];
                 /** @var $validator \Magento\Core\Model\File\Validator\AvailablePath */
                 $validator = $this->_objectManager->create('Magento\Core\Model\File\Validator\AvailablePath');
                 /** @var $helper \Magento\Catalog\Helper\Catalog */
@@ -158,10 +157,10 @@ class Sitemap extends  \Magento\Backend\App\Action
                 $validator->setPaths($helper->getSitemapValidPaths());
                 if (!$validator->isValid($path)) {
                     foreach ($validator->getMessages() as $message) {
-                        $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($message);
+                        $this->messageManager->addError($message);
                     }
                     // save data in session
-                    $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setFormData($data);
+                    $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
                     // redirect to edit form
                     $this->_redirect('adminhtml/*/edit', array(
                         'sitemap_id' => $this->getRequest()->getParam('sitemap_id')));
@@ -169,21 +168,17 @@ class Sitemap extends  \Magento\Backend\App\Action
                 }
             }
 
-            /** @var \Magento\Filesystem $filesystem */
-            $filesystem = $this->_objectManager->get('Magento\Filesystem');
+            /** @var \Magento\Filesystem\Directory\Write $directory */
+            $directory = $this->_objectManager->get('Magento\Filesystem')
+                ->getDirectoryWrite(\Magento\Filesystem::ROOT);
 
             if ($this->getRequest()->getParam('sitemap_id')) {
                 $model->load($this->getRequest()->getParam('sitemap_id'));
                 $fileName = $model->getSitemapFilename();
 
-                $filesystem->setWorkingDirectory(
-                    $this->_objectManager->get('Magento\App\Dir')->getDir() . $model->getSitemapPath()
-                );
-                $filePath = $this->_objectManager->get('Magento\App\Dir')->getDir()
-                    . $model->getSitemapPath() . DS . $fileName;
-
-                if ($fileName && $filesystem->isFile($filePath)) {
-                    $filesystem->delete($filePath);
+                $path = $model->getSitemapPath() . '/' . $fileName;
+                if ($fileName && $directory->isFile($path)) {
+                    $directory->delete($path);
                 }
             }
 
@@ -194,10 +189,9 @@ class Sitemap extends  \Magento\Backend\App\Action
                 // save the data
                 $model->save();
                 // display success message
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('The sitemap has been saved.'));
+                $this->messageManager->addSuccess(__('The sitemap has been saved.'));
                 // clear previously saved data from session
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setFormData(false);
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 
                 // check if 'Save and Continue'
                 if ($this->getRequest()->getParam('back')) {
@@ -215,9 +209,9 @@ class Sitemap extends  \Magento\Backend\App\Action
 
             } catch (\Exception $e) {
                 // display error message
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 // save data in session
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setFormData($data);
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
                 // redirect to edit form
                 $this->_redirect('adminhtml/*/edit', array(
                     'sitemap_id' => $this->getRequest()->getParam('sitemap_id')));
@@ -233,8 +227,10 @@ class Sitemap extends  \Magento\Backend\App\Action
      */
     public function deleteAction()
     {
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = $this->_objectManager->get('Magento\Filesystem');
+        /** @var \Magento\Filesystem\Directory\Write $directory */
+        $directory = $this->_objectManager->get('Magento\Filesystem')
+            ->getDirectoryWrite(\Magento\Filesystem::ROOT);
+
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('sitemap_id');
         if ($id) {
@@ -247,28 +243,27 @@ class Sitemap extends  \Magento\Backend\App\Action
                 /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
                 $model->load($id);
                 // delete file
-                if ($model->getSitemapFilename() && $filesystem->isFile($model->getPreparedFilename())) {
-                    $filesystem->delete($model->getPreparedFilename());
+                $path = $directory->getRelativePath($model->getPreparedFilename());
+                if ($model->getSitemapFilename() && $directory->isFile($path)) {
+                    $directory->delete($path);
                 }
                 $model->delete();
                 // display success message
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('The sitemap has been deleted.'));
+                $this->messageManager->addSuccess(__('The sitemap has been deleted.'));
                 // go to grid
                 $this->_redirect('adminhtml/*/');
                 return;
 
             } catch (\Exception $e) {
                 // display error message
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 // go back to edit form
                 $this->_redirect('adminhtml/*/edit', array('sitemap_id' => $id));
                 return;
             }
         }
         // display error message
-        $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(
-            __('We can\'t find a sitemap to delete.'));
+        $this->messageManager->addError(__('We can\'t find a sitemap to delete.'));
         // go to grid
         $this->_redirect('adminhtml/*/');
     }
@@ -288,16 +283,16 @@ class Sitemap extends  \Magento\Backend\App\Action
             try {
                 $sitemap->generateXml();
 
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('The sitemap "%1" has been generated.', $sitemap->getSitemapFilename()));
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e,
+                $this->messageManager->addException($e,
                     __('Something went wrong generating the sitemap.'));
             }
         } else {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('We can\'t find a sitemap to generate.'));
         }
 

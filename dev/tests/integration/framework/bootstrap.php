@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/../../static/framework/Magento/TestFramework/Utility/Classes.php';
 require_once __DIR__ . '/../../static/framework/Magento/TestFramework/Utility/AggregateInvoker.php';
@@ -44,8 +43,8 @@ function tool_autoloader($className)
         return false;
     }
 
-    $filePath = str_replace('\\', DS, $className);
-    $filePath = BP . DS . 'dev' . DS . 'tools' . DS . $filePath . '.php';
+    $filePath = str_replace('\\', '/', $className);
+    $filePath = BP . '/dev/tools/' . $filePath . '.php';
 
     if (file_exists($filePath)) {
         include_once($filePath);

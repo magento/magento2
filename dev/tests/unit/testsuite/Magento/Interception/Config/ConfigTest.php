@@ -46,14 +46,26 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $fixtureBasePath = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/..');
+        $fixtureBasePath = __DIR__ . '/..';
         $fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
         $fileResolverMock->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap(array(
-                array('di.xml', 'global', array($fixtureBasePath . '/Custom/Module/etc/di.xml')),
-                array('di.xml', 'backend', array($fixtureBasePath . '/Custom/Module/etc/backend/di.xml')),
-                array('di.xml', 'frontend', array($fixtureBasePath . '/Custom/Module/etc/frontend/di.xml')),
+                array(
+                    'di.xml',
+                    'global',
+                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/di.xml'))
+                ),
+                array(
+                    'di.xml',
+                    'backend',
+                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/backend/di.xml'))
+                ),
+                array(
+                    'di.xml',
+                    'frontend',
+                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/frontend/di.xml'))
+                ),
             )));
 
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');

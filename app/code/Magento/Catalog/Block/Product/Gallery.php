@@ -107,7 +107,8 @@ class Gallery extends \Magento\View\Element\Template
     public function getImageWidth()
     {
         $file = $this->getCurrentImage()->getPath();
-        if ($this->_filesystem->isFile($file)) {
+
+        if ($this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA)->isFile($file)) {
             $size = getimagesize($file);
             if (isset($size[0])) {
                 if ($size[0] > 600) {

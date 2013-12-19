@@ -64,9 +64,9 @@ class Observer
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Backend\Model\Session
+     * @var \Magento\Message\ManagerInterface
      */
-    protected $_backendSession;
+    protected $messageManager;
 
     /**
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
@@ -76,7 +76,7 @@ class Observer
      * @param \Magento\SalesRule\Model\Resource\Report\Rule $reportRule
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
-     * @param \Magento\Backend\Model\Session $backendSession
+     * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -86,7 +86,7 @@ class Observer
         \Magento\SalesRule\Model\Resource\Report\Rule $reportRule,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
-        \Magento\Backend\Model\Session $backendSession
+        \Magento\Message\ManagerInterface $messageManager
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_ruleCustomerFactory = $ruleCustomerFactory;
@@ -95,7 +95,7 @@ class Observer
         $this->_reportRule = $reportRule;
         $this->_locale = $locale;
         $this->_collectionFactory = $collectionFactory;
-        $this->_backendSession = $backendSession;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -198,7 +198,7 @@ class Observer
         }
 
         if ($disabledRulesCount) {
-            $this->_backendSession->addWarning(__(
+            $this->messageManager->addWarning(__(
                 '%1 Shopping Cart Price Rules based on "%2" attribute have been disabled.',
                 $disabledRulesCount,
                 $attributeCode

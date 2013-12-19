@@ -34,9 +34,12 @@
 
 namespace Magento\Backend\Block\Dashboard;
 
-abstract class AbstractDashboard extends \Magento\Adminhtml\Block\Widget
+abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 {
-    protected $_dataHelperName = null;
+    /**
+     * @var \Magento\Backend\Helper\Dashboard\AbstractDashboard
+     */
+    protected $_dataHelper = null;
 
     /**
      * @var \Magento\Reports\Model\Resource\Order\CollectionFactory
@@ -59,28 +62,22 @@ abstract class AbstractDashboard extends \Magento\Adminhtml\Block\Widget
 
     public function getCollection()
     {
-           return $this->getDataHelper()->getCollection();
+        return $this->getDataHelper()->getCollection();
     }
 
     public function getCount()
     {
-           return $this->getDataHelper()->getCount();
+        return $this->getDataHelper()->getCount();
     }
 
+    /**
+     * Get data helper
+     *
+     * @return \Magento\Backend\Helper\Dashboard\AbstractDashboard
+     */
     public function getDataHelper()
     {
-           return $this->helper($this->getDataHelperName());
-    }
-
-    public  function getDataHelperName()
-    {
-           return $this->_dataHelperName;
-    }
-
-    public  function setDataHelperName($dataHelperName)
-    {
-           $this->_dataHelperName = $dataHelperName;
-           return $this;
+        return $this->_dataHelper;
     }
 
     protected function _prepareData()

@@ -34,21 +34,21 @@
 
 namespace Magento\Sales\Block\Adminhtml\Order;
 
-class Create extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * @var \Magento\Adminhtml\Model\Session\Quote
+     * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
+     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
+        \Magento\Backend\Model\Session\Quote $sessionQuote,
         array $data = array()
     ) {
         $this->_sessionQuote = $sessionQuote;
@@ -134,7 +134,7 @@ class Create extends \Magento\Adminhtml\Block\Widget\Form\Container
     /**
      * Retrieve quote session object
      *
-     * @return \Magento\Adminhtml\Model\Session\Quote
+     * @return \Magento\Backend\Model\Session\Quote
      */
     protected function _getSession()
     {

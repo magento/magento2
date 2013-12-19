@@ -78,7 +78,7 @@ class Group
      */
     protected function _prepareLayout()
     {
-        $button = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'label' => __('Add Group Price'),
                 'onclick' => 'return groupPriceControl.addItem()',

@@ -40,6 +40,25 @@ class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
     protected $_template = 'email/stock.phtml';
 
     /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $_imageHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Catalog\Helper\Image $imageHelper,
+        array $data = array()
+    ) {
+        $this->_imageHelper = $imageHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Product thumbnail image url getter
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -47,7 +66,7 @@ class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
      */
     public function getThumbnailUrl($product)
     {
-        return (string)$this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail')
+        return (string)$this->_imageHelper->init($product, 'thumbnail')
             ->resize($this->getThumbnailSize());
     }
 

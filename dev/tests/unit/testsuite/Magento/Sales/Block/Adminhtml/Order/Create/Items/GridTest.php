@@ -36,7 +36,13 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $orderCreateMock = $this->getMock('Magento\Sales\Model\AdminOrder\Create', array(), array(), '', false);
+        $orderCreateMock = $this->getMock(
+            'Magento\Sales\Model\AdminOrder\Create',
+            array('__wakeup'),
+            array(),
+            '',
+            false
+        );
 
         $taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')
             ->disableOriginalConstructor()
@@ -46,9 +52,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $sessionMock = $this->getMockBuilder('Magento\Adminhtml\Model\Session\Quote')
+        $sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session\Quote')
             ->disableOriginalConstructor()
-            ->setMethods(array('getQuote'))
+            ->setMethods(array('getQuote', '__wakeup'))
             ->getMock();
 
         $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
@@ -58,6 +64,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $storeMock = $this->getMockBuilder('Magento\Core\Model\Store')
             ->disableOriginalConstructor()
+            ->setMethods(array('__wakeup', 'convertPrice'))
             ->getMock();
         $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
 
@@ -66,10 +73,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
 
         $wishlistFactoryMock = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
-            ->setMethods(array('methods'))
+            ->setMethods(array('methods', '__wakeup'))
             ->getMock();
 
-        $giftMessageSave = $this->getMockBuilder('Magento\GiftMessage\Model\Save')
+        $giftMessageSave = $this->getMockBuilder('Magento\Giftmessage\Model\Save')
+            ->setMethods(array('__wakeup'))
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -70,20 +70,32 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected $_coreData;
 
     /**
+     * @var \Magento\Catalog\Helper\Output
+     */
+    protected $_outputHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Wishlist\Helper\Data $wishlistData
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
+     * @param \Magento\Theme\Helper\Layout $layoutHelper
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Rss\Model\RssFactory $rssFactory
+     * @param \Magento\Catalog\Helper\Output $outputHelper
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
@@ -92,15 +104,21 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Math\Random $mathRandom,
-        \Magento\Wishlist\Helper\Data $wishlistData,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Wishlist\Helper\Data $wishlistHelper,
+        \Magento\Catalog\Helper\Product\Compare $compareProduct,
+        \Magento\Theme\Helper\Layout $layoutHelper,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
+        \Magento\Catalog\Helper\Output $outputHelper,
         array $data = array()
     ) {
+        $this->_outputHelper = $outputHelper;
         $this->_coreData = $coreData;
         $this->_wishlistFactory = $wishlistFactory;
         $this->_customerFactory = $customerFactory;
@@ -112,7 +130,11 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
             $taxData,
             $catalogData,
             $mathRandom,
-            $wishlistData,
+            $cartHelper,
+            $wishlistHelper,
+            $compareProduct,
+            $layoutHelper,
+            $imageHelper,
             $customerSession,
             $productFactory,
             $data
@@ -214,9 +236,9 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
                 }
 
                 /** @var $outputHelper \Magento\Catalog\Helper\Output */
-                $outputHelper = $this->helper('Magento\Catalog\Helper\Output');
+                $outputHelper = $this->_outputHelper;
                 $description = '<table><tr><td><a href="' . $productUrl . '"><img src="'
-                    . $this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail')->resize(75, 75)
+                    . $this->_imageHelper->init($product, 'thumbnail')->resize(75, 75)
                     . '" border="0" align="left" height="75" width="75"></a></td>'
                     . '<td style="text-decoration:none;">'
                     . $outputHelper->productAttribute($product, $product->getShortDescription(), 'short_description')

@@ -40,7 +40,7 @@ class Add extends \Magento\Backend\Block\Template
 
     protected function _prepareLayout()
     {
-        $this->addChild('save_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Save Attribute Set'),
             'class' => 'save',
             'data_attribute' => array(
@@ -49,7 +49,7 @@ class Add extends \Magento\Backend\Block\Template
                 ),
             ),
         ));
-        $this->addChild('back_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Back'),
             'onclick'   => 'setLocation(\''.$this->getUrl('catalog/*/').'\')',
             'class' => 'back'

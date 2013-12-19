@@ -51,14 +51,14 @@ class File extends \Magento\Core\Model\Config\Value
     protected $_filesystem;
 
     /**
+     * @var \Magento\Filesystem\Directory\WriteInterface
+     */
+    protected $_mediaDirectory;
+
+    /**
      * @var \Magento\Core\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
-
-    /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dir;
 
     /**
      * @param \Magento\Core\Model\Context $context
@@ -68,7 +68,6 @@ class File extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\App\Dir $dir
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -81,7 +80,6 @@ class File extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
         \Magento\Filesystem $filesystem,
-        \Magento\App\Dir $dir,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -89,7 +87,7 @@ class File extends \Magento\Core\Model\Config\Value
         $this->_uploaderFactory = $uploaderFactory;
         $this->_requestData = $requestData;
         $this->_filesystem = $filesystem;
-        $this->_dir = $dir;
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
@@ -149,8 +147,11 @@ class File extends \Magento\Core\Model\Config\Value
      */
     public function validateMaxSize($filePath)
     {
-        if ($this->_maxFileSize > 0
-            && $this->_filesystem->getFileSize($filePath, dirname($filePath)) > ($this->_maxFileSize * 1024)) {
+        $directory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::SYS_TMP);
+        if (
+            $this->_maxFileSize > 0 &&
+            $directory->stat($directory->getRelativePath($filePath))['size'] > ($this->_maxFileSize * 1024)
+        ) {
             throw new \Magento\Core\Exception(
                 __('The file you\'re uploading exceeds the server size limit of %1 kilobytes.', $this->_maxFileSize)
             );
@@ -195,26 +196,13 @@ class File extends \Magento\Core\Model\Config\Value
             }
 
             if (array_key_exists('config', $fieldConfig['upload_dir'])) {
-                $uploadRoot = $this->_getUploadRoot($fieldConfig['upload_dir']['config']);
-                $uploadDir = $uploadRoot . '/' . $uploadDir;
+                $uploadDir = $this->_mediaDirectory->getAbsolutePath($uploadDir);
             }
         } else {
             $uploadDir = (string) $fieldConfig['upload_dir'];
         }
 
         return $uploadDir;
-    }
-
-    /**
-     * Return the root part of directory path for uploading
-     *
-     * @var string
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function _getUploadRoot($token)
-    {
-        return $this->_dir->getDir(\Magento\App\Dir::MEDIA);
     }
 
     /**

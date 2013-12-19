@@ -80,13 +80,13 @@ class Account extends \Magento\Backend\App\Action
         try {
             $user->save();
             $user->sendPasswordResetNotificationEmail();
-            $this->_getSession()->addSuccess(
+            $this->messageManager->addSuccess(
                 __('The account has been saved.')
             );
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addMessages($e->getMessages());
+            $this->messageManager->addMessages($e->getMessages());
         } catch (\Exception $e) {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('An error occurred while saving account.')
             );
         }

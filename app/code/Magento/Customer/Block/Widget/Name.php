@@ -28,6 +28,29 @@ namespace Magento\Customer\Block\Widget;
 
 class Name extends \Magento\Customer\Block\Widget\AbstractWidget
 {
+    /**
+     * @var \Magento\Customer\Helper\Data
+     */
+    protected $_customerHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Customer\Helper\Data $customerHelper,
+        array $data = array()
+    ) {
+        $this->_customerHelper = $customerHelper;
+        parent::__construct($context, $eavConfig, $addressHelper, $data);
+    }
+
     public function _construct()
     {
         parent::_construct();
@@ -74,7 +97,7 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function getPrefixOptions()
     {
-        $prefixOptions = $this->helper('Magento\Customer\Helper\Data')->getNamePrefixOptions();
+        $prefixOptions = $this->_customerHelper->getNamePrefixOptions();
 
         if ($this->getObject() && !empty($prefixOptions)) {
             $oldPrefix = $this->escapeHtml(trim($this->getObject()->getPrefix()));
@@ -130,7 +153,7 @@ class Name extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function getSuffixOptions()
     {
-        $suffixOptions = $this->helper('Magento\Customer\Helper\Data')->getNameSuffixOptions();
+        $suffixOptions = $this->_customerHelper->getNameSuffixOptions();
         if ($this->getObject() && !empty($suffixOptions)) {
             $oldSuffix = $this->escapeHtml(trim($this->getObject()->getSuffix()));
             $suffixOptions[$oldSuffix] = $oldSuffix;

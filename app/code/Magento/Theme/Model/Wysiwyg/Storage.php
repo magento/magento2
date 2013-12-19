@@ -62,11 +62,6 @@ class Storage
     const DIRECTORY_NAME_REGEXP = '/^[a-z0-9\-\_]+$/si';
 
     /**
-     * @var \Magento\Filesystem
-     */
-    protected $_filesystem;
-
-    /**
      * Storage helper
      *
      * @var \Magento\Theme\Helper\Storage
@@ -84,6 +79,11 @@ class Storage
     protected $_imageFactory;
 
     /**
+     * @var \Magento\Filesystem\Directory\Write
+     */
+    protected $mediaWriteDirectory;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Filesystem $filesystem
@@ -97,8 +97,7 @@ class Storage
         \Magento\ObjectManager $objectManager,
         \Magento\Image\AdapterFactory $imageFactory
     ) {
-        $this->_filesystem = $filesystem;
-        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
         $this->_helper = $helper;
         $this->_objectManager = $objectManager;
         $this->_imageFactory = $imageFactory;
@@ -125,7 +124,7 @@ class Storage
         }
 
         $this->_createThumbnail(
-            $targetPath . \Magento\Filesystem::DIRECTORY_SEPARATOR . $uploader->getUploadedFileName()
+            $targetPath . '/' . $uploader->getUploadedFileName()
         );
 
         $result['cookie'] = array(
@@ -147,27 +146,27 @@ class Storage
      */
     public function _createThumbnail($source)
     {
-        if (self::TYPE_IMAGE != $this->_helper->getStorageType() || !$this->_filesystem->isFile($source)
-            || !$this->_filesystem->isReadable($source)
+        if (self::TYPE_IMAGE != $this->_helper->getStorageType() || !$this->mediaWriteDirectory->isFile($source)
+            || !$this->mediaWriteDirectory->isReadable($source)
         ) {
             return false;
         }
         $thumbnailDir = $this->_helper->getThumbnailDirectory($source);
         $thumbnailPath =
-            $thumbnailDir . \Magento\Filesystem::DIRECTORY_SEPARATOR . pathinfo($source, PATHINFO_BASENAME);
+            $thumbnailDir . '/' . pathinfo($source, PATHINFO_BASENAME);
         try {
-            $this->_filesystem->ensureDirectoryExists($thumbnailDir);
+            $this->mediaWriteDirectory->isExist($thumbnailDir);
             $image = $this->_imageFactory->create();
-            $image->open($source);
+            $image->open($this->mediaWriteDirectory->getAbsolutePath($source));
             $image->keepAspectRatio(true);
             $image->resize(self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT);
-            $image->save($thumbnailPath);
+            $image->save($this->mediaWriteDirectory->getAbsolutePath($thumbnailPath));
         } catch (\Magento\Filesystem\FilesystemException $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             return false;
         }
 
-        if ($this->_filesystem->isFile($thumbnailPath)) {
+        if ($this->mediaWriteDirectory->isFile($thumbnailPath)) {
             return $thumbnailPath;
         }
         return false;
@@ -188,17 +187,17 @@ class Storage
                 __('Use only standard alphanumeric, dashes and underscores.')
             );
         }
-        if (!$this->_filesystem->isWritable($path)) {
+        if (!$this->mediaWriteDirectory->isWritable($path)) {
             $path = $this->_helper->getStorageRoot();
         }
 
-        $newPath = $path . \Magento\Filesystem::DIRECTORY_SEPARATOR . $name;
+        $newPath = $path . '/' . $name;
 
-        if ($this->_filesystem->has($newPath)) {
+        if ($this->mediaWriteDirectory->isExist($newPath)) {
             throw new \Magento\Core\Exception(__('We found a directory with the same name.'));
         }
 
-        $this->_filesystem->ensureDirectoryExists($newPath);
+        $this->mediaWriteDirectory->create($newPath);
 
         $result = array(
             'name'       => $name,
@@ -219,18 +218,16 @@ class Storage
     public function deleteFile($file)
     {
         $file = $this->_helper->urlDecode($file);
-        $path = $this->_helper->getSession()->getStoragePath();
+        $path = $this->mediaWriteDirectory->getRelativePath($this->_helper->getSession()->getStoragePath());
 
-        $filePath = $this->_filesystem->normalizePath($path . '/' . $file);
-        $thumbnailPath = $this->_helper->getThumbnailDirectory($filePath)
-            . \Magento\Filesystem::DIRECTORY_SEPARATOR
-            . $file;
+        $filePath = $this->mediaWriteDirectory->getRelativePath($path . '/' . $file);
+        $thumbnailPath = $this->_helper->getThumbnailDirectory($filePath) . '/' . $file;
 
-        if ($this->_filesystem->isPathInDirectory($filePath, $path)
-            && $this->_filesystem->isPathInDirectory($filePath, $this->_helper->getStorageRoot())
+        if (0 === strpos($filePath, $path)
+            && 0 === strpos($filePath, $this->_helper->getStorageRoot())
         ) {
-            $this->_filesystem->delete($filePath);
-            $this->_filesystem->delete($thumbnailPath);
+            $this->mediaWriteDirectory->delete($filePath);
+            $this->mediaWriteDirectory->delete($thumbnailPath);
         }
         return $this;
     }
@@ -244,14 +241,13 @@ class Storage
      */
     public function getDirsCollection($currentPath)
     {
-        if (!$this->_filesystem->has($currentPath)) {
+        if (!$this->mediaWriteDirectory->isExist($currentPath)) {
             throw new \Magento\Core\Exception(__('We cannot find a directory with this name.'));
         }
-
-        $paths = $this->_filesystem->searchKeys($currentPath, '*');
+        $paths = $this->mediaWriteDirectory->search('#.*#', $currentPath);
         $directories = array();
         foreach ($paths as $path) {
-            if ($this->_filesystem->isDirectory($path)) {
+            if ($this->mediaWriteDirectory->isDirectory($path)) {
                 $directories[] = $path;
             }
         }
@@ -265,12 +261,12 @@ class Storage
      */
     public function getFilesCollection()
     {
-        $paths = $this->_filesystem->searchKeys($this->_helper->getCurrentPath(), '*');
+        $paths = $this->mediaWriteDirectory->search('#.*#', $this->_helper->getCurrentPath());
         $files = array();
         $requestParams = $this->_helper->getRequestParams();
         $storageType = $this->_helper->getStorageType();
         foreach ($paths as $path) {
-            if (!$this->_filesystem->isFile($path)) {
+            if (!$this->mediaWriteDirectory->isFile($path)) {
                 continue;
             }
             $fileName = pathinfo($path, PATHINFO_BASENAME);
@@ -321,13 +317,13 @@ class Storage
      */
     public function deleteDirectory($path)
     {
-        $rootCmp = rtrim($this->_helper->getStorageRoot(), \Magento\Filesystem::DIRECTORY_SEPARATOR);
-        $pathCmp = rtrim($path, \Magento\Filesystem::DIRECTORY_SEPARATOR);
+        $rootCmp = rtrim($this->_helper->getStorageRoot(), '/');
+        $pathCmp = rtrim($path, '/');
 
         if ($rootCmp == $pathCmp) {
             throw new \Magento\Core\Exception(__('We cannot delete root directory %1.', $path));
         }
 
-        return $this->_filesystem->delete($path);
+        return $this->mediaWriteDirectory->delete($path);
     }
 }

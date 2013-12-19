@@ -54,11 +54,17 @@ class Console implements \Magento\AppInterface
     protected $_objectManager;
 
     /**
+     * @var \Magento\Filesystem\Directory\Read
+     */
+    protected $rootDirectory;
+
+    /**
      * @param \Magento\Install\Model\Installer\ConsoleFactory $installerFactory
      * @param Output $output
      * @param \Magento\App\State $state
      * @param \Magento\App\ObjectManager\ConfigLoader $loader
      * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Filesystem $filesystem
      * @param array $arguments
      */
     public function __construct(
@@ -67,8 +73,10 @@ class Console implements \Magento\AppInterface
         \Magento\App\State $state,
         \Magento\App\ObjectManager\ConfigLoader $loader,
         \Magento\ObjectManager $objectManager,
+        \Magento\Filesystem $filesystem,
         array $arguments = array()
     ) {
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
         $this->_loader = $loader;
         $this->_state  = $state;
         $this->_installerFactory = $installerFactory;
@@ -85,13 +93,18 @@ class Console implements \Magento\AppInterface
      */
     protected function _buildInitArguments(array $args)
     {
+        $directories = array();
         if (!empty($args[\Magento\Install\Model\Installer\Console::OPTION_URIS])) {
-            $args[\Magento\App\Dir::PARAM_APP_URIS] =
-                unserialize(base64_decode($args[\Magento\Install\Model\Installer\Console::OPTION_URIS]));
+            $uris = unserialize(base64_decode($args[\Magento\Install\Model\Installer\Console::OPTION_URIS]));
+            foreach ($uris as $code => $uri) {
+                $args[\Magento\Filesystem::PARAM_APP_DIRS][$code]['uri'] = $uri;
+            }
         }
         if (!empty($args[\Magento\Install\Model\Installer\Console::OPTION_DIRS])) {
-            $args[\Magento\App\Dir::PARAM_APP_DIRS] =
-                unserialize(base64_decode($args[\Magento\Install\Model\Installer\Console::OPTION_DIRS]));
+            $dirs = unserialize(base64_decode($args[\Magento\Install\Model\Installer\Console::OPTION_DIRS]));
+            foreach ($dirs as $code => $dir) {
+                $args[\Magento\Filesystem::PARAM_APP_DIRS][$code]['path'] = $dir;
+            }
         }
         return $args;
     }
@@ -103,7 +116,9 @@ class Console implements \Magento\AppInterface
      */
     protected function _handleInstall(\Magento\Install\Model\Installer\Console $installer)
     {
-        if (isset($this->_arguments['config']) && file_exists($this->_arguments['config'])) {
+        if (isset($this->_arguments['config'])
+            && $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($this->_arguments['config']))
+        ) {
             $config = (array) include($this->_arguments['config']);
             $this->_arguments = array_merge((array)$config, $this->_arguments);
         }
@@ -115,8 +130,7 @@ class Console implements \Magento\AppInterface
         }
         if (!$installer->hasErrors()) {
             if ($isUninstallMode) {
-                $msg = $result ? 'Uninstalled successfully'
-                    : 'Ignoring attempt to uninstall non-installed application';
+                $msg = $result ? 'Uninstalled successfully' : 'Ignoring attempt to uninstall non-installed application';
             } else {
                 $msg = 'Installed successfully' . ($result ? ' (encryption key "' . $result . '")' : '');
             }
@@ -139,11 +153,11 @@ class Console implements \Magento\AppInterface
         $installer = $this->_installerFactory->create(array('installArgs' => $this->_arguments));
         if (isset($this->_arguments['show_locales'])) {
             $this->_output->export($installer->getAvailableLocales());
-        } else if (isset($this->_arguments['show_currencies'])) {
+        } elseif (isset($this->_arguments['show_currencies'])) {
             $this->_output->export($installer->getAvailableCurrencies());
-        } else if (isset($this->_arguments['show_timezones'])) {
+        } elseif (isset($this->_arguments['show_timezones'])) {
             $this->_output->export($installer->getAvailableTimezones());
-        } else if (isset($this->_arguments['show_install_options'])) {
+        } elseif (isset($this->_arguments['show_install_options'])) {
             $this->_output->export($installer->getAvailableInstallOptions());
         } else {
             $this->_handleInstall($installer);

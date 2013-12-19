@@ -52,7 +52,7 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->_fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
+        $this->_fixtureDir = __DIR__ . '/_files/';
     }
 
     protected function setUp()

@@ -198,7 +198,9 @@ class Js extends \Magento\App\Helper\AbstractHelper
         //various files
         $this->_addTranslation('Allow', __('Allow'));
         $this->_addTranslation('Activate', __('Activate'));
+        $this->_addTranslation('Reauthorize', __('Reauthorize'));
         $this->_addTranslation('Cancel', __('Cancel'));
+        $this->_addTranslation('Done', __('Done'));
         $this->_addTranslation('Save', __('Save'));
         $this->_addTranslation('File extension not known or unsupported type.', __('File extension not known or unsupported type.'));
         $this->_addTranslation('Configure Product', __('Configure Product'));
@@ -280,17 +282,17 @@ class Js extends \Magento\App\Helper\AbstractHelper
 
     /**
      * Adds some translated text to the translated data array as long as the key and text don't match.
-     * 
+     *
      * There is no point in having translated text added if the key is already representing the translated text.
-     * 
+     *
      * @param $key
      * @param $translatedText
      */
-    protected function _addTranslation($key, $translatedText) 
+    protected function _addTranslation($key, $translatedText)
     {
         if ($key !== $translatedText) {
             $this->_translateData[$key] = $translatedText;
         }
     }
-    
+
 }

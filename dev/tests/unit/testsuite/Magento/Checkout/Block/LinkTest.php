@@ -61,34 +61,22 @@ class LinkTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml($canOnepageCheckout, $isOutputEnabled)
     {
-        $helper = $this->getMockBuilder('Magento\Customer\Helper\Data')
+        $helper = $this->getMockBuilder('Magento\Checkout\Helper\Data')
             ->disableOriginalConstructor()
             ->setMethods(array('canOnepageCheckout', 'isModuleOutputEnabled'))
             ->getMock();
-
-        $helperFactory = $this->getMockBuilder('Magento\App\Helper\HelperFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(array('get'))
-            ->getMock();
-        $helperFactory->expects($this->any())->method('get')->will($this->returnValue($helper));
 
         $moduleManager = $this->getMockBuilder('Magento\Module\Manager')
             ->disableOriginalConstructor()
             ->setMethods(array('isOutputEnabled'))
             ->getMock();
 
-        /** @var  \Magento\View\Element\Template\Context $context */
-        $context = $this->_objectManagerHelper->getObject(
-            'Magento\View\Element\Template\Context',
-            array('helperFactory' => $helperFactory)
-        );
-
         /** @var \Magento\Checkout\Block\Link $block */
         $block = $this->_objectManagerHelper->getObject(
             'Magento\Checkout\Block\Link',
             array(
-                'context' => $context,
-                'moduleManager' => $moduleManager
+                'moduleManager' => $moduleManager,
+                'checkoutHelper' => $helper,
             )
         );
         $helper->expects($this->any())->method('canOnepageCheckout')->will($this->returnValue($canOnepageCheckout));

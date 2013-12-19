@@ -31,7 +31,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-class Inventory extends \Magento\Adminhtml\Block\Widget
+class Inventory extends \Magento\Backend\Block\Widget
 {
     protected $_template = 'catalog/product/tab/inventory.phtml';
 

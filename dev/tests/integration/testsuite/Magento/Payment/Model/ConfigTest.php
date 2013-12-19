@@ -45,8 +45,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $fileList = array(
-            __DIR__ . '/_files/payment.xml',
-            __DIR__ . '/_files/payment2.xml',
+            file_get_contents(__DIR__ . '/_files/payment.xml'),
+            file_get_contents(__DIR__ . '/_files/payment2.xml')
         );
         $fileResolverMock->expects($this->any())
             ->method('get')

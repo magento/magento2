@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Recurring\Profile\View;
 
-class Getawayinfo extends \Magento\Adminhtml\Block\Widget
+class Getawayinfo extends \Magento\Backend\Block\Widget
 {
     /**
      * Core registry

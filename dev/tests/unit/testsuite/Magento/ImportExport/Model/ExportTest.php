@@ -76,7 +76,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_exportFileExtension));
 
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $dir = $this->getMock('Magento\App\Dir', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $adapterFactory = $this->getMock('Magento\Core\Model\Log\AdapterFactory', array(), array(), '', false);
         $entityFactory = $this->getMock(
             'Magento\ImportExport\Model\Export\Entity\Factory', array(), array(), '', false);;
@@ -86,7 +86,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $mockModelExport = $this->getMock(
             'Magento\ImportExport\Model\Export',
             array('getEntityAdapter', '_getEntityAdapter', '_getWriter'),
-            array($logger, $dir, $adapterFactory, $this->_exportConfigMock, $entityFactory, $exportAdapterFac)
+            array($logger, $filesystem, $adapterFactory, $this->_exportConfigMock, $entityFactory, $exportAdapterFac)
         );
         $mockModelExport->expects($this->any())
             ->method('getEntityAdapter')

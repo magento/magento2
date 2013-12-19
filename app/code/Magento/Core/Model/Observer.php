@@ -118,10 +118,9 @@ class Observer
      */
     public function themeRegistration(\Magento\Event\Observer $observer)
     {
-        $baseDir = $observer->getEvent()->getBaseDir();
         $pathPattern = $observer->getEvent()->getPathPattern();
         try {
-            $this->_registration->register($baseDir, $pathPattern);
+            $this->_registration->register($pathPattern);
         } catch (\Magento\Core\Exception $e) {
             $this->_logger->logException($e);
         }

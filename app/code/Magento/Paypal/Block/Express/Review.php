@@ -55,6 +55,25 @@ class Review extends \Magento\View\Element\Template
     protected $_paypalActionPrefix = 'paypal';
 
     /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $_taxHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Tax\Helper\Data $taxHelper,
+        array $data = array()
+    ) {
+        $this->_taxHelper = $taxHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Quote object setter
      *
      * @param \Magento\Sales\Model\Quote $quote
@@ -143,10 +162,10 @@ class Review extends \Magento\View\Element\Template
             $price = $rate->getErrorMessage();
         } else {
             $price = $this->_getShippingPrice($rate->getPrice(),
-                $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax());
+                $this->_taxHelper->displayShippingPriceIncludingTax());
 
             $incl = $this->_getShippingPrice($rate->getPrice(), true);
-            if (($incl != $price) && $this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices()) {
+            if (($incl != $price) && $this->_taxHelper->displayShippingBothPrices()) {
                 $renderedInclTax = sprintf(
                     $inclTaxFormat,
                     __('Incl. Tax'),
@@ -186,7 +205,7 @@ class Review extends \Magento\View\Element\Template
     protected function _getShippingPrice($price, $isInclTax)
     {
         return $this->_formatPrice(
-            $this->helper('Magento\Tax\Helper\Data')->getShippingPrice(
+            $this->_taxHelper->getShippingPrice(
                 $price,
                 $isInclTax,
                 $this->_address

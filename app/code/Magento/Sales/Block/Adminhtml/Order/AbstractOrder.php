@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
-class AbstractOrder extends \Magento\Adminhtml\Block\Widget
+class AbstractOrder extends \Magento\Backend\Block\Widget
 {
     /**
      * Core registry
@@ -43,15 +43,23 @@ class AbstractOrder extends \Magento\Adminhtml\Block\Widget
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Sales\Helper\Admin
+     */
+    protected $_adminHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Sales\Helper\Admin $adminHelper,
         array $data = array()
     ) {
+        $this->_adminHelper = $adminHelper;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -86,12 +94,12 @@ class AbstractOrder extends \Magento\Adminhtml\Block\Widget
 
     public function displayPriceAttribute($code, $strong = false, $separator = '<br/>')
     {
-        return $this->helper('Magento\Sales\Helper\Admin')->displayPriceAttribute($this->getPriceDataObject(), $code, $strong, $separator);
+        return $this->_adminHelper->displayPriceAttribute($this->getPriceDataObject(), $code, $strong, $separator);
     }
 
     public function displayPrices($basePrice, $price, $strong = false, $separator = '<br/>')
     {
-        return $this->helper('Magento\Sales\Helper\Admin')->displayPrices($this->getPriceDataObject(), $basePrice, $price, $strong, $separator);
+        return $this->_adminHelper->displayPrices($this->getPriceDataObject(), $basePrice, $price, $strong, $separator);
     }
 
     /**

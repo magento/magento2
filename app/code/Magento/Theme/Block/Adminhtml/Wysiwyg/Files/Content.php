@@ -34,6 +34,33 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
 class Content extends \Magento\Backend\Block\Widget\Container
 {
     /**
+     * @var \Magento\Theme\Helper\Storage
+     */
+    protected $_storageHelper;
+
+    /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Theme\Helper\Storage $storageHelper
+     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Theme\Helper\Storage $storageHelper,
+        \Magento\Core\Helper\Data $coreHelper,
+        array $data = array()
+    ) {
+        $this->_coreHelper = $coreHelper;
+        $this->_storageHelper = $storageHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Block construction
      */
     protected function _construct()
@@ -81,7 +108,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
     public function getContentsUrl()
     {
         return $this->getUrl('adminhtml/*/contents', array('type' => $this->getRequest()->getParam('type'))
-            + $this->helper('Magento\Theme\Helper\Storage')->getRequestParams());
+            + $this->_storageHelper->getRequestParams());
     }
 
     /**
@@ -107,7 +134,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
             'showBreadcrumbs' => true
         ));
 
-        return $this->helper('Magento\Core\Helper\Data')->jsonEncode($setupObject);
+        return $this->_coreHelper->jsonEncode($setupObject);
     }
 
     /**
@@ -118,7 +145,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
     public function getNewfolderUrl()
     {
         return $this->getUrl(
-            'adminhtml/*/newFolder', $this->helper('Magento\Theme\Helper\Storage')->getRequestParams()
+            'adminhtml/*/newFolder', $this->_storageHelper->getRequestParams()
         );
     }
 
@@ -130,7 +157,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
     protected function getDeletefolderUrl()
     {
         return $this->getUrl(
-            'adminhtml/*/deleteFolder', $this->helper('Magento\Theme\Helper\Storage')->getRequestParams()
+            'adminhtml/*/deleteFolder', $this->_storageHelper->getRequestParams()
         );
     }
 
@@ -142,7 +169,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
     public function getDeleteFilesUrl()
     {
         return $this->getUrl(
-            'adminhtml/*/deleteFiles', $this->helper('Magento\Theme\Helper\Storage')->getRequestParams()
+            'adminhtml/*/deleteFiles', $this->_storageHelper->getRequestParams()
         );
     }
 
@@ -153,7 +180,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getOnInsertUrl()
     {
-        return $this->getUrl('adminhtml/*/onInsert', $this->helper('Magento\Theme\Helper\Storage')->getRequestParams());
+        return $this->getUrl('adminhtml/*/onInsert', $this->_storageHelper->getRequestParams());
     }
 
     /**

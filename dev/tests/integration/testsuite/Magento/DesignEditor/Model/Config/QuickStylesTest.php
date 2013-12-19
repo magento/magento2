@@ -50,6 +50,10 @@ class QuickStylesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Filesystem\DirectoryList $directoryList */
+        $directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
+        $path = str_replace($directoryList->getRoot(), '', str_replace('\\', '/', __DIR__) . '/../_files/design');
+        $directoryList->addDirectory(\Magento\Filesystem::THEMES, array('path' => ltrim($path, '/')));
         $this->_design = $objectManager->get('Magento\View\DesignInterface');
         $objectManager->get('Magento\App\State')->setAreaCode(\Magento\View\DesignInterface::DEFAULT_AREA);
         $this->_design->setDesignTheme('vendor_test');
@@ -58,7 +62,7 @@ class QuickStylesTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($quickStylesPath);
         $this->_model = $objectManager->create(
             'Magento\DesignEditor\Model\Config\Control\QuickStyles',
-            array('configFiles' => array($quickStylesPath))
+            array('configFiles' => array(file_get_contents($quickStylesPath)))
         );
     }
 

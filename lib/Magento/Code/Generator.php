@@ -57,18 +57,22 @@ class Generator
     );
 
     /**
-     * @param \Magento\Code\Generator\EntityAbstract $generator
+     * @param Generator\EntityAbstract $generator
      * @param \Magento\Autoload\IncludePath $autoloader
-     * @param \Magento\Code\Generator\Io $ioObject
+     * @param Generator\Io $ioObject
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Code\Generator\EntityAbstract $generator = null,
         \Magento\Autoload\IncludePath $autoloader = null,
-        \Magento\Code\Generator\Io $ioObject = null
+        \Magento\Code\Generator\Io $ioObject = null,
+        \Magento\Filesystem $filesystem = null
     ) {
-        $this->_generator  = $generator;
-        $this->_autoloader = $autoloader ? : new \Magento\Autoload\IncludePath();
-        $this->_ioObject   = $ioObject ? : new \Magento\Code\Generator\Io(new \Magento\Io\File(), $this->_autoloader);
+        //todo: remove $filesystem from constructor
+        $this->_generator   = $generator;
+        $this->_autoloader  = $autoloader ? : new \Magento\Autoload\IncludePath();
+        $this->_ioObject    = $ioObject ? : new \Magento\Code\Generator\Io(
+            new \Magento\Filesystem\Driver\File(), $this->_autoloader);
     }
 
     /**

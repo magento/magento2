@@ -53,7 +53,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Magento version
      */
-    const VERSION = '2.0.0.0-dev56';
+    const VERSION = '2.0.0.0-dev57';
 
 
     /**
@@ -425,7 +425,10 @@ class App implements \Magento\Core\Model\AppInterface
         if (session_module_name() == 'files') {
             /** @var \Magento\Filesystem $filesystem */
             $filesystem = $this->_objectManager->create('Magento\Filesystem');
-            $filesystem->delete(session_save_path());
+            $sessionDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::SESSION);
+            foreach ($sessionDirectory->read() as $path) {
+                $sessionDirectory->delete($path);
+            }
         }
         return $this;
     }
@@ -801,7 +804,7 @@ class App implements \Magento\Core\Model\AppInterface
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '56',
+            'number'    => '57',
         );
     }
 }

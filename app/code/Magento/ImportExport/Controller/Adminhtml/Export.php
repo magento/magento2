@@ -95,13 +95,13 @@ class Export extends \Magento\Backend\App\Action
                     $model->getContentType()
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->_objectManager->get('Magento\Logger')->logException($e);
-                $this->_getSession()->addError(__('Please correct the data sent.'));
+                $this->messageManager->addError(__('Please correct the data sent.'));
             }
         } else {
-            $this->_getSession()->addError(__('Please correct the data sent.'));
+            $this->messageManager->addError(__('Please correct the data sent.'));
         }
         return $this->_redirect('adminhtml/*/index');
     }
@@ -146,10 +146,10 @@ class Export extends \Magento\Backend\App\Action
                 $this->_view->renderLayout();
                 return;
             } catch (\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             }
         } else {
-            $this->_getSession()->addError(__('Please correct the data sent.'));
+            $this->messageManager->addError(__('Please correct the data sent.'));
         }
         $this->_redirect('adminhtml/*/index');
     }

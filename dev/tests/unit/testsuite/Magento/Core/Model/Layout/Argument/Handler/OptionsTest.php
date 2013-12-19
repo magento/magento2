@@ -44,7 +44,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        include_once(__DIR__ . DIRECTORY_SEPARATOR . 'TestOptions.php');
+        include_once(__DIR__ . '/TestOptions.php');
 
         $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
@@ -71,7 +71,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     public function parseDataProvider()
     {
         $layout = simplexml_load_file(
-            __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'arguments.xml',
+            __DIR__ . '/_files/arguments.xml',
             'Magento\View\Layout\Element'
         );
         $optionsArguments = $layout->xpath('//argument[@name="testOptions"]');

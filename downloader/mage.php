@@ -24,7 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-define('DS', DIRECTORY_SEPARATOR);
 define('PS', PATH_SEPARATOR);
 define('BP', dirname(__DIR__));
 define('MAGENTO_ROOT', dirname(__DIR__));
@@ -47,18 +46,18 @@ class __cli_Magento_Connect
         $this->setIncludes();
         require_once("Mage/Autoload/Simple.php");
         \Magento\Autoload\Simple::register();
-        chdir(BP . DS . 'downloader' . DS);
+        chdir(BP . '/downloader/');
         return $this;
     }
 
     public function setIncludes()
     {
         if (defined('DEVELOPMENT_MODE')) {
-            $libPath = PS . dirname(BP) . DS . 'lib';
+            $libPath = PS . dirname(BP) . '/lib';
         } else {
-            $libPath = PS . BP . DS . 'downloader' . DS . 'lib';
+            $libPath = PS . BP . '/downloader/lib';
         }
-        $includePath = BP . DS . 'app'
+        $includePath = BP . '/app'
         . $libPath
         . PS . get_include_path();
         set_include_path($includePath);
@@ -124,8 +123,8 @@ class __cli_Magento_Connect
     {
         if(!$this->_sconfig) {
             $this->_sconfig = new \Magento\Connect\Singleconfig(
-                    $this->getConfig()->magento_root . DS .
-                    $this->getConfig()->downloader_path . DS .
+                    $this->getConfig()->magento_root . '/' .
+                    $this->getConfig()->downloader_path . '/' .
                     \Magento\Connect\Singleconfig::DEFAULT_SCONFIG_FILENAME
             );
         }

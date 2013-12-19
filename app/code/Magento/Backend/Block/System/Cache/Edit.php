@@ -33,7 +33,7 @@
  */
 namespace Magento\Backend\Block\System\Cache;
 
-class Edit extends \Magento\Adminhtml\Block\Widget
+class Edit extends \Magento\Backend\Block\Widget
 {
 
     protected $_template = 'Magento_Backend::system/cache/edit.phtml';
@@ -47,7 +47,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
 
     protected function _prepareLayout()
     {
-        $this->addChild('save_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Save Cache Settings'),
             'class' => 'save',
             'data_attribute'  => array(

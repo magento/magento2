@@ -33,7 +33,7 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
-class Instance extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Instance extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Block constructor

@@ -72,10 +72,10 @@ abstract class EntityAbstract
     protected $_classGenerator;
 
     /**
-     * @param string $sourceClassName
-     * @param string $resultClassName
-     * @param \Magento\Code\Generator\Io $ioObject
-     * @param \Magento\Code\Generator\CodeGenerator\CodeGeneratorInterface $classGenerator
+     * @param null $sourceClassName
+     * @param null $resultClassName
+     * @param Io $ioObject
+     * @param CodeGenerator\CodeGeneratorInterface $classGenerator
      * @param \Magento\Autoload\IncludePath $autoLoader
      */
     public function __construct(
@@ -93,7 +93,10 @@ abstract class EntityAbstract
         if ($ioObject) {
             $this->_ioObject = $ioObject;
         } else {
-            $this->_ioObject = new \Magento\Code\Generator\Io(new \Magento\Io\File(), $this->_autoloader);
+            $this->_ioObject = new \Magento\Code\Generator\Io(
+                new \Magento\Filesystem\Driver\File(),
+                $this->_autoloader
+            );
         }
         if ($classGenerator) {
             $this->_classGenerator = $classGenerator;
@@ -257,7 +260,7 @@ abstract class EntityAbstract
             && !in_array($pathParts[2], array('Block', 'Helper', 'Model'))
         ) {
             $controllerPath = preg_replace('/^([0-9A-Za-z]*)_([0-9A-Za-z]*)/', '\\1_\\2_controllers', $sourceClassName);
-            $filePath = stream_resolve_include_path(str_replace('_', DIRECTORY_SEPARATOR, $controllerPath) . '.php');
+            $filePath = stream_resolve_include_path(str_replace('_', '/', $controllerPath) . '.php');
             $isSourceClassValid = !empty($filePath);
         } else {
             $isSourceClassValid =$autoloader::getFile($sourceClassName);

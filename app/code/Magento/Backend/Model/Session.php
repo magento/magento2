@@ -25,22 +25,26 @@
  */
 namespace Magento\Backend\Model;
 
-class Session extends \Magento\Core\Model\Session\AbstractSession
+class Session extends \Magento\Session\SessionManager
 {
     /**
-     * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
-     * @param array $data
+     * @param \Magento\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Session\ValidatorInterface $validator
+     * @param \Magento\Session\StorageInterface $storage
      */
     public function __construct(
-        \Magento\Core\Model\Session\Context $context,
+        \Magento\App\RequestInterface $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
-        array $data = array()
+        \Magento\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Session\ValidatorInterface $validator,
+        \Magento\Session\StorageInterface $storage
     ) {
-        parent::__construct($context, $sidResolver, $sessionConfig, $data);
-        $this->start('adminhtml');
+        parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
+        $this->start();
     }
 
     /**

@@ -75,7 +75,7 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
     {
         $hasDescription = parent::hasDescription($item);
         if ($hasDescription) {
-            return ($item->getDescription() !== $this->_wishlistData->defaultCommentString());
+            return ($item->getDescription() !== $this->_wishlistHelper->defaultCommentString());
         }
         return $hasDescription;
     }

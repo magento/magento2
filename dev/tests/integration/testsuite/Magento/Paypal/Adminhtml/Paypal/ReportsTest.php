@@ -43,7 +43,7 @@ class ReportsTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/paypal_reports/fetch');
         $this->assertSessionMessages(
             $this->equalTo(array("We couldn't fetch reports from 'login@127.0.0.1'.")),
-            \Magento\Message\Factory::ERROR
+            \Magento\Message\MessageInterface::TYPE_ERROR
         );
     }
 }

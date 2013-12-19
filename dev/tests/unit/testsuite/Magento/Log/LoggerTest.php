@@ -23,6 +23,9 @@
  */
 namespace Magento\Log;
 
+use Magento\Filesystem,
+    Magento\Filesystem\Directory\Write;
+
 class LoggerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -40,16 +43,35 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_filesystemMock;
 
+    /**
+     * @var Write | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_directory;
+
     protected function setUp()
     {
-        $this->_filesystemMock = $this->getMock('Magento\Io\File', array(), array(), '', false, false);
-        $dirs = new \Magento\App\Dir(TESTS_TEMP_DIR);
-        $logDir = $dirs->getDir(\Magento\App\Dir::LOG);
+        $logDir = TESTS_TEMP_DIR . '/var/log';
+        $this->_filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+        $this->_filesystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::LOG)
+            ->will($this->returnValue($this->_directory));
+        $this->_directory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue(true));
+        $this->_directory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnArgument(0));
+        $this->_directory->expects($this->any())
+            ->method('getRelativePath')
+            ->will($this->returnValue($logDir));
+
         if (!is_dir($logDir)) {
             mkdir($logDir, 0777, true);
         }
 
-        $this->_model = new \Magento\Logger($dirs, $this->_filesystemMock);
+        $this->_model = new \Magento\Logger($this->_filesystemMock);
         $this->_loggersProperty = new \ReflectionProperty($this->_model, '_loggers');
         $this->_loggersProperty->setAccessible(true);
     }
@@ -101,7 +123,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddLogWithSpecificKey()
     {
-        $this->_filesystemMock->expects($this->once())->method('checkAndCreateFolder');
         $key = uniqid();
         $this->_model->addStreamLog($key);
         $this->assertTrue($this->_model->hasLog($key));

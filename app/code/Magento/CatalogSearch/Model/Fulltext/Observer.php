@@ -71,6 +71,11 @@ class Observer
     protected $_backendSession;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * Construct
      *
      * @param \Magento\Backend\Model\Session $backendSession
@@ -78,19 +83,22 @@ class Observer
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Backend\Model\Url $backendUrl,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Message\ManagerInterface $messageManager
     ) {
         $this->_backendSession = $backendSession;
         $this->_backendUrl = $backendUrl;
         $this->_eavConfig = $eavConfig;
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
         $this->_storeManager = $storeManager;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -173,7 +181,7 @@ class Observer
 
         if ($showNotice) {
             $url = $this->_backendUrl->getUrl('adminhtml/system_cache');
-            $this->_backendSession->addNotice(
+            $this->messageManager->addNotice(
                 __('Attribute setting change related with Search Index. Please run <a href="%1">Rebuild Search Index</a> process.', $url)
             );
         }

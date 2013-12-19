@@ -101,24 +101,15 @@ namespace Magento\Core\Model\Input;
 class Filter implements \Zend_Filter_Interface
 {
     /**
-     * @var \Magento\App\Helper\HelperFactory
-     */
-    protected $_helperFactory;
-
-    /**
      * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\App\Helper\HelperFactory $helperFactory
      * @param \Magento\ObjectManager $objectManager
      */
-    function __construct(
-        \Magento\App\Helper\HelperFactory $helperFactory,
-        \Magento\ObjectManager $objectManager
-    ) {
-        $this->_helperFactory = $helperFactory;
+    public function __construct(\Magento\ObjectManager $objectManager)
+    {
         $this->_objectManager = $objectManager;
     }
 
@@ -301,7 +292,7 @@ class Filter implements \Zend_Filter_Interface
         if (isset($filterData['helper'])) {
             $helper = $filterData['helper'];
             if (is_string($helper)) {
-                $helper = $this->_helperFactory->get($helper);
+                $helper = $this->_objectManager->get($helper);
             } elseif (!($helper instanceof \Magento\App\Helper\AbstractHelper)) {
                 throw new \Exception("Filter '{$helper}' not found");
             }

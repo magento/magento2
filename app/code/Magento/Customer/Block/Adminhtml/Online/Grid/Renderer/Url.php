@@ -34,7 +34,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Online\Grid\Renderer;
 
-class Url extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Url extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders grid column

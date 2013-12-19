@@ -64,13 +64,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $helperImage->expects($this->any())->method('resize')->will($this->returnValue($helperImage));
         $helperImage->expects($this->any())->method('__toString')->will($this->returnValue($url));
 
-        $helperFactory = $this->getMock(
-            'Magento\App\Helper\HelperFactory', array('get'), array(), '', false, false
-        );
-        $helperFactory->expects($this->any())
-            ->method('get')
-            ->with('Magento\Catalog\Helper\Image', array())
-            ->will($this->returnValue($helperImage));
 
         $arguments = array(
             'statusListFactory' => $this->getMock(
@@ -92,7 +85,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             'Magento\Checkout\Block\Cart\Item\Renderer\Configurable',
             array(
                 'viewConfig' => $configManager,
-                'helperFactory' => $helperFactory,
+                'imageHelper' => $helperImage,
             ));
 
         $layout = $configurable->getLayout();

@@ -43,9 +43,16 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_modulesReaderMock = $this->getMockBuilder('Magento\Module\Dir\Reader')
             ->disableOriginalConstructor()
             ->getMock();
+        $directoryMock = $this->getMockBuilder('\Magento\Filesystem\Directory\Read')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $directoryMock->expects($this->any())
+            ->method('readFile')
+            ->will($this->returnValue(file_get_contents($path)));
 
         $this->_configReader = new \Magento\Core\Model\DataService\Config\Reader(
-            array($path),
+            new \Magento\Config\FileIterator($directoryMock, array($path)),
             $this->_modulesReaderMock
         );
     }

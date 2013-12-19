@@ -103,7 +103,7 @@ class Order extends \Magento\Backend\App\Action
         $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($id);
 
         if (!$order->getId()) {
-            $this->_getSession()->addError(__('This order no longer exists.'));
+            $this->messageManager->addError(__('This order no longer exists.'));
             $this->_redirect('sales/*/');
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
@@ -162,11 +162,11 @@ class Order extends \Magento\Backend\App\Action
                     $historyItem->setIsCustomerNotified(1);
                     $historyItem->save();
                 }
-                $this->_getSession()->addSuccess(__('You sent the order email.'));
+                $this->messageManager->addSuccess(__('You sent the order email.'));
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('We couldn\'t send the email order.'));
+                $this->messageManager->addError(__('We couldn\'t send the email order.'));
                 $this->_objectManager->get('Magento\Logger')->logException($e);
             }
         }
@@ -183,13 +183,13 @@ class Order extends \Magento\Backend\App\Action
             try {
                 $order->cancel()
                     ->save();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('You canceled the order.')
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('You have not canceled the item.'));
+                $this->messageManager->addError(__('You have not canceled the item.'));
                 $this->_objectManager->get('Magento\Logger')->logException($e);
             }
             $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
@@ -206,13 +206,13 @@ class Order extends \Magento\Backend\App\Action
             try {
                 $order->hold()
                     ->save();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('You put the order on hold.')
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('You have not put the order on hold.'));
+                $this->messageManager->addError(__('You have not put the order on hold.'));
             }
             $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
         }
@@ -228,13 +228,13 @@ class Order extends \Magento\Backend\App\Action
             try {
                 $order->unhold()
                     ->save();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('You released the order from holding status.')
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('The order was not on hold.'));
+                $this->messageManager->addError(__('The order was not on hold.'));
             }
             $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
         }
@@ -271,11 +271,11 @@ class Order extends \Magento\Backend\App\Action
                     throw new \Exception(sprintf('Action "%s" is not supported.', $action));
             }
             $order->save();
-            $this->_getSession()->addSuccess($message);
+            $this->messageManager->addSuccess($message);
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('We couldn\'t update the payment.'));
+            $this->messageManager->addError(__('We couldn\'t update the payment.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
@@ -395,13 +395,13 @@ class Order extends \Magento\Backend\App\Action
         }
         if ($countNonCancelOrder) {
             if ($countCancelOrder) {
-                $this->_getSession()->addError(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
+                $this->messageManager->addError(__('%1 order(s) cannot be canceled.', $countNonCancelOrder));
             } else {
-                $this->_getSession()->addError(__('You cannot cancel the order(s).'));
+                $this->messageManager->addError(__('You cannot cancel the order(s).'));
             }
         }
         if ($countCancelOrder) {
-            $this->_getSession()->addSuccess(__('We canceled %1 order(s).', $countCancelOrder));
+            $this->messageManager->addSuccess(__('We canceled %1 order(s).', $countCancelOrder));
         }
         $this->_redirect('sales/*/');
     }
@@ -427,13 +427,13 @@ class Order extends \Magento\Backend\App\Action
 
         if ($countNonHoldOrder) {
             if ($countHoldOrder) {
-                $this->_getSession()->addError(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
+                $this->messageManager->addError(__('%1 order(s) were not put on hold.', $countNonHoldOrder));
             } else {
-                $this->_getSession()->addError(__('No order(s) were put on hold.'));
+                $this->messageManager->addError(__('No order(s) were put on hold.'));
             }
         }
         if ($countHoldOrder) {
-            $this->_getSession()->addSuccess(__('You have put %1 order(s) on hold.', $countHoldOrder));
+            $this->messageManager->addSuccess(__('You have put %1 order(s) on hold.', $countHoldOrder));
         }
 
         $this->_redirect('sales/*/');
@@ -460,15 +460,15 @@ class Order extends \Magento\Backend\App\Action
         }
         if ($countNonUnHoldOrder) {
             if ($countUnHoldOrder) {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('%1 order(s) were not released from on hold status.', $countNonUnHoldOrder)
                 );
             } else {
-                $this->_getSession()->addError(__('No order(s) were released from on hold status.'));
+                $this->messageManager->addError(__('No order(s) were released from on hold status.'));
             }
         }
         if ($countUnHoldOrder) {
-            $this->_getSession()->addSuccess(
+            $this->messageManager->addSuccess(
                 __('%1 order(s) have been released from on hold status.', $countUnHoldOrder)
             );
         }
@@ -488,8 +488,7 @@ class Order extends \Magento\Backend\App\Action
      */
     public function massPrintAction()
     {
-        $orderIds = $this->getRequest()->getPost('order_ids');
-        $document = $this->getRequest()->getPost('document');
+
     }
 
     /**
@@ -521,7 +520,7 @@ class Order extends \Magento\Backend\App\Action
                     'application/pdf'
                 );
             } else {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('There are no printable documents related to selected orders.')
                 );
                 $this->_redirect('sales/*/');
@@ -559,7 +558,7 @@ class Order extends \Magento\Backend\App\Action
                     'application/pdf'
                 );
             } else {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('There are no printable documents related to selected orders.')
                 );
                 $this->_redirect('sales/*/');
@@ -597,7 +596,7 @@ class Order extends \Magento\Backend\App\Action
                     'application/pdf'
                 );
             } else {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('There are no printable documents related to selected orders.')
                 );
                 $this->_redirect('sales/*/');
@@ -661,7 +660,7 @@ class Order extends \Magento\Backend\App\Action
                     'application/pdf'
                 );
             } else {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('There are no printable documents related to selected orders.')
                 );
                 $this->_redirect('sales/*/');
@@ -683,11 +682,11 @@ class Order extends \Magento\Backend\App\Action
                 new \Magento\Object() // workaround for backwards compatibility
             );
             $order->save();
-            $this->_getSession()->addSuccess(__('The payment has been voided.'));
+            $this->messageManager->addSuccess(__('The payment has been voided.'));
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('We couldn\'t void the payment.'));
+            $this->messageManager->addError(__('We couldn\'t void the payment.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->_redirect('sales/*/view', array('order_id' => $order->getId()));
@@ -806,13 +805,13 @@ class Order extends \Magento\Backend\App\Action
             $address->addData($data);
             try {
                 $address->save();
-                $this->_getSession()->addSuccess(__('You updated the order address.'));
+                $this->messageManager->addSuccess(__('You updated the order address.'));
                 $this->_redirect('sales/*/view', array('order_id' => $address->getParentId()));
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException(
+                $this->messageManager->addException(
                     $e,
                     __('Something went wrong updating the order address.')
                 );

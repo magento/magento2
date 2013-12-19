@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Widget;
 
-class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
+class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     protected $_selectedProducts = array();
 
@@ -60,6 +60,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Model\Resource\Category $resourceCategory
@@ -69,6 +70,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
         \Magento\Catalog\Model\Resource\Category $resourceCategory,
@@ -79,7 +81,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
         $this->_collectionFactory = $collectionFactory;
         $this->_resourceCategory = $resourceCategory;
         $this->_resourceProduct = $resourceProduct;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     /**
@@ -206,7 +208,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Filter checked/unchecked rows in grid
      *
-     * @param \Magento\Adminhtml\Block\Widget\Grid\Column $column
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser
      */
     protected function _addColumnFilterToCollection($column)
@@ -227,7 +229,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Prepare products collection, defined collection filters (category, product type)
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
@@ -260,7 +262,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Prepare columns for products grid
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {

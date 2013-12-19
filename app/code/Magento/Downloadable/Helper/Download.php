@@ -26,6 +26,8 @@
 
 namespace Magento\Downloadable\Helper;
 
+use Magento\Filesystem;
+
 /**
  * Downloadable Products Download Helper
  */
@@ -79,14 +81,14 @@ class Download extends \Magento\App\Helper\AbstractHelper
      *
      * @var string
      */
-    protected $_contentType     = 'application/octet-stream';
+    protected $_contentType = 'application/octet-stream';
 
     /**
      * File name
      *
      * @var string
      */
-    protected $_fileName        = 'download';
+    protected $_fileName = 'download';
 
     /**
      * Core file storage database
@@ -117,9 +119,9 @@ class Download extends \Magento\App\Helper\AbstractHelper
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Core\Model\App
      */
-    protected $_dirModel;
+    protected $_app;
 
     /**
      * @var \Magento\Filesystem
@@ -127,12 +129,17 @@ class Download extends \Magento\App\Helper\AbstractHelper
     protected $_filesystem;
 
     /**
+     * Working Directory (Could be MEDIA or HTTP).
+     * @var \Magento\Filesystem\Directory\Read
+     */
+    protected $_workingDirectory;
+
+    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\App\Dir $dirModel
      * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
@@ -141,22 +148,22 @@ class Download extends \Magento\App\Helper\AbstractHelper
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\App\Dir $dirModel,
         \Magento\Filesystem $filesystem
     ) {
         $this->_coreData = $coreData;
         $this->_downloadableFile = $downloadableFile;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_dirModel = $dirModel;
+        $this->_app = $context->getApp();
         $this->_filesystem = $filesystem;
+
         parent::__construct($context);
     }
 
     /**
      * Retrieve Resource file handle (socket, file pointer etc)
      *
-     * @return resource
+     * @return \Magento\Filesystem\File\ReadInterface
      * @throws \Magento\Core\Exception|\Exception
      */
     protected function _getHandle()
@@ -167,84 +174,16 @@ class Download extends \Magento\App\Helper\AbstractHelper
 
         if (is_null($this->_handle)) {
             if ($this->_linkType == self::LINK_TYPE_URL) {
-                $port = 80;
-
-                /**
-                 * Validate URL
-                 */
-                $urlProp = parse_url($this->_resourceFile);
-                if (!isset($urlProp['scheme']) || strtolower($urlProp['scheme'] != 'http')) {
-                    throw new \Magento\Core\Exception(__('Please correct the download URL scheme.'));
-                }
-                if (!isset($urlProp['host'])) {
-                    throw new \Magento\Core\Exception(__('Please correct the download URL host.'));
-                }
-                $hostname = $urlProp['host'];
-
-                if (isset($urlProp['port'])) {
-                    $port = (int)$urlProp['port'];
-                }
-
-                $path = '/';
-                if (isset($urlProp['path'])) {
-                    $path = $urlProp['path'];
-                }
-                $query = '';
-                if (isset($urlProp['query'])) {
-                    $query = '?' . $urlProp['query'];
-                }
-
-                try {
-                    $this->_handle = fsockopen($hostname, $port, $errno, $errstr);
-                } catch (\Exception $e) {
-                    throw $e;
-                }
-
-                if ($this->_handle === false) {
-                    throw new \Magento\Core\Exception(
-                        __('Something went wrong connecting to the host. Error#%1 - %2.', $errno, $errstr)
-                    );
-                }
-
-                $headers = 'GET ' . $path . $query . ' HTTP/1.0' . "\r\n"
-                    . 'Host: ' . $hostname . "\r\n"
-                    . 'User-Agent: Magento ver/' . \Magento\Core\Model\App::VERSION . "\r\n"
-                    . 'Connection: close' . "\r\n"
-                    . "\r\n";
-                fwrite($this->_handle, $headers);
-
-                while (!feof($this->_handle)) {
-                    $str = fgets($this->_handle, 1024);
-                    if ($str == "\r\n") {
-                        break;
-                    }
-                    $match = array();
-                    if (preg_match('#^([^:]+): (.*)\s+$#', $str, $match)) {
-                        $k = strtolower($match[1]);
-                        if ($k == 'set-cookie') {
-                            continue;
-                        } else {
-                            $this->_urlHeaders[$k] = trim($match[2]);
-                        }
-                    } elseif (preg_match('#^HTTP/[0-9\.]+ (\d+) (.*)\s$#', $str, $match)) {
-                        $this->_urlHeaders['code'] = $match[1];
-                        $this->_urlHeaders['code-string'] = trim($match[2]);
-                    }
-                }
-
-                if (!isset($this->_urlHeaders['code']) || $this->_urlHeaders['code'] != 200) {
-                    throw new \Magento\Core\Exception(__('Something went wrong while getting the requested content.'));
-                }
+                $this->_workingDirectory = $this->_filesystem->getDirectoryRead(Filesystem::HTTP);
+                $this->_handle = $this->_workingDirectory->openFile($this->_resourceFile);
             } elseif ($this->_linkType == self::LINK_TYPE_FILE) {
-                $this->_handle = new \Magento\Io\File();
-                if (!is_file($this->_resourceFile)) {
-                    $this->_coreFileStorageDb->saveFileToFilesystem($this->_resourceFile);
+                $this->_workingDirectory = $this->_filesystem->getDirectoryRead(Filesystem::MEDIA);
+                $fileExists = $this->_downloadableFile->ensureFileInFilesystem($this->_resourceFile);
+                if ($fileExists) {
+                    $this->_handle = $this->_workingDirectory->openFile($this->_resourceFile, '???');
+                } else {
+                    throw new \Magento\Core\Exception(__('Invalid download link type.'));
                 }
-                $this->_handle->open(array('path' => $this->_dirModel->getDir(\Magento\App\Dir::VAR_DIR)));
-                if (!$this->_handle->fileExists($this->_resourceFile, true)) {
-                    throw new \Magento\Core\Exception(__("We can't find this file."));
-                }
-                $this->_handle->streamOpen($this->_resourceFile, 'r');
             } else {
                 throw new \Magento\Core\Exception(__('Invalid download link type.'));
             }
@@ -257,15 +196,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
      */
     public function getFilesize()
     {
-        $handle = $this->_getHandle();
-        if ($this->_linkType == self::LINK_TYPE_FILE) {
-            return $handle->streamStat('size');
-        } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            if (isset($this->_urlHeaders['content-length'])) {
-                return $this->_urlHeaders['content-length'];
-            }
-        }
-        return null;
+        return $this->_workingDirectory->stat($this->_resourceFile)['size'];
     }
 
     /**
@@ -281,10 +212,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
                 return $this->_downloadableFile->getFileType($this->_resourceFile);
             }
         } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            if (isset($this->_urlHeaders['content-type'])) {
-                $contentType = explode('; ', $this->_urlHeaders['content-type']);
-                return $contentType[0];
-            }
+            return $this->_workingDirectory->stat($this->_resourceFile)['type'];
         }
         return $this->_contentType;
     }
@@ -298,8 +226,9 @@ class Download extends \Magento\App\Helper\AbstractHelper
         if ($this->_linkType == self::LINK_TYPE_FILE) {
             return pathinfo($this->_resourceFile, PATHINFO_BASENAME);
         } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            if (isset($this->_urlHeaders['content-disposition'])) {
-                $contentDisposition = explode('; ', $this->_urlHeaders['content-disposition']);
+            $stat = $this->_workingDirectory->stat($this->_resourceFile);
+            if (isset($stat['disposition'])) {
+                $contentDisposition = explode('; ', $stat['disposition']);
                 if (!empty($contentDisposition[1]) && strpos($contentDisposition[1], 'filename=') !== false) {
                     return substr($contentDisposition[1], 9);
                 }
@@ -323,7 +252,11 @@ class Download extends \Magento\App\Helper\AbstractHelper
     {
         if (self::LINK_TYPE_FILE == $linkType) {
             //check LFI protection
-            $this->_filesystem->checkLfiProtection($resourceFile);
+            if (preg_match('#\.\.[\\\/]#', $resourceFile)) {
+                throw new \InvalidArgumentException(
+                    'Requested file may not include parent directory traversal ("../", "..\\" notation)'
+                );
+            }
         }
 
         $this->_resourceFile    = $resourceFile;
@@ -336,12 +269,12 @@ class Download extends \Magento\App\Helper\AbstractHelper
     {
         $handle = $this->_getHandle();
         if ($this->_linkType == self::LINK_TYPE_FILE) {
-            while (true == ($buffer = $handle->streamRead())) {
+            while (true == ($buffer = $handle->read(1024))) {
                 print $buffer;
             }
         } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            while (!feof($handle)) {
-                print fgets($handle, 1024);
+            while (!$handle->eof()) {
+                print $handle->read(1024);
             }
         }
     }

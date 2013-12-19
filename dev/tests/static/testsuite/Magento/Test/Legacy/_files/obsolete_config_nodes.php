@@ -53,7 +53,7 @@ return array(
     '/config/adminhtml/menu'                   => 'Move them to adminhtml.xml.',
     '/config/adminhtml/acl'                    => 'Move them to adminhtml.xml.',
     '/config/adminhtml/global_search'          =>
-        'This configuration moved to Di configuration of \Magento\Adminhtml\Controller\Index',
+        'This configuration moved to Di configuration of \Magento\Backend\Controller\Index',
     '/config/*[self::global|self::adminhtml|self::frontend]/di' => 'This configuration moved to di.xml file',
     '/config/*[self::global|self::adminhtml|self::frontend]/events' => 'This configuration moved to events.xml file',
     '/config/*[self::global|self::adminhtml|self::frontend]/routers' =>
@@ -64,7 +64,7 @@ return array(
     '/config/global/catalog/product/options' => 'This configuration moved to product_options.xml file',
     '/config/global/catalog/product/media/image_types' =>
         'This configuration moved to Di configuration of '
-        . '\Magento\Adminhtml\Block\Catalog\Product\Frontend\Product\Watermark',
+        . '\Magento\Backend\Block\Catalog\Product\Frontend\Product\Watermark',
     '/config/global/eav_attributes' => 'This configuration moved to eav_attributes.xml file',
     '/config/global/index' => 'This configuration moved to indexers.xml file',
     '/config/global/catalogrule' => 'This configuration moved to Di configuration of \Magento\CatalogRule\Model\Rule',

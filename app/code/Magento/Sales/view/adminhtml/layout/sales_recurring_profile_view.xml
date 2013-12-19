@@ -32,7 +32,7 @@
         </block>
     </referenceContainer>
     <referenceContainer name="left">
-        <block class="Magento\Adminhtml\Block\Widget\Tabs" name="sales.recurring.profile.view.tabs">
+        <block class="Magento\Backend\Block\Widget\Tabs" name="sales.recurring.profile.view.tabs">
             <action method="setDestElementId">
                 <argument name="value" xsi:type="string">sales_recurring_profile_view</argument>
             </action>

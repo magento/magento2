@@ -145,8 +145,7 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
         }
         $map = function ($value) {
             return trim($value) ?
-                \Magento\TestFramework\Utility\Files::init()->getPathToSource() . DIRECTORY_SEPARATOR .
-                str_replace('/', DIRECTORY_SEPARATOR, trim($value)) : '';
+                \Magento\TestFramework\Utility\Files::init()->getPathToSource() . '/' . trim($value) : '';
         };
         return array_filter(array_map($map, $result), 'file_exists');
     }

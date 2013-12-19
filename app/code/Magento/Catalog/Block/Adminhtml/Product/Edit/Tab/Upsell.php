@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-class Upsell extends \Magento\Adminhtml\Block\Widget\Grid
+class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * Core registry
@@ -75,6 +75,7 @@ class Upsell extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\Product\LinkFactory $linkFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -83,10 +84,13 @@ class Upsell extends \Magento\Adminhtml\Block\Widget\Grid
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\Product\LinkFactory $linkFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -103,7 +107,7 @@ class Upsell extends \Magento\Adminhtml\Block\Widget\Grid
         $this->_status = $status;
         $this->_visibility = $visibility;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     /**
@@ -174,7 +178,7 @@ class Upsell extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Prepare collection
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
@@ -198,7 +202,7 @@ class Upsell extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Add columns to grid
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {

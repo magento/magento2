@@ -690,7 +690,10 @@ class Order extends \Magento\Sales\Model\AbstractModel
      */
     public function canCancel()
     {
-        if ($this->canUnhold()) {  // $this->isPaymentReview()
+        if (!$this->_canVoidOrder()) {
+            return false;
+        }
+        if ($this->canUnhold()) {
             return false;
         }
 
@@ -718,15 +721,6 @@ class Order extends \Magento\Sales\Model\AbstractModel
             return false;
         }
 
-        /**
-         * Use only state for availability detect
-         */
-        /*foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToCancel()>0) {
-                return true;
-            }
-        }
-        return false;*/
         return true;
     }
 
@@ -736,14 +730,20 @@ class Order extends \Magento\Sales\Model\AbstractModel
      */
     public function canVoidPayment()
     {
+        return $this->_canVoidOrder() ? $this->getPayment()->canVoid($this->getPayment()) : false;
+    }
+
+    /**
+     * Check whether order could be canceled by states and flags
+     *
+     * @return bool
+     */
+    protected function _canVoidOrder()
+    {
         if ($this->canUnhold() || $this->isPaymentReview()) {
             return false;
         }
-        $state = $this->getState();
-        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
-            return false;
-        }
-        return $this->getPayment()->canVoid(new \Magento\Object);
+        return true;
     }
 
     /**

@@ -74,15 +74,15 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
     protected $_taxData = null;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem\Directory\ReadInterface
      */
-    protected $_coreDir;
+    protected $_rootDirectory;
 
     /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\App\Dir $coreDir
+     * @param \Magento\Filesystem $filesystem,
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -91,13 +91,13 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\App\Dir $coreDir,
+        \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_taxData = $taxData;
-        $this->_coreDir = $coreDir;
+        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -339,7 +339,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
     protected function _setFontRegular($size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_coreDir->getDir(\Magento\App\Dir::ROOT) . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf'
+            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf')
         );
         $this->getPage()->setFont($font, $size);
         return $font;
@@ -354,7 +354,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
     protected function _setFontBold($size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_coreDir->getDir(\Magento\App\Dir::ROOT) . '/lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf'
+            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf')
         );
         $this->getPage()->setFont($font, $size);
         return $font;
@@ -369,7 +369,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
     protected function _setFontItalic($size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_coreDir->getDir(\Magento\App\Dir::ROOT) . '/lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf'
+            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf')
         );
         $this->getPage()->setFont($font, $size);
         return $font;

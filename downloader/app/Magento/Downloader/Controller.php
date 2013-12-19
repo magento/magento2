@@ -384,7 +384,7 @@ final class Controller
             return;
         }
 
-        $target = $this->_mageDir . DS . "var/" . uniqid() . $info['name'];
+        $target = $this->_mageDir . '/var/' . uniqid() . $info['name'];
         $res = move_uploaded_file($info['tmp_name'], $target);
         if(false === $res) {
             echo "Error moving uploaded file";
@@ -552,8 +552,7 @@ final class Controller
      */
     public function getBootstrapPath()
     {
-        $ds = DIRECTORY_SEPARATOR;
-        return $this->getMageDir() . $ds . 'app' . $ds . 'bootstrap.php';
+        return $this->getMageDir() . '/app/bootstrap.php';
     }
 
     /**
@@ -563,8 +562,7 @@ final class Controller
      */
     public function getVarFilename()
     {
-        $ds = DIRECTORY_SEPARATOR;
-        return $this->getMageDir() . $ds . 'lib' . $ds . 'Magento' . $ds . 'Profiler.php';
+        return $this->getMageDir() . '/lib/Magento/Profiler.php';
     }
 
     /**
@@ -575,8 +573,7 @@ final class Controller
      */
     public function filepath($name = '')
     {
-        $ds = DIRECTORY_SEPARATOR;
-        return rtrim($this->getRootDir() . $ds . str_replace('/', $ds, $name), $ds);
+        return rtrim($this->getRootDir() . '/' . $name, '/');
     }
 
     /**
@@ -610,7 +607,7 @@ final class Controller
         } else {
             $class = 'Magento\Downloader\Model\\' . str_replace(' ', '\\', ucwords(str_replace('\\', ' ', $model)));
             if (!class_exists($class, false)) {
-                include_once str_replace('_', DIRECTORY_SEPARATOR, $class).'.php';
+                include_once str_replace('_', '/', $class).'.php';
             }
         }
 
@@ -812,7 +809,7 @@ final class Controller
     public function isWritable()
     {
         if (is_null($this->_writable)) {
-            $this->_writable = is_writable($this->getMageDir() . DIRECTORY_SEPARATOR)
+            $this->_writable = is_writable($this->getMageDir() . '/')
                 && is_writable($this->filepath())
                 && (!file_exists($this->filepath('config.ini') || is_writable($this->filepath('config.ini'))));
         }
@@ -863,7 +860,7 @@ final class Controller
     protected function _getMaintenanceFilePath()
     {
         if (is_null($this->_maintenanceFile)) {
-            $path = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
+            $path = dirname(dirname(__DIR__)) . '/';
             $this->_maintenanceFile = $path . 'maintenance.flag';
         }
         return $this->_maintenanceFile;
@@ -1030,7 +1027,7 @@ final class Controller
                 ->setBackupExtension($this->_getExtensionType($type))
                 ->setTime(time())
                 ->setName($archiveName)
-                ->setBackupsDir(\Mage::getBaseDir('var') . DS . 'backups');
+                ->setBackupsDir(\Mage::getBaseDir('var') . '/backups');
 
             \Magento\App\ObjectManager::getInstance()
                 ->get('Magento\Core\Model\Registry')
@@ -1074,12 +1071,12 @@ final class Controller
             '.git',
             '.svn',
             'maintenance.flag',
-            \Mage::getBaseDir('var') . DS . 'session',
-            \Mage::getBaseDir('var') . DS . 'cache',
-            \Mage::getBaseDir('var') . DS . 'full_page_cache',
-            \Mage::getBaseDir('var') . DS . 'locks',
-            \Mage::getBaseDir('var') . DS . 'log',
-            \Mage::getBaseDir('var') . DS . 'report'
+            \Mage::getBaseDir('var') . '/session',
+            \Mage::getBaseDir('var') . '/cache',
+            \Mage::getBaseDir('var') . '/full_page_cache',
+            \Mage::getBaseDir('var') . '/locks',
+            \Mage::getBaseDir('var') . '/log',
+            \Mage::getBaseDir('var') . '/report'
         );
     }
 

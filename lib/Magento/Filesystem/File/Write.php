@@ -18,24 +18,31 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Filesystem\File;
 
+use Magento\Filesystem\DriverInterface;
 use Magento\Filesystem\FilesystemException;
+use Magento\Webapi\Exception;
 
 class Write extends Read implements WriteInterface
 {
     /**
+     * Constructor
+     *
      * @param string $path
+     * @param DriverInterface $driver
      * @param string $mode
      */
-    public function __construct($path, $mode)
+    public function __construct($path, DriverInterface $driver, $mode)
     {
         $this->mode = $mode;
-        parent::__construct($path);
+        parent::__construct($path, $driver);
     }
 
     /**
@@ -45,9 +52,7 @@ class Write extends Read implements WriteInterface
      */
     protected function assertValid()
     {
-        clearstatcache();
-
-        $fileExists = file_exists($this->path);
+        $fileExists = $this->driver->isExists($this->path);
         if (!$fileExists && preg_match('/r/', $this->mode)) {
             throw new FilesystemException(sprintf('The file "%s" doesn\'t exist', $this->path));
         } elseif ($fileExists && preg_match('/x/', $this->mode)) {
@@ -64,11 +69,15 @@ class Write extends Read implements WriteInterface
      */
     public function write($data)
     {
-        $result = fwrite($this->resource, $data);
-        if ($result === false) {
-            throw new FilesystemException(sprintf('Cannot write to the "%s" file', $this->path));
+        try {
+            return $this->driver->fileWrite($this->resource, $data);
+        } catch (FilesystemException $e) {
+            throw new FilesystemException(
+                sprintf('Cannot write to the "%s" file. %s',
+                    $this->path,
+                    $e->getMessage()
+                ));
         }
-        return $result;
     }
 
     /**
@@ -82,11 +91,15 @@ class Write extends Read implements WriteInterface
      */
     public function writeCsv(array $data, $delimiter = ',', $enclosure = '"')
     {
-        $result = fputcsv($this->resource, $data, $delimiter, $enclosure);
-        if ($result === false) {
-            throw new FilesystemException(sprintf('Cannot write to the "%s" file', $this->path));
+        try {
+            return $this->driver->filePutCsv($this->resource, $data, $delimiter, $enclosure);
+        } catch (FilesystemException $e) {
+            throw new FilesystemException(
+                sprintf('Cannot write to the "%s" file. %s',
+                    $this->path,
+                    $e->getMessage()
+                ));
         }
-        return $result;
     }
 
     /**
@@ -97,23 +110,26 @@ class Write extends Read implements WriteInterface
      */
     public function flush()
     {
-        $result = fflush($this->resource);
-        if ($result === false) {
-            throw new FilesystemException(sprintf('Cannot flush the "%s" file', $this->path));
+        try {
+            return $this->driver->fileFlush($this->resource);
+        } catch (FilesystemException $e) {
+            throw new FilesystemException(
+                sprintf('Cannot flush the "%s" file. %s',
+                    $this->path,
+                    $e->getMessage()
+                ));
         }
-        return $result;
     }
 
     /**
      * Portable advisory file locking
      *
-     * @param bool $exclusive
+     * @param int $lockMode
      * @return bool
      */
-    public function lock($exclusive = true)
+    public function lock($lockMode = LOCK_EX)
     {
-        $lock = $exclusive ? LOCK_EX : LOCK_SH;
-        return flock($this->resource, $lock);
+        return $this->driver->fileLock($this->resource, $lockMode);
     }
 
     /**
@@ -123,21 +139,6 @@ class Write extends Read implements WriteInterface
      */
     public function unlock()
     {
-        return flock($this->resource, LOCK_UN);
-    }
-
-    /**
-     * Closes the file.
-     *
-     * @return bool
-     * @throws FilesystemException
-     */
-    public function close()
-    {
-        $result = fclose($this->resource);
-        if ($result === false) {
-            throw new FilesystemException(sprintf('Cannot close the "%s" file', $this->path));
-        }
-        return $result;
+        return $this->driver->fileUnlock($this->resource);
     }
 }

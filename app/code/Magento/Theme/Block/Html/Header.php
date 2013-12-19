@@ -42,15 +42,23 @@ class Header extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
+     * @var \Magento\Core\Helper\File\Storage\Database
+     */
+    protected $_fileStorageHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Core\Helper\File\Storage\Database $fileStorageHelper,
         array $data = array()
     ) {
+        $this->_fileStorageHelper = $fileStorageHelper;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
     }
@@ -121,12 +129,10 @@ class Header extends \Magento\View\Element\Template
     {
         $folderName = \Magento\Backend\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
         $storeLogoPath = $this->_storeConfig->getConfig('design/header/logo_src');
-        $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\Core\Model\Store::URL_TYPE_MEDIA))
-            . $folderName . '/' . $storeLogoPath;
-        $absolutePath = $this->_dirs->getDir(\Magento\App\Dir::MEDIA) . DIRECTORY_SEPARATOR
-            . $folderName . DIRECTORY_SEPARATOR . $storeLogoPath;
+        $path = $folderName . '/' . $storeLogoPath;
+        $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\Core\Model\Store::URL_TYPE_MEDIA)) . $path;
 
-        if (!is_null($storeLogoPath) && $this->_isFile($absolutePath)) {
+        if (!is_null($storeLogoPath) && $this->_isFile($path)) {
             $url = $logoUrl;
         } else {
             $url = $this->getViewFileUrl('images/logo.gif');
@@ -137,17 +143,15 @@ class Header extends \Magento\View\Element\Template
     /**
      * If DB file storage is on - find there, otherwise - just file_exists
      *
-     * @param string $filename
+     * @param string $filename relative path
      * @return bool
      */
     protected function _isFile($filename)
     {
-        $helper = $this->_helperFactory->get('Magento\Core\Helper\File\Storage\Database');
-
-        if ($helper->checkDbUsage() && !is_file($filename)) {
-            $helper->saveFileToFilesystem($filename);
+        if ($this->_fileStorageHelper->checkDbUsage() && !$this->getMediaDirectory()->isFile($filename)) {
+            $this->_fileStorageHelper->saveFileToFilesystem($filename);
         }
 
-        return is_file($filename);
+        return $this->getMediaDirectory()->isFile($filename);
     }
 }

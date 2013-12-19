@@ -45,8 +45,15 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMockForAbstractClass('Magento\ImportExport\Model\Export\Entity\AbstractEav', array(),
-            '', false, true, true, array('_getExportAttributeCodes', 'getAttributeCollection', 'getAttributeOptions'));
+        $this->_model = $this->getMockForAbstractClass(
+            'Magento\ImportExport\Model\Export\Entity\AbstractEav',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('_getExportAttributeCodes', 'getAttributeCollection', 'getAttributeOptions', '__wakeup')
+        );
 
         $this->_model->expects($this->once())
             ->method('_getExportAttributeCodes')

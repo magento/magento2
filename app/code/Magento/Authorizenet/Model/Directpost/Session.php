@@ -24,33 +24,34 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Authorize.net DirectPost session model.
- *
- * @category   Magento
- * @package    Magento_Authorizenet
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Authorizenet\Model\Directpost;
 
-class Session extends \Magento\Core\Model\Session\AbstractSession
+/**
+ * Authorize.net DirectPost session model
+ */
+class Session extends \Magento\Session\SessionManager
 {
     /**
-     * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
-     * @param null $sessionName
-     * @param array $data
+     * @param \Magento\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Session\ValidatorInterface $validator
+     * @param \Magento\Session\StorageInterface $storage
+     * @param string|null $sessionName
+     * @internal param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Session\Context $context,
+        \Magento\App\RequestInterface $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
-        $sessionName = null,
-        array $data = array()        
+        \Magento\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Session\ValidatorInterface $validator,
+        \Magento\Session\StorageInterface $storage,
+        $sessionName = null
     ) {
-        parent::__construct($context, $sidResolver, $sessionConfig, $data);
-        $this->start('authorizenet_directpost', $sessionName);
+        parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
+        $this->start($sessionName);
     }
 
     /**

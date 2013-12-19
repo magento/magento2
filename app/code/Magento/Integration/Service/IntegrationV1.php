@@ -118,6 +118,15 @@ class IntegrationV1 implements \Magento\Integration\Service\IntegrationV1Interfa
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function findByConsumerId($consumerId)
+    {
+        $integration = $this->_integrationFactory->create()->load($consumerId, 'consumer_id');
+        return $integration;
+    }
+
+    /**
      * Check if an integration exists by the name
      *
      * @param string $name

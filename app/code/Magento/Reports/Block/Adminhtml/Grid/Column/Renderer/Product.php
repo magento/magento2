@@ -35,7 +35,7 @@
 namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
 class Product
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders grid column

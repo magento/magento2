@@ -31,7 +31,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
  */
 class View
     extends \Magento\Backend\Block\Template
-    implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
+    implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\Log\Model\Customer

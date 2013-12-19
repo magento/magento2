@@ -34,8 +34,8 @@
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 class Creditmemos
-    extends \Magento\Adminhtml\Block\Widget\Grid
-    implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
+    extends \Magento\Backend\Block\Widget\Grid\Extended
+    implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry
@@ -57,6 +57,7 @@ class Creditmemos
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory
      * @param \Magento\Sales\Model\Order\Creditmemo $orderCreditmemo
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -65,6 +66,7 @@ class Creditmemos
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory,
         \Magento\Sales\Model\Order\Creditmemo $orderCreditmemo,
         \Magento\Core\Model\Registry $coreRegistry,
@@ -73,7 +75,7 @@ class Creditmemos
         $this->_coreRegistry = $coreRegistry;
         $this->_orderCreditmemo = $orderCreditmemo;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     protected function _construct()

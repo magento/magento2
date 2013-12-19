@@ -24,7 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Rating\Block\Adminhtml\Edit\Tab;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
@@ -39,7 +38,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Session
      *
-     * @var \Magento\Core\Model\Session\AbstractSession
+     * @var \Magento\Session\SessionManagerInterface
      */
     protected $_session;
 
@@ -55,7 +54,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Rating\Model\Rating\OptionFactory $optionFactory
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param array $data
      */
@@ -64,7 +63,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Rating\Model\Rating\OptionFactory $optionFactory,
-        \Magento\Core\Model\Session\AbstractSession $session,
+        \Magento\Session\SessionManagerInterface $session,
         \Magento\Core\Model\System\Store $systemStore,
         array $data = array()
     ) {

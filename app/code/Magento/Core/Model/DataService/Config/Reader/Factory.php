@@ -46,7 +46,7 @@ class Factory
      * @param array $configFiles
      * @return \Magento\Core\Model\DataService\Config\Reader
      */
-    public function createReader(array $configFiles)
+    public function createReader($configFiles)
     {
         return $this->_objectManager->create('Magento\Core\Model\DataService\Config\Reader',
             array('configFiles'  => $configFiles));

@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Centinel\Model;
+
 /**
  * 3D Secure Validation Model
  */
-namespace Magento\Centinel\Model;
-
 class Service extends \Magento\Object
 {
     /**
@@ -85,7 +85,7 @@ class Service extends \Magento\Object
     /**
      * Centinel session
      *
-     * @var \Magento\Core\Model\Session\AbstractSession
+     * @var \Magento\Session\SessionManagerInterface
      */
     protected $_centinelSession;
 
@@ -117,7 +117,7 @@ class Service extends \Magento\Object
      * @param \Magento\Centinel\Model\Config $config
      * @param \Magento\Centinel\Model\Api $api
      * @param \Magento\UrlInterface $url
-     * @param \Magento\Core\Model\Session\AbstractSession $centinelSession
+     * @param \Magento\Session\SessionManagerInterface $centinelSession
      * @param \Magento\Centinel\Model\StateFactory $stateFactory
      * @param \Magento\Data\Form\FormKey $formKey
      * @param string $urlPrefix
@@ -127,7 +127,7 @@ class Service extends \Magento\Object
         \Magento\Centinel\Model\Config $config,
         \Magento\Centinel\Model\Api $api,
         \Magento\UrlInterface $url,
-        \Magento\Core\Model\Session\AbstractSession $centinelSession,
+        \Magento\Session\SessionManagerInterface $centinelSession,
         \Magento\Centinel\Model\StateFactory $stateFactory,
         \Magento\Data\Form\FormKey $formKey,
         $urlPrefix = 'centinel/index/',

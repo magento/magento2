@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Shipment;
 
-class View extends \Magento\Adminhtml\Block\Widget\Form\Container
+class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry

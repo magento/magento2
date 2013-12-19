@@ -118,7 +118,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
      */
     public function refreshRecentAction()
     {
-        return $this->_forward('refreshRecent', 'report_statistics');
+        $this->_forward('refreshRecent', 'report_statistics');
     }
 
     /**
@@ -128,7 +128,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
      */
     public function refreshLifetimeAction()
     {
-        return $this->_forward('refreshLifetime', 'report_statistics');
+        $this->_forward('refreshLifetime', 'report_statistics');
     }
 
     /**
@@ -370,7 +370,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     public function refreshStatisticsAction()
     {
-        return $this->_forward('index', 'report_statistics');
+        $this->_forward('index', 'report_statistics');
     }
 
     protected function _isAllowed()

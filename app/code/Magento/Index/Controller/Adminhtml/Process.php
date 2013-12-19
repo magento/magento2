@@ -112,7 +112,7 @@ class Process extends \Magento\Backend\App\Action
             $this->_view->loadLayout();
             $this->_view->renderLayout();
         } else {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('Cannot initialize the indexer process.')
             );
             $this->_redirect('adminhtml/*/list');
@@ -133,19 +133,19 @@ class Process extends \Magento\Backend\App\Action
             }
             try {
                 $process->save();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('The index has been saved.')
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e,
+                $this->messageManager->addException($e,
                      __('There was a problem with saving process.')
                 );
             }
             $this->_redirect('adminhtml/*/list');
         } else {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('Cannot initialize the indexer process.')
             );
             $this->_redirect('adminhtml/*/list');
@@ -165,18 +165,18 @@ class Process extends \Magento\Backend\App\Action
 
                 $process->reindexEverything();
                 \Magento\Profiler::stop('__INDEX_PROCESS_REINDEX_ALL__');
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('%1 index was rebuilt.', $process->getIndexer()->getName())
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e,
+                $this->messageManager->addException($e,
                      __('There was a problem with reindexing process.')
                 );
             }
         } else {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('Cannot initialize the indexer process.')
             );
         }
@@ -208,7 +208,7 @@ class Process extends \Magento\Backend\App\Action
     {
         $processIds = $this->getRequest()->getParam('process');
         if (empty($processIds) || !is_array($processIds)) {
-            $this->_getSession()->addError(__('Please select Indexes'));
+            $this->messageManager->addError(__('Please select Indexes'));
         } else {
             try {
                 $counter = 0;
@@ -220,13 +220,13 @@ class Process extends \Magento\Backend\App\Action
                         $counter++;
                     }
                 }
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('Total of %1 index(es) have reindexed data.', $counter)
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e, __('Cannot initialize the indexer process.'));
+                $this->messageManager->addException($e, __('Cannot initialize the indexer process.'));
             }
         }
 
@@ -241,7 +241,7 @@ class Process extends \Magento\Backend\App\Action
     {
         $processIds = $this->getRequest()->getParam('process');
         if (empty($processIds) || !is_array($processIds)) {
-            $this->_getSession()->addError(__('Please select Index(es)'));
+            $this->messageManager->addError(__('Please select Index(es)'));
         } else {
             try {
                 $counter = 0;
@@ -254,13 +254,13 @@ class Process extends \Magento\Backend\App\Action
                         $counter++;
                     }
                 }
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('Total of %1 index(es) have changed index mode.', $counter)
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e, __('Cannot initialize the indexer process.'));
+                $this->messageManager->addException($e, __('Cannot initialize the indexer process.'));
             }
         }
 

@@ -29,7 +29,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
-class Address extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Address extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry

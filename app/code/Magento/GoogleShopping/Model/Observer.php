@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Google Shopping Observer
- *
- * @category    Magento
- * @package     Magento_GoogleShopping
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\GoogleShopping\Model;
 
+/**
+ * Google Shopping Observer
+ */
 class Observer
 {
     /**
@@ -43,11 +39,9 @@ class Observer
     protected $_coreStoreConfig;
 
     /**
-     * Admin session
-     *
-     * @var \Magento\Core\Model\Session\AbstractSession
+     * @var \Magento\Message\ManagerInterface
      */
-    protected $_session;
+    protected $messageManager;
 
     /**
      * Admin session
@@ -82,7 +76,7 @@ class Observer
      * @param \Magento\GoogleShopping\Model\MassOperationsFactory $operationsFactory
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Message\ManagerInterface $messageManager
      * @param \Magento\GoogleShopping\Model\Flag $flag
      */
     public function __construct(
@@ -90,14 +84,14 @@ class Observer
         \Magento\GoogleShopping\Model\MassOperationsFactory $operationsFactory,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Session\AbstractSession $session,
+        \Magento\Message\ManagerInterface $messageManager,
         \Magento\GoogleShopping\Model\Flag $flag
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_operationsFactory = $operationsFactory;
         $this->_inboxFactory = $inboxFactory;
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_session = $session;
+        $this->messageManager = $messageManager;
         $this->_flag = $flag;
     }
 
@@ -115,7 +109,7 @@ class Observer
         try {
             $this->_operationsFactory->create()->synchronizeItems($items);
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
-            $this->_session->addError('Cannot update Google Content Item. Google requires CAPTCHA.');
+            $this->messageManager->addError('Cannot update Google Content Item. Google requires CAPTCHA.');
         }
 
         return $this;
@@ -135,7 +129,7 @@ class Observer
         try {
             $this->_operationsFactory->create()->deleteItems($items);
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
-            $this->_session->addError('Cannot delete Google Content Item. Google requires CAPTCHA.');
+            $this->messageManager->addError('Cannot delete Google Content Item. Google requires CAPTCHA.');
         }
 
         return $this;

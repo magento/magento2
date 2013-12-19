@@ -106,7 +106,7 @@ class XmlInterceptorScanner implements ScannerInterface
         if (!class_exists($className)) {
             $className = preg_replace('/[^a-zA-Z0-9_]/', '', $className);
             $className = preg_replace('/^([0-9A-Za-z]*)_([0-9A-Za-z]*)/', '\\1_\\2_controllers', $className);
-            $filePath = stream_resolve_include_path(str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php');
+            $filePath = stream_resolve_include_path(str_replace('_', '/', $className) . '.php');
             if (file_exists($filePath)) {
                 require_once $filePath;
             }

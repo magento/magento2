@@ -51,13 +51,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $dirMap = array(
-            array(\Magento\App\Dir::APP, __DIR__),
-            array(\Magento\App\Dir::THEMES, __DIR__ . '/design'),
-        );
-        $dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false, false);
-        $dirs->expects($this->any())->method('getDir')->will($this->returnValueMap($dirMap));
-
         $this->_viewFileSystem = $this->getMock('\Magento\View\FileSystem', array(), array(), '', false);
 
         $this->_filesystem = $this->getMock('\Magento\Filesystem', array(), array(), '', false);
@@ -77,7 +70,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'enginePool' => $this->_templateEngine,
             'viewFileSystem' => $this->_viewFileSystem,
             'appState' => $appState,
-            'dirs' => $dirs,
             'data' => array('template' => 'template.phtml', 'module_name' => 'Fixture_Module')
             )
         );
@@ -93,25 +85,34 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testFetchView()
     {
         $this->expectOutputString('');
-
+        $directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $directoryMock->expects($this->any())
+            ->method('getRelativePath')
+            ->will($this->returnArgument(0));
         $this->_filesystem
             ->expects($this->once())
-            ->method('isPathInDirectory')
-            ->with('template.phtml', __DIR__)
-            ->will($this->returnValue(true))
-        ;
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($directoryMock)
+        );
         $this->_filesystem
-            ->expects($this->once())->method('isFile')->with('template.phtml')->will($this->returnValue(true));
+            ->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValue('themedir')
+        );
+        $directoryMock->expects($this->once())
+            ->method('isFile')
+            ->with('themedir/template.phtml')
+            ->will($this->returnValue(true)
+        );
 
         $output = '<h1>Template Contents</h1>';
         $vars = array('var1' => 'value1', 'var2' => 'value2');
         $this->_templateEngine
             ->expects($this->once())
             ->method('render')
-            ->with($this->identicalTo($this->_block), 'template.phtml', $vars)
             ->will($this->returnValue($output))
         ;
         $this->_block->assign($vars);
-        $this->assertEquals($output, $this->_block->fetchView('template.phtml'));
+        $this->assertEquals($output, $this->_block->fetchView('themedir/template.phtml'));
     }
 }

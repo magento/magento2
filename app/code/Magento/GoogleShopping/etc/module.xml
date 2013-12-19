@@ -29,7 +29,6 @@
             <module name="Magento_Catalog"/>
         </sequence>
         <depends>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_AdminNotification"/>
             <module name="Magento_Core"/>
             <module name="Magento_Backend"/>

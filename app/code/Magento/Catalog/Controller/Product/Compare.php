@@ -181,7 +181,7 @@ class Compare extends \Magento\App\Action\Action
             if ($product->getId()/* && !$product->isSuper()*/) {
                 $this->_catalogProductCompareList->addProduct($product);
                 $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName());
-                $this->_catalogSession->addSuccess(
+                $this->messageManager->addSuccess(
                     __('You added product %1 to the comparison list.', $productName)
                 );
                 $this->_eventManager->dispatch('catalog_product_compare_add_product', array('product'=>$product));
@@ -223,7 +223,7 @@ class Compare extends \Magento\App\Action\Action
                 if ($item->getId()) {
                     $item->delete();
                     $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName());
-                    $this->_catalogSession->addSuccess(
+                    $this->messageManager->addSuccess(
                         __('You removed product %1 from the comparison list.', $productName)
                     );
                     $this->_eventManager->dispatch('catalog_product_compare_remove_product', array('product' => $item));
@@ -255,12 +255,12 @@ class Compare extends \Magento\App\Action\Action
 
         try {
             $items->clear();
-            $this->_catalogSession->addSuccess(__('You cleared the comparison list.'));
+            $this->messageManager->addSuccess(__('You cleared the comparison list.'));
             $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
         } catch (\Magento\Core\Exception $e) {
-            $this->_catalogSession->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_catalogSession->addException($e, __('Something went wrong  clearing the comparison list.'));
+            $this->messageManager->addException($e, __('Something went wrong  clearing the comparison list.'));
         }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());

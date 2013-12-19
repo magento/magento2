@@ -388,7 +388,7 @@ class Connect extends \Magento\Downloader\Model
         if ('ftp' == $p['deployment_type'] || '1' == $p['inst_protocol']) {
             /*check ftp*/
 
-            $confFile = $configObj->downloader_path.DIRECTORY_SEPARATOR.$configTestFile;
+            $confFile = $configObj->downloader_path . '/' . $configTestFile;
             try {
                 $ftpObj = new \Magento\Connect\Ftp();
                 $ftpObj->connect($p['ftp']);

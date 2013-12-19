@@ -117,7 +117,7 @@ class Download extends \Magento\App\Action\Action
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError(__('Sorry, there was an error getting requested content. Please contact the store owner.'));
+                $this->messageManager->addError(__('Sorry, there was an error getting requested content. Please contact the store owner.'));
             }
         }
         return $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
@@ -147,7 +147,7 @@ class Download extends \Magento\App\Action\Action
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
             } catch (\Magento\Core\Exception $e) {
-                $this->_getCustomerSession()->addError(__('Sorry, there was an error getting requested content. Please contact the store owner.'));
+                $this->messageManager->addError(__('Sorry, there was an error getting requested content. Please contact the store owner.'));
             }
         }
         return $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
@@ -165,7 +165,7 @@ class Download extends \Magento\App\Action\Action
         $linkPurchasedItem = $this->_objectManager->create('Magento\Downloadable\Model\Link\Purchased\Item')
             ->load($id, 'link_hash');
         if (! $linkPurchasedItem->getId() ) {
-            $session->addNotice(__("We can't find the link you requested."));
+            $this->messageManager->addNotice(__("We can't find the link you requested."));
             return $this->_redirect('*/customer/products');
         }
         if (!$this->_objectManager->get('Magento\Downloadable\Helper\Data')->getIsShareable($linkPurchasedItem)) {
@@ -182,7 +182,7 @@ class Download extends \Magento\App\Action\Action
                 } else {
                     $notice = __('Please log in to download your product.');
                 }
-                $session->addNotice($notice);
+                $this->messageManager->addNotice($notice);
                 $session->authenticate($this);
                 $session->setBeforeAuthUrl(
                     $this->_objectManager->create('Magento\Core\Model\Url')->getUrl(
@@ -196,7 +196,7 @@ class Download extends \Magento\App\Action\Action
             $linkPurchased = $this->_objectManager->create('Magento\Downloadable\Model\Link\Purchased')
                 ->load($linkPurchasedItem->getPurchasedId());
             if ($linkPurchased->getCustomerId() != $customerId) {
-                $session->addNotice(__("We can't find the link you requested."));
+                $this->messageManager->addNotice(__("We can't find the link you requested."));
                 return $this->_redirect('*/customer/products');
             }
         }
@@ -230,18 +230,18 @@ class Download extends \Magento\App\Action\Action
                 exit(0);
             }
             catch (\Exception $e) {
-                $session->addError(
+                $this->messageManager->addError(
                     __('Something went wrong while getting the requested content.')
                 );
             }
         } elseif ($status == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_EXPIRED) {
-            $session->addNotice(__('The link has expired.'));
+            $this->messageManager->addNotice(__('The link has expired.'));
         } elseif ($status == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING
             || $status == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PAYMENT_REVIEW
         ) {
-            $session->addNotice(__('The link is not available.'));
+            $this->messageManager->addNotice(__('The link is not available.'));
         } else {
-            $session->addError(
+            $this->messageManager->addError(
                 __('Something went wrong while getting the requested content.')
             );
         }

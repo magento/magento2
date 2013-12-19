@@ -50,17 +50,25 @@ class View extends \Magento\View\Element\Template
     protected $_catalogLayer;
 
     /**
+     * @var \Magento\Catalog\Helper\Category
+     */
+    protected $_categoryHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Catalog\Helper\Category $categoryHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Catalog\Helper\Category $categoryHelper,
         array $data = array()
     ) {
+        $this->_categoryHelper = $categoryHelper;
         $this->_catalogLayer = $catalogLayer;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -88,7 +96,7 @@ class View extends \Magento\View\Element\Template
                 $headBlock->setKeywords($keywords);
             }
             //@todo: move canonical link to separate block
-            if ($this->helper('Magento\Catalog\Helper\Category')->canUseCanonicalTag()
+            if ($this->_categoryHelper->canUseCanonicalTag()
                 && !$headBlock->getChildBlock('magento-page-head-category-canonical-link')
             ) {
                 $headBlock->addChild(

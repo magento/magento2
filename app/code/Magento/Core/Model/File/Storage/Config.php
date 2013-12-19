@@ -23,6 +23,10 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
+use Magento\Filesystem\Directory\WriteInterface as DirectoryWrite,
+    Magento\Filesystem\File\Write,
+    Magento\Filesystem\FilesystemException;
+
 class Config
 {
     /**
@@ -30,33 +34,35 @@ class Config
      *
      * @var string
      */
-    protected $_cacheFile;
+    protected $cacheFilePath;
 
     /**
      * Loaded config
      *
      * @var array
      */
-    protected $_config;
+    protected $config;
 
     /**
      * File stream handler
      *
-     * @var \Magento\Io\File
+     * @var DirectoryWrite
      */
-    protected $_streamFactory;
+    protected $pubDirectory;
 
     /**
      * @param \Magento\Core\Model\File\Storage $storage
-     * @param \Magento\Filesystem\Stream\LocalFactory $streamFactory
+     * @param \Magento\Filesystem $filesystem
      * @param string $cacheFile
      */
     public function __construct(
-        \Magento\Core\Model\File\Storage $storage, \Magento\Filesystem\Stream\LocalFactory $streamFactory, $cacheFile
+        \Magento\Core\Model\File\Storage $storage,
+        \Magento\Filesystem $filesystem,
+        $cacheFile
     ) {
-        $this->_config = $storage->getScriptConfig();
-        $this->_streamFactory = $streamFactory;
-        $this->_cacheFile = $cacheFile;
+        $this->config = $storage->getScriptConfig();
+        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::PUB);
+        $this->cacheFilePath = $cacheFile;
     }
 
     /**
@@ -66,7 +72,7 @@ class Config
      */
     public function getMediaDirectory()
     {
-        return $this->_config['media_directory'];
+        return $this->config['media_directory'];
     }
 
     /**
@@ -76,7 +82,7 @@ class Config
      */
     public function getAllowedResources()
     {
-        return $this->_config['allowed_resources'];
+        return $this->config['allowed_resources'];
     }
 
     /**
@@ -84,16 +90,15 @@ class Config
      */
     public function save()
     {
-        /** @var \Magento\Filesystem\StreamInterface $stream */
-        $stream = $this->_streamFactory->create(array('path' => $this->_cacheFile));
+        /** @var Write $file */
+        $file = $this->pubDirectory->openFile($this->pubDirectory->getRelativePath($this->cacheFilePath), 'w');
         try{
-            $stream->open('w');
-            $stream->lock(true);
-            $stream->write(json_encode($this->_config));
-            $stream->unlock();
-            $stream->close();
-        } catch (\Magento\Filesystem\FilesystemException $e) {
-            $stream->close();
+            $file->lock();
+            $file->write(json_encode($this->config));
+            $file->unlock();
+            $file->close();
+        } catch (FilesystemException $e) {
+            $file->close();
         }
     }
 }

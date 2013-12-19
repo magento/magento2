@@ -143,7 +143,7 @@ class ThemeDeployment
 
             $this->_copyDirStructure(
                 $copyRule['source'],
-                $this->_destinationHomeDir . DIRECTORY_SEPARATOR . $destDir,
+                $this->_destinationHomeDir . '/' . $destDir,
                 $context
             );
         }

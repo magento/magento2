@@ -33,6 +33,25 @@ class Autocomplete extends \Magento\View\Element\AbstractBlock
 {
     protected $_suggestData = null;
 
+    /**
+     * @var \Magento\CatalogSearch\Helper\Data
+     */
+    protected $_catalogsearchHelper;
+
+    /**
+     * @param \Magento\View\Element\Context $context
+     * @param \Magento\CatalogSearch\Helper\Data $catalogsearchHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Context $context,
+        \Magento\CatalogSearch\Helper\Data $catalogsearchHelper,
+        array $data = array()
+    ) {
+        $this->_catalogsearchHelper = $catalogsearchHelper;
+        parent::__construct($context, $data);
+    }
+
     protected function _toHtml()
     {
         $html = '';
@@ -71,8 +90,8 @@ class Autocomplete extends \Magento\View\Element\AbstractBlock
     public function getSuggestData()
     {
         if (!$this->_suggestData) {
-            $collection = $this->helper('Magento\CatalogSearch\Helper\Data')->getSuggestCollection();
-            $query = $this->helper('Magento\CatalogSearch\Helper\Data')->getQueryText();
+            $collection = $this->_catalogsearchHelper->getSuggestCollection();
+            $query = $this->_catalogsearchHelper->getQueryText();
             $counter = 0;
             $data = array();
             foreach ($collection as $item) {

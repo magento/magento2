@@ -190,7 +190,7 @@ class Fedex
             $directoryData,
             $data
         );
-        $wsdlBasePath = $configReader->getModuleDir('etc', 'Magento_Usa')  . DS . 'wsdl' . DS . 'FedEx' . DS;
+        $wsdlBasePath = $configReader->getModuleDir('etc', 'Magento_Usa')  . '/wsdl/FedEx/';
         $this->_shipServiceWsdl = $wsdlBasePath . 'ShipService_v10.wsdl';
         $this->_rateServiceWsdl = $wsdlBasePath . 'RateService_v10.wsdl';
         $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v5.wsdl';

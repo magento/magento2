@@ -54,6 +54,11 @@ dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/input/n
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/input/naming/property/underscore_absent.php
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/input/naming/property/underscore_middle.php
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/input/naming/property/underscore_start_public.php
+dev/tests/unit/testsuite/Magento/Backup/_files/Fs.php
+dev/tests/unit/testsuite/Magento/Backup/_files/Ftp.php
+dev/tests/unit/testsuite/Magento/Backup/_files/Gz.php
+dev/tests/unit/testsuite/Magento/Backup/_files/Helper.php
+dev/tests/unit/testsuite/Magento/Backup/_files/Tar.php
 dev/tests/unit/testsuite/Magento/Code/Validator/_files/ClassesForConstructorIntegrity.php
 dev/tests/unit/testsuite/Magento/Code/Validator/_files/ClassesForContextAggregation.php
 dev/tests/unit/testsuite/Magento/Code/Reader/_files/ClassesForArgumentsReader.php

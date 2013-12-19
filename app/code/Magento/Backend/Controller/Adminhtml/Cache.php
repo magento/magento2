@@ -64,16 +64,6 @@ class Cache extends \Magento\Backend\App\Action
     }
 
     /**
-     * Retrieve session model
-     *
-     * @return \Magento\Adminhtml\Model\Session
-     */
-    protected function _getSession()
-    {
-        return $this->_objectManager->get('Magento\Core\Model\Session\AbstractSession');
-    }
-
-    /**
      * Display cache management grid
      */
     public function indexAction()
@@ -95,7 +85,7 @@ class Cache extends \Magento\Backend\App\Action
         foreach ($this->_cacheFrontendPool as $cacheFrontend) {
             $cacheFrontend->getBackend()->clean();
         }
-        $this->_getSession()->addSuccess(
+        $this->messageManager->addSuccess(
             __("You flushed the cache storage.")
         );
         $this->_redirect('adminhtml/*');
@@ -111,9 +101,7 @@ class Cache extends \Magento\Backend\App\Action
             $cacheFrontend->clean();
         }
         $this->_eventManager->dispatch('adminhtml_cache_flush_system');
-        $this->_getSession()->addSuccess(
-            __("The Magento cache storage has been flushed.")
-        );
+        $this->messageManager->addSuccess(__("The Magento cache storage has been flushed."));
         $this->_redirect('adminhtml/*');
     }
 
@@ -137,18 +125,14 @@ class Cache extends \Magento\Backend\App\Action
             }
             if ($updatedTypes > 0) {
                 $this->_cacheState->persist();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __("%1 cache type(s) enabled.", $updatedTypes)
                 );
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
-            $this->_getSession()->addException(
-                $e,
-                __('An error occurred while enabling cache.')
-            );
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
         }
         $this->_redirect('adminhtml/*');
     }
@@ -174,14 +158,14 @@ class Cache extends \Magento\Backend\App\Action
             }
             if ($updatedTypes > 0) {
                 $this->_cacheState->persist();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __("%1 cache type(s) disabled.", $updatedTypes)
                 );
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addException(
+            $this->messageManager->addException(
                 $e,
                 __('An error occurred while disabling cache.')
             );
@@ -207,12 +191,12 @@ class Cache extends \Magento\Backend\App\Action
                 $updatedTypes++;
             }
             if ($updatedTypes > 0) {
-                $this->_getSession()->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
+                $this->messageManager->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('An error occurred while refreshing cache.'));
+            $this->messageManager->addException($e, __('An error occurred while refreshing cache.'));
         }
         $this->_redirect('adminhtml/*');
     }
@@ -243,11 +227,11 @@ class Cache extends \Magento\Backend\App\Action
             $this->_objectManager->get('Magento\View\Asset\MergeService')
                 ->cleanMergedJsCss();
             $this->_eventManager->dispatch('clean_media_cache_after');
-            $this->_getSession()->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
+            $this->messageManager->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addException(
+            $this->messageManager->addException(
                 $e,
                 __('An error occurred while clearing the JavaScript/CSS cache.')
             );
@@ -263,13 +247,13 @@ class Cache extends \Magento\Backend\App\Action
         try {
             $this->_objectManager->create('Magento\Catalog\Model\Product\Image')->clearCache();
             $this->_eventManager->dispatch('clean_catalog_images_cache_after');
-            $this->_getSession()->addSuccess(
+            $this->messageManager->addSuccess(
                 __('The image cache was cleaned.')
             );
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addException(
+            $this->messageManager->addException(
                 $e,
                 __('An error occurred while clearing the image cache.')
             );

@@ -44,6 +44,11 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $_checkoutData = null;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\App\Cache\Type\Config $configCacheType
@@ -52,6 +57,7 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
      * @param \Magento\Checkout\Helper\Data $checkoutData
+     * @param \Magento\Message\ManagerInterface $messageManager
      * @param array $data
      */
     public function __construct(
@@ -63,10 +69,12 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
         \Magento\Checkout\Helper\Data $checkoutData,
+        \Magento\Message\ManagerInterface $messageManager,
         array $data = array()
     ) {
 
         $this->_checkoutData = $checkoutData;
+        $this->messageManager = $messageManager;
         parent::__construct(
             $context,
             $coreData,
@@ -89,7 +97,7 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 
     public function getMessages()
     {
-        return $this->_customerSession->getMessages(true);
+        return $this->messageManager->getMessages(true);
     }
 
     public function getPostAction()

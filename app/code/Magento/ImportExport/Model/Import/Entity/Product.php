@@ -373,9 +373,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem\Directory\WriteInterface
      */
-    protected $_dir;
+    protected $_mediaDirectory;
 
     /**
      * @var \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory
@@ -396,6 +396,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @var \Magento\Stdlib\DateTime
      */
     protected $dateTime;
+
+    /**
+     * @var \Magento\Logger
+     */
+    private $_logger;
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
@@ -420,11 +425,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory
      * @param \Magento\ImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory
      * @param \Magento\ImportExport\Model\Import\UploaderFactory $uploaderFactory
-     * @param \Magento\App\Dir $dir
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
      * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Logger $logger
      * @param array $data
      */
     public function __construct(
@@ -450,11 +456,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory,
         \Magento\ImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory,
         \Magento\ImportExport\Model\Import\UploaderFactory $uploaderFactory,
-        \Magento\App\Dir $dir,
+        \Magento\Filesystem $filesystem,
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Logger $logger,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -471,11 +478,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_linkFactory = $linkFactory;
         $this->_proxyProdFactory = $proxyProdFactory;
         $this->_uploaderFactory = $uploaderFactory;
-        $this->_dir = $dir;
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
         $this->_stockResItemFac = $stockResItemFac;
         $this->_stockItemFactory = $stockItemFactory;
         $this->_locale = $locale;
         $this->dateTime = $dateTime;
+        $this->_logger = $logger;
         parent::__construct(
             $coreData,
             $importExportData,
@@ -679,7 +687,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             $params = array($this, $productTypeName);
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], array('params' => $params)))) {
-                throw new \Magento\Core\Exception("Entity type model '{$productTypeConfig['model']}' is not found");
+                throw new \Magento\Core\Exception(sprintf("Entity type model '%s' is not found", $productTypeConfig['model']));
             }
             if (! $model instanceof \Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType) {
                 throw new \Magento\Core\Exception(__('Entity type model must be an instance of '
@@ -942,6 +950,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             } else {
                                 $linkedId = $this->_oldSku[$linkedSku]['entity_id'];
                             }
+
+                            if ($linkedId == null) {
+                                // Import file links to a SKU which is skipped for some reason, which leads to a "NULL"
+                                // link causing fatal errors.
+                                $this->_logger->logException(
+                                    new \Exception(
+                                        sprintf('WARNING: Orphaned link skipped: From SKU %s (ID %d) to SKU %s, ' .
+                                        'Link type id: %d', $sku, $productId, $linkedSku, $linkId)
+                                    )
+                                );
+                                continue;
+                            }
+
                             $linkKey = "{$productId}-{$linkedId}-{$linkId}";
 
                             if (!isset($linkRows[$linkKey])) {
@@ -1389,20 +1410,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $this->_fileUploader->init();
 
-            $mediaDir = $this->_dir->getDir(\Magento\App\Dir::MEDIA);
-            if (!$mediaDir) {
-                throw new \Magento\Exception('Media directory is unavailable.');
+            $tmpPath = $this->_mediaDirectory->getAbsolutePath('import');
+            if (!$this->_fileUploader->setTmpDir($tmpPath)) {
+                throw new \Magento\Core\Exception(sprintf("File directory '%s' is not readable.", $tmpPath));
             }
-            $tmpDir = "{$mediaDir}/import";
-            if (!$this->_fileUploader->setTmpDir($tmpDir)) {
-                throw new \Magento\Core\Exception("File directory '{$tmpDir}' is not readable.");
-            }
-            $destDir = "{$mediaDir}/catalog/product";
-            if (!is_dir($destDir)) {
-                mkdir($destDir, 0777, true);
-            }
-            if (!$this->_fileUploader->setDestDir($destDir)) {
-                throw new \Magento\Core\Exception("File directory '{$destDir}' is not writable.");
+            $destinationDir = "catalog/product";
+            $destinationPath = $this->_mediaDirectory->getAbsolutePath($destinationDir);
+
+            $this->_mediaDirectory->create($destinationDir);
+            if (!$this->_fileUploader->setDestDir($destinationPath)) {
+                throw new \Magento\Core\Exception(sprintf("File directory '%s' is not writable.", $destinationPath));
             }
         }
         return $this->_fileUploader;

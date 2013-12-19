@@ -36,25 +36,25 @@ namespace Magento\Backend\Block\System\Config\Form\Field;
 class Export extends \Magento\Data\Form\Element\AbstractElement
 {
     /**
-     * @var \Magento\App\Helper\HelperFactory
+     * @var \Magento\Backend\Helper\Data
      */
-    protected $_helperFactory;
+    protected $_helper;
 
     /**
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Escaper $escaper
-     * @param \Magento\App\Helper\HelperFactory $helperFactory
+     * @param \Magento\Backend\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
         \Magento\Data\Form\Element\Factory $factoryElement,
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Escaper $escaper,
-        \Magento\App\Helper\HelperFactory $helperFactory,
+        \Magento\Backend\Helper\Data $helper,
         array $data = array()
     ) {
-        $this->_helperFactory = $helperFactory;
+        $this->_helper = $helper;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
@@ -70,7 +70,7 @@ class Export extends \Magento\Data\Form\Element\AbstractElement
             'website' => $buttonBlock->getRequest()->getParam('website')
         );
 
-        $url = $this->_helperFactory->get('Magento\Backend\Helper\Data')->getUrl("*/*/exportTablerates", $params);
+        $url = $this->_helper->getUrl("*/*/exportTablerates", $params);
         $data = array(
             'label'     =>  __('Export CSV'),
             'onclick'   => "setLocation('" . $url

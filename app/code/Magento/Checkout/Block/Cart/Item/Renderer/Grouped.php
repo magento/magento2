@@ -61,11 +61,11 @@ class Grouped extends \Magento\Checkout\Block\Cart\Item\Renderer
     {
         $product = $this->getProduct();
         if (!$product->getData('thumbnail')
-            ||($product->getData('thumbnail') == 'no_selection')
+            || ($product->getData('thumbnail') == 'no_selection')
             || ($this->_storeConfig->getConfig(self::GROUPED_PRODUCT_IMAGE) == self::USE_PARENT_IMAGE)) {
             $product = $this->getGroupedProduct();
         }
-        return $this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail');
+        return $this->_imageHelper->init($product, 'thumbnail');
     }
 
     /**
@@ -79,10 +79,8 @@ class Grouped extends \Magento\Checkout\Block\Cart\Item\Renderer
     {
         $renderer = $this->getRenderedBlock()->getItemRenderer($this->getItem()->getRealProductType());
         $renderer->setItem($this->getItem());
-//        $renderer->overrideProductUrl($this->getProductUrl());
         $renderer->overrideProductThumbnail($this->getProductThumbnail());
         $rendererHtml = $renderer->toHtml();
-//        $renderer->overrideProductUrl(null);
         $renderer->overrideProductThumbnail(null);
         return $rendererHtml;
     }

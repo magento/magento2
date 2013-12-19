@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Fylesystem installer
- *
- * @category   Magento
- * @package    Magento_Install
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Install\Model\Installer;
 
+/**
+ * Filesystem installer
+ */
 class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
 {
     /**#@+
@@ -55,11 +51,6 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_installConfig;
 
     /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dir;
-
-    /**
      * Application Root Directory
      *
      * @var string
@@ -67,20 +58,26 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_appRootDir;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Install\Model\Config $installConfig
-     * @param \Magento\App\Dir $dir
+     * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
         \Magento\Filesystem $filesystem,
         \Magento\Install\Model\Config $installConfig,
-        \Magento\App\Dir $dir
+        \Magento\Message\ManagerInterface $messageManager
     ) {
         parent::__construct($installer);
         $this->_filesystem = $filesystem;
         $this->_installConfig = $installConfig;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -117,26 +114,6 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     }
 
     /**
-     * Check file system path
-     *
-     * @deprecated since 1.7.1.0
-     * @param   string $path
-     * @param   bool $recursive
-     * @param   bool $existence
-     * @param   string $mode
-     * @return  bool
-     * @throws \Magento\Exception
-     */
-    protected function _checkPath($path, $recursive, $existence, $mode)
-    {
-        $appRootDir = $this->_dir->getDir('app');
-        if (!is_readable($appRootDir)) {
-            throw new \Magento\Exception("Application root directory '$appRootDir' is not readable.");
-        }
-        return $this->_checkFullPath(dirname($appRootDir) . $path, $recursive, $existence);
-    }
-
-    /**
      * Check file system full path
      *
      * @param  string $fullPath
@@ -147,12 +124,13 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     protected function _checkFullPath($fullPath, $recursive, $existence)
     {
         $result = true;
-
-        if ($recursive && $this->_filesystem->isDirectory($fullPath)) {
-            $pathsToCheck = $this->_filesystem->getNestedKeys($fullPath);
-            array_unshift($pathsToCheck, $fullPath);
+        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $path = $directory->getRelativePath($fullPath);
+        if ($recursive && $directory->isDirectory($path)) {
+            $pathsToCheck = $directory->read($path);
+            array_unshift($pathsToCheck, $path);
         } else {
-            $pathsToCheck = array($fullPath);
+            $pathsToCheck = array($path);
         }
 
         $skipFileNames = array('.svn', '.htaccess');
@@ -162,15 +140,13 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
             }
 
             if ($existence) {
-                $setError = !$this->_filesystem->isWritable($fullPath);
+                $setError = !$directory->isWritable($path);
             } else {
-                $setError = $this->_filesystem->has($fullPath) && !$this->_filesystem->isWritable($fullPath);
+                $setError = $directory->isExist($path) && !$directory->isWritable($path);
             }
 
             if ($setError) {
-                $this->_getInstaller()->getDataModel()->addError(
-                    __('Path "%1" must be writable.', $pathToCheck)
-                );
+                $this->messageManager->addError(__('Path "%1" must be writable.', $pathToCheck));
                 $result = false;
             }
         }

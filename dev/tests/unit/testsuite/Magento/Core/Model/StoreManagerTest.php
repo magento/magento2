@@ -49,7 +49,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_helperFactoryMock;
+    protected $_helperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -60,13 +60,13 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_factoryMock = $this->getMock('Magento\Core\Model\Store\StorageFactory', array(), array(), '', false);
         $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
-        $this->_helperFactoryMock = $this->getMock('Magento\App\Helper\HelperFactory', array(), array(), '', false);
+        $this->_helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_storage = $this->getMock('Magento\Core\Model\Store\StorageInterface');
 
         $this->_model = new \Magento\Core\Model\StoreManager(
             $this->_factoryMock,
             $this->_requestMock,
-            $this->_helperFactoryMock,
+            $this->_helperMock,
             'scope_code',
             'scope_type'
         );
@@ -151,14 +151,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsSingleStoreModeWhenSingleStoreModeEnabledAndHasSingleStore()
     {
-        $helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $helperMock->expects($this->once())->method('isSingleStoreModeEnabled')->will($this->returnValue(true));
-
-        $this->_helperFactoryMock
-            ->expects($this->any())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
+        $this->_helperMock->expects($this->once())->method('isSingleStoreModeEnabled')->will($this->returnValue(true));
 
         $this->_storage->expects($this->once())->method('hasSingleStore')->will($this->returnValue(true));
 
@@ -169,14 +162,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsSingleStoreModeWhenSingleStoreModeDisabledAndHasSingleStore()
     {
-        $helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $helperMock->expects($this->once())->method('isSingleStoreModeEnabled')->will($this->returnValue(false));
-
-        $this->_helperFactoryMock
-            ->expects($this->any())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
+        $this->_helperMock->expects($this->once())->method('isSingleStoreModeEnabled')->will($this->returnValue(false));
 
         $this->_storage->expects($this->once())->method('hasSingleStore')->will($this->returnValue(true));
 

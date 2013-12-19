@@ -32,6 +32,27 @@ namespace Magento\Sales\Block\Recurring\Profile\View;
 class Fees extends \Magento\Sales\Block\Recurring\Profile\View
 {
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Core\Helper\Data $coreHelper,
+        array $data = array()
+    ) {
+        $this->_coreHelper = $coreHelper;
+        parent::__construct($context, $registry, $data);
+    }
+
+    /**
      * Prepare fees info
      *
      * @return void
@@ -51,7 +72,7 @@ class Fees extends \Magento\Sales\Block\Recurring\Profile\View
             if ($value) {
                 $this->_addInfo(array(
                     'label' => $this->_profile->getFieldLabel($key),
-                    'value' => $this->helper('Magento\Core\Helper\Data')->formatCurrency($value, false),
+                    'value' => $this->_coreHelper->formatCurrency($value, false),
                     'is_amount' => true,
                 ));
             }

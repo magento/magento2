@@ -254,7 +254,7 @@ extends \Magento\Connect\Command
                             $this->ui()->output('Changed locally: ');
                             foreach ($modifications as $row) {
                                 if(!$ftp) {
-                                    $this->ui()->output($config->magento_root.DS.$row);
+                                    $this->ui()->output($config->magento_root . '/' . $row);
                                 } else {
                                     $this->ui()->output($row);
                                 }
@@ -266,7 +266,7 @@ extends \Magento\Connect\Command
 
                     $dir = $config->getChannelCacheDir($pChan);
                     @mkdir($dir, 0777, true);
-                    $file = $dir.DIRECTORY_SEPARATOR.$pName."-".$pVer.".tgz";
+                    $file = $dir . '/' . $pName."-".$pVer.".tgz";
                     if(!@file_exists($file)) {
                         $rest->downloadPackageFileOfRelease($pName, $pVer, $file);
                     }

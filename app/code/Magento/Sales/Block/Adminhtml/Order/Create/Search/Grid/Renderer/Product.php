@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
 
-class Product extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Text
+class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**
      * Render product name to add Configure link

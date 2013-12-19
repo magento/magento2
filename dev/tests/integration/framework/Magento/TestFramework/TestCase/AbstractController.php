@@ -97,7 +97,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         if ($this->_assertSessionErrors) {
             // equalTo() is intentionally used instead of isEmpty() to provide the informative diff
-            $this->assertSessionMessages($this->equalTo(array()), \Magento\Message\Factory::ERROR);
+            $this->assertSessionMessages($this->equalTo(array()), \Magento\Message\MessageInterface::TYPE_ERROR);
         }
     }
 
@@ -198,23 +198,23 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Assert that actual session messages meet expectations:
      * Usage examples:
-     * $this->assertSessionMessages($this->isEmpty(), \Magento\Message\Factory::ERROR);
+     * $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
      * $this->assertSessionMessages($this->equalTo(array('Entity has been saved.')),
-     * \Magento\Message\Factory::SUCCESS);
+     * \Magento\Message\MessageInterface::TYPE_SUCCESS);
      *
      * @param \PHPUnit_Framework_Constraint $constraint Constraint to compare actual messages against
-     * @param string|null $messageType Message type filter, one of the constants \Magento\Message\Factory::*
-     * @param string $sessionModel Class of the session model that manages messages
+     * @param string|null $messageType Message type filter, one of the constants \Magento\Message\MessageInterface::*
+     * @param string $messageManager Class of the session model that manages messages
      */
     public function assertSessionMessages(
-        \PHPUnit_Framework_Constraint $constraint, $messageType = null, $sessionModel = 'Magento\Core\Model\Session'
+        \PHPUnit_Framework_Constraint $constraint, $messageType = null, $messageManager = 'Magento\Message\Manager'
     ) {
         $this->_assertSessionErrors = false;
-        /** @var $session \Magento\Core\Model\Session\AbstractSession */
-        $session = $this->_objectManager->get($sessionModel);
+        /** @var $messages \Magento\Message\ManagerInterface */
+        $messages = $this->_objectManager->get($messageManager);
         $actualMessages = array();
         /** @var $message \Magento\Message\AbstractMessage */
-        foreach ($session->getMessages()->getItems($messageType) as $message) {
+        foreach ($messages->getMessages()->getItemsByType($messageType) as $message) {
             $actualMessages[] = $message->getText();
         }
         $this->assertThat(

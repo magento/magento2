@@ -66,6 +66,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFilePath()
     {
-        $this->assertEquals($this->_workingDir . DS . $this->_pathInfo, $this->_model->getFilePath());
+        $this->assertEquals($this->_workingDir . '/' . $this->_pathInfo, $this->_model->getFilePath());
     }
 }

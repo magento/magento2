@@ -32,4 +32,14 @@
             <instance type="Magento\Core\Helper\Data\Proxy" />
         </param>
     </type>
+    <virtualType name="Magento\Authorizenet\Model\Directpost\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>authorizenet_directpost</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Authorizenet\Model\Directpost\Session">
+        <param name="storage">
+            <instance type="Magento\Authorizenet\Model\Directpost\Session\Storage" />
+        </param>
+    </type>
 </config>

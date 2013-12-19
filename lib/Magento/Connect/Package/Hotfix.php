@@ -111,7 +111,7 @@ END;
     {
         $targetDirLen = strlen($targetDir);
         //get all subdirectories and files.
-        $entries = @glob($targetDir.$path.DS."*");
+        $entries = @glob($targetDir . $path . '/*');
         if (!empty($entries)) {
             foreach ($entries as $entry) {
                 $filePath = substr($entry, $targetDirLen);

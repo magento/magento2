@@ -91,7 +91,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
         if ($invoiceId) {
             $invoice = $this->_objectManager->create('Magento\Sales\Model\Order\Invoice')->load($invoiceId);
             if (!$invoice->getId()) {
-                $this->_getSession()->addError(__('The invoice no longer exists.'));
+                $this->messageManager->addError(__('The invoice no longer exists.'));
                 return false;
             }
         } elseif ($orderId) {
@@ -100,14 +100,14 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
              * Check order existing
              */
             if (!$order->getId()) {
-                $this->_getSession()->addError(__('The order no longer exists.'));
+                $this->messageManager->addError(__('The order no longer exists.'));
                 return false;
             }
             /**
              * Check invoice create availability
              */
             if (!$order->canInvoice()) {
-                $this->_getSession()->addError(__('The order does not allow an invoice to be created.'));
+                $this->messageManager->addError(__('The order does not allow an invoice to be created.'));
                 return false;
             }
             $savedQtys = $this->_getItemQtys();
@@ -207,7 +207,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
         if ($invoice) {
             $this->_title->add(__('New Invoice'));
 
-            $comment = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getCommentText(true);
+            $comment = $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
             if ($comment) {
                 $invoice->setCommentText($comment);
             }
@@ -260,7 +260,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
         $orderId = $this->getRequest()->getParam('order_id');
 
         if (!empty($data['comment_text'])) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setCommentText($data['comment_text']);
+            $this->_objectManager->get('Magento\Backend\Model\Session')->setCommentText($data['comment_text']);
         }
 
         try {
@@ -302,12 +302,12 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                 $transactionSave->save();
 
                 if (isset($shippingResponse) && $shippingResponse->hasErrors()) {
-                    $this->_getSession()->addError(__('The invoice and the shipment  have been created. '
+                    $this->messageManager->addError(__('The invoice and the shipment  have been created. '
                         . 'The shipping label cannot be created now.'));
                 } elseif (!empty($data['do_shipment'])) {
-                    $this->_getSession()->addSuccess(__('You created the invoice and shipment.'));
+                    $this->messageManager->addSuccess(__('You created the invoice and shipment.'));
                 } else {
-                    $this->_getSession()->addSuccess(__('The invoice has been created.'));
+                    $this->messageManager->addSuccess(__('The invoice has been created.'));
                 }
 
                 // send invoice/shipment emails
@@ -319,26 +319,26 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                     $invoice->sendEmail(!empty($data['send_email']), $comment);
                 } catch (\Exception $e) {
                     $this->_objectManager->get('Magento\Logger')->logException($e);
-                    $this->_getSession()->addError(__('We can\'t send the invoice email.'));
+                    $this->messageManager->addError(__('We can\'t send the invoice email.'));
                 }
                 if ($shipment) {
                     try {
                         $shipment->sendEmail(!empty($data['send_email']));
                     } catch (\Exception $e) {
                         $this->_objectManager->get('Magento\Logger')->logException($e);
-                        $this->_getSession()->addError(__('We can\'t send the shipment.'));
+                        $this->messageManager->addError(__('We can\'t send the shipment.'));
                     }
                 }
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getCommentText(true);
+                $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
                 $this->_redirect('sales/order/view', array('order_id' => $orderId));
             } else {
                 $this->_redirect('sales/*/new', array('order_id' => $orderId));
             }
             return;
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('We can\'t save the invoice.'));
+            $this->messageManager->addError(__('We can\'t save the invoice.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->_redirect('sales/*/new', array('order_id' => $orderId));
@@ -355,11 +355,11 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             try {
                 $invoice->capture();
                 $this->_saveInvoice($invoice);
-                $this->_getSession()->addSuccess(__('The invoice has been captured.'));
+                $this->messageManager->addSuccess(__('The invoice has been captured.'));
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('Invoice capturing error'));
+                $this->messageManager->addError(__('Invoice capturing error'));
             }
             $this->_redirect('sales/*/view', array('invoice_id'=>$invoice->getId()));
         } else {
@@ -377,11 +377,11 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             try {
                 $invoice->cancel();
                 $this->_saveInvoice($invoice);
-                $this->_getSession()->addSuccess(__('You canceled the invoice.'));
+                $this->messageManager->addSuccess(__('You canceled the invoice.'));
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('Invoice canceling error'));
+                $this->messageManager->addError(__('Invoice canceling error'));
             }
             $this->_redirect('sales/*/view', array('invoice_id' => $invoice->getId()));
         } else {
@@ -399,11 +399,11 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             try {
                 $invoice->void();
                 $this->_saveInvoice($invoice);
-                $this->_getSession()->addSuccess(__('The invoice has been voided.'));
+                $this->messageManager->addSuccess(__('The invoice has been voided.'));
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('Invoice voiding error'));
+                $this->messageManager->addError(__('Invoice voiding error'));
             }
             $this->_redirect('sales/*/view', array('invoice_id' => $invoice->getId()));
         } else {

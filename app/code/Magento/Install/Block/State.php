@@ -37,6 +37,13 @@ class State extends \Magento\View\Element\Template
     protected $_template = 'state.phtml';
 
     /**
+     * Install Wizard
+     *
+     * @var \Magento\Install\Model\Wizard
+     */
+    protected $_wizard;
+    
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Wizard $wizard
      * @param array $data

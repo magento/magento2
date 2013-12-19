@@ -40,18 +40,32 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $_moduleDirResolver;
 
+    /**
+     * @var \Magento\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_filesystemDirectoryMock;
+
+    /**
+     * Paths to fixtures
+     *
+     * @var array
+     */
+    protected $_paths;
+
     protected function setUp()
     {
-        $fileResolver = $this->getMock('Magento\Config\FileResolverInterface');
-        $fileResolver
-            ->expects($this->once())
-            ->method('get')
-            ->with('email_templates.xml', 'scope')
-            ->will($this->returnValue(array(
-                __DIR__ . '/_files/Fixture/ModuleOne/etc/email_templates_one.xml',
-                __DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml',
-            )))
-        ;
+        $fileResolver = $this->getMock(
+            'Magento\Email\Model\Template\Config\FileResolver',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_paths = array(
+            __DIR__ . '/_files/Fixture/ModuleOne/etc/email_templates_one.xml',
+            __DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml',
+        );
+
 
         $this->_converter = $this->getMock('Magento\Email\Model\Template\Config\Converter', array('convert'));
 
@@ -71,18 +85,46 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_moduleDirResolver = $this->getMock(
             'Magento\Module\Dir\ReverseResolver', array(), array(), '', false
         );
+        $this->_filesystemDirectoryMock = $this->getMock(
+            '\Magento\Filesystem\Directory\Read',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $this->_filesystemDirectoryMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnArgument(0));
+
+        $fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
+            $this->_filesystemDirectoryMock,
+            $this->_paths,
+            $this->_moduleDirResolver
+        );
+        $fileResolver->expects($this->once())
+            ->method('get')
+            ->with('email_templates.xml', 'scope')
+            ->will($this->returnValue($fileIterator)
+        );
 
         $this->_model = new \Magento\Email\Model\Template\Config\Reader(
             $fileResolver,
             $this->_converter,
             $schemaLocator,
-            $validationState,
-            $this->_moduleDirResolver
+            $validationState
         );
     }
 
     public function testRead()
     {
+
+        $this->_filesystemDirectoryMock->expects($this->at(0))
+            ->method('readFile')
+            ->will($this->returnValue(file_get_contents($this->_paths[0])));
+        $this->_filesystemDirectoryMock->expects($this->at(2))
+            ->method('readFile')
+            ->will($this->returnValue(file_get_contents($this->_paths[1])));
         $this->_moduleDirResolver
             ->expects($this->at(0))
             ->method('getModuleName')
@@ -95,10 +137,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->with(__DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml')
             ->will($this->returnValue('Fixture_ModuleTwo'))
         ;
-        $constraint = function (\DOMDOcument $actual) {
+        $constraint = function (\DOMDocument $actual) {
             try {
-                $expected = __DIR__ . '/_files/email_templates_merged.xml';
-                \PHPUnit_Framework_Assert::assertXmlStringEqualsXmlFile($expected, $actual->saveXML());
+                $expected = file_get_contents(__DIR__ . '/_files/email_templates_merged.xml');
+                \PHPUnit_Framework_Assert::assertXmlStringEqualsXmlString($expected, $actual->saveXML());
                 return true;
             } catch (\PHPUnit_Framework_AssertionFailedError $e) {
                 return false;
@@ -111,6 +153,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->with($this->callback($constraint))
             ->will($this->returnValue($expectedResult))
         ;
+
         $this->assertSame($expectedResult, $this->_model->read('scope'));
     }
 

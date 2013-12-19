@@ -40,13 +40,10 @@ class Problem extends \Magento\Backend\App\Action
             return;
         }
 
-        $this->_view->getLayout()->getMessagesBlock()->setMessages(
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getMessages(true)
-        );
+        $this->_view->getLayout()->getMessagesBlock()->setMessages($this->messageManager->getMessages(true));
         $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_problem');
-
         $this->_addBreadcrumb(__('Newsletter Problem Reports'), __('Newsletter Problem Reports'));
 
         $this->_view->renderLayout();
@@ -61,14 +58,13 @@ class Problem extends \Magento\Backend\App\Action
                 $collection
                     ->addSubscriberInfo()
                     ->addFieldToFilter($collection->getResource()->getIdFieldName(),
-                                       array('in'=>$problems))
+                                       array('in' => $problems))
                     ->load();
 
                 $collection->walk('unsubscribe');
             }
 
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addSuccess(__('We unsubscribed the people you identified.'));
+            $this->messageManager->addSuccess(__('We unsubscribed the people you identified.'));
         }
 
         if ($this->getRequest()->getParam('_delete')) {
@@ -78,18 +74,13 @@ class Problem extends \Magento\Backend\App\Action
                 $collection->addFieldToFilter(
                     $collection->getResource()->getIdFieldName(),
                     array('in' => $problems)
-                )
-                    ->load();
+                )->load();
                 $collection->walk('delete');
             }
 
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addSuccess(__('The problems you identified have been deleted.'));
+            $this->messageManager->addSuccess(__('The problems you identified have been deleted.'));
         }
-        $this->_view->getLayout()->getMessagesBlock()->setMessages(
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getMessages(true)
-        );
-
+        $this->_view->getLayout()->getMessagesBlock()->setMessages($this->messageManager->getMessages(true));
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();
     }

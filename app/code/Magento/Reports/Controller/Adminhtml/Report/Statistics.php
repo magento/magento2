@@ -144,23 +144,19 @@ class Statistics extends \Magento\Backend\App\Action
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate($date);
             }
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addSuccess(__('Recent statistics have been updated.'));
+            $this->messageManager->addSuccess(__('Recent statistics have been updated.'));
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addError(__('We can\'t refresh recent statistics.'));
+            $this->messageManager->addError(__('We can\'t refresh recent statistics.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
 
-        if($this->_getSession()->isFirstPageAfterLogin()) {
+        if ($this->_getSession()->isFirstPageAfterLogin()) {
             $this->_redirect('adminhtml/*');
         } else {
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl('*/*'));
         }
-        return $this;
     }
 
     /**
@@ -175,14 +171,11 @@ class Statistics extends \Magento\Backend\App\Action
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate();
             }
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addSuccess(__('We updated lifetime statistics.'));
+            $this->messageManager->addSuccess(__('We updated lifetime statistics.'));
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addError(__('We can\'t refresh lifetime statistics.'));
+            $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
 
@@ -191,8 +184,6 @@ class Statistics extends \Magento\Backend\App\Action
         } else {
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl('*/*'));
         }
-
-        return $this;
     }
 
     public function indexAction()

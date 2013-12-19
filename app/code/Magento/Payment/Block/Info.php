@@ -138,15 +138,19 @@ class Info extends \Magento\View\Element\Template
         if ($this->hasIsSecureMode()) {
             return (bool)(int)$this->_getData('is_secure_mode');
         }
-        if (!$payment = $this->getInfo()) {
-            return true;
-        }
-        if (!$method = $payment->getMethodInstance()) {
+
+        $method = $this->getMethod();
+        if (!$method) {
             return true;
         }
 
-        $methodStore = $this->_storeManager->getStore($method->getStore());
-        return $methodStore->getId() != \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+        $store = $method->getStore();
+        if (!$store) {
+            return false;
+        }
+
+        $methodStore = $this->_storeManager->getStore($store);
+        return $methodStore->getCode() != \Magento\Core\Model\Store::ADMIN_CODE;
     }
 
     /**

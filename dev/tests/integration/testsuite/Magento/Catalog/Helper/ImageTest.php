@@ -37,11 +37,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected static $_fixtureMediaDir = '';
-
-    /**
-     * @var string
-     */
     protected static $_sampleCachedUrl = '';
 
     /**
@@ -51,30 +46,35 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        $mediaDirectory = $objectManager->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+
         // image fixtures
-        self::$_fixtureMediaDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Product\Media\Config')->getBaseMediaPath();
-        mkdir(self::$_fixtureMediaDir . '/m/a', 0777, true);
+        $fixtureMediaDir = $mediaDirectory->getAbsolutePath($config->getBaseMediaPath());
+
+        mkdir($fixtureMediaDir . '/m/a', 0777, true);
         $fixtureDir = dirname(__DIR__) . '/_files';
-        copy("{$fixtureDir}/magento_image.jpg", self::$_fixtureMediaDir . '/m/a/magento_image.jpg');
-        copy("{$fixtureDir}/magento_small_image.jpg", self::$_fixtureMediaDir . '/m/a/magento_small_image.jpg');
-        copy("{$fixtureDir}/magento_thumbnail.jpg", self::$_fixtureMediaDir . '/m/a/magento_thumbnail.jpg');
+        copy("{$fixtureDir}/magento_image.jpg", $fixtureMediaDir . '/m/a/magento_image.jpg');
+        copy("{$fixtureDir}/magento_small_image.jpg", $fixtureMediaDir . '/m/a/magento_small_image.jpg');
+        copy("{$fixtureDir}/magento_thumbnail.jpg", $fixtureMediaDir . '/m/a/magento_thumbnail.jpg');
 
         // watermark fixture
         mkdir(
-            self::$_fixtureMediaDir . '/watermark/stores/' . \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            $fixtureMediaDir . '/watermark/stores/' . $objectManager
                 ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId(),
             0777,
             true
         );
         copy(
             "{$fixtureDir}/watermark.jpg",
-            self::$_fixtureMediaDir . '/watermark/stores/' . \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            $fixtureMediaDir . '/watermark/stores/' . $objectManager
                 ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId() . '/watermark.jpg'
         );
 
         // sample product with images
-        self::$_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        self::$_product = $objectManager
             ->create('Magento\Catalog\Model\Product');
         self::$_product
             ->addData(array(
@@ -85,17 +85,19 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         ;
 
         // sample image cached URL
-        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Helper\Image');
+        $helper = $objectManager->get('Magento\Catalog\Helper\Image');
         self::$_sampleCachedUrl = (string)$helper->init(self::$_product, 'image');
     }
 
     public static function tearDownAfterClass()
     {
-        \Magento\Io\File::rmdirRecursive(self::$_fixtureMediaDir);
-        \Magento\Io\File::rmdirRecursive(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Catalog\Model\Product\Media\Config')->getBaseTmpMediaPath()
-        );
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+        $mediaDirectory = $objectManager->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+
+        $mediaDirectory->delete($config->getBaseMediaPath());
+        $mediaDirectory->delete($config->getBaseTmpMediaPath());
     }
 
     /**

@@ -38,7 +38,7 @@ class Totals
     /**
      * Retrieve count totals
      *
-     * @param \Magento\Adminhtml\Block\Widget\Grid $grid
+     * @param \Magento\Backend\Block\Widget\Grid $grid
      * @param string $from
      * @param string $to
      * @return \Magento\Object

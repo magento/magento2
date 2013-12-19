@@ -59,13 +59,25 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_coreData;
 
     /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $_imageHelper;
+
+    /**
+     * @var \Magento\Catalog\Helper\Output
+     */
+    protected $_outputHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Core\Model\Resource\Iterator $resourceIterator
+     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Helper\Output $outputHelper
      * @param array $data
      */
     public function __construct(
@@ -76,8 +88,12 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Core\Model\Resource\Iterator $resourceIterator,
+        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Helper\Output $outputHelper,
         array $data = array()
     ) {
+        $this->_outputHelper = $outputHelper;
+        $this->_imageHelper = $imageHelper;
         $this->_coreData = $coreData;
         $this->_productFactory = $productFactory;
         $this->_rssFactory = $rssFactory;
@@ -149,8 +165,8 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
                     <td><a href="%s"><img src="%s" alt="" border="0" align="left" height="75" width="75" /></a></td>
                     <td style="text-decoration:none;">%s',
                     $product->getProductUrl(),
-                    $this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail')->resize(75, 75),
-                    $this->helper('Magento\Catalog\Helper\Output')->productAttribute(
+                    $this->_imageHelper->init($product, 'thumbnail')->resize(75, 75),
+                    $this->_outputHelper->productAttribute(
                         $product,
                         $product->getDescription(),
                         'description'

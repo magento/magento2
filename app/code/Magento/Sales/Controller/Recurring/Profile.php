@@ -71,7 +71,7 @@ class Profile extends \Magento\App\Action\Action
      * Make sure customer is logged in and put it into registry
      *
      * @param RequestInterface $request
-     * @return mixed
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
@@ -93,7 +93,7 @@ class Profile extends \Magento\App\Action\Action
     {
         $this->_title->add(__('Recurring Billing Profiles'));
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 
@@ -127,11 +127,11 @@ class Profile extends \Magento\App\Action\Action
                 default:
                     break;
             }
-            $this->_session->addSuccess(__('The profile state has been updated.'));
+            $this->messageManager->addSuccess(__('The profile state has been updated.'));
         } catch (\Magento\Core\Exception $e) {
-            $this->_session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_session->addError(__('We couldn\'t update the profile.'));
+            $this->messageManager->addError(__('We couldn\'t update the profile.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         if ($profile) {
@@ -152,14 +152,14 @@ class Profile extends \Magento\App\Action\Action
             $profile->fetchUpdate();
             if ($profile->hasDataChanges()) {
                 $profile->save();
-                $this->_session->addSuccess(__('The profile has been updated.'));
+                $this->messageManager->addSuccess(__('The profile has been updated.'));
             } else {
-                $this->_session->addNotice(__('The profile has no changes.'));
+                $this->messageManager->addNotice(__('The profile has no changes.'));
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_session->addError(__('We couldn\'t update the profile.'));
+            $this->messageManager->addError(__('We couldn\'t update the profile.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         if ($profile) {
@@ -179,7 +179,7 @@ class Profile extends \Magento\App\Action\Action
             $this->_title->add(__('Recurring Billing Profiles'));
             $this->_title->add(__('Profile #%1', $profile->getReferenceId()));
             $this->_view->loadLayout();
-            $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+            $this->_view->getLayout()->initMessages();
             $navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation');
             if ($navigationBlock) {
                 $navigationBlock->setActive('sales/recurring_profile/');
@@ -187,7 +187,7 @@ class Profile extends \Magento\App\Action\Action
             $this->_view->renderLayout();
             return;
         } catch (\Magento\Core\Exception $e) {
-            $this->_session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }

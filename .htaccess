@@ -32,7 +32,7 @@
 ## adjust memory limit
 
 #    php_value memory_limit 64M
-    php_value memory_limit 256M
+    php_value memory_limit 2048M
     php_value max_execution_time 18000
 
 ############################################
@@ -176,7 +176,6 @@
         order allow,deny
         deny from all
     </Files>
-
 ############################################
 ## If running in cluster environment, uncomment this
 ## http://developer.yahoo.com/performance/rules.html#etags

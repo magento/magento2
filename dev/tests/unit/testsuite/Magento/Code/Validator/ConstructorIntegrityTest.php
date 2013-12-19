@@ -62,6 +62,7 @@ class ConstructorIntegrityTest extends \PHPUnit_Framework_TestCase
     public function testValidateIfClassHasExtraArgumentInTheParentConstructor()
     {
         $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Four/Test.php');
+        $fileName = str_replace('\\', '/', $fileName);
         $this->setExpectedException(
             '\Magento\Code\ValidationException',
             'Extra parameters passed to parent construct: $factory. File: ' . $fileName
@@ -72,6 +73,7 @@ class ConstructorIntegrityTest extends \PHPUnit_Framework_TestCase
     public function testValidateIfClassHasMissingRequiredArguments()
     {
         $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/Test.php');
+        $fileName = str_replace('\\', '/', $fileName);
         $this->setExpectedException(
             '\Magento\Code\ValidationException',
             'Missed required argument factory in parent::__construct call. File: ' . $fileName
@@ -82,6 +84,7 @@ class ConstructorIntegrityTest extends \PHPUnit_Framework_TestCase
     public function testValidateIfClassHasIncompatibleArguments()
     {
         $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/Test.php');
+        $fileName = str_replace('\\', '/', $fileName);
         $this->setExpectedException(
             '\Magento\Code\ValidationException',
             'Incompatible argument type: Required type: \Magento\SomeModule\Model\Proxy. ' .
@@ -92,8 +95,8 @@ class ConstructorIntegrityTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateWrongOrderForParentArguments()
     {
-        $fileName = realpath(__DIR__) . DIRECTORY_SEPARATOR
-            . '_files' . DIRECTORY_SEPARATOR . 'ClassesForConstructorIntegrity.php';
+        $fileName = realpath(__DIR__) . '/_files/ClassesForConstructorIntegrity.php';
+        $fileName = str_replace('\\', '/', $fileName);
         $this->setExpectedException(
             '\Magento\Code\ValidationException',
             'Incompatible argument type: Required type: \Context. ' .
@@ -104,8 +107,8 @@ class ConstructorIntegrityTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateWrongOptionalParamsType()
     {
-        $fileName = realpath(__DIR__) . DIRECTORY_SEPARATOR
-            . '_files' . DIRECTORY_SEPARATOR . 'ClassesForConstructorIntegrity.php';
+        $fileName = realpath(__DIR__) . '/_files/ClassesForConstructorIntegrity.php';
+        $fileName = str_replace('\\', '/', $fileName);
         $this->setExpectedException(
             '\Magento\Code\ValidationException',
             'Incompatible argument type: Required type: array. ' .

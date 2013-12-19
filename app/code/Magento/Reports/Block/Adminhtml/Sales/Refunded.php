@@ -34,7 +34,7 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales;
 
-class Refunded extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Refunded extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected $_template = 'report/grid/container.phtml';
 

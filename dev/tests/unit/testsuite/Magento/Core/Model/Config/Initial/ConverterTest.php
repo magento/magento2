@@ -37,7 +37,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvert()
     {
-        $fixturePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
+        $fixturePath = __DIR__ . '/_files/';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($fixturePath . 'config.xml'));
         $expectedResult = include $fixturePath . 'converted_config.php';

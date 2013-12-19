@@ -24,17 +24,19 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 namespace Magento\Checkout\Model;
 
-class Session extends \Magento\Core\Model\Session\AbstractSession
+class Session extends \Magento\Session\SessionManager
 {
+    /**
+     * Checkout state begin
+     */
     const CHECKOUT_STATE_BEGIN = 'begin';
 
     /**
      * Quote instance
      *
-     * @var null|\Magento\Sales\Model\Quote
+     * @var \Magento\Sales\Model\Quote
      */
     protected $_quote;
 
@@ -80,33 +82,53 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     protected $_remoteAddress;
 
     /**
-     * @param \Magento\Core\Model\Session\Context $context
+     * @var \Magento\Event\ManagerInterface
+     */
+    protected $_eventManager;
+
+    /**
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
+     * @param \Magento\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Session\ValidatorInterface $validator
+     * @param \Magento\Session\StorageInterface $storage
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param null $sessionName
-     * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Session\Context $context,
+        \Magento\App\RequestInterface $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
+        \Magento\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Session\ValidatorInterface $validator,
+        \Magento\Session\StorageInterface $storage,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
-        $sessionName = null,
-        array $data = array()
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        $sessionName = null
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;
         $this->_quoteFactory = $quoteFactory;
         $this->_remoteAddress = $remoteAddress;
-        parent::__construct($context, $sidResolver, $sessionConfig, $data);
-        $this->start('checkout', $sessionName);
+        $this->_eventManager = $eventManager;
+        $this->_storeManager = $storeManager;
+        parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
+        $this->start($sessionName);
     }
 
     /**
@@ -206,7 +228,7 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
 
         if ($remoteAddr = $this->_remoteAddress->getRemoteAddress()) {
             $this->_quote->setRemoteIp($remoteAddr);
-            $xForwardIp = $this->_request->getServer('HTTP_X_FORWARDED_FOR');
+            $xForwardIp = $this->request->getServer('HTTP_X_FORWARDED_FOR');
             $this->_quote->setXForwardedFor($xForwardIp);
         }
         return $this->_quote;
@@ -304,97 +326,6 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
             return false;
         }
         return $steps[$step][$data];
-    }
-
-    /**
-     * Retrieves list of all saved additional messages for different instances (e.g. quote items) in checkout session
-     * Returned: array(itemKey => messageCollection, ...)
-     * where itemKey is a unique hash (e.g 'quote_item17') to distinguish item messages among message collections
-     *
-     * @param bool $clear
-     *
-     * @return array
-     */
-    public function getAdditionalMessages($clear = false)
-    {
-        $additionalMessages = $this->getData('additional_messages');
-        if (!$additionalMessages) {
-            return array();
-        }
-        if ($clear) {
-            $this->setData('additional_messages', null);
-        }
-        return $additionalMessages;
-    }
-
-    /**
-     * Retrieves list of item additional messages
-     * itemKey is a unique hash (e.g 'quote_item17') to distinguish item messages among message collections
-     *
-     * @param string $itemKey
-     * @param bool $clear
-     *
-     * @return null|\Magento\Message\Collection
-     */
-    public function getItemAdditionalMessages($itemKey, $clear = false)
-    {
-        $allMessages = $this->getAdditionalMessages();
-        if (!isset($allMessages[$itemKey])) {
-            return null;
-        }
-
-        $messages = $allMessages[$itemKey];
-        if ($clear) {
-            unset($allMessages[$itemKey]);
-            $this->setAdditionalMessages($allMessages);
-        }
-        return $messages;
-    }
-
-    /**
-     * Adds new message in this session to a list of additional messages for some item
-     * itemKey is a unique hash (e.g 'quote_item17') to distinguish item messages among message collections
-     *
-     * @param string $itemKey
-     * @param \Magento\Message\AbstractMessage $message
-     *
-     * @return \Magento\Checkout\Model\Session
-     */
-    public function addItemAdditionalMessage($itemKey, $message)
-    {
-        $allMessages = $this->getAdditionalMessages();
-        if (!isset($allMessages[$itemKey])) {
-            $allMessages[$itemKey] = $this->messagesFactory->create();
-        }
-        $allMessages[$itemKey]->add($message);
-        $this->setAdditionalMessages($allMessages);
-
-        return $this;
-    }
-
-    /**
-     * Retrieves list of quote item messages
-     * @param int $itemId
-     * @param bool $clear
-     *
-     * @return null|\Magento\Message\Collection
-     */
-    public function getQuoteItemMessages($itemId, $clear = false)
-    {
-        return $this->getItemAdditionalMessages('quote_item' . $itemId, $clear);
-    }
-
-    /**
-     * Adds new message to a list of quote item messages, saved in this session
-     *
-     * @param int $itemId
-     * @param \Magento\Message\AbstractMessage $message
-     *
-     * @return \Magento\Checkout\Model\Session
-     */
-    public function addQuoteItemMessage($itemId, $message)
-    {
-        return $this->addItemAdditionalMessage('quote_item' . $itemId, $message);
     }
 
     /**

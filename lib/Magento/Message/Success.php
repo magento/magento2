@@ -30,7 +30,12 @@ namespace Magento\Message;
 class Success extends AbstractMessage
 {
     /**
-     * @var string
+     * Getter message type
+     *
+     * @return string
      */
-    protected $type = Factory::SUCCESS;
+    public function getType()
+    {
+        return MessageInterface::TYPE_SUCCESS;
+    }
 }

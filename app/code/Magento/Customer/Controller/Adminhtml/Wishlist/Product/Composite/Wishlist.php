@@ -102,8 +102,6 @@ class Wishlist
 
         $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
             ->renderConfigureResult($configureResult);
-
-        return $this;
     }
 
     /**
@@ -130,7 +128,7 @@ class Wishlist
             $updateResult->setMessage($e->getMessage());
         }
         $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
-        $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setCompositeProductResult($updateResult);
+        $this->_objectManager->get('Magento\Backend\Model\Session')->setCompositeProductResult($updateResult);
         $this->_redirect('catalog/product/showUpdateResult');
 
         return false;

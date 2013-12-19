@@ -37,25 +37,41 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $_configData;
 
+    /**
+     * @var \Magento\Filesystem\DirectoryList
+     */
+    protected $directoryList;
+
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Dir $dirs */
-        $dirs = $objectManager->create(
-            'Magento\App\Dir', array(
-                'baseDir' => BP,
-                'dirs' => array(
-                    \Magento\App\Dir::MODULES => __DIR__ . '/_files/code',
-                    \Magento\App\Dir::CONFIG => __DIR__ . '/_files/code',
-                    \Magento\App\Dir::THEMES => __DIR__ . '/_files/design',
+        /** @var \Magento\Filesystem $filesystem */
+        $filesystem = $objectManager->create(
+            'Magento\Filesystem',
+            array('directoryList' => $objectManager->create(
+                    'Magento\Filesystem\DirectoryList',
+                    array(
+                        'root' => BP,
+                        'directories' => array(
+                            \Magento\Filesystem::MODULES => array('path' => __DIR__ . '/_files/code'),
+                            \Magento\Filesystem::CONFIG => array('path' => __DIR__ . '/_files/code'),
+                            \Magento\Filesystem::THEMES => array('path' => __DIR__ . '/_files/design')
+                        )
+                    )
                 )
             )
         );
 
+        $this->directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
+        $dirPath = ltrim(str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__))
+            . '/_files', '/');
+        $this->directoryList->addDirectory(\Magento\Filesystem::MODULES, array('path' => $dirPath));
+
         /** @var \Magento\Module\Declaration\FileResolver $modulesDeclarations */
         $modulesDeclarations = $objectManager->create(
             'Magento\Module\Declaration\FileResolver', array(
-                'applicationDirs' => $dirs,
+                'filesystem' => $filesystem,
+                'fileIteratorFactory' => $objectManager->create('Magento\Config\FileIteratorFactory')
             )
         );
 
@@ -77,7 +93,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Module\Dir\Reader $moduleReader */
         $moduleReader = $objectManager->create(
             'Magento\Module\Dir\Reader', array(
-                'moduleList' => $modulesList
+                'moduleList' => $modulesList,
+                'filesystem' => $filesystem
             )
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/code/Magento/Test/etc');
@@ -86,7 +103,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $fileResolver = $objectManager->create(
             'Magento\Widget\Model\Config\FileResolver', array(
                 'moduleReader' => $moduleReader,
-                'applicationDirs' => $dirs,
+                'filesystem' => $filesystem,
             )
         );
 

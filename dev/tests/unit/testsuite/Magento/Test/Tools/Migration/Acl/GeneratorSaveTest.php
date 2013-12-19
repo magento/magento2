@@ -75,11 +75,11 @@ class GeneratorSaveTest extends \PHPUnit_Framework_TestCase
         $this->_fileManagerMock = $this->getMock('Magento\Tools\Migration\Acl\FileManager');
         $this->_model = new \Magento\Tools\Migration\Acl\Generator($this->_xmlFormatterMock, $this->_fileManagerMock);
 
-        $this->_fixturePath = realpath(__DIR__) . DIRECTORY_SEPARATOR . '_files';
-        $path = $this->_fixturePath . DIRECTORY_SEPARATOR . 'save' . DIRECTORY_SEPARATOR;
+        $this->_fixturePath = realpath(__DIR__) . '/_files';
+        $path = $this->_fixturePath . '/save/';
 
         $this->_originFile = $path . 'adminhtml.xml';
-        $this->_aclFile = $path . 'adminhtml' . DIRECTORY_SEPARATOR . 'acl.xml';
+        $this->_aclFile = $path . 'adminhtml/acl.xml';
 
         $dom = new \DOMDocument();
         $config = $dom->createElement('config');

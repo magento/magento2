@@ -80,9 +80,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             'parent_theme'         => null,
             'is_featured'          => true,
             'preview_image'        => '',
-            'theme_directory'      => implode(
-                DIRECTORY_SEPARATOR, array(__DIR__, '_files', 'design', 'frontend', 'default', 'default')
-            )
+            'theme_directory'      => __DIR__ . '_files/design/frontend/default/default'
         );
     }
 }

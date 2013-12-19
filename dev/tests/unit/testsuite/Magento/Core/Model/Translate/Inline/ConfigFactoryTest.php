@@ -38,6 +38,6 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('Magento\Core\Model\Translate\Inline\Config'))
             ->will($this->returnValue($result));
         $factory = new ConfigFactory($objectManager);
-        $this->assertEquals($result, $factory->create('any'));
+        $this->assertEquals($result, $factory->create());
     }
 }

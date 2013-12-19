@@ -34,13 +34,13 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-class Options extends \Magento\Adminhtml\Block\Widget
+class Options extends \Magento\Backend\Block\Widget
 {
     protected $_template = 'catalog/product/edit/options.phtml';
 
     protected function _prepareLayout()
     {
-        $this->addChild('add_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('add_button', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Add New Option'),
             'class' => 'add',
             'id'    => 'add_new_defined_option'
@@ -48,7 +48,7 @@ class Options extends \Magento\Adminhtml\Block\Widget
 
         $this->addChild('options_box', 'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option');
 
-        $this->addChild('import_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('import_button', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Import Options'),
             'class' => 'add',
             'id'    => 'import_new_defined_option'

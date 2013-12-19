@@ -61,12 +61,18 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\Customer\Helper\Data
+     */
+    protected $_customerHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Customer\Model\FormFactory $customerFactory
      * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      */
     public function __construct(
@@ -76,8 +82,10 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Customer\Model\FormFactory $customerFactory,
         \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {
+        $this->_customerHelper = $customerHelper;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_systemStore = $systemStore;
         $this->_customerFactory = $customerFactory;
@@ -117,7 +125,7 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
 
         $prefixElement = $form->getElement('prefix');
         if ($prefixElement) {
-            $prefixOptions = $this->helper('Magento\Customer\Helper\Data')->getNamePrefixOptions($customerStoreId);
+            $prefixOptions = $this->_customerHelper->getNamePrefixOptions($customerStoreId);
             if (!empty($prefixOptions)) {
                 $fieldset->removeField($prefixElement->getId());
                 $prefixField = $fieldset->addField($prefixElement->getId(),
@@ -134,7 +142,7 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
 
         $suffixElement = $form->getElement('suffix');
         if ($suffixElement) {
-            $suffixOptions = $this->helper('Magento\Customer\Helper\Data')->getNameSuffixOptions($customerStoreId);
+            $suffixOptions = $this->_customerHelper->getNameSuffixOptions($customerStoreId);
             if (!empty($suffixOptions)) {
                 $fieldset->removeField($suffixElement->getId());
                 $suffixField = $fieldset->addField($suffixElement->getId(),

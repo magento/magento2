@@ -24,6 +24,10 @@
 
 namespace Magento\Core\Model\File\Storage;
 
+use Magento\Filesystem\Directory\WriteInterface as DirectoryWrite,
+    Magento\Filesystem\File\Write,
+    Magento\Filesystem\FilesystemException;
+
 /**
  * Class Synchronization
  */
@@ -34,25 +38,25 @@ class Synchronization
      *
      * @var \Magento\Core\Model\File\Storage\DatabaseFactory
      */
-    protected $_storageFactory;
+    protected $storageFactory;
 
     /**
      * File stream handler
      *
-     * @var \Magento\Io\File
+     * @var DirectoryWrite
      */
-    protected $_streamFactory;
+    protected $pubDirectory;
 
     /**
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageFactory
-     * @param \Magento\Filesystem\Stream\LocalFactory $streamFactory
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Model\File\Storage\DatabaseFactory $storageFactory,
-        \Magento\Filesystem\Stream\LocalFactory $streamFactory
+        \Magento\Filesystem $filesystem
     ) {
-        $this->_storageFactory = $storageFactory;
-        $this->_streamFactory = $streamFactory;
+        $this->storageFactory = $storageFactory;
+        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::PUB);
     }
 
     /**
@@ -65,27 +69,21 @@ class Synchronization
     public function synchronize($relativeFileName, $filePath)
     {
         /** @var $storage \Magento\Core\Model\File\Storage\Database */
-        $storage = $this->_storageFactory->create();
+        $storage = $this->storageFactory->create();
         try {
             $storage->loadByFilename($relativeFileName);
         } catch (\Exception $e) {
         }
         if ($storage->getId()) {
-            $directory = dirname($filePath);
-            if (!is_dir($directory) && !mkdir($directory, 0777, true)) {
-                throw new \LogicException('Could not create directory');
-            }
-
-            /** @var \Magento\Filesystem\StreamInterface $stream */
-            $stream = $this->_streamFactory->create(array('path' => $filePath));
+            /** @var Write $file */
+            $file = $this->pubDirectory->openFile($this->pubDirectory->getRelativePath($filePath), 'w');
             try{
-                $stream->open('w');
-                $stream->lock(true);
-                $stream->write($storage->getContent());
-                $stream->unlock();
-                $stream->close();
-            } catch (\Magento\Filesystem\FilesystemException $e) {
-                $stream->close();
+                $file->lock();
+                $file->write($storage->getContent());
+                $file->unlock();
+                $file->close();
+            } catch (FilesystemException $e) {
+                $file->close();
             }
         }
     }

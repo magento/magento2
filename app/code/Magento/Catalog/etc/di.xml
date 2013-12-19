@@ -29,17 +29,12 @@
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
-    <type name="Magento\Catalog\Helper\Product\View">
-        <param name="messageModels">
-            <value>
-                <catalog>Magento\Catalog\Model\Session</catalog>
-                <checkout>Magento\Checkout\Model\Session</checkout>
-            </value>
-        </param>
-    </type>
     <type name="Magento\Catalog\Helper\Product">
         <param name="typeSwitcherLabel">
             <value>Virtual</value>
+        </param>
+        <param name="catalogSession">
+            <instance type="Magento\Catalog\Model\Session\Proxy" />
         </param>
     </type>
     <type name="Magento\Catalog\Model\Product">
@@ -65,6 +60,9 @@
     <type name="Magento\Catalog\Model\Resource\Product\Collection">
         <param name="catalogUrl">
             <instance type="Magento\Catalog\Model\Resource\Url\Proxy" />
+        </param>
+        <param name="customerSession">
+            <instance type="Magento\Customer\Model\Session\Proxy" />
         </param>
     </type>
     <type name="Magento\Catalog\Model\Entity\Product\Attribute\Design\Options\Container">
@@ -92,6 +90,9 @@
     <type name="Magento\Catalog\Helper\Data">
         <param name="templateFilterModel">
             <value>Magento\Catalog\Model\Template\Filter</value>
+        </param>
+        <param name="catalogSession">
+            <instance type="Magento\Catalog\Model\Session\Proxy" />
         </param>
     </type>
     <type name="Magento\Catalog\Model\Config\Source\GridPerPage">
@@ -122,6 +123,16 @@
         </param>
         <param name="catalogSession">
             <instance type="Magento\Catalog\Model\Session\Proxy" />
+        </param>
+    </type>
+    <virtualType name="Magento\Catalog\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>catalog</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Session">
+        <param name="storage">
+            <instance type="Magento\Catalog\Model\Session\Storage" />
         </param>
     </type>
 </config>

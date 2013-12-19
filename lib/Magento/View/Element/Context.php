@@ -71,7 +71,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_design;
 
     /**
-     * @var \Magento\Core\Model\Session
+     * @var \Magento\Session\SessionManagerInterface
      */
     protected $_session;
 
@@ -89,11 +89,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
      * @var \Magento\App\FrontController
      */
     protected $_frontController;
-
-    /**
-     * @var \Magento\App\Helper\HelperFactory
-     */
-    protected $_helperFactory;
 
     /**
      * @var \Magento\View\Url
@@ -145,11 +140,10 @@ class Context implements \Magento\ObjectManager\ContextInterface
      * @param \Magento\TranslateInterface $translator
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\FrontController $frontController
-     * @param \Magento\App\Helper\HelperFactory $helperFactory
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
      * @param \Magento\App\Cache\StateInterface $cacheState
@@ -171,11 +165,10 @@ class Context implements \Magento\ObjectManager\ContextInterface
         \Magento\TranslateInterface $translator,
         \Magento\App\CacheInterface $cache,
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Session\AbstractSession $session,
+        \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\App\FrontController $frontController,
-        \Magento\App\Helper\HelperFactory $helperFactory,
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
         \Magento\App\Cache\StateInterface $cacheState,
@@ -197,7 +190,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
         $this->_sidResolver     = $sidResolver;
         $this->_storeConfig     = $storeConfig;
         $this->_frontController = $frontController;
-        $this->_helperFactory   = $helperFactory;
         $this->_viewUrl         = $viewUrl;
         $this->_viewConfig      = $viewConfig;
         $this->_cacheState      = $cacheState;
@@ -241,14 +233,6 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\App\Helper\HelperFactory
-     */
-    public function getHelperFactory()
-    {
-        return $this->_helperFactory;
-    }
-
-    /**
      * @return \Magento\View\LayoutInterface
      */
     public function getLayout()
@@ -265,7 +249,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Core\Model\Session|\Magento\Core\Model\Session\AbstractSession
+     * @return \Magento\Session\SessionManagerInterface
      */
     public function getSession()
     {

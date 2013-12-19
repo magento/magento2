@@ -200,15 +200,16 @@ class State
      *
      * @param string $areaCode
      * @param callable $callback
+     * @param array $params
      * @return mixed
      * @throws \Exception
      */
-    public function emulateAreaCode($areaCode, $callback)
+    public function emulateAreaCode($areaCode, $callback, $params = array())
     {
         $currentArea = $this->_areaCode;
         $this->_areaCode = $areaCode;
         try {
-            $result = call_user_func($callback);
+            $result = call_user_func_array($callback, $params);
         } catch (\Exception $e) {
             $this->_areaCode = $currentArea;
             throw $e;

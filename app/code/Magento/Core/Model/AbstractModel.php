@@ -153,12 +153,12 @@ abstract class AbstractModel extends \Magento\Object
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
+        $this->_appState = $context->getAppState();
         $this->_eventManager = $context->getEventDispatcher();
         $this->_cacheManager = $context->getCacheManager();
         $this->_resource = $resource;
         $this->_resourceCollection = $resourceCollection;
         $this->_logger = $context->getLogger();
-        $this->_appState = $context->getAppState();
 
         if (method_exists($this->_resource, 'getIdFieldName') || $this->_resource instanceof \Magento\Object) {
             $this->_idFieldName = $this->_getResource()->getIdFieldName();

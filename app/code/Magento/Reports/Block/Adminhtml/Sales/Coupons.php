@@ -34,7 +34,7 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales;
 
-class Coupons extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Coupons extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected $_template = 'report/grid/container.phtml';
 

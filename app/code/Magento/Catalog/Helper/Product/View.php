@@ -40,11 +40,11 @@ class View extends \Magento\App\Helper\AbstractHelper
     public $ERR_BAD_CONTROLLER_INTERFACE = 2;
 
     /**
-     * List of catalog product session message models name
+     * List of catalog product session message groups
      *
      * @var array
      */
-    protected $_messageModels;
+    protected $messageGroups;
 
     /**
      * Core registry
@@ -87,6 +87,11 @@ class View extends \Magento\App\Helper\AbstractHelper
     protected $_view;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Design $catalogDesign
@@ -94,7 +99,8 @@ class View extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Theme\Helper\Layout $pageLayout
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\App\ViewInterface $view
-     * @param array $messageModels
+     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param array $messageGroups
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
@@ -104,7 +110,8 @@ class View extends \Magento\App\Helper\AbstractHelper
         \Magento\Theme\Helper\Layout $pageLayout,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\App\ViewInterface $view,
-        array $messageModels = array()
+        \Magento\Message\ManagerInterface $messageManager,
+        array $messageGroups = array()
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
@@ -112,8 +119,9 @@ class View extends \Magento\App\Helper\AbstractHelper
         $this->_pageLayout = $pageLayout;
         $this->_coreRegistry = $coreRegistry;
         $this->_view = $view;
+        $this->messageGroups = $messageGroups;
+        $this->messageManager = $messageManager;
         parent::__construct($context);
-        $this->_messageModels = $messageModels;
     }
 
     /**
@@ -216,7 +224,7 @@ class View extends \Magento\App\Helper\AbstractHelper
 
         if ($params->getSpecifyOptions()) {
             $notice = $product->getTypeInstance()->getSpecifyOptionMessage();
-            $this->_catalogSession->addNotice($notice);
+            $this->messageManager->addNotice($notice);
         }
 
         $this->_catalogSession->setLastViewedProductId($product->getId());
@@ -224,9 +232,7 @@ class View extends \Magento\App\Helper\AbstractHelper
         $this->initProductLayout($product, $controller);
 
         if ($controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
-            foreach ($this->_messageModels as $sessionModel) {
-                $this->_view->getLayout()->initMessages($sessionModel);
-            }
+            $this->_view->getLayout()->initMessages($this->messageGroups);
         } else {
             throw new \Magento\Core\Exception(
                 __('Bad controller interface for showing product'),

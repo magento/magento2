@@ -67,7 +67,7 @@ class Payflowadvanced extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
-     * @param \Magento\Core\Model\Session\Generic $paypalSession
+     * @param \Magento\Session\Generic $paypalSession
      * @param \Magento\Paypal\Helper\Checkout $checkoutHelper
      * @param \Magento\Logger $logger
      */
@@ -78,7 +78,7 @@ class Payflowadvanced extends \Magento\Paypal\Controller\Express\AbstractExpress
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
-        \Magento\Core\Model\Session\Generic $paypalSession,
+        \Magento\Session\Generic $paypalSession,
         \Magento\Paypal\Helper\Checkout $checkoutHelper,
         \Magento\Logger $logger
     ) {

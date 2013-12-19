@@ -45,8 +45,8 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     public function __construct(\Magento\Module\Dir\Reader $moduleReader)
     {
         $etcDir = $moduleReader->getModuleDir('etc', 'Magento_Catalog');
-        $this->_schema = $etcDir . DIRECTORY_SEPARATOR . 'product_options_merged.xsd';
-        $this->_perFileSchema = $etcDir . DIRECTORY_SEPARATOR . 'product_options.xsd';
+        $this->_schema = $etcDir . '/product_options_merged.xsd';
+        $this->_perFileSchema = $etcDir . '/product_options.xsd';
     }
 
     /**

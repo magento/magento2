@@ -160,24 +160,20 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     /**
      * Build controller class name based on moduleName and controllerName
      *
-     * @param string $realModule
+     * @param string $module
      * @param string $controller
      * @return string
      */
-    public function getControllerClassName($realModule, $controller)
+    public function getControllerClassName($module, $controller)
     {
         /**
-         * Start temporary block
-         * TODO: Sprint#27. Delete after adminhtml refactoring
+         * TODO: Delete these lines after adminhtml module is removed
          */
-        if ($realModule == 'Magento_Adminhtml') {
-            return parent::getControllerClassName($realModule, $controller);
+        if ($module == 'Magento_Adminhtml') {
+            return parent::getControllerClassName($module, $controller);
         }
-        /**
-         * End temporary block
-         */
 
-        $parts = explode('_', $realModule);
+        $parts = explode('_', $module);
         $parts = array_splice($parts, 0, 2);
         $parts[] = 'Controller';
         $parts[] = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;

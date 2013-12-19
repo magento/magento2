@@ -41,12 +41,13 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param mixed $commentedEntity
+     * @param string $commentedEntity
      * @param string $expectedClass
      * @dataProvider getCommentsDataProvider
      */
     public function testGetComments($commentedEntity, $expectedClass)
     {
+        $commentedEntity = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($commentedEntity);
         $this->_block->setEntity($commentedEntity);
         $comments = $this->_block->getComments();
         $this->assertInstanceOf($expectedClass, $comments);
@@ -59,18 +60,15 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Invoice'),
+                'Magento\Sales\Model\Order\Invoice',
                 'Magento\Sales\Model\Resource\Order\Invoice\Comment\Collection'
             ),
             array(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Creditmemo'),
+                'Magento\Sales\Model\Order\Creditmemo',
                 'Magento\Sales\Model\Resource\Order\Creditmemo\Comment\Collection'
             ),
             array(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Shipment'),
+                'Magento\Sales\Model\Order\Shipment',
                 'Magento\Sales\Model\Resource\Order\Shipment\Comment\Collection'
             )
         );

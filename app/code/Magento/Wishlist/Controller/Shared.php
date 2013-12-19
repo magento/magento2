@@ -96,7 +96,7 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
         $this->_coreRegistry->register('shared_wishlist', $wishlist);
 
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages(array('Magento\Checkout\Model\Session', 'Magento\Wishlist\Model\Session'));
+        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 
@@ -115,7 +115,7 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
         $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId);
 
 
-        /* @var $session \Magento\Core\Model\Session\Generic */
+        /* @var $session \Magento\Session\Generic */
         $session    = $this->_objectManager->get('Magento\Wishlist\Model\Session');
         $cart       = $this->_objectManager->get('Magento\Checkout\Model\Cart');
 
@@ -134,13 +134,13 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
             }
         } catch (\Magento\Core\Exception $e) {
             if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
-                $session->addError(__('This product(s) is out of stock.'));
+                $this->messageManager->addError(__('This product(s) is out of stock.'));
             } else {
-                $this->_objectManager->get('Magento\Catalog\Model\Session')->addNotice($e->getMessage());
+                $this->messageManager->addNotice($e->getMessage());
                 $redirectUrl = $item->getProductUrl();
             }
         } catch (\Exception $e) {
-            $session->addException($e, __('Cannot add item to shopping cart'));
+            $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
         }
 
         return $this->getResponse()->setRedirect($redirectUrl);

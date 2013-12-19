@@ -177,7 +177,7 @@ class Quote extends \Magento\Sales\Model\Resource\AbstractResource
     public function isOrderIncrementIdUsed($orderIncrementId)
     {
         $adapter   = $this->_getReadAdapter();
-        $bind      = array(':increment_id' => (int)$orderIncrementId);
+        $bind      = array(':increment_id' => $orderIncrementId);
         $select    = $adapter->select();
         $select->from($this->getTable('sales_flat_order'), 'entity_id')
             ->where('increment_id = :increment_id');

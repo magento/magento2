@@ -52,6 +52,37 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_filesystem;
 
     /**
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $_rootDirectory;
+
+    /**
+     * @var \Magento\Filesystem\Directory\WriteInterface
+     */
+    protected $_mediaDirectory;
+
+    /**
+     * Relative path for main destination folder
+     *
+     * @var string
+     */
+    protected $_path = '/custom_options';
+
+    /**
+     * Relative path for quote folder
+     *
+     * @var string
+     */
+    protected $_quotePath = '/custom_options/quote';
+
+    /**
+     * Relative path for order folder
+     *
+     * @var string
+     */
+    protected $_orderPath = '/custom_options/order';
+
+    /**
      * @var \Magento\File\Size
      */
     protected $_fileSize;
@@ -67,13 +98,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @var \Magento\Escaper
      */
     protected $_escaper;
-
-    /**
-     * Dir
-     *
-     * @var \Magento\App\Dir
-     */
-    protected $_dir;
 
     /**
      * Url
@@ -94,7 +118,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
      * @param \Magento\UrlInterface $url
-     * @param \Magento\App\Dir $dir
      * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Filesystem $filesystem
@@ -106,7 +129,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\UrlInterface $url,
-        \Magento\App\Dir $dir,
         \Magento\Escaper $escaper,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Filesystem $filesystem,
@@ -115,10 +137,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_url = $url;
-        $this->_dir = $dir;
         $this->_escaper = $escaper;
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
+        $this->_rootDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->_mediaDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
         $this->_fileSize = $fileSize;
         $this->_data = $data;
         parent::__construct($checkoutSession, $coreStoreConfig, $data);
@@ -348,10 +371,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $dispersion = \Magento\Core\Model\File\Uploader::getDispretionPath($fileName);
 
             $filePath = $dispersion;
-            $dirName = dirname($fileInfo['tmp_name']);
-            $fileHash = md5($this->_filesystem->read($fileInfo['tmp_name'], $dirName));
-            $filePath .= DS . $fileHash . '.' . $extension;
-            $fileFullPath = $this->getQuoteTargetDir() . $filePath;
+
+            $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::SYS_TMP);
+            $fileHash = md5($tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
+            $filePath .= '/' . $fileHash . '.' . $extension;
+            $fileFullPath = $this->_mediaDirectory->getAbsolutePath($this->_quotePath . $filePath);
 
             $upload->addFilter('Rename', array(
                 'target' => $fileFullPath,
@@ -368,19 +392,20 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
             $_width = 0;
             $_height = 0;
-            if ($this->_filesystem->isReadable($fileInfo['tmp_name'], $dirName)) {
+
+            if ($tmpDirectory->isReadable($tmpDirectory->getRelativePath($fileInfo['tmp_name']))) {
                 $_imageSize = getimagesize($fileInfo['tmp_name']);
                 if ($_imageSize) {
                     $_width = $_imageSize[0];
                     $_height = $_imageSize[1];
                 }
             }
-
+            $uri = $this->_filesystem->getUri(\Magento\Filesystem::MEDIA);
             $this->setUserValue(array(
                 'type'          => $fileInfo['type'],
                 'title'         => $fileInfo['name'],
-                'quote_path'    => $this->getQuoteTargetDir(true) . $filePath,
-                'order_path'    => $this->getOrderTargetDir(true) . $filePath,
+                'quote_path'    => $uri . $this->_quotePath . $filePath,
+                'order_path'    => $uri . $this->_orderPath . $filePath,
                 'fullpath'      => $fileFullPath,
                 'size'          => $fileInfo['size'],
                 'width'         => $_width,
@@ -420,20 +445,21 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
          */
         $checkPaths = array();
         if (isset($optionValue['quote_path'])) {
-            $checkPaths[] = $this->_dir->getDir() . $optionValue['quote_path'];
+            $checkPaths[] = $optionValue['quote_path'];
         }
         if (isset($optionValue['order_path']) && !$this->getUseQuotePath()) {
-            $checkPaths[] = $this->_dir->getDir() . $optionValue['order_path'];
+            $checkPaths[] = $optionValue['order_path'];
         }
-
         $fileFullPath = null;
+        $fileRelativePath = null;
         foreach ($checkPaths as $path) {
-            if (!$this->_filesystem->isFile($path)) {
+            if (!$this->_rootDirectory->isFile($path)) {
                 if (!$this->_coreFileStorageDatabase->saveFileToFilesystem($fileFullPath)) {
                     continue;
                 }
             }
-            $fileFullPath = $path;
+            $fileFullPath = $this->_rootDirectory->getAbsolutePath($path);
+            $fileRelativePath = $path;
             break;
         }
 
@@ -479,9 +505,9 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
 
         if ($validatorChain->isValid($fileFullPath)) {
-            $ok = $this->_filesystem->isReadable($fileFullPath)
+            $ok = $this->_rootDirectory->isReadable($fileRelativePath)
                 && isset($optionValue['secret_key'])
-                && substr(md5($this->_filesystem->read($fileFullPath)), 0, 20) == $optionValue['secret_key'];
+                && substr(md5($this->_rootDirectory->readFile($fileRelativePath)), 0, 20) == $optionValue['secret_key'];
 
             return $ok;
         } elseif ($validatorChain->getErrors()) {
@@ -732,55 +758,21 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             if (!isset($value['quote_path'])) {
                 throw new \Exception();
             }
-            $quoteFileFullPath = $this->_dir->getDir() . $value['quote_path'];
-            if (!$this->_filesystem->isFile($quoteFileFullPath)
-                || !$this->_filesystem->isReadable($quoteFileFullPath)
-            ) {
+            $quotePath = $value['quote_path'];
+            $orderPath = $value['order_path'];
+
+            if (!$this->_rootDirectory->isFile($quotePath) || !$this->_rootDirectory->isReadable($quotePath)) {
                 throw new \Exception();
             }
-            $orderFileFullPath = $this->_dir->getDir() . $value['order_path'];
-            $dir = pathinfo($orderFileFullPath, PATHINFO_DIRNAME);
-            $this->_createWritableDir($dir);
-            $this->_coreFileStorageDatabase->copyFile($quoteFileFullPath, $orderFileFullPath);
-            $this->_filesystem->copy($quoteFileFullPath, $orderFileFullPath);
+            $this->_coreFileStorageDatabase->copyFile(
+                $this->_rootDirectory->getAbsolutePath($quotePath),
+                $this->_rootDirectory->getAbsolutePath($orderPath)
+            );
+            $this->_rootDirectory->copyFile($quotePath, $orderPath);
         } catch (\Exception $e) {
             return $this;
         }
         return $this;
-    }
-
-    /**
-     * Main Destination directory
-     *
-     * @param boolean $relative If true - returns relative path to the webroot
-     * @return string
-     */
-    public function getTargetDir($relative = false)
-    {
-        $fullPath = $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DS . 'custom_options';
-        return $relative ? str_replace($this->_dir->getDir(), '', $fullPath) : $fullPath;
-    }
-
-    /**
-     * Quote items destination directory
-     *
-     * @param boolean $relative If true - returns relative path to the webroot
-     * @return string
-     */
-    public function getQuoteTargetDir($relative = false)
-    {
-        return $this->getTargetDir($relative) . DS . 'quote';
-    }
-
-    /**
-     * Order items destination directory
-     *
-     * @param boolean $relative If true - returns relative path to the webroot
-     * @return string
-     */
-    public function getOrderTargetDir($relative = false)
-    {
-        return $this->getTargetDir($relative) . DS . 'order';
     }
 
     /**
@@ -800,34 +792,14 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     protected function _initFilesystem()
     {
-        $this->_createWritableDir($this->getTargetDir());
-        $this->_createWritableDir($this->getQuoteTargetDir());
-        $this->_createWritableDir($this->getOrderTargetDir());
+        $this->_mediaDirectory->create($this->_path);
+        $this->_mediaDirectory->create($this->_quotePath);
+        $this->_mediaDirectory->create($this->_orderPath);
 
         // Directory listing and hotlink secure
-        if (!$this->_filesystem->isFile($this->getTargetDir() . DS . '.htaccess')) {
-            $stream = $this->_filesystem->createStream($this->getTargetDir() . DS . '.htaccess');
-            $stream->open('w+');
-            $stream->write("Order deny,allow\nDeny from all");
-            $stream->close();
-        }
-    }
-
-    /**
-     * Create Writable directory if it doesn't exist
-     *
-     * @param string Absolute directory path
-     * @return void
-     * @throws \Magento\Core\Exception
-     */
-    protected function _createWritableDir($path)
-    {
-        try {
-            if (!$this->_filesystem->isWritable($path)) {
-                $this->_filesystem->createDirectory($path, 0777);
-            }
-        } catch (\Magento\Filesystem\Exception $e) {
-            throw new \Magento\Core\Exception(__("Cannot create writable directory '%1'.", $path));
+        $path = $this->_path . '/.htaccess';
+        if (!$this->_mediaDirectory->isFile($path)) {
+            $this->_mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
         }
     }
 
@@ -872,7 +844,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         }
 
         // File path came in - check the physical file
-        if (!$this->_filesystem->isReadable($fileInfo)) {
+        if (!$this->_rootDirectory->isReadable($this->_rootDirectory->getRelativePath($fileInfo))) {
             return false;
         }
         $imageInfo = getimagesize($fileInfo);

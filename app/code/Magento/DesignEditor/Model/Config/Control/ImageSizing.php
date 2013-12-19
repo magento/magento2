@@ -44,11 +44,13 @@ class ImageSizing extends \Magento\DesignEditor\Model\Config\Control\AbstractCon
     protected $_moduleReader;
 
     /**
+     * @param $configFiles
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param array $configFiles
      */
-    public function __construct(\Magento\Module\Dir\Reader $moduleReader, array $configFiles)
-    {
+    public function __construct(
+        $configFiles,
+        \Magento\Module\Dir\Reader $moduleReader
+    ) {
         $this->_moduleReader = $moduleReader;
         parent::__construct($configFiles);
     }
@@ -60,7 +62,6 @@ class ImageSizing extends \Magento\DesignEditor\Model\Config\Control\AbstractCon
      */
     public function getSchemaFile()
     {
-        return $this->_moduleReader->getModuleDir('etc', 'Magento_DesignEditor') . DIRECTORY_SEPARATOR
-            . 'image_sizing.xsd';
+        return $this->_moduleReader->getModuleDir('etc', 'Magento_DesignEditor') . '/image_sizing.xsd';
     }
 }

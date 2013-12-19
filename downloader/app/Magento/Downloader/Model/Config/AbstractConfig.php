@@ -83,7 +83,7 @@ class AbstractConfig extends \Magento\Downloader\Model
     {
         if ((!is_writable($this->getFilename())&&is_file($this->getFilename()))||(dirname($this->getFilename())!=''&&!is_writable(dirname($this->getFilename())))) {
             if(isset($this->_data['ftp'])&&!empty($this->_data['ftp'])&&strlen($this->get('downloader_path'))>0){
-                $confFile=$this->get('downloader_path').DIRECTORY_SEPARATOR.basename($this->getFilename());
+                $confFile=$this->get('downloader_path') . '/' . basename($this->getFilename());
                 $ftpObj = new \Magento\Connect\Ftp();
                 $ftpObj->connect($this->_data['ftp']);
                 $tempFile = tempnam(sys_get_temp_dir(),'configini');

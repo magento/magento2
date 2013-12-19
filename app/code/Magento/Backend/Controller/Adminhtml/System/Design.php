@@ -109,11 +109,10 @@ class Design extends \Magento\Backend\App\Action
             try {
                 $design->save();
 
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(__('You saved the design change.'));
+                $this->messageManager->addSuccess(__('You saved the design change.'));
             } catch (\Exception $e){
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addError($e->getMessage())
-                    ->setDesignData($data);
+                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setDesignData($data);
                 $this->_redirect('adminhtml/*/edit', array('id'=>$design->getId()));
                 return;
             }
@@ -130,15 +129,11 @@ class Design extends \Magento\Backend\App\Action
 
             try {
                 $design->delete();
-
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addSuccess(__('You deleted the design change.'));
+                $this->messageManager->addSuccess(__('You deleted the design change.'));
             } catch (\Magento\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addException($e, __("Cannot delete the design change."));
+                $this->messageManager->addException($e, __("Cannot delete the design change."));
             }
         }
         $this->getResponse()->setRedirect($this->getUrl('adminhtml/*/'));

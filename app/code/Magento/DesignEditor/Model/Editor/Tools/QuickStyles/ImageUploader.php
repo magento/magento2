@@ -86,10 +86,8 @@ class ImageUploader extends \Magento\Object
     public function getStoragePath()
     {
         if (null === $this->_storagePath) {
-            $this->_storagePath = implode(\Magento\Filesystem::DIRECTORY_SEPARATOR, array(
-                \Magento\Filesystem::fixSeparator($this->_getTheme()->getCustomization()->getCustomizationPath()),
-                self::PATH_PREFIX_QUICK_STYLE,
-            ));
+            $this->_storagePath = $this->_getTheme()->getCustomization()->getCustomizationPath() . '/'
+                . self::PATH_PREFIX_QUICK_STYLE;
         }
         return $this->_storagePath;
     }
@@ -156,13 +154,10 @@ class ImageUploader extends \Magento\Object
      */
     public function removeFile($file)
     {
-        $path = $this->getStoragePath();
-        $filePath = $this->_filesystem->normalizePath($path . '/' . $file);
-
-        if ($this->_filesystem->isPathInDirectory($filePath, $path)
-            && $this->_filesystem->isPathInDirectory($filePath, $this->getStoragePath())
-        ) {
-            $this->_filesystem->delete($filePath);
+        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $path = $directory->getRelativePath($this->getStoragePath() . '/' . $file);
+        if ($directory->isExist($path)) {
+            $directory->delete($path);
         }
 
         return $this;

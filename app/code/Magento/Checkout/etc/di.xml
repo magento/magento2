@@ -31,4 +31,14 @@
             </value>
         </param>
     </type>
+    <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>checkout</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Checkout\Model\Session">
+        <param name="storage">
+            <instance type="Magento\Checkout\Model\Session\Storage" />
+        </param>
+    </type>
 </config>

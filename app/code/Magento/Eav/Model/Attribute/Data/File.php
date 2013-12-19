@@ -55,28 +55,28 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
     protected $_fileValidator;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem\Directory\Write
      */
-    protected $_coreDir;
+    protected $_directory;
 
     /**
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Logger $logger
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
-     * @param \Magento\App\Dir $coreDir
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Logger $logger,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator,
-        \Magento\App\Dir $coreDir
+        \Magento\Filesystem $filesystem
     ) {
         parent::__construct($locale, $logger);
         $this->_coreData = $coreData;
         $this->_fileValidator = $fileValidator;
-        $this->_coreDir = $coreDir;
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
     }
 
     /**
@@ -252,15 +252,14 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
             }
         }
 
-        $path = $this->_coreDir->getDir('media') . DS . $attribute->getEntity()->getEntityTypeCode();
+        $destinationFolder = $attribute->getEntity()->getEntityTypeCode();
 
         // unlink entity file
         if ($toDelete) {
             $this->getEntity()->setData($attribute->getAttributeCode(), '');
-            $file = $path . $original;
-            $ioFile = new \Magento\Io\File();
-            if ($ioFile->fileExists($file)) {
-                $ioFile->rm($file);
+            $file = $destinationFolder . $original;
+            if ($this->_directory->isExist($file)) {
+                $this->_directory->delete($file);
             }
         }
 
@@ -270,7 +269,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
                 $uploader->setFilesDispersion(true);
                 $uploader->setFilenamesCaseSensitivity(false);
                 $uploader->setAllowRenameFiles(true);
-                $uploader->save($path, $value['name']);
+                $uploader->save($this->_directory->getAbsolutePath($destinationFolder), $value['name']);
                 $fileName = $uploader->getUploadedFileName();
                 $this->getEntity()->setData($attribute->getAttributeCode(), $fileName);
             } catch (\Exception $e) {

@@ -18,36 +18,46 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Filesystem\File;
 
+use Magento\Filesystem\DriverInterface;
+
 class WriteFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Filesystem\DriverFactory
      */
-    protected $objectManager;
+    protected $driverFactory;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Filesystem\DriverFactory $driverFactory
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Filesystem\DriverFactory $driverFactory)
     {
-        $this->objectManager = $objectManager;
+        $this->driverFactory = $driverFactory;
     }
 
     /**
-     * Create a readable file
+     * Create a readable file.
      *
-     * @param string $path
+     * @param $path
+     * @param string|null $protocol
+     * @param DriverInterface $directoryDriver [optional]
      * @param string $mode
-     * @return \Magento\Filesystem\File\WriteInterface
+     * @return Write
      */
-    public function create($path, $mode)
+    public function create($path, $protocol, DriverInterface $directoryDriver = null, $mode = 'r')
     {
-        return $this->objectManager->create('Magento\Filesystem\File\Write', array('path' => $path, 'mode' => $mode));
+        $fileDriver = $directoryDriver;
+        if ($protocol) {
+            $fileDriver = $this->driverFactory->get($protocol, $directoryDriver);
+        }
+        return new \Magento\Filesystem\File\Write($path, $fileDriver, $mode);
     }
 }

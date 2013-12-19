@@ -34,7 +34,7 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Carrier\Tablerate;
 
-class Grid extends \Magento\Adminhtml\Block\Widget\Grid
+class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * Website filter
@@ -63,6 +63,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Shipping\Model\Resource\Carrier\Tablerate\CollectionFactory $collectionFactory
      * @param \Magento\Shipping\Model\Carrier\Tablerate $tablerate
      * @param array $data
@@ -70,13 +71,14 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Shipping\Model\Resource\Carrier\Tablerate\CollectionFactory $collectionFactory,
         \Magento\Shipping\Model\Carrier\Tablerate $tablerate,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_tablerate = $tablerate;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     /**
@@ -158,7 +160,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Prepare table columns
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {

@@ -34,7 +34,7 @@
 
 namespace Magento\Review\Block\Adminhtml\Grid\Filter;
 
-class Type extends \Magento\Adminhtml\Block\Widget\Grid\Column\Filter\Select
+class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     protected function _getOptions()
     {

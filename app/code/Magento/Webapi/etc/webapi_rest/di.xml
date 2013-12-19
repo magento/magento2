@@ -97,4 +97,7 @@
             <instance type="Magento\Authz\Service\AuthorizationV1Interface\Proxy" />
         </param>
     </type>
+    <type name="Magento\Authz\Service\AuthorizationV1">
+        <plugin name="webapiRestAuthorizationV1" type="Magento\Webapi\Model\Plugin\AuthorizationServiceV1" />
+    </type>
 </config>

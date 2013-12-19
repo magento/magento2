@@ -36,9 +36,9 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_backendUrl;
 
     /**
-     * @var \Magento\App\ResponseFactory
+     * @var \Magento\App\ResponseInterface
      */
-    protected $_responseFactory;
+    protected $_response;
 
     /**
      * @var \Magento\Backend\Model\Session
@@ -56,7 +56,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_helper;
 
     /**
-     * @param \Magento\App\ResponseFactory $responseFactory
+     * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\Url $backendUrl
@@ -65,7 +65,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
      * @param \Magento\Backend\Helper\Data $helper
      */
     public function __construct(
-        \Magento\App\ResponseFactory $responseFactory,
+        \Magento\App\ResponseInterface $response,
         \Magento\Filesystem $filesystem,
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\Model\Url $backendUrl,
@@ -78,7 +78,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
         $this->_session = $session;
         $this->_flag = $flag;
         $this->_helper = $helper;
-        parent::__construct($responseFactory, $filesystem);
+        parent::__construct($response, $filesystem);
     }
 
 
@@ -94,9 +94,8 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     {
         $this->_session
             ->setIsUrlNotice($this->_flag->get('', \Magento\Backend\App\AbstractAction::FLAG_IS_URLS_CHECKED));
-        $response = $this->_responseFactory->create();
-        $response->setRedirect($this->_helper->getUrl($path, $arguments));
-        return $response;
+        $this->_response->setRedirect($this->_helper->getUrl($path, $arguments));
+        return $this->_response;
     }
 
     /**
@@ -112,8 +111,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     public function create($fileName, $content, $contentType = 'application/octet-stream', $contentLength = null)
     {
         if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
-            $response = $this->_redirect($this->_backendUrl->getStartupPageUrl());
-            return $response;
+            return $this->_redirect($this->_backendUrl->getStartupPageUrl());
         }
         return parent::create($fileName, $content, $contentType, $contentLength);
     }

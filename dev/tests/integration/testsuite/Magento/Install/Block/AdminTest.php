@@ -38,7 +38,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             'password_confirmation' => 'password_with_1_number',
         );
 
-        /** @var $session \Magento\Core\Model\Session\Generic */
+        /** @var $session \Magento\Session\Generic */
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Install\Model\Session');
         $session->setAdminData(array_merge($preserve, $omit));
 

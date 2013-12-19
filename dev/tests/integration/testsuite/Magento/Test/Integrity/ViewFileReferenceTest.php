@@ -267,7 +267,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _getArea($file)
     {
-        $file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
+        $file = str_replace('\\', '/', $file);
         $areaPatterns = array(
             '#app/code/[^/]+/[^/]+/view/([^/]+)/#S',
             '#app/design/([^/]+)/#S',

@@ -60,9 +60,9 @@ class Page extends \Magento\App\Helper\AbstractHelper
     protected $_page;
 
     /**
-     * @var \Magento\Core\Model\Session\Pool
+     * @var \Magento\Message\ManagerInterface
      */
-    protected $_sessionPool;
+    protected $messageManager;
 
     /**
      * Locale
@@ -97,7 +97,7 @@ class Page extends \Magento\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Session\Pool $sessionFactory
+     * @param \Magento\Message\ManagerInterface $messageManager
      * @param \Magento\Cms\Model\Page $page
      * @param \Magento\Theme\Helper\Layout $pageLayout
      * @param \Magento\View\DesignInterface $design
@@ -109,7 +109,7 @@ class Page extends \Magento\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Session\Pool $sessionFactory,
+        \Magento\Message\ManagerInterface $messageManager,
         \Magento\Cms\Model\Page $page,
         \Magento\Theme\Helper\Layout $pageLayout,
         \Magento\View\DesignInterface $design,
@@ -119,7 +119,7 @@ class Page extends \Magento\App\Helper\AbstractHelper
         \Magento\Escaper $escaper,
         \Magento\App\ViewInterface $view
     ) {
-        $this->_sessionPool = $sessionFactory;
+        $this->messageManager = $messageManager;
         $this->_view = $view;
         $this->_page = $page;
         $this->_pageLayout = $pageLayout;
@@ -215,18 +215,10 @@ class Page extends \Magento\App\Helper\AbstractHelper
 
         /* @TODO: Move catalog and checkout storage types to appropriate modules */
         $messageBlock = $this->_view->getLayout()->getMessagesBlock();
-        $sessions = array(
-            'Magento\Catalog\Model\Session',
-            'Magento\Checkout\Model\Session',
-            'Magento\Customer\Model\Session'
+        $messageBlock->addStorageType($this->messageManager->getDefaultGroup());
+        $messageBlock->addMessages(
+            $this->messageManager->getMessages(true)
         );
-        foreach ($sessions as $storageType) {
-            $storage = $this->_sessionPool->get($storageType);
-            if ($storage) {
-                $messageBlock->addStorageType($storageType);
-                $messageBlock->addMessages($storage->getMessages(true));
-            }
-        }
 
         if ($renderLayout) {
             $this->_view->renderLayout();

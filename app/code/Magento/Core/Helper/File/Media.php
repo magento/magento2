@@ -37,17 +37,25 @@ class Media extends \Magento\App\Helper\AbstractHelper
     protected $_date;
 
     /**
+     * @var \Magento\Filesystem
+     */
+    protected $filesystem;
+    
+    /**
      * Constructor
      *
      * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Date $date
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Date $date
+        \Magento\Core\Model\Date $date,
+        \Magento\Filesystem $filesystem
     ) {
         parent::__construct($context);
         $this->_date = $date;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -67,12 +75,14 @@ class Media extends \Magento\App\Helper\AbstractHelper
     public function collectFileInfo($mediaDirectory, $path)
     {
         $path = ltrim($path, '\\/');
-        $fullPath = $mediaDirectory . DS . $path;
+        $fullPath = $mediaDirectory . '/' . $path;
 
-        if (!file_exists($fullPath) || !is_file($fullPath)) {
+        $dir = $this->filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        $relativePath = $dir->getRelativePath($fullPath);
+        if (!$dir->isFile($relativePath)) {
             throw new \Magento\Core\Exception(__('File %1 does not exist', $fullPath));
         }
-        if (!is_readable($fullPath)) {
+        if (!$dir->isReadable($relativePath)) {
             throw new \Magento\Core\Exception(__('File %1 is not readable', $fullPath));
         }
 
@@ -84,7 +94,7 @@ class Media extends \Magento\App\Helper\AbstractHelper
 
         return array(
             'filename'      => basename($path),
-            'content'       => @file_get_contents($fullPath),
+            'content'       => $dir->readFile($relativePath),
             'update_time'   => $this->_date->date(),
             'directory'     => $directory
         );

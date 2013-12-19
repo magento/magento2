@@ -27,6 +27,8 @@
 
 namespace Magento\View\Element;
 
+use Magento\Filesystem\DirectoryList;
+
 /**
  * @magentoAppIsolation enabled
  */
@@ -62,13 +64,13 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testCssWithWrongImage()
     {
-        $dirPath = __DIR__ . DIRECTORY_SEPARATOR . '_files';
-        /** @var $dirs \Magento\App\Dir */
-        $dirs = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir');
-
-        $prepareFileName = new \ReflectionMethod($dirs, '_setDir');
-        $prepareFileName->setAccessible(true);
-        $prepareFileName->invoke($dirs, \Magento\App\Dir::THEMES, $dirPath);
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Filesystem $filesystem */
+        $relativePath = $objectManager->get('Magento\Filesystem')->getDirectoryRead(\Magento\Filesystem::ROOT)
+            ->getRelativePath(__DIR__ . '/_files');
+        /** @var $directoryList \Magento\Filesystem\DirectoryList */
+        $directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
+        $directoryList->addDirectory(\Magento\Filesystem::THEMES, array('path' => $relativePath));
 
         $cssUrl = $this->_block->getViewFileUrl('css/wrong.css', array(
             'area'    => 'frontend',
@@ -504,21 +506,6 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEndsWith(
             '/core/index/notfound', $this->_block->getViewFileUrl('not_exist_folder/wrong_bad_file.xyz')
         );
-    }
-
-    public function testHelper()
-    {
-        // Without layout
-        $this->assertInstanceOf('Magento\Core\Helper\Data', $this->_block->helper('Magento\Core\Helper\Data'));
-
-        // With layout
-        $helper = $this->_block->helper('Magento\Core\Helper\Data');
-
-        try {
-            $this->assertInstanceOf('Magento\Core\Helper\Data', $helper);
-        } catch (\Exception $e) {
-            throw $e;
-        }
     }
 
     public function testFormatDate()

@@ -134,7 +134,11 @@ if (count($serveFiles) > 0) {
 fclose($fh);
 
 $testOutput = __DIR__ . '/test-output';
-\Magento\Io\File::rmdirRecursive($testOutput);
+
+$filesystemAdapter = new \Magento\Filesystem\Driver\File();
+if ($filesystemAdapter->isExists($testOutput)) {
+    $filesystemAdapter->deleteDirectory($testOutput);
+}
 mkdir($testOutput);
 
 $command

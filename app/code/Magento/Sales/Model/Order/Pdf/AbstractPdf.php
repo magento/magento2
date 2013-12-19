@@ -99,9 +99,14 @@ abstract class AbstractPdf extends \Magento\Object
     protected $_translate;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem\Directory\WriteInterface
      */
-    protected $_coreDir;
+    protected $_mediaDirectory;
+
+    /**
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $_rootDirectory;
 
     /**
      * @var \Magento\Shipping\Model\Config
@@ -128,7 +133,7 @@ abstract class AbstractPdf extends \Magento\Object
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\Translate $translate
-     * @param \Magento\App\Dir $coreDir
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
@@ -143,7 +148,7 @@ abstract class AbstractPdf extends \Magento\Object
         \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\Translate $translate,
-        \Magento\App\Dir $coreDir,
+        \Magento\Filesystem $filesystem,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
@@ -156,7 +161,8 @@ abstract class AbstractPdf extends \Magento\Object
         $this->string = $string;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_translate = $translate;
-        $this->_coreDir = $coreDir;
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
         $this->_shippingConfig = $shippingConfig;
         $this->_pdfConfig = $pdfConfig;
         $this->_pdfTotalFactory = $pdfTotalFactory;
@@ -239,9 +245,9 @@ abstract class AbstractPdf extends \Magento\Object
         $this->y = $this->y ? $this->y : 815;
         $image = $this->_coreStoreConfig->getConfig('sales/identity/logo', $store);
         if ($image) {
-            $image = $this->_coreDir->getDir(\Magento\App\Dir::MEDIA) . '/sales/store/logo/' . $image;
-            if (is_file($image)) {
-                $image       = \Zend_Pdf_Image::imageWithPath($image);
+            $imagePath = '/sales/store/logo/' . $image;
+            if ($this->_mediaDirectory->isFile($imagePath)) {
+                $image       = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
                 $top         = 830; //top border of the page
                 $widthLimit  = 270; //half of the page width
                 $heightLimit = 270; //assuming the image is not a "skyscraper"
@@ -834,7 +840,7 @@ abstract class AbstractPdf extends \Magento\Object
     protected function _setFontRegular($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_coreDir->getDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf'
+            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -850,7 +856,7 @@ abstract class AbstractPdf extends \Magento\Object
     protected function _setFontBold($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_coreDir->getDir() . '/lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf'
+            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -866,7 +872,7 @@ abstract class AbstractPdf extends \Magento\Object
     protected function _setFontItalic($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_coreDir->getDir() . '/lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf'
+            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf')
         );
         $object->setFont($font, $size);
         return $font;

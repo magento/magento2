@@ -41,7 +41,7 @@ class Creditmemo
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\App\Dir $coreDir
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
@@ -54,7 +54,7 @@ class Creditmemo
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\App\Dir $coreDir,
+        \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
@@ -68,7 +68,7 @@ class Creditmemo
             $context,
             $registry,
             $taxData,
-            $coreDir,
+            $filesystem,
             $coreStoreConfig,
             $purchasedFactory,
             $itemsFactory,

@@ -85,11 +85,11 @@ class Custom extends \Magento\Backend\App\Action
                 }
                 $data = array_merge($data, array('file_name' => $packageName));
                 $session->setCustomExtensionPackageFormData($data);
-                $session->addSuccess(
+                $this->messageManager->addSuccess(
                     __('The package %1 data has been loaded.', $packageName)
                 );
             } catch (\Exception $e) {
-                $session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             }
         }
         $this->_redirect('adminhtml/*/edit');
@@ -119,9 +119,9 @@ class Custom extends \Magento\Backend\App\Action
             /** @var $ext \Magento\Connect\Model\Extension */
             $ext->setData($p);
             if ($ext->savePackage()) {
-                $session->addSuccess(__('The package data has been saved.'));
+                $this->messageManager->addSuccess(__('The package data has been saved.'));
             } else {
-                $session->addError(__('Something went wrong saving the package data.'));
+                $this->messageManager->addError(__('Something went wrong saving the package data.'));
                 $this->_redirect('adminhtml/*/edit');
             }
             if (empty($create)) {
@@ -130,10 +130,10 @@ class Custom extends \Magento\Backend\App\Action
                 $this->_forward('create');
             }
         } catch (\Magento\Core\Exception $e){
-            $session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*');
         } catch (\Exception $e){
-            $session->addException($e, __('Something went wrong saving the package.'));
+            $this->messageManager->addException($e, __('Something went wrong saving the package.'));
             $this->_redirect('adminhtml/*');
         }
     }
@@ -161,10 +161,10 @@ class Custom extends \Magento\Backend\App\Action
             }
             $this->_redirect('adminhtml/*');
         } catch(\Magento\Core\Exception $e){
-            $session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*');
         } catch(\Exception $e){
-            $session->addException($e, __('Something went wrong creating the package.'));
+            $this->messageManager->addException($e, __('Something went wrong creating the package.'));
             $this->_redirect('adminhtml/*');
         }
     }

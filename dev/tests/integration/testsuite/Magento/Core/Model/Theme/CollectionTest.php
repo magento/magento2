@@ -39,9 +39,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(
+                'Magento\Filesystem\DirectoryList',
+                array(
+                    'root' => \Magento\Filesystem::ROOT,
+                    'directories' => array(
+                        \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/_files/design')
+                    ),
+                )
+            );
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Filesystem', array('directoryList' => $directoryList));
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Theme\Collection');
-        $this->_model->setBaseDir(dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files'. DIRECTORY_SEPARATOR . 'design');
+            ->create('Magento\Core\Model\Theme\Collection', array('filesystem' => $filesystem));
     }
 
     /**
@@ -51,7 +62,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadThemesFromFileSystem()
     {
-        $pathPattern = implode(DS, array('frontend', '*', 'theme.xml'));
+        $pathPattern = implode('/', array('frontend', '*', 'theme.xml'));
         $this->_model->addTargetPattern($pathPattern);
         $this->assertEquals(8, count($this->_model));
     }
@@ -76,7 +87,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'themePath'    => implode(DIRECTORY_SEPARATOR, array('frontend', 'magento_default', 'theme.xml')),
+                'themePath'    => implode('/', array('frontend', 'magento_default', 'theme.xml')),
                 'expectedData' => array(
                     'area'                 => 'frontend',
                     'theme_title'          => 'Default',

@@ -52,7 +52,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
     /**
      * Source file handler.
      *
-     * @var resource
+     * @var \Magento\Filesystem\File\Write
      */
     protected $_fileHandler;
 
@@ -63,8 +63,8 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      */
     public function __destruct()
     {
-        if (is_resource($this->_fileHandler)) {
-            fclose($this->_fileHandler);
+        if (is_object($this->_fileHandler)) {
+            $this->_fileHandler->close();
         }
     }
 
@@ -75,7 +75,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      */
     protected function _init()
     {
-        $this->_fileHandler = fopen($this->_destination, 'w');
+        $this->_fileHandler = $this->_directoryHandle->openFile($this->_destination, 'w');
         return $this;
     }
 
@@ -115,7 +115,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
             foreach ($headerColumns as $columnName) {
                 $this->_headerCols[$columnName] = false;
             }
-            fputcsv($this->_fileHandler, array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
+            $this->_fileHandler->writeCsv(array_keys($this->_headerCols), $this->_delimiter, $this->_enclosure);
         }
         return $this;
     }
@@ -132,13 +132,11 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
         if (null === $this->_headerCols) {
             $this->setHeaderCols(array_keys($rowData));
         }
-        fputcsv(
-            $this->_fileHandler,
+        $this->_fileHandler->writeCsv(
             array_merge($this->_headerCols, array_intersect_key($rowData, $this->_headerCols)),
             $this->_delimiter,
             $this->_enclosure
         );
-
         return $this;
     }
 }

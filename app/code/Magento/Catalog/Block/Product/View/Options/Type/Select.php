@@ -38,6 +38,27 @@ class Select
     extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Tax\Helper\Data $taxData
+     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Tax\Helper\Data $taxData,
+        \Magento\Core\Helper\Data $coreHelper,
+        array $data = array()
+    ) {
+        $this->_coreHelper = $coreHelper;
+        parent::__construct($context, $taxData, $coreHelper, $data);
+    }
+
+    /**
      * Return html for control element
      *
      * @return string
@@ -75,7 +96,7 @@ class Select
                     $_value->getOptionTypeId(),
                     $_value->getTitle() . ' ' . $priceStr . '',
                     array(
-                        'price' => $this->helper('Magento\Core\Helper\Data')->currencyByStore(
+                        'price' => $this->_coreHelper->currencyByStore(
                             $_value->getPrice(true),
                             $store,
                             false
@@ -143,7 +164,7 @@ class Select
                     . ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"')
                     . ' name="options[' . $_option->getId() . ']' . $arraySign . '" id="options_' . $_option->getId()
                     . '_' . $count . '" value="' . $htmlValue . '" ' . $checked . ' price="'
-                    . $this->helper('Magento\Core\Helper\Data')->currencyByStore($_value->getPrice(true), $store, false) . '" />'
+                    . $this->_coreHelper->currencyByStore($_value->getPrice(true), $store, false) . '" />'
                     . '<label class="label" for="options_' . $_option->getId() . '_' . $count . '"><span>'
                     . $_value->getTitle() . '</span>' . $priceStr . '</label>';
                 $selectHtml .= '</div>';

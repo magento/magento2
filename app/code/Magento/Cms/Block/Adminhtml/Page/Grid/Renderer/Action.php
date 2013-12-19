@@ -27,7 +27,7 @@
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer;
 
 class Action
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Core\Model\UrlFactory

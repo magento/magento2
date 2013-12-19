@@ -51,9 +51,14 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     protected $_fileSizeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Io\File
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem
      */
     protected $_filesystemMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem\Directory\Read
+     */
+    protected $_directoryMock;
 
     /**
      * @var int
@@ -67,7 +72,11 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\Core\Model\File\UploaderFactory', array('create'), array(), '', false
         );
         $this->_uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($this->_uploader));
-        $this->_filesystemMock = $this->getMock('Magento\Io\File', array('read'), array(), '', false);
+        $this->_directoryMock = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($this->_directoryMock));
         /** @var $service \Magento\Theme\Model\Uploader\Service */
 
         $this->_fileSizeMock = $this->getMockBuilder('Magento\File\Size')
@@ -129,8 +138,17 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetFileContent()
     {
         $fileName = 'file.name';
-        $this->_filesystemMock->expects($this->once())->method('read')->with($fileName)
+
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($fileName)
+            ->will($this->returnValue($fileName));
+
+        $this->_directoryMock->expects($this->once())
+            ->method('readFile')
+            ->with($fileName)
             ->will($this->returnValue('content from my file'));
+
         $this->_service = new \Magento\Theme\Model\Uploader\Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
@@ -154,8 +172,13 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
                 'css' => '3M'
             )
         );
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($fileName)
+            ->will($this->returnValue($fileName));
 
-        $this->_filesystemMock->expects($this->once())->method('read')->with($fileName)
+        $this->_directoryMock->expects($this->once())
+            ->method('readFile')->with($fileName)
             ->will($this->returnValue('content'));
 
         $this->_uploader->expects($this->once())
@@ -207,8 +230,14 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
                 'js' => '500M'
             )
         );
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($fileName)
+            ->will($this->returnValue($fileName));
 
-        $this->_filesystemMock->expects($this->once())->method('read')->with($fileName)
+        $this->_directoryMock->expects($this->once())
+            ->method('readFile')
+            ->with($fileName)
             ->will($this->returnValue('content'));
 
         $this->_uploader->expects($this->once())

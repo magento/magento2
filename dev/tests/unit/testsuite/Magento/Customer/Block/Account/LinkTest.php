@@ -37,30 +37,17 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('getAccountUrl'))
             ->getMock();
-
-        $helperFactory = $this->getMockBuilder('Magento\App\Helper\HelperFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(array('get'))
-            ->getMock();
-        $helperFactory->expects($this->any())->method('get')->will($this->returnValue($helper));
-
         $layout = $this->getMockBuilder('Magento\Core\Model\Layout')
             ->disableOriginalConstructor()
             ->setMethods(array('helper'))
             ->getMock();
 
-        $context = $objectManager->getObject(
-            'Magento\View\Element\Template\Context',
-            array(
-                'layout' => $layout,
-                'helperFactory' => $helperFactory
-            )
-        );
 
         $block = $objectManager->getObject(
             'Magento\Customer\Block\Account\Link',
             array(
-                'context' => $context,
+                'layout' => $layout,
+                'customerHelper' => $helper,
             )
         );
         $helper->expects($this->any())->method('getAccountUrl')->will($this->returnValue('account url'));

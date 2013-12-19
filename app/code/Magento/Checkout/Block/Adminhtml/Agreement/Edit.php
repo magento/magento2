@@ -26,7 +26,7 @@
 
 namespace Magento\Checkout\Block\Adminhtml\Agreement;
 
-class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry

@@ -37,7 +37,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     protected $_installerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Dir\Verification
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem\DirectoryList\Verification
      */
     protected $_dirVerifierMock;
 
@@ -69,7 +69,13 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->_instFactoryMock = $this->getMock('\Magento\Install\Model\Installer\ConsoleFactory',
             array('create'), array(), '', false);
         $this->_installerMock = $this->getMock('Magento\Install\Model\Installer\Console', array(), array(), '', false);
-        $this->_dirVerifierMock = $this->getMock('Magento\App\Dir\Verification', array(), array(), '', false);
+        $this->_dirVerifierMock = $this->getMock(
+            'Magento\Filesystem\DirectoryList\Verification',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_outputMock = $this->getMock('Magento\Install\App\Output', array(), array(), '', false);
         $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->_configLoaderMock = $this->getMockBuilder('Magento\App\ObjectManager\ConfigLoader')
@@ -87,8 +93,30 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
 
     protected function _createModel($params = array())
     {
+        $directory = $this->getMock(
+            'Magento\Filesystem\Directory\Read',
+            array('isExist','getRelativePath'),
+            array(),
+            '',
+            false
+        );
+        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false);
+        $filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Filesystem::ROOT)
+            ->will($this->returnValue($directory));
+        if (isset($params['config'])) {
+            $directory->expects($this->once())
+                ->method('getRelativePath')
+                ->with($params['config'])
+                ->will($this->returnValue($params['config']));
+            $directory->expects($this->once())
+                ->method('isExist')
+                ->with($params['config'])
+                ->will($this->returnValue(true));
+        }
         return new \Magento\Install\App\Console($this->_instFactoryMock, $this->_outputMock,
-            $this->_appStateMock, $this->_configLoaderMock, $this->_objectManagerMock, $params
+            $this->_appStateMock, $this->_configLoaderMock, $this->_objectManagerMock, $filesystem, $params
         );
     }
 

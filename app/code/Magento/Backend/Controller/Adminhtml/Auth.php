@@ -53,7 +53,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
     public function logoutAction()
     {
         $this->_auth->logout();
-        $this->_auth->getAuthStorage()->addSuccess(__('You have logged out.'));
+        $this->messageManager->addSuccess(__('You have logged out.'));
         $this->getResponse()->setRedirect($this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl());
     }
 

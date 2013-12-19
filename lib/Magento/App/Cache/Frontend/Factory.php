@@ -47,11 +47,6 @@ class Factory
     private $_filesystem;
 
     /**
-     * @var \Magento\App\Dir
-     */
-    private $_dirs;
-
-    /**
      * Cache options to be enforced for all instances being created
      *
      * @var array
@@ -97,7 +92,6 @@ class Factory
     /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\App\Resource $resource
      * @param array $enforcedOptions
      * @param array $decorators
@@ -105,14 +99,12 @@ class Factory
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Filesystem $filesystem,
-        \Magento\App\Dir $dirs,
         \Magento\App\Resource $resource,
         array $enforcedOptions = array(),
         array $decorators = array()
     ) {
         $this->_objectManager = $objectManager;
         $this->_filesystem = $filesystem;
-        $this->_dirs = $dirs;
         $this->_resource = $resource;
         $this->_enforcedOptions = $enforcedOptions;
         $this->_decorators = $decorators;
@@ -130,21 +122,20 @@ class Factory
 
         foreach (array('backend_options', 'slow_backend_options') as $section) {
             if (!empty($options[$section]['cache_dir'])) {
-                $dir = $this->_dirs->getDir(\Magento\App\Dir::VAR_DIR) . DS . $options[$section]['cache_dir'];
-                $this->_filesystem->setIsAllowCreateDirectories(true);
-                $this->_filesystem->ensureDirectoryExists($dir, 0777);
-                $options[$section]['cache_dir'] = $dir;
+                $directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+                $directory->create($options[$section]['cache_dir']);
+                $options[$section]['cache_dir'] = $directory->getAbsolutePath($options[$section]['cache_dir']);
             }
         }
 
-        $this->_backendOptions['cache_dir'] = $this->_dirs->getDir(\Magento\App\Dir::CACHE);
+        $this->_backendOptions['cache_dir'] = $this->_filesystem->getPath(\Magento\Filesystem::CACHE);
 
         $idPrefix = isset($options['id_prefix']) ? $options['id_prefix'] : '';
         if (!$idPrefix && isset($options['prefix'])) {
             $idPrefix = $options['prefix'];
         }
         if (empty($idPrefix)) {
-            $idPrefix = substr(md5($this->_dirs->getDir(\Magento\App\Dir::CONFIG)), 0, 3) . '_';
+            $idPrefix = substr(md5($this->_filesystem->getPath(\Magento\Filesystem::CONFIG)), 0, 3) . '_';
         }
         $options['frontend_options']['cache_id_prefix'] = $idPrefix;
 

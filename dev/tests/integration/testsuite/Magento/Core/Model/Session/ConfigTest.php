@@ -39,13 +39,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_cacheLimiter = 'private_no_expire';
 
+    /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    protected $_objectManager;
+
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Core\Model\Session\AbstractSession _model */
-        $this->_model = $objectManager->create('\Magento\Core\Model\Session\Config', array(
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $sessionManager \Magento\Session\SessionManager */
+        $sessionManager = $this->_objectManager->get('Magento\Session\SessionManager');
+        if ($sessionManager->isSessionExists()) {
+            $sessionManager->destroy();
+        }
+        $this->_model = $this->_objectManager->create('Magento\Core\Model\Session\Config', array(
+            'saveMethod' => 'files',
             'cacheLimiter' => $this->_cacheLimiter
         ));
+    }
+
+    protected function tearDown()
+    {
+        $this->_objectManager->removeSharedInstance('Magento\Core\Model\Session\Config');
     }
 
     /**
@@ -54,7 +69,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testDefaultConfiguration()
     {
         $this->assertEquals(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('session'),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')->getPath('session'),
             $this->_model->getSavePath()
         );
         $this->assertEquals(
@@ -66,6 +81,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('localhost', $this->_model->getCookieDomain());
         $this->assertEquals(false, $this->_model->getCookieSecure());
         $this->assertEquals(true, $this->_model->getCookieHttpOnly());
+        $this->assertEquals($this->_model->getOption('save_path'), ini_get('session.save_path'));
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testGetSessionSaveMethod()
+    {
+        $this->assertEquals('files', $this->_model->getSaveHandler());
     }
 }
-

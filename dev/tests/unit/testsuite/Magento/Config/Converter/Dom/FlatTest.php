@@ -43,11 +43,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             '/root/multipleNode' => 'id'
         ));
         $this->_fixturePath = realpath(__DIR__ . '/../../')
-            . DIRECTORY_SEPARATOR . '_files'
-            . DIRECTORY_SEPARATOR . 'converter'
-            . DIRECTORY_SEPARATOR . 'dom'
-            . DIRECTORY_SEPARATOR . 'flat'
-            . DIRECTORY_SEPARATOR;
+            . '/_files/converter/dom/flat/';
     }
 
     public function testConvert()

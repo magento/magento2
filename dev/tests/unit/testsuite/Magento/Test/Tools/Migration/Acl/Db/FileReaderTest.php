@@ -43,8 +43,7 @@ class FileReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractData()
     {
-        $filePath = __DIR__ . DIRECTORY_SEPARATOR . '../_files' . DIRECTORY_SEPARATOR . 'log'
-            . DIRECTORY_SEPARATOR . 'AclXPathToAclId.log';
+        $filePath = __DIR__ . '/../_files/log/AclXPathToAclId.log';
         $expectedMap = array(
             "admin/test1/test2"        => "Test1_Test2::all",
             "admin/test1/test2/test3"  => "Test1_Test2::test3",

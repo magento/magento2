@@ -32,11 +32,6 @@ namespace Magento\Index\Model\Lock;
 class Storage
 {
     /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dirs;
-
-    /**
      * @var \Magento\Index\Model\Process\FileFactory
      */
     protected $_fileFactory;
@@ -49,15 +44,22 @@ class Storage
     protected $_fileHandlers = array();
 
     /**
-     * @param \Magento\App\Dir $dirs
+     * Directory instance
+     *
+     * @var \Magento\Filesystem\Directory\WriteInterface
+     */
+    protected $_varDirectory;
+
+    /**
      * @param \Magento\Index\Model\Process\FileFactory $fileFactory
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\App\Dir $dirs,
-        \Magento\Index\Model\Process\FileFactory $fileFactory
+        \Magento\Index\Model\Process\FileFactory $fileFactory,
+        \Magento\Filesystem $filesystem
     ) {
-        $this->_dirs = $dirs;
         $this->_fileFactory   = $fileFactory;
+        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
     }
 
     /**
@@ -69,15 +71,11 @@ class Storage
     public function getFile($processId)
     {
         if (!isset($this->_fileHandlers[$processId])) {
-            $file = $this->_fileFactory->create();
-            $varDirectory = $this->_dirs->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'locks';
-            $file->setAllowCreateFolders(true);
-
-            $file->open(array('path' => $varDirectory));
-            $fileName = 'index_process_' . $processId . '.lock';
-            $file->streamOpen($fileName);
-            $file->streamWrite(date('r'));
-            $this->_fileHandlers[$processId] = $file;
+            $this->_varDirectory->create('locks');
+            $fileName = 'locks/index_process_' . $processId . '.lock';
+            $stream = $this->_varDirectory->openFile($fileName, 'w+');
+            $stream->write(date('r'));
+            $this->_fileHandlers[$processId] = $this->_fileFactory->create(array('streamHandler' => $stream));
         }
         return $this->_fileHandlers[$processId];
     }

@@ -32,11 +32,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dirMock;
+    protected $_filesystem;
 
     protected function setUp()
     {
-        $this->_dirMock = $this->getMock('Magento\App\Dir', array(), array(), '', false, false);
+        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
     }
 
     protected function _getHelper($store, $config, $factory)
@@ -51,18 +51,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($store));
 
-        $adapterMock = $this->getMockBuilder('Magento\Filesystem\Adapter\Local')
-            ->getMock();
-        $adapterMock->expects($this->any())
-            ->method('isDirectory')
-            ->will($this->returnValue(true));
-
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-
         $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
 
         return new \Magento\Captcha\Helper\Data(
-            $context, $this->_dirMock, $storeManager, $config, $filesystem, $factory
+            $context, $storeManager, $config, $this->_filesystem, $factory
         );
     }
 
@@ -82,7 +74,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with($this->equalTo('Zend'))
             ->will($this->returnValue(new \Magento\Captcha\Model\DefaultModel(
-                $this->getMock('Magento\Core\Model\Session\AbstractSession', array(), array(), '', false),
+                $this->getMock('Magento\Session\SessionManager', array(), array(), '', false),
                 $this->getMock('Magento\Captcha\Helper\Data', array(), array(), '', false),
                 $this->getMock('Magento\Captcha\Model\Resource\LogFactory', array(), array(), '', false),
                 'user_create'
@@ -111,9 +103,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFonts()
     {
-        $this->_dirMock->expects($this->once())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::LIB)
+        $this->_filesystem->expects($this->once())
+            ->method('getPath')
+            ->with(\Magento\Filesystem::LIB)
             ->will($this->returnValue(TESTS_TEMP_DIR . '/lib'));
 
         $factoryMock = $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false);
@@ -134,17 +126,25 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetImgDir()
     {
         $factoryMock = $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false);
-        $this->_dirMock->expects($this->once())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::MEDIA)
-            ->will($this->returnValue(TESTS_TEMP_DIR . '/media'));
+
+        $dirWriteMock = $this->getMock('Magento\Filesystem\Directory\Write',
+            array('changePermissions', 'create', 'getAbsolutePath'), array(), '', false);
+
+        $this->_filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::MEDIA)
+            ->will($this->returnValue($dirWriteMock));
+
+        $dirWriteMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('/captcha/base')
+            ->will($this->returnValue(TESTS_TEMP_DIR . '/captcha/base'));
 
         $object = $this->_getHelper($this->_getStoreStub(), $this->_getConfigStub(), $factoryMock);
         $this->assertFileNotExists(TESTS_TEMP_DIR . '/captcha');
         $result = $object->getImgDir();
-        $result = str_replace('/', DIRECTORY_SEPARATOR, $result);
         $this->assertStringStartsWith(TESTS_TEMP_DIR, $result);
-        $this->assertStringEndsWith('captcha' . DIRECTORY_SEPARATOR . 'base' . DIRECTORY_SEPARATOR, $result);
+        $this->assertStringEndsWith('captcha/base/', $result);
     }
 
     /**

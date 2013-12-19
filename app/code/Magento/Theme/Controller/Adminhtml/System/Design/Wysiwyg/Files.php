@@ -147,7 +147,7 @@ class Files extends \Magento\Backend\App\Action
         /** @var $helper \Magento\Theme\Helper\Storage */
         $helper = $this->_objectManager->get('Magento\Theme\Helper\Storage');
         try {
-            $this->_fileFactory->create($file, array(
+            return $this->_fileFactory->create($file, array(
                 'type'  => 'filename',
                 'value' => $helper->getThumbnailPath($file)
             ));

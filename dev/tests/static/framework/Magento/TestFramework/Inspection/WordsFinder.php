@@ -81,7 +81,7 @@ class WordsFinder
         }
 
         // Add config files to whitelist, as they surely contain banned words
-        $basePath = $this->_baseDir . DIRECTORY_SEPARATOR;
+        $basePath = $this->_baseDir . '/';
         $basePathLen = strlen($basePath);
         foreach ($configFiles as $configFile) {
             $configFile = realpath($configFile);
@@ -191,7 +191,7 @@ class WordsFinder
         $whitelist = $this->_whitelist;
         $this->_whitelist = array();
         foreach ($whitelist as $whitelistFile => $whitelistWords) {
-            $whitelistFile = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $whitelistFile);
+            $whitelistFile = str_replace('\\', '/', $whitelistFile);
             $this->_whitelist[$whitelistFile] = $whitelistWords;
         }
     }
@@ -258,7 +258,7 @@ class WordsFinder
      */
     protected function _removeWhitelistedWords($path, $foundWords)
     {
-        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+        $path = str_replace('\\', '/', $path);
         foreach ($this->_whitelist as $whitelistPath => $whitelistWords) {
             if (strncmp($whitelistPath, $path, strlen($whitelistPath)) != 0) {
                 continue;

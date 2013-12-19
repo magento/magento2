@@ -50,6 +50,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
@@ -57,13 +58,14 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_productFactory = $productFactory;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     protected function _construct()
@@ -169,7 +171,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'type'      => 'number',
             'index'     => 'position',
             'editable'  => !$this->getCategory()->getProductsReadonly()
-            //'renderer'  => 'Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Input'
+            //'renderer'  => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Input'
         ));
 
         return parent::_prepareColumns();

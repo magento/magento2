@@ -106,7 +106,7 @@ class Product extends \Magento\App\Action\Action
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Catalog\Model\Design $catalogDesign
-     * @param \Magento\Core\Model\Session\Generic $reviewSession
+     * @param \Magento\Session\Generic $reviewSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -120,7 +120,7 @@ class Product extends \Magento\App\Action\Action
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         \Magento\Core\Model\Session $session,
         \Magento\Catalog\Model\Design $catalogDesign,
-        \Magento\Core\Model\Session\Generic $reviewSession,
+        \Magento\Session\Generic $reviewSession,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_storeManager = $storeManager;
@@ -142,7 +142,7 @@ class Product extends \Magento\App\Action\Action
      * Dispatch request
      *
      * @param RequestInterface $request
-     * @return mixed
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
@@ -295,19 +295,19 @@ class Product extends \Magento\App\Action\Action
                     }
 
                     $review->aggregate();
-                    $session->addSuccess(__('Your review has been accepted for moderation.'));
+                    $this->messageManager->addSuccess(__('Your review has been accepted for moderation.'));
                 } catch (\Exception $e) {
                     $session->setFormData($data);
-                    $session->addError(__('We cannot post the review.'));
+                    $this->messageManager->addError(__('We cannot post the review.'));
                 }
             } else {
                 $session->setFormData($data);
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
-                        $session->addError($errorMessage);
+                        $this->messageManager->addError($errorMessage);
                     }
                 } else {
-                    $session->addError(__('We cannot post the review.'));
+                    $this->messageManager->addError(__('We cannot post the review.'));
                 }
             }
         }
@@ -373,7 +373,7 @@ class Product extends \Magento\App\Action\Action
         }
 
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages(array('Magento\Review\Model\Session', 'Magento\Catalog\Model\Session'));
+        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 

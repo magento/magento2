@@ -42,11 +42,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_uploaderFactory;
 
     /**
-     * Dir model
+     * Filesystem facade
      *
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem
      */
-    protected $_dir;
+    protected $_filesystem;
 
     /**
      * File Uploader factory
@@ -59,15 +59,15 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Construct
      *
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Dir $dir
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\App\Dir $dir,
+        \Magento\Filesystem $filesystem,
         \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
     ) {
-        $this->_dir = $dir;
+        $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
         parent::__construct($logger);
     }
@@ -94,7 +94,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return $this;
         }
 
-        $path = $this->_dir->getDir(\Magento\App\Dir::MEDIA) . DS . 'catalog' . DS . 'category' . DS;
+        $path = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA)->getAbsolutePath('catalog/category/');
 
         try {
             /** @var $uploader \Magento\Core\Model\File\Uploader */

@@ -38,12 +38,6 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
     const UPLOAD_DIR = 'logo';
 
     /**
-     * Token for the root part of directory path for uploading
-     *
-     */
-    const UPLOAD_ROOT = 'media';
-
-    /**
      * Return path to directory for upload file
      *
      * @return string
@@ -51,10 +45,7 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
      */
     protected function _getUploadDir()
     {
-        $uploadDir = $this->_appendScopeInfo(self::UPLOAD_DIR);
-        $uploadRoot = $this->_getUploadRoot(self::UPLOAD_ROOT);
-        $uploadDir = $uploadRoot . DIRECTORY_SEPARATOR . $uploadDir;
-        return $uploadDir;
+        return $this->_mediaDirectory->getAbsolutePath($this->_appendScopeInfo(self::UPLOAD_DIR));
     }
 
     /**
@@ -65,16 +56,5 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
     protected function _addWhetherScopeInfo()
     {
         return true;
-    }
-
-    /**
-     * Get real media dir path
-     *
-     * @param  $token
-     * @return string
-     */
-    protected function _getUploadRoot($token)
-    {
-        return $this->_dir->getDir($token);
     }
 }

@@ -48,12 +48,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with('admin/captcha/qwe')
             ->will($this->returnValue('1'));
 
+        $filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+
+        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
+        $directoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
+
         $this->_model = new \Magento\Captcha\Helper\Adminhtml\Data(
             $this->getMock('Magento\App\Helper\Context', array(), array(), '', false),
-            $this->getMock('Magento\App\Dir', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\Config', array(), array(), '', false),
-            $this->getMock('Magento\Filesystem', array(), array(), '', false),
+            $filesystemMock,
             $this->getMock('Magento\Captcha\Model\CaptchaFactory', array(), array(), '', false),
             $backendConfig
         );

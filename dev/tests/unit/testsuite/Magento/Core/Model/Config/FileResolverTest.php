@@ -26,104 +26,133 @@ namespace Magento\Core\Model\Config;
 class FileResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Files resolver
+     *
      * @var \Magento\Core\Model\Config\FileResolver
      */
-    protected $_model;
+    protected $model;
+
+    /**
+     * Filesystem
+     *
+     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystem;
+
+    /**
+     * File iterator factory
+     *
+     * @var \Magento\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $iteratorFactory;
+
+    /**
+     * @var \Magento\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $moduleReader;
 
     protected function setUp()
     {
-        $appConfigDir = __DIR__ . DIRECTORY_SEPARATOR . 'FileResolver'
-            . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'etc';
-
-        $applicationDirs = $this->getMock('Magento\App\Dir', array(), array('getDir'), '', false);
-        $applicationDirs->expects($this->any())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::CONFIG)
-            ->will($this->returnValue($appConfigDir));
-
-        $moduleReader = $this->getMock('Magento\Module\Dir\Reader', array(),
-            array('getConfigurationFiles'), '', false);
-        $moduleReader->expects($this->any())
-            ->method('getConfigurationFiles')
-            ->will($this->returnValueMap(
-                array(
-                    array(
-                        'adminhtml' . DIRECTORY_SEPARATOR . 'di.xml',
-                        array(
-                            'app/code/Custom/FirstModule/adminhtml/di.xml',
-                            'app/code/Custom/SecondModule/adminhtml/di.xml',
-                        )
-                    ),
-                    array(
-                        'frontend' . DIRECTORY_SEPARATOR . 'di.xml',
-                        array(
-                            'app/code/Custom/FirstModule/frontend/di.xml',
-                            'app/code/Custom/SecondModule/frontend/di.xml',
-                        )
-                    ),
-                    array(
-                        'di.xml',
-                        array(
-                            'app/code/Custom/FirstModule/di.xml',
-                            'app/code/Custom/SecondModule/di.xml',
-                        )
-                    ),
-                )
-            ));
-        $this->_model = new \Magento\Core\Model\Config\FileResolver($moduleReader, $applicationDirs);
+        $this->iteratorFactory = $this->getMock(
+            'Magento\Config\FileIteratorFactory',
+            array(),
+            array('getPath'),
+            '',
+            false
+        );
+        $this->filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $this->moduleReader = $this->getMock(
+            'Magento\Module\Dir\Reader',
+            array(),
+            array('getConfigurationFiles'),
+            '',
+            false
+        );
+        $this->model = new \Magento\Core\Model\Config\FileResolver(
+            $this->moduleReader,
+            $this->filesystem,
+            $this->iteratorFactory
+        );
     }
 
     /**
-     * @param array $expectedResult
-     * @param string $scope
+     * Test for get method with primary scope
+     *
+     * @dataProvider providerGet
      * @param string $filename
-     * @dataProvider getMethodDataProvider
+     * @param array $fileList
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testGet(array $expectedResult, $scope, $filename)
+    public function testGetPrimary($filename, $fileList)
     {
-        $this->assertEquals($expectedResult, $this->_model->get($filename, $scope));
+        $scope = 'primary';
+        $directory = $this->getMock(
+            'Magento\Filesystem\Directory\Read',
+            array('search', 'getRelativePath'),
+            array(),
+            '',
+            false
+        );
+        $directory->expects($this->once())
+            ->method('search')
+            ->with('#' . preg_quote($filename) . '$#')
+            ->will($this->returnValue($fileList));
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Filesystem::CONFIG)
+            ->will($this->returnValue($directory));
+        $this->iteratorFactory->expects($this->once())
+            ->method('create')
+            ->with($directory, $fileList)
+            ->will($this->returnValue(true));
+        $this->assertTrue($this->model->get($filename, $scope));
     }
 
     /**
+     * Test for get method with global scope
+     *
+     * @dataProvider providerGet
+     * @param string $filename
+     * @param array $fileList
+     */
+    public function testGetGlobal($filename, $fileList)
+    {
+        $scope = 'global';
+        $this->moduleReader->expects($this->once())
+            ->method('getConfigurationFiles')
+            ->with($filename)
+            ->will($this->returnValue($fileList));
+        $this->assertEquals($fileList, $this->model->get($filename, $scope));
+    }
+
+    /**
+     * Test for get method with default scope
+     *
+     * @dataProvider providerGet
+     * @param string $filename
+     * @param array $fileList
+     */
+    public function testGetDefault($filename, $fileList)
+    {
+        $scope = 'some_scope';
+        $this->moduleReader->expects($this->once())
+            ->method('getConfigurationFiles')
+            ->with($scope . '/' . $filename)
+            ->will($this->returnValue($fileList));
+        $this->assertEquals($fileList, $this->model->get($filename, $scope));
+    }
+
+    /**
+     * Data provider for get tests
+     *
      * @return array
      */
-    public function getMethodDataProvider()
+    public function providerGet()
     {
-        $appConfigDir = __DIR__ . DIRECTORY_SEPARATOR . 'FileResolver'
-            . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'etc';
         return array(
-            array(
-                array(
-                    $appConfigDir . DIRECTORY_SEPARATOR . 'config.xml',
-                    $appConfigDir . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . 'config.xml',
-                ),
-                'primary',
-                'config.xml',
-            ),
-            array(
-                array(
-                    'app/code/Custom/FirstModule/di.xml',
-                    'app/code/Custom/SecondModule/di.xml',
-                ),
-                'global',
-                'di.xml',
-            ),
-            array(
-                array(
-                    'app/code/Custom/FirstModule/frontend/di.xml',
-                    'app/code/Custom/SecondModule/frontend/di.xml',
-                ),
-                'frontend',
-                'di.xml',
-            ),
-            array(
-                array(
-                    'app/code/Custom/FirstModule/adminhtml/di.xml',
-                    'app/code/Custom/SecondModule/adminhtml/di.xml',
-                ),
-                'adminhtml',
-                'di.xml',
-            ),
+            array('di.xml', array('di.xml', 'anotherfolder/di.xml')),
+            array('no_files.xml', array()),
+            array('one_file.xml', array('one_file.xml'))
         );
     }
 }

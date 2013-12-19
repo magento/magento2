@@ -50,16 +50,9 @@ class Item
     /**
      * Module of menu item
      *
-     * @var \Magento\App\Helper\AbstractHelper
-     */
-    protected $_moduleHelper;
-
-    /**
-     * Module helper name
-     *
      * @var string
      */
-    protected $_moduleHelperName;
+    protected $_moduleName;
 
     /**
      * Menu item sort index in list
@@ -166,13 +159,18 @@ class Item
     protected $_moduleList;
 
     /**
-     * @param \Magento\Backend\Model\Menu\Item\Validator $validator
+     * @var \Magento\Module\Manager
+     */
+    private $_moduleManager;
+
+    /**
+     * @param Item\Validator $validator
      * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\Url $urlModel
-     * @param \Magento\App\Helper\AbstractHelper $helper
      * @param \Magento\Module\ModuleListInterface $moduleList
+     * @param \Magento\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -181,18 +179,19 @@ class Item
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\Url $urlModel,
-        \Magento\App\Helper\AbstractHelper $helper,
         \Magento\Module\ModuleListInterface $moduleList,
+        \Magento\Module\Manager $moduleManager,
         array $data = array()
     ) {
         $this->_validator = $validator;
         $this->_validator->validate($data);
 
+        $this->_moduleManager = $moduleManager;
         $this->_acl = $authorization;
         $this->_storeConfig = $storeConfig;
         $this->_menuFactory = $menuFactory;
         $this->_urlModel = $urlModel;
-        $this->_moduleHelper = $helper;
+        $this->_moduleName = isset($data['module']) ? $data['module'] : 'Magento_Backend';
         $this->_moduleList = $moduleList;
 
         $this->_id = $data['id'];
@@ -288,7 +287,7 @@ class Item
     }
 
     /**
-     * Chechk whether item has javascript callback on click
+     * Check whether item has javascript callback on click
      *
      * @return bool
      */
@@ -371,14 +370,14 @@ class Item
     /**
      * Set Item module
      *
-     * @param \Magento\App\Helper\AbstractHelper $helper
+     * @param string $module
      * @return \Magento\Backend\Model\Menu\Item
      * @throws \InvalidArgumentException
      */
-    public function setModuleHelper(\Magento\App\Helper\AbstractHelper $helper)
+    public function setModule($module)
     {
-        $this->_validator->validateParam('module', $helper);
-        $this->_moduleHelper = $helper;
+        $this->_validator->validateParam('module', $module);
+        $this->_moduleName = $module;
         return $this;
     }
 
@@ -405,7 +404,7 @@ class Item
      */
     public function setConfigDependency($configPath)
     {
-        $this->_validator->validateParam('depenedsOnConfig', $configPath);
+        $this->_validator->validateParam('dependsOnConfig', $configPath);
         $this->_dependsOnConfig = $configPath;
         return $this;
     }
@@ -417,7 +416,7 @@ class Item
      */
     public function isDisabled()
     {
-        return !$this->_moduleHelper->isModuleOutputEnabled()
+        return !$this->_moduleManager->isOutputEnabled($this->_moduleName)
             || !$this->_isModuleDependenciesAvailable()
             || !$this->_isConfigDependenciesAvailable();
     }
@@ -465,18 +464,12 @@ class Item
 
     public function __sleep()
     {
-        $helperClass = get_class($this->_moduleHelper);
-        // Save original class name of the helper
-        if (substr($helperClass, -1 * strlen('Interceptor')) === 'Interceptor') {
-            $helperClass = get_parent_class($helperClass);
-        }
-        $this->_moduleHelperName = $helperClass;
         if ($this->_submenu) {
             $this->_serializedSubmenu = $this->_submenu->serialize();
         }
         return array(
             '_parentId',
-            '_moduleHelperName',
+            '_moduleName',
             '_sortIndex',
             '_dependsOnConfig',
             '_id',
@@ -493,7 +486,7 @@ class Item
     public function __wakeup()
     {
         $objectManager = \Magento\App\ObjectManager::getInstance();
-        $this->_moduleHelper = $objectManager->get($this->_moduleHelperName);
+        $this->_moduleManager = $objectManager->get('Magento\Module\Manager');
         $this->_validator = $objectManager->get('Magento\Backend\Model\Menu\Item\Validator');
         $this->_acl = $objectManager->get('Magento\AuthorizationInterface');
         $this->_storeConfig = $objectManager->get('Magento\Core\Model\Store\Config');

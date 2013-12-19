@@ -27,7 +27,7 @@
 require __DIR__ . '/../../../../../app/bootstrap.php';
 
 // default generation dir
-$generationDir = BP . DS . \Magento\Code\Generator\Io::DEFAULT_DIRECTORY;
+$generationDir = BP . '/' . \Magento\Code\Generator\Io::DEFAULT_DIRECTORY;
 
 try {
     $opt = new Zend_Console_Getopt(array(
@@ -74,7 +74,7 @@ try {
 \Magento\Autoload\IncludePath::addIncludePath($generationDir);
 
 //reinit generator with correct generation path
-$io = new \Magento\Code\Generator\Io(null, null, $generationDir);
+$io = new \Magento\Code\Generator\Io(new \Magento\Filesystem\Driver\File(), null, $generationDir);
 $generator = new \Magento\Code\Generator(null, null, $io);
 
 try {

@@ -49,7 +49,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dirs;
+    protected $_directory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -61,14 +61,16 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = $this->getMockForAbstractClass('Magento\ObjectManager', array('create'));
         $this->_config = $this->getMock('Magento\View\Asset\ConfigInterface', array(), array(), '', false);
         $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-        $this->_dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
+        $this->_directory = $this->getMock('\Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_state = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->will($this->returnValue($this->_directory));
 
         $this->_object = new \Magento\View\Asset\MergeService(
             $this->_objectManager,
             $this->_config,
             $this->_filesystem,
-            $this->_dirs,
             $this->_state
         );
     }
@@ -172,15 +174,10 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanMergedJsCss()
     {
-        $this->_dirs->expects($this->once())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::PUB_VIEW_CACHE)
-            ->will($this->returnValue('/pub/cache'));
-
-        $mergedDir = '/pub/cache/' . \Magento\View\Asset\Merged::PUBLIC_MERGE_DIR;
-        $this->_filesystem->expects($this->once())
+        $mergedDir = \Magento\View\Asset\Merged::PUBLIC_MERGE_DIR;
+        $this->_directory->expects($this->once())
             ->method('delete')
-            ->with($mergedDir, null);
+            ->with($mergedDir);
 
         $this->_object->cleanMergedJsCss();
     }

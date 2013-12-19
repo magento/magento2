@@ -34,7 +34,7 @@
 
 namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Renderer;
 
-class Checkbox extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders grid column

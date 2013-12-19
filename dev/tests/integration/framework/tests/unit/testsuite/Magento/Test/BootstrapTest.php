@@ -104,8 +104,12 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         );
         $this->_shell = $this->getMock('Magento\Shell', array('execute'));
         $this->_object = new \Magento\TestFramework\Bootstrap(
-            $this->_settings, $this->_envBootstrap, $this->_docBlockBootstrap, $this->_profilerBootstrap,
-            $this->_shell, __DIR__
+            $this->_settings,
+            $this->_envBootstrap,
+            $this->_docBlockBootstrap,
+            $this->_profilerBootstrap,
+            $this->_shell,
+            __DIR__
         );
     }
 
@@ -143,8 +147,12 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         ;
         // invoke the constructor explicitly
         $this->_object->__construct(
-            $settings, $this->_envBootstrap, $this->_docBlockBootstrap, $this->_profilerBootstrap,
-            $this->_shell, __DIR__
+            $settings,
+            $this->_envBootstrap,
+            $this->_docBlockBootstrap,
+            $this->_profilerBootstrap,
+            $this->_shell,
+            __DIR__
         );
         $this->_object
             ->expects($this->any())
@@ -197,7 +205,6 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     public function testRunBootstrapProfilerEnabled()
     {
         $baseDir = $this->_integrationTestsDir;
-        $dirSep = DIRECTORY_SEPARATOR;
         $this->_injectApplicationMock(array(
             'TESTS_PROFILER_FILE'                   => 'profiler.csv',
             'TESTS_BAMBOO_PROFILER_FILE'            => 'profiler_bamboo.csv',
@@ -206,12 +213,12 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->_profilerBootstrap
             ->expects($this->once())
             ->method('registerFileProfiler')
-            ->with("{$baseDir}{$dirSep}profiler.csv")
+            ->with("{$baseDir}/profiler.csv")
         ;
         $this->_profilerBootstrap
             ->expects($this->once())
             ->method('registerBambooProfiler')
-            ->with("{$baseDir}{$dirSep}profiler_bamboo.csv", "{$baseDir}{$dirSep}profiler_metrics.php")
+            ->with("{$baseDir}/profiler_bamboo.csv", "{$baseDir}/profiler_metrics.php")
         ;
         $this->_object->runBootstrap();
     }

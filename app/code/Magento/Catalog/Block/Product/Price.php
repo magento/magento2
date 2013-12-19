@@ -75,6 +75,11 @@ class Price extends \Magento\View\Element\Template
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\Checkout\Helper\Cart
+     */
+    protected $_cartHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -82,6 +87,7 @@ class Price extends \Magento\View\Element\Template
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
      */
     public function __construct(
@@ -92,8 +98,10 @@ class Price extends \Magento\View\Element\Template
         \Magento\Core\Model\Registry $registry,
         \Magento\Stdlib\String $string,
         \Magento\Math\Random $mathRandom,
+        \Magento\Checkout\Helper\Cart $cartHelper,
         array $data = array()
     ) {
+        $this->_cartHelper = $cartHelper;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $registry;
         $this->_catalogData = $catalogData;
@@ -205,7 +213,7 @@ class Price extends \Magento\View\Element\Template
      */
     public function getAddToCartUrl($product, $additional = array())
     {
-        return $this->helper('Magento\Checkout\Helper\Cart')->getAddUrl($product, $additional);
+        return $this->_cartHelper->getAddUrl($product, $additional);
     }
 
     /**

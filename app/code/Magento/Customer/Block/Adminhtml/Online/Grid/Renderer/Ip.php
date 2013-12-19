@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Online\Grid\Renderer;
 
-class Ip extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Ip extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
 
     public function render(\Magento\Object $row)

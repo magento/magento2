@@ -44,10 +44,9 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     {
         $this->_factoryMock = $this->getMock('Magento\Log\Model\Shell\Command\Factory', array(), array(), '', false);
         $filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-        $dirMock = $this->getMock('Magento\App\Dir', array(), array(), '', false);
         $this->_model = $this->getMock('Magento\Log\Model\Shell',
             array('_applyPhpVariables'),
-            array($filesystemMock, 'entryPoint.php', $dirMock, $this->_factoryMock)
+            array($filesystemMock, 'entryPoint.php', $this->_factoryMock)
         );
     }
 

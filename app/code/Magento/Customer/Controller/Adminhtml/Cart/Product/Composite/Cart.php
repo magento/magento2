@@ -116,8 +116,6 @@ class Cart extends \Magento\Backend\App\Action
 
         $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
             ->renderConfigureResult($configureResult);
-
-        return $this;
     }
 
     /**
@@ -143,10 +141,8 @@ class Cart extends \Magento\Backend\App\Action
         }
 
         $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
-        $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setCompositeProductResult($updateResult);
+        $this->_objectManager->get('Magento\Backend\Model\Session')->setCompositeProductResult($updateResult);
         $this->_redirect('catalog/product/showUpdateResult');
-
-        return $this;
     }
 
     /**

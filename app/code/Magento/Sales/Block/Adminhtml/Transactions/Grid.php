@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Transactions;
 
-class Grid extends \Magento\Adminhtml\Block\Widget\Grid
+class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * Core registry
@@ -62,6 +62,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $collectionFactory
      * @param \Magento\Payment\Helper\Data $paymentData
@@ -71,6 +72,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\Order\Payment\Transaction $transaction,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $collectionFactory,
         \Magento\Payment\Helper\Data $paymentData,
@@ -81,7 +83,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
         $this->_paymentData = $paymentData;
         $this->_transaction = $transaction;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     /**
@@ -101,7 +103,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Prepare collection for grid
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
@@ -122,7 +124,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Add columns to grid
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {

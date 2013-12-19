@@ -233,7 +233,7 @@ class Filesystem extends \Magento\Data\Collection
             $dir = array($dir);
         }
         foreach ($dir as $folder) {
-            if ($nodes = glob($folder . DIRECTORY_SEPARATOR . '*')) {
+            if ($nodes = glob($folder . '/*')) {
                 foreach ($nodes as $node) {
                     $collectedResult[] = $node;
                 }

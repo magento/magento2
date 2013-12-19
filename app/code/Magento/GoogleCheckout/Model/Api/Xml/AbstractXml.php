@@ -72,7 +72,7 @@ abstract class AbstractXml extends \Magento\Object
 
     public function log($text, $nl=true)
     {
-        error_log(print_r($text, 1) . ($nl ? "\n" : ''), 3, $this->objectManager->get('Magento\Core\Mode\Dir')->getBaseDir('log') . DS . 'callback.log');
+        error_log(print_r($text, 1) . ($nl ? "\n" : ''), 3, $this->objectManager->get('Magento\Core\Mode\Dir')->getBaseDir('log') . '/callback.log');
         return $this;
     }
 
@@ -138,8 +138,8 @@ abstract class AbstractXml extends \Magento\Object
             //Setup the log file
             $logDir = $this->objectManager->get('Magento\Core\Mode\Dir')->getBaseDir('log');
             $this->getData('g_request')->SetLogFiles(
-                $logDir . DS . 'googleerror.log',
-                $logDir . DS . 'googlemessage.log',
+                $logDir . '/googleerror.log',
+                $logDir . '/googlemessage.log',
                 L_ALL
             );
         }
@@ -168,8 +168,8 @@ abstract class AbstractXml extends \Magento\Object
             //Setup the log file
             $logDir = $this->objectManager->get('Magento\Core\Mode\Dir')->getBaseDir('log');
             $this->getData('g_response')->SetLogFiles(
-                $logDir . DS . 'googleerror.log',
-                $logDir . DS . 'googlemessage.log',
+                $logDir . '/googleerror.log',
+                $logDir . '/googlemessage.log',
                 L_ALL
             );
         }

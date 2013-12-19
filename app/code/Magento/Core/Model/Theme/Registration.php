@@ -66,32 +66,35 @@ class Registration
     );
 
     /**
+     * @var \Magento\Filesystem\Directory\Read
+     */
+    protected $directoryRead;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Model\Theme\Collection $filesystemCollection
+     * @param Collection $filesystemCollection
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory,
-        \Magento\Core\Model\Theme\Collection $filesystemCollection
+        \Magento\Core\Model\Resource\Theme\CollectionFactory    $collectionFactory,
+        \Magento\Core\Model\Theme\Collection                    $filesystemCollection,
+        \Magento\Filesystem                                     $filesystem
     ) {
-        $this->_collectionFactory = $collectionFactory;
-        $this->_themeCollection = $filesystemCollection;
+        $this->_collectionFactory   = $collectionFactory;
+        $this->_themeCollection     = $filesystemCollection;
+        $this->directoryRead        = $filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
     }
 
     /**
      * Theme registration
      *
-     * @param string $baseDir
      * @param string $pathPattern
      * @return \Magento\View\Design\ThemeInterface
      */
-    public function register($baseDir = '', $pathPattern = '')
+    public function register($pathPattern = '')
     {
-        if (!empty($baseDir)) {
-            $this->_themeCollection->setBaseDir($baseDir);
-        }
-
         if (empty($pathPattern)) {
             $this->_themeCollection->addDefaultPattern('*');
         } else {
@@ -157,7 +160,7 @@ class Registration
         if (!$theme->getPreviewImage() || !$themeDirectory) {
             return $this;
         }
-        $imagePath = realpath($themeDirectory . DIRECTORY_SEPARATOR . $theme->getPreviewImage());
+        $imagePath = $this->directoryRead->getAbsolutePath($themeDirectory . '/' . $theme->getPreviewImage());
         if (0 === strpos($imagePath, $themeDirectory)) {
             $theme->getThemeImage()->createPreviewImage($imagePath);
         }

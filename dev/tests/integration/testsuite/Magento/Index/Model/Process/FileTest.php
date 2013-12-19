@@ -35,17 +35,12 @@ class FileTest extends \PHPUnit_Framework_TestCase
     /**
      * Test lock name
      */
-    const FILE_NAME = 'index_test.lock';
+    const FILE_PATH = 'locks/index_test.lock';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
      */
     protected $_objectManager;
-
-    /**
-     * @var string
-     */
-    protected $_fileDirectory;
 
     /**
      * @var resource
@@ -57,14 +52,19 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var \Magento\Filesystem\Directory\WriteInterface
+     */
+    protected $_varDirectory;
+
     protected function setUp()
     {
-        $this->_objectManager   = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model           = $this->_objectManager->create('Magento\Index\Model\Process\File');
-        /** @var $dir \Magento\App\Dir */
-        $dir = $this->_objectManager->get('Magento\App\Dir');
-        $this->_fileDirectory   = $dir->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'locks';
-        $fullFileName           = $this->_fileDirectory . DIRECTORY_SEPARATOR . self::FILE_NAME;
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $filesystem = $this->_objectManager->create('Magento\Filesystem');
+        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+
+        $fullFileName = $this->_varDirectory->getAbsolutePath(self::FILE_PATH);
         $this->_testFileHandler = fopen($fullFileName, 'w');
     }
 
@@ -72,7 +72,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->_objectManager);
         unset($this->_model);
-        unset($this->_fileDirectory);
+        unset($this->_varDirectory);
         fclose($this->_testFileHandler);
         unset($this->_testFileHandler);
     }
@@ -82,8 +82,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     protected function _openFile()
     {
-        $this->_model->cd($this->_fileDirectory);
-        $this->_model->streamOpen(self::FILE_NAME);
+        $this->_model = $this->_objectManager->create(
+            'Magento\Index\Model\Process\File',
+            array('streamHandler' => $this->_varDirectory->openFile(self::FILE_PATH, 'w+'))
+        );
     }
 
     /**
@@ -104,11 +106,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
         flock($this->_testFileHandler, LOCK_UN);
     }
 
-    public function testProcessLockNoStream()
-    {
-        $this->assertFalse($this->_model->processLock());
-    }
-
     /**
      * This test can't check non blocking lock case because its required two parallel test processes
      */
@@ -117,7 +114,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->_openFile();
 
         // can't take shared lock if file has exclusive lock
-        $this->assertTrue($this->_model->processLock());
+        $this->_model->processLock();
+        $this->assertFalse($this->_model->isProcessLocked());
         $this->assertFalse($this->_tryGetSharedLock(), 'File must be locked');
         $this->assertAttributeSame(true, '_streamLocked', $this->_model);
         $this->assertAttributeSame(false, '_processLocked', $this->_model);
@@ -131,8 +129,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         // can't take exclusive lock if file has shared lock
         $this->assertTrue($this->_tryGetSharedLock(), 'File must not be locked');
-        $this->assertFalse($this->_model->processLock());
-        $this->assertAttributeSame(true, '_streamLocked', $this->_model);
+        $this->_model->processLock();
+        $this->assertTrue($this->_model->isProcessLocked());
+        $this->assertAttributeSame(false, '_streamLocked', $this->_model);
         $this->assertAttributeSame(true, '_processLocked', $this->_model);
 
         $this->_unlock();
@@ -142,15 +141,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->_openFile();
         $this->_model->processLock();
-
-        $this->assertTrue($this->_model->processUnlock());
+        $this->_model->processUnlock();
+        $this->assertFalse($this->_model->isProcessLocked());
         $this->assertAttributeSame(false, '_streamLocked', $this->_model);
         $this->assertAttributeSame(null, '_processLocked', $this->_model);
-    }
-
-    public function testIsProcessLockedNoStream()
-    {
-        $this->assertNull($this->_model->isProcessLocked());
     }
 
     public function testIsProcessLockedStoredFlag()

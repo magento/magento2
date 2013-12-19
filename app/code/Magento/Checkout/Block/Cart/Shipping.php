@@ -53,11 +53,17 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_directoryBlock;
 
     /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $_taxHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Directory\Block\Data $directoryBlock
+     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param array $data
      */
     public function __construct(
@@ -66,8 +72,10 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Directory\Block\Data $directoryBlock,
+        \Magento\Tax\Helper\Data $taxHelper,
         array $data = array()
     ) {
+        $this->_taxHelper = $taxHelper;
         $this->_directoryBlock = $directoryBlock;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
     }
@@ -235,7 +243,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getShippingPrice($price, $flag)
     {
-        return $this->formatPrice($this->helper('Magento\Tax\Helper\Data')->getShippingPrice(
+        return $this->formatPrice($this->_taxHelper->getShippingPrice(
             $price,
             $flag,
             $this->getAddress(),

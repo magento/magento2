@@ -31,42 +31,57 @@ class DirTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\App\Dir|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_applicationDirs;
+    protected $filesystemMock;
 
     /**
      * @var \Magento\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_stringMock;
 
+    /**
+     * @var \Magento\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $directoryMock;
+
     protected function setUp()
     {
-        $this->_applicationDirs = $this->getMock('Magento\App\Dir', array(), array(), '', false, false);
-        $this->_applicationDirs
-            ->expects($this->once())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::MODULES)
-            ->will($this->returnValue('app' . DIRECTORY_SEPARATOR . 'code'));
+        $this->filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false, false);
+        $this->directoryMock  = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false, false);
+        $this->_stringMock    = $this->getMock('Magento\Stdlib\String', array(), array(), '', false, false);
 
-        $this->_stringMock = $this->getMock('\Magento\Stdlib\String', array(), array(), '', false, false);
-        $this->_stringMock->expects($this->once())->method('upperCaseWords')
-            ->will($this->returnValue('Test' . DIRECTORY_SEPARATOR . 'Module'));
-        $this->_model = new \Magento\Module\Dir($this->_applicationDirs, $this->_stringMock);
+        $this->_stringMock->expects($this->once())
+            ->method('upperCaseWords')
+            ->will($this->returnValue('Test/Module'));
+
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($this->directoryMock));
+
+        $this->_model = new \Magento\Module\Dir($this->filesystemMock, $this->_stringMock);
     }
 
     public function testGetDirModuleRoot()
     {
+        $this->directoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('Test/Module')
+            ->will($this->returnValue('/Test/Module'));
         $this->assertEquals(
-            str_replace('/', DIRECTORY_SEPARATOR, 'app/code/Test/Module'),
+            '/Test/Module',
             $this->_model->getDir('Test_Module')
         );
     }
 
     public function testGetDirModuleSubDir()
     {
+        $this->directoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('Test/Module/etc')
+            ->will($this->returnValue('/Test/Module/etc'));
         $this->assertEquals(
-            str_replace('/', DIRECTORY_SEPARATOR, 'app/code/Test/Module/etc'),
+            '/Test/Module/etc',
             $this->_model->getDir('Test_Module', 'etc')
         );
     }

@@ -119,6 +119,7 @@ class Cc extends \Magento\Payment\Block\Info\Cc
                     $balance = $this->_coreData->currency($cardInfo->getBalanceOnCard(), true, false);
                     $data[__('Remaining Balance')] = $balance;
                 }
+                $cardInfo->setMethodInstance($this->getInfo()->getMethodInstance());
                 $this->setCardInfoObject($cardInfo);
                 $cards[] = array_merge($this->getSpecificInformation(), $data);
                 $this->unsCardInfoObject();

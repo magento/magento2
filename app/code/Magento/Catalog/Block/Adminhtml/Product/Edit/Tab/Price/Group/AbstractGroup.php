@@ -34,7 +34,7 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group;
 
 abstract class AbstractGroup
-    extends \Magento\Adminhtml\Block\Widget
+    extends \Magento\Backend\Block\Widget
     implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**

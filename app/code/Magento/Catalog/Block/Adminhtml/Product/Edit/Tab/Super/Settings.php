@@ -41,10 +41,16 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configurableType;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Catalog\Model\Product\Type\Configurable $configurableType
+     * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
      */
     public function __construct(
@@ -52,8 +58,10 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Catalog\Model\Product\Type\Configurable $configurableType,
+        \Magento\Core\Helper\Data $coreHelper,
         array $data = array()
     ) {
+        $this->_coreHelper = $coreHelper;
         $this->_configurableType = $configurableType;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -65,7 +73,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareLayout()
     {
         $onclick = "jQuery('[data-form=edit-product]').attr('action', "
-            . $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getContinueUrl())
+            . $this->_coreHelper->jsonEncode($this->getContinueUrl())
             . ").addClass('ignore-validate').submit();";
         $this->addChild('continue_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'   => __('Generate Variations'),

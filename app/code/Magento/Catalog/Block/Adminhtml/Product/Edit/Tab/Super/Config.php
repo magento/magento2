@@ -147,7 +147,7 @@ class Config
      */
     protected function _prepareLayout()
     {
-        $this->addChild('create_empty', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('create_empty', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Create Empty'),
             'class' => 'add',
             'onclick' => 'superProduct.createEmptyProduct()'

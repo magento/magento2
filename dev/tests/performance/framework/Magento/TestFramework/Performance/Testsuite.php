@@ -153,7 +153,7 @@ class Testsuite
      */
     protected function _getScenarioReportFile(\Magento\TestFramework\Performance\Scenario $scenario)
     {
-        $basePath = $this->_config->getReportDir() . DIRECTORY_SEPARATOR
+        $basePath = $this->_config->getReportDir() . '/'
             . pathinfo($scenario->getFile(), PATHINFO_FILENAME);
         $iteration = 1;
         do {

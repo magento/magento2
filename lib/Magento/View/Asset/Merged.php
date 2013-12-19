@@ -60,11 +60,6 @@ class Merged implements \Iterator
     protected $contentType;
 
     /**
-     * @var \Magento\App\Dir
-     */
-    protected $dirs;
-
-    /**
      * Whether initialization has been performed or not
      *
      * @var bool
@@ -74,7 +69,6 @@ class Merged implements \Iterator
     /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Dir $dirs
      * @param MergeStrategyInterface $mergeStrategy
      * @param array $assets
      * @throws \InvalidArgumentException
@@ -82,13 +76,11 @@ class Merged implements \Iterator
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Logger $logger,
-        \Magento\App\Dir $dirs,
         MergeStrategyInterface $mergeStrategy,
         array $assets
     ) {
         $this->objectManager = $objectManager;
         $this->logger = $logger;
-        $this->dirs = $dirs;
         $this->mergeStrategy = $mergeStrategy;
 
         if (!$assets) {
@@ -170,18 +162,20 @@ class Merged implements \Iterator
      */
     protected function getMergedFilePath(array $publicFiles)
     {
-        $jsDir = \Magento\Filesystem::fixSeparator($this->dirs->getDir(\Magento\App\Dir::PUB_LIB));
-        $publicDir = \Magento\Filesystem::fixSeparator($this->dirs->getDir(\Magento\App\Dir::STATIC_VIEW));
+        /** @var \Magento\Filesystem $filesystem */
+        $filesystem = $this->objectManager->get('Magento\Filesystem');
+        $jsDir = $filesystem->getPath(\Magento\Filesystem::PUB_LIB);
+        $publicDir = $filesystem->getPath(\Magento\Filesystem::STATIC_VIEW);
+
         $prefixRemovals = array($jsDir, $publicDir);
 
         $relFileNames = array();
         foreach ($publicFiles as $file) {
-            $file = \Magento\Filesystem::fixSeparator($file);
-            $relFileNames[] = str_replace($prefixRemovals, '', $file);
+            $relFileNames[] = ltrim(str_replace($prefixRemovals, '', $file), '/');
         }
 
-        $mergedDir = $this->dirs->getDir(\Magento\App\Dir::PUB_VIEW_CACHE) . '/'
-            . self::PUBLIC_MERGE_DIR;
+        $mergedDir = $filesystem->getDirectoryRead(\Magento\Filesystem::PUB_VIEW_CACHE)
+            ->getAbsolutePath(self::PUBLIC_MERGE_DIR);
         return $mergedDir . '/' . md5(implode('|', $relFileNames)) . '.' . $this->contentType;
     }
 

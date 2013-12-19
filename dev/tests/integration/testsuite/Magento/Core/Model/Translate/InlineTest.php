@@ -67,6 +67,15 @@ class InlineTest extends \PHPUnit_Framework_TestCase
                     ->get('Magento\Core\Model\StoreManagerInterface')->getStore($this->_storeId)
             )
         );
+        $this->_model->disable();
+        $this->assertFalse($this->_model->isAllowed());
+        $this->assertFalse($this->_model->isAllowed($this->_storeId));
+        $this->assertFalse(
+            $this->_model->isAllowed(
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\Core\Model\StoreManagerInterface')->getStore($this->_storeId)
+            )
+        );
     }
 
     /**

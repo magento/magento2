@@ -34,7 +34,7 @@
 namespace Magento\Customer\Block\Adminhtml\Grid\Renderer;
 
 class Multiaction
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Action
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
     /**
      * Renders column

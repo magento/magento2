@@ -190,7 +190,7 @@ class Front extends \Magento\Backend\Block\Widget\Form\Generic
         // define field dependencies
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Form\Element\Dependence')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence')
                 ->addFieldMap("is_wysiwyg_enabled", 'wysiwyg_enabled')
                 ->addFieldMap("is_html_allowed_on_front", 'html_allowed_on_front')
                 ->addFieldMap("frontend_input", 'frontend_input_type')

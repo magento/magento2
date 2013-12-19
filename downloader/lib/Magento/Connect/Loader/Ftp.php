@@ -104,12 +104,12 @@ class Ftp
         $uri = $this->_ftpUser.":".$this->_ftpPassword."@".$uri;
         $this->getFtp()->connect("ftp://".$uri);
         $this->getFtp()->pasv(true);
-        $tmpDir = self::TEMPORARY_DIR . DS;
+        $tmpDir = self::TEMPORARY_DIR . '/';
         if (!is_dir($tmpDir)) {
             $tmpDir = sys_get_temp_dir();
         }
-        if (substr($tmpDir, -1) != DS) {
-            $tmpDir .= DS;
+        if (substr($tmpDir, -1) != '/') {
+            $tmpDir .= '/';
         }
         $localFile = $tmpDir . time() . ".xml";
 

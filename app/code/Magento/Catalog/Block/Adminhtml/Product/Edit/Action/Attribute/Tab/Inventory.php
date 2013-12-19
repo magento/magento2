@@ -34,8 +34,8 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 class Inventory
-    extends \Magento\Adminhtml\Block\Widget
-    implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
+    extends \Magento\Backend\Block\Widget
+    implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\CatalogInventory\Model\Source\Backorders

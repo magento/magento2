@@ -42,16 +42,16 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchema()
     {
-        $expected = BP . str_replace('\\', DIRECTORY_SEPARATOR, '\lib\Magento\Event\etc\events.xsd');
-        $actual = $this->_model->getSchema();
+        $expected = str_replace('\\', '/', BP . '/lib/Magento/Event/etc/events.xsd');
+        $actual = str_replace('\\', '/', $this->_model->getSchema());
         $this->assertEquals($expected, $actual);
 
     }
 
     public function testGetPerFileSchema()
     {
-        $actual = $this->_model->getPerFileSchema();
-        $expected = BP . str_replace('\\', DIRECTORY_SEPARATOR, '\lib\Magento\Event\etc\events.xsd');
+        $actual = str_replace('\\', '/', $this->_model->getPerFileSchema());
+        $expected = str_replace('\\', '/', BP . '/lib/Magento/Event/etc/events.xsd');
         $this->assertEquals($expected, $actual);
     }
 }

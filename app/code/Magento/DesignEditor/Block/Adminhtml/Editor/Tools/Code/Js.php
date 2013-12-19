@@ -44,11 +44,17 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_themeContext;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Theme\Model\Config\Customization $customizationConfig
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
+     * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
      */
     public function __construct(
@@ -57,8 +63,10 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Data\FormFactory $formFactory,
         \Magento\Theme\Model\Config\Customization $customizationConfig,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
+        \Magento\Core\Helper\Data $coreHelper,
         array $data = array()
     ) {
+        $this->_coreHelper = $coreHelper;
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_customizationConfig = $customizationConfig;
         $this->_themeContext = $themeContext;
@@ -154,7 +162,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $customization = $this->_themeContext->getStagingTheme()->getCustomization();
         $jsFiles = $customization->getFilesByType(\Magento\View\Design\Theme\Customization\File\Js::TYPE);
-        return $this->helper('Magento\Core\Helper\Data')->jsonEncode($customization->generateFileInfo($jsFiles));
+        return $this->_coreHelper->jsonEncode($customization->generateFileInfo($jsFiles));
     }
 
     /**

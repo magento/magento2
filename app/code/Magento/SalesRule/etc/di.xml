@@ -28,11 +28,6 @@
     <type name="Magento\Sales\Model\Quote\Config">
         <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
     </type>
-    <type name="Magento\SalesRule\Model\Observer">
-        <param name="backendSession">
-            <instance type="Magento\Backend\Model\Session\Proxy" />
-        </param>
-    </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
             <value>

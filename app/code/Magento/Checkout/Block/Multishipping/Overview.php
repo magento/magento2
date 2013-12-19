@@ -46,15 +46,23 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     protected $_multishipping;
 
     /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $_taxHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Type\Multishipping $multishipping
+     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Type\Multishipping $multishipping,
+        \Magento\Tax\Helper\Data $taxHelper,
         array $data = array()
     ) {
+        $this->_taxHelper = $taxHelper;
         $this->_multishipping = $multishipping;
         parent::__construct($context, $data);
     }
@@ -335,7 +343,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function renderTotals($totals, $colspan = null)
     {
         if ($colspan === null) {
-            $colspan = $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 5 : 3;
+            $colspan = $this->_taxHelper->displayCartBothPrices() ? 5 : 3;
         }
         $totals = $this->getChildBlock('totals')->setTotals($totals)->renderTotals('', $colspan)
             . $this->getChildBlock('totals')->setTotals($totals)->renderTotals('footer', $colspan);

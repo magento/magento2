@@ -61,10 +61,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         if (null === $files) {
             $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml');
         }
+        $configFiles = array();
+        foreach ($files as $path) {
+            $configFiles[$path] = file_get_contents($path);
+        }
         $this->_config = $this->_objectManager->getObject(
             'Magento\Validator\Config',
             array(
-                'configFiles' => $files,
+                'configFiles' => $configFiles,
                 'builderFactory' => new \Magento\Validator\UniversalFactory(new \Magento\ObjectManager\ObjectManager()),
             )
         );

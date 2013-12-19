@@ -94,7 +94,7 @@ class Queue extends \Magento\Backend\App\Action
         $data = $this->getRequest()->getParams();
         if (empty($data) || !isset($data['id'])) {
             $this->_forward('noroute');
-            return $this;
+            return;
         }
 
         // set default value for selected store
@@ -279,12 +279,12 @@ class Queue extends \Magento\Backend\App\Action
 
             $queue->save();
 
-            $this->_getSession()->addSuccess(__('The newsletter queue has been saved.'));
+            $this->messageManager->addSuccess(__('The newsletter queue has been saved.'));
             $this->_getSession()->setFormData(false);
 
             $this->_redirect('*/*');
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $id = $this->getRequest()->getParam('id');
             if ($id) {
                 $this->_redirect('*/*/edit', array('id' => $id));

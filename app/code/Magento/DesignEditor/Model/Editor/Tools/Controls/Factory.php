@@ -59,15 +59,31 @@ class Factory
     protected $_viewFileSystem;
 
     /**
+     * @var \Magento\Config\FileIteratorFactory
+     */
+    protected $fileIteratorFactory;
+
+    /**
+     * @var \Magento\Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\View\FileSystem $viewFileSystem
+     * @param \Magento\Config\FileIteratorFactory $fileIteratorFactory
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\View\FileSystem $viewFileSystem
+        \Magento\View\FileSystem $viewFileSystem,
+        \Magento\Config\FileIteratorFactory $fileIteratorFactory,
+        \Magento\Filesystem $filesystem
     ) {
         $this->_objectManager = $objectManager;
         $this->_viewFileSystem = $viewFileSystem;
+        $this->fileIteratorFactory = $fileIteratorFactory;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -117,8 +133,15 @@ class Factory
                 throw new \Magento\Exception("Unknown control configuration type: \"{$type}\"");
                 break;
         }
+        $rootDirectory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $paths = array();
+        foreach ($files as $file) {
+            $paths[] = $rootDirectory->getRelativePath($file);
+        }
+        $fileIterator = $this->fileIteratorFactory->create($rootDirectory, $paths);
         /** @var $config \Magento\DesignEditor\Model\Config\Control\AbstractControl */
-        $config = $this->_objectManager->create($class, array('configFiles' => $files));
+        $config = $this->_objectManager->create($class, array('configFiles' => $fileIterator));
+
         return $this->_objectManager->create(
             'Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration', array(
                 'configuration' => $config,

@@ -195,7 +195,7 @@ class Links
      */
     public function getAddButtonHtml()
     {
-        $addButton = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        $addButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData([
                 'label' => __('Add New Row'),
                 'id'    => 'add_link_item',
@@ -269,40 +269,50 @@ class Links
                 'sample_type' => $item->getSampleType(),
                 'sort_order' => $item->getSortOrder(),
             );
-            $file = $fileHelper->getFilePath(
-                $this->_link->getBasePath(), $item->getLinkFile()
-            );
 
-            if ($item->getLinkFile() && !is_file($file)) {
-                $this->_coreFileStorageDb->saveFileToFilesystem($file);
+            $linkFile = $item->getLinkFile();
+            if ($linkFile) {
+                $file = $fileHelper->getFilePath(
+                    $this->_link->getBasePath(), $linkFile
+                );
+
+                $fileExist = $fileHelper->ensureFileInFilesystem($file);
+
+                if ($fileExist) {
+                    $name = '<a href="'
+                        . $this->getUrl('adminhtml/downloadable_product_edit/link', array(
+                            'id' => $item->getId(),
+                            '_secure' => true
+                        )) . '">' . $fileHelper->getFileFromPathFile($linkFile) . '</a>';
+                    $tmpLinkItem['file_save'] = array(
+                        array(
+                            'file' => $linkFile,
+                            'name' => $name,
+                            'size' => $fileHelper->getFileSize($file),
+                            'status' => 'old'
+                        ));
+                }
             }
 
-            if ($item->getLinkFile() && is_file($file)) {
-                $name = '<a href="'
-                    . $this->getUrl('adminhtml/downloadable_product_edit/link', array(
-                        'id' => $item->getId(),
-                        '_secure' => true
-                    )) . '">' . $fileHelper->getFileFromPathFile($item->getLinkFile()) . '</a>';
-                $tmpLinkItem['file_save'] = array(
-                    array(
-                        'file' => $item->getLinkFile(),
-                        'name' => $name,
-                        'size' => filesize($file),
-                        'status' => 'old'
-                    ));
+            $sampleFile = $item->getSampleFile();
+            if ($sampleFile) {
+                $file = $fileHelper->getFilePath(
+                    $this->_link->getBaseSamplePath(), $sampleFile
+                );
+
+                $fileExist = $fileHelper->ensureFileInFilesystem($file);
+
+                if ($fileExist) {
+                    $tmpLinkItem['sample_file_save'] = array(
+                        array(
+                            'file' => $item->getSampleFile(),
+                            'name' => $fileHelper->getFileFromPathFile($sampleFile),
+                            'size' => $fileHelper->getFileSize($file),
+                            'status' => 'old'
+                        ));
+                }
             }
-            $sampleFile = $fileHelper->getFilePath(
-                $this->_link->getBaseSamplePath(), $item->getSampleFile()
-            );
-            if ($item->getSampleFile() && is_file($sampleFile)) {
-                $tmpLinkItem['sample_file_save'] = array(
-                    array(
-                        'file' => $item->getSampleFile(),
-                        'name' => $fileHelper->getFileFromPathFile($item->getSampleFile()),
-                        'size' => filesize($sampleFile),
-                        'status' => 'old'
-                    ));
-            }
+
             if ($item->getNumberOfDownloads() == '0') {
                 $tmpLinkItem['is_unlimited'] = ' checked="checked"';
             }
@@ -344,7 +354,7 @@ class Links
      */
     protected function _prepareLayout()
     {
-        $this->addChild('upload_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('upload_button', 'Magento\Backend\Block\Widget\Button', array(
             'id'      => '',
             'label'   => __('Upload Files'),
             'type'    => 'button',

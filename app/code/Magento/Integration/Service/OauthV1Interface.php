@@ -51,9 +51,10 @@ interface OauthV1Interface
      * Create access token for provided consumer.
      *
      * @param int $consumerId
+     * @param bool $clearExistingToken
      * @return bool If token was created
      */
-    public function createAccessToken($consumerId);
+    public function createAccessToken($consumerId, $clearExistingToken = false);
 
     /**
      * Retrieve access token assigned to the consumer.
@@ -74,6 +75,16 @@ interface OauthV1Interface
     public function loadConsumer($consumerId);
 
     /**
+     * Load consumer by its key.
+     *
+     * @param string $key
+     * @return \Magento\Integration\Model\Oauth\Consumer
+     * @throws \Magento\Oauth\Exception
+     * @throws \Magento\Core\Exception
+     */
+    public function loadConsumerByKey($key);
+
+    /**
      * Execute post to integration (consumer) HTTP Post URL. Generate and return oauth_verifier.
      *
      * @param int $consumerId - The consumer Id.
@@ -91,4 +102,12 @@ interface OauthV1Interface
      * @return array Consumer data array
      */
     public function deleteConsumer($consumerId);
+
+    /**
+     * Remove token associated with provided consumer.
+     *
+     * @param int $consumerId
+     * @return bool If token was deleted
+     */
+    public function deleteToken($consumerId);
 }

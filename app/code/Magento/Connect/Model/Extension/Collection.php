@@ -45,23 +45,28 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected $_disallowedFilesMask = '/^package\.xml$/i';
 
     /**
-     * Base dir where packages are located
-     *
-     * @var string
+     * @var \Magento\Filesystem
      */
-    protected $_baseDir = '';
+    protected $filesystem;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\App\Dir $dirs
+     * @var \Magento\Filesystem\Directory\Write
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\App\Dir $dirs)
+    protected $connectDirectory;
+
+    /**
+     * Set base dir
+     *
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Filesystem $filesystem
+     */
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Filesystem $filesystem)
     {
         parent::__construct($entityFactory);
-        $this->_baseDir = $dirs->getDir('var') . DS . 'connect';
-        $io = new \Magento\Io\File();
-        $io->setAllowCreateFolders(true)->createDestinationDir($this->_baseDir);
-        $this->addTargetDir($this->_baseDir);
+        $this->filesystem = $filesystem;
+        $this->connectDirectory = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->connectDirectory->create('connect');
+        $this->addTargetDir($this->connectDirectory->getAbsolutePath('connect'));
     }
 
     /**
@@ -73,13 +78,14 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected function _generateRow($filename)
     {
         $row = parent::_generateRow($filename);
-        $row['package'] = preg_replace('/\.(xml|ser)$/', '', str_replace($this->_baseDir . DS, '', $filename));
+        $row['package'] = preg_replace('/\.(xml|ser)$/', '',
+            str_replace($this->connectDirectory->getAbsolutePath('connect/'), '', $filename));
         $row['filename_id'] = $row['package'];
-        $folder = explode(DS, $row['package']);
+        $folder = explode('/', $row['package']);
         array_pop($folder);
-        $row['folder'] = DS;
+        $row['folder'] = '/';
         if (!empty($folder)) {
-            $row['folder'] = implode(DS, $folder) . DS;
+            $row['folder'] = implode('/', $folder) . '/';
         }
         return $row;
     }
@@ -95,10 +101,10 @@ class Collection extends \Magento\Data\Collection\Filesystem
         $collectDirs = $this->_collectDirs;
         $this->setCollectFiles(false)->setCollectDirs(true);
 
-        $this->_collectRecursive($this->_baseDir);
-        $result = array(DS => DS);
+        $this->_collectRecursive($this->connectDirectory->getAbsolutePath('connect'));
+        $result = array('/' => '/');
         foreach ($this->_collectedDirs as $dir) {
-            $dir = str_replace($this->_baseDir . DS, '', $dir) . DS;
+            $dir = substr($this->connectDirectory->getRelativePath($dir), strlen('connect/')) . '/';
             $result[$dir] = $dir;
         }
 

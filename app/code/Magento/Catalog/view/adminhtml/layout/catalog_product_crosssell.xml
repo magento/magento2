@@ -26,7 +26,7 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <container name="root" label="Root" output="1">
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Crosssell" name="catalog.product.edit.tab.crosssell"/>
-        <block class="Magento\Adminhtml\Block\Widget\Grid\Serializer" name="crosssell_grid_serializer">
+        <block class="Magento\Backend\Block\Widget\Grid\Serializer" name="crosssell_grid_serializer">
             <arguments>
                 <argument name="input_names" xsi:type="string">position</argument>
                 <argument name="grid_block" xsi:type="string">catalog.product.edit.tab.crosssell</argument>

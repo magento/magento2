@@ -71,11 +71,6 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Core\Model\Session _model */
         $this->session = $objectManager->get('Magento\Core\Model\Session');
 
-        $this->store = $this->getMockBuilder('Magento\Core\Model\Store')
-            ->setMethods(array('isAdmin'))
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->coreStoreConfig = $this->getMockBuilder('Magento\Core\Model\Store\ConfigInterface')
             ->setMethods(array('getConfig'))
             ->disableOriginalConstructor()
@@ -86,18 +81,9 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $storeManager = $this->getMockBuilder('Magento\Core\Model\StoreManagerInterface')
-            ->setMethods(array('getStore'))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $storeManager->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($this->store));
-
         $this->model = $objectManager->create(
             'Magento\Core\Model\Session\SidResolver',
             array(
-                'storeManager' => $storeManager,
                 'coreStoreConfig' => $this->coreStoreConfig,
                 'urlBuilder' => $this->urlBuilder,
                 'sidNameMap' => array($this->customSessionName => $this->customSessionQueryParam)
@@ -163,11 +149,11 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetSessionIdQueryParamCustom()
     {
         $oldSessionName = $this->session->getName();
-        $this->session->setSessionName($this->customSessionName);
+        $this->session->setName($this->customSessionName);
         $this->assertEquals(
             $this->customSessionQueryParam,
             $this->model->getSessionIdQueryParam($this->session)
         );
-        $this->session->setSessionName($oldSessionName);
+        $this->session->setName($oldSessionName);
     }
 }

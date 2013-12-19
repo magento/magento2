@@ -56,7 +56,6 @@ class Agreement extends \Magento\Backend\App\Action
                 $this->_view->getLayout()->createBlock('Magento\Checkout\Block\Adminhtml\Agreement')
             );
         $this->_view->renderLayout();
-        return $this;
     }
 
     public function newAction()
@@ -74,9 +73,7 @@ class Agreement extends \Magento\Backend\App\Action
         if ($id) {
             $agreementModel->load($id);
             if (!$agreementModel->getId()) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(
-                    __('This condition no longer exists.')
-                );
+                $this->messageManager->addError(__('This condition no longer exists.'));
                 $this->_redirect('checkout/*/');
                 return;
             }
@@ -84,7 +81,7 @@ class Agreement extends \Magento\Backend\App\Action
 
         $this->_title->add($agreementModel->getId() ? $agreementModel->getName() : __('New Condition'));
 
-        $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getAgreementData(true);
+        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getAgreementData(true);
         if (!empty($data)) {
             $agreementModel->setData($data);
         }
@@ -114,17 +111,17 @@ class Agreement extends \Magento\Backend\App\Action
             try {
                 $model->save();
 
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(__('The condition has been saved.'));
+                $this->messageManager->addSuccess(__('The condition has been saved.'));
                 $this->_redirect('checkout/*/');
 
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Something went wrong while saving this condition.'));
+                $this->messageManager->addError(__('Something went wrong while saving this condition.'));
             }
 
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setAgreementData($postData);
+            $this->_objectManager->get('Magento\Backend\Model\Session')->setAgreementData($postData);
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
     }
@@ -135,20 +132,20 @@ class Agreement extends \Magento\Backend\App\Action
         $model = $this->_objectManager->get('Magento\Checkout\Model\Agreement')
             ->load($id);
         if (!$model->getId()) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('This condition no longer exists.'));
+            $this->messageManager->addError(__('This condition no longer exists.'));
             $this->_redirect('checkout/*/');
             return;
         }
 
         try {
             $model->delete();
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(__('The condition has been deleted.'));
+            $this->messageManager->addSuccess(__('The condition has been deleted.'));
             $this->_redirect('checkout/*/');
             return;
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Something went wrong  while deleting this condition.'));
+            $this->messageManager->addError(__('Something went wrong  while deleting this condition.'));
         }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));

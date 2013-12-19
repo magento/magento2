@@ -94,6 +94,8 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected $_sourceFiles = array();
 
+    protected $_dirWriteMock;
+
     protected function setUp()
     {
         $sourceFileOne = $this->getMock(
@@ -144,9 +146,22 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\View\Design\Theme\FileFactory', array('create'), array(), '', false
         );
         $this->_filesystem = $this->getMock(
-            'Magento\Filesystem', array('isDirectory', 'searchKeys', 'copy', 'delete'),
-            array($this->getMockForAbstractClass('Magento\Filesystem\AdapterInterface'))
+            'Magento\Filesystem',
+            array('getDirectoryWrite'),
+            array(),
+            '',
+            false
         );
+        $this->_dirWriteMock = $this->getMock(
+            'Magento\Filesystem\Directory\Write',
+            array('isDirectory', 'search', 'copy', 'delete', 'read', 'copyFile', 'isExist'), array(),
+            '',
+            false
+        );
+        $this->_filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::MEDIA)
+            ->will($this->returnValue($this->_dirWriteMock));
 
         /* Init \Magento\Core\Model\Resource\Layout\Collection model  */
         $this->_updateFactory = $this->getMock('Magento\Core\Model\Layout\UpdateFactory', array('create'),
@@ -378,28 +393,28 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomizationPath')
             ->will($this->returnValue('target/path'));
 
-        $this->_filesystem->expects($this->any())
+        $this->_dirWriteMock->expects($this->any())
             ->method('isDirectory')->will($this->returnValueMap(array(
-                array('source/path', null, true),
+                array('source/path', true),
             )));
 
-        $this->_filesystem
+        $this->_dirWriteMock
             ->expects($this->any())
-            ->method('searchKeys')
+            ->method('read')
             ->will($this->returnValueMap(array(
-                array('target/path', '*', array()),
-                array('source/path', '*', array('source/path/file_one.jpg', 'source/path/file_two.png'))
+                array('target/path', array()),
+                array('source/path', array('source/path/file_one.jpg', 'source/path/file_two.png'))
             )));
 
         $expectedCopyEvents = array(
-            array('source/path/file_one.jpg', 'target/path/file_one.jpg', 'source/path', 'target/path'),
-            array('source/path/file_two.png', 'target/path/file_two.png', 'source/path', 'target/path'),
+            array('source/path/file_one.jpg', 'target/path/file_one.jpg', null),
+            array('source/path/file_two.png', 'target/path/file_two.png', null),
         );
         $actualCopyEvents = array();
         $recordCopyEvent = function () use (&$actualCopyEvents) {
             $actualCopyEvents[] = func_get_args();
         };
-        $this->_filesystem->expects($this->any())->method('copy')->will($this->returnCallback($recordCopyEvent));
+        $this->_dirWriteMock->expects($this->any())->method('copyFile')->will($this->returnCallback($recordCopyEvent));
 
         $this->_object->copy($this->_sourceTheme, $this->_targetTheme);
 

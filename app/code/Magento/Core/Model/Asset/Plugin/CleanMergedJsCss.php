@@ -32,20 +32,20 @@ class CleanMergedJsCss
     protected $database;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem
      */
-    protected $dirs;
+    protected $filesystem;
 
     /**
      * @param \Magento\Core\Helper\File\Storage\Database $database
-     * @param \Magento\App\Dir $dirs
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Helper\File\Storage\Database $database,
-        \Magento\App\Dir $dirs
+        \Magento\Filesystem $filesystem
     ) {
         $this->database = $database;
-        $this->dirs = $dirs;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -58,8 +58,9 @@ class CleanMergedJsCss
     {
         $invocationChain->proceed($arguments);
 
-        $mergedDir = $this->dirs->getDir(\Magento\App\Dir::PUB_VIEW_CACHE)
-            . '/' . \Magento\View\Asset\Merged::PUBLIC_MERGE_DIR;
+        /** @var \Magento\Filesystem\Directory\ReadInterface $pubCacheDirectory */
+        $pubCacheDirectory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::PUB_VIEW_CACHE);
+        $mergedDir = $pubCacheDirectory->getAbsolutePath() . '/' . \Magento\View\Asset\Merged::PUBLIC_MERGE_DIR;
         $this->database->deleteFolder($mergedDir);
     }
 }

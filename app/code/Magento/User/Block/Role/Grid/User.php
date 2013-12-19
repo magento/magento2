@@ -50,8 +50,9 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\User\Model\RoleFactory $roleFactory
      * @param array $data
@@ -59,12 +60,13 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\User\Model\RoleFactory $roleFactory,
         array $data = array()
     ) {
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_roleFactory = $roleFactory;

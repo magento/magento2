@@ -50,7 +50,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $fileList = array(__DIR__ . '/../_files/payment.xml');
+        $fileList = array(file_get_contents(__DIR__ . '/../_files/payment.xml'));
         $this->_fileResolverMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue($fileList));
@@ -70,8 +70,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testMergeCompleteAndPartial()
     {
         $fileList = array(
-            __DIR__ . '/../_files/payment.xml',
-            __DIR__ . '/../_files/payment2.xml'
+            file_get_contents(__DIR__ . '/../_files/payment.xml'),
+            file_get_contents(__DIR__ . '/../_files/payment2.xml')
         );
         $this->_fileResolverMock->expects($this->any())
             ->method('get')

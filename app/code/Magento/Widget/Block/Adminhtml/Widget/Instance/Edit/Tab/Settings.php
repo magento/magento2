@@ -164,7 +164,7 @@ class Settings
             'values'   => $options
         ));
         $continueButton = $this->getLayout()
-            ->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            ->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'label'     => __('Continue'),
                 'onclick'   => "setSettings('" . $this->getContinueUrl() . "', 'code', 'theme_id')",

@@ -107,7 +107,7 @@ class Cart
     protected function _prepareLayout()
     {
         $deleteAllConfirmString = __('Are you sure you want to delete all items from shopping cart?');
-        $this->addChild('empty_customer_cart_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('empty_customer_cart_button', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Clear Shopping Cart'),
             'onclick' => 'order.clearShoppingCart(\'' . $deleteAllConfirmString . '\')'
         ));

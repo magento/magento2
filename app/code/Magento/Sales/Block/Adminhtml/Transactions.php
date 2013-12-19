@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml;
 
-class Transactions extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Transactions extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected function _construct()
     {

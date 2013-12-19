@@ -26,22 +26,26 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="email_templates_types.xsd"/>
+    <xs:complexType name="emailTemplateType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="label" type="xs:string" use="required"/>
+        <xs:attribute name="file" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="emailTemplateFormatType" use="required"/>
+        <xs:attribute name="module" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="emailTemplateFormatType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="html"/>
+            <xs:enumeration value="text"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:element name="config">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="template" type="emailTemplateModularType" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element name="template" type="emailTemplateType" minOccurs="1" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-
-    <!-- Module context is determined automatically during merger, it is not stored in individual config files -->
-    <xs:complexType name="emailTemplateModularType">
-        <xs:complexContent>
-            <xs:extension base="emailTemplateType">
-                <xs:attribute name="module" type="xs:string" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
 </xs:schema>

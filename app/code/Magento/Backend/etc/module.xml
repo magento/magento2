@@ -31,12 +31,12 @@
         <depends>
             <module name="Magento_Directory"/>
             <module name="Magento_Core"/>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_Eav"/>
             <module name="Magento_AdminNotification"/>
             <module name="Magento_Cron"/>
             <module name="Magento_Sendfriend"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_Weee"/>
         </depends>
     </module>
 </config>

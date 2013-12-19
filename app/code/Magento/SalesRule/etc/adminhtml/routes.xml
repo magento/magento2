@@ -26,7 +26,7 @@
 <config>
     <router id="admin">
         <route id="sales_rule" frontName="sales_rule">
-            <module name="Magento_SalesRule_Adminhtml" before="Magento_Adminhtml" />
+            <module name="Magento_SalesRule" before="Magento_Adminhtml" />
         </route>
     </router>
 </config>

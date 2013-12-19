@@ -131,6 +131,14 @@ class Inline implements \Magento\Core\Model\Translate\InlineInterface
     }
 
     /**
+     * Disable inline translation functionality
+     */
+    public function disable()
+    {
+        $this->_isAllowed = false;
+    }
+
+    /**
      * Replace translation templates with HTML fragments
      *
      * @param array|string $body

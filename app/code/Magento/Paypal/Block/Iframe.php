@@ -75,17 +75,25 @@ class Iframe extends \Magento\Payment\Block\Form
     protected $_checkoutSession;
 
     /**
+     * @var \Magento\Paypal\Helper\Hss
+     */
+    protected $_hssHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Paypal\Helper\Hss $hssHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Paypal\Helper\Hss $hssHelper,
         array $data = array()
     ) {
+        $this->_hssHelper = $hssHelper;
         $this->_orderFactory = $orderFactory;
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($context, $data);
@@ -101,11 +109,14 @@ class Iframe extends \Magento\Payment\Block\Form
             ->getQuote()
             ->getPayment()
             ->getMethod();
-        if (in_array($paymentCode, $this->helper('Magento\Paypal\Helper\Hss')->getHssMethods())) {
+        if (in_array($paymentCode, $this->_hssHelper->getHssMethods())) {
             $this->_paymentMethodCode = $paymentCode;
             $templatePath = str_replace('_', '', $paymentCode);
             $templateFile = "{$templatePath}/iframe.phtml";
-            if (file_exists($this->_viewFileSystem->getFilename($templateFile, array('module' => 'Magento_Paypal')))) {
+
+            $directory = $this->getDirectory();
+            $file = $this->_viewFileSystem->getFilename($templateFile, array('module' => 'Magento_Paypal'));
+            if ($directory->isExist($directory->getRelativePath($file))) {
                 $this->setTemplate($templateFile);
             } else {
                 $this->setTemplate('hss/iframe.phtml');

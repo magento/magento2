@@ -26,78 +26,63 @@ namespace Magento\Core\Model\File\Storage;
 class SynchronizationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\File\Storage\Synchronization
+     * Test fir synchronize method
      */
-    protected $_model;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_storageMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_storageFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_streamMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_streamFactoryMock;
-
-    /**
-     * @var string
-     */
-    protected $_content = 'content';
-
-    protected function setUp()
-    {
-        $this->_storageFactoryMock =
-            $this->getMock('Magento\Core\Model\File\Storage\DatabaseFactory', array('create'), array(), '', false);
-        $this->_storageMock = $this->getMock(
-            'Magento\Core\Model\File\Storage\Database',
-            array('getContent', 'getId', 'loadByFilename', '__wakeup'),
-            array(),
-            '',
-            false
-        );
-        $this->_storageFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->_storageMock));
-
-        $this->_storageMock->expects($this->once())->method('getContent')->will($this->returnValue($this->_content));
-        $this->_streamFactoryMock =
-            $this->getMock('Magento\Filesystem\Stream\LocalFactory', array('create'), array(), '', false);
-        $this->_streamMock = $this->getMock('Magento\Filesystem\StreamInterface');
-        $this->_streamFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->_streamMock));
-
-        $this->_model = new \Magento\Core\Model\File\Storage\Synchronization(
-                        $this->_storageFactoryMock, $this->_streamFactoryMock);
-    }
-
-    protected function tearDown()
-    {
-        unset($this->_model);
-        unset($this->_storageMock);
-    }
-
     public function testSynchronize()
     {
+        $content = 'content';
         $relativeFileName = 'config.xml';
         $filePath = realpath(__DIR__ . '/_files/');
-        $this->_storageMock->expects($this->once())->method('getId')->will($this->returnValue(true));
-        $this->_storageMock->expects($this->once())->method('loadByFilename');
-        $this->_streamMock->expects($this->once())->method('open')->with('w');
-        $this->_streamMock->expects($this->once())->method('write')->with($this->_content);
-        $this->_model->synchronize($relativeFileName, $filePath);
+
+        $storageFactoryMock =$this->getMock(
+            'Magento\Core\Model\File\Storage\DatabaseFactory', array('create', '_wakeup'), array(), '', false
+        );
+        $storageMock = $this->getMock(
+            'Magento\Core\Model\File\Storage\Database',
+            array('getContent', 'getId', 'loadByFilename', '__wakeup'), array(), '', false
+        );
+        $storageFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($storageMock));
+
+        $storageMock->expects($this->once())
+            ->method('getContent')
+            ->will($this->returnValue($content));
+        $storageMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(true));
+        $storageMock->expects($this->once())
+            ->method('loadByFilename');
+
+        $file = $this->getMock(
+            'Magento\Filesystem\File\Write', array('lock', 'write', 'unlock', 'close'), array(), '', false
+        );
+        $file->expects($this->once())
+            ->method('lock');
+        $file->expects($this->once())
+            ->method('write')
+            ->with($content);
+        $file->expects($this->once())
+            ->method('unlock');
+        $file->expects($this->once())
+            ->method('close');
+        $directory = $this->getMock(
+            'Magento\Filesystem\Direcoty\Write', array('openFile', 'getRelativePath'), array(), '', false
+        );
+        $directory->expects($this->once())
+            ->method('getRelativePath')
+            ->will($this->returnArgument(0));
+        $directory->expects($this->once())
+            ->method('openFile')
+            ->with($filePath)
+            ->will($this->returnValue($file));
+        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::PUB)
+            ->will($this->returnValue($directory));
+
+        $model = new Synchronization($storageFactoryMock, $filesystem);
+        $model->synchronize($relativeFileName, $filePath);
     }
 }

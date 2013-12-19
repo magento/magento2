@@ -29,27 +29,29 @@
  */
 namespace Magento\Paypal\Model;
 
+use Magento\Filesystem\Directory\WriteInterface;
+
 class Cert extends \Magento\Core\Model\AbstractModel
 {
     /**
      * Certificate base path
      */
-    const BASEPATH_PAYPAL_CERT  = 'cert/paypal';
+    const BASEPATH_PAYPAL_CERT = 'cert/paypal/';
 
     /**
-     * @var \Magento\App\Dir
+     * @var WriteInterface
      */
-    protected $_coreDir;
+    protected $varDirectory;
 
     /**
      * @var \Magento\Encryption\EncryptorInterface
      */
-    protected $_encryptor;
+    protected $encryptor;
 
     /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\App\Dir $coreDir
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -58,14 +60,14 @@ class Cert extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\App\Dir $coreDir,
+        \Magento\Filesystem $filesystem,
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreDir = $coreDir;
-        $this->_encryptor = $encryptor;
+        $this->varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->encryptor = $encryptor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -104,12 +106,12 @@ class Cert extends \Magento\Core\Model\AbstractModel
         }
 
         $certFileName = sprintf('cert_%s_%s.pem', $this->getWebsiteId(), strtotime($this->getUpdatedAt()));
-        $certFile = $this->_getBaseDir() . DS . $certFileName;
+        $certFile = self::BASEPATH_PAYPAL_CERT . $certFileName;
 
-        if (!file_exists($certFile)) {
+        if (!$this->varDirectory->isExist($certFile)) {
             $this->_createCertFile($certFile);
         }
-        return $certFile;
+        return $this->varDirectory->getAbsolutePath($certFile);
     }
 
     /**
@@ -119,15 +121,10 @@ class Cert extends \Magento\Core\Model\AbstractModel
      */
     protected function _createCertFile($file)
     {
-        $certDir = $this->_getBaseDir();
-        if (!is_dir($certDir)) {
-            $ioAdapter = new \Magento\Io\File();
-            $ioAdapter->checkAndCreateFolder($certDir);
-        } else {
+        if ($this->varDirectory->isDirectory(self::BASEPATH_PAYPAL_CERT)) {
             $this->_removeOutdatedCertFile();
         }
-
-        file_put_contents($file, $this->_encryptor->decrypt($this->getContent()));
+        $this->varDirectory->writeFile($file, $this->encryptor->decrypt($this->getContent()));
     }
 
     /**
@@ -137,25 +134,12 @@ class Cert extends \Magento\Core\Model\AbstractModel
      */
     protected function _removeOutdatedCertFile()
     {
-        $certDir = $this->_getBaseDir();
-        if (is_dir($certDir)) {
-            $entries = scandir($certDir);
-            foreach ($entries as $entry) {
-                if ($entry != '.' && $entry != '..' && strpos($entry, 'cert_' . $this->getWebsiteId()) !== false) {
-                    unlink($certDir . DS . $entry);
-                }
-            }
-        }
-    }
+        $pattern = sprintf('#cert_%s#' . $this->getWebsiteId());
 
-    /**
-     * Retrieve base directory for certificate
-     *
-     * @return string
-     */
-    protected function _getBaseDir()
-    {
-        return $this->_coreDir->getDir(\Magento\App\Dir::VAR_DIR) . DS . self::BASEPATH_PAYPAL_CERT;
+        $entries = $this->varDirectory->search($pattern, self::BASEPATH_PAYPAL_CERT);
+        foreach ($entries as $entry) {
+            $this->varDirectory->delete($entry);
+        }
     }
 
     /**

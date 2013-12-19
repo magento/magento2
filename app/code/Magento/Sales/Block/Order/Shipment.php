@@ -49,17 +49,25 @@ class Shipment extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
+     * @var \Magento\Payment\Helper\Data
+     */
+    protected $_paymentHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Payment\Helper\Data $paymentHelper,
         array $data = array()
     ) {
+        $this->_paymentHelper = $paymentHelper;
         $this->_coreRegistry = $registry;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
@@ -73,7 +81,7 @@ class Shipment extends \Magento\View\Element\Template
         }
         $this->setChild(
             'payment_info',
-            $this->helper('Magento\Payment\Helper\Data')->getInfoBlock($this->getOrder()->getPayment())
+            $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment())
         );
     }
 

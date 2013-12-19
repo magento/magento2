@@ -120,15 +120,23 @@ class Grid extends \Magento\Backend\Block\Widget
     protected $_backendSession;
 
     /**
+     * @var \Magento\Backend\Helper\Data
+     */
+    protected $_backendHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         array $data = array()
     ) {
+        $this->_backendHelper = $backendHelper;
         $this->_urlModel = $urlModel;
         $this->_backendSession = $context->getBackendSession();
         parent::__construct($context, $data);
@@ -337,7 +345,7 @@ class Grid extends \Magento\Backend\Block\Widget
             }
 
             if (is_string($filter)) {
-                $data = $this->helper('Magento\Backend\Helper\Data')->prepareFilterString($filter);
+                $data = $this->_backendHelper->prepareFilterString($filter);
                 $data = array_merge($data, (array)$this->getRequest()->getPost($this->getVarNameFilter()));
                 $this->_setFilterValues($data);
             } else if ($filter && is_array($filter)) {
@@ -363,7 +371,7 @@ class Grid extends \Magento\Backend\Block\Widget
      */
     protected function _decodeFilter(&$value)
     {
-        $value = $this->helper('Magento\Backend\Helper\Data')->decodeFilter($value);
+        $value = $this->_backendHelper->decodeFilter($value);
     }
 
     /**

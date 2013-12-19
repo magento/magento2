@@ -56,7 +56,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $this->_viewFileSystem->expects($this->any())
             ->method('getFilename')
-            ->will($this->returnValue(implode(DIRECTORY_SEPARATOR, $pathChunks)));
+            ->will($this->returnValue(implode('/', $pathChunks)));
 
         $theme = $this->getMock('Magento\Core\Model\Theme', array('getId', 'getCollection'), array(), '', false);
         $theme->expects($this->any())

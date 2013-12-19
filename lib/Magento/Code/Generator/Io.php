@@ -30,7 +30,7 @@ class Io
 {
     /**
      * Default code generation directory
-     * Should correspond the value from \Magento\App\Dir
+     * Should correspond the value from \Magento\Filesystem
      */
     const DEFAULT_DIRECTORY = 'var/generation';
 
@@ -47,11 +47,6 @@ class Io
     private $_generationDirectory;
 
     /**
-     * @var \Magento\Io\IoInterface
-     */
-    private $_ioObject;
-
-    /**
      * Autoloader instance
      *
      * @var \Magento\Autoload\IncludePath
@@ -59,29 +54,36 @@ class Io
     private $_autoloader;
 
     /**
-     * @var string
+     * @var \Magento\Filesystem\Driver\File
      */
-    private $_directorySeparator;
-
+    private $filesystemDriver;
     /**
-     * @param \Magento\Io\IoInterface $ioObject
-     * @param \Magento\Autoload\IncludePath $autoLoader
-     * @param string $generationDirectory
+     * @param \Magento\Filesystem\Driver\File   $filesystemDriver
+     * @param \Magento\Autoload\IncludePath     $autoLoader
+     * @param null $generationDirectory
      */
-    public function __construct(\Magento\Io\IoInterface $ioObject = null, \Magento\Autoload\IncludePath $autoLoader = null,
+    public function __construct(
+        \Magento\Filesystem\Driver\File $filesystemDriver,
+        \Magento\Autoload\IncludePath   $autoLoader = null,
         $generationDirectory = null
     ) {
-        $this->_ioObject           = $ioObject ? : new \Magento\Io\File();
-        $this->_autoloader         = $autoLoader ? : new \Magento\Autoload\IncludePath();
-        $this->_directorySeparator = $this->_ioObject->dirsep();
+        $this->_autoloader          = $autoLoader ? : new \Magento\Autoload\IncludePath();
+        $this->filesystemDriver     = $filesystemDriver;
+        $this->initGeneratorDirectory($generationDirectory);
+    }
 
-        if ($generationDirectory) {
-            $this->_generationDirectory
-                = rtrim($generationDirectory, $this->_directorySeparator) . $this->_directorySeparator;
+    /**
+     * Get path to generation directory
+     *
+     * @param $directory
+     * @return string
+     */
+    protected function initGeneratorDirectory($directory = null)
+    {
+        if ($directory) {
+            $this->_generationDirectory = rtrim($directory, '/') . '/';
         } else {
-            $this->_generationDirectory
-                = realpath(__DIR__ . str_replace('/', $this->_directorySeparator, '/../../../../'))
-                . $this->_directorySeparator . self::DEFAULT_DIRECTORY . $this->_directorySeparator;
+            $this->_generationDirectory = realpath(__DIR__ . '/../../../../') . '/' . self::DEFAULT_DIRECTORY . '/';
         }
     }
 
@@ -92,10 +94,10 @@ class Io
     public function getResultFileDirectory($className)
     {
         $fileName = $this->getResultFileName($className);
-        $pathParts = explode($this->_directorySeparator, $fileName);
+        $pathParts = explode('/', $fileName);
         unset($pathParts[count($pathParts) - 1]);
 
-        return implode($this->_directorySeparator, $pathParts) . $this->_directorySeparator;
+        return implode('/', $pathParts) . '/';
     }
 
     /**
@@ -117,7 +119,7 @@ class Io
     public function writeResultFile($fileName, $content)
     {
         $content = "<?php\n" . $content;
-        return $this->_ioObject->write($fileName, $content);
+        return $this->filesystemDriver->filePutContents($fileName, $content);
     }
 
     /**
@@ -151,7 +153,7 @@ class Io
      */
     public function fileExists($fileName)
     {
-        return $this->_ioObject->fileExists($fileName, true);
+        return $this->filesystemDriver->isExists($fileName);
     }
 
     /**
@@ -160,9 +162,14 @@ class Io
      */
     private function _makeDirectory($directory)
     {
-        if ($this->_ioObject->isWriteable($directory)) {
+        if ($this->filesystemDriver->isWritable($directory)) {
             return true;
         }
-        return $this->_ioObject->mkdir($directory, self::DIRECTORY_PERMISSION, true);
+        try {
+            $this->filesystemDriver->createDirectory($directory, self::DIRECTORY_PERMISSION);
+            return true;
+        } catch (\Magento\Filesystem\FilesystemException $e) {
+            return false;
+        }
     }
 }

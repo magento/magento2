@@ -34,22 +34,30 @@ class AbstractWidget extends \Magento\View\Element\Template
     protected $_eavConfig;
 
     /**
+     * @var \Magento\Customer\Helper\Address
+     */
+    protected $_addressHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Customer\Helper\Address $addressHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Customer\Helper\Address $addressHelper,
         array $data = array()
     ) {
+        $this->_addressHelper = $addressHelper;
         $this->_eavConfig = $eavConfig;
         parent::__construct($context, $data);
     }
 
     public function getConfig($key)
     {
-        return $this->helper('Magento\Customer\Helper\Address')->getConfig($key);
+        return $this->_addressHelper->getConfig($key);
     }
 
     public function getFieldIdFormat()

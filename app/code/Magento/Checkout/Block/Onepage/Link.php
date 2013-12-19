@@ -41,15 +41,23 @@ class Link extends \Magento\View\Element\Template
     protected $_checkoutSession;
 
     /**
+     * @var \Magento\Checkout\Helper\Data
+     */
+    protected $_checkoutHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Checkout\Helper\Data $checkoutHelper,
         array $data = array()
     ) {
+        $this->_checkoutHelper = $checkoutHelper;
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($context, $data);
     }
@@ -75,6 +83,6 @@ class Link extends \Magento\View\Element\Template
      */
     public function isPossibleOnepageCheckout()
     {
-        return $this->helper('Magento\Checkout\Helper\Data')->canOnepageCheckout();
+        return $this->_checkoutHelper->canOnepageCheckout();
     }
 }

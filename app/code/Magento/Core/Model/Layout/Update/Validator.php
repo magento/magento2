@@ -94,9 +94,9 @@ class Validator extends \Zend_Validate_Abstract
         $this->_initMessageTemplates();
         $this->_xsdSchemas = array(
             self::LAYOUT_SCHEMA_SINGLE_HANDLE => $this->_modulesReader->getModuleDir('etc', 'Magento_Core')
-                . DIRECTORY_SEPARATOR . 'layout_single.xsd',
+                . '/layout_single.xsd',
             self::LAYOUT_SCHEMA_MERGED => $this->_modulesReader->getModuleDir('etc', 'Magento_Core')
-                . DIRECTORY_SEPARATOR . 'layout_merged.xsd',
+                . '/layout_merged.xsd',
         );
     }
 

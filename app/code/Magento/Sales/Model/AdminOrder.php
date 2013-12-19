@@ -36,9 +36,9 @@ namespace Magento\Sales\Model;
 class AdminOrder
 {
     /**
-     * @var \Magento\Backend\Model\Session
+     * @var \Magento\Message\ManagerInterface
      */
-    protected $_session;
+    protected $messageManager;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory]
@@ -53,16 +53,16 @@ class AdminOrder
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Backend\Model\Session $session
+     * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Backend\Model\Session $session
+        \Magento\Message\ManagerInterface $messageManager
     ) {
         $this->_productFactory = $productFactory;
         $this->_customerFactory = $customerFactory;
-        $this->_session = $session;
+        $this->messageManager = $messageManager;
     }
 
     public function checkRelation(\Magento\Sales\Model\Order $order)
@@ -72,9 +72,7 @@ class AdminOrder
          */
         $customer = $this->_customerFactory->create()->load($order->getCustomerId());
         if (!$customer->getId()) {
-            $this->_session->addNotice(
-                __(' The customer does not exist in the system anymore.')
-            );
+            $this->messageManager->addNotice(__(' The customer does not exist in the system anymore.'));
         }
 
         /**
@@ -92,14 +90,14 @@ class AdminOrder
         $hasBadItems = false;
         foreach ($order->getAllItems() as $item) {
             if (!$productCollection->getItemById($item->getProductId())) {
-                $this->_session->addError(
+                $this->messageManager->addError(
                    __('The item %1 (SKU %2) does not exist in the catalog anymore.', $item->getName(), $item->getSku()
                 ));
                 $hasBadItems = true;
             }
         }
         if ($hasBadItems) {
-            $this->_session->addError(
+            $this->messageManager->addError(
                 __('Some items in this order are no longer in our catalog.')
             );
         }

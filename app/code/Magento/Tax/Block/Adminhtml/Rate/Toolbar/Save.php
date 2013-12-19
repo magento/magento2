@@ -48,23 +48,23 @@ class Save extends \Magento\Backend\Block\Template
 
     protected function _prepareLayout()
     {
-        $this->addChild('backButton', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('backButton', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Back'),
             'onclick'   => 'window.location.href=\''.$this->getUrl('tax/*/').'\'',
             'class' => 'back'
         ));
 
-        $this->addChild('resetButton', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('resetButton', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Reset'),
             'onclick'   => 'window.location.reload()'
         ));
 
-        $this->addChild('saveButton', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('saveButton', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Save Rate'),
             'class' => 'save'
         ));
 
-        $this->addChild('deleteButton', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('deleteButton', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Delete Rate'),
             'onclick'   => 'deleteConfirm(\'' . __('Are you sure you want to do this?') . '\', \'' . $this->getUrl('tax/*/delete', array('rate' => $this->getRequest()->getParam('rate'))) . '\')',
             'class' => 'delete'

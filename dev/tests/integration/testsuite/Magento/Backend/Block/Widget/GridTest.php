@@ -86,18 +86,15 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getColumnSetMock()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $directoryList = $objectManager->create('\Magento\Filesystem\DirectoryList', array('root' => __DIR__));
         return $this->getMock('Magento\Backend\Block\Widget\Grid\ColumnSet', array(), array(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->create('Magento\View\Element\Template\Context', array(
-                    'dirs' => new \Magento\App\Dir(__DIR__),
-                    'filesystem' => new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local),
-                )),
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->create('Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory'),
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->create('Magento\Backend\Model\Widget\Grid\SubTotals'),
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->create('Magento\Backend\Model\Widget\Grid\Totals'),
+            $objectManager->create('\Magento\View\Element\Template\Context', array(
+                'filesystem' => $objectManager->create('\Magento\Filesystem', array('directoryList' => $directoryList))
+            )),
+            $objectManager->create('Magento\Backend\Model\Widget\Grid\Row\UrlGeneratorFactory'),
+            $objectManager->create('Magento\Backend\Model\Widget\Grid\SubTotals'),
+            $objectManager->create('Magento\Backend\Model\Widget\Grid\Totals'),
         ));
     }
 
@@ -116,5 +113,15 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $this->_columnSetMock->expects($this->once())->method('isFilterVisible')->will($this->returnValue(false));
         $this->_block->getMainButtonsHtml();
+    }
+
+    public function testGetMassactionBlock()
+    {
+        /** @var $layout \Magento\Core\Model\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        /** @var $block \Magento\Backend\Block\Widget\Grid */
+        $block = $layout->createBlock('Magento\Backend\Block\Widget\Grid\Extended', 'block');
+        $child = $layout->addBlock('Magento\View\Element\Template', 'massaction', 'block');
+        $this->assertSame($child, $block->getMassactionBlock());
     }
 }

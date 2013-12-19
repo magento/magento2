@@ -48,7 +48,7 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
     protected $_design;
 
     /**
-     * @var \Magento\Core\Model\Session
+     * @var \Magento\Session\SessionManagerInterface
      */
     protected $_session;
 
@@ -102,11 +102,6 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
      * @var \Magento\App\FrontController
      */
     protected $_frontController;
-
-    /**
-     * @var \Magento\App\Helper\HelperFactory
-     */
-    protected $_helperFactory;
 
     /**
      * @var \Magento\View\Url
@@ -167,7 +162,6 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
         $this->_sidResolver     = $context->getSidResolver();
         $this->_storeConfig     = $context->getStoreConfig();
         $this->_frontController = $context->getFrontController();
-        $this->_helperFactory   = $context->getHelperFactory();
         $this->_viewUrl         = $context->getViewUrl();
         $this->_viewConfig      = $context->getViewConfig();
         $this->_cacheState      = $context->getCacheState();
@@ -175,7 +169,7 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
         $this->_app             = $context->getApp();
         $this->_escaper         = $context->getEscaper();
         $this->filterManager    = $context->getFilterManager();
-        $this->_locale           = $context->getLocale();
+        $this->_locale          = $context->getLocale();
         parent::__construct($data);
         $this->_construct();
     }
@@ -711,17 +705,6 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
     protected function _getNotFoundUrl($route = '', $params = array('_direct' => 'core/index/notfound'))
     {
         return $this->getUrl($route, $params);
-    }
-
-    /**
-     * Return helper object
-     *
-     * @param string $name
-     * @return \Magento\App\Helper\AbstractHelper
-     */
-    public function helper($name)
-    {
-        return $this->_helperFactory->get($name);
     }
 
     /**

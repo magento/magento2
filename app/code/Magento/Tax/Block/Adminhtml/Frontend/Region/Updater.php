@@ -29,6 +29,25 @@ namespace Magento\Tax\Block\Adminhtml\Frontend\Region;
 class Updater
     extends \Magento\Backend\Block\System\Config\Form\Field
 {
+    /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $_directoryHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Directory\Helper\Data $directoryHelper,
+        array $data = array()
+    ) {
+        $this->_directoryHelper = $directoryHelper;
+        parent::__construct($context, $data);
+    }
+
     protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
     {
         $html = parent::_getElementHtml($element);
@@ -47,7 +66,7 @@ class Updater
                }
                </script>';
 
-        $html .= sprintf($js, $this->helper('Magento\Directory\Helper\Data')->getRegionJson());
+        $html .= sprintf($js, $this->_directoryHelper->getRegionJson());
         return $html;
     }
 }

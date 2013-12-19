@@ -69,7 +69,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_shell = new \Magento\Shell();
         $basePath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
-        $basePath = str_replace(DIRECTORY_SEPARATOR, '/', $basePath);
+        $basePath = str_replace('\\', '/', $basePath);
 
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
         $this->_generationDir =  $this->_tmpDir . '/generation';
@@ -93,8 +93,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $filesystem = new \Magento\Filesystem\Adapter\Local();
-        $filesystem->delete($this->_tmpDir);
+        $filesystem = new \Magento\Filesystem\Driver\File();
+        if ($filesystem->isExists($this->_tmpDir)) {
+            $filesystem->deleteDirectory($this->_tmpDir);
+        }
     }
 
     /**
@@ -258,7 +260,11 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     public function testConstructorIntegrity()
     {
         $autoloader = new \Magento\Autoload\IncludePath();
-        $generatorIo = new \Magento\Code\Generator\Io(new \Magento\Io\File(), $autoloader, $this->_generationDir);
+        $generatorIo = new \Magento\Code\Generator\Io(
+            new \Magento\Filesystem\Driver\File(),
+            $autoloader,
+            $this->_generationDir
+        );
         $generator = new \Magento\Code\Generator(null, $autoloader, $generatorIo);
         $autoloader = new \Magento\Code\Generator\Autoloader($generator);
         spl_autoload_register(array($autoloader, 'load'));

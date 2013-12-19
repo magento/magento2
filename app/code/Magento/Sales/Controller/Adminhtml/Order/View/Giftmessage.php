@@ -43,9 +43,9 @@ class Giftmessage extends \Magento\Backend\App\Action
                 ->setGiftmessages($this->getRequest()->getParam('giftmessage'))
                 ->saveAllInOrder();
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('Something went wrong while saving the gift message.'));
+            $this->messageManager->addError(__('Something went wrong while saving the gift message.'));
         }
 
         if($this->getRequest()->getParam('type')=='order_item') {

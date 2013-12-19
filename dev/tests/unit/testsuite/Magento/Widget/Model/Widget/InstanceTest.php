@@ -53,6 +53,11 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     protected $_cacheTypesListMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_directoryMock;
+
     public function setUp()
     {
         $this->_widgetModelMock = $this->getMockBuilder('Magento\Widget\Model\Widget')
@@ -69,8 +74,20 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $filesystemMock =$this->getMock('\Magento\Filesystem', array(), array(), '', false);
+        $this->_directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $filesystemMock->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($this->_directoryMock));
+        $this->_directoryMock->expects($this->any())
+            ->method('isReadable')
+            ->will($this->returnArgument(0));
+        $this->_directoryMock->expects($this->any())
+            ->method('getRelativePath')
+            ->will($this->returnArgument(0));
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $args = $objectManagerHelper->getConstructArguments('Magento\Widget\Model\Widget\Instance', array(
+            'filesystem' => $filesystemMock,
             'viewFileSystem' => $this->_viewFileSystemMock,
             'cacheTypeList' => $this->_cacheTypesListMock,
             'reader' => $this->_readerMock,

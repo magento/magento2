@@ -34,13 +34,32 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
 class Tree extends \Magento\Backend\Block\Template
 {
     /**
+     * @var \Magento\Theme\Helper\Storage
+     */
+    protected $_storageHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Theme\Helper\Storage $storageHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Theme\Helper\Storage $storageHelper,
+        array $data = array()
+    ) {
+        $this->_storageHelper = $storageHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Json source URL
      *
      * @return string
      */
     public function getTreeLoaderUrl()
     {
-        return $this->getUrl('adminhtml/*/treeJson', $this->helper('Magento\Theme\Helper\Storage')->getRequestParams());
+        return $this->getUrl('adminhtml/*/treeJson', $this->_storageHelper->getRequestParams());
     }
 
     /**
@@ -72,14 +91,14 @@ class Tree extends \Magento\Backend\Block\Template
     public function getTreeCurrentPath()
     {
         $treePath = '/root';
-        $path = $this->helper('Magento\Theme\Helper\Storage')->getSession()->getCurrentPath();
+        $path = $this->_storageHelper->getSession()->getCurrentPath();
         if ($path) {
-            $path = str_replace($this->helper('Magento\Theme\Helper\Storage')->getStorageRoot(), '', $path);
+            $path = str_replace($this->_storageHelper->getStorageRoot(), '', $path);
             $relative = '';
-            foreach (explode(DIRECTORY_SEPARATOR, $path) as $dirName) {
+            foreach (explode('/', $path) as $dirName) {
                 if ($dirName) {
-                    $relative .= DIRECTORY_SEPARATOR . $dirName;
-                    $treePath .= '/' . $this->helper('Magento\Theme\Helper\Storage')->urlEncode($relative);
+                    $relative .= '/' . $dirName;
+                    $treePath .= '/' . $this->_storageHelper->urlEncode($relative);
                 }
             }
         }

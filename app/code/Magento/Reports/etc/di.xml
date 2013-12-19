@@ -34,9 +34,14 @@
             </value>
         </param>
     </type>
-    <virtualType name="Magento\Reports\Model\Session" type="Magento\Core\Model\Session\Generic">
-        <param name="sessionNamespace">
+    <virtualType name="Magento\Reports\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
             <value>reports</value>
+        </param>
+    </virtualType>
+    <virtualType name="Magento\Reports\Model\Session" type="Magento\Session\Generic">
+        <param name="storage">
+            <instance type="Magento\Reports\Model\Session\Storage" />
         </param>
     </virtualType>
     <type name="Magento\Reports\Model\Product\Index\AbstractIndex">

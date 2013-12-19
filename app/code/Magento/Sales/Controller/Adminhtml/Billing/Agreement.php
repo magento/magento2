@@ -128,13 +128,13 @@ class Agreement extends \Magento\Backend\App\Action
         if ($agreementModel && $agreementModel->canCancel()) {
             try {
                 $agreementModel->cancel();
-                $this->_getSession()->addSuccess(__('You canceled the billing agreement.'));
+                $this->messageManager->addSuccess(__('You canceled the billing agreement.'));
                 $this->_redirect('sales/*/view', array('_current' => true));
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('We could not cancel the billing agreement.'));
+                $this->messageManager->addError(__('We could not cancel the billing agreement.'));
                 $this->_objectManager->get('Magento\Logger')->logException($e);
             }
             $this->_redirect('sales/*/view', array('_current' => true));
@@ -152,13 +152,13 @@ class Agreement extends \Magento\Backend\App\Action
         if ($agreementModel) {
             try {
                 $agreementModel->delete();
-                $this->_getSession()->addSuccess(__('You deleted the billing agreement.'));
+                $this->messageManager->addSuccess(__('You deleted the billing agreement.'));
                 $this->_redirect('sales/*/');
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(__('We could not delete the billing agreement.'));
+                $this->messageManager->addError(__('We could not delete the billing agreement.'));
                 $this->_objectManager->get('Magento\Logger')->logException($e);
             }
             $this->_redirect('sales/*/view', array('_current' => true));
@@ -177,7 +177,7 @@ class Agreement extends \Magento\Backend\App\Action
         $agreementModel = $this->_objectManager->create('Magento\Sales\Model\Billing\Agreement')->load($agreementId);
 
         if (!$agreementModel->getId()) {
-            $this->_getSession()->addError(__('Please specify the correct billing agreement ID and try again.'));
+            $this->messageManager->addError(__('Please specify the correct billing agreement ID and try again.'));
             return false;
         }
 

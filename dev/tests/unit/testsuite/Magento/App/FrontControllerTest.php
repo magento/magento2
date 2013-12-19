@@ -34,11 +34,6 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_response;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_request;
 
     /**
@@ -53,14 +48,13 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
         $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->_router = $this->getMock('Magento\App\Router\AbstractRouter',
             array('match'), array(), '', false);
         $this->_routerList = $this->getMock('Magento\App\RouterList', array(), array(), '', false);
         $this->_routerList->expects($this->any())
             ->method('getIterator')->will($this->returnValue($this->_routerList));
-        $this->_model = new \Magento\App\FrontController($this->_response, $this->_routerList);
+        $this->_model = new \Magento\App\FrontController($this->_routerList);
     }
 
     /**

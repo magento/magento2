@@ -28,5 +28,11 @@
 /** @var $config \Magento\Catalog\Model\Product\Media\Config */
 $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get('Magento\Catalog\Model\Product\Media\Config');
-\Magento\Io\File::rmdirRecursive($config->getBaseMediaPath());
-\Magento\Io\File::rmdirRecursive($config->getBaseTmpMediaPath());
+
+/** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
+$mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get('Magento\Filesystem')
+    ->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+
+$mediaDirectory->delete($config->getBaseMediaPath());
+$mediaDirectory->delete($config->getBaseTmpMediaPath());

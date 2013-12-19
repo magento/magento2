@@ -39,17 +39,24 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_tmpConfigFile = '';
 
+    /**
+     * @var \Magento\Filesystem\Directory\Write
+     */
+    protected static $_varDirectory;
+
     public static function setUpBeforeClass()
     {
-        self::$_tmpDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
-            ->getDir(\Magento\App\Dir::VAR_DIR) . DIRECTORY_SEPARATOR . 'InstallerTest';
-        self::$_tmpConfigFile = self::$_tmpDir . DIRECTORY_SEPARATOR . 'local.xml';
-        mkdir(self::$_tmpDir);
+        /** @var \Magento\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
+        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        self::$_tmpDir = self::$_varDirectory->getAbsolutePath('InstallerTest');
+        self::$_tmpConfigFile = self::$_tmpDir . '/local.xml';
+        self::$_varDirectory->create(self::$_varDirectory->getRelativePath(self::$_tmpDir));
     }
 
     public static function tearDownAfterClass()
     {
-        \Magento\Io\File::rmdirRecursive(self::$_tmpDir);
+        self::$_varDirectory->delete(self::$_varDirectory->getRelativePath(self::$_tmpDir));
     }
 
     /**
@@ -62,13 +69,24 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     protected function _getModel($emulateConfig = false)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $directoryList = $objectManager->create(
+                'Magento\Filesystem\DirectoryList',
+                    array(
+                        'root' => __DIR__,
+                        'directories' => array(
+                            \Magento\Filesystem::CONFIG => array('path' => self::$_tmpDir)
+                        )
+                    )
+                );
+        $filesystem = $objectManager->create('Magento\Filesystem', array('directoryList' => $directoryList));
+
         if ($emulateConfig) {
             $installerConfig = new \Magento\Install\Model\Installer\Config(
                 $objectManager->get('Magento\Install\Model\Installer'),
                 $objectManager->get('Magento\App\RequestInterface'),
-                new \Magento\App\Dir(__DIR__, array(), array(\Magento\App\Dir::CONFIG => self::$_tmpDir)),
-                new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local()),
-                $objectManager->get('Magento\Core\Model\StoreManager')
+                $filesystem,
+                $objectManager->get('Magento\Core\Model\StoreManager'),
+                $objectManager->get('Magento\Message\Manager')
             );
             $objectManager->addSharedInstance($installerConfig, 'Magento\Install\Model\Installer\Config');
         }

@@ -29,6 +29,25 @@ class Actions
     extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
+     * @var \Magento\Core\Helper\Url
+     */
+    protected $_urlHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Core\Helper\Url $urlHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        \Magento\Core\Helper\Url $urlHelper,
+        array $data = array()
+    ) {
+        $this->_urlHelper = $urlHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Renders grid column
      *
      * @param   \Magento\Object $row
@@ -46,7 +65,7 @@ class Actions
                 __('Mark as Read') .'</a> | '
             : '';
 
-        $encodedUrl = $this->helper('Magento\Core\Helper\Url')->getEncodedUrl();
+        $encodedUrl = $this->_urlHelper->getEncodedUrl();
         return sprintf('%s%s<a href="%s" onClick="deleteConfirm(\'%s\', this.href); return false;">%s</a>',
             $readDetailsHtml,
             $markAsReadHtml,

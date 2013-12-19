@@ -50,20 +50,20 @@ class Type extends \Magento\View\Element\Template
     /**
      * Install installer config
      *
-     * @var \Magento\Core\Model\Session\Generic
+     * @var \Magento\Session\Generic
      */
     protected $_session;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer\Config $installerConfig
-     * @param \Magento\Core\Model\Session\Generic $session
+     * @param \Magento\Session\Generic $session
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer\Config $installerConfig,
-        \Magento\Core\Model\Session\Generic $session,
+        \Magento\Session\Generic $session,
         array $data = array()
     ) {
         parent::__construct($context, $data);

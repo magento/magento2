@@ -34,7 +34,7 @@
 
 namespace Magento\Reports\Block\Adminhtml\Review;
 
-class Detail extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Detail extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @var \Magento\Catalog\Model\ProductFactory

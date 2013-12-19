@@ -57,6 +57,11 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_collectionFactory;
 
     /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $_imageHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -65,6 +70,7 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param array $data
      */
     public function __construct(
@@ -76,8 +82,10 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Helper\Image $imageHelper,
         array $data = array()
     ) {
+        $this->_imageHelper = $imageHelper;
         $this->_catalogLayer = $catalogLayer;
         $this->_visibility = $visibility;
         $this->_rssFactory = $rssFactory;
@@ -181,7 +189,7 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
 
         $description = '<table><tr>'
                      . '<td><a href="'.$product->getProductUrl().'"><img src="'
-                     . $this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail')->resize(75, 75)
+                     . $this->_imageHelper->init($product, 'thumbnail')->resize(75, 75)
                      . '" border="0" align="left" height="75" width="75"></a></td>'
                      . '<td  style="text-decoration:none;">' . $product->getDescription();
 

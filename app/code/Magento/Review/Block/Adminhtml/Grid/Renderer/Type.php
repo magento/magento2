@@ -34,7 +34,7 @@
 
 namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
 
-class Type extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     public function render(\Magento\Object $row)
     {

@@ -32,31 +32,57 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_config;
 
+    /**
+     * @var \Magento\Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var \Magento\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * Setup test
+     */
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Dir $dirs */
-        $dirs = $objectManager->create(
-            'Magento\App\Dir',
-            array(
-                'baseDir' => BP,
-                'dirs' => array(
-                    \Magento\App\Dir::MODULES => __DIR__ . '/LayoutTest',
-                    \Magento\App\Dir::CONFIG => __DIR__ . '/LayoutTest',
-                )
-            )
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $rootPath = $this->objectManager->get('Magento\Filesystem')
+            ->getDirectoryRead(\Magento\Filesystem::ROOT)
+            ->getAbsolutePath();
+
+        $path = str_replace('\\', '/', realpath(__DIR__ . '/../DataService/LayoutTest'));
+
+        $directoryList = new \Magento\Filesystem\DirectoryList(
+            $rootPath, array(
+            \Magento\Filesystem::MODULES => array('path' => $path),
+            \Magento\Filesystem::CONFIG => array('path' => $path)
+        ));
+
+        $this->filesystem = new \Magento\Filesystem(
+            $directoryList,
+            new \Magento\Filesystem\Directory\ReadFactory(),
+            new \Magento\Filesystem\Directory\WriteFactory()
         );
 
-        $moduleList = $objectManager->create(
+        $modulesDir = new \Magento\Module\Dir(
+            $this->filesystem,
+            $this->objectManager->get('Magento\Stdlib\String')
+        );
+        /** @var \Magento\Module\Dir\Reader $moduleReader */
+
+
+        $moduleList = $this->objectManager->create(
             'Magento\Module\ModuleList',
             array(
-                'reader' => $objectManager->create(
+                'reader' => $this->objectManager->create(
                     'Magento\Module\Declaration\Reader\Filesystem',
                     array(
-                        'fileResolver' => $objectManager->create(
+                        'fileResolver' => $this->objectManager->create(
                             'Magento\Module\Declaration\FileResolver',
                             array(
-                                'applicationDirs' => $dirs
+                                'filesystem' => $this->filesystem
                             )
                         )
                     )
@@ -65,19 +91,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        /** @var \Magento\Module\Dir\Reader $moduleReader */
-        $moduleReader = $objectManager->create(
-            'Magento\Module\Dir\Reader',
-            array(
-                'moduleList' => $moduleList
-            )
+        $moduleReader = new \Magento\Module\Dir\Reader(
+            $modulesDir,
+            $moduleList,
+            $this->filesystem,
+            $this->objectManager->get('Magento\Config\FileIteratorFactory')
         );
-        $moduleReader->setModuleDir('Magento_Last', 'etc', __DIR__ . '/LayoutTest/Magento/Last/etc');
 
         /** @var \Magento\Core\Model\DataService\Config\Reader\Factory $dsCfgReaderFactory */
-        $dsCfgReaderFactory = $objectManager->create('Magento\Core\Model\DataService\Config\Reader\Factory');
+        $dsCfgReaderFactory = $this->objectManager->create(
+            'Magento\Core\Model\DataService\Config\Reader\Factory'
+        );
 
-        $this->_config = new \Magento\Core\Model\DataService\Config($dsCfgReaderFactory, $moduleReader);
+        /** @var \Magento\Core\Model\DataService\Config $config */
+        $this->_config = new \Magento\Core\Model\DataService\Config(
+            $dsCfgReaderFactory,
+            $moduleReader
+        );
+
     }
 
     public function testGetClassByAliasOverride()

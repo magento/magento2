@@ -232,9 +232,9 @@ class AvailablePath extends \Zend_Validate_Abstract
         }
 
         //validation
-        $value = str_replace(array('/', '\\'), DS, $this->_value);
+        $value = str_replace('\\', '/', $this->_value);
         $valuePathInfo = pathinfo(ltrim($value, '\\/'));
-        if ($valuePathInfo['dirname'] == '.' || $valuePathInfo['dirname'] == DS) {
+        if ($valuePathInfo['dirname'] == '.' || $valuePathInfo['dirname'] == '/') {
             $valuePathInfo['dirname'] = '';
         }
 
@@ -265,10 +265,10 @@ class AvailablePath extends \Zend_Validate_Abstract
             if (!isset($this->_pathsData[$path]['regFilename'])) {
                 $pathInfo = pathinfo($path);
                 $options['file_mask'] = $pathInfo['basename'];
-                if ($pathInfo['dirname'] == '.' || $pathInfo['dirname'] == DS) {
+                if ($pathInfo['dirname'] == '.' || $pathInfo['dirname'] == '/') {
                     $pathInfo['dirname'] = '';
                 } else {
-                    $pathInfo['dirname'] = str_replace(array('/', '\\'), DS, $pathInfo['dirname']);
+                    $pathInfo['dirname'] = str_replace('\\', '/', $pathInfo['dirname']);
                 }
                 $options['dir_mask'] = $pathInfo['dirname'];
                 $this->_pathsData[$path]['options'] = $options;
@@ -293,21 +293,21 @@ class AvailablePath extends \Zend_Validate_Abstract
             }
 
             //directory mask
-            $reg = $options['dir_mask'] . DS;
+            $reg = $options['dir_mask'] . '/';
             if (!isset($this->_pathsData[$path]['regDir'])) {
                 //make regular
                 $reg = str_replace('.', '\.', $reg);
                 $reg = str_replace('*\\', '||', $reg);
                 $reg = str_replace('*/', '||', $reg);
                 //$reg = str_replace('*', '||', $reg);
-                $reg = str_replace(DS, '[\\' . DS . ']', $reg);
-                $reg = str_replace('?', '([^\\' . DS . ']+)', $reg);
-                $reg = str_replace('||', '(.*[\\' . DS . '])?', $reg);
+                $reg = str_replace('/', '[\\/]', $reg);
+                $reg = str_replace('?', '([^\\/]+)', $reg);
+                $reg = str_replace('||', '(.*[\\/])?', $reg);
                 $reg = "/^$reg$/";
             } else {
                 $reg = $this->_pathsData[$path]['regDir'];
             }
-            $resultDir = preg_match($reg, $valuePathInfo['dirname'] . DS);
+            $resultDir = preg_match($reg, $valuePathInfo['dirname'] . '/');
 
             if ($protected && ($resultDir && $resultFile)) {
                 return false;

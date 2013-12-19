@@ -30,9 +30,10 @@ namespace Magento\Backend\Model\Auth;
  * Backend Auth session model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @todo implement solution that keeps is_first_visit flag in session during redirects
  */
 class Session
-    extends \Magento\Core\Model\Session\AbstractSession
+    extends \Magento\Session\SessionManager
     implements \Magento\Backend\Model\Auth\StorageInterface
 {
     const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
@@ -62,48 +63,32 @@ class Session
     protected $_config;
 
     /**
-     * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
+     * @param \Magento\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Session\ValidatorInterface $validator
+     * @param \Magento\Session\StorageInterface $storage
      * @param \Magento\Acl\Builder $aclBuilder
      * @param \Magento\Backend\Model\Url $backendUrl
      * @param \Magento\Backend\App\ConfigInterface $config
-     * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Session\Context $context,
+        \Magento\App\RequestInterface $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
+        \Magento\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Session\ValidatorInterface $validator,
+        \Magento\Session\StorageInterface $storage,
         \Magento\Acl\Builder $aclBuilder,
         \Magento\Backend\Model\Url $backendUrl,
-        \Magento\Backend\App\ConfigInterface $config,
-        array $data = array()
+        \Magento\Backend\App\ConfigInterface $config
     ) {
         $this->_config = $config;
         $this->_aclBuilder = $aclBuilder;
         $this->_backendUrl = $backendUrl;
-        parent::__construct($context, $sidResolver, $sessionConfig, $data);
-        $this->start('admin');
-    }
-
-    /**
-     * Pull out information from session whether there is currently the first page after log in
-     *
-     * The idea is to set this value on login(), then redirect happens,
-     * after that on next request the value is grabbed once the session is initialized
-     * Since the session is used as a singleton, the value will be in $_isFirstPageAfterLogin until the end of request,
-     * unless it is reset intentionally from somewhere
-     *
-     * @param string $namespace
-     * @param string $sessionName
-     * @return \Magento\Backend\Model\Auth\Session
-     * @see self::login()
-     */
-    public function start($namespace = 'default', $sessionName = null)
-    {
-        parent::start($namespace, $sessionName);
-        // @todo implement solution that keeps is_first_visit flag in session during redirects
-        return $this;
+        parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
+        $this->start();
     }
 
     /**

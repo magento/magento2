@@ -320,7 +320,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         }
 
         if ($this->_coreStoreConfig->getConfig('web/url/use_store') && $storeCode = $this->_storeManager->getStore()->getCode()) {
-                $targetUrl = $request->getBaseUrl(). '/' . $storeCode . '/' .$this->getTargetPath();
+            $targetUrl = $request->getBaseUrl(). '/' . $storeCode . '/' .$this->getTargetPath();
         }
 
         $queryString = $this->_getQueryString();

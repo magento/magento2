@@ -34,7 +34,7 @@
 
 namespace Magento\Review\Block\Adminhtml;
 
-class Add extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Add extends \Magento\Backend\Block\Widget\Form\Container
 {
     protected function _construct()
     {

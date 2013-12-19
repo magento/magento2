@@ -32,7 +32,7 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
-class Time extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Core\Model\Date

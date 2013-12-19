@@ -24,13 +24,11 @@
  */
 -->
 <config>
-    <module name="Magento_Integration" version="1.0.0.1" active="true">
+    <module name="Magento_Integration" version="1.0.0.2" active="true">
         <sequence>
             <module name="Magento_Core"/>
-            <module name="Magento_Adminhtml"/>
         </sequence>
         <depends>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_Core"/>
             <module name="Magento_Backend"/>
         </depends>

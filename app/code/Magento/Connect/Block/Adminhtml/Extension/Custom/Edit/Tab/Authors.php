@@ -90,7 +90,7 @@ class Authors
      */
     public function getAddAuthorButtonHtml()
     {
-        return $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setType('button')
             ->setClass('add')
             ->setLabel(__('Add Author'))

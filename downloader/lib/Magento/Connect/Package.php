@@ -230,7 +230,7 @@ END;
     public function save($path)
     {
         $this->validate();
-        $path = rtrim($path, "\\/") . DS;
+        $path = rtrim($path, "\\/") . '/';
         $this->_savePackage($path);
         return $this;
     }
@@ -493,7 +493,7 @@ END;
             $fileNode = $parent->addChild('file');
             $fileNode->addAttribute('name', $fileName);
             $targetDir = $this->getTarget()->getTargetUri($targetName);
-            $hash = md5_file($targetDir.DS.$path);
+            $hash = md5_file($targetDir . '/' . $path);
             $fileNode->addAttribute('hash', $hash);
         }
         return $this;
@@ -513,9 +513,9 @@ END;
     public function addContentDir($targetName, $path, $exclude=null, $include=null)
     {
         $targetDir = $this->getTarget()->getTargetUri($targetName);
-        $targetDirLen = strlen($targetDir . DS);
+        $targetDirLen = strlen($targetDir . '/');
         //get all subdirectories and files.
-        $entries = @glob($targetDir. DS . $path . DS . "{,.}*", GLOB_BRACE);
+        $entries = @glob($targetDir . '/' . $path . '/' . "{,.}*", GLOB_BRACE);
         if (!empty($entries)) {
             foreach ($entries as $entry) {
                 $filePath = substr($entry, $targetDirLen);
@@ -903,7 +903,7 @@ END;
             $this->_contents[] = $path;
         } else {
             foreach($parent as $_content) {
-                $this->_getList($_content, ($path ? $path . DS : '')  . $_content['name']);
+                $this->_getList($_content, ($path ? $path . '/' : '')  . $_content['name']);
             }
         }
     }
@@ -943,7 +943,7 @@ END;
                 if (isset($_content['hash'])) {
                     $contentHash = (string)$_content['hash'];
                 }
-                $this->_getHashList($_content, ($path ? $path . DS : '')  . $_content['name'], $contentHash);
+                $this->_getHashList($_content, ($path ? $path . '/' : '')  . $_content['name'], $contentHash);
             }
         }
     }
@@ -1297,7 +1297,7 @@ END;
      */
     public function getRelaseDirFilename()
     {
-        return $this->getName() . DS . $this->getVersion() . DS . $this->getReleaseFilename();
+        return $this->getName() . '/' . $this->getVersion() . '/' . $this->getReleaseFilename();
     }
 
     /**

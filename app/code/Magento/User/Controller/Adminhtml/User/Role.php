@@ -185,23 +185,16 @@ class Role extends \Magento\Backend\App\AbstractAction
         $currentUser = $this->_userFactory->create()->setId($this->_authSession->getUser()->getId());
 
         if (in_array($rid, $currentUser->getRoles()) ) {
-            $this->_session->addError(
-                __('You cannot delete self-assigned roles.')
-            );
+            $this->messageManager->addError(__('You cannot delete self-assigned roles.'));
             $this->_redirect('adminhtml/*/editrole', array('rid' => $rid));
             return;
         }
 
         try {
             $this->_initRole()->delete();
-
-            $this->_session->addSuccess(
-                __('You deleted the role.')
-            );
+            $this->messageManager->addSuccess(__('You deleted the role.'));
         } catch (\Exception $e) {
-            $this->_session->addError(
-                __('An error occurred while deleting this role.')
-            );
+            $this->messageManager->addError(__('An error occurred while deleting this role.'));
         }
 
         $this->_redirect("*/*/");
@@ -230,7 +223,7 @@ class Role extends \Magento\Backend\App\AbstractAction
 
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
-            $this->_session->addError(__('This role no longer exists.'));
+            $this->messageManager->addError(__('This role no longer exists.'));
             $this->_redirect('adminhtml/*/');
             return;
         }
@@ -259,16 +252,11 @@ class Role extends \Magento\Backend\App\AbstractAction
             foreach ($roleUsers as $nRuid) {
                 $this->_addUserToRole($nRuid, $role->getId());
             }
-
-            $this->_session->addSuccess(
-                __('You saved the role.')
-            );
+            $this->messageManager->addSuccess(__('You saved the role.'));
         } catch (\Magento\Core\Exception $e) {
-            $this->_session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_session->addError(
-                __('An error occurred while saving this role.')
-            );
+            $this->messageManager->addError(__('An error occurred while saving this role.'));
         }
         $this->_redirect('adminhtml/*/');
         return;

@@ -29,9 +29,14 @@
             <value type="bool">false</value>
         </param>
     </type>
-    <virtualType name="Magento\Wishlist\Model\Session" type="Magento\Core\Model\Session\Generic">
-        <param name="sessionNamespace">
+    <virtualType name="Magento\Wishlist\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
             <value>wishlist</value>
+        </param>
+    </virtualType>
+    <virtualType name="Magento\Wishlist\Model\Session" type="Magento\Session\Generic">
+        <param name="storage">
+            <instance type="Magento\Wishlist\Model\Session\Storage" />
         </param>
         <param name="sessionName">
             <value>adminhtml</value>
