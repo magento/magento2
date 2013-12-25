@@ -89,9 +89,9 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     protected $_customerSession;
 
     /**
-     * @var \Magento\Message\Factory
+     * @var \Magento\Message\ManagerInterface
      */
-    protected $messageFactory;
+    protected $messageManager;
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -101,7 +101,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      * @param \Magento\Checkout\Model\Resource\Cart $resourceCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Message\Factory $messageFactory
+     * @param \Magento\Message\ManagerInterface $messageManager
      * @param array $data
      */
     public function __construct(
@@ -112,7 +112,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         \Magento\Checkout\Model\Resource\Cart $resourceCart,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Message\Factory $messageFactory,
+        \Magento\Message\ManagerInterface $messageManager,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -122,7 +122,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         $this->_resourceCart = $resourceCart;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
-        $this->messageFactory = $messageFactory;
+        $this->messageManager = $messageManager;
         parent::__construct($data);
     }
 
@@ -241,7 +241,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      * @param mixed $qtyFlag if is null set product qty like in order
      * @return \Magento\Checkout\Model\Cart
      */
-    public function addOrderItem($orderItem, $qtyFlag=null)
+    public function addOrderItem($orderItem, $qtyFlag = null)
     {
         /* @var $orderItem \Magento\Sales\Model\Order\Item */
         if (is_null($orderItem->getParentItem())) {
@@ -324,7 +324,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      * @return \Magento\Checkout\Model\Cart
      * @throws \Magento\Core\Exception
      */
-    public function addProduct($productInfo, $requestInfo=null)
+    public function addProduct($productInfo, $requestInfo = null)
     {
         $product = $this->_getProduct($productInfo);
         $request = $this->_getProductRequest($requestInfo);
@@ -334,9 +334,11 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         if ($product->getStockItem()) {
             $minimumQty = $product->getStockItem()->getMinSaleQty();
             //If product was not found in cart and there is set minimal qty for it
-            if ($minimumQty && $minimumQty > 0 && $request->getQty() < $minimumQty
+            if ($minimumQty
+                && $minimumQty > 0
+                && $request->getQty() < $minimumQty
                 && !$this->getQuote()->hasProductId($productId)
-            ){
+            ) {
                 $request->setQty($minimumQty);
             }
         }
@@ -397,7 +399,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
                 if ($product->getId() && $product->isVisibleInCatalog()) {
                     try {
                         $this->getQuote()->addProduct($product);
-                    } catch (\Exception $e){
+                    } catch (\Exception $e) {
                         $allAdded = false;
                     }
                 } else {
@@ -406,14 +408,10 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             }
 
             if (!$allAvailable) {
-                $this->_checkoutSession->addError(
-                    __("We don't have some of the products you want.")
-                );
+                $this->messageManager->addError(__("We don't have some of the products you want."));
             }
             if (!$allAdded) {
-                $this->_checkoutSession->addError(
-                    __("We don't have as many of some products as you want.")
-                );
+                $this->messageManager->addError(__("We don't have as many of some products as you want."));
             }
         }
         return $this;
@@ -474,7 +472,6 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     {
         $this->_eventManager->dispatch('checkout_cart_update_items_before', array('cart'=>$this, 'info'=>$data));
 
-        $session = $this->_checkoutSession;
         $qtyRecalculatedFlag = false;
         foreach ($data as $itemId => $itemInfo) {
             $item = $this->getQuote()->getItemById($itemId);
@@ -499,21 +496,21 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
 
                 if (isset($itemInfo['before_suggest_qty']) && ($itemInfo['before_suggest_qty'] != $qty)) {
                     $qtyRecalculatedFlag = true;
-                    $message = $this->messageFactory->notice(
-                        __('Quantity was recalculated from %1 to %2', $itemInfo['before_suggest_qty'], $qty)
+                    $this->messageManager->addNotice(
+                        __('Quantity was recalculated from %1 to %2', $itemInfo['before_suggest_qty'], $qty),
+                        'quote_item' . $item->getId()
                     );
-                    $session->addQuoteItemMessage($item->getId(), $message);
                 }
             }
         }
 
         if ($qtyRecalculatedFlag) {
-            $session->addNotice(
+            $this->messageManager->addNotice(
                 __('Some products quantities were recalculated because of quantity increment mismatch.')
             );
         }
 
-        $this->_eventManager->dispatch('checkout_cart_update_items_after', array('cart'=>$this, 'info'=>$data));
+        $this->_eventManager->dispatch('checkout_cart_update_items_after', array('cart' => $this, 'info' => $data));
         return $this;
     }
 

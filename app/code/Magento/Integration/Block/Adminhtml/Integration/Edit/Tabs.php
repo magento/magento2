@@ -26,7 +26,7 @@
 
 namespace Magento\Integration\Block\Adminhtml\Integration\Edit;
 
-class Tabs extends \Magento\Adminhtml\Block\Widget\Tabs
+class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * Initialize integration edit page tabs

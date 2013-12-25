@@ -39,7 +39,7 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Eav') . DIRECTORY_SEPARATOR . 'eav_attributes.xsd';
+        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Eav') . '/eav_attributes.xsd';
     }
 
     /**

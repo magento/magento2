@@ -100,7 +100,6 @@ class CopyRule
                 array_reverse($nonModularLocations)
             );
             foreach ($allDirPatterns as $pattern) {
-                $pattern = \Magento\Filesystem::fixSeparator($pattern);
                 foreach ($this->_getMatchingDirs($pattern) as $srcDir) {
                     $paramsFromDir = $this->_parsePlaceholders($srcDir, $pattern);
                     if (!empty($paramsFromDir['namespace']) && !empty($paramsFromDir['module'])) {
@@ -145,21 +144,33 @@ class CopyRule
      */
     private function _getMatchingDirs($dirPattern)
     {
-        $patternGlob = preg_replace($this->_placeholderPcre, '*', $dirPattern, -1, $placeholderCount);
+        $dirPattern = preg_replace($this->_placeholderPcre, '*', $dirPattern, -1, $placeholderCount);
+        $directoryHandler = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
         if ($placeholderCount) {
             // autodetect pattern base directory because the filesystem interface requires it
-            $firstPlaceholderPos = strpos($patternGlob, '*');
-            $patternBaseDir = substr($patternGlob, 0, $firstPlaceholderPos);
-            $patternTrailing = substr($patternGlob, $firstPlaceholderPos);
-            $paths = $this->_filesystem->searchKeys($patternBaseDir, $patternTrailing);
+            $firstPlaceholderPos = strpos($dirPattern, '*');
+            $patternBaseDir = substr($dirPattern, 0, $firstPlaceholderPos);
+            $patternTrailing = substr($dirPattern, $firstPlaceholderPos);
+            $patternTrailing = preg_replace_callback('/[\\\\^$.[\\]|()?*+{}\\-\\/]/', function ($matches) {
+                switch ($matches[0]) {
+                    case '*':
+                        return '.*';
+                    case '?':
+                        return '.';
+                    default:
+                        return '\\'.$matches[0];
+                }
+            }, $patternTrailing, -1);
+
+            $paths = $directoryHandler->search('#' . $patternTrailing . '#', $patternBaseDir);
         } else {
             // pattern is already a valid path containing no placeholders
             $paths = array($dirPattern);
         }
         $result = array();
         foreach ($paths as $path) {
-            if ($this->_filesystem->isDirectory($path)) {
-                $result[] = $path;
+            if ($directoryHandler->isDirectory($path)) {
+                $result[] = $directoryHandler->getAbsolutePath($path);
             }
         }
         return $result;

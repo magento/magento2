@@ -42,7 +42,7 @@ class Sftp extends \Magento\Io\AbstractIo implements \Magento\Io\IoInterface
     const SSH2_PORT = 22;
 
     /**
-     * @var Net_SFTP $_connection
+     * @var \Net_SFTP $_connection
      */
     protected $_connection = null;
 

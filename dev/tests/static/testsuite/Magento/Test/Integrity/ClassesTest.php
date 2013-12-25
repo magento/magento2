@@ -57,7 +57,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 \:\:get(?:ResourceModel | BlockSingleton | Model | Singleton)?\(\s*[\'"]([a-z\d\\\\]+)[\'"]\s*[\),]
 
                 # various methods, first argument
-                | \->(?:initReport | addBlock | createBlock | setDataHelperName
+                | \->(?:initReport | addBlock | createBlock
                     | setAttributeModel | setBackendModel | setFrontendModel | setSourceModel | setModel
                 )\(\s*\'([a-z\d\\\\]+)\'\s*[\),]
 
@@ -253,7 +253,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 foreach ($fileList as $currentFile) {
                     $absolutePath =
                         \Magento\TestFramework\Utility\Files::init()->getPathToSource() .
-                        DIRECTORY_SEPARATOR .
+                        '/' .
                         $currentFile;
                     if (is_dir($absolutePath)) {
                         $recursiveFiles =
@@ -408,7 +408,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     protected function _setReferenceBlacklist()
     {
         if (!isset(self::$_referenceBlackList)) {
-            $blackList = file(__DIR__ . DIRECTORY_SEPARATOR . '_files/blacklist/reference.txt', FILE_IGNORE_NEW_LINES);
+            $blackList = file(__DIR__ . '/_files/blacklist/reference.txt', FILE_IGNORE_NEW_LINES);
             self::$_referenceBlackList = $blackList;
         }
     }

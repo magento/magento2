@@ -33,7 +33,7 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart;
 
-class Abandoned extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Abandoned extends \Magento\Backend\Block\Widget\Grid\Container
 {
 
     protected function _construct()

@@ -31,6 +31,7 @@ use Magento\View\Design\FileResolution\Strategy\LocaleInterface;
 use Magento\View\Design\FileResolution\Strategy\View\NotifiableInterface;
 use Magento\View\Design\FileResolution\Strategy\ViewInterface;
 use Magento\View\Design\ThemeInterface;
+use Magento\Filesystem\Directory\Write;
 
 /**
  * Caching Proxy
@@ -46,11 +47,6 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
      * @var Fallback
      */
     protected $fallback;
-
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
 
     /**
      * Path to maps directory
@@ -74,6 +70,11 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     protected $canSaveMap;
 
     /**
+     * @var Write
+     */
+    protected $varDirectory;
+
+    /**
      * Cached fallback map sections
      *
      * @var array
@@ -92,16 +93,17 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
         Fallback $fallback,
         Filesystem $filesystem,
         $mapDir,
-        $baseDir,
+        $baseDir, // magento root
         $canSaveMap = true
     ) {
         $this->fallback = $fallback;
-        $this->filesystem = $filesystem;
-        if (!$filesystem->isDirectory($baseDir)) {
+        $this->varDirectory = $filesystem->getDirectoryWrite(Filesystem::VAR_DIR);
+        $rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT);
+        if (!$rootDirectory->isDirectory($rootDirectory->getRelativePath($baseDir))) {
             throw new \InvalidArgumentException("Wrong base directory specified: '{$baseDir}'");
         }
         $this->baseDir = $baseDir;
-        $this->mapDir = $mapDir;
+        $this->mapDir = $this->varDirectory->getRelativePath($mapDir);
         $this->canSaveMap = $canSaveMap;
     }
 
@@ -113,15 +115,15 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
         if (!$this->canSaveMap) {
             return;
         }
-        if (!$this->filesystem->isDirectory($this->mapDir)) {
-            $this->filesystem->createDirectory($this->mapDir, 0777);
+        if (!$this->varDirectory->isDirectory($this->mapDir)) {
+            $this->varDirectory->create($this->mapDir);
         }
         foreach ($this->sections as $sectionFile => $section) {
             if (!$section['is_changed']) {
                 continue;
             }
-            $filePath = $this->mapDir . DIRECTORY_SEPARATOR . $sectionFile;
-            $this->filesystem->write($filePath, serialize($section['data']));
+            $filePath = $this->mapDir . '/' . $sectionFile;
+            $this->varDirectory->writeFile($filePath, serialize($section['data']));
         }
     }
 
@@ -201,7 +203,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
         if (isset($this->sections[$sectionKey]['data'][$fileKey])) {
             $value = $this->sections[$sectionKey]['data'][$fileKey];
             if ('' !== (string)$value) {
-                $value = $this->baseDir . DIRECTORY_SEPARATOR . $value;
+                $value = $this->baseDir . '/' . $value;
             }
             return $value;
         }
@@ -222,13 +224,12 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
      */
     protected function setToMap($fileType, $area, ThemeInterface $theme, $locale, $module, $file, $filePath)
     {
-        $pattern = $this->baseDir . DIRECTORY_SEPARATOR;
-        if (0 !== strpos($filePath, $pattern)) {
+        if (0 !== strpos($filePath, $this->baseDir)) {
             throw new \Magento\Exception(
-                "Attempt to store fallback path '{$filePath}', which is not within '{$pattern}'"
+                "Attempt to store fallback path '{$filePath}', which is not within '{$this->baseDir}'"
             );
         }
-        $value = substr($filePath, strlen($pattern));
+        $value = ltrim(substr($filePath, strlen($this->baseDir)), '/\\');
 
         $sectionKey = $this->loadSection($area, $theme, $locale);
         $fileKey = "$fileType|$file|$module";
@@ -262,13 +263,13 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     {
         $sectionFile = $this->getSectionFile($area, $themeModel, $locale);
         if (!isset($this->sections[$sectionFile])) {
-            $filePath = $this->mapDir . DIRECTORY_SEPARATOR . $sectionFile;
+            $filePath = $this->mapDir . '/' . $sectionFile;
             $this->sections[$sectionFile] = array(
                 'data' => array(),
                 'is_changed' => false,
             );
-            if ($this->filesystem->isFile($filePath)) {
-                $this->sections[$sectionFile]['data'] = unserialize($this->filesystem->read($filePath));
+            if ($this->varDirectory->isFile($filePath)) {
+                $this->sections[$sectionFile]['data'] = unserialize($this->varDirectory->readFile($filePath));
             }
         }
         return $sectionFile;

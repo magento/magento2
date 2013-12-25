@@ -39,7 +39,6 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Shipping"/>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_Weee"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Directory"/>

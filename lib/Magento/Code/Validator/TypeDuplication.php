@@ -78,8 +78,9 @@ class TypeDuplication implements ValidatorInterface
 
         if (!empty($errors)) {
             if (false == $this->_ignoreWarning($class)) {
+                $classPath = str_replace('\\', '/', $class->getFileName());
                 throw new ValidationException('Argument type duplication in class ' . $class->getName()
-                    . ' in ' . $class->getFileName() . PHP_EOL . implode(PHP_EOL, $errors)
+                    . ' in ' . $classPath . PHP_EOL . implode(PHP_EOL, $errors)
                 );
             }
         }

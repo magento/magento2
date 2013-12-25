@@ -125,6 +125,11 @@ class Onepage
     protected $_objectCopyService;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Checkout\Helper\Data $helper
      * @param \Magento\Customer\Helper\Data $customerData
@@ -139,6 +144,7 @@ class Onepage
      * @param \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Object\Copy $objectCopyService
+     * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
@@ -154,7 +160,8 @@ class Onepage
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Object\Copy $objectCopyService
+        \Magento\Object\Copy $objectCopyService,
+        \Magento\Message\ManagerInterface $messageManager
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerData = $customerData;
@@ -171,6 +178,7 @@ class Onepage
         $this->_serviceQuoteFactory = $serviceQuoteFactory;
         $this->_orderFactory = $orderFactory;
         $this->_objectCopyService = $objectCopyService;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -765,7 +773,7 @@ class Onepage
         if ($customer->isConfirmationRequired()) {
             $customer->sendNewAccountEmail('confirmation', '', $this->getQuote()->getStoreId());
             $url = $this->_customerData->getEmailConfirmationUrl($customer->getEmail());
-            $this->getCustomerSession()->addSuccess(
+            $this->messageManager->addSuccess(
                 __('Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%1">click here</a>.', $url)
             );
         } else {

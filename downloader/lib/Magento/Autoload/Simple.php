@@ -46,7 +46,7 @@ class Simple
 
     public function autoload($class)
     {
-        $classFile = str_replace(' ', DIRECTORY_SEPARATOR, ucwords(str_replace('_', ' ', $class)));
+        $classFile = str_replace(' ', '/', ucwords(str_replace('_', ' ', $class)));
         $classFile.= '.php';
         @include $classFile;
     }

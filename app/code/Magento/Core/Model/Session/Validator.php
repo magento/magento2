@@ -23,7 +23,10 @@
  */
 namespace Magento\Core\Model\Session;
 
-class Validator
+/**
+ * Session Validator
+ */
+class Validator implements \Magento\Session\ValidatorInterface
 {
     const VALIDATOR_KEY                         = '_session_validator_data';
     const VALIDATOR_HTTP_USER_AGENT_KEY         = 'http_user_agent';
@@ -69,10 +72,10 @@ class Validator
     /**
      * Validate session
      *
-     * @param \Magento\Core\Model\Session\AbstractSession $session
-     * @throws \Magento\Core\Model\Session\Exception
+     * @param \Magento\Session\SessionManagerInterface $session
+     * @throws \Magento\Session\Exception
      */
-    public function validate(\Magento\Core\Model\Session\AbstractSession $session)
+    public function validate(\Magento\Session\SessionManagerInterface $session)
     {
         if (!isset($_SESSION[self::VALIDATOR_KEY])) {
             $_SESSION[self::VALIDATOR_KEY] = $this->_getSessionEnvironment();
@@ -80,7 +83,7 @@ class Validator
             if (!$this->_validate()) {
                 $session->destroy(array('clear_storage' => false));
                 // throw core session exception
-                throw new \Magento\Core\Model\Session\Exception('');
+                throw new \Magento\Session\Exception('');
             }
         }
     }

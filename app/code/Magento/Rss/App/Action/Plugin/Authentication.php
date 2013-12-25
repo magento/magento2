@@ -56,20 +56,20 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
 
     /**
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Backend\Model\Url $url
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\App\ActionFlag $actionFlag
+     * @param \Magento\Message\ManagerInterface $messageManager
      * @param \Magento\HTTP\Authentication $httpAuthentication
      * @param \Magento\Logger $logger
      * @param \Magento\AuthorizationInterface $authorization
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Url $url,
         \Magento\App\ResponseInterface $response,
         \Magento\App\ActionFlag $actionFlag,
+        \Magento\Message\ManagerInterface $messageManager,
         \Magento\HTTP\Authentication $httpAuthentication,
         \Magento\Logger $logger,
         \Magento\AuthorizationInterface $authorization
@@ -77,7 +77,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
         $this->_httpAuthentication = $httpAuthentication;
         $this->_logger = $logger;
         $this->_authorization = $authorization;
-        parent::__construct($auth, $session, $url, $response, $actionFlag);
+        parent::__construct($auth, $url, $response, $actionFlag, $messageManager);
     }
 
     /**
@@ -115,7 +115,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
         // Verify if logged in and authorized
         if (!$session->isLoggedIn() || !$this->_authorization->isAllowed($resource)) {
             $this->_httpAuthentication->setAuthenticationFailed('RSS Feeds');
-            return null;
+            return $this->_response;
         }
 
         return parent::aroundDispatch($arguments, $invocationChain);

@@ -42,8 +42,8 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var $session \Magento\Adminhtml\Model\Session */
-        $session = $objectManager->get('Magento\Adminhtml\Model\Session');
+        /** @var $session \Magento\Backend\Model\Session */
+        $session = $objectManager->get('Magento\Backend\Model\Session');
         $session->setProductIds(array(1));
 
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');

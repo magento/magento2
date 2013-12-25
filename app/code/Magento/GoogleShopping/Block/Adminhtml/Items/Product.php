@@ -66,6 +66,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavCollectionFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
@@ -75,6 +76,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavCollectionFactory,
         \Magento\Catalog\Model\Product\Type $productType,
@@ -85,7 +87,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_eavCollectionFactory = $eavCollectionFactory;
         $this->_productType = $productType;
         $this->_productFactory = $productFactory;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     protected function _construct()

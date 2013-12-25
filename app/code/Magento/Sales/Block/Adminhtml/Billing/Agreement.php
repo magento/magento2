@@ -31,7 +31,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Billing;
 
-class Agreement extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Agreement extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Initialize billing agreements grid container

@@ -34,7 +34,7 @@
 
 namespace Magento\Email\Block\Adminhtml\Template\Grid\Filter;
 
-class Type extends \Magento\Adminhtml\Block\Widget\Grid\Column\Filter\Select
+class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     protected static $_types = array(
         null => null,

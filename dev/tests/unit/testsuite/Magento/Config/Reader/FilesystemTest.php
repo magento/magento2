@@ -52,7 +52,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_file =  __DIR__ . '/../_files/reader/config.xml';
+        $this->_file = file_get_contents(__DIR__ . '/../_files/reader/config.xml');
         $this->_fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
         $this->_converterMock = $this->getMock('Magento\Config\ConverterInterface', array(), array(), '', false);
         $this->_schemaLocatorMock = $this->getMock('Magento\Config\SchemaLocatorInterface');
@@ -73,7 +73,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
 
         $dom = new \DomDocument();
-        $dom->loadXML(file_get_contents($this->_file));
+        $dom->loadXML($this->_file);
         $this->_converterMock->expects($this->once())->method('convert')->with($dom);
         $model->read('scope');
     }

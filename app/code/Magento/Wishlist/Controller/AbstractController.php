@@ -164,9 +164,8 @@ abstract class AbstractController extends \Magento\App\Action\Action
                 }
                 $redirectUrl = $item->getProductUrl();
             } else {
-                $wishlistSession = $this->_objectManager->get('Magento\Wishlist\Model\Session');
                 foreach ($messages as $message) {
-                    $wishlistSession->addError($message);
+                    $this->messageManager->addError($message);
                 }
                 $redirectUrl = $indexUrl;
             }
@@ -178,8 +177,7 @@ abstract class AbstractController extends \Magento\App\Action\Action
                 $wishlist->save();
             }
             catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Wishlist\Model\Session')
-                    ->addError(__('We can\'t update wish list.'));
+                $this->messageManager->addError(__('We can\'t update wish list.'));
                 $redirectUrl = $indexUrl;
             }
 
@@ -188,7 +186,7 @@ abstract class AbstractController extends \Magento\App\Action\Action
                 $products[] = '"' . $product->getName() . '"';
             }
 
-            $this->_objectManager->get('Magento\Checkout\Model\Session')->addSuccess(
+            $this->messageManager->addSuccess(
                 __('%1 product(s) have been added to shopping cart: %2.', count($addedItems), join(', ', $products))
             );
         }

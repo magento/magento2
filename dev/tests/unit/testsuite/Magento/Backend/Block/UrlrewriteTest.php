@@ -36,15 +36,15 @@ class UrlrewriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCreateUrl(array $modes, $expectedUrl)
     {
-        /** @var $selectorBlock \Magento\Adminhtml\Block\Urlrewrite\Selector */
+        /** @var $selectorBlock \Magento\Backend\Block\Urlrewrite\Selector */
         $selectorBlock = $modes
-            ? $this->getMock('Magento\Adminhtml\Block\Urlrewrite\Selector', array('getModes'), array(), '', false)
+            ? $this->getMock('Magento\Backend\Block\Urlrewrite\Selector', array('getModes'), array(), '', false)
             : false;
         if ($selectorBlock) {
             $selectorBlock->expects($this->once())->method('getModes')->with()->will($this->returnValue($modes));
         }
 
-        $testedBlock = $this->getMock('Magento\Adminhtml\Block\Urlrewrite', array('getUrl'), array(), '', false);
+        $testedBlock = $this->getMock('Magento\Backend\Block\Urlrewrite', array('getUrl'), array(), '', false);
         $testedBlock->setSelectorBlock($selectorBlock);
         $testedBlock->expects($this->once())
             ->method('getUrl')

@@ -56,11 +56,37 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     protected $_storageModel;
 
+    /**
+     * @var \Magento\Filesystem\Directory\Write
+     */
+    protected $directoryTmp;
+
+    /**
+     * @var \Magento\Filesystem\Directory\Write
+     */
+    protected $directoryVar;
+
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_filesystem = $this->_objectManager->get('Magento\Filesystem');
-        $this->_filesystem->setIsAllowCreateDirectories(true);
+
+        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Filesystem\DirectoryList');
+
+        $dirPath = ltrim(str_replace($directoryList->getRoot(), '', str_replace('\\', '/', __DIR__)) . '/_files', '/');
+
+        $tmpDirPath = ltrim(str_replace($directoryList->getRoot(), '',
+            str_replace('\\', '/', realpath(__DIR__ . '/../../../../../tmp'))), '/');
+
+        $directoryList->addDirectory(\Magento\Filesystem::VAR_DIR, array('path' => $dirPath));
+        $directoryList->addDirectory(\Magento\Filesystem::TMP, array('path' => $tmpDirPath));
+        $directoryList->addDirectory(\Magento\Filesystem::MEDIA, array('path' => $tmpDirPath));
+
+        $this->_filesystem = $this->_objectManager->create(
+            'Magento\Filesystem', array('directoryList' => $directoryList)
+        );
+        $this->directoryVar = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->directoryTmp = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::TMP);
 
         /** @var $theme \Magento\View\Design\ThemeInterface */
         $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface')->getCollection()->getFirstItem();
@@ -74,13 +100,14 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_helperStorage = $this->_objectManager->get('Magento\Theme\Helper\Storage');
 
         $this->_storageModel = $this->_objectManager->create('Magento\Theme\Model\Wysiwyg\Storage', array(
-            'helper' => $this->_helperStorage
+            'helper' => $this->_helperStorage,
+            'filesystem' => $this->_filesystem
         ));
     }
 
     protected function tearDown()
     {
-        $this->_filesystem->delete($this->_helperStorage->getStorageRoot());
+        $this->directoryTmp->delete($this->directoryTmp->getRelativePath($this->_helperStorage->getStorageRoot()));
     }
 
     /**
@@ -92,14 +119,16 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $imagePath = realpath(__DIR__) . "/_files/theme/image/{$image}";
         $tmpImagePath = $this->_copyFileToTmpCustomizationPath($imagePath);
 
+        $relativePath = $this->directoryTmp->getRelativePath($tmpImagePath);
         $method = $this->_getMethod('_createThumbnail');
-        $result = $method->invokeArgs($this->_storageModel, array($tmpImagePath));
+        $result = $method->invokeArgs($this->_storageModel, array($relativePath));
 
-        $expectedResult = $this->_helperStorage->getThumbnailDirectory($tmpImagePath)
-            . \Magento\Filesystem::DIRECTORY_SEPARATOR . $image;
+        $expectedResult = $this->directoryTmp->getRelativePath(
+            $this->_helperStorage->getThumbnailDirectory($tmpImagePath)
+            . '/' . $image);
 
         $this->assertEquals($expectedResult, $result);
-        $this->assertFileExists($result);
+        $this->assertFileExists($this->directoryTmp->getAbsolutePath($result));
     }
 
     /**
@@ -123,11 +152,13 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected function _copyFileToTmpCustomizationPath($sourceFile)
     {
         $targetFile = $this->_helperStorage->getStorageRoot()
-            . \Magento\Filesystem::DIRECTORY_SEPARATOR
-            . basename($sourceFile);
-
-        $this->_filesystem->ensureDirectoryExists(pathinfo($targetFile, PATHINFO_DIRNAME));
-        $this->_filesystem->copy($sourceFile, $targetFile);
+            . '/' . basename($sourceFile);
+        $this->directoryTmp->create(pathinfo($targetFile, PATHINFO_DIRNAME));
+        $this->directoryVar->copyFile(
+            $this->directoryVar->getRelativePath($sourceFile),
+            $this->directoryTmp->getRelativePath($targetFile),
+            $this->directoryTmp
+        );
         return $targetFile;
     }
 }

@@ -234,7 +234,7 @@ class Emulation extends \Magento\Object
             $storeId
         );
         $this->_locale->setLocaleCode($newLocaleCode);
-        $this->_helperTranslate->initTranslate($newLocaleCode, true);
+        $this->_helperTranslate->initTranslate($newLocaleCode, true, $area);
         return $initialLocaleCode;
     }
 

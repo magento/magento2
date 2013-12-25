@@ -77,8 +77,9 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     protected $_isGateway               = true;
     protected $_canAuthorize            = true;
     protected $_canCapture              = true;
-    protected $_canCapturePartial       = false;
+    protected $_canCapturePartial       = true;
     protected $_canRefund               = true;
+    protected $_canRefundInvoicePartial = true;
     protected $_canVoid                 = true;
     protected $_canUseInternal          = true;
     protected $_canUseCheckout          = true;
@@ -239,6 +240,20 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     }
 
     /**
+     * Get capture amount
+     *
+     * @param float $amount
+     * @return float
+     */
+    protected function _getCaptureAmount($amount)
+    {
+        $infoInstance = $this->getInfoInstance();
+        $amountToPay = round($amount, 2);
+        $authorizedAmount = round($infoInstance->getAmountAuthorized(), 2);
+        return $amountToPay != $authorizedAmount ? $amountToPay : 0;
+    }
+
+    /**
      * Capture payment
      *
      * @param \Magento\Object|\Magento\Sales\Model\Order\Payment $payment
@@ -253,8 +268,13 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
             $request->setOrigid($payment->getReferenceTransactionId());
         } elseif ($payment->getParentTransactionId()) {
             $request = $this->_buildBasicRequest($payment);
-            $request->setTrxtype(self::TRXTYPE_DELAYED_CAPTURE);
             $request->setOrigid($payment->getParentTransactionId());
+            $captureAmount = $this->_getCaptureAmount($amount);
+            if ($captureAmount) {
+                $request->setAmt($captureAmount);
+            }
+            $trxType = $this->getInfoInstance()->hasAmountPaid() ? self::TRXTYPE_SALE : self::TRXTYPE_DELAYED_CAPTURE;
+            $request->setTrxtype($trxType);
         } else {
             $request = $this->_buildPlaceRequest($payment, $amount);
             $request->setTrxtype(self::TRXTYPE_SALE);
@@ -302,6 +322,26 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
     }
 
     /**
+     * Check void availability
+     *
+     * @param   \Magento\Object $payment
+     * @return  bool
+     */
+    public function canVoid(\Magento\Object $payment)
+    {
+        if ($payment instanceof \Magento\Sales\Model\Order\Invoice
+            || $payment instanceof \Magento\Sales\Model\Order\Creditmemo
+        ) {
+            return false;
+        }
+        if ($payment->getAmountPaid()) {
+            $this->_canVoid = false;
+        }
+
+        return $this->_canVoid;
+    }
+
+    /**
      * Attempt to void the authorization on cancelling
      *
      * @param \Magento\Object $payment
@@ -309,7 +349,11 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
      */
     public function cancel(\Magento\Object $payment)
     {
-        return $this->void($payment);
+        if (!$payment->getOrder()->getInvoiceCollection()->count()) {
+            return $this->void($payment);
+        }
+
+        return false;
     }
 
     /**
@@ -331,6 +375,7 @@ class Payflowpro extends  \Magento\Payment\Model\Method\Cc
         if ($response->getResultCode() == self::RESPONSE_CODE_APPROVED){
             $payment->setTransactionId($response->getPnref())
                 ->setIsTransactionClosed(1);
+            $payment->setShouldCloseParentTransaction(!$payment->getCreditmemo()->getInvoice()->canRefund());
         }
         return $this;
     }

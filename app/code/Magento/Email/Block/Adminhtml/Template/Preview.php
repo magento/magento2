@@ -33,7 +33,7 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
-class Preview extends \Magento\Adminhtml\Block\Widget
+class Preview extends \Magento\Backend\Block\Widget
 {
     /**
      * @var \Magento\Core\Model\Input\Filter\MaliciousCode

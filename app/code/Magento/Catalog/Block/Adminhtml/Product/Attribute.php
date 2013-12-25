@@ -34,7 +34,7 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
-class Attribute extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Attribute extends \Magento\Backend\Block\Widget\Grid\Container
 {
 
     protected function _construct()

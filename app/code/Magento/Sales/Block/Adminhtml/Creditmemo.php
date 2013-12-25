@@ -34,7 +34,7 @@
 
 namespace Magento\Sales\Block\Adminhtml;
 
-class Creditmemo extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Creditmemo extends \Magento\Backend\Block\Widget\Grid\Container
 {
 
     protected function _construct()

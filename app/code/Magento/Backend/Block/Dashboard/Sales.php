@@ -34,7 +34,7 @@
 
 namespace Magento\Backend\Block\Dashboard;
 
-use Magento\Adminhtml\Block\Widget;
+use Magento\Backend\Block\Widget;
 
 class Sales extends \Magento\Backend\Block\Dashboard\Bar
 {

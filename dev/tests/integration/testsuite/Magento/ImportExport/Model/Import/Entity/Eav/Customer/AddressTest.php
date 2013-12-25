@@ -385,8 +385,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // set fixture CSV file
         $sourceFile = __DIR__ . '/../_files/address_import_update.csv';
+
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $filesystem = $objectManager->create('Magento\Filesystem');
+
+        $directoryWrite = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+
         $result = $this->_entityAdapter
-            ->setSource(\Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile))
+            ->setSource(\Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite))
             ->isDataValid();
         $this->assertFalse($result, 'Validation result must be false.');
 
@@ -469,8 +476,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // set fixture CSV file
         $sourceFile = __DIR__ . '/../_files/address_import_delete.csv';
+
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $filesystem = $objectManager->create('Magento\Filesystem');
+        $directoryWrite = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
         $result = $this->_entityAdapter
-            ->setSource(\Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile))
+            ->setSource(\Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite))
             ->isDataValid();
         $this->assertTrue($result, 'Validation result must be true.');
 

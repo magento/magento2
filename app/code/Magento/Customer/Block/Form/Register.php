@@ -49,16 +49,24 @@ class Register extends \Magento\Directory\Block\Data
     protected $_moduleManager;
 
     /**
+     * @var \Magento\Customer\Helper\Data
+     */
+    protected $_customerHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
+     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
+     * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
@@ -70,13 +78,21 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\AddressFactory $addressFactory,
+        \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {
+        $this->_customerHelper = $customerHelper;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
         $this->_addressFactory = $addressFactory;
         parent::__construct(
-            $context, $coreData, $jsonEncoder, $configCacheType, $regionCollFactory, $countryCollFactory, $data
+            $context,
+            $coreData,
+            $jsonEncoder,
+            $configCacheType,
+            $regionCollFactory,
+            $countryCollFactory,
+            $data
         );
     }
 
@@ -104,7 +120,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getPostActionUrl()
     {
-        return $this->helper('Magento\Customer\Helper\Data')->getRegisterPostUrl();
+        return $this->_customerHelper->getRegisterPostUrl();
     }
 
     /**
@@ -116,7 +132,7 @@ class Register extends \Magento\Directory\Block\Data
     {
         $url = $this->getData('back_url');
         if (is_null($url)) {
-            $url = $this->helper('Magento\Customer\Helper\Data')->getLoginUrl();
+            $url = $this->_customerHelper->getLoginUrl();
         }
         return $url;
     }

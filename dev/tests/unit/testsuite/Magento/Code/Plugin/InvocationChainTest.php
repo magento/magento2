@@ -26,10 +26,10 @@
  */
 namespace Magento\Code\Plugin;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'GeneratorTest' . DIRECTORY_SEPARATOR . 'SimpleClass.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'GeneratorTest' . DIRECTORY_SEPARATOR . 'SimpleClassPluginA.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'GeneratorTest' . DIRECTORY_SEPARATOR . 'SimpleClassPluginB.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'GeneratorTest' . DIRECTORY_SEPARATOR . 'SimpleObjectManager.php';
+require_once __DIR__ . '/GeneratorTest/SimpleClass.php';
+require_once __DIR__ . '/GeneratorTest/SimpleClassPluginA.php';
+require_once __DIR__ . '/GeneratorTest/SimpleClassPluginB.php';
+require_once __DIR__ . '/GeneratorTest/SimpleObjectManager.php';
 
 class InvocationChainTest extends \PHPUnit_Framework_TestCase
 {

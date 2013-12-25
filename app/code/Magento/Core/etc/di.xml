@@ -30,7 +30,7 @@
     <preference for="Magento\AuthorizationInterface" type="Magento\Authorization" />
     <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\DefaultPolicy" />
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Authorization\RoleLocator\DefaultRoleLocator" />
-    <preference for="Magento\Core\Model\Session\AbstractSession" type="Magento\Core\Model\Session" />
+    <preference for="Magento\Session\SessionManagerInterface" type="Magento\Core\Model\Session" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Core\Model\Locale" />
     <preference for="Magento\View\Asset\MergeStrategyInterface" type="Magento\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\Core\Model\DataService\ConfigInterface" type="Magento\Core\Model\DataService\Config" />
@@ -46,7 +46,7 @@
     <preference for="Magento\Core\Model\Url\SecurityInfoInterface" type="Magento\Core\Model\Url\SecurityInfo\Proxy" />
     <preference for="Magento\App\DefaultPathInterface" type="Magento\App\DefaultPath\DefaultPath" />
     <preference for="Magento\Encryption\EncryptorInterface" type="Magento\Encryption\Encryptor" />
-    <preference for="Magento\Filter\Encrypt\AdapterInterface" type=" Magento\Filter\Encrypt\Basic" />
+    <preference for="Magento\Filter\Encrypt\AdapterInterface" type="Magento\Filter\Encrypt\Basic" />
     <preference for="Magento\Cache\ConfigInterface" type="Magento\Cache\Config" />
     <preference for="Magento\View\Design\Theme\ThemeProviderInterface" type="Magento\Core\Model\Theme\ThemeProvider" />
     <preference for="Magento\View\Design\Theme\FileProviderInterface" type="Magento\Core\Model\Theme\FileProvider" />
@@ -56,6 +56,9 @@
     <preference for="Magento\TranslateInterface" type="Magento\Core\Model\Translate" />
     <preference for="Magento\App\Response\RedirectInterface" type="Magento\Core\App\Response\Redirect" />
     <preference for="Magento\Data\Collection\EntityFactoryInterface" type="Magento\Core\Model\EntityFactory" />
+    <preference for="Magento\Core\Model\Translate\InlineInterface" type="Magento\Core\Model\Translate\Inline" />
+    <preference for="Magento\Session\ValidatorInterface" type="Magento\Core\Model\Session\Validator" />
+    <preference for="Magento\Session\StorageInterface" type="Magento\Session\Storage" />
     <type name="Magento\App\DefaultPath\DefaultPath">
         <param name="parts">
             <value>
@@ -95,7 +98,7 @@
             <value type="argument">Magento\Core\Model\Store::CUSTOM_ENTRY_POINT_PARAM</value>
         </param>
         <param name="url">
-            <instance type="Magento\Core\Model\Url\Proxy" />
+            <instance type="Magento\Core\Model\Url" shared="false"/>
         </param>
     </type>
     <type name="Magento\Core\Model\Acl\Cache">
@@ -361,11 +364,6 @@
             <value type="argument">Magento\Encryption\Encryptor::PARAM_CRYPT_KEY</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Session\Context">
-        <param name="saveMethod">
-            <value type="argument">Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_METHOD</value>
-        </param>
-    </type>
     <type name="Magento\Core\Model\Session\Config">
         <param name="savePath">
             <value type="argument">Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_PATH</value>
@@ -373,10 +371,16 @@
         <param name="cacheLimiter">
             <value type="argument">Magento\Core\Model\Session\Config::PARAM_SESSION_CACHE_LIMITER</value>
         </param>
+        <param name="saveMethod">
+            <value type="argument">Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_METHOD</value>
+        </param>
     </type>
     <type name="Magento\Core\Model\StoreManager">
         <param name="request">
             <instance type="Magento\App\Request\Http\Proxy" />
+        </param>
+        <param name="helper">
+            <instance type="Magento\Core\Helper\Data\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Model\Config\Section\Processor\Placeholder">
@@ -474,6 +478,26 @@
     <type name="Magento\Core\Model\Locale">
         <param name="dateModel">
             <instance type="Magento\Core\Model\Date\Proxy" />
+        </param>
+    </type>
+    <virtualType name="Magento\Core\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>core</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Core\Model\Session">
+        <param name="storage">
+            <instance type="Magento\Core\Model\Session\Storage" />
+        </param>
+    </type>
+    <virtualType name="Magento\Message\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>message</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Message\Session">
+        <param name="storage">
+            <instance type="Magento\Message\Session\Storage" />
         </param>
     </type>
     <type name="Magento\View\Asset\MergeService">

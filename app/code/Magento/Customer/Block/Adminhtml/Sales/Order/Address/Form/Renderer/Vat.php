@@ -36,12 +36,12 @@ namespace Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer;
 use Magento\View\Element\Template;
 
 class Vat
-    extends \Magento\Adminhtml\Block\Widget\Form\Renderer\Fieldset\Element
+    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
      * Validate button block
      *
-     * @var null|\Magento\Adminhtml\Block\Widget\Button
+     * @var null|\Magento\Backend\Block\Widget\Button
      */
     protected $_validateButton = null;
 
@@ -69,7 +69,7 @@ class Vat
     /**
      * Retrieve validate button block
      *
-     * @return \Magento\Adminhtml\Block\Widget\Button
+     * @return \Magento\Backend\Block\Widget\Button
      */
     public function getValidateButton()
     {
@@ -107,7 +107,7 @@ class Vat
             $beforeHtml = '<script type="text/javascript">var ' . $optionsVarName . ' = ' . $vatValidateOptions
                 . ';</script>';
             $this->_validateButton = $this->getLayout()
-                ->createBlock('Magento\Adminhtml\Block\Widget\Button')->setData(array(
+                ->createBlock('Magento\Backend\Block\Widget\Button')->setData(array(
                     'label'       => __('Validate VAT Number'),
                     'before_html' => $beforeHtml,
                     'onclick'     => 'order.validateVat(' . $optionsVarName . ')'

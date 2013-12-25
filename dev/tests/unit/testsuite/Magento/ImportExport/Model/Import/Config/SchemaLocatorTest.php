@@ -48,11 +48,11 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchema()
     {
-        $this->assertEquals('schema_dir' . DIRECTORY_SEPARATOR . 'import_merged.xsd', $this->_model->getSchema());
+        $this->assertEquals('schema_dir/import_merged.xsd', $this->_model->getSchema());
     }
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals('schema_dir' . DIRECTORY_SEPARATOR . 'import.xsd', $this->_model->getPerFileSchema());
+        $this->assertEquals('schema_dir/import.xsd', $this->_model->getPerFileSchema());
     }
 }

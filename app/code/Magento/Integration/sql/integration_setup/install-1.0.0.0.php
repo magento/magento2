@@ -242,7 +242,7 @@ $table = $installer->getConnection()
         \Magento\DB\Ddl\Table::TYPE_TEXT,
         255,
         array(),
-        'Endpoint for Oauth handshake'
+        'Endpoint for posting consumer credentials'
     )
     ->addColumn(
         'status',

@@ -77,7 +77,7 @@ class Configurable extends \Magento\Checkout\Block\Cart\Item\Renderer
             || ($this->_storeConfig->getConfig(self::CONFIGURABLE_PRODUCT_IMAGE) == self::USE_PARENT_IMAGE)) {
             $product = $this->getProduct();
         }
-        return $this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail');
+        return $this->_imageHelper->init($product, 'thumbnail');
     }
 
     /**

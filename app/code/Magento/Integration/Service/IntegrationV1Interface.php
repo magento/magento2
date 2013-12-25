@@ -53,9 +53,17 @@ interface IntegrationV1Interface
      * Find Integration by name.
      *
      * @param string $integrationName
-     * @return array|null Integration data or null if not found
+     * @return IntegrationModel
      */
     public function findByName($integrationName);
+
+    /**
+     * Get the details of an Integration by consumer_id.
+     *
+     * @param int $consumerId
+     * @return IntegrationModel
+     */
+    public function findByConsumerId($consumerId);
 
     /**
      * Update an Integration.

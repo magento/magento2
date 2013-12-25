@@ -61,6 +61,16 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_checkoutCart;
 
     /**
+     * @var \Magento\Checkout\Helper\Data
+     */
+    protected $_checkoutHelper;
+
+    /**
+     * @var \Magento\Checkout\Helper\Url
+     */
+    protected $_urlHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
@@ -69,7 +79,11 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Checkout\Model\Cart $checkoutCart
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Checkout\Helper\Url $urlHelper
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
@@ -80,8 +94,12 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Checkout\Model\Cart $checkoutCart,
+        \Magento\Checkout\Helper\Data $checkoutHelper,
+        \Magento\Checkout\Helper\Url $urlHelper,
         array $data = array()
     ) {
+        $this->_urlHelper = $urlHelper;
+        $this->_checkoutHelper = $checkoutHelper;
         $this->_taxData = $taxData;
         $this->_catalogUrl = $catalogUrl;
         $this->_taxConfig = $taxConfig;
@@ -251,7 +269,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function isPossibleOnepageCheckout()
     {
-        return $this->helper('Magento\Checkout\Helper\Data')->canOnepageCheckout() && !$this->getQuote()->getHasError();
+        return $this->_checkoutHelper->canOnepageCheckout() && !$this->getQuote()->getHasError();
     }
 
     /**
@@ -261,7 +279,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getCheckoutUrl()
     {
-        return $this->helper('Magento\Checkout\Helper\Url')->getCheckoutUrl();
+        return $this->_urlHelper->getCheckoutUrl();
     }
 
     /**

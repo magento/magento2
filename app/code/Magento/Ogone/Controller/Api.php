@@ -122,13 +122,13 @@ class Api extends \Magento\App\Action\Action
         }
 
         if (!$hashValidationResult) {
-            $this->_getCheckout()->addError(__('The hash is not valid.'));
+            $this->messageManager->addError(__('The hash is not valid.'));
             return false;
         }
 
         $order = $this->_getOrder();
         if (!$order->getId()) {
-            $this->_getCheckout()->addError(__('The order is not valid.'));
+            $this->messageManager->addError(__('The order is not valid.'));
             return false;
         }
 
@@ -225,6 +225,7 @@ class Api extends \Magento\App\Action\Action
             default:
                 //all unknown transaction will accept as exceptional
                 $this->_exceptionProcess();
+                break;
         }
     }
 
@@ -274,7 +275,7 @@ class Api extends \Magento\App\Action\Action
                     throw new \Exception (__('Can\'t detect Ogone payment action'));
             }
         } catch(\Exception $e) {
-            $this->_getCheckout()->addError(__('The order cannot be saved.'));
+            $this->messageManager->addError(__('The order cannot be saved.'));
             $this->_redirect('checkout/cart');
             return;
         }
@@ -287,8 +288,8 @@ class Api extends \Magento\App\Action\Action
     {
         $order = $this->_getOrder();
         $status = $this->getRequest()->getParam('STATUS');
-        try{
-            if ($status ==  \Magento\Ogone\Model\Api::OGONE_AUTH_PROCESSING) {
+        try {
+            if ($status == \Magento\Ogone\Model\Api::OGONE_AUTH_PROCESSING) {
                 $order->setState(
                     \Magento\Sales\Model\Order::STATE_PROCESSING,
                     \Magento\Ogone\Model\Api::WAITING_AUTHORIZATION,
@@ -330,7 +331,7 @@ class Api extends \Magento\App\Action\Action
             $this->_redirect('checkout/onepage/success');
             return;
         } catch (\Exception $e) {
-            $this->_getCheckout()->addError(__('Order can\'t save'));
+            $this->messageManager->addError(__('Order can\'t save'));
             $this->_redirect('checkout/cart');
             return;
         }
@@ -365,8 +366,8 @@ class Api extends \Magento\App\Action\Action
             $order->save();
             $this->_redirect('checkout/onepage/success');
             return;
-        } catch(\Exception $e) {
-            $this->_getCheckout()->addError(__('Order can\'t save'));
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('Order can\'t save'));
             $this->_redirect('checkout/cart');
             return;
         }
@@ -418,7 +419,7 @@ class Api extends \Magento\App\Action\Action
             return;
         }
 
-        switch($params['STATUS']) {
+        switch ($params['STATUS']) {
             case \Magento\Ogone\Model\Api::OGONE_PAYMENT_UNCERTAIN_STATUS :
                 $exception = __('Something went wrong during the payment process, and so the result is unpredictable.');
                 break;
@@ -427,10 +428,11 @@ class Api extends \Magento\App\Action\Action
                 break;
             default:
                 $exception = __('Unknown exception');
+                break;
         }
 
         if (!empty($exception)) {
-            try{
+            try {
                 $this->_getCheckout()->setLastSuccessQuoteId($order->getQuoteId());
                 $this->_prepareCCInfo($order, $params);
                 $order->getPayment()->setLastTransId($params['PAYID']);
@@ -445,11 +447,11 @@ class Api extends \Magento\App\Action\Action
                     $order->addStatusToHistory(\Magento\Ogone\Model\Api::PROCESSING_OGONE_STATUS, $exception);
                 }
                 $order->save();
-            }catch(\Exception $e) {
-                $this->_getCheckout()->addError(__('Something went wrong while saving this order.'));
+            } catch (\Exception $e) {
+                $this->messageManager->addError(__('Something went wrong while saving this order.'));
             }
         } else {
-            $this->_getCheckout()->addError(__('Exception not defined'));
+            $this->messageManager->addError(__('Exception not defined'));
         }
 
         $this->_redirect('checkout/onepage/success');
@@ -469,7 +471,6 @@ class Api extends \Magento\App\Action\Action
         }
         $this->_getCheckout()->setQuoteId($this->_getCheckout()->getOgoneQuoteId());
         $this->_declineProcess();
-        return $this;
     }
 
     /**
@@ -479,7 +480,7 @@ class Api extends \Magento\App\Action\Action
     {
         $status     = \Magento\Ogone\Model\Api::DECLINE_OGONE_STATUS;
         $comment    = __('Declined Order on Ogone side');
-        $this->_getCheckout()->addError(__('The payment transaction has been declined.'));
+        $this->messageManager->addError(__('The payment transaction has been declined.'));
         $this->_cancelOrder($status, $comment);
     }
 
@@ -498,7 +499,6 @@ class Api extends \Magento\App\Action\Action
         }
         $this->_getCheckout()->setQuoteId($this->_getCheckout()->getOgoneQuoteId());
         $this->_cancelProcess();
-        return $this;
     }
 
     /**
@@ -528,12 +528,12 @@ class Api extends \Magento\App\Action\Action
             return;
         }
 
-        try{
+        try {
             $order->cancel();
             $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, $status, $comment);
             $order->save();
-        }catch(\Exception $e) {
-            $this->_getCheckout()->addError(__('Something went wrong while canceling this order.'));
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('Something went wrong while canceling this order.'));
         }
 
         $this->_redirect('checkout/cart');

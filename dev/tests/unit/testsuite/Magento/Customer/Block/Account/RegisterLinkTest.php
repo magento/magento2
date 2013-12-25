@@ -77,12 +77,11 @@ class RegisterLinkTest extends \PHPUnit_Framework_TestCase
 
         $context = $this->_objectManager->getObject('Magento\View\Element\Template\Context');
 
-        $context->getHelperFactory()->expects($this->once())->method('get')->will($this->returnValue($helper));
-
         $block = $this->_objectManager->getObject(
             'Magento\Customer\Block\Account\RegisterLink',
             array(
                 'context' => $context,
+                'customerHelper' => $helper
             )
         );
         $this->assertEquals('register url', $block->getHref());

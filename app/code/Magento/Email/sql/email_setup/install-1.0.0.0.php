@@ -129,7 +129,7 @@ $table = $installer->getConnection()
     )
     ->addIndex(
         $installer->getIdxName(
-            'core_email_template',
+            'email_template',
             array('template_code'),
             \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
         ),
@@ -137,11 +137,11 @@ $table = $installer->getConnection()
         array('type' => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
     )
     ->addIndex(
-        $installer->getIdxName('core_email_template', array('added_at')),
+        $installer->getIdxName('email_template', array('added_at')),
         array('added_at')
     )
     ->addIndex(
-        $installer->getIdxName('core_email_template', array('modified_at')),
+        $installer->getIdxName('email_template', array('modified_at')),
         array('modified_at')
     )
     ->setComment('Email Templates');

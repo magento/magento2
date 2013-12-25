@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Filter;
 
-class Status extends \Magento\Adminhtml\Block\Widget\Grid\Column\Filter\Select
+class Status extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
 
     protected static $_statuses;

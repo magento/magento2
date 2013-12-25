@@ -34,7 +34,7 @@
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
 class Template
-    extends \Magento\Adminhtml\Block\Widget
+    extends \Magento\Backend\Block\Widget
 {
     /**
      * Prepare html output

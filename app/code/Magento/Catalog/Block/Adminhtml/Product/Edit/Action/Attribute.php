@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action;
 
-class Attribute extends \Magento\Adminhtml\Block\Widget
+class Attribute extends \Magento\Backend\Block\Widget
 {
 
     /**
@@ -60,18 +60,18 @@ class Attribute extends \Magento\Adminhtml\Block\Widget
 
     protected function _prepareLayout()
     {
-        $this->addChild('back_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Back'),
             'onclick'   => 'setLocation(\''.$this->getUrl('catalog/product/', array('store'=>$this->getRequest()->getParam('store', 0))).'\')',
             'class' => 'back'
         ));
 
-        $this->addChild('reset_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Reset'),
             'onclick'   => 'setLocation(\''.$this->getUrl('catalog/*/*', array('_current'=>true)).'\')'
         ));
 
-        $this->addChild('save_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Save'),
             'class'     => 'save',
             'data_attribute'  => array(
@@ -99,7 +99,7 @@ class Attribute extends \Magento\Adminhtml\Block\Widget
      */
     protected function _getHelper()
     {
-        return $this->helper('Magento\Catalog\Helper\Product\Edit\Action\Attribute');
+        return $this->_helperActionAttribute;
     }
 
     /**
@@ -117,7 +117,7 @@ class Attribute extends \Magento\Adminhtml\Block\Widget
      *
      * @return string
      */
-     public function getCancelButtonHtml()
+    public function getCancelButtonHtml()
     {
         return $this->getChildHtml('reset_button');
     }

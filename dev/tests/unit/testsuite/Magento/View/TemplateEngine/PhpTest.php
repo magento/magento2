@@ -32,11 +32,17 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     protected $_phpEngine;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_helperFactoryMock;
+
+    /**
      * Create a PHP template engine to test.
      */
     protected function setUp()
     {
-        $this->_phpEngine = new \Magento\View\TemplateEngine\Php();
+        $this->_helperFactoryMock = $this->getMock('Magento\ObjectManager');
+        $this->_phpEngine = new \Magento\View\TemplateEngine\Php($this->_helperFactoryMock);
     }
 
     /**
@@ -82,5 +88,27 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         $filename = 'This_is_not_a_file';
         $this->_phpEngine->render($blockMock, $filename);
     }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testHelperWithInvalidClass()
+    {
+        $class = 'Magento\Object';
+        $object = $this->getMock($class, array(), array(), '', false);
+        $this->_helperFactoryMock->expects($this->once())
+            ->method('get')->with($class)->will($this->returnValue($object));
+        $this->_phpEngine->helper($class);
+    }
+
+    public function testHelperWithValidClass()
+    {
+        $class = 'Magento\App\Helper\AbstractHelper';
+        $object = $this->getMockForAbstractClass($class, array(), '', false);
+        $this->_helperFactoryMock->expects($this->once())
+            ->method('get')->with($class)->will($this->returnValue($object));
+        $this->assertEquals($object, $this->_phpEngine->helper($class));
+    }
+
 
 }

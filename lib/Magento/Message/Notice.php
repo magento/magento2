@@ -30,7 +30,12 @@ namespace Magento\Message;
 class Notice extends AbstractMessage
 {
     /**
-     * @var string
+     * Getter message type
+     *
+     * @return string
      */
-    protected $type = Factory::NOTICE;
+    public function getType()
+    {
+        return MessageInterface::TYPE_NOTICE;
+    }
 }

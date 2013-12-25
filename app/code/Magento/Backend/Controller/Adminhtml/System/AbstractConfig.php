@@ -54,7 +54,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      * Check if current section is found and is allowed
      *
      * @param \Magento\App\RequestInterface $request
-     * @return $this|mixed
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(\Magento\App\RequestInterface $request)
     {

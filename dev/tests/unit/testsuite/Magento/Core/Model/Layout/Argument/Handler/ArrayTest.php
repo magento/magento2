@@ -155,7 +155,7 @@ class ArrayTest extends \PHPUnit_Framework_TestCase
     public function parseDataProvider()
     {
         $layout = simplexml_load_file(
-            __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'arguments.xml',
+            __DIR__ . '/_files/arguments.xml',
             'Magento\View\Layout\Element'
         );
 

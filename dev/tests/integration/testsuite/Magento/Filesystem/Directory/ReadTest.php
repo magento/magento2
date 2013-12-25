@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for \Magento\Filesystem\Stream\Local
+ * Test for \Magento\Filesystem\Directory\Read
  *
  * Magento
  *
@@ -50,7 +50,11 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $dir = $this->getDirectoryInstance('foo');
         $this->assertContains(
-            '../_files/foo/bar',
+            '_files/foo',
+            $dir->getAbsolutePath()
+        );
+        $this->assertContains(
+            '_files/foo/bar',
             $dir->getAbsolutePath('bar')
         );
     }
@@ -182,7 +186,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for isReadable method
      *
-     * @dataProvider isReadbaleProvider
+     * @dataProvider isReadableProvider
      * @param string $dirPath
      * @param string $path
      * @param bool $readable
@@ -194,15 +198,65 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for isFile method
+     *
+     * @dataProvider isFileProvider
+     * @param string $path
+     * @param bool $isFile
+     */
+    public function testIsFile($path, $isFile)
+    {
+        $this->assertEquals($isFile, $this->getDirectoryInstance('foo')->isFile($path));
+    }
+
+    /**
+     * Test for isDirectory method
+     *
+     * @dataProvider isDirectoryProvider
+     * @param string $path
+     * @param bool $isDirectory
+     */
+    public function testIsDirectory($path, $isDirectory)
+    {
+        $this->assertEquals($isDirectory, $this->getDirectoryInstance('foo')->isDirectory($path));
+    }
+
+    /**
      * Data provider for testIsReadable
      *
      * @return array
      */
-    public function isReadbaleProvider()
+    public function isReadableProvider()
     {
         return array(
             array('foo', 'bar', true),
             array('foo', 'file_three.txt', true)
+        );
+    }
+
+    /**
+     * Data provider for testIsFile
+     *
+     * @return array
+     */
+    public function isFileProvider()
+    {
+        return array(
+            array('bar', false),
+            array('file_three.txt', true)
+        );
+    }
+
+    /**
+     * Data provider for testIsDirectory
+     *
+     * @return array
+     */
+    public function isDirectoryProvider()
+    {
+        return array(
+            array('bar', true),
+            array('file_three.txt', false)
         );
     }
 
@@ -226,9 +280,12 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     private function getDirectoryInstance($path)
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
-        $readFactory = Bootstrap::getObjectManager()->create(
-            'Magento\Filesystem\File\ReadFactory', array('path' => $fullPath)
+        $config = array(
+            'path' => $fullPath
         );
-        return new Read($fullPath, $readFactory);
+        $objectManager = Bootstrap::getObjectManager();
+        $directoryFactory = $objectManager->create('Magento\Filesystem\Directory\ReadFactory');
+        return $directoryFactory->create($config,
+            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\Filesystem\DirectoryList')));
     }
 }

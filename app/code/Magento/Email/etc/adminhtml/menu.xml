@@ -27,6 +27,6 @@
 -->
 <config>
     <menu>
-        <add id="Magento_Email::template" title="Email Templates" module="Magento_Email" sortOrder="10" parent="Magento_Adminhtml::marketing_communications" action="adminhtml/email_template" resource="Magento_Email::template"/>
+        <add id="Magento_Email::template" title="Email Templates" module="Magento_Email" sortOrder="10" parent="Magento_Backend::marketing_communications" action="adminhtml/email_template" resource="Magento_Email::template"/>
     </menu>
 </config>

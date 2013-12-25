@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Transactions;
 
-class Detail extends \Magento\Adminhtml\Block\Widget\Container
+class Detail extends \Magento\Backend\Block\Widget\Container
 {
     /**
      * Transaction model

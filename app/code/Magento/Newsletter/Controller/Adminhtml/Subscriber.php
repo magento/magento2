@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Newsletter subscribers controller
- *
- * @category    Magento
- * @package     Magento_Newsletter
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
+/**
+ * Newsletter subscribers controller
+ */
 class Subscriber extends \Magento\Backend\App\Action
 {
     /**
@@ -75,7 +71,7 @@ class Subscriber extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();
-     }
+    }
 
     /**
      * Export subscribers grid to CSV format
@@ -104,19 +100,19 @@ class Subscriber extends \Magento\Backend\App\Action
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
-             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Please select one or more subscribers.'));
-        }
-        else {
+             $this->messageManager->addError(__('Please select one or more subscribers.'));
+        } else {
             try {
                 foreach ($subscribersIds as $subscriberId) {
-                    $subscriber = $this->_objectManager->create('Magento\Newsletter\Model\Subscriber')->load($subscriberId);
+                    $subscriber = $this->_objectManager->create('Magento\Newsletter\Model\Subscriber')
+                        ->load($subscriberId);
                     $subscriber->unsubscribe();
                 }
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
+                $this->messageManager->addSuccess(
                     __('A total of %1 record(s) were updated.', count($subscribersIds))
                 );
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             }
         }
 
@@ -127,19 +123,17 @@ class Subscriber extends \Magento\Backend\App\Action
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
-             $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Please select one or more subscribers.'));
-        }
-        else {
+             $this->messageManager->addError(__('Please select one or more subscribers.'));
+        } else {
             try {
                 foreach ($subscribersIds as $subscriberId) {
-                    $subscriber = $this->_objectManager->create('Magento\Newsletter\Model\Subscriber')->load($subscriberId);
+                    $subscriber = $this->_objectManager->create('Magento\Newsletter\Model\Subscriber')
+                        ->load($subscriberId);
                     $subscriber->delete();
                 }
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('Total of %1 record(s) were deleted', count($subscribersIds))
-                );
+                $this->messageManager->addSuccess(__('Total of %1 record(s) were deleted', count($subscribersIds)));
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             }
         }
 

@@ -34,7 +34,7 @@
  */
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit;
 
-class Tabs extends \Magento\Adminhtml\Block\Widget\Tabs
+class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
 
     protected function _construct()

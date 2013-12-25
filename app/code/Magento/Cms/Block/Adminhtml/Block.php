@@ -33,7 +33,7 @@
  */
 namespace Magento\Cms\Block\Adminhtml;
 
-class Block extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Block extends \Magento\Backend\Block\Widget\Grid\Container
 {
 
     protected function _construct()

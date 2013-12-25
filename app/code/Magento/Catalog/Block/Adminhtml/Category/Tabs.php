@@ -38,7 +38,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected $_attributeTabBlock = 'Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes';
 
-    protected $_template = 'Magento_Adminhtml::widget/tabshoriz.phtml';
+    protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
    /**
      * Core registry

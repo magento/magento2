@@ -38,10 +38,10 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvert()
     {
         $dom = new \DOMDocument();
-        $xmlFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'cache_config.xml';
+        $xmlFile = __DIR__ . '/_files/cache_config.xml';
         $dom->loadXML(file_get_contents($xmlFile));
 
-        $convertedFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'cache_config.php';
+        $convertedFile = __DIR__ . '/_files/cache_config.php';
         $expectedResult = include $convertedFile;
         $this->assertEquals($expectedResult, $this->_model->convert($dom));
     }

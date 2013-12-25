@@ -29,13 +29,16 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\View\Url\CssResolver
      */
-    protected $_object;
+    protected $object;
 
     protected function setUp()
     {
-        $filesystem = new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local());
-        $dirs = new \Magento\App\Dir('/base_dir');
-        $this->_object = new \Magento\View\Url\CssResolver($filesystem, $dirs);
+        $filesystem = $this->getMock('Magento\Filesystem', array('getPath', '__wakeup'), array(), '', false);
+        $filesystem->expects($this->any())
+            ->method('getPath')
+            ->with(\Magento\Filesystem::ROOT)
+            ->will($this->returnValue('/base_dir/'));
+        $this->object = new CssResolver($filesystem);
     }
 
     /**
@@ -48,7 +51,7 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplaceCssRelativeUrls($cssContent, $originalPath, $newPath, $callback, $expected)
     {
-        $actual = $this->_object->replaceCssRelativeUrls($cssContent, $originalPath, $newPath, $callback);
+        $actual = $this->object->replaceCssRelativeUrls($cssContent, $originalPath, $newPath, $callback);
         $this->assertEquals($expected, $actual);
     }
 
@@ -147,7 +150,7 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplaceCssRelativeUrlsException($originalFile, $newFile)
     {
-        $this->_object->replaceCssRelativeUrls('body {background: url(body.gif);}', $originalFile, $newFile);
+        $this->object->replaceCssRelativeUrls('body {background: url(body.gif);}', $originalFile, $newFile);
     }
 
     /**

@@ -34,7 +34,7 @@
 namespace Magento\GoogleShopping\Block\Adminhtml\Types\Edit;
 
 class Attributes
-    extends \Magento\Adminhtml\Block\Widget\Form\Renderer\Fieldset\Element
+    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
 
     protected $_template = 'types/edit/attributes.phtml';
@@ -86,13 +86,13 @@ class Attributes
      */
     protected function _prepareLayout()
     {
-        $this->addChild('add_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('add_button', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Add New Attribute'),
             'class' => 'add',
             'id'    => 'add_new_attribute',
             'on_click' => 'gContentAttribute.add()'
         ));
-        $this->addChild('delete_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Remove'),
             'class' => 'delete delete-product-option',
             'on_click' => 'gContentAttribute.remove(event)'

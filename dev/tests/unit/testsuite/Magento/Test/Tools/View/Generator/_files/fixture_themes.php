@@ -60,7 +60,7 @@ return array(
         ),
         'filesystem_glob_map' => array(
             array(
-                '/base/dir/area_one/fixture/theme_one/', '*_*',
+                '#.*_.*#', '/base/dir/area_one/fixture/theme_one/',
                 array('/base/dir/area_one/fixture/theme_one/Magento_Core'),
             ),
         ),
@@ -103,7 +103,7 @@ return array(
         ),
         'filesystem_glob_map' => array(
             array(
-                '/base/dir/area_one/fixture/theme_two/', '*_*',
+                '#.*_.*#', '/base/dir/area_one/fixture/theme_two/',
                 array(
                     '/base/dir/area_one/fixture/theme_two/Fixture_ModuleOne',
                     '/base/dir/area_one/fixture/theme_two/Fixture_ModuleTwo',
@@ -160,7 +160,7 @@ return array(
         ),
         'filesystem_glob_map' => array(
             array(
-                '/base/dir/area_two/fixture/theme_three/', '*_*',
+                '#.*_.*#', '/base/dir/area_two/fixture/theme_three/',
                 array(),
             ),
         ),
@@ -170,42 +170,6 @@ return array(
                 'destinationContext' => array(
                     'area' => 'area_two',
                     'themePath' => 'fixture/theme_three',
-                    'locale' => null,
-                    'module' => null,
-                )
-            ),
-        ),
-    ),
-    'fallback_pattern_mixing_slashes' => array(
-        'theme' => $themeFour,
-        'pattern_dir_map' => array(
-            array(
-                array('area' => 'area_two', 'theme' => $themeFour),
-                array(
-                    '/base/dir/area_two\\fixture\\theme_four',
-                ),
-            ),
-            array(
-                array(
-                    'area' => 'area_two', 'theme' => $themeFour, 'namespace' => '%namespace%', 'module' => '%module%'
-                ),
-                array(
-                    '/base/dir/area_two\\fixture\\theme_four\\%namespace%_%module%',
-                ),
-            ),
-        ),
-        'filesystem_glob_map' => array(
-            array(
-                '/base/dir/area_two/fixture/theme_four/', '*_*',
-                array(),
-            ),
-        ),
-        'expected_result' => array(
-            array(
-                'source' => '/base/dir/area_two/fixture/theme_four',
-                'destinationContext' => array(
-                    'area' => 'area_two',
-                    'themePath' => 'fixture/theme_four',
                     'locale' => null,
                     'module' => null,
                 )

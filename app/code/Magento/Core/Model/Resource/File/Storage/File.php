@@ -32,21 +32,9 @@ namespace Magento\Core\Model\Resource\File\Storage;
 class File
 {
     /**
-     * Prefix of model events names
-     *
-     * @var string
-     */
-    protected $_mediaBaseDirectory = null;
-
-    /**
      * @var \Magento\Filesystem
      */
     protected $_filesystem;
-
-    /**
-     * @var \Magento\Core\Helper\File\Storage\Database
-     */
-    protected $_dbHelper;
 
     /**
      * @var \Magento\Logger
@@ -55,35 +43,14 @@ class File
 
     /**
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Helper\File\Storage\Database $dbHelper
      * @param \Magento\Logger $log
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
-        \Magento\Core\Helper\File\Storage\Database $dbHelper,
         \Magento\Logger $log
     ) {
-        $this->_dbHelper = $dbHelper;
         $this->_logger = $log;
-
         $this->_filesystem = $filesystem;
-        $this->_filesystem->setIsAllowCreateDirectories(true);
-        $this->_filesystem->ensureDirectoryExists($this->getMediaBaseDirectory());
-        $this->_filesystem->setWorkingDirectory($this->getMediaBaseDirectory());
-    }
-
-    /**
-     * Files at storage
-     *
-     * @return string
-     */
-    public function getMediaBaseDirectory()
-    {
-        if (is_null($this->_mediaBaseDirectory)) {
-            $this->_mediaBaseDirectory = $this->_dbHelper->getMediaBaseDir();
-        }
-
-        return $this->_mediaBaseDirectory;
     }
 
     /**
@@ -96,23 +63,22 @@ class File
     {
         $files          = array();
         $directories    = array();
-        $currentDir     = $this->getMediaBaseDirectory() . $dir;
 
-        if ($this->_filesystem->isDirectory($currentDir)) {
-            foreach ($this->_filesystem->getNestedKeys($currentDir) as $fullPath) {
-                $itemName = basename($fullPath);
+        $directoryInstance = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        if ($directoryInstance->isDirectory($dir)) {
+            foreach ($directoryInstance->read($dir) as $path) {
+                $itemName = basename($path);
                 if ($itemName == '.svn' || $itemName == '.htaccess') {
                     continue;
                 }
 
-                $relativePath = $this->_getRelativePath($fullPath);
-                if ($this->_filesystem->isDirectory($fullPath)) {
+                if ($directoryInstance->isDirectory($path)) {
                     $directories[] = array(
                         'name' => $itemName,
-                        'path' => dirname($relativePath)
+                        'path' => dirname($path)
                     );
                 } else {
-                    $files[] = $relativePath;
+                    $files[] = $path;
                 }
             }
         }
@@ -128,13 +94,10 @@ class File
      */
     public function clear($dir = '')
     {
-        if (strpos($dir, $this->getMediaBaseDirectory()) !== 0) {
-            $dir = $this->getMediaBaseDirectory() . $dir;
-        }
-
-        if ($this->_filesystem->isDirectory($dir)) {
-            foreach ($this->_filesystem->getNestedKeys($dir) as $path) {
-                $this->_filesystem->delete($path);
+        $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        if ($directoryInstance->isDirectory($dir)) {
+            foreach ($directoryInstance->read($dir) as $path) {
+                $directoryInstance->delete($path);
             }
         }
 
@@ -155,15 +118,16 @@ class File
         }
 
         $path = (strlen($dir['path']))
-            ? $dir['path'] . DS . $dir['name']
+            ? $dir['path'] . '/' . $dir['name']
             : $dir['name'];
-        $path = $this->getMediaBaseDirectory() . DS . $path;
 
         try {
-            $this->_filesystem->ensureDirectoryExists($path);
+            $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA)->create($path);
         } catch (\Exception $e) {
             $this->_logger->log($e->getMessage());
-            throw new \Magento\Core\Exception(__('Unable to create directory: %1', $path));
+            throw new \Magento\Core\Exception(
+                __('Unable to create directory: %1', \Magento\Filesystem::MEDIA . '/' . $path)
+            );
         }
 
         return true;
@@ -180,31 +144,17 @@ class File
      */
     public function saveFile($filePath, $content, $overwrite = false)
     {
-        if (strpos($filePath, $this->getMediaBaseDirectory()) !== 0) {
-            $filePath = $this->getMediaBaseDirectory() . DS . $filePath;
-        }
-
         try {
-            if (!$this->_filesystem->isFile($filePath) || ($overwrite && $this->_filesystem->delete($filePath))) {
-                $this->_filesystem->write($filePath, $content);
+            $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+            if (!$directoryInstance->isFile($filePath) || ($overwrite && $directoryInstance->delete($filePath))) {
+                $directoryInstance->writeFile($filePath, $content);
                 return true;
             }
-        } catch (\Magento\Filesystem\Exception $e) {
+        } catch (\Magento\Filesystem\FilesystemException $e) {
             $this->_logger->log($e->getMessage());
             throw new \Magento\Core\Exception(__('Unable to save file: %1', $filePath));
         }
 
         return false;
-    }
-
-    /**
-     * Get path relative to media base directory
-     *
-     * @param string $path
-     * @return string
-     */
-    protected function _getRelativePath($path)
-    {
-        return ltrim(str_replace($this->getMediaBaseDirectory(), '', $path), \Magento\Filesystem::DIRECTORY_SEPARATOR);
     }
 }

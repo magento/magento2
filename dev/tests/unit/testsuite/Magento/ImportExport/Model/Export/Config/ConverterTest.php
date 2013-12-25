@@ -37,7 +37,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_filePath = realpath(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
+        $this->_filePath = realpath(__DIR__) . '/_files/';
         $this->_model = new \Magento\ImportExport\Model\Export\Config\Converter();
     }
 

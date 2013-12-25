@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Catalog\Model\Resource\Product;
 
 /**
  * Product collection
- *
- * @category    Magento
- * @package     Magento_Catalog
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product;
-
 class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractCollection
 {
     /**
@@ -843,14 +838,13 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         $tableAlias    = $attributeCode . '_max_value';
         $fieldAlias    = 'max_' . $attributeCode;
         $condition  = 'e.entity_id = ' . $tableAlias . '.entity_id
-            AND '.$this->_getConditionSql($tableAlias . '.attribute_id', $attribute->getId());
+            AND ' . $this->_getConditionSql($tableAlias . '.attribute_id', $attribute->getId());
 
         $select->join(
-                array($tableAlias => $attribute->getBackend()->getTable()),
-                $condition,
-                array($fieldAlias => new \Zend_Db_Expr('MAX('.$tableAlias.'.value)'))
-            )
-            ->group('e.entity_type_id');
+            array($tableAlias => $attribute->getBackend()->getTable()),
+            $condition,
+            array($fieldAlias => new \Zend_Db_Expr('MAX(' . $tableAlias . '.value)'))
+        )->group('e.entity_type_id');
 
         $data = $this->getConnection()->fetchRow($select);
         if (isset($data[$fieldAlias])) {

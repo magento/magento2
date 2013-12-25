@@ -34,7 +34,7 @@
 
 namespace Magento\Reports\Block\Adminhtml\Product;
 
-class Lowstock extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Lowstock extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected function _construct()
     {

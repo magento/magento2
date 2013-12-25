@@ -37,10 +37,10 @@ class DomTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertWithValidDom()
     {
-        $xmlFilePath = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/_files/valid_module.xml');
+        $xmlFilePath = __DIR__ . '/_files/valid_module.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFilePath));
-        $expectedResult = include __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/_files/converted_valid_module.php');
+        $expectedResult = include __DIR__ . '/_files/converted_valid_module.php';
         $this->assertEquals($expectedResult, $this->_converter->convert($dom));
     }
 

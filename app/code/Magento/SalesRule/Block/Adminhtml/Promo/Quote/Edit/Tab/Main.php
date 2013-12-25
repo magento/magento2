@@ -298,7 +298,7 @@ class Main
 
         // field dependencies
         $this->setChild('form_after', $this->getLayout()
-            ->createBlock('Magento\Adminhtml\Block\Widget\Form\Element\Dependence')
+            ->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence')
             ->addFieldMap($couponTypeFiled->getHtmlId(), $couponTypeFiled->getName())
             ->addFieldMap($couponCodeFiled->getHtmlId(), $couponCodeFiled->getName())
             ->addFieldMap($autoGenerationCheckbox->getHtmlId(), $autoGenerationCheckbox->getName())

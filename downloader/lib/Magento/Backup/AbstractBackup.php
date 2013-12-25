@@ -212,7 +212,7 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      */
     public function getBackupPath()
     {
-        return $this->getBackupsDir() . DS . $this->getBackupFilename();
+        return $this->getBackupsDir() . '/' . $this->getBackupFilename();
     }
 
     /**

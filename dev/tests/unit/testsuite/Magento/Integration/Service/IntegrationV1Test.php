@@ -36,6 +36,7 @@ class IntegrationV1Test extends \PHPUnit_Framework_TestCase
     const VALUE_INTEGRATION_EMAIL = 'test@magento.com';
     const VALUE_INTEGRATION_SETUP_BACKEND = 0;
     const VALUE_INTEGRATION_ENDPOINT = 'http://magento.ll/endpoint';
+    const VALUE_INTEGRATION_CONSUMER_ID = 1;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $_integrationFactory;
@@ -331,6 +332,36 @@ class IntegrationV1Test extends \PHPUnit_Framework_TestCase
         $this->_integrationMock->expects($this->never())
             ->method('delete');
         $this->_service->delete(self::VALUE_INTEGRATION_ID);
+    }
+
+    public function testFindByConsumerId()
+    {
+        $this->_integrationMock->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($this->_integrationData));
+
+        $this->_integrationMock->expects($this->once())
+            ->method('load')
+            ->with(self::VALUE_INTEGRATION_CONSUMER_ID, 'consumer_id')
+            ->will($this->returnValue($this->_integrationMock));
+
+        $integration = $this->_service->findByConsumerId(self::VALUE_INTEGRATION_CONSUMER_ID);
+        $this->assertEquals($this->_integrationData[Integration::NAME], $integration->getData()[Integration::NAME]);
+    }
+
+    public function testFindByConsumerIdNotFound()
+    {
+        $this->_emptyIntegrationMock->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue(null));
+
+        $this->_integrationMock->expects($this->once())
+            ->method('load')
+            ->with(self::VALUE_INTEGRATION_CONSUMER_ID, 'consumer_id')
+            ->will($this->returnValue($this->_emptyIntegrationMock));
+
+        $integration = $this->_service->findByConsumerId(1);
+        $this->assertNull($integration->getData());
     }
 
     /**

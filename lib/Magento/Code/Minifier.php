@@ -24,6 +24,8 @@
 
 namespace Magento\Code;
 
+use Magento\Filesystem\Directory\Read;
+
 class Minifier
 {
     /**
@@ -32,28 +34,34 @@ class Minifier
     private $_strategy;
 
     /**
-     * @var \Magento\Filesystem
+     * @var Read
      */
-    private $_filesystem;
+    private $rootDirectory;
 
     /**
-     * @var string directory where minified files are saved
+     * @var string directory name where minified files are saved
      */
-    private $_baseDir;
+    private $directoryName;
+
+    /**
+     * @var Read
+     */
+    private $pubViewCacheDir;
 
     /**
      * @param \Magento\Code\Minifier\StrategyInterface $strategy
      * @param \Magento\Filesystem $filesystem
-     * @param string $baseDir
+     * @param string $directoryName
      */
     public function __construct(
         \Magento\Code\Minifier\StrategyInterface $strategy,
         \Magento\Filesystem $filesystem,
-        $baseDir
+        $directoryName
     ) {
         $this->_strategy = $strategy;
-        $this->_filesystem = $filesystem;
-        $this->_baseDir = $baseDir;
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->pubViewCacheDir = $filesystem->getDirectoryRead(\Magento\Filesystem::PUB_VIEW_CACHE);
+        $this->directoryName = $directoryName;
     }
 
     /**
@@ -67,13 +75,15 @@ class Minifier
         if ($this->_isFileMinified($originalFile)) {
             return $originalFile;
         }
-        $minifiedFile = $this->_findOriginalMinifiedFile($originalFile);
+        $originalFileRelative = $this->rootDirectory->getRelativePath($originalFile);
+        $minifiedFile = $this->_findOriginalMinifiedFile($originalFileRelative);
         if (!$minifiedFile) {
-            $minifiedFile = $this->_baseDir . '/' . $this->_generateMinifiedFileName($originalFile);
-            $this->_strategy->minifyFile($originalFile, $minifiedFile);
+            $minifiedFile = $this->directoryName . '/' . $this->_generateMinifiedFileName($originalFile);
+            $this->_strategy->minifyFile($originalFileRelative, $minifiedFile);
         }
 
-        return $minifiedFile;
+        $minifiedFile = $this->pubViewCacheDir->getRelativePath($minifiedFile);
+        return $this->pubViewCacheDir->getAbsolutePath($minifiedFile);
     }
 
     /**
@@ -111,7 +121,7 @@ class Minifier
     {
         $fileInfo = pathinfo($originalFile);
         $minifiedFile = $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.min.' . $fileInfo['extension'];
-        if ($this->_filesystem->has($minifiedFile)) {
+        if ($this->rootDirectory->isExist($minifiedFile)) {
             return $minifiedFile;
         }
         return false;

@@ -45,17 +45,17 @@ class Backup extends \Magento\Backend\Block\Template
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->addChild('createButton', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('createButton', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Database Backup'),
             'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_DB . "')",
             'class'  => 'task'
         ));
-        $this->addChild('createSnapshotButton', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('createSnapshotButton', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('System Backup'),
             'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_SYSTEM_SNAPSHOT . "')",
             'class'  => ''
         ));
-        $this->addChild('createMediaBackupButton', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('createMediaBackupButton', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Database and Media Backup'),
             'onclick' => "return backup.backup('" . \Magento\Backup\Factory::TYPE_MEDIA . "')",
             'class'  => ''

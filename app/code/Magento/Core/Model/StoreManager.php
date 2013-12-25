@@ -75,23 +75,21 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
     protected $_scopeType;
 
     /**
-     * Helper factory
-     *
-     * @var \Magento\App\Helper\HelperFactory
+     * @var \Magento\Core\Helper\Data
      */
-    protected $_helperFactory;
+    protected $_helper;
 
     /**
-     * @param \Magento\Core\Model\Store\StorageFactory $factory
+     * @param Store\StorageFactory $factory
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\App\Helper\HelperFactory $helperFactory
+     * @param \Magento\Core\Helper\Data $helper
      * @param string $scopeCode
      * @param string $scopeType
      */
     public function __construct(
         \Magento\Core\Model\Store\StorageFactory $factory,
         \Magento\App\RequestInterface $request,
-        \Magento\App\Helper\HelperFactory $helperFactory,
+        \Magento\Core\Helper\Data $helper,
         $scopeCode = '',
         $scopeType = 'store'
     ) {
@@ -99,7 +97,7 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
         $this->_request = $request;
         $this->_scopeCode = $scopeCode;
         $this->_scopeType = $scopeType ?: self::SCOPE_TYPE_STORE;
-        $this->_helperFactory = $helperFactory;
+        $this->_helper = $helper;
     }
 
     /**
@@ -186,9 +184,7 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
      */
     public function isSingleStoreMode()
     {
-        /** @var $helper \Magento\Core\Helper\Data */
-        $helper =  $this->_helperFactory->get('Magento\Core\Helper\Data');
-        return $this->hasSingleStore() && $helper->isSingleStoreModeEnabled();
+        return $this->hasSingleStore() && $this->_helper->isSingleStoreModeEnabled();
     }
 
     /**

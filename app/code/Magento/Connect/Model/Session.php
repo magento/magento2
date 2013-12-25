@@ -24,17 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Connect\Model;
 
 /**
  * Auth session model
- *
- * @category    Magento
- * @package     Magento_Connect
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect\Model;
-
-class Session extends \Magento\Core\Model\Session\AbstractSession
+class Session extends \Magento\Session\SessionManager
 {
     /**
      * Connect data
@@ -44,22 +39,26 @@ class Session extends \Magento\Core\Model\Session\AbstractSession
     protected $_connectData;
 
     /**
-     * @param \Magento\Core\Model\Session\Context $context
+     * @param \Magento\App\RequestInterface $request
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
+     * @param \Magento\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Session\ValidatorInterface $validator
+     * @param \Magento\Session\StorageInterface $storage
      * @param \Magento\Connect\Helper\Data $connectData
-     * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Session\Context $context,
+        \Magento\App\RequestInterface $request,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Connect\Helper\Data $connectData,
-        array $data = array()
+        \Magento\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Session\ValidatorInterface $validator,
+        \Magento\Session\StorageInterface $storage,
+        \Magento\Connect\Helper\Data $connectData
     ) {
         $this->_connectData = $connectData;
-        parent::__construct($context, $sidResolver, $sessionConfig, $data);
-        $this->start('adminhtml');
+        parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
+        $this->start();
     }
 
     /**

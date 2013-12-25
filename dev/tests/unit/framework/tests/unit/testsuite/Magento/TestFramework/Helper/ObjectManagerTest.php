@@ -41,7 +41,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         'translator'      => 'Magento\TranslateInterface',
         'cache'           => 'Magento\App\CacheInterface',
         'design'          => 'Magento\View\DesignInterface',
-        'session'         => 'Magento\Core\Model\Session',
+        'session'         => 'Magento\Session\SessionManagerInterface',
         'storeConfig'     => 'Magento\Core\Model\Store\Config',
         'frontController' => 'Magento\App\FrontController'
     );
@@ -52,7 +52,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_modelDependencies = array(
-        'eventManager'    => 'Magento\Event\ManagerInterface',
+        'eventManager'       => 'Magento\Event\ManagerInterface',
         'cacheManager'       => 'Magento\App\CacheInterface',
         'resource'           => 'Magento\Core\Model\Resource\AbstractResource',
         'resourceCollection' => 'Magento\Data\Collection\Db'

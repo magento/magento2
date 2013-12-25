@@ -88,104 +88,107 @@
             </media_storage_configuration>
             <filesystem>
                 <directory>
-                    <base>
-                        <read_only>true</read_only>
-                        <path/>
-                    </base>
-                    <app>
-                        <read_only>true</read_only>
-                        <path>app</path>
-                    </app>
-                    <code>
-                        <read_only>true</read_only>
-                        <path>app/code</path>
-                    </code>
                     <design>
-                        <read_only>true</read_only>
+                        <read_only>1</read_only>
                         <path>app/design</path>
                     </design>
-                    <etc>
-                        <read_only>false</read_only>
-                        <path>app/etc</path>
-                        <allow_create_dirs>false</allow_create_dirs>
-                        <permissions>777</permissions>
-                    </etc>
-                    <lib>
-                        <read_only>true</read_only>
-                        <path>lib</path>
-                    </lib>
                     <var>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>var</path>
-                        <allow_create_dirs>true</allow_create_dirs>
-                        <permissions>777</permissions>
+                        <allow_create_dirs>1</allow_create_dirs>
+                        <permissions>511</permissions>
                     </var>
                     <tmp>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>var/tmp</path>
-                        <allow_create_dirs>true</allow_create_dirs>
-                        <permissions>777</permissions>
+                        <allow_create_dirs>1</allow_create_dirs>
+                        <permissions>511</permissions>
                     </tmp>
                     <cache>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>var/cache</path>
-                        <allow_create_dirs>true</allow_create_dirs>
-                        <permissions>777</permissions>
+                        <allow_create_dirs>1</allow_create_dirs>
+                        <permissions>511</permissions>
                     </cache>
                     <log>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>var/log</path>
-                        <allow_create_dirs>true</allow_create_dirs>
-                        <permissions>777</permissions>
+                        <allow_create_dirs>1</allow_create_dirs>
+                        <permissions>511</permissions>
                     </log>
                     <session>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>var/session</path>
-                        <allow_create_dirs>true</allow_create_dirs>
-                        <permissions>777</permissions>
+                        <allow_create_dirs>1</allow_create_dirs>
+                        <permissions>511</permissions>
                     </session>
-                    <di>
-                        <read_only>false</read_only>
-                        <path>var/di</path>
-                        <allow_create_dirs>true</allow_create_dirs>
-                        <permissions>777</permissions>
-                    </di>
-                    <generation>
-                        <read_only>false</read_only>
-                        <path>var/generation</path>
-                        <allow_create_dirs>true</allow_create_dirs>
-                        <permissions>777</permissions>
-                    </generation>
                     <pub>
-                        <read_only>true</read_only>
+                        <read_only>0</read_only>
                         <path>pub</path>
-                        <permissions>777</permissions>
+                        <uri>pub</uri>
+                        <permissions>511</permissions>
                     </pub>
                     <pub_lib>
-                        <read_only>true</read_only>
+                        <read_only>1</read_only>
                         <path>pub/lib</path>
+                        <uri>pub/lib</uri>
                     </pub_lib>
                     <media>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>pub/media</path>
-                        <permissions>777</permissions>
+                        <uri>pub/media</uri>
+                        <permissions>511</permissions>
                     </media>
                     <upload>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>pub/media/upload</path>
-                        <permissions>777</permissions>
+                        <uri>pub/media/upload</uri>
+                        <permissions>511</permissions>
                     </upload>
                     <static>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>pub/static</path>
-                        <permissions>777</permissions>
+                        <uri>pub/static</uri>
+                        <permissions>511</permissions>
                     </static>
                     <view_cache>
-                        <read_only>false</read_only>
+                        <read_only>0</read_only>
                         <path>pub/cache</path>
-                        <permissions>777</permissions>
+                        <uri>pub/cache</uri>
+                        <permissions>511</permissions>
                     </view_cache>
+                    <ftp>
+                        <read_only>0</read_only>
+                        <permissions>511</permissions>
+                        <driver>Magento\Filesystem\Driver\File</driver>
+                    </ftp>
+                    <ftps>
+                        <read_only>0</read_only>
+                        <permissions>511</permissions>
+                        <driver>Magento\Filesystem\Driver\File</driver>
+                    </ftps>
+                    <ssh2>
+                        <read_only>0</read_only>
+                        <permissions>511</permissions>
+                        <driver>Magento\Filesystem\Driver\File</driver>
+                    </ssh2>
                 </directory>
+                <protocol>
+                    <zlib>
+                        <driver>Magento\Filesystem\Driver\Zlib</driver>
+                        <protocol>compress.zlib</protocol>
+                    </zlib>
+                    <http>
+                        <read_only>1</read_only>
+                        <driver>Magento\Filesystem\Driver\Http</driver>
+                        <protocol>http</protocol>
+                    </http>
+                    <https>
+                        <read_only>1</read_only>
+                        <driver>Magento\Filesystem\Driver\Https</driver>
+                        <protocol>https</protocol>
+                    </https>
+                </protocol>
             </filesystem>
         </system>
         <web>

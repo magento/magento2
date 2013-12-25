@@ -50,22 +50,32 @@ abstract class AbstractAdapter
     protected $_headerCols = null;
 
     /**
-     * @param null $destination
+     * @var \Magento\Filesystem\Directory\Write
      */
-    public function __construct($destination = null)
+    protected $_directoryHandle;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Filesystem $filesystem
+     * @param null                $destination
+     * @throws \Magento\Core\Exception
+     */
+    public function __construct(\Magento\Filesystem $filesystem, $destination = null)
     {
+        $this->_directoryHandle = $filesystem->getDirectoryWrite(\Magento\Filesystem::SYS_TMP);
         if (!$destination) {
-            $destination = tempnam(sys_get_temp_dir(), 'importexport_');
+            $destination = uniqid('importexport_');
+            $this->_directoryHandle->touch($destination);
         }
         if (!is_string($destination)) {
             throw new \Magento\Core\Exception(__('Destination file path must be a string'));
         }
 
-        $pathinfo = pathinfo($destination);
-        if (empty($pathinfo['dirname']) || !is_writable($pathinfo['dirname'])) {
+        if (!$this->_directoryHandle->isWritable()) {
             throw new \Magento\Core\Exception(__('Destination directory is not writable'));
         }
-        if (is_file($destination) && !is_writable($destination)) {
+        if ($this->_directoryHandle->isFile($destination) && !$this->_directoryHandle->isWritable($destination)) {
             throw new \Magento\Core\Exception(__('Destination file is not writable'));
         }
 
@@ -91,7 +101,7 @@ abstract class AbstractAdapter
      */
     public function getContents()
     {
-        return file_get_contents($this->_destination);
+        return $this->_directoryHandle->readFile($this->_destination);
     }
 
     /**

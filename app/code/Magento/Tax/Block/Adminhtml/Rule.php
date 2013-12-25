@@ -34,7 +34,7 @@
 
 namespace Magento\Tax\Block\Adminhtml;
 
-class Rule extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Rule extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected function _construct()
     {

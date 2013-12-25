@@ -61,8 +61,8 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setLastOrderId($order->getId())
             ->setLastQuoteId($order->getQuoteId())
             ->setQuoteId($order->getQuoteId());
-        /** @var $paypalSession \Magento\Core\Model\Session\Generic */
-        $paypalSession = $this->_objectManager->get('Magento\Core\Model\Session\Generic');
+        /** @var $paypalSession \Magento\Session\Generic */
+        $paypalSession = $this->_objectManager->get('Magento\Session\Generic');
         $paypalSession->setExpressCheckoutToken('token');
 
         $this->dispatch('paypal/express/cancel');

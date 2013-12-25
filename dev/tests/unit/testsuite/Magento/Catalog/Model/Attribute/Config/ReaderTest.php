@@ -58,8 +58,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('catalog_attributes.xml', 'scope')
             ->will($this->returnValue(array(
-                __DIR__ . '/_files/attributes_config_one.xml',
-                __DIR__ . '/_files/attributes_config_two.xml',
+                file_get_contents(__DIR__ . '/_files/attributes_config_one.xml'),
+                file_get_contents(__DIR__ . '/_files/attributes_config_two.xml'),
             )))
         ;
 

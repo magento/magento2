@@ -212,7 +212,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     /**
      * Session entity
      *
-     * @var \Magento\Core\Model\Session\AbstractSession
+     * @var \Magento\Session\SessionManagerInterface
      */
     protected $_session;
 
@@ -274,9 +274,11 @@ class Store extends \Magento\Core\Model\AbstractModel
     protected $_coreFileStorageDatabase = null;
 
     /**
-     * @var \Magento\App\Dir
+     * Filesystem instance
+     *
+     * @var \Magento\Filesystem
      */
-    protected $_dir;
+    protected $filesystem;
 
     /**
      * Core store config
@@ -310,7 +312,7 @@ class Store extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Url $url
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
-     * @param \Magento\App\Dir $dir
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Core\Model\Resource\Store $resource
@@ -329,7 +331,7 @@ class Store extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Url $url,
         \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
-        \Magento\App\Dir $dir,
+        \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Core\Model\Resource\Store $resource,
@@ -347,7 +349,7 @@ class Store extends \Magento\Core\Model\AbstractModel
         $this->_request = $request;
         $this->_configDataResource = $configDataResource;
         $this->_isCustomEntryPoint = $isCustomEntryPoint;
-        $this->_dir = $dir;
+        $this->filesystem = $filesystem;
         $this->_config = $coreConfig;
         $this->_storeManager = $storeManager;
         $this->_sidResolver = $sidResolver;
@@ -393,13 +395,13 @@ class Store extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve store session object
      *
-     * @return \Magento\Core\Model\Session\AbstractSession
+     * @return \Magento\Session\SessionManagerInterface
      */
     protected function _getSession()
     {
         if (!$this->_session) {
             $this->_session = \Magento\App\ObjectManager::getInstance()
-                ->create('Magento\Core\Model\Session')
+                ->create('Magento\Session\SessionManagerInterface')
                 ->start('store_' . $this->getCode());
         }
         return $this->_session;
@@ -566,7 +568,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->_dir->getUri(\Magento\App\Dir::PUB_LIB);
+                            . $this->filesystem->getUri(\Magento\Filesystem::PUB_LIB);
                     }
                     break;
 
@@ -575,7 +577,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->_dir->getUri(\Magento\App\Dir::STATIC_VIEW);
+                            . $this->filesystem->getUri(\Magento\Filesystem::STATIC_VIEW);
                     }
                     break;
 
@@ -584,18 +586,18 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->_dir->getUri(\Magento\App\Dir::PUB_VIEW_CACHE);
+                            . $this->filesystem->getUri(\Magento\Filesystem::PUB_VIEW_CACHE);
                     }
                     break;
 
                 case self::URL_TYPE_MEDIA:
-                    $url = $this->_getMediaScriptUrl($this->_dir, $secure);
+                    $url = $this->_getMediaScriptUrl($this->filesystem, $secure);
                     if (!$url) {
                         $path = $secure ? self::XML_PATH_SECURE_BASE_MEDIA_URL : self::XML_PATH_UNSECURE_BASE_MEDIA_URL;
                         $url = $this->getConfig($path);
                         if (!$url) {
                             $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                                . $this->_dir->getUri(\Magento\App\Dir::MEDIA);
+                                . $this->filesystem->getUri(\Magento\Filesystem::MEDIA);
                         }
                     }
                     break;
@@ -653,16 +655,16 @@ class Store extends \Magento\Core\Model\AbstractModel
      * If we use Database file storage and server doesn't support rewrites (.htaccess in media folder)
      * we have to put name of fetching media script exactly into URL
      *
-     * @param \Magento\App\Dir $dirs
+     * @param \Magento\Filesystem $filesystem
      * @param bool $secure
      * @return string|bool
      */
-    protected function _getMediaScriptUrl(\Magento\App\Dir $dirs, $secure)
+    protected function _getMediaScriptUrl(\Magento\Filesystem $filesystem, $secure)
     {
         if (!$this->getConfig(self::XML_PATH_USE_REWRITES)
             && $this->_coreFileStorageDatabase->checkDbUsage()
         ) {
-            return $this->getBaseUrl(self::URL_TYPE_WEB, $secure) . $dirs->getUri(\Magento\App\Dir::PUB)
+            return $this->getBaseUrl(self::URL_TYPE_WEB, $secure) . $filesystem->getUri(\Magento\Filesystem::PUB)
             . '/' . self::MEDIA_REWRITE_SCRIPT;
         }
         return false;
@@ -690,8 +692,8 @@ class Store extends \Magento\Core\Model\AbstractModel
     public function isUseStoreInUrl()
     {
         return !($this->hasDisableStoreInUrl() && $this->getDisableStoreInUrl())
-            && $this->_appState->isInstalled()
-            && $this->getConfig(self::XML_PATH_STORE_IN_URL);
+        && $this->_appState->isInstalled()
+        && $this->getConfig(self::XML_PATH_STORE_IN_URL);
     }
 
     /**

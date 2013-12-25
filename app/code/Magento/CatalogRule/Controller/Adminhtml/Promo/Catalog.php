@@ -87,7 +87,7 @@ class Catalog extends \Magento\Backend\App\Action
 
         $dirtyRules = $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf();
         if ($dirtyRules->getState()) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addNotice($this->getDirtyRulesNoticeMessage());
+            $this->messageManager->addNotice($this->getDirtyRulesNoticeMessage());
         }
 
         $this->_initAction()
@@ -113,9 +113,7 @@ class Catalog extends \Magento\Backend\App\Action
         if ($id) {
             $model->load($id);
             if (! $model->getRuleId()) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(
-                    __('This rule no longer exists.')
-                );
+                $this->messageManager->addError(__('This rule no longer exists.'));
                 $this->_redirect('catalog_rule/*');
                 return;
             }
@@ -124,7 +122,7 @@ class Catalog extends \Magento\Backend\App\Action
         $this->_title->add($model->getRuleId() ? $model->getName() : __('New Catalog Price Rule'));
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getPageData(true);
+        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }
@@ -165,7 +163,7 @@ class Catalog extends \Magento\Backend\App\Action
                 $validateResult = $model->validateData(new \Magento\Object($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
-                        $this->_getSession()->addError($errorMessage);
+                        $this->messageManager->addError($errorMessage);
                     }
                     $this->_getSession()->setPageData($data);
                     $this->_redirect('catalog_rule/*/edit', array('id'=>$model->getId()));
@@ -177,14 +175,12 @@ class Catalog extends \Magento\Backend\App\Action
 
                 $model->loadPost($data);
 
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setPageData($model->getData());
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($model->getData());
 
                 $model->save();
 
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('The rule has been saved.')
-                );
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setPageData(false);
+                $this->messageManager->addSuccess(__('The rule has been saved.'));
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData(false);
                 if ($this->getRequest()->getParam('auto_apply')) {
                     $this->getRequest()->setParam('rule_id', $model->getId());
                     $this->_forward('applyRules');
@@ -200,13 +196,13 @@ class Catalog extends \Magento\Backend\App\Action
                 }
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('An error occurred while saving the rule data. Please review the log and try again.')
                 );
                 $this->_objectManager->get('Magento\Logger')->logException($e);
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setPageData($data);
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
                 $this->_redirect('catalog_rule/*/edit', array('id' => $this->getRequest()->getParam('rule_id')));
                 return;
             }
@@ -225,15 +221,13 @@ class Catalog extends \Magento\Backend\App\Action
                 $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()
                     ->setState(1)
                     ->save();
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('The rule has been deleted.')
-                );
+                $this->messageManager->addSuccess(__('The rule has been deleted.'));
                 $this->_redirect('catalog_rule/*/');
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('An error occurred while deleting the rule. Please review the log and try again.')
                 );
                 $this->_objectManager->get('Magento\Logger')->logException($e);
@@ -241,9 +235,7 @@ class Catalog extends \Magento\Backend\App\Action
                 return;
             }
         }
-        $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(
-            __('Unable to find a rule to delete.')
-        );
+        $this->messageManager->addError(__('Unable to find a rule to delete.'));
         $this->_redirect('catalog_rule/*/');
     }
 
@@ -320,15 +312,15 @@ class Catalog extends \Magento\Backend\App\Action
             $ruleJob->applyAll();
 
             if ($ruleJob->hasSuccess()) {
-                $this->_getSession()->addSuccess($ruleJob->getSuccess());
+                $this->messageManager->addSuccess($ruleJob->getSuccess());
                 $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()
                     ->setState(0)
                     ->save();
             } elseif ($ruleJob->hasError()) {
-                $this->_getSession()->addError($errorMessage . ' ' . $ruleJob->getError());
+                $this->messageManager->addError($errorMessage . ' ' . $ruleJob->getError());
             }
         } catch (\Exception $e) {
-            $this->_getSession()->addError($errorMessage);
+            $this->messageManager->addError($errorMessage);
         }
         $this->_redirect('catalog_rule/*');
     }

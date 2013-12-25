@@ -38,10 +38,10 @@ class DomTest extends \PHPUnit_Framework_TestCase
     public function testConvert()
     {
         $dom = new \DOMDocument();
-        $xmlFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'simple_di_config.xml';
+        $xmlFile = __DIR__ . '/_files/simple_di_config.xml';
         $dom->loadXML(file_get_contents($xmlFile));
 
-        $resultFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'mapped_simple_di_config.php';
+        $resultFile = __DIR__ . '/_files/mapped_simple_di_config.php';
         $expectedResult = include $resultFile;
         $this->assertEquals($expectedResult, $this->_mapper->convert($dom));
     }

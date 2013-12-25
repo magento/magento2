@@ -38,11 +38,11 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('catalog/product_compare/add/product/1?nocookie=1');
 
-        /** @var $session \Magento\Catalog\Model\Session */
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Session');
-        $this->assertInstanceOf('Magento\Message\Success', $session->getMessages()->getLastAddedMessage());
+        /** @var $messageManager \Magento\Message\Manager */
+        $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Message\Manager');
+        $this->assertInstanceOf('Magento\Message\Success', $messageManager->getMessages()->getLastAddedMessage());
         $this->assertContains('Simple Product 1 Name',
-            (string)$session->getMessages()->getLastAddedMessage()->getText());
+            (string)$messageManager->getMessages()->getLastAddedMessage()->getText());
 
         $this->assertRedirect();
 
@@ -66,11 +66,11 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('catalog/product_compare/remove/product/2');
 
-        /** @var $session \Magento\Catalog\Model\Session */
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Session');
-        $this->assertInstanceOf('Magento\Message\Success', $session->getMessages()->getLastAddedMessage());
+        /** @var $messageManager \Magento\Message\Manager */
+        $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Message\Manager');
+        $this->assertInstanceOf('Magento\Message\Success', $messageManager->getMessages()->getLastAddedMessage());
         $this->assertContains('Simple Product 2 Name',
-            (string)$session->getMessages()->getLastAddedMessage()->getText());
+            (string)$messageManager->getMessages()->getLastAddedMessage()->getText());
 
         $this->assertRedirect();
 
@@ -106,9 +106,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('catalog/product_compare/clear');
 
-        /** @var $session \Magento\Catalog\Model\Session */
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Session');
-        $this->assertInstanceOf('Magento\Message\Success', $session->getMessages()->getLastAddedMessage());
+        /** @var $messageManager \Magento\Message\Manager */
+        $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Message\Manager');
+        $this->assertInstanceOf('Magento\Message\Success', $messageManager->getMessages()->getLastAddedMessage());
 
         $this->assertRedirect();
 
@@ -123,13 +123,13 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_prepareCompareListWithProductNameXss();
         $this->dispatch('catalog/product_compare/remove/product/1?nocookie=1');
         $messages = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Session')->getMessages()->getItems();
+            ->get('Magento\Message\Manager')->getMessages()->getItems();
         $isProductNamePresent = false;
         foreach ($messages as $message) {
-            if (strpos($message->getCode(), '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;') !== false) {
+            if (strpos($message->getText(), '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;') !== false) {
                 $isProductNamePresent = true;
             }
-            $this->assertNotContains('<script>alert("xss");</script>', (string)$message->getCode());
+            $this->assertNotContains('<script>alert("xss");</script>', (string)$message->getText());
         }
         $this->assertTrue($isProductNamePresent, 'Product name was not found in session messages');
     }

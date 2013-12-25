@@ -52,9 +52,9 @@ class Storage extends \Magento\Object
     protected $_configAsArray;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\Filesystem\Directory\Write
      */
-    protected $_filesystem;
+    protected $_directory;
 
     /**
      * @var \Magento\Image\AdapterFactory
@@ -134,13 +134,6 @@ class Storage extends \Magento\Object
     protected $_storageCollectionFactory;
 
     /**
-     * Dir
-     *
-     * @var \Magento\App\Dir
-     */
-    protected $_dir;
-
-    /**
      * Uploader factory
      *
      * @var \Magento\Core\Model\File\UploaderFactory
@@ -157,7 +150,6 @@ class Storage extends \Magento\Object
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Image\AdapterFactory $imageFactory
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\App\Dir $dir
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory
      * @param \Magento\Core\Model\File\Storage\FileFactory $storageFileFactory
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
@@ -178,7 +170,6 @@ class Storage extends \Magento\Object
         \Magento\Filesystem $filesystem,
         \Magento\Image\AdapterFactory $imageFactory,
         \Magento\View\Url $viewUrl,
-        \Magento\App\Dir $dir,
         \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory,
         \Magento\Core\Model\File\Storage\FileFactory $storageFileFactory,
         \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
@@ -193,12 +184,9 @@ class Storage extends \Magento\Object
         $this->_backendUrl = $backendUrl;
         $this->_cmsWysiwygImages = $cmsWysiwygImages;
         $this->_coreFileStorageDb = $coreFileStorageDb;
-        $this->_filesystem = $filesystem;
-        $this->_filesystem->setIsAllowCreateDirectories(true);
-        $this->_filesystem->setWorkingDirectory($cmsWysiwygImages->getStorageRoot());
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
         $this->_imageFactory = $imageFactory;
         $this->_viewUrl = $viewUrl;
-        $this->_dir = $dir;
         $this->_storageCollectionFactory = $storageCollectionFactory;
         $this->_storageFileFactory = $storageFileFactory;
         $this->_storageDatabaseFactory = $storageDatabaseFactory;
@@ -223,8 +211,8 @@ class Storage extends \Magento\Object
             $subDirectories = $this->_directoryDatabaseFactory->create();
             $subDirectories->getSubdirectories($path);
             foreach ($subDirectories as $directory) {
-                $fullPath = rtrim($path, DS) . DS . $directory['name'];
-                $this->_filesystem->ensureDirectoryExists($fullPath, 0777, $path);
+                $fullPath = rtrim($path, '/') . '/' . $directory['name'];
+                $this->_directory->create($fullPath);
             }
         }
 
@@ -251,7 +239,7 @@ class Storage extends \Magento\Object
         $storageRootLength = strlen($this->_cmsWysiwygImages->getStorageRoot());
 
         foreach ($collection as $key => $value) {
-            $rootChildParts = explode(DIRECTORY_SEPARATOR, substr($value->getFilename(), $storageRootLength));
+            $rootChildParts = explode('/', substr($value->getFilename(), $storageRootLength));
 
             if (array_key_exists($rootChildParts[0], $conditions['plain'])
                 || ($regExp && preg_match($regExp, $value->getFilename()))) {
@@ -352,18 +340,20 @@ class Storage extends \Magento\Object
             throw new \Magento\Core\Exception(
                 __('Please correct the folder name. Use only letters, numbers, underscores and dashes.'));
         }
-        if (!$this->_filesystem->isDirectory($path) || !$this->_filesystem->isWritable($path)) {
+
+        $relativePath = $this->_directory->getRelativePath($path);
+        if (!$this->_directory->isDirectory($relativePath) || !$this->_directory->isWritable($relativePath)) {
             $path = $this->_cmsWysiwygImages->getStorageRoot();
         }
 
-        $newPath = $path . DS . $name;
-
-        if ($this->_filesystem->isDirectory($newPath, $path)) {
+        $newPath = $path . '/' . $name;
+        $relativeNewPath = $this->_directory->getRelativePath($newPath);
+        if ($this->_directory->isDirectory($relativeNewPath)) {
             throw new \Magento\Core\Exception(
                 __('We found a directory with the same name. Please try another folder name.'));
         }
 
-        $this->_filesystem->createDirectory($newPath);
+        $this->_directory->create($relativeNewPath);
         try {
             if ($this->_coreFileStorageDb->checkDbUsage()) {
                 $relativePath = $this->_coreFileStorageDb->getMediaRelativePath($newPath);
@@ -392,8 +382,9 @@ class Storage extends \Magento\Object
     public function deleteDirectory($path)
     {
         // prevent accidental root directory deleting
-        $rootCmp = rtrim($this->_cmsWysiwygImages->getStorageRoot(), DS);
-        $pathCmp = rtrim($path, DS);
+        $rootCmp = rtrim($this->_cmsWysiwygImages->getStorageRoot(), '/');
+        $rootCmp = preg_replace('~[/\\\]+~', '/', $rootCmp);
+        $pathCmp = rtrim($path, '/');
 
         if ($rootCmp == $pathCmp) {
             throw new \Magento\Core\Exception(
@@ -401,19 +392,20 @@ class Storage extends \Magento\Object
             );
         }
 
-
         if ($this->_coreFileStorageDb->checkDbUsage()) {
             $this->_directoryDatabaseFactory->create()->deleteDirectory($path);
         }
         try {
-            $this->_filesystem->delete($path);
+            $this->_directory->delete($this->_directory->getRelativePath($path));
         } catch (\Magento\Filesystem\FilesystemException $e) {
             throw new \Magento\Core\Exception(__('We cannot delete directory %1.', $path));
         }
 
         if (strpos($pathCmp, $rootCmp) === 0) {
-            $this->_filesystem->delete(
-                $this->getThumbnailRoot() . DS . ltrim(substr($pathCmp, strlen($rootCmp)), '\\/')
+            $this->_directory->delete(
+                $this->_directory->getRelativePath(
+                    $this->getThumbnailRoot() . substr($pathCmp, strlen($rootCmp))
+                )
             );
         }
     }
@@ -426,15 +418,17 @@ class Storage extends \Magento\Object
      */
     public function deleteFile($target)
     {
-        if ($this->_filesystem->isFile($target)) {
-            $this->_filesystem->delete($target);
+        $relativePath = $this->_directory->getRelativePath($target);
+        if ($this->_directory->isFile($relativePath)) {
+            $this->_directory->delete($relativePath);
         }
         $this->_coreFileStorageDb->deleteFile($target);
 
         $thumb = $this->getThumbnailPath($target, true);
+        $relativePathThumb = $this->_directory->getRelativePath($thumb);
         if ($thumb) {
-            if ($this->_filesystem->isFile($thumb)) {
-                $this->_filesystem->delete($thumb);
+            if ($this->_directory->isFile($relativePathThumb)) {
+                $this->_directory->delete($relativePathThumb);
             }
             $this->_coreFileStorageDb->deleteFile($thumb);
         }
@@ -467,7 +461,7 @@ class Storage extends \Magento\Object
         }
 
         // create thumbnail
-        $this->resizeFile($targetPath . DS . $uploader->getUploadedFileName(), true);
+        $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
 
         $result['cookie'] = array(
             'name'     => $this->getSession()->getName(),
@@ -492,9 +486,9 @@ class Storage extends \Magento\Object
         $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
 
         if (strpos($filePath, $mediaRootDir) === 0) {
-            $thumbPath = $this->getThumbnailRoot() . DS . substr($filePath, strlen($mediaRootDir));
+            $thumbPath = $this->getThumbnailRoot() . substr($filePath, strlen($mediaRootDir));
 
-            if (!$checkFile || $this->_filesystem->isReadable($thumbPath)) {
+            if (!$checkFile || $this->_directory->isExist($this->_directory->getRelativePath($thumbPath))) {
                 return $thumbPath;
             }
         }
@@ -514,9 +508,10 @@ class Storage extends \Magento\Object
         $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
 
         if (strpos($filePath, $mediaRootDir) === 0) {
-            $thumbSuffix = self::THUMBS_DIRECTORY_NAME . DS . substr($filePath, strlen($mediaRootDir));
-
-            if (! $checkFile || $this->_filesystem->isReadable($mediaRootDir . $thumbSuffix)) {
+            $thumbSuffix = self::THUMBS_DIRECTORY_NAME . substr($filePath, strlen($mediaRootDir));
+            if (!$checkFile || $this->_directory->isExist(
+                    $this->_directory->getRelativePath($mediaRootDir . '/' . $thumbSuffix))) {
+                $thumbSuffix = substr($mediaRootDir, strlen($this->_directory->getAbsolutePath())) . '/' . $thumbSuffix;
                 $randomIndex = '?rand=' . time();
                 return str_replace('\\', '/', $this->_cmsWysiwygImages->getBaseUrl() . $thumbSuffix) . $randomIndex;
             }
@@ -534,26 +529,26 @@ class Storage extends \Magento\Object
      */
     public function resizeFile($source, $keepRation = true)
     {
-        if (!$this->_filesystem->isFile($source)
-            || !$this->_filesystem->isReadable($source)
-        ) {
+       $realPath = $this->_directory->getRelativePath($source);
+        if (!$this->_directory->isFile($realPath) || !$this->_directory->isExist($realPath)) {
             return false;
         }
 
         $targetDir = $this->getThumbsPath($source);
-        if (!$this->_filesystem->isWritable($targetDir)) {
-            $this->_filesystem->createDirectory($targetDir);
+        $pathTargetDir = $this->_directory->getRelativePath($targetDir);
+        if (!$this->_directory->isExist($pathTargetDir)) {
+            $this->_directory->create($pathTargetDir);
         }
-        if (!$this->_filesystem->isWritable($targetDir)) {
+        if (!$this->_directory->isExist($pathTargetDir)) {
             return false;
         }
         $image = $this->_imageFactory->create();
         $image->open($source);
         $image->keepAspectRatio($keepRation);
         $image->resize($this->_resizeParameters['width'], $this->_resizeParameters['height']);
-        $dest = $targetDir . DS . pathinfo($source, PATHINFO_BASENAME);
+        $dest = $targetDir . '/' . pathinfo($source, PATHINFO_BASENAME);
         $image->save($dest);
-        if ($this->_filesystem->isFile($dest)) {
+        if ($this->_directory->isFile($this->_directory->getRelativePath($dest))) {
             return $dest;
         }
         return false;
@@ -571,7 +566,7 @@ class Storage extends \Magento\Object
         if (!$path) {
             $path = $this->_cmsWysiwygImages->getCurrentPath();
         }
-        return $this->resizeFile($path . DS . $filename);
+        return $this->resizeFile($path . '/' . $filename);
     }
 
     /**
@@ -582,11 +577,11 @@ class Storage extends \Magento\Object
      */
     public function getThumbsPath($filePath = false)
     {
-        $mediaRootDir = $this->_dir->getDir(\Magento\App\Dir::MEDIA);
+        $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
         $thumbnailDir = $this->getThumbnailRoot();
 
         if ($filePath && strpos($filePath, $mediaRootDir) === 0) {
-            $thumbnailDir .= DS . dirname(substr($filePath, strlen($mediaRootDir)));
+            $thumbnailDir .= dirname(substr($filePath, strlen($mediaRootDir)));
         }
 
         return $thumbnailDir;
@@ -595,7 +590,7 @@ class Storage extends \Magento\Object
     /**
      * Storage session
      *
-     * @return \Magento\Adminhtml\Model\Session
+     * @return \Magento\Backend\Model\Session
      */
     public function getSession()
     {
@@ -626,7 +621,7 @@ class Storage extends \Magento\Object
      */
     public function getThumbnailRoot()
     {
-        return $this->_cmsWysiwygImages->getStorageRoot() . self::THUMBS_DIRECTORY_NAME;
+        return $this->_cmsWysiwygImages->getStorageRoot() . '/' . self::THUMBS_DIRECTORY_NAME;
     }
 
     /**

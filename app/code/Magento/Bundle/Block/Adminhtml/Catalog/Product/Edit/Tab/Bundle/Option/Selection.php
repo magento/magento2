@@ -122,7 +122,7 @@ class Selection
      */
     protected function _prepareLayout()
     {
-        $this->addChild('selection_delete_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('selection_delete_button', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Delete'),
             'class' => 'delete icon-btn',
             'on_click' => 'bSelection.remove(event)'

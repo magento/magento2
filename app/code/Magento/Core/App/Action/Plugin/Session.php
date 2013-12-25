@@ -67,7 +67,13 @@ class Session
     protected $_storeConfig;
 
     /**
+     * @var \Magento\App\ResponseInterface
+     */
+    protected $_response;
+
+    /**
      * @param \Magento\App\ActionFlag $flag
+     * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Stdlib\Cookie $cookie
      * @param \Magento\Core\Model\Url $url
@@ -78,6 +84,7 @@ class Session
      */
     public function __construct(
         \Magento\App\ActionFlag $flag,
+        \Magento\App\ResponseInterface $response,
         \Magento\Core\Model\Session $session,
         \Magento\Stdlib\Cookie $cookie,
         \Magento\Core\Model\Url $url,
@@ -87,6 +94,7 @@ class Session
         array $cookieCheckActions = array()
     ) {
         $this->_session = $session;
+        $this->_response = $response;
         $this->_sidResolver = $sidResolver;
         $this->_cookie = $cookie;
         $this->_cookieCheckActions = $cookieCheckActions;
@@ -114,7 +122,7 @@ class Session
                 $this->_session->unsCookieShouldBeReceived();
                 if ($this->_storeConfig->getConfig('web/browser_capabilities/cookies')) {
                     $this->_forward($request);
-                    return null;
+                    return $this->_response;
                 }
             } elseif ($checkCookie) {
                 if ($request->getQuery($this->_sidResolver->getSessionIdQueryParam($this->_session), false)
@@ -124,7 +132,7 @@ class Session
                     $this->_session->setCookieShouldBeReceived(true);
                 } else {
                     $this->_forward($request);
-                    return null;
+                    return $this->_response;
                 }
             }
         }

@@ -34,7 +34,7 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 
-class AbstractType extends \Magento\Adminhtml\Block\Widget
+class AbstractType extends \Magento\Backend\Block\Widget
 {
     protected $_name = 'abstract';
 

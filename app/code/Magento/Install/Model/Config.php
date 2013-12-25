@@ -44,22 +44,24 @@ class Config
     protected $_dataStorage;
 
     /**
-     * Directory model
+     * Filesystem
      *
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem
      */
-    protected $_coreDir;
-
-
+    protected $filesystem;
 
     /**
-     * @param \Magento\Install\Model\Config\Data $dataStorage
-     * @param \Magento\App\Dir $coreDir
+     * Constructor
+     *
+     * @param Config\Data $dataStorage
+     * @param \Magento\Filesystem $filesystem
      */
-    public function __construct(\Magento\Install\Model\Config\Data $dataStorage, \Magento\App\Dir $coreDir)
-    {
+    public function __construct(
+        \Magento\Install\Model\Config\Data  $dataStorage,
+        \Magento\Filesystem                 $filesystem
+    ) {
         $this->_dataStorage = $dataStorage;
-        $this->_coreDir = $coreDir;
+        $this->filesystem   = $filesystem;
     }
 
     /**
@@ -126,7 +128,7 @@ class Config
             $data['filesystem_prerequisites']['writables'] : array();
         foreach ($items as $nodeKey => $item) {
             $value = $item;
-            $value['path'] = $this->_coreDir->getDir($nodeKey);
+            $value['path'] = $this->filesystem->getPath($nodeKey);
             $paths[$nodeKey] = $value;
         }
 

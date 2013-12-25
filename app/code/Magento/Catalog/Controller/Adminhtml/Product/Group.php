@@ -35,13 +35,13 @@ class Group extends \Magento\Backend\App\Action
         $model->setAttributeGroupName($this->getRequest()->getParam('attribute_group_name'))
               ->setAttributeSetId($this->getRequest()->getParam('attribute_set_id'));
 
-        if( $model->itemExists() ) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('A group with the same name already exists.'));
+        if ($model->itemExists()) {
+            $this->messageManager->addError(__('A group with the same name already exists.'));
         } else {
             try {
                 $model->save();
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(__('Something went wrong while saving this group.'));
+                $this->messageManager->addError(__('Something went wrong while saving this group.'));
             }
         }
     }

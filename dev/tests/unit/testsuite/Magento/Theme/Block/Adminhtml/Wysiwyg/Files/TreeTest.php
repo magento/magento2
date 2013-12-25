@@ -50,18 +50,11 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $constructArguments =  $objectManagerHelper->getConstructArguments(
-            'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content',
-            array('urlBuilder'    => $this->_urlBuilder)
-        );
-        $this->_filesTree = $this->getMock(
-            'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree', array('helper'), $constructArguments
-        );
+        $this->_filesTree = $objectManagerHelper->getObject(
+            'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree',
+            array('urlBuilder'    => $this->_urlBuilder, 'storageHelper' => $this->_helperStorage)
 
-        $this->_filesTree->expects($this->any())
-            ->method('helper')
-            ->with('Magento\Theme\Helper\Storage')
-            ->will($this->returnValue($this->_helperStorage));
+        );
     }
 
     public function testGetTreeLoaderUrl()

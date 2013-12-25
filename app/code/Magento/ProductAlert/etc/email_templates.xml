@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <template id="catalog_productalert_email_stock_template" label="Stock Alert" file="stock_alert.html" type="html"/>
-    <template id="catalog_productalert_email_price_template" label="Price Alert" file="price_alert.html" type="html"/>
-    <template id="catalog_productalert_cron_error_email_template" label="Cron Error Warning" file="cron_error.html" type="html"/>
+    <template id="catalog_productalert_email_stock_template" label="Stock Alert" file="stock_alert.html" type="html" module="Magento_ProductAlert"/>
+    <template id="catalog_productalert_email_price_template" label="Price Alert" file="price_alert.html" type="html" module="Magento_ProductAlert"/>
+    <template id="catalog_productalert_cron_error_email_template" label="Cron Error Warning" file="cron_error.html" type="html" module="Magento_ProductAlert"/>
 </config>

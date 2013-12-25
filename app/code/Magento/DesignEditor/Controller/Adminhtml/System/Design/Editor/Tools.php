@@ -255,7 +255,7 @@ class Tools extends \Magento\Backend\App\Action
 
             $response = array('error' => false, 'content' => $result);
         } catch (\Magento\Core\Exception $e) {
-            $this->_session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $response = array('error' => true, 'message' => $e->getMessage());
             $this->_objectManager->get('Magento\Logger')->logException($e);
         } catch (\Exception $e) {

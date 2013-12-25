@@ -42,12 +42,18 @@ class Cert extends \Magento\Core\Model\Config\Value
     protected $_encryptor;
 
     /**
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $_tmpDirectory;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Paypal\Model\CertFactory $certFactory
      * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -59,12 +65,14 @@ class Cert extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Config $config,
         \Magento\Paypal\Model\CertFactory $certFactory,
         \Magento\Encryption\EncryptorInterface $encryptor,
+        \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_certFactory = $certFactory;
         $this->_encryptor = $encryptor;
+        $this->_tmpDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::SYS_TMP);
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
@@ -85,13 +93,15 @@ class Cert extends \Magento\Core\Model\Config\Value
         if (!isset($_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'])) {
             return $this;
         }
-        $tmpPath = $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'];
-        if ($tmpPath && file_exists($tmpPath)) {
-            if (!filesize($tmpPath)) {
+        $tmpPath = $this->_tmpDirectory->getRelativePath(
+            $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value']
+        );
+        if ($tmpPath && $this->_tmpDirectory->isExist($tmpPath)) {
+            if (!$this->_tmpDirectory->stat($tmpPath)['size']) {
                 throw new \Magento\Core\Exception(__('The PayPal certificate file is empty.'));
             }
             $this->setValue($_FILES['groups']['name'][$this->getGroupId()]['fields'][$this->getField()]['value']);
-            $content = $this->_encryptor->encrypt(file_get_contents($tmpPath));
+            $content = $this->_encryptor->encrypt($this->_tmpDirectory->readFile($tmpPath));
             $this->_certFactory->create()->loadByWebsite($this->getScopeId())
                 ->setContent($content)
                 ->save();

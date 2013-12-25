@@ -50,8 +50,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportFromCsvFileWithCorrectData()
     {
-        $importFileName = __DIR__ . DIRECTORY_SEPARATOR . '_files'
-            . DIRECTORY_SEPARATOR . 'correct_rates_import_file.csv';
+        $importFileName = __DIR__ . '/_files/correct_rates_import_file.csv';
         $this->_importHandler->importFromCsvFile(array('tmp_name' => $importFileName));
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -76,8 +75,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportFromCsvFileThrowsExceptionWhenCountryCodeIsInvalid()
     {
-        $importFileName = __DIR__ . DIRECTORY_SEPARATOR . '_files'
-            . DIRECTORY_SEPARATOR . 'rates_import_file_incorrect_country.csv';
+        $importFileName = __DIR__ . '/_files/rates_import_file_incorrect_country.csv';
         $this->_importHandler->importFromCsvFile(array('tmp_name' => $importFileName));
     }
 }

@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Wishlist\Grid\Renderer;
 
-class Description extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Description extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
 
     public function render(\Magento\Object $row)

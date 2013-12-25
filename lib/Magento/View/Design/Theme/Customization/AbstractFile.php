@@ -82,7 +82,7 @@ abstract class AbstractFile
     public function getFullPath(\Magento\View\Design\Theme\FileInterface $file)
     {
         $customizationPath = $this->_customizationPath->getCustomizationPath($file->getTheme());
-        return $customizationPath . DIRECTORY_SEPARATOR . $file->getData('file_path');
+        return $customizationPath . '/' . $file->getData('file_path');
     }
 
     /**
@@ -181,9 +181,9 @@ abstract class AbstractFile
      */
     protected function _saveFileContent($filePath, $content)
     {
-        $this->_filesystem->delete($filePath);
+        $this->getDirectoryWrite()->delete($filePath);
         if (!empty($content)) {
-            $this->_filesystem->setIsAllowCreateDirectories(true)->write($filePath, $content);
+            $this->getDirectoryWrite()->writeFile($this->getDirectoryWrite()->getRelativePath($filePath), $content);
         }
     }
 
@@ -194,8 +194,19 @@ abstract class AbstractFile
      */
     protected function _deleteFileContent($filePath)
     {
-        if ($this->_filesystem->has($filePath)) {
-            $this->_filesystem->delete($filePath);
+        $filePath = $this->getDirectoryWrite()->getRelativePath($filePath);
+        if ($this->getDirectoryWrite()->touch($filePath)) {
+            $this->getDirectoryWrite()->delete($filePath);
         }
+    }
+
+    /**
+     * Returns filesystem directory instance for write operations
+     *
+     * @return \Magento\Filesystem\Directory\WriteInterface
+     */
+    protected function getDirectoryWrite()
+    {
+        return $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
     }
 }

@@ -58,13 +58,6 @@ class Messages extends Template
     protected $contentWrapTagName = 'span';
 
     /**
-     * Flag which require message text escape
-     *
-     * @var bool
-     */
-    protected $escapeMessageFlag = false;
-
-    /**
      * Storage for used types of message storages
      *
      * @var array
@@ -77,10 +70,10 @@ class Messages extends Template
      * @var array
      */
     protected $messageTypes = array(
-        \Magento\Message\Factory::ERROR,
-        \Magento\Message\Factory::WARNING,
-        \Magento\Message\Factory::NOTICE,
-        \Magento\Message\Factory::SUCCESS
+        \Magento\Message\MessageInterface::TYPE_ERROR,
+        \Magento\Message\MessageInterface::TYPE_WARNING,
+        \Magento\Message\MessageInterface::TYPE_NOTICE,
+        \Magento\Message\MessageInterface::TYPE_SUCCESS
     );
 
     /**
@@ -98,19 +91,27 @@ class Messages extends Template
     protected $collectionFactory;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+    
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Message\Factory $messageFactory
      * @param \Magento\Message\CollectionFactory $collectionFactory
+     * @param \Magento\Message\ManagerInterface $messageManager
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         \Magento\Message\Factory $messageFactory,
         \Magento\Message\CollectionFactory $collectionFactory,
+        \Magento\Message\ManagerInterface $messageManager,
         array $data = array()
     ) {
         $this->messageFactory = $messageFactory;
         $this->collectionFactory = $collectionFactory;
+        $this->messageManager = $messageManager;
         parent::__construct($context, $data);
     }
 
@@ -121,21 +122,9 @@ class Messages extends Template
      */
     protected function _prepareLayout()
     {
-        $this->addStorageType(get_class($this->_session));
-        $this->addMessages($this->_session->getMessages(true));
+        $this->addStorageType($this->messageManager->getDefaultGroup());
+        $this->addMessages($this->messageManager->getMessages(true));
         parent::_prepareLayout();
-        return $this;
-    }
-
-    /**
-     * Set message escape flag
-     *
-     * @param bool $flag
-     * @return \Magento\View\Element\Messages
-     */
-    public function setEscapeMessageFlag($flag)
-    {
-        $this->escapeMessageFlag = $flag;
         return $this;
     }
 
@@ -160,7 +149,7 @@ class Messages extends Template
     public function addMessages(\Magento\Message\Collection $messages)
     {
         foreach ($messages->getItems() as $message) {
-            $this->getMessageCollection()->add($message);
+            $this->getMessageCollection()->addMessage($message);
         }
         return $this;
     }
@@ -186,7 +175,7 @@ class Messages extends Template
      */
     public function addMessage(\Magento\Message\AbstractMessage $message)
     {
-        $this->getMessageCollection()->add($message);
+        $this->getMessageCollection()->addMessage($message);
         return $this;
     }
 
@@ -198,7 +187,7 @@ class Messages extends Template
      */
     public function addError($message)
     {
-        $this->addMessage($this->messageFactory->error($message));
+        $this->addMessage($this->messageFactory->create(\Magento\Message\MessageInterface::TYPE_ERROR, $message));
         return $this;
     }
 
@@ -210,7 +199,7 @@ class Messages extends Template
      */
     public function addWarning($message)
     {
-        $this->addMessage($this->messageFactory->warning($message));
+        $this->addMessage($this->messageFactory->create(\Magento\Message\MessageInterface::TYPE_WARNING, $message));
         return $this;
     }
 
@@ -222,7 +211,7 @@ class Messages extends Template
      */
     public function addNotice($message)
     {
-        $this->addMessage($this->messageFactory->notice($message));
+        $this->addMessage($this->messageFactory->create(\Magento\Message\MessageInterface::TYPE_NOTICE, $message));
         return $this;
     }
 
@@ -234,7 +223,7 @@ class Messages extends Template
      */
     public function addSuccess($message)
     {
-        $this->addMessage($this->messageFactory->success($message));
+        $this->addMessage($this->messageFactory->create(\Magento\Message\MessageInterface::TYPE_SUCCESS, $message));
         return $this;
     }
 
@@ -244,9 +233,9 @@ class Messages extends Template
      * @param   string $type
      * @return  array
      */
-    public function getMessages($type=null)
+    public function getMessagesByType($type)
     {
-        return $this->getMessageCollection()->getItems($type);
+        return $this->getMessageCollection()->getItemsByType($type);
     }
 
     /**
@@ -297,7 +286,7 @@ class Messages extends Template
     {
         $html = '';
         foreach ($this->getMessageTypes() as $type) {
-            if ($messages = $this->getMessages($type)) {
+            if ($messages = $this->getMessagesByType($type)) {
                 if (!$html) {
                     $html .= '<' . $this->firstLevelTagName . ' class="messages">';
                 }
@@ -307,7 +296,7 @@ class Messages extends Template
                 foreach ($messages as $message) {
                     $html.= '<' . $this->secondLevelTagName . '>';
                     $html.= '<' . $this->contentWrapTagName .  $this->getUiId('message', $type) .  '>';
-                    $html.= ($this->escapeMessageFlag) ? $this->escapeHtml($message->getText()) : $message->getText();
+                    $html.= $message->getText();
                     $html.= '</' . $this->contentWrapTagName . '>';
                     $html.= '</' . $this->secondLevelTagName . '>';
                 }
@@ -376,15 +365,5 @@ class Messages extends Template
     public function addStorageType($type)
     {
         $this->usedStorageTypes[] = $type;
-    }
-
-    /**
-     * Whether or not to escape the message.
-     *
-     * @return boolean
-     */
-    public function shouldEscapeMessage()
-    {
-        return $this->escapeMessageFlag;
     }
 }

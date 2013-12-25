@@ -160,6 +160,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->markTestSkipped();
         $this->_objectManagerMock = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_coreDataMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_stringLib = new \Magento\Stdlib\String;

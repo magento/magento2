@@ -27,27 +27,12 @@ namespace Magento\Message;
 /**
  * Abstract message model
  */
-abstract class AbstractMessage
+abstract class AbstractMessage implements MessageInterface
 {
     /**
      * @var string
      */
-    protected $type;
-
-    /**
-     * @var string
-     */
-    protected $code;
-
-    /**
-     * @var mixed
-     */
-    protected $class;
-
-    /**
-     * @var mixed
-     */
-    protected $method;
+    protected $text;
 
     /**
      * @var mixed
@@ -60,79 +45,47 @@ abstract class AbstractMessage
     protected $isSticky = false;
 
     /**
-     * @param string $code
+     * @param string $text
      */
-    public function __construct($code = '')
+    public function __construct($text)
     {
-        $this->code = $code;
+        $this->text = $text;
     }
 
     /**
-     * Get message code
+     * Getter message type
      *
      * @return string
      */
-    public function getCode()
-    {
-        return $this->code;
-    }
+    abstract public function getType();
 
     /**
-     * Get message text
+     * Getter for text of message
      *
      * @return string
      */
     public function getText()
     {
-        return $this->getCode();
+        return $this->text;
     }
 
     /**
-     * Get message type
+     * Setter message text
      *
-     * @return string
+     * @param string $text
+     * @return $this
      */
-    public function getType()
+    public function setText($text)
     {
-        return $this->type;
+        $this->text = $text;
+        return $this;
     }
 
     /**
-     * Get message class
-     *
-     * @param $class
-     */
-    public function setClass($class)
-    {
-        $this->class = $class;
-    }
-
-    /**
-     * Get message method
-     *
-     * @param $method
-     */
-    public function setMethod($method)
-    {
-        $this->method = $method;
-    }
-
-    /**
-     * Convert message to string
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        $out = $this->getType() . ': ' . $this->getText();
-        return $out;
-    }
-
-    /**
-     * Set message identifier
+     * Setter message identifier
      *
      * @param string $identifier
-     * @return AbstractMessage
+     * @return $this
      */
     public function setIdentifier($identifier)
     {
@@ -141,7 +94,7 @@ abstract class AbstractMessage
     }
 
     /**
-     * Get message identifier
+     * Getter message identifier
      *
      * @return string
      */
@@ -151,10 +104,10 @@ abstract class AbstractMessage
     }
 
     /**
-     * Set message sticky status
+     * Setter for flag. Whether message is sticky
      *
      * @param bool $isSticky
-     * @return AbstractMessage
+     * @return $this
      */
     public function setIsSticky($isSticky = true)
     {
@@ -163,7 +116,7 @@ abstract class AbstractMessage
     }
 
     /**
-     * Get whether message is sticky
+     * Getter for flag. Whether message is sticky
      *
      * @return bool
      */
@@ -173,14 +126,13 @@ abstract class AbstractMessage
     }
 
     /**
-     * Set code
+     * Retrieve message as a string
      *
-     * @param string $code
-     * @return AbstractMessage
+     * @return string
      */
-    public function setCode($code)
+    public function toString()
     {
-        $this->code = $code;
-        return $this;
+        $out = $this->getType() . ': ' . $this->getText();
+        return $out;
     }
 }

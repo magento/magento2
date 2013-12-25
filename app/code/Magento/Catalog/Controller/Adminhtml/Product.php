@@ -172,13 +172,13 @@ class Product extends \Magento\Backend\App\Action
      * Create serializer block for a grid
      *
      * @param string $inputName
-     * @param \Magento\Adminhtml\Block\Widget\Grid $gridBlock
+     * @param \Magento\Backend\Block\Widget\Grid $gridBlock
      * @param array $productsArray
      * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer
      */
     protected function _createSerializerBlock(
         $inputName,
-        \Magento\Adminhtml\Block\Widget\Grid $gridBlock,
+        \Magento\Backend\Block\Widget\Grid $gridBlock,
         $productsArray
     ) {
         return $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer')
@@ -269,7 +269,7 @@ class Product extends \Magento\Backend\App\Action
         $product = $this->_initProduct();
 
         if ($productId && !$product->getId()) {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('This product no longer exists.')
             );
             $this->_redirect('catalog/*/');
@@ -646,8 +646,8 @@ class Product extends \Magento\Backend\App\Action
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
-            $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
+            $this->messageManager->addError($e->getMessage());
+            $this->_view->getLayout()->initMessages();
             $response->setError(true);
             $response->setMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
         }
@@ -764,16 +764,16 @@ class Product extends \Magento\Backend\App\Action
         $links = $this->getRequest()->getPost('links');
         if (isset($links['related']) && !$product->getRelatedReadonly()) {
             $product->setRelatedLinkData(
-                $this->_objectManager->get('Magento\Adminhtml\Helper\Js')->decodeGridSerializedInput($links['related'])
+                $this->_objectManager->get('Magento\Backend\Helper\Js')->decodeGridSerializedInput($links['related'])
             );
         }
         if (isset($links['upsell']) && !$product->getUpsellReadonly()) {
             $product->setUpSellLinkData(
-                $this->_objectManager->get('Magento\Adminhtml\Helper\Js')->decodeGridSerializedInput($links['upsell'])
+                $this->_objectManager->get('Magento\Backend\Helper\Js')->decodeGridSerializedInput($links['upsell'])
             );
         }
         if (isset($links['crosssell']) && !$product->getCrosssellReadonly()) {
-            $product->setCrossSellLinkData($this->_objectManager->get('Magento\Adminhtml\Helper\Js')
+            $product->setCrossSellLinkData($this->_objectManager->get('Magento\Backend\Helper\Js')
                 ->decodeGridSerializedInput($links['crosssell']));
         }
 
@@ -893,9 +893,9 @@ class Product extends \Magento\Backend\App\Action
 
                 $this->_objectManager->create('Magento\CatalogRule\Model\Rule')->applyAllRulesToProduct($productId);
 
-                $this->_getSession()->addSuccess(__('You saved the product.'));
+                $this->messageManager->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
-                    $this->_getSession()->addNotice(__('SKU for product %1 has been changed to %2.',
+                    $this->messageManager->addNotice(__('SKU for product %1 has been changed to %2.',
                             $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName()),
                             $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getSku()))
                     );
@@ -908,16 +908,16 @@ class Product extends \Magento\Backend\App\Action
 
                 if ($redirectBack === 'duplicate') {
                     $newProduct = $product->duplicate();
-                    $this->_getSession()->addSuccess(__('You duplicated the product.'));
+                    $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
 
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage())
-                    ->setProductData($data);
+                $this->messageManager->addError($e->getMessage());
+                $this->_session->setProductData($data);
                 $redirectBack = true;
             } catch (\Exception $e) {
                 $this->_objectManager->get('Magento\Logger')->logException($e);
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $redirectBack = true;
             }
         }
@@ -960,11 +960,11 @@ class Product extends \Magento\Backend\App\Action
         $product = $this->_initProduct();
         try {
             $newProduct = $product->duplicate();
-            $this->_getSession()->addSuccess(__('You duplicated the product.'));
+            $this->messageManager->addSuccess(__('You duplicated the product.'));
             $this->_redirect('catalog/*/edit', array('_current'=>true, 'id'=>$newProduct->getId()));
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirect('catalog/*/edit', array('_current'=>true));
         }
     }
@@ -1010,7 +1010,7 @@ class Product extends \Magento\Backend\App\Action
     {
         $productIds = $this->getRequest()->getParam('product');
         if (!is_array($productIds)) {
-            $this->_getSession()->addError(__('Please select product(s).'));
+            $this->messageManager->addError(__('Please select product(s).'));
         } else {
             if (!empty($productIds)) {
                 try {
@@ -1018,11 +1018,11 @@ class Product extends \Magento\Backend\App\Action
                         $product = $this->_objectManager->get('Magento\Catalog\Model\Product')->load($productId);
                         $product->delete();
                     }
-                    $this->_getSession()->addSuccess(
+                    $this->messageManager->addSuccess(
                         __('A total of %1 record(s) have been deleted.', count($productIds))
                     );
                 } catch (\Exception $e) {
-                    $this->_getSession()->addError($e->getMessage());
+                    $this->messageManager->addError($e->getMessage());
                 }
             }
         }
@@ -1044,13 +1044,13 @@ class Product extends \Magento\Backend\App\Action
             $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
                 ->updateAttributes($productIds, array('status' => $status), $storeId);
 
-            $this->_getSession()->addSuccess(
+            $this->messageManager->addSuccess(
                 __('A total of %1 record(s) have been updated.', count($productIds))
             );
         } catch (\Magento\Core\Model\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_getSession()
                 ->addException($e, __('Something went wrong while updating the product(s) status.'));
@@ -1095,7 +1095,7 @@ class Product extends \Magento\Backend\App\Action
      */
     public function showUpdateResultAction()
     {
-        $session = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
+        $session = $this->_objectManager->get('Magento\Backend\Model\Session');
         if ($session->hasCompositeProductResult()
             && $session->getCompositeProductResult() instanceof \Magento\Object) {
             $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')

@@ -37,6 +37,11 @@ class FileExistsTest extends \PHPUnit_Framework_TestCase
     protected $_filesystem;
 
     /**
+     * @var \Magento\Filesystem\Directory\Write | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_directory;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_strategy;
@@ -53,7 +58,17 @@ class FileExistsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock(
+            'Magento\Filesystem',
+            array('getDirectoryWrite', 'getDirectoryRead'),
+            array(),
+            '',
+            false
+        );
+        $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
+        $this->_filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($this->_directory));
         $this->_strategy = $this->getMock('Magento\View\Asset\MergeStrategyInterface');
 
         $this->_object = new \Magento\View\Asset\MergeStrategy\FileExists(
@@ -66,14 +81,11 @@ class FileExistsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_strategy
             ->expects($this->never())
-            ->method('mergeFiles')
-        ;
+            ->method('mergeFiles');
 
-        $this->_filesystem->expects($this->once())
-            ->method('has')
-            ->with($this->_mergedFile)
-            ->will($this->returnValue(true))
-        ;
+        $this->_directory->expects($this->once())
+            ->method('isExist')
+            ->will($this->returnValue(true));
 
         $this->_object->mergeFiles($this->_filesArray, $this->_mergedFile, 'contentType');
     }
@@ -83,14 +95,11 @@ class FileExistsTest extends \PHPUnit_Framework_TestCase
         $this->_strategy
             ->expects($this->once())
             ->method('mergeFiles')
-            ->with($this->_filesArray, $this->_mergedFile, 'contentType')
-        ;
+            ->with($this->_filesArray, $this->_mergedFile, 'contentType');
 
-        $this->_filesystem->expects($this->once())
-            ->method('has')
-            ->with($this->_mergedFile)
-            ->will($this->returnValue(false))
-        ;
+        $this->_directory->expects($this->once())
+            ->method('isExist')
+            ->will($this->returnValue(false));
 
         $this->_object->mergeFiles($this->_filesArray, $this->_mergedFile, 'contentType');
     }

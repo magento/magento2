@@ -240,7 +240,7 @@
 
 .image-placeholder {
     position: relative;
-    background: #fff url(Magento_Adminhtml::images/image-placeholder.png) no-repeat 50% 0;
+    background: #fff url(Magento_Backend::images/image-placeholder.png) no-repeat 50% 0;
 }
 
 .image-placeholder .fileinput-button {

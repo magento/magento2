@@ -34,16 +34,25 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLogoSrc()
     {
+        $filesystem = $this->getMock('\Magento\Filesystem', array(), array(), '', false );
+        $mediaDirectory = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false );
         $storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array('getConfig'), array(), '', false);
+
+        $urlBuilder = $this->getMock('Magento\UrlInterface');
+
         $storeConfig->expects($this->once())
             ->method('getConfig')
             ->will($this->returnValue('default/image.gif'));
-
-        $urlBuilder = $this->getMock('Magento\UrlInterface');
         $urlBuilder->expects($this->once())
             ->method('getBaseUrl')
             ->will($this->returnValue('http://localhost/pub/media/'));
+        $mediaDirectory->expects($this->any())
+            ->method('isFile')
+            ->will($this->returnValue(true));
 
+        $filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($mediaDirectory));
         $helper = $this->getMock('Magento\Core\Helper\File\Storage\Database',
             array('checkDbUsage'), array(), '', false, false
         );
@@ -51,24 +60,13 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
             ->method('checkDbUsage')
             ->will($this->returnValue(false));
 
-        $helperFactory = $this->getMock('Magento\App\Helper\HelperFactory', array('get'), array(), '', false);
-        $helperFactory->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($helper));
-
-        $dirsMock = $this->getMock('Magento\App\Dir', array('getDir'), array(), '', false);
-        $dirsMock->expects($this->any())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::MEDIA)
-            ->will($this->returnValue(__DIR__ . DIRECTORY_SEPARATOR . '_files'));
-
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $arguments = array(
             'storeConfig' => $storeConfig,
             'urlBuilder' => $urlBuilder,
-            'helperFactory' => $helperFactory,
-            'dirs' => $dirsMock
+            'fileStorageHelper' => $helper,
+            'filesystem' => $filesystem
         );
         $block = $objectManager->getObject('Magento\Theme\Block\Html\Header', $arguments);
 

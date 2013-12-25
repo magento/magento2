@@ -39,8 +39,8 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Dir::PARAM_APP_DIRS => array(
-                \Magento\App\Dir::THEMES => dirname(__DIR__) . '/Core/Model/_files/design'
+            \Magento\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/Core/Model/_files/design')
             )
         ));
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
@@ -81,7 +81,6 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testExpectedVersusActualFilename($expected, $actual)
     {
-        $expected = str_replace('/', DIRECTORY_SEPARATOR, $expected);
         $this->assertStringMatchesFormat($expected, $actual);
         $this->assertFileExists($actual);
     }

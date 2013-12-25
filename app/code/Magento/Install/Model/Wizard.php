@@ -90,10 +90,10 @@ class Wizard
     /**
      * Get wizard step by request
      *
-     * @param   \Zend_Controller_Request_Abstract $request
+     * @param   \Magento\App\RequestInterface $request
      * @return  \Magento\Object|bool
      */
-    public function getStepByRequest(\Zend_Controller_Request_Abstract $request)
+    public function getStepByRequest(\Magento\App\RequestInterface $request)
     {
         foreach ($this->_steps as $step) {
             if ($step->getController() == $request->getControllerName()

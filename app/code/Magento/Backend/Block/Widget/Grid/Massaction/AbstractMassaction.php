@@ -45,13 +45,6 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     protected $_jsonEncoder;
 
     /**
-     * Backend data helper
-     *
-     * @var \Magento\Backend\Helper\Data
-     */
-    protected $_backendHelper;
-
-    /**
      * Massaction items
      *
      * @var array

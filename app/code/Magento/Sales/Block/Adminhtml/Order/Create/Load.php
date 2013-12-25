@@ -39,7 +39,7 @@ class Load extends \Magento\View\Element\Template
     /**
      * Adminhtml js
      *
-     * @var \Magento\Adminhtml\Helper\Js
+     * @var \Magento\Backend\Helper\Js
      */
     protected $_adminhtmlJs = null;
 
@@ -51,13 +51,13 @@ class Load extends \Magento\View\Element\Template
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Adminhtml\Helper\Js $adminhtmlJs
+     * @param \Magento\Backend\Helper\Js $adminhtmlJs
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Adminhtml\Helper\Js $adminhtmlJs,
+        \Magento\Backend\Helper\Js $adminhtmlJs,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;

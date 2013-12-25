@@ -92,10 +92,8 @@ class Index
     }
 
     /**
-     * Dispatch request
-     *
      * @param RequestInterface $request
-     * @return mixed
+     * @return \Magento\App\ResponseInterface
      * @throws \Magento\App\Action\NotFoundException
      */
     public function dispatch(RequestInterface $request)
@@ -161,12 +159,10 @@ class Index
 
             $this->_coreRegistry->register('wishlist', $wishlist);
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Wishlist\Model\Session')->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             return false;
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Wishlist\Model\Session')->addException($e,
-                __('Wish List could not be created.')
-            );
+            $this->messageManager->addException($e, __('Wish List could not be created.'));
             return false;
         }
 
@@ -195,13 +191,7 @@ class Index
             }
         }
 
-        $messageStores = array(
-            'Magento\Customer\Model\Session',
-            'Magento\Checkout\Model\Session',
-            'Magento\Catalog\Model\Session',
-            'Magento\Wishlist\Model\Session'
-        );
-        $this->_view->getLayout()->initMessages($messageStores);
+        $this->_view->getLayout()->initMessages();
 
         $this->_view->renderLayout();
     }
@@ -228,7 +218,7 @@ class Index
 
         $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($productId);
         if (!$product->getId() || !$product->isVisibleInCatalog()) {
-            $session->addError(__('We can\'t specify a product.'));
+            $this->messageManager->addError(__('We can\'t specify a product.'));
             $this->_redirect('*/');
             return;
         }
@@ -271,13 +261,15 @@ class Index
             /** @var $helper \Magento\Wishlist\Helper\Data */
             $helper = $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
             $message = __('%1 has been added to your wishlist. Click <a href="%2">here</a> to continue shopping.', $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName()), $this->_objectManager->get('Magento\Escaper')->escapeUrl($referer));
-            $session->addSuccess($message);
+            $this->messageManager->addSuccess($message);
         }
         catch (\Magento\Core\Exception $e) {
-            $session->addError(__('An error occurred while adding item to wish list: %1', $e->getMessage()));
+            $this->messageManager->addError(
+                __('An error occurred while adding item to wish list: %1', $e->getMessage())
+            );
         }
         catch (\Exception $e) {
-            $session->addError(__('An error occurred while adding item to wish list.'));
+            $this->messageManager->addError(__('An error occurred while adding item to wish list.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
 
@@ -321,12 +313,11 @@ class Index
             $this->_objectManager->get('Magento\Catalog\Helper\Product\View')
                 ->prepareAndRender($item->getProductId(), $this, $params);
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Customer\Model\Session')->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_redirect('*');
             return;
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Customer\Model\Session')
-                ->addError(__('We can\'t configure the product.'));
+            $this->messageManager->addError(__('We can\'t configure the product.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_redirect('*');
             return;
@@ -347,7 +338,7 @@ class Index
 
         $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($productId);
         if (!$product->getId() || !$product->isVisibleInCatalog()) {
-            $session->addError(__('We can\'t specify a product.'));
+            $this->messageManager->addError(__('We can\'t specify a product.'));
             $this->_redirect('*/');
             return;
         }
@@ -376,11 +367,11 @@ class Index
             $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
 
             $message = __('%1 has been updated in your wish list.', $product->getName());
-            $session->addSuccess($message);
+            $this->messageManager->addSuccess($message);
         } catch (\Magento\Core\Exception $e) {
-            $session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $session->addError(__('An error occurred while updating wish list.'));
+            $this->messageManager->addError(__('An error occurred while updating wish list.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         $this->_redirect('*/*', array('wishlist_id' => $wishlist->getId()));
@@ -434,7 +425,7 @@ class Index
                         $item->delete();
                     } catch (\Exception $e) {
                         $this->_objectManager->get('Magento\Logger')->logException($e);
-                        $this->_objectManager->get('Magento\Customer\Model\Session')->addError(
+                        $this->messageManager->addError(
                             __('Can\'t delete item from wishlist')
                         );
                     }
@@ -450,7 +441,7 @@ class Index
                         ->save();
                     $updatedItems++;
                 } catch (\Exception $e) {
-                    $this->_objectManager->get('Magento\Customer\Model\Session')->addError(
+                    $this->messageManager->addError(
                         __('Can\'t save description %1', $this->_objectManager->get('Magento\Escaper')->escapeHtml($description))
                     );
                 }
@@ -463,7 +454,7 @@ class Index
                     $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
                 }
                 catch (\Exception $e) {
-                    $this->_objectManager->get('Magento\Customer\Model\Session')->addError(__('Can\'t update wish list'));
+                    $this->messageManager->addError(__('Can\'t update wish list'));
                 }
             }
 
@@ -495,11 +486,11 @@ class Index
             $item->delete();
             $wishlist->save();
         } catch (\Magento\Core\Exception $e) {
-            $this->_objectManager->get('Magento\Customer\Model\Session')->addError(
+            $this->messageManager->addError(
                 __('An error occurred while deleting the item from wish list: %1', $e->getMessage())
             );
         } catch(\Exception $e) {
-            $this->_objectManager->get('Magento\Customer\Model\Session')->addError(
+            $this->messageManager->addError(
                 __('An error occurred while deleting the item from wish list.')
             );
         }
@@ -544,7 +535,7 @@ class Index
             $item->setQty($qty);
         }
 
-        /* @var $session \Magento\Core\Model\Session\Generic */
+        /* @var $session \Magento\Session\Generic */
         $session    = $this->_objectManager->get('Magento\Wishlist\Model\Session');
         $cart       = $this->_objectManager->get('Magento\Checkout\Model\Cart');
 
@@ -575,16 +566,16 @@ class Index
             $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
         } catch (\Magento\Core\Exception $e) {
             if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
-                $session->addError(__('This product(s) is out of stock.'));
+                $this->messageManager->addError(__('This product(s) is out of stock.'));
             } else if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {
-                $this->_objectManager->create('Magento\Catalog\Model\Session')->addNotice($e->getMessage());
+                $this->messageManager->addNotice($e->getMessage());
                 $redirectUrl = $this->_url->getUrl('*/*/configure/', array('id' => $item->getId()));
             } else {
-                $this->_objectManager->get('Magento\Catalog\Model\Session')->addNotice($e->getMessage());
+                $this->messageManager->addNotice($e->getMessage());
                 $redirectUrl = $this->_url->getUrl('*/*/configure/', array('id' => $item->getId()));
             }
         } catch (\Exception $e) {
-            $session->addException($e, __('Cannot add item to shopping cart'));
+            $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
         }
 
         $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
@@ -628,14 +619,14 @@ class Index
             $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
             $productName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($item->getProduct()->getName());
             $wishlistName = $this->_objectManager->get('Magento\Escaper')->escapeHtml($wishlist->getName());
-            $session->addSuccess(
+            $this->messageManager->addSuccess(
                 __("%1 has been moved to wish list %2", $productName, $wishlistName)
             );
             $wishlist->save();
         } catch (\Magento\Core\Exception $e) {
-            $session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $session->addException($e, __('We can\'t move the item to the wish list.'));
+            $this->messageManager->addException($e, __('We can\'t move the item to the wish list.'));
         }
 
         return $this->getResponse()->setRedirect($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl());
@@ -648,7 +639,7 @@ class Index
     {
         $this->_getWishlist();
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages(array('Magento\Customer\Model\Session', 'Magento\Wishlist\Model\Session'));
+        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 
@@ -696,7 +687,7 @@ class Index
         }
 
         if ($error) {
-            $this->_objectManager->get('Magento\Wishlist\Model\Session')->addError($error);
+            $this->messageManager->addError($error);
             $this->_objectManager->get('Magento\Wishlist\Model\Session')
                 ->setSharingForm($this->getRequest()->getPost());
             $this->_redirect('*/*/share');
@@ -756,13 +747,11 @@ class Index
             $translate->setTranslateInline(true);
 
             $this->_eventManager->dispatch('wishlist_share', array('wishlist'=>$wishlist));
-            $this->_objectManager->get('Magento\Customer\Model\Session')->addSuccess(
-                __('Your wish list has been shared.')
-            );
+            $this->messageManager->addSuccess(__('Your wish list has been shared.'));
             $this->_redirect('*/*', array('wishlist_id' => $wishlist->getId()));
         } catch (\Exception $e) {
             $translate->setTranslateInline(true);
-            $this->_objectManager->get('Magento\Wishlist\Model\Session')->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_objectManager->get('Magento\Wishlist\Model\Session')
                 ->setSharingForm($this->getRequest()->getPost());
             $this->_redirect('*/*/share');
@@ -801,7 +790,8 @@ class Index
 
         try {
             $info      = unserialize($option->getValue());
-            $filePath  = $this->_objectManager->get('Magento\App\Dir')->getDir() . $info['quote_path'];
+            $filePath  = $this->_objectManager->get('Magento\Filesystem')->getPath(\Magento\Filesystem::ROOT)
+                . $info['quote_path'];
             $secretKey = $this->getRequest()->getParam('key');
 
             if ($secretKey == $info['secret_key']) {

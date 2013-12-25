@@ -65,25 +65,33 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected $_taxConfig;
 
     /**
+     * @var \Magento\GiftMessage\Helper\Message
+     */
+    protected $_messageHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
+     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
      * @param \Magento\GiftMessage\Model\Save $giftMessageSave
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Helper\Data $taxData
+     * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Adminhtml\Model\Session\Quote $sessionQuote,
+        \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\GiftMessage\Model\Save $giftMessageSave,
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Helper\Data $taxData,
+        \Magento\GiftMessage\Helper\Message $messageHelper,
         array $data = array()
     ) {
+        $this->_messageHelper = $messageHelper;
         $this->_wishlistFactory = $wishlistFactory;
         $this->_giftMessageSave = $giftMessageSave;
         $this->_taxConfig = $taxConfig;
@@ -158,12 +166,12 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     public function isGiftMessagesAvailable($item=null)
     {
         if(is_null($item)) {
-            return $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable(
+            return $this->_messageHelper->getIsMessagesAvailable(
                 'items', $this->getQuote(), $this->getStore()
             );
         }
 
-        return $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable(
+        return $this->_messageHelper->getIsMessagesAvailable(
             'item', $item, $this->getStore()
         );
     }
@@ -416,7 +424,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $options['title'] = __('This product does not have any configurable options');
         }
 
-        return $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData($options)
             ->toHtml();
     }

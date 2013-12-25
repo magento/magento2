@@ -53,15 +53,23 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Payment\Helper\Data
+     */
+    protected $_paymentHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Payment\Helper\Data $paymentHelper,
         array $data = array()
     ) {
+        $this->_paymentHelper = $paymentHelper;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -98,7 +106,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
         }
         $this->setChild(
             'payment_info',
-            $this->helper('Magento\Payment\Helper\Data')->getInfoBlock($this->getOrder()->getPayment())
+            $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment())
         );
     }
 

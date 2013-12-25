@@ -30,7 +30,7 @@
 
 namespace Magento\GoogleShopping\Block\Adminhtml\Types;
 
-class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry

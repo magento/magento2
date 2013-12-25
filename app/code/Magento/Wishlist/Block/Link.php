@@ -30,11 +30,30 @@ namespace Magento\Wishlist\Block;
 class Link extends \Magento\View\Element\Html\Link
 {
     /**
+     * @var \Magento\Wishlist\Helper\Data
+     */
+    protected $_wishlistHelper;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Wishlist\Helper\Data $wishlistHelper,
+        array $data = array()
+    ) {
+        $this->_wishlistHelper = $wishlistHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * @return string
      */
     protected function _toHtml()
     {
-        if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) {
+        if ($this->_wishlistHelper->isAllow()) {
             return parent::_toHtml();
         }
         return '';
@@ -71,7 +90,7 @@ class Link extends \Magento\View\Element\Html\Link
      */
     protected function _getItemCount()
     {
-        return $this->helper('Magento\Wishlist\Helper\Data')->getItemCount();
+        return $this->_wishlistHelper->getItemCount();
     }
 
     /**

@@ -127,7 +127,7 @@ class Archive
             if ($i == (count($archivers) - 1)) {
                 $packed = $destination;
             } else {
-                $packed = dirname($destination) . DS . '~tmp-'. microtime(true) . $archivers[$i] . '.' . $archivers[$i];
+                $packed = dirname($destination) . '/~tmp-'. microtime(true) . $archivers[$i] . '.' . $archivers[$i];
             }
             $source = $this->_getArchiver($archivers[$i])->pack($source, $packed, $skipRoot);
             if ($interimSource && $i < count($archivers)) {
@@ -157,9 +157,9 @@ class Archive
                 break;
             }
             if ($i == 0) {
-                $packed = rtrim($destination, DS) . DS;
+                $packed = rtrim($destination, '/') . '/';
             } else {
-                $packed = rtrim($destination, DS) . DS . '~tmp-'. microtime(true) . $archivers[$i-1] . '.'
+                $packed = rtrim($destination, '/') . '/~tmp-'. microtime(true) . $archivers[$i-1] . '.'
                     . $archivers[$i-1];
             }
             $source = $this->_getArchiver($archivers[$i])->unpack($source, $packed);

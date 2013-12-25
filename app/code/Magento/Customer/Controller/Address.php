@@ -100,8 +100,10 @@ class Address extends \Magento\App\Action\Action
     }
 
     /**
+     * Check customer authentication
+     *
      * @param RequestInterface $request
-     * @return mixed
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
@@ -118,8 +120,7 @@ class Address extends \Magento\App\Action\Action
     {
         if (count($this->_getSession()->getCustomer()->getAddresses())) {
             $this->_view->loadLayout();
-            $this->_view->getLayout()
-                ->initMessages(array('Magento\Customer\Model\Session', 'Magento\Catalog\Model\Session'));
+            $this->_view->getLayout()->initMessages();
 
             $block = $this->_view->getLayout()->getBlock('address_book');
             if ($block) {
@@ -147,7 +148,7 @@ class Address extends \Magento\App\Action\Action
     public function formAction()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages('Magento\Customer\Model\Session');
+        $this->_view->getLayout()->initMessages();
         $navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
             $navigationBlock->setActive('customer/address');
@@ -183,24 +184,24 @@ class Address extends \Magento\App\Action\Action
                     $address->getVatValidationResult()
                 );
                 $validationMessage->getIsError()
-                    ? $this->_getSession()->addError($validationMessage->getMessage())
-                    : $this->_getSession()->addSuccess($validationMessage->getMessage());
+                    ? $this->messageManager->addError($validationMessage->getMessage())
+                    : $this->messageManager->addSuccess($validationMessage->getMessage());
             }
 
-            $this->_getSession()->addSuccess(__('The address has been saved.'));
+            $this->messageManager->addSuccess(__('The address has been saved.'));
             $url = $this->_buildUrl('*/*/index', array('_secure'=>true));
             $this->getResponse()->setRedirect($this->_redirect->success($url));
             return;
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addException($e, $e->getMessage());
+            $this->messageManager->addException($e, $e->getMessage());
         } catch (\Magento\Validator\ValidatorException $e) {
             foreach ($e->getMessages() as $messages) {
                 foreach ($messages as $message) {
-                    $this->_getSession()->addError($message);
+                    $this->messageManager->addError($message);
                 }
             }
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('Cannot save address.'));
+            $this->messageManager->addException($e, __('Cannot save address.'));
         }
 
         $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
@@ -261,16 +262,16 @@ class Address extends \Magento\App\Action\Action
 
             // Validate address_id <=> customer_id
             if ($address->getCustomerId() != $this->_getSession()->getCustomerId()) {
-                $this->_getSession()->addError(__('The address does not belong to this customer.'));
+                $this->messageManager->addError(__('The address does not belong to this customer.'));
                 $this->getResponse()->setRedirect($this->_buildUrl('*/*/index'));
                 return;
             }
 
             try {
                 $address->delete();
-                $this->_getSession()->addSuccess(__('The address has been deleted.'));
+                $this->messageManager->addSuccess(__('The address has been deleted.'));
             } catch (\Exception $e){
-                $this->_getSession()->addException($e, __('An error occurred while deleting the address.'));
+                $this->messageManager->addException($e, __('An error occurred while deleting the address.'));
             }
         }
         $this->getResponse()->setRedirect($this->_buildUrl('*/*/index'));

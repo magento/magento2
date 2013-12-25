@@ -69,7 +69,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
             'resource' => $this->_optionResource,
             'optionValueFactory' => $optValFactoryMock,
         ));
-        $dateBlock = $this->getMock('Magento\Adminhtml\Block\Catalog\Product\Composite\Fieldset\Options',
+        $dateBlock = $this->getMock('Magento\Backend\Block\Catalog\Product\Composite\Fieldset\Options',
             array('setProduct', 'setOption'), array('context' => $context, 'option' => $option), '', false);
         $dateBlock->expects($this->any())
             ->method('setProduct')->will($this->returnValue($dateBlock));

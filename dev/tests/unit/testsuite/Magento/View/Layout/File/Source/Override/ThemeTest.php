@@ -34,12 +34,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_filesystem;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $_dirs;
+    private $_directory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -48,12 +43,16 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-        $this->_dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
-        $this->_dirs->expects($this->any())->method('getDir')->will($this->returnArgument(0));
+        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $this->_directory = $this->getMock('Magento\Filesystem\Directory\Read', array('search'), array(), '', false);
+
+        $filesystem->expects($this->any())->method('getDirectoryRead')
+            ->with(\Magento\Filesystem::THEMES)
+            ->will($this->returnValue($this->_directory));
+
         $this->_fileFactory = $this->getMock('Magento\View\Layout\File\Factory', array(), array(), '', false);
         $this->_model = new \Magento\View\Layout\File\Source\Override\Theme(
-            $this->_filesystem, $this->_dirs, $this->_fileFactory
+            $filesystem, $this->_fileFactory
         );
     }
 
@@ -72,10 +71,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         $filePathOne = 'design/area/theme_path/Module_One/layout/override/theme/parent_theme/1.xml';
         $filePathTwo = 'design/area/theme_path/Module_Two/layout/override/theme/grand_parent_theme/2.xml';
-        $this->_filesystem
-            ->expects($this->once())
-            ->method('searchKeys')
-            ->with('design', 'area/theme_path/*_*/layout/override/theme/*/*.xml')
+        $this->_directory->expects($this->once())
+            ->method('search')
+            ->with('~area\/theme_path\/[\S]+_[\S]+\/layout\/override\/theme\/[\S]+\/[\S]+\.xml~')
             ->will($this->returnValue(array($filePathOne, $filePathTwo)))
         ;
 
@@ -107,10 +105,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
 
         $filePathOne = 'design/area/theme_path/Module_Two/layout/override/theme/grand_parent_theme/preset/3.xml';
-        $this->_filesystem
-            ->expects($this->once())
-            ->method('searchKeys')
-            ->with('design', 'area/theme_path/*_*/layout/override/theme/*/preset/3.xml')
+        $this->_directory->expects($this->once())
+            ->method('search')
+            ->with('~area\/theme_path\/[\S]+_[\S]+\/layout\/override\/theme\/[\S]+\/preset\/3\.xml~')
             ->will($this->returnValue(array($filePathOne)))
         ;
 
@@ -139,12 +136,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue(null));
         $theme->expects($this->once())->method('getCode')->will($this->returnValue('theme_path'));
 
-        $this->_filesystem
-            ->expects($this->once())
-            ->method('searchKeys')
-            ->with('design', 'area/theme_path/*_*/layout/override/theme/*/*.xml')
-            ->will($this->returnValue(array($filePath)))
-        ;
+        $this->_directory->expects($this->once())
+            ->method('search')
+            ->with('~area\/theme_path\/[\S]+_[\S]+\/layout\/override\/theme\/[\S]+\/[\S]+\.xml~')
+            ->will($this->returnValue(array($filePath)));
+
         $this->_model->getFiles($theme);
     }
 }

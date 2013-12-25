@@ -59,17 +59,15 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content',
             array(
                 'urlBuilder'    => $this->_urlBuilder,
-                'request'       => $this->_request
+                'request'       => $this->_request,
+                'storageHelper'  => $this->_helperStorage,
             )
         );
-        $this->_filesContent = $this->getMock(
-            'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content', array('helper'), $constructArguments
-        );
 
-        $this->_filesContent->expects($this->any())
-            ->method('helper')
-            ->with('Magento\Theme\Helper\Storage')
-            ->will($this->returnValue($this->_helperStorage));
+        $this->_filesContent = $objectManagerHelper->getObject(
+            'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content',
+            $constructArguments
+        );
     }
 
     /**

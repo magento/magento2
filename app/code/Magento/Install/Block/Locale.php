@@ -29,14 +29,47 @@
  *
  * @category   Magento
  * @package    Magento_Install
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Install\Block;
 
 class Locale extends \Magento\Install\Block\AbstractBlock
 {
-
+    /**
+     * Template file
+     *
+     * @var string
+     */
     protected $_template = 'locale.phtml';
+
+    /**
+     * Locale code
+     *
+     * @var string
+     */
+    protected $_localeCode;
+
+    /**
+     * Set locale code
+     *
+     * @param $localeCode
+     * @return \Magento\Install\Block\Locale
+     */
+    public function setLocaleCode($localeCode)
+    {
+        $this->_localeCode = $localeCode;
+        return $this;
+    }
+
+    /**
+     * Retrieve locale code
+     *
+     * @return string
+     */
+    public function getLocaleCode()
+    {
+        return $this->_localeCode;
+    }
 
     /**
      * Retrieve locale object
@@ -47,7 +80,9 @@ class Locale extends \Magento\Install\Block\AbstractBlock
     {
         $locale = $this->getData('locale');
         if (null === $locale) {
-            $locale = $this->_locale->getLocale();
+            $locale = $this->_locale->setLocaleCode(
+                $this->getLocaleCode()
+            )->getLocale();
             $this->setData('locale', $locale);
         }
         return $locale;

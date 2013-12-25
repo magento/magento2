@@ -125,13 +125,6 @@ class Observer
     protected $_checkoutSession;
 
     /**
-     * Session
-     *
-     * @var \Magento\Core\Model\Session
-     */
-    protected $_session;
-
-    /**
      * Website collection factory
      *
      * @var \Magento\Core\Model\Resource\Website\CollectionFactory
@@ -144,13 +137,17 @@ class Observer
     protected $_escaper;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * Construct
      *
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websiteCollectionFactory
-     * @param \Magento\Core\Model\Session $session
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\UrlInterface $url
@@ -161,6 +158,7 @@ class Observer
      * @param \Magento\App\RequestInterface $requestHttp
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Escaper $escaper
+     * @param \Magento\Message\ManagerInterface $messageManager
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -169,7 +167,6 @@ class Observer
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Core\Model\Resource\Website\CollectionFactory $websiteCollectionFactory,
-        \Magento\Core\Model\Session $session,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\UrlInterface $url,
@@ -179,13 +176,13 @@ class Observer
         \Magento\Persistent\Model\Persistent\ConfigFactory $persistentConfigFactory,
         \Magento\App\RequestInterface $requestHttp,
         \Magento\View\LayoutInterface $layout,
-        \Magento\Escaper $escaper
+        \Magento\Escaper $escaper,
+        \Magento\Message\ManagerInterface $messageManager
     ) {
         $this->_eventManager = $eventManager;
         $this->_persistentSession = $persistentSession;
         $this->_persistentData = $persistentData;
         $this->_websiteCollectionFactory = $websiteCollectionFactory;
-        $this->_session = $session;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
         $this->_url = $url;
@@ -196,6 +193,7 @@ class Observer
         $this->_requestHttp = $requestHttp;
         $this->_layout = $layout;
         $this->_escaper = $escaper;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -476,7 +474,7 @@ class Observer
         /** @var $controllerAction \Magento\App\Action\Action */
         $controllerAction = $observer->getEvent()->getControllerAction();
         if (method_exists($controllerAction, 'redirectLogin')) {
-            $this->_session->addNotice(__('To check out, please log in using your email address.'));
+            $this->messageManager->addNotice(__('To check out, please log in using your email address.'));
             $controllerAction->redirectLogin();
             if ($controllerAction instanceof \Magento\GoogleCheckout\Controller\Redirect
                 || $controllerAction instanceof \Magento\Paypal\Controller\Express\AbstractExpress

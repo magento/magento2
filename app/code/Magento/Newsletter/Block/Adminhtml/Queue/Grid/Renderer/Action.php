@@ -34,7 +34,7 @@
 
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Grid\Renderer;
 
-class Action extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Action
+class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
     public function render(\Magento\Object $row)
     {

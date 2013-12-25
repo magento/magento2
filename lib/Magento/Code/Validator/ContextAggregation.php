@@ -80,8 +80,9 @@ class ContextAggregation implements ValidatorInterface
         }
 
         if (false == empty($errors)) {
+            $classPath = str_replace('\\', '/', $class->getFileName());
             throw new ValidationException(
-                'Incorrect dependency in class ' . $className . ' in ' . $class->getFileName() . PHP_EOL
+                'Incorrect dependency in class ' . $className . ' in ' . $classPath . PHP_EOL
                 . implode(PHP_EOL, $errors)
             );
         }

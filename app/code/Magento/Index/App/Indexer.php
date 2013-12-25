@@ -25,8 +25,7 @@
  */
 namespace Magento\Index\App;
 
-use Magento\AppInterface,
-    Magento\Filesystem;
+use Magento\AppInterface;
 
 class Indexer implements AppInterface
 {
@@ -43,18 +42,18 @@ class Indexer implements AppInterface
     protected $_filesystem;
 
     /**
-     * @var Magento\Index\Model\IndexerFactory
+     * @var \Magento\Index\Model\IndexerFactory
      */
     protected $_indexerFactory;
 
     /**
      * @param string $reportDir
-     * @param Filesystem $filesystem
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Index\Model\IndexerFactory $indexerFactory
      */
     public function __construct(
         $reportDir,
-        Filesystem $filesystem,
+        \Magento\Filesystem $filesystem,
         \Magento\Index\Model\IndexerFactory $indexerFactory
     ) {
         $this->_reportDir = $reportDir;
@@ -70,7 +69,11 @@ class Indexer implements AppInterface
     public function execute()
     {
         /* Clean reports */
-        $this->_filesystem->delete($this->_reportDir, dirname($this->_reportDir));
+        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $path = $directory->getRelativePath($this->_reportDir);
+        if ($directory->isExist($path)) {
+            $directory->delete($path);
+        }
 
         /* Run all indexer processes */
         /** @var $indexer \Magento\Index\Model\Indexer */

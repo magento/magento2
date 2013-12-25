@@ -87,18 +87,18 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     protected $_keepSession = true;
 
     /**
-     * @var \Magento\Core\Model\Session\AbstractSession
+     * @var \Magento\Session\SessionManagerInterface
      */
     protected $_session;
 
     /**
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param \Magento\Captcha\Model\Resource\LogFactory $resLogFactory
      * @param string $formId
      */
     public function __construct(
-        \Magento\Core\Model\Session\AbstractSession $session,
+        \Magento\Session\SessionManagerInterface $session,
         \Magento\Captcha\Helper\Data $captchaData,
         \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
         $formId

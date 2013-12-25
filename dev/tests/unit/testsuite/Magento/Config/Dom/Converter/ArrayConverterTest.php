@@ -41,10 +41,7 @@ class ArrayConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = new \Magento\Config\Dom\Converter\ArrayConverter();
         $this->_fixturePath = realpath(__DIR__ . '/../../')
-            . DIRECTORY_SEPARATOR . '_files'
-            . DIRECTORY_SEPARATOR . 'dom'
-            . DIRECTORY_SEPARATOR . 'converter'
-            . DIRECTORY_SEPARATOR;
+            . '/_files/dom/converter/';
     }
 
     /**

@@ -84,7 +84,7 @@ class CodeMessDetector
             implode(',', $whiteList),
             'xml', //report format
             $this->_rulesetFile,
-            '--exclude' , str_replace('/', DIRECTORY_SEPARATOR, implode(',', $blackList)),
+            '--exclude' , implode(',', $blackList),
             '--reportfile' , $this->_reportFile
         );
 

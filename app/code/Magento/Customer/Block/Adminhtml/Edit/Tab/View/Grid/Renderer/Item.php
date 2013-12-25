@@ -44,15 +44,23 @@ class Item
     protected $_productConfig = null;
 
     /**
+     * @var \Magento\Catalog\Helper\Product\ConfigurationPool
+     */
+    protected $_productConfigPool;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
+     * @param \Magento\Catalog\Helper\Product\ConfigurationPool $productConfigPool
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfig,
+        \Magento\Catalog\Helper\Product\ConfigurationPool $productConfigPool,
         array $data = array()
     ) {
+        $this->_productConfigPool = $productConfigPool;
         $this->_productConfig = $productConfig;
         parent::__construct($context, $data);
     }
@@ -88,11 +96,7 @@ class Item
             $helperName = 'Magento\Catalog\Helper\Product\Configuration';
         }
 
-        $helper = $this->_helperFactory->get($helperName);
-        if (!($helper instanceof \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface)) {
-            throw new \Magento\Core\Exception(__("Helper for options rendering doesn't implement required interface."));
-        }
-        return $helper;
+        return $this->_productConfigPool->get($helperName);
     }
 
     /*

@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Recurring\Profile\View;
 
-class Info extends \Magento\Adminhtml\Block\Widget
+class Info extends \Magento\Backend\Block\Widget
 {
     /**
      * Core registry

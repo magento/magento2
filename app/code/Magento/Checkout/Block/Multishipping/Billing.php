@@ -47,19 +47,21 @@ class Billing extends \Magento\Payment\Block\Form\Container
 
     /**
      * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param \Magento\Checkout\Model\Type\Multishipping $multishipping
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
+        \Magento\Payment\Helper\Data $paymentHelper,
         \Magento\Checkout\Model\Type\Multishipping $multishipping,
         \Magento\Checkout\Model\Session $checkoutSession,
         array $data = array()
     ) {
         $this->_multishipping = $multishipping;
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($context, $data);
+        parent::__construct($context, $paymentHelper, $data);
     }
 
     /**

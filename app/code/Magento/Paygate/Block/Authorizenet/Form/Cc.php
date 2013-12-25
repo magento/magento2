@@ -170,7 +170,7 @@ class Cc extends \Magento\Payment\Block\Form
      */
     public function getCancelButtonHtml()
     {
-        $cancelButton = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        $cancelButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
                 'id'      => 'payment_cancel',
                 'label'   => __('Cancel'),

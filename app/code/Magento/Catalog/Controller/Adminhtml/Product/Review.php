@@ -129,9 +129,8 @@ class Review extends \Magento\Backend\App\Action
     {
         if (($data = $this->getRequest()->getPost()) && ($reviewId = $this->getRequest()->getParam('id'))) {
             $review = $this->_objectManager->create('Magento\Review\Model\Review')->load($reviewId);
-            $session = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
             if (! $review->getId()) {
-                $session->addError(__('The review was removed by another user or does not exist.'));
+                $this->messageManager->addError(__('The review was removed by another user or does not exist.'));
             } else {
                 try {
                     $review->addData($data)->save();
@@ -159,11 +158,11 @@ class Review extends \Magento\Backend\App\Action
 
                     $review->aggregate();
 
-                    $session->addSuccess(__('You saved the review.'));
+                    $this->messageManager->addSuccess(__('You saved the review.'));
                 } catch (\Magento\Core\Exception $e) {
-                    $session->addError($e->getMessage());
+                    $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e){
-                    $session->addException($e, __('Something went wrong while saving this review.'));
+                    $this->messageManager->addException($e, __('Something went wrong while saving this review.'));
                 }
             }
 
@@ -180,14 +179,12 @@ class Review extends \Magento\Backend\App\Action
     public function deleteAction()
     {
         $reviewId   = $this->getRequest()->getParam('id', false);
-        $session    = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
-
         try {
             $this->_objectManager->create('Magento\Review\Model\Review')->setId($reviewId)
                 ->aggregate()
                 ->delete();
 
-            $session->addSuccess(__('The review has been deleted.'));
+            $this->messageManager->addSuccess(__('The review has been deleted.'));
             if( $this->getRequest()->getParam('ret') == 'pending' ) {
                 $this->getResponse()->setRedirect($this->getUrl('adminhtml/*/pending'));
             } else {
@@ -195,9 +192,9 @@ class Review extends \Magento\Backend\App\Action
             }
             return;
         } catch (\Magento\Core\Exception $e) {
-            $session->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e){
-            $session->addException($e, __('Something went wrong  deleting this review.'));
+            $this->messageManager->addException($e, __('Something went wrong  deleting this review.'));
         }
 
         $this->_redirect('catalog/*/edit/',array('id'=>$reviewId));
@@ -206,23 +203,22 @@ class Review extends \Magento\Backend\App\Action
     public function massDeleteAction()
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
-        $session    = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
 
-        if(!is_array($reviewsIds)) {
-             $session->addError(__('Please select review(s).'));
+        if (!is_array($reviewsIds)) {
+            $this->messageManager->addError(__('Please select review(s).'));
         } else {
             try {
                 foreach ($reviewsIds as $reviewId) {
                     $model = $this->_objectManager->create('Magento\Review\Model\Review')->load($reviewId);
                     $model->delete();
                 }
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
+                $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been deleted.', count($reviewsIds))
                 );
             } catch (\Magento\Core\Exception $e) {
-                $session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e){
-                $session->addException($e, __('An error occurred while deleting record(s).'));
+                $this->messageManager->addException($e, __('An error occurred while deleting record(s).'));
             }
         }
 
@@ -232,12 +228,9 @@ class Review extends \Magento\Backend\App\Action
     public function massUpdateStatusAction()
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
-        $session    = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
-
-        if(!is_array($reviewsIds)) {
-             $session->addError(__('Please select review(s).'));
+        if (!is_array($reviewsIds)) {
+            $this->messageManager->addError(__('Please select review(s).'));
         } else {
-            /* @var $session \Magento\Adminhtml\Model\Session */
             try {
                 $status = $this->getRequest()->getParam('status');
                 foreach ($reviewsIds as $reviewId) {
@@ -246,13 +239,13 @@ class Review extends \Magento\Backend\App\Action
                         ->save()
                         ->aggregate();
                 }
-                $session->addSuccess(
+                $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been updated.', count($reviewsIds))
                 );
             } catch (\Magento\Core\Exception $e) {
-                $session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $session->addException($e, __('An error occurred while updating the selected review(s).'));
+                $this->messageManager->addException($e, __('An error occurred while updating the selected review(s).'));
             }
         }
 
@@ -262,13 +255,10 @@ class Review extends \Magento\Backend\App\Action
     public function massVisibleInAction()
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
-        $session    = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
 
-        if(!is_array($reviewsIds)) {
-             $session->addError(__('Please select review(s).'));
+        if (!is_array($reviewsIds)) {
+            $this->messageManager->addError(__('Please select review(s).'));
         } else {
-            $session = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
-            /* @var $session \Magento\Adminhtml\Model\Session */
             try {
                 $stores = $this->getRequest()->getParam('stores');
                 foreach ($reviewsIds as $reviewId) {
@@ -276,13 +266,13 @@ class Review extends \Magento\Backend\App\Action
                     $model->setSelectStores($stores);
                     $model->save();
                 }
-                $session->addSuccess(
+                $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been updated.', count($reviewsIds))
                 );
             } catch (\Magento\Core\Exception $e) {
-                $session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $session->addException($e, __('An error occurred while updating the selected review(s).'));
+                $this->messageManager->addException($e, __('An error occurred while updating the selected review(s).'));
             }
         }
 
@@ -324,7 +314,6 @@ class Review extends \Magento\Backend\App\Action
     public function postAction()
     {
         $productId  = $this->getRequest()->getParam('product_id', false);
-        $session    = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
 
         if ($data = $this->getRequest()->getPost()) {
             if ($this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->hasSingleStore()) {
@@ -358,7 +347,7 @@ class Review extends \Magento\Backend\App\Action
 
                 $review->aggregate();
 
-                $session->addSuccess(__('You saved the review.'));
+                $this->messageManager->addSuccess(__('You saved the review.'));
                 if( $this->getRequest()->getParam('ret') == 'pending' ) {
                     $this->getResponse()->setRedirect($this->getUrl('catalog/*/pending'));
                 } else {
@@ -367,9 +356,9 @@ class Review extends \Magento\Backend\App\Action
 
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $session->addException($e, __('An error occurred while saving review.'));
+                $this->messageManager->addException($e, __('An error occurred while saving review.'));
             }
         }
         $this->getResponse()->setRedirect($this->getUrl('catalog/*/'));

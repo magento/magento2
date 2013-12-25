@@ -26,9 +26,6 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
-require \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir()
-    . '/app/code/Magento/Catalog/Controller/Product.php';
-
 /**
  * @magentoAppArea frontend
  */
@@ -147,44 +144,5 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testPrepareAndRenderWrongProduct()
     {
         $this->_helper->prepareAndRender(999, $this->_controller);
-    }
-
-    /**
-     * Test for _getSessionMessageModels
-     *
-     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
-     * @magentoAppIsolation enabled
-     * @magentoAppArea frontend
-     */
-    public function testGetSessionMessageModels()
-    {
-        $expectedMessages = array(
-            'Magento\Catalog\Model\Session'  => 'catalog message',
-            'Magento\Checkout\Model\Session' => 'checkout message',
-        );
-
-        // add messages
-        foreach ($expectedMessages as $sessionModel => $messageText) {
-            /** @var $session \Magento\Core\Model\Session\AbstractSession */
-            $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get($sessionModel);
-            $session->addNotice($messageText);
-        }
-
-        // _getSessionMessageModels invokes inside prepareAndRender
-        $this->_helper->prepareAndRender(10, $this->_controller);
-
-        // assert messages
-        $actualMessages = $this->_layout->getMessagesBlock()->getMessages();
-        $this->assertSameSize($expectedMessages, $actualMessages);
-
-        sort($expectedMessages);
-
-        /** @var $message \Magento\Message\Notice */
-        foreach ($actualMessages as $key => $message) {
-            $actualMessages[$key] = $message->getText();
-        }
-        sort($actualMessages);
-
-        $this->assertEquals($expectedMessages, $actualMessages);
     }
 }

@@ -61,7 +61,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     /**
      * Custom columns preparation
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {

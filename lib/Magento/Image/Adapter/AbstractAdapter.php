@@ -78,10 +78,21 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $_constrainOnly;
 
     /**
-     * IO model to work with files
-     * @var \Magento\Io\File
+     * Filesystem instance
+     *
+     * @var \Magento\Filesystem
      */
-    protected $_ioFile;
+    protected $_filesystem;
+
+    /**
+     * @var \Magento\Filesystem\Directory\Write
+     */
+    protected $directoryWrite;
+
+    /**
+     * @var \Magento\Logger
+     */
+    protected $logger;
 
     abstract public function open($fileName);
 
@@ -130,11 +141,12 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initialize default values
      *
+     * @param \Magento\Filesystem $filesystem,
      * @param array $data
      */
-    public function __construct(array $data = array())
-    {
-        $this->_ioFile = isset($data['io']) ? $data['io'] : new \Magento\Io\File();
+    public function __construct(\Magento\Filesystem $filesystem, array $data = array()) {
+        $this->_filesystem      = $filesystem;
+        $this->directoryWrite   = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
     }
 
     /**
@@ -530,16 +542,14 @@ abstract class AbstractAdapter implements AdapterInterface
         } else {
             $newFileName = $newName;
         }
-        $fileName = $destination . DIRECTORY_SEPARATOR . $newFileName;
+        $fileName = $destination . '/' . $newFileName;
 
         if (!is_writable($destination)) {
             try {
-                $result = $this->_ioFile->mkdir($destination);
-            } catch (\Exception $e) {
-                $result = false;
-            }
-
-            if (!$result) {
+                $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
+            } catch (\Magento\Filesystem\FilesystemException $e) {
+                $this->logger->addStreamLog(\Magento\Logger::LOGGER_SYSTEM);
+                $this->logger->log($e->getMessage());
                 throw new \Exception('Unable to write file into directory ' . $destination . '. Access forbidden.');
             }
         }

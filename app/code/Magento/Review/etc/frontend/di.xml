@@ -24,9 +24,14 @@
  */
 -->
 <config>
-    <virtualType name="Magento\Review\Model\Session" type="Magento\Core\Model\Session\Generic">
-        <param name="sessionNamespace">
+    <virtualType name="Magento\Review\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
             <value>review</value>
+        </param>
+    </virtualType>
+    <virtualType name="Magento\Review\Model\Session" type="Magento\Session\Generic">
+        <param name="storage">
+            <instance type="Magento\Review\Model\Session\Storage" />
         </param>
         <param name="sessionName">
             <value>frontend</value>

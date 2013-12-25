@@ -30,37 +30,58 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     {
         // Wire object with mocks
         $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+
         $objectManager = $this->getMock('Magento\ObjectManager');
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $backendHelper = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-        $session = $this->getMock(
-            'Magento\Core\Model\Session\AbstractSession',
-            array('addSuccess'),
-            array(),
-            '',
-            false
-        );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $controller = $helper->getObject('Magento\Backend\Controller\Adminhtml\Cache', array(
-                'objectManager' => $objectManager,
-                'response' => $response,
-                'helper' => $backendHelper,
-                'eventManager' => $eventManager
-            )
+
+        $session = $this->getMock(
+            'Magento\Backend\Model\Session',
+            array('setIsUrlNotice'),
+            $helper->getConstructArguments('Magento\Backend\Model\Session')
         );
+        $messageManager = $this->getMock(
+            'Magento\Message\Manager',
+            array('addSuccess'),
+            $helper->getConstructArguments('Magento\Message\Manager')
+        );
+        $context = $this->getMock(
+            'Magento\Backend\App\Action\Context',
+            array('getRequest', 'getResponse', 'getMessageManager', 'getSession'),
+            $helper->getConstructArguments('Magento\Backend\App\Action\Context', array(
+                'session' => $session,
+                'response' => $response,
+                'objectManager' => $objectManager,
+                'helper' => $backendHelper,
+                'request' => $request,
+                'messageManager' => $messageManager
+            ))
+        );
+        $context->expects($this->once())->method('getRequest')->will($this->returnValue($request));
+        $context->expects($this->once())->method('getResponse')->will($this->returnValue($response));
+        $context->expects($this->once())->method('getSession')->will($this->returnValue($session));
+        $context->expects($this->once())->method('getMessageManager')->will($this->returnValue($messageManager));
+        $controller = $helper->getObject('Magento\Backend\Controller\Adminhtml\Cache', array(
+            'context' => $context
+        ));
 
         // Setup expectations
         $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
         $mergeService->expects($this->once())
             ->method('cleanMergedJsCss');
 
-        $session->expects($this->once())
+        $messageManager->expects($this->once())
             ->method('addSuccess')
             ->with('The JavaScript/CSS cache has been cleaned.');
 
+        $session->expects($this->once())
+            ->method('setIsUrlNotice')
+            ->will($this->returnSelf());
+
         $valueMap = array(
             array('Magento\View\Asset\MergeService', $mergeService),
-            array('Magento\Core\Model\Session\AbstractSession', $session),
+            array('Magento\Session\SessionManager', $session),
         );
         $objectManager->expects($this->any())
             ->method('get')

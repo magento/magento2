@@ -163,20 +163,20 @@ class Option extends \Magento\Backend\Block\Widget
 
     protected function _prepareLayout()
     {
-        $this->addChild('add_selection_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('add_selection_button', 'Magento\Backend\Block\Widget\Button', array(
             'id'    => $this->getFieldId() . '_{{index}}_add_button',
             'label' => __('Add Products to Option'),
             'class' => 'add add-selection'
         ));
 
-        $this->addChild('close_search_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('close_search_button', 'Magento\Backend\Block\Widget\Button', array(
             'id'    => $this->getFieldId().'_{{index}}_close_button',
             'label'     => __('Close'),
             'on_click'   => 'bSelection.closeSearch(event)',
             'class' => 'back no-display'
         ));
 
-        $this->addChild('option_delete_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('option_delete_button', 'Magento\Backend\Block\Widget\Button', array(
             'label' => __('Delete Option'),
             'class' => 'action-delete',
             'on_click' => 'bOption.remove(event)'

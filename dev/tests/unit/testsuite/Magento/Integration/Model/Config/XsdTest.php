@@ -65,6 +65,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration">
                         <email>test-integration@magento.com</email>
                         <endpoint_url>https://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array()
@@ -74,6 +75,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                     <integration name="TestIntegration2">
                         <email>test-integration2@magento.com</email>
@@ -97,6 +99,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 '<integrations>
                     <integration name="TestIntegration1">
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array("Element 'endpoint_url': This element is not expected. Expected is ( email ).")
@@ -108,6 +111,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email></email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array(
@@ -129,7 +133,20 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     "Element 'endpoint_url': '' is not a valid value of the atomic type 'urlType'."
                 )
             ),
-
+            'identity_link_url is empty' => array(
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url></identity_link_url>
+                    </integration>
+                </integrations>',
+                array(
+                    "Element 'identity_link_url': [facet 'minLength'] The value has a length of '0'; this underruns"
+                    . " the allowed minimum length of '4'.",
+                    "Element 'identity_link_url': '' is not a valid value of the atomic type 'urlType'."
+                )
+            ),
             /** Invalid structure */
             'irrelevant root node' => array(
                 '<integration name="TestIntegration"/>',
@@ -140,6 +157,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                     <invalid/>
                 </integrations>',
@@ -150,6 +168,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                         <invalid/>
                     </integration>
                 </integrations>',
@@ -160,6 +179,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                         <invalid/>
                     </integration>
                 </integrations>',
@@ -172,6 +192,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array("Element 'integrations', attribute 'invalid': The attribute 'invalid' is not allowed.")
@@ -181,6 +202,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1" invalid="invalid">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array("Element 'integration', attribute 'invalid': The attribute 'invalid' is not allowed.")
@@ -190,6 +212,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email invalid="invalid">test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array("Element 'email', attribute 'invalid': The attribute 'invalid' is not allowed.")
@@ -199,17 +222,28 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url invalid="invalid">http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array("Element 'endpoint_url', attribute 'invalid': The attribute 'invalid' is not allowed.")
             ),
-
+            'invalid attribute in identity_link_url' => array(
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url invalid="invalid">http://endpoint.url</identity_link_url>
+                    </integration>
+                </integrations>',
+                array("Element 'identity_link_url', attribute 'invalid': The attribute 'invalid' is not allowed.")
+            ),
             /** Missing or empty required attributes */
             'integration without name' => array(
                 '<integrations>
                     <integration>
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array("Element 'integration': The attribute 'name' is required but missing.")
@@ -219,6 +253,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array
@@ -236,6 +271,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email>invalid</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
                 array("Element 'email': [facet 'pattern'] The value 'invalid' "

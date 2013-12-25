@@ -324,7 +324,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             '/getOptions\(\)\s*->get(Base|App|Code|Design|Etc|Lib|Locale|Js|Media'
                 .'|Var|Tmp|Cache|Log|Session|Upload|Export)?Dir\(/S',
             $content,
-            'The class \Magento\Core\Model\Config\Options is obsolete. Replacement suggestion: \Magento\App\Dir'
+            'The class \Magento\Core\Model\Config\Options is obsolete. Replacement suggestion: \Magento\Filesystem'
         );
     }
 
@@ -540,7 +540,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         $ignored = array();
         $appPath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
         foreach ($blackList as $file) {
-            $ignored[] = realpath($appPath . DIRECTORY_SEPARATOR . $file);
+            $ignored[] = realpath($appPath . '/' . $file);
         }
         $files = \Magento\TestFramework\Utility\Files::init()->
             getClassFiles(true, true, true, true, true, true, false);

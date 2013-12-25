@@ -41,11 +41,6 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
     const UPLOAD_DIR                = 'email/logo';
 
     /**
-     * Token for the root part of directory path for uploading
-     */
-    const UPLOAD_ROOT_TOKEN         = 'system/filesystem/media';
-
-    /**
      * Upload max file size in kilobytes
      *
      * @var int
@@ -59,10 +54,7 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
      */
     protected function _getUploadDir()
     {
-        $uploadDir  = $this->_appendScopeInfo(self::UPLOAD_DIR);
-        $uploadRoot = $this->_getUploadRoot(self::UPLOAD_ROOT_TOKEN);
-        $uploadDir  = $uploadRoot . DS . $uploadDir;
-        return $uploadDir;
+        return $this->_mediaDirectory->getAbsolutePath($this->_appendScopeInfo(self::UPLOAD_DIR));
     }
 
     /**
@@ -89,8 +81,7 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
         $fileTmpName = $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'];
 
         if ($this->getOldValue() && ($fileTmpName || $deleteFlag)) {
-            $uploadPath = $this->_getUploadRoot(self::UPLOAD_ROOT_TOKEN) . DS . self::UPLOAD_DIR;
-            $this->_filesystem->delete($uploadPath . DS . $this->getOldValue(), $uploadPath);
+            $this->_mediaDirectory->delete(self::UPLOAD_DIR . '/' . $this->getOldValue());
         }
         return parent::_beforeSave();
     }

@@ -125,17 +125,15 @@ class Subscriber extends \Magento\App\Action\Action
 
                 $status = $this->_subscriberFactory->create()->subscribe($email);
                 if ($status == \Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE) {
-                    $this->_session->addSuccess(__('The confirmation request has been sent.'));
+                    $this->messageManager->addSuccess(__('The confirmation request has been sent.'));
                 } else {
-                    $this->_session->addSuccess(__('Thank you for your subscription.'));
+                    $this->messageManager->addSuccess(__('Thank you for your subscription.'));
                 }
-            }
-            catch (\Magento\Core\Exception $e) {
-                $this->_session->addException($e, __('There was a problem with the subscription: %1',
+            } catch (\Magento\Core\Exception $e) {
+                $this->messageManager->addException($e, __('There was a problem with the subscription: %1',
                     $e->getMessage()));
-            }
-            catch (\Exception $e) {
-                $this->_session->addException($e, __('Something went wrong with the subscription.'));
+            } catch (\Exception $e) {
+                $this->messageManager->addException($e, __('Something went wrong with the subscription.'));
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
@@ -155,12 +153,12 @@ class Subscriber extends \Magento\App\Action\Action
 
             if ($subscriber->getId() && $subscriber->getCode()) {
                 if ($subscriber->confirm($code)) {
-                    $this->_session->addSuccess(__('Your subscription has been confirmed.'));
+                    $this->messageManager->addSuccess(__('Your subscription has been confirmed.'));
                 } else {
-                    $this->_session->addError(__('This is an invalid subscription confirmation code.'));
+                    $this->messageManager->addError(__('This is an invalid subscription confirmation code.'));
                 }
             } else {
-                $this->_session->addError(__('This is an invalid subscription ID.'));
+                $this->messageManager->addError(__('This is an invalid subscription ID.'));
             }
         }
 
@@ -180,13 +178,11 @@ class Subscriber extends \Magento\App\Action\Action
                 $this->_subscriberFactory->create()->load($id)
                     ->setCheckCode($code)
                     ->unsubscribe();
-                $this->_session->addSuccess(__('You have been unsubscribed.'));
-            }
-            catch (\Magento\Core\Exception $e) {
-                $this->_session->addException($e, $e->getMessage());
-            }
-            catch (\Exception $e) {
-                $this->_session->addException($e, __('Something went wrong with the un-subscription.'));
+                $this->messageManager->addSuccess(__('You have been unsubscribed.'));
+            } catch (\Magento\Core\Exception $e) {
+                $this->messageManager->addException($e, $e->getMessage());
+            } catch (\Exception $e) {
+                $this->messageManager->addException($e, __('Something went wrong with the un-subscription.'));
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());

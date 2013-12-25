@@ -23,7 +23,8 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
-use \Magento\Webapi\Model\Config\Converter;
+use Magento\Webapi\Model\Config\Converter,
+    Magento\Filesystem\Directory\ReadInterface;
 
 /**
  * Webapi Config Model for Soap.
@@ -40,11 +41,8 @@ class Config
     const KEY_ACL_RESOURCES = 'resources';
     /**#@-*/
 
-    /** @var \Magento\Filesystem */
-    protected $_filesystem;
-
-    /** @var \Magento\App\Dir */
-    protected $_dir;
+    /** @var ReadInterface */
+    protected $modulesDirectory;
 
     /** @var \Magento\Webapi\Model\Config */
     protected $_config;
@@ -70,17 +68,15 @@ class Config
     /**
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\App\Dir $dir
      * @param \Magento\Webapi\Model\Config $config
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Filesystem $filesystem,
-        \Magento\App\Dir $dir,
         \Magento\Webapi\Model\Config $config
     ) {
-        $this->_filesystem = $filesystem;
-        $this->_dir = $dir;
+        // TODO: Check if Service specific XSD is already cached
+        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
         $this->_config = $config;
         $this->_objectManager = $objectManager;
     }
@@ -204,9 +200,6 @@ class Config
      */
     public function getServiceSchemaDOM($serviceClass)
     {
-         // TODO: Check if Service specific XSD is already cached
-        $modulesDir = $this->_dir->getDir(\Magento\App\Dir::MODULES);
-
         // TODO: Change pattern to match interface instead of class. Think about sub-services.
         if (!preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $serviceClass, $matches)) {
             // TODO: Generate exception when error handling strategy is defined
@@ -217,10 +210,10 @@ class Config
         /** Convert "_Catalog_Attribute" into "Catalog/Attribute" */
         $servicePath = str_replace('_', '/', ltrim($matches[3], '_'));
         $version = $matches[4];
-        $schemaPath = "{$modulesDir}/{$vendorName}/{$moduleName}/etc/schema/{$servicePath}{$version}.xsd";
+        $schemaPath = "{$vendorName}/{$moduleName}/etc/schema/{$servicePath}{$version}.xsd";
 
-        if ($this->_filesystem->isFile($schemaPath)) {
-            $schema = $this->_filesystem->read($schemaPath);
+        if ($this->modulesDirectory->isFile($schemaPath)) {
+            $schema = $this->modulesDirectory->readFile($schemaPath);
         } else {
             $schema = '';
         }

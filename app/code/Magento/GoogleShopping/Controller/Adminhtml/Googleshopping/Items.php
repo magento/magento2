@@ -87,7 +87,7 @@ class Items extends \Magento\Backend\App\Action
         ) {
             $_countryInfo = $this->_objectManager->get('Magento\GoogleShopping\Model\Config')
                 ->getTargetCountryInfo($this->_getStore()->getId());
-            $this->_getSession()->addNotice(
+            $this->messageManager->addNotice(
                 __("The store's currency should be set to %1 for %2 in system configuration. Otherwise item prices won't be correct in Google Content.", $_countryInfo['currency_name'], $_countryInfo['name'])
             );
         }
@@ -146,7 +146,7 @@ class Items extends \Magento\Backend\App\Action
                 ->addProducts($productIds, $storeId);
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
             // Google requires CAPTCHA for login
-            $this->_getSession()->addError(__($e->getMessage()));
+            $this->messageManager->addError(__($e->getMessage()));
             $flag->unlock();
             $this->_redirectToCaptcha($e);
             return;
@@ -186,7 +186,7 @@ class Items extends \Magento\Backend\App\Action
                 ->deleteItems($itemIds);
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
             // Google requires CAPTCHA for login
-            $this->_getSession()->addError(__($e->getMessage()));
+            $this->messageManager->addError(__($e->getMessage()));
             $flag->unlock();
             $this->_redirectToCaptcha($e);
             return;
@@ -226,7 +226,7 @@ class Items extends \Magento\Backend\App\Action
                 ->synchronizeItems($itemIds);
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
             // Google requires CAPTCHA for login
-            $this->_getSession()->addError(__($e->getMessage()));
+            $this->messageManager->addError(__($e->getMessage()));
             $flag->unlock();
             $this->_redirectToCaptcha($e);
             return;
@@ -257,20 +257,20 @@ class Items extends \Magento\Backend\App\Action
                     ->urlDecode($this->getRequest()->getParam('captcha_token')),
                 $this->getRequest()->getParam('user_confirm')
             );
-            $this->_getSession()->addSuccess(__('Captcha has been confirmed.'));
+            $this->messageManager->addSuccess(__('Captcha has been confirmed.'));
 
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
-            $this->_getSession()->addError(__('There was a Captcha confirmation error: %1', $e->getMessage()));
+            $this->messageManager->addError(__('There was a Captcha confirmation error: %1', $e->getMessage()));
             $this->_redirectToCaptcha($e);
             return;
         } catch (\Zend_Gdata_App_Exception $e) {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 $this->_objectManager->get('Magento\GoogleShopping\Helper\Data')
                     ->parseGdataExceptionMessage($e->getMessage())
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->_getSession()->addError(__('Something went wrong during Captcha confirmation.'));
+            $this->messageManager->addError(__('Something went wrong during Captcha confirmation.'));
         }
 
         $this->_redirect('adminhtml/*/index', array('store'=>$storeId));

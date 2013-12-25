@@ -208,17 +208,17 @@ class Template extends \Magento\Backend\App\Action
 
             $template->save();
 
-            $this->_getSession()->addSuccess(__('The newsletter template has been saved.'));
+            $this->messageManager->addSuccess(__('The newsletter template has been saved.'));
             $this->_getSession()->setFormData(false);
 
             $this->_redirect('*/template');
             return;
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError(nl2br($e->getMessage()));
+            $this->messageManager->addError(nl2br($e->getMessage()));
             $this->_getSession()->setData('newsletter_template_form_data',
                 $this->getRequest()->getParams());
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e,
+            $this->messageManager->addException($e,
                 __('An error occurred while saving this template.')
             );
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
@@ -238,12 +238,12 @@ class Template extends \Magento\Backend\App\Action
         if ($template->getId()) {
             try {
                 $template->delete();
-                $this->_getSession()->addSuccess(__('The newsletter template has been deleted.'));
+                $this->messageManager->addSuccess(__('The newsletter template has been deleted.'));
                 $this->_getSession()->setFormData(false);
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e,
+                $this->messageManager->addException($e,
                     __('An error occurred while deleting this template.')
                 );
             }

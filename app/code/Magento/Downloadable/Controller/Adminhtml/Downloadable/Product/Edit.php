@@ -116,7 +116,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
             try {
                 $this->_processDownload($resource, $resourceType);
             } catch (\Magento\Core\Exception $e) {
-                $this->_getCustomerSession()->addError(__('Something went wrong while getting the requested content.'));
+                $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
             }
         }
         exit(0);

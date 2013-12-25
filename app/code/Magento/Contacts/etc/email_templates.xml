@@ -24,5 +24,5 @@
  */
 -->
 <config>
-    <template id="contacts_email_email_template" label="Contact Form" file="submitted_form.html" type="text"/>
+    <template id="contacts_email_email_template" label="Contact Form" file="submitted_form.html" type="text" module="Magento_Contacts"/>
 </config>

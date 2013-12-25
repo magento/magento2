@@ -33,7 +33,7 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Product\Downloads;
 
-class Grid extends \Magento\Adminhtml\Block\Widget\Grid
+class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Reports\Model\Resource\Product\Downloads\CollectionFactory
@@ -43,17 +43,19 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\Resource\Product\Downloads\CollectionFactory $downloadsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\Resource\Product\Downloads\CollectionFactory $downloadsFactory,
         array $data = array()
     ) {
         $this->_downloadsFactory = $downloadsFactory;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     protected function _construct()

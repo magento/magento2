@@ -48,17 +48,25 @@ class StoreView extends \Magento\Backend\Block\Template
     protected $_customizationConfig;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Resource\Website\Collection $websiteCollection
      * @param \Magento\Theme\Model\Config\Customization $customizationConfig
+     * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Resource\Website\Collection $websiteCollection,
         \Magento\Theme\Model\Config\Customization $customizationConfig,
+        \Magento\Core\Helper\Data $coreHelper,
         array $data = array()
     ) {
+        $this->_coreHelper = $coreHelper;
         $this->_websiteCollection = $websiteCollection;
         $this->_customizationConfig = $customizationConfig;
 
@@ -212,7 +220,7 @@ class StoreView extends \Magento\Backend\Block\Template
         $options['afterAssignOpen']  = false;
 
         /** @var $helper \Magento\Core\Helper\Data */
-        $helper = $this->helper('Magento\Core\Helper\Data');
+        $helper = $this->_coreHelper;
 
         return $helper->jsonEncode($options);
     }

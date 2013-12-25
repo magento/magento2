@@ -32,6 +32,25 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css;
 class Group extends \Magento\Backend\Block\Widget\Form
 {
     /**
+     * @var \Magento\DesignEditor\Helper\Data
+     */
+    protected $_designEditorHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\DesignEditor\Helper\Data $designEditorHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\DesignEditor\Helper\Data $designEditorHelper,
+        array $data = array()
+    ) {
+        $this->_designEditorHelper = $designEditorHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Get url to download CSS file
      *
      * @param string $fileId
@@ -42,7 +61,7 @@ class Group extends \Magento\Backend\Block\Widget\Form
     {
         return $this->getUrl('adminhtml/system_design_theme/downloadCss', array(
             'theme_id' => $themeId,
-            'file'     => $this->_helperFactory->get('Magento\DesignEditor\Helper\Data')->urlEncode($fileId)
+            'file'     => $this->_designEditorHelper->urlEncode($fileId)
         ));
     }
 

@@ -117,7 +117,7 @@ class Instance extends \Magento\Backend\App\Action
                 ->load($instanceId)
                 ->setCode($code);
             if (!$widgetInstance->getId()) {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('Please specify a correct widget.')
                 );
                 return false;
@@ -199,8 +199,8 @@ class Instance extends \Magento\Backend\App\Action
         $widgetInstance = $this->_initWidgetInstance();
         $result = $widgetInstance->validate();
         if ($result !== true && is_string($result)) {
-            $this->_getSession()->addError($result);
-            $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
+            $this->messageManager->addError($result);
+            $this->_view->getLayout()->initMessages();
             $response->setError(true);
             $response->setMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
         }
@@ -224,7 +224,7 @@ class Instance extends \Magento\Backend\App\Action
             ->setWidgetParameters($this->getRequest()->getPost('parameters'));
         try {
             $widgetInstance->save();
-            $this->_getSession()->addSuccess(
+            $this->messageManager->addSuccess(
                 __('The widget instance has been saved.')
             );
             if ($this->getRequest()->getParam('back', false)) {
@@ -237,7 +237,7 @@ class Instance extends \Magento\Backend\App\Action
             }
             return;
         } catch (\Exception $exception) {
-            $this->_getSession()->addError($exception->getMessage());
+            $this->messageManager->addError($exception->getMessage());
             $this->_logger->logException($exception);
             $this->_redirect('adminhtml/*/edit', array('_current' => true));
             return;
@@ -256,11 +256,11 @@ class Instance extends \Magento\Backend\App\Action
         if ($widgetInstance) {
             try {
                 $widgetInstance->delete();
-                $this->_getSession()->addSuccess(
+                $this->messageManager->addSuccess(
                     __('The widget instance has been deleted.')
                 );
             } catch (\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             }
         }
         $this->_redirect('adminhtml/*/');
@@ -298,9 +298,9 @@ class Instance extends \Magento\Backend\App\Action
             ->setUseMassaction(true)
             ->setProductTypeId($productTypeId)
             ->setSelectedProducts(explode(',', $selected));
-        /* @var $serializer \Magento\Adminhtml\Block\Widget\Grid\Serializer */
+        /* @var $serializer \Magento\Backend\Block\Widget\Grid\Serializer */
         $serializer = $this->_view->getLayout()->createBlock(
-            'Magento\Adminhtml\Block\Widget\Grid\Serializer',
+            'Magento\Backend\Block\Widget\Grid\Serializer',
             '',
             array(
                 'data' => array(

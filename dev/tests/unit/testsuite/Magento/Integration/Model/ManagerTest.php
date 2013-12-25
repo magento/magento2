@@ -90,7 +90,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                     array(
                         'TestIntegration1' => array(
                             'email' => 'test-integration1@magento.com',
-                            'endpoint_url' => 'http://endpoint.com'
+                            'endpoint_url' => 'http://endpoint.com',
+                            'identity_link_url' => 'http://www.example.com/identity'
                         ),
                         'TestIntegration2' => array(
                             'email' => 'test-integration2@magento.com'
@@ -109,6 +110,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             Integration::NAME => 'TestIntegration1',
             Integration::EMAIL => 'test-integration1@magento.com',
             Integration::ENDPOINT => 'http://endpoint.com',
+            Integration::IDENTITY_LINK_URL => 'http://www.example.com/identity',
             Integration::SETUP_TYPE => 1,
         );
 

@@ -40,11 +40,6 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_backendHelperMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_layoutMock;
 
     /**
@@ -67,11 +62,6 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_requestMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Helper\HelperFactory
-     */
-    protected $_helperFactoryMock;
-
     protected function setUp()
     {
         $this->_gridMock = $this->getMock('Magento\Backend\Block\Widget\Grid', array('getId'), array(), '', false);
@@ -83,10 +73,6 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             array(), '', false, false
         );
 
-        $this->_backendHelperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-        $this->_layoutMock->expects($this->any())
-            ->method('helper')
-            ->will($this->returnValue($this->_backendHelperMock));
         $this->_layoutMock->expects($this->any())
             ->method('getParentName')
             ->with('test_grid_massaction')
@@ -100,20 +86,10 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
 
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
 
-        $this->_helperFactoryMock = $this->getMock(
-            'Magento\App\Helper\HelperFactory', array('get'), array(), '', false, false
-        );
-        $this->_helperFactoryMock
-            ->expects($this->any())
-            ->method('get')
-            ->with('Magento\Backend\Helper\Data')
-            ->will($this->returnValue($this->_backendHelperMock));
-
         $arguments = array(
             'layout'       => $this->_layoutMock,
             'request'      => $this->_requestMock,
             'urlBuilder'   => $this->_urlModelMock,
-            'helperFactory' => $this->_helperFactoryMock,
             'data'         => array(
                 'massaction_id_field'  => 'test_id',
                 'massaction_id_filter' => 'test_id'
@@ -128,7 +104,6 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_layoutMock);
-        unset($this->_backendHelperMock);
         unset($this->_eventManagerMock);
         unset($this->_gridMock);
         unset($this->_urlModelMock);

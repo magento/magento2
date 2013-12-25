@@ -200,10 +200,10 @@ class Excel
     /**
      * Write Converted XML Data to Temporary File
      *
-     * @param \Magento\Filesystem\StreamInterface $stream
+     * @param \Magento\Filesystem\File\WriteInterface $stream
      * @param string $sheetName
      */
-    public function write(\Magento\Filesystem\StreamInterface $stream, $sheetName = '')
+    public function write(\Magento\Filesystem\File\WriteInterface $stream, $sheetName = '')
     {
         $stream->write($this->_getXmlHeader($sheetName));
 

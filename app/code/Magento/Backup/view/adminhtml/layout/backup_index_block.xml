@@ -40,7 +40,7 @@
                     <argument name="options" xsi:type="array">
                         <item name="delete" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Delete</item>
-                            <item name="url" xsi:type="string">adminhtml/*/massDelete</item>
+                            <item name="url" xsi:type="string">backup/*/massDelete</item>
                             <item name="confirm" xsi:type="string" translate="true">Are you sure you want to delete the selected backup(s)?</item>
                         </item>
                     </argument>

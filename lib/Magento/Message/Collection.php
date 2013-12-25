@@ -37,28 +37,17 @@ class Collection
     protected $messages = array();
 
     /**
-     * @var string
+     * @var MessageInterface
      */
     protected $lastAddedMessage;
 
     /**
      * Adding new message to collection
      *
-     * @param AbstractMessage $message
+     * @param MessageInterface $message
      * @return Collection
      */
-    public function add(AbstractMessage $message)
-    {
-        return $this->addMessage($message);
-    }
-
-    /**
-     * Adding new message to collection
-     *
-     * @param AbstractMessage $message
-     * @return Collection
-     */
-    public function addMessage(AbstractMessage $message)
+    public function addMessage(MessageInterface $message)
     {
         if (!isset($this->messages[$message->getType()])) {
             $this->messages[$message->getType()] = array();
@@ -77,7 +66,7 @@ class Collection
     {
         foreach ($this->messages as $type => $messages) {
             foreach ($messages as $id => $message) {
-                /** @var $message AbstractMessage */
+                /** @var $message MessageInterface */
                 if (!$message->getIsSticky()) {
                     unset($this->messages[$type][$id]);
                 }
@@ -86,13 +75,16 @@ class Collection
                 unset($this->messages[$type]);
             }
         }
+        if ($this->lastAddedMessage instanceof MessageInterface && !$this->lastAddedMessage->getIsSticky()) {
+            $this->lastAddedMessage = null;
+        }
         return $this;
     }
 
     /**
      * Get last added message if any
      *
-     * @return AbstractMessage|null
+     * @return MessageInterface|null
      */
     public function getLastAddedMessage()
     {
@@ -103,13 +95,13 @@ class Collection
      * Get first even message by identifier
      *
      * @param string $identifier
-     * @return AbstractMessage|null
+     * @return MessageInterface|null
      */
     public function getMessageByIdentifier($identifier)
     {
         foreach ($this->messages as $messages) {
             foreach ($messages as $message) {
-                /** @var $message AbstractMessage */
+                /** @var $message MessageInterface */
                 if ($identifier === $message->getIdentifier()) {
                     return $message;
                 }
@@ -126,7 +118,7 @@ class Collection
     {
         foreach ($this->messages as $type => $messages) {
             foreach ($messages as $id => $message) {
-                /** @var $message AbstractMessage */
+                /** @var $message MessageInterface */
                 if ($identifier === $message->getIdentifier()) {
                     unset($this->messages[$type][$id]);
                 }
@@ -140,21 +132,16 @@ class Collection
     /**
      * Retrieve messages collection items
      *
-     * @param string $type
      * @return array
      */
-    public function getItems($type = null)
+    public function getItems()
     {
-        if ($type) {
-            return isset($this->messages[$type]) ? $this->messages[$type] : array();
-        }
-
-        $arrRes = array();
+        $result = array();
         foreach ($this->messages as $messages) {
-            $arrRes = array_merge($arrRes, $messages);
+            $result = array_merge($result, $messages);
         }
 
-        return $arrRes;
+        return $result;
     }
 
     /**
@@ -175,37 +162,35 @@ class Collection
      */
     public function getErrors()
     {
-        return $this->getItemsByType(Factory::ERROR);
+        return $this->getItemsByType(MessageInterface::TYPE_ERROR);
     }
 
     /**
-     * @return string
+     * Retrieve messages count by type
+     *
+     * @param string $type
+     * @return int
      */
-    public function toString()
+    public function getCountByType($type)
     {
-        $out = '';
-        $arrItems = $this->getItems();
-        foreach ($arrItems as $item) {
-            $out .= $item->toString();
+        $result = 0;
+        if (isset($this->messages[$type])) {
+            $result = count($this->messages[$type]);
         }
-
-        return $out;
+        return $result;
     }
 
     /**
      * Retrieve messages count
      *
-     * @param null|string $type
      * @return int
      */
-    public function count($type = null)
+    public function getCount()
     {
-        if ($type) {
-            if (isset($this->messages[$type])) {
-                return count($this->messages[$type]);
-            }
-            return 0;
+        $result = 0;
+        foreach ($this->messages as $messages) {
+            $result += count($messages);
         }
-        return count($this->messages);
+        return $result;
     }
 }

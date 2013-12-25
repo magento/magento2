@@ -70,7 +70,7 @@ class Product extends \Magento\App\Action\Action
      * If allow only for customer - redirect to login page
      *
      * @param RequestInterface $request
-     * @return mixed
+     * @return \Magento\App\ResponseInterface
      * @throws \Magento\App\Action\NotFoundException
      */
     public function dispatch(RequestInterface $request)
@@ -164,13 +164,13 @@ class Product extends \Magento\App\Action\Action
         $catalogSession = $this->_objectManager->get('Magento\Catalog\Model\Session');
 
         if ($model->getMaxSendsToFriend() && $model->isExceedLimit()) {
-            $catalogSession->addNotice(
+            $this->messageManager->addNotice(
                 __('You can\'t send messages more than %1 times an hour.', $model->getMaxSendsToFriend())
             );
         }
 
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages('Magento\Catalog\Model\Session');
+        $this->_view->getLayout()->initMessages();
 
         $this->_eventManager->dispatch('sendfriend_product', array('product' => $product));
         $data = $catalogSession->getSendfriendFormData();
@@ -222,7 +222,7 @@ class Product extends \Magento\App\Action\Action
             $validate = $model->validate();
             if ($validate === true) {
                 $model->send();
-                $catalogSession->addSuccess(__('The link to a friend was sent.'));
+                $this->messageManager->addSuccess(__('The link to a friend was sent.'));
                 $url = $product->getProductUrl();
                 $this->getResponse()->setRedirect($this->_redirect->success($url));
                 return;
@@ -230,16 +230,16 @@ class Product extends \Magento\App\Action\Action
             else {
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
-                        $catalogSession->addError($errorMessage);
+                        $this->messageManager->addError($errorMessage);
                     }
                 } else {
-                    $catalogSession->addError(__('We found some problems with the data.'));
+                    $this->messageManager->addError(__('We found some problems with the data.'));
                 }
             }
         } catch (\Magento\Core\Exception $e) {
-            $catalogSession->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $catalogSession->addException($e, __('Some emails were not sent.'));
+            $this->messageManager->addException($e, __('Some emails were not sent.'));
         }
 
         // save form data

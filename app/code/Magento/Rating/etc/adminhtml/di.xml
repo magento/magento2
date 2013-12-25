@@ -26,7 +26,7 @@
 <config>
     <type name="Magento\Rating\Block\Adminhtml\Edit\Tab\Form">
         <param name="session">
-            <instance type="Magento\Adminhtml\Model\Session" />
+            <instance type="Magento\Backend\Model\Session" />
         </param>
     </type>
 </config>

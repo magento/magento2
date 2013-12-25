@@ -33,7 +33,7 @@ class Design extends \Magento\Backend\Block\Template
     {
         $this->setTemplate('Magento_Backend::system/design/index.phtml');
 
-        $this->addChild('add_new_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('add_new_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Add Design Change'),
             'onclick'   => "setLocation('".$this->getUrl('adminhtml/*/new')."')",
             'class'   => 'add'

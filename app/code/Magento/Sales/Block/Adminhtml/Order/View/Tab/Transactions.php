@@ -35,7 +35,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 class Transactions
     extends \Magento\Sales\Block\Adminhtml\Transactions\Grid
-    implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
+    implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
 
     /**

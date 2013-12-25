@@ -417,8 +417,8 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
                         . " AND sv.store_id = " . (int)$storeId,
                     array())
                 ->join(
-                    array('ds' => $statusInfo['table']),
-                    "ds.entity_id = pw.product_id AND ds.attribute_id = {$statusInfo['id']} AND ds.store_id = 0",
+                    array('dss' => $statusInfo['table']),
+                    "dss.entity_id = pw.product_id AND dss.attribute_id = {$statusInfo['id']} AND dss.store_id = 0",
                     array())
                 ->joinLeft(
                     array('ss' => $statusInfo['table']),
@@ -428,7 +428,7 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
                 ->where('i.product_id IS NULL')
                 ->where('pw.website_id=?', $websiteId)
                 ->where(
-                    $this->_getWriteAdapter()->getCheckSql('ss.value_id IS NOT NULL', 'ss.value', 'ds.value') . ' = ?',
+                    $this->_getWriteAdapter()->getCheckSql('ss.value_id IS NOT NULL', 'ss.value', 'dss.value') . ' = ?',
                     \Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
                 ->columns(array(
                     'category_id'   => new \Zend_Db_Expr($rootId),
@@ -501,8 +501,8 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
                 ))
             )
             ->joinLeft(
-                array('ds'=>$statusInfo['table']),
-                "ds.entity_id=cp.product_id AND ds.attribute_id={$statusInfo['id']} AND ds.store_id=0",
+                array('dss'=>$statusInfo['table']),
+                "dss.entity_id=cp.product_id AND dss.attribute_id={$statusInfo['id']} AND dss.store_id=0",
                 array())
             ->joinLeft(
                 array('ss'=>$statusInfo['table']),
@@ -511,7 +511,7 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
             ->where(
                 $adapter->getCheckSql('ss.value_id IS NOT NULL',
                     $adapter->quoteIdentifier('ss.value'),
-                    $adapter->quoteIdentifier('ds.value')
+                    $adapter->quoteIdentifier('dss.value')
                 ) . ' = ?',
                 \Magento\Catalog\Model\Product\Status::STATUS_ENABLED
             );
@@ -600,8 +600,8 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
                 ))
             )
             ->joinLeft(
-                array('ds'=>$statusInfo['table']),
-                "ds.entity_id=pw.product_id AND ds.attribute_id={$statusInfo['id']} AND ds.store_id=0",
+                array('dss'=>$statusInfo['table']),
+                "dss.entity_id=pw.product_id AND dss.attribute_id={$statusInfo['id']} AND dss.store_id=0",
                 array())
             ->joinLeft(
                 array('ss'=>$statusInfo['table']),
@@ -618,7 +618,7 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
                     $adapter->quoteIdentifier('dca.value')) . '=1) OR ce.entity_id=rc.entity_id'
             )
             ->where(
-                $adapter->getCheckSql('ss.value_id IS NOT NULL', 'ss.value', 'ds.value') . '=?',
+                $adapter->getCheckSql('ss.value_id IS NOT NULL', 'ss.value', 'dss.value') . '=?',
                 \Magento\Catalog\Model\Product\Status::STATUS_ENABLED
             )
             ->group(array('ce.entity_id', 'cp.product_id', 's.store_id'));
@@ -672,8 +672,8 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
                 ))
             )
             ->joinLeft(
-                array('ds'=>$statusInfo['table']),
-                "ds.entity_id=pw.product_id AND ds.attribute_id={$statusInfo['id']} AND ds.store_id=0",
+                array('dss'=>$statusInfo['table']),
+                "dss.entity_id=pw.product_id AND dss.attribute_id={$statusInfo['id']} AND dss.store_id=0",
                 array())
             ->joinLeft(
                 array('ss'=>$statusInfo['table']),
@@ -686,7 +686,7 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
             ->where(
                     $adapter->getCheckSql('ss.value_id IS NOT NULL',
                         $adapter->quoteIdentifier('ss.value'),
-                        $adapter->quoteIdentifier('ds.value')
+                        $adapter->quoteIdentifier('dss.value')
                     ) . ' = ?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
             ->where('pw.product_id IN(?)', $productIds);
 
@@ -710,8 +710,8 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
                     . " AND sv.store_id = s.store_id",
                 array())
             ->join(
-                array('ds' => $statusInfo['table']),
-                "ds.entity_id = pw.product_id AND ds.attribute_id = {$statusInfo['id']} AND ds.store_id = 0",
+                array('dss' => $statusInfo['table']),
+                "dss.entity_id = pw.product_id AND dss.attribute_id = {$statusInfo['id']} AND dss.store_id = 0",
                 array())
             ->joinLeft(
                 array('ss' => $statusInfo['table']),
@@ -719,7 +719,7 @@ class Product extends \Magento\Index\Model\Resource\AbstractResource
                 array())
             ->where('i.product_id IS NULL')
             ->where(
-                $adapter->getCheckSql('ss.value_id IS NOT NULL', 'ss.value', 'ds.value') . '=?',
+                $adapter->getCheckSql('ss.value_id IS NOT NULL', 'ss.value', 'dss.value') . '=?',
                 \Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
             ->where('pw.product_id IN(?)', $productIds)
             ->columns(array(

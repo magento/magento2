@@ -49,7 +49,7 @@ class Config extends \Magento\Install\Block\AbstractBlock
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
-     * @param \Magento\Core\Model\Session\Generic $session
+     * @param \Magento\Session\Generic $session
      * @param \Magento\Install\Model\Installer\Config $installerConfig
      * @param array $data
      */
@@ -57,7 +57,7 @@ class Config extends \Magento\Install\Block\AbstractBlock
         \Magento\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
-        \Magento\Core\Model\Session\Generic $session,
+        \Magento\Session\Generic $session,
         \Magento\Install\Model\Installer\Config $installerConfig,
         array $data = array()
     ) {

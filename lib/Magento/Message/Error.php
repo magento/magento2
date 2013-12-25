@@ -30,7 +30,12 @@ namespace Magento\Message;
 class Error extends AbstractMessage
 {
     /**
-     * @var string
+     * Getter message type
+     *
+     * @return string
      */
-    protected $type = Factory::ERROR;
+    public function getType()
+    {
+        return MessageInterface::TYPE_ERROR;
+    }
 }

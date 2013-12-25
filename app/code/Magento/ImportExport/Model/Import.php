@@ -133,8 +133,13 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_behaviorFactory;
 
     /**
+     * @var \Magento\Filesystem
+     */
+    protected $_filesystem;
+
+    /**
      * @param \Magento\Logger $logger
-     * @param \Magento\App\Dir $dir
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Log\AdapterFactory $adapterFactory
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\Core\Model\Config $coreConfig
@@ -150,7 +155,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\App\Dir $dir,
+        \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Log\AdapterFactory $adapterFactory,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\Core\Model\Config $coreConfig,
@@ -174,7 +179,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->_uploaderFactory = $uploaderFactory;
         $this->_indexer = $indexer;
         $this->_behaviorFactory = $behaviorFactory;
-        parent::__construct($logger, $dir, $adapterFactory, $data);
+        $this->_filesystem = $filesystem;
+        parent::__construct($logger, $filesystem, $adapterFactory, $data);
     }
 
     /**
@@ -228,7 +234,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     protected function _getSourceAdapter($sourceFile)
     {
-        return \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile);
+        return \Magento\ImportExport\Model\Import\Adapter::findAdapterFor(
+            $sourceFile,
+            $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT)
+        );
     }
 
     /**
@@ -410,7 +419,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     public function getWorkingDir()
     {
-        return $this->_dir->getDir('var') . DS . 'importexport' . DS;
+        return $this->_varDirectory->getAbsolutePath('importexport/');
     }
 
     /**
@@ -536,19 +545,25 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
         $uploadedFile = $result['path'] . $result['file'];
         if (!$extension) {
-            unlink($uploadedFile);
+            $this->_varDirectory->delete($uploadedFile);
             throw new \Magento\Core\Exception(__('Uploaded file has no extension'));
         }
         $sourceFile = $this->getWorkingDir() . $entity;
 
         $sourceFile .= '.' . $extension;
+        $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
 
         if (strtolower($uploadedFile) != strtolower($sourceFile)) {
-            if (file_exists($sourceFile)) {
-                unlink($sourceFile);
+            if ($this->_varDirectory->isExist($sourceFileRelative)) {
+                $this->_varDirectory->delete($sourceFileRelative);
             }
 
-            if (!@rename($uploadedFile, $sourceFile)) {
+            try {
+                $this->_varDirectory->renameFile(
+                    $this->_varDirectory->getRelativePath($uploadedFile),
+                    $sourceFileRelative
+                );
+            } catch (\Magento\Filesystem\FilesystemException $e) {
                 throw new \Magento\Core\Exception(__('Source file moving failed'));
             }
         }
@@ -557,7 +572,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         try {
             $this->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {
-            unlink($sourceFile);
+            $this->_varDirectory->delete($sourceFileRelative);
             throw new \Magento\Core\Exception($e->getMessage());
         }
         return $sourceFile;
@@ -571,10 +586,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     protected function _removeBom($sourceFile)
     {
-        $string = file_get_contents($sourceFile);
+        $string = $this->_varDirectory->readFile($this->_varDirectory->getRelativePath($sourceFile));
         if ($string !== false && substr($string, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
             $string = substr($string, 3);
-            file_put_contents($sourceFile, $string);
+            $this->_varDirectory->writeFile($this->_varDirectory->getRelativePath($sourceFile), $string);
         }
         return $this;
     }

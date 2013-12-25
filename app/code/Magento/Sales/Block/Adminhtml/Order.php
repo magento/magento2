@@ -33,7 +33,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml;
 
-class Order extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Order extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected function _construct()
     {

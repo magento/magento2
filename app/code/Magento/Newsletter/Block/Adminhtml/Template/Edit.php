@@ -33,7 +33,7 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
-class Edit extends \Magento\Adminhtml\Block\Widget
+class Edit extends \Magento\Backend\Block\Widget
 {
     /**
      * Edit Block model
@@ -94,26 +94,26 @@ class Edit extends \Magento\Adminhtml\Block\Widget
             $block->setCanLoadTinyMce(true);
         }
 
-        $this->addChild('back_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Back'),
             'onclick'   => "window.location.href = '" . $this->getUrl('*/*') . "'",
             'class'     => 'action-back'
         ));
 
-        $this->addChild('reset_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Reset'),
             'onclick'   => 'window.location.href = window.location.href',
             'class'     => 'reset'
         ));
 
-        $this->addChild('to_plain_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('to_plain_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Convert to Plain Text'),
             'onclick'   => 'templateControl.stripTags();',
             'id'            => 'convert_button',
             'class'     => 'convert'
         ));
 
-        $this->addChild('to_html_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('to_html_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Return HTML Version'),
             'onclick'   => 'templateControl.unStripTags();',
             'id'            => 'convert_button_back',
@@ -121,25 +121,25 @@ class Edit extends \Magento\Adminhtml\Block\Widget
             'class'     => 'return'
         ));
 
-        $this->addChild('save_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Save Template'),
             'onclick'   => 'templateControl.save();',
             'class'     => 'save primary'
         ));
 
-        $this->addChild('save_as_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('save_as_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Save As'),
             'onclick'   => 'templateControl.saveAs();',
             'class'     => 'save-as'
         ));
 
-        $this->addChild('preview_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('preview_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Preview Template'),
             'onclick'   => 'templateControl.preview();',
             'class'     => 'preview'
         ));
 
-        $this->addChild('delete_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
             'label'     => __('Delete Template'),
             'onclick'   => 'templateControl.deleteTemplate();',
             'class'     => 'delete'

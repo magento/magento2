@@ -62,7 +62,9 @@ class ServiceCallsConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function getServiceCallsConfigFiles()
     {
         return glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')->getDir('app')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get('Magento\Filesystem')
+                ->getPath(\Magento\Filesystem::APP)
                 . '/*/*/*/etc/service_calls.xml'
         );
     }

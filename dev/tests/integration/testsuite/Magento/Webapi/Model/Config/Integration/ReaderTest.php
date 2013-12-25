@@ -52,8 +52,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testRead()
     {
         $configFiles = array(
-            realpath(__DIR__ . '/_files/apiA.xml'),
-            realpath(__DIR__ . '/_files/apiB.xml')
+            file_get_contents(realpath(__DIR__ . '/_files/apiA.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/apiB.xml'))
         );
         $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
 

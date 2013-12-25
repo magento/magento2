@@ -33,7 +33,7 @@
  */
 namespace Magento\Index\Block\Adminhtml\Process\Grid;
 
-class Massaction extends \Magento\Adminhtml\Block\Widget\Grid\Massaction\AbstractMassaction
+class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\Extended
 {
     /**
      * Get ids for only visible indexers

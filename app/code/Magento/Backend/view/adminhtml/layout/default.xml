@@ -279,7 +279,7 @@
         <block class="Magento\Backend\Block\Page\Header" name="header" as="header">
             <block class="Magento\Backend\Block\GlobalSearch" as="search" acl="Magento_Adminhtml::global_search"/>
         </block>
-        <block class="Magento\Adminhtml\Block\Widget\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
+        <block class="Magento\Backend\Block\Widget\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
         <!--<update handle="formkey"/> this won't work, see the try/catch and a jammed exception in \Magento\Core\Model\Layout::createBlock() -->
         <block class="Magento\Backend\Block\Admin\Formkey" name="formkey" as="formkey" template="Magento_Backend::admin/formkey.phtml"/>
         <!-- deprecated since 1.7.0.0 see \Magento\Theme\Block\Js\Translate -->

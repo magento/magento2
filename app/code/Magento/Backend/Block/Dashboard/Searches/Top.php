@@ -49,22 +49,24 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     protected $_moduleManager;
 
     /**
-     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queriesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Module\Manager $moduleManager,
         \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queriesFactory,
         array $data = array()
     ) {
         $this->_moduleManager = $moduleManager;
         $this->_queriesFactory = $queriesFactory;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     protected function _construct()

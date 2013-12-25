@@ -108,6 +108,11 @@ class Instance extends \Magento\Core\Model\AbstractModel
     protected $mathRandom;
 
     /**
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $_directory;
+    
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Escaper $escaper
@@ -118,6 +123,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Widget\Model\Widget $widgetModel
      * @param \Magento\Widget\Model\NamespaceResolver $namespaceResolver
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Filesystem $filesystem
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $relatedCacheTypes
@@ -134,6 +140,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
         \Magento\Widget\Model\Widget $widgetModel,
         \Magento\Widget\Model\NamespaceResolver $namespaceResolver,
         \Magento\Math\Random $mathRandom,
+        \Magento\Filesystem $filesystem,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $relatedCacheTypes = array(),
@@ -147,6 +154,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
         $this->_reader = $reader;
         $this->_widgetModel = $widgetModel;
         $this->mathRandom = $mathRandom;
+        $this->_directory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
         $this->_namespaceResolver = $namespaceResolver;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -360,6 +368,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve option array of widget types
      *
+     * @param string
      * @return array
      */
     public function getWidgetsOptionArray($value = 'code')
@@ -414,7 +423,8 @@ class Instance extends \Magento\Core\Model\AbstractModel
                     ),
                 ));
 
-                if (is_readable($configFile)) {
+                $isReadable = $this->_directory->isReadable($this->_directory->getRelativePath($configFile));
+                if ($isReadable) {
                     $config = $this->_reader->readFile($configFile);
                     $widgetName = isset($this->_widgetConfigXml['name']) ? $this->_widgetConfigXml['name'] : null;
                     $themeWidgetConfig = null;

@@ -47,7 +47,7 @@ class File extends \Magento\Simplexml\Config\Cache\AbstractCache
     {
     	$this->setData('key', $key);
     	
-    	$file = $this->getDir().DS.$this->getKey();
+    	$file = $this->getDir() . '/' . $this->getKey();
         $this->setFileName($file.'.xml');
         $this->setStatFileName($file.'.stat');
         

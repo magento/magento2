@@ -51,14 +51,8 @@ class Sample extends \Magento\Core\Model\AbstractModel
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';
 
     /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dirModel;
-
-    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\App\Dir $dirModel
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -66,12 +60,10 @@ class Sample extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\App\Dir $dirModel,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_dirModel = $dirModel;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -83,16 +75,6 @@ class Sample extends \Magento\Core\Model\AbstractModel
     {
         $this->_init('Magento\Downloadable\Model\Resource\Sample');
         parent::_construct();
-    }
-
-    /**
-     * Return sample files path
-     *
-     * @return string
-     */
-    public function getSampleDir()
-    {
-        return $this->_dirModel->getDir();
     }
 
     /**
@@ -128,8 +110,7 @@ class Sample extends \Magento\Core\Model\AbstractModel
      */
     public function getBaseTmpPath()
     {
-        return $this->_dirModel->getDir(\Magento\App\Dir::MEDIA)
-            . DS . 'downloadable' . DS . 'tmp' . DS . 'samples';
+        return 'downloadable/tmp/samples';
     }
 
     /**
@@ -139,8 +120,7 @@ class Sample extends \Magento\Core\Model\AbstractModel
      */
     public function getBasePath()
     {
-        return $this->_dirModel->getDir(\Magento\App\Dir::MEDIA)
-            . DS . 'downloadable' . DS . 'files' . DS . 'samples';
+        return 'downloadable/files/samples';
     }
 
     /**

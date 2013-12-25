@@ -26,44 +26,70 @@ namespace Magento\Install\App\Action\Plugin;
 class DirTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Dir plugin
+     *
      * @var \Magento\Install\App\Action\Plugin\Dir
      */
-    protected $_plugin;
+    protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * App state mock
+     *
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\State
      */
-    protected $_appStateMock;
+    protected $appStateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Var directory
+     *
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem\Directory\Write
      */
-    protected $_dirMock;
+    protected $varDirectory;
 
     protected function setUp()
     {
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $this->_dirMock = $this->getMock('Magento\App\Dir', array(), array(), '', false);
-        $this->_plugin = new \Magento\Install\App\Action\Plugin\Dir(
-            $this->_appStateMock,
-            $this->_dirMock
+        $this->appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $this->varDirectory = $this->getMock(
+            'Magento\Filesystem\Directory\Write', array('read', 'isDirectory', 'delete'), array(), '', false
+        );
+        $filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::VAR_DIR)
+            ->will($this->returnValue($this->varDirectory));
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $this->plugin = new \Magento\Install\App\Action\Plugin\Dir(
+            $this->appStateMock,
+            $filesystem,
+            $logger
         );
     }
 
+    /**
+     * Test when app is installed
+     */
     public function testBeforeDispatchWhenAppIsInstalled()
     {
-        $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(false));
-        $this->_dirMock
-            ->expects($this->once())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::VAR_DIR)->will($this->returnValue('dir_name'));
-        $this->assertEquals(array(), $this->_plugin->beforeDispatch(array()));
+        $directories = array('dir1', 'dir2');
+        $this->appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(false));
+        $this->varDirectory->expects($this->once())
+            ->method('read')
+            ->will($this->returnValue($directories));
+        $this->varDirectory->expects($this->exactly(count($directories)))
+            ->method('isDirectory')
+            ->will($this->returnValue(true));
+        $this->varDirectory->expects($this->exactly(count($directories)))
+            ->method('delete');
+        $this->assertEquals(array(), $this->plugin->beforeDispatch(array()));
     }
 
+    /**
+     * Test when app is not installed
+     */
     public function testBeforeDispatchWhenAppIsNotInstalled()
     {
-        $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
-        $this->_dirMock->expects($this->never())->method('getDir');
-        $this->assertEquals(array(), $this->_plugin->beforeDispatch(array()));
+        $this->appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
+        $this->varDirectory->expects($this->never())->method('read');
+        $this->assertEquals(array(), $this->plugin->beforeDispatch(array()));
     }
 }

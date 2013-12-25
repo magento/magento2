@@ -26,7 +26,7 @@
 <config>
     <router id="admin">
         <route id="sales" frontName="sales">
-            <module name="Magento_Sales_Adminhtml" before="Magento_Adminhtml" />
+            <module name="Magento_Sales" before="Magento_Adminhtml" />
         </route>
     </router>
 </config>

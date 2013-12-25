@@ -70,18 +70,31 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_coreData;
 
     /**
+     * @var \Magento\Catalog\Helper\Product
+     */
+    protected $_productHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
+     * @param \Magento\Theme\Helper\Layout $layoutHelper
+     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Stdlib\String $string
+     * @param \Magento\Catalog\Helper\Product $productHelper
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
@@ -90,19 +103,39 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Math\Random $mathRandom,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Wishlist\Helper\Data $wishlistHelper,
+        \Magento\Catalog\Helper\Product\Compare $compareProduct,
+        \Magento\Theme\Helper\Layout $layoutHelper,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Stdlib\String $string,
+        \Magento\Catalog\Helper\Product $productHelper,
         array $data = array()
     ) {
+        $this->_productHelper = $productHelper;
         $this->_coreData = $coreData;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_productFactory = $productFactory;
         $this->_taxCalculation = $taxCalculation;
         $this->string = $string;
-        parent::__construct($context, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
+        parent::__construct(
+            $context,
+            $catalogConfig,
+            $registry,
+            $taxData,
+            $catalogData,
+            $mathRandom,
+            $cartHelper,
+            $wishlistHelper,
+            $compareProduct,
+            $layoutHelper,
+            $imageHelper,
+            $data
+        );
     }
 
     /**
@@ -134,7 +167,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
                 $headBlock->setDescription($this->string->substr($product->getDescription(), 0, 255));
             }
             //@todo: move canonical link to separate block
-            if ($this->helper('Magento\Catalog\Helper\Product')->canUseCanonicalTag()
+            if ($this->_productHelper->canUseCanonicalTag()
                 && !$headBlock->getChildBlock('magento-page-head-product-canonical-link')
             ) {
                 $params = array('_ignore_category'=>true);
@@ -202,7 +235,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         $addUrlValue = $this->_urlBuilder->getUrl('*/*/*', array('_use_rewrite' => true, '_current' => true));
         $additional[$addUrlKey] = $this->_coreData->urlEncode($addUrlValue);
 
-        return $this->helper('Magento\Checkout\Helper\Cart')->getAddUrl($product, $additional);
+        return $this->_cartHelper->getAddUrl($product, $additional);
     }
 
     /**

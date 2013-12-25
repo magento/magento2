@@ -102,17 +102,17 @@ class Currency extends \Magento\Backend\App\Action
             $errors = $importModel->getMessages();
             if (sizeof($errors) > 0) {
                 foreach ($errors as $error) {
-                    $backendSession->addWarning($error);
+                    $this->messageManager->addWarning($error);
                 }
-                $backendSession->addWarning(__('All possible rates were fetched, please click on "Save" to apply'));
+                $this->messageManager->addWarning(__('All possible rates were fetched, please click on "Save" to apply'));
             } else {
-                $backendSession->addSuccess(__('All rates were fetched, please click on "Save" to apply'));
+                $this->messageManager->addSuccess(__('All rates were fetched, please click on "Save" to apply'));
             }
 
             $backendSession->setRates($rates);
         }
         catch (\Exception $e){
-            $backendSession->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         }
         $this->_redirect('adminhtml/*/');
     }
@@ -121,8 +121,6 @@ class Currency extends \Magento\Backend\App\Action
     {
         $data = $this->getRequest()->getParam('rate');
         if (is_array($data)) {
-            /** @var \Magento\Backend\Model\Session $backendSession */
-            $backendSession = $this->_objectManager->get('Magento\Backend\Model\Session');
             try {
                 foreach ($data as $currencyCode => $rate) {
                     foreach( $rate as $currencyTo => $value ) {
@@ -132,7 +130,7 @@ class Currency extends \Magento\Backend\App\Action
                         );
                         $data[$currencyCode][$currencyTo] = $value;
                         if( $value == 0 ) {
-                            $backendSession->addWarning(
+                            $this->messageManager->addWarning(
                                 __('Please correct the input data for %1 => %2 rate', $currencyCode, $currencyTo)
                             );
                         }
@@ -140,9 +138,9 @@ class Currency extends \Magento\Backend\App\Action
                 }
 
                 $this->_objectManager->create('Magento\Directory\Model\Currency')->saveRates($data);
-                $backendSession->addSuccess(__('All valid rates have been saved.'));
+                $this->messageManager->addSuccess(__('All valid rates have been saved.'));
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Backend\Model\Session')->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             }
         }
 

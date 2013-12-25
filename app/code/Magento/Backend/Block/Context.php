@@ -1,7 +1,4 @@
 <?php
-
-namespace Magento\Backend\Block;
-
 /**
  * Backend block context
  *
@@ -25,6 +22,12 @@ namespace Magento\Backend\Block;
  *
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+namespace Magento\Backend\Block;
+
+/**
+ * Backend block context
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -40,14 +43,13 @@ class Context extends \Magento\View\Element\Context
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\TranslateInterface $translator
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\FrontController $frontController
-     * @param \Magento\App\Helper\HelperFactory $helperFactory
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\ConfigInterface $viewConfig
      * @param \Magento\App\Cache\StateInterface $cacheState
@@ -58,7 +60,7 @@ class Context extends \Magento\View\Element\Context
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\AuthorizationInterface $authorization
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -66,14 +68,13 @@ class Context extends \Magento\View\Element\Context
         \Magento\View\LayoutInterface $layout,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\UrlInterface $urlBuilder,
-        \Magento\Core\Model\Translate $translator,
+        \Magento\TranslateInterface $translator,
         \Magento\App\CacheInterface $cache,
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Session\AbstractSession $session,
+        \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\App\FrontController $frontController,
-        \Magento\App\Helper\HelperFactory $helperFactory,
         \Magento\View\Url $viewUrl,
         \Magento\View\ConfigInterface $viewConfig,
         \Magento\App\Cache\StateInterface $cacheState,
@@ -87,27 +88,9 @@ class Context extends \Magento\View\Element\Context
     ) {
         $this->_authorization = $authorization;
         parent::__construct(
-            $request,
-            $layout,
-            $eventManager,
-            $urlBuilder,
-            $translator,
-            $cache,
-            $design,
-            $session,
-            $sidResolver,
-            $storeConfig,
-            $frontController,
-            $helperFactory,
-            $viewUrl,
-            $viewConfig,
-            $cacheState,
-            $logger,
-            $app,
-            $escaper,
-            $filterManager,
-            $locale,
-            $data
+            $request, $layout, $eventManager, $urlBuilder, $translator, $cache, $design, $session, $sidResolver,
+            $storeConfig, $frontController, $viewUrl, $viewConfig, $cacheState, $logger, $app, $escaper,
+            $filterManager, $locale, $data
         );
     }
 

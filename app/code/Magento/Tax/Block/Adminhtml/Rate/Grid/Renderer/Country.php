@@ -33,7 +33,7 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer;
 
-class Country extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Country
+class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Country
 {
 /**
      * Render column for export

@@ -40,11 +40,6 @@ class Url
     protected $_filesystem;
 
     /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dirs;
-
-    /**
      * @var \Magento\View\Service
      */
     protected $_viewService;
@@ -78,7 +73,6 @@ class Url
 
     /**
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\UrlInterface $urlBuilder
      * @param Url\ConfigInterface $config
      * @param Service $viewService
@@ -88,7 +82,6 @@ class Url
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
-        \Magento\App\Dir $dirs,
         \Magento\UrlInterface $urlBuilder,
         \Magento\View\Url\ConfigInterface $config,
         \Magento\View\Service $viewService,
@@ -97,7 +90,6 @@ class Url
         array $fileUrlMap = array()
     ) {
         $this->_filesystem = $filesystem;
-        $this->_dirs = $dirs;
         $this->_urlBuilder = $urlBuilder;
         $this->_config = $config;
         $this->_viewService = $viewService;
@@ -155,10 +147,10 @@ class Url
     public function getPublicFileUrl($publicFilePath, $isSecure = null)
     {
         foreach ($this->_fileUrlMap as $urlMap) {
-            $dir = $this->_dirs->getDir($urlMap['value']);
+            $dir = $this->_filesystem->getPath($urlMap['value']);
+            $publicFilePath = str_replace('\\', '/', $publicFilePath);
             if (strpos($publicFilePath, $dir) === 0) {
                 $relativePath = ltrim(substr($publicFilePath, strlen($dir)), '\\/');
-                $relativePath = str_replace(DIRECTORY_SEPARATOR, '/', $relativePath);
                 $url = $this->_urlBuilder->getBaseUrl(
                     array(
                         '_type' => $urlMap['key'],
@@ -167,12 +159,14 @@ class Url
                 ) . $relativePath;
 
                 if ($this->_isStaticFilesSigned() && $this->_viewService->isViewFileOperationAllowed()) {
-                    $fileMTime = $this->_filesystem->getMTime($publicFilePath);
+                    $directory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+                    $fileMTime = $directory->stat($directory->getRelativePath($publicFilePath))['mtime'];
                     $url .= '?' . $fileMTime;
                 }
                 return $url;
             }
         }
+
         throw new \Magento\Exception(
             "Cannot build URL for the file '$publicFilePath' because it does not reside in a public directory."
         );

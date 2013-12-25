@@ -48,7 +48,7 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
 
     //checking update time
     if (filemtime($configCacheFile) + $config['update_time'] > time()) {
-        $mediaDirectory = trim(str_replace(__DIR__, '', $config['media_directory']), DS);
+        $mediaDirectory = trim(str_replace(__DIR__, '', $config['media_directory']), '/');
         $allowedResources = array_merge($allowedResources, $config['allowed_resources']);
     }
 }

@@ -32,7 +32,7 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
-class Link extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Filesystem $filesystem
@@ -74,7 +74,8 @@ class Link extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Abstract
         $url = $this->escapeHtml($sitemap->getSitemapUrl($row->getSitemapPath(), $row->getSitemapFilename()));
 
         $fileName = preg_replace('/^\//', '', $row->getSitemapPath() . $row->getSitemapFilename());
-        if ($this->_filesystem->isFile(BP . DS . $fileName)) {
+        $directory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        if ($directory->isFile($fileName)) {
             return sprintf('<a href="%1$s">%1$s</a>', $url);
         }
 

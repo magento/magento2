@@ -67,7 +67,7 @@ abstract class AbstractState extends \Magento\Object
      * Otherwise it will return value of the attribute specified by $key
      *
      * $index parameter is ignored
-     * @see \Magento\Core\Model\Session\AbstractSession::getData()
+     * @see \Magento\Session\SessionManager::getData()
      *
      * @param string $key
      * @param string|int $index

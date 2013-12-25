@@ -22,13 +22,13 @@
  */
 
 #integrationGrid_table .col-name {
-    width: 60%;
+    width: 75%;
 }
 
 #integrationGrid_table .col-status,
 #integrationGrid_table .col-reauthorize,
 #integrationGrid_table .col-authorize {
-    width: 12%;
+    width: 10%;
 }
 
 #integrationGrid_table .col-delete,

@@ -43,6 +43,25 @@ class Items extends \Magento\Backend\Block\Template
     protected $_giftMessage = array();
 
     /**
+     * @var \Magento\GiftMessage\Helper\Message
+     */
+    protected $_messageHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\GiftMessage\Helper\Message $messageHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\GiftMessage\Helper\Message $messageHelper,
+        array $data = array()
+    ) {
+        $this->_messageHelper = $messageHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Get Order Item
      *
      * @return \Magento\Sales\Model\Order\Item
@@ -138,7 +157,7 @@ class Items extends \Magento\Backend\Block\Template
     protected function _initMessage()
     {
         $this->_giftMessage[$this->getItem()->getGiftMessageId()] =
-            $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($this->getItem()->getGiftMessageId());
+            $this->_messageHelper->getGiftMessage($this->getItem()->getGiftMessageId());
 
         // init default values for giftmessage form
         if(!$this->getMessage()->getSender()) {

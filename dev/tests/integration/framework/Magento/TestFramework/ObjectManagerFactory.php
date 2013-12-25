@@ -24,8 +24,12 @@
 
 namespace Magento\TestFramework;
 
-use Magento\App\Dir;
-
+/**
+ * Class ObjectManagerFactory
+ *
+ * @package Magento\TestFramework
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
 {
     /**
@@ -62,18 +66,17 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
      */
     public function restore(ObjectManager $objectManager, $rootDir, array $arguments)
     {
-        $directories = new Dir(
-            $rootDir,
-            isset($arguments[Dir::PARAM_APP_URIS]) ? $arguments[Dir::PARAM_APP_URIS] : array(),
-            isset($arguments[Dir::PARAM_APP_DIRS]) ? $arguments[Dir::PARAM_APP_DIRS] : array()
-        );
+        $directories = isset($arguments[\Magento\Filesystem::PARAM_APP_DIRS])
+            ? $arguments[\Magento\Filesystem::PARAM_APP_DIRS]
+            : array();
+        $directoryList = new \Magento\Filesystem\DirectoryList($rootDir, $directories);
 
         \Magento\TestFramework\ObjectManager::setInstance($objectManager);
 
         $this->_pluginList->reset();
 
         $objectManager->configure($this->_primaryConfigData);
-        $objectManager->addSharedInstance($directories, 'Magento\App\Dir');
+        $objectManager->addSharedInstance($directoryList, 'Magento\Filesystem\DirectoryList');
         $objectManager->configure(array(
             'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
                 'parameters' => array('canSaveMap' => false)
@@ -90,17 +93,14 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
 
         $options = new \Magento\App\Config(
             $arguments,
-            new \Magento\App\Config\Loader($directories)
+            new \Magento\App\Config\Loader($directoryList)
         );
+
         $objectManager->addSharedInstance($options, 'Magento\App\Config');
         $objectManager->getFactory()->setArguments($options->get());
         $objectManager->configure(
             $objectManager->get('Magento\App\ObjectManager\ConfigLoader')->load('global')
         );
-
-        /** @var \Magento\App\Dir\Verification $verification */
-        $verification = $objectManager->get('Magento\App\Dir\Verification');
-        $verification->createAndVerifyDirectories();
 
         return $objectManager;
     }
@@ -108,15 +108,15 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
     /**
      * Load primary config data
      *
-     * @param Dir $directories
+     * @param string $configDirectoryPath
      * @param string $appMode
      * @return array
      * @throws \Magento\BootstrapException
      */
-    protected function _loadPrimaryConfig(Dir $directories, $appMode)
+    protected function _loadPrimaryConfig($configDirectoryPath, $appMode)
     {
         if (null === $this->_primaryConfigData) {
-            $this->_primaryConfigData = parent::_loadPrimaryConfig($directories, $appMode);
+            $this->_primaryConfigData = parent::_loadPrimaryConfig($configDirectoryPath, $appMode);
         }
         return $this->_primaryConfigData;
     }

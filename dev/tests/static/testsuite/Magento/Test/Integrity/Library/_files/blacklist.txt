@@ -63,3 +63,6 @@ lib/Magento/App/Helper/Context.php
 
 lib/Magento/View/DesignLoader.php
 lib/Magento/Session/SidResolverInterface.php
+
+lib/Magento/Filesystem/DirectoryList/Configuration.php
+lib/Magento/Filesystem/Driver/Http.php

@@ -26,7 +26,7 @@
 namespace Magento\Core\App\FrontController\Plugin;
 
 use Magento\Core\Model\StoreManager,
-    Magento\App\Dir;
+    Magento\Filesystem;
 
 class DispatchExceptionHandler
 {
@@ -35,22 +35,23 @@ class DispatchExceptionHandler
      */
     protected $_storeManager;
 
-
     /**
-     * @var \Magento\App\Dir
+     * Filesystem instance
+     *
+     * @var \Magento\Filesystem
      */
-    protected $_dir;
+    protected $filesystem;
 
     /**
      * @param StoreManager $storeManager
-     * @param Dir $dir
+     * @param Filesystem $filesystem
      */
     public function __construct(
         StoreManager $storeManager,
-        Dir $dir
+        Filesystem $filesystem
     ) {
         $this->_storeManager = $storeManager;
-        $this->_dir = $dir;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -64,11 +65,11 @@ class DispatchExceptionHandler
     {
         try {
             return $invocationChain->proceed($arguments);
-        } catch (\Magento\Core\Model\Session\Exception $e) {
+        } catch (\Magento\Session\Exception $e) {
             header('Location: ' . $this->_storeManager->getStore()->getBaseUrl());
             exit;
         } catch (\Magento\Core\Model\Store\Exception $e) {
-            require $this->_dir->getDir(Dir::PUB) . DS . 'errors' . DS . '404.php';
+            require $this->filesystem->getPath(Filesystem::PUB) . '/errors/404.php';
             exit;
         }
     }

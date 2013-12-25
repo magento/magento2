@@ -31,7 +31,6 @@
         <depends>
             <module name="Magento_Backend"/>
             <module name="Magento_Core"/>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Cms"/>
             <module name="Magento_Newsletter"/>

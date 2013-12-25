@@ -125,13 +125,7 @@ class Generator
      */
     public function getEtcDirPattern()
     {
-        return $this->_basePath . DIRECTORY_SEPARATOR
-        . 'app' . DIRECTORY_SEPARATOR
-        . 'code' . DIRECTORY_SEPARATOR
-        . '*' . DIRECTORY_SEPARATOR //code pool
-        . '*' . DIRECTORY_SEPARATOR //namespace
-        . '*' . DIRECTORY_SEPARATOR //module name
-        . 'etc' . DIRECTORY_SEPARATOR;
+        return $this->_basePath . '/app/code/*/*/*/etc/';
     }
 
     /**
@@ -140,7 +134,7 @@ class Generator
     public function getMenuFiles()
     {
         if (null === $this->_menuFiles) {
-            $pattern = $this->getEtcDirPattern() . 'adminhtml' . DIRECTORY_SEPARATOR . 'menu.xml';
+            $pattern = $this->getEtcDirPattern() . 'adminhtml/menu.xml';
             $this->_menuFiles = (glob($pattern));
         }
         return $this->_menuFiles;

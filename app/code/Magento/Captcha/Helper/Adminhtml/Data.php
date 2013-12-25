@@ -42,7 +42,6 @@ class Data extends \Magento\Captcha\Helper\Data
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\Core\Model\StoreManager $storeManager
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Filesystem $filesystem
@@ -51,7 +50,6 @@ class Data extends \Magento\Captcha\Helper\Data
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\App\Dir $dirs,
         \Magento\Core\Model\StoreManager $storeManager,
         \Magento\Core\Model\Config $config,
         \Magento\Filesystem $filesystem,
@@ -59,7 +57,7 @@ class Data extends \Magento\Captcha\Helper\Data
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
         $this->_backendConfig = $backendConfig;
-        parent::__construct($context, $dirs, $storeManager, $config, $filesystem, $factory);
+        parent::__construct($context, $storeManager, $config, $filesystem, $factory);
     }
 
 

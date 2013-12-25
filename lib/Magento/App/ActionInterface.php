@@ -28,8 +28,10 @@ namespace Magento\App;
 interface ActionInterface
 {
     /**
+     * Dispatch request
+     *
      * @param RequestInterface $request
-     * @return mixed
+     * @return ResponseInterface
      */
     public function dispatch(RequestInterface $request);
 }

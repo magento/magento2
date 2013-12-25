@@ -62,7 +62,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fixturePath = realpath(__DIR__ . '/../') . DIRECTORY_SEPARATOR . '_files';
+        $this->_fixturePath = realpath(__DIR__ . '/../') . '/_files';
 
         $aclXPathToId = array(
             'config/acl/resources/admin/system' => 'Module_Name::acl_resource',
@@ -80,16 +80,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $prefix = $this->_fixturePath . DIRECTORY_SEPARATOR
-            . 'app' . DIRECTORY_SEPARATOR
-            . 'code' . DIRECTORY_SEPARATOR;
-        $suffix = DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'adminhtml' . DIRECTORY_SEPARATOR . 'menu.xml';
+        $prefix = $this->_fixturePath . '/app/code/';
+        $suffix = '/etc/adminhtml/menu.xml';
 
         $this->_menuFiles = array(
-            $prefix . 'community' . DIRECTORY_SEPARATOR . 'Namespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'core' . DIRECTORY_SEPARATOR . 'ANamespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'core' . DIRECTORY_SEPARATOR . 'BNamespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
-            $prefix . 'local' . DIRECTORY_SEPARATOR . 'Namespace' . DIRECTORY_SEPARATOR . 'Module' . $suffix,
+            $prefix . 'community/Namespace/Module' . $suffix,
+            $prefix . 'core/ANamespace/Module' . $suffix,
+            $prefix . 'core/BNamespace/Module' . $suffix,
+            $prefix . 'local/Namespace/Module' . $suffix,
         );
 
         $this->_menuIdToXPath = array(
@@ -104,13 +102,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetEtcPattern()
     {
-        $path = $this->_fixturePath . DIRECTORY_SEPARATOR
-            . 'app' . DIRECTORY_SEPARATOR
-            . 'code' . DIRECTORY_SEPARATOR
-            . '*' . DIRECTORY_SEPARATOR
-            . '*' . DIRECTORY_SEPARATOR
-            . '*' . DIRECTORY_SEPARATOR
-            . 'etc' . DIRECTORY_SEPARATOR;
+        $path = $this->_fixturePath . '/app/code/*/*/*/etc/';
 
         $this->assertEquals($path, $this->_model->getEtcDirPattern());
     }
@@ -215,8 +207,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateMenuAttributes()
     {
-        $menuFileSource = $this->_fixturePath . DIRECTORY_SEPARATOR . 'update_menu_attributes_source.xml';
-        $menuFileResult = $this->_fixturePath . DIRECTORY_SEPARATOR . 'update_menu_attributes_result.xml';
+        $menuFileSource = $this->_fixturePath . '/update_menu_attributes_source.xml';
+        $menuFileResult = $this->_fixturePath . '/update_menu_attributes_result.xml';
 
         $domSource = new \DOMDocument();
         $domSource->load($menuFileSource);

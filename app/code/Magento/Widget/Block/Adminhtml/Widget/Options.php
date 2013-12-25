@@ -122,7 +122,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setData('main_fieldset', $fieldset);
 
         // add dependence javascript block
-        $block = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Form\Element\Dependence');
+        $block = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence');
         $this->setChild('form_after', $block);
 
         return $fieldset;
@@ -132,7 +132,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * Add fields to main fieldset based on specified widget type
      *
      * @throws \Magento\Core\Exception
-     * @return \Magento\Adminhtml\Block\Widget\Form
+     * @return \Magento\Backend\Block\Widget\Form
      */
     public function addFields()
     {

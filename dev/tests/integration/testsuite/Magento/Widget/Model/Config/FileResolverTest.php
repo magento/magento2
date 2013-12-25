@@ -32,14 +32,30 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $_object;
 
-    /** @var \Magento\App\Dir/PHPUnit_Framework_MockObject_MockObject  */
-    private $_applicationDirsMock;
+    /**
+     * @var \Magento\Filesystem\DirectoryList
+     */
+    protected $directoryList;
 
     public function setUp()
     {
-        $this->_applicationDirsMock = $this->getMockBuilder('Magento\App\Dir')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Filesystem $filesystem */
+        $filesystem = $objectManager->create(
+            'Magento\Filesystem',
+            array('directoryList' => $objectManager->create(
+                    'Magento\Filesystem\DirectoryList',
+                    array(
+                        'root' => BP,
+                        'directories' => array(
+                            \Magento\Filesystem::MODULES => array('path' => __DIR__ . '/_files/code'),
+                            \Magento\Filesystem::THEMES => array('path' => __DIR__ . '/_files/design'),
+                            \Magento\Filesystem::CONFIG => array('path' => __DIR__ . '/_files/'),
+                        )
+                    )
+                )
+            )
+        );
 
         $moduleListMock = $this->getMockBuilder('Magento\Module\ModuleListInterface')
             ->disableOriginalConstructor()
@@ -52,36 +68,39 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
                 'active' => 'true'
             ))));
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
         $moduleReader = $objectManager->create('Magento\Module\Dir\Reader', array(
-            'moduleList' => $moduleListMock
+            'moduleList' => $moduleListMock,
+            'filesystem' => $filesystem
         ));
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/code/Magento/Test/etc');
         $this->_object = $objectManager->create('Magento\Widget\Model\Config\FileResolver', array(
             'moduleReader' => $moduleReader,
-            'applicationDirs' => $this->_applicationDirsMock
+            'filesystem' => $filesystem
         ));
+
+        $this->directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
+        $dirPath = ltrim(str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__))
+            . '/_files', '/');
+        $this->directoryList->addDirectory(\Magento\Filesystem::MODULES, array('path' => $dirPath));
+
     }
 
     public function testGetDesign()
     {
-        $this->_applicationDirsMock->expects($this->any())
-            ->method('getDir')
-            ->will($this->returnValue(__DIR__ . '/_files/design'));
-        $widgetConfigs = $this->_object->get('widget.xml', 'design');
-        $expected = realpath(__DIR__ . '/_files/design/frontend/Test/etc/widget.xml');
+        $widgetConfigs  = $this->_object->get('widget.xml', 'design');
+        $expected       = realpath(__DIR__ . '/_files/design/frontend/Test/etc/widget.xml');
+        $actual         = $widgetConfigs->key();
         $this->assertCount(1, $widgetConfigs);
-        $this->assertEquals($expected, realpath($widgetConfigs[0]));
+        $this->assertStringEndsWith($actual, $expected);
     }
 
     public function testGetGlobal()
     {
-        $this->_applicationDirsMock->expects($this->any())
-            ->method('getDir')
-            ->will($this->returnValue(__DIR__ . '/_files/code'));
-        $widgetConfigs = $this->_object->get('widget.xml', 'global');
-        $expected = realpath(__DIR__ . '/_files/code/Magento/Test/etc/widget.xml');
+        $widgetConfigs  = $this->_object->get('widget.xml', 'global');
+        $expected       = realpath(__DIR__ . '/_files/code/Magento/Test/etc/widget.xml');
+        $actual         = $widgetConfigs->key();
         $this->assertCount(1, $widgetConfigs);
-        $this->assertEquals($expected, realpath($widgetConfigs[0]));
+        $this->assertStringEndsWith($actual, $expected);
     }
 }

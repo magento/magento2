@@ -89,7 +89,7 @@ class Ftp
         $uri = self::FTP_USER.":".self::FTP_PASS."@".$uri;
         $this->getFtp()->connect("ftp://".$uri);
         $this->getFtp()->pasv(true);
-        $localFile = self::TEMPORARY_DIR.DS.time().".xml";
+        $localFile = self::TEMPORARY_DIR . '/' . time() . '.xml';
 
         if ($this->getFtp()->get($localFile, $remoteFile)) {
             $this->_responseBody = file_get_contents($localFile);

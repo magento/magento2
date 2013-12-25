@@ -99,7 +99,7 @@
         <description>Link to a Specified Product</description>
         <parameter name="id_path" type="block" visible="true" required="true" sort_order="10" translate="label">
             <label>Product</label>
-            <block class="Magento\Adminhtml\Block\Catalog\Product\Widget\Chooser">
+            <block class="Magento\Backend\Block\Catalog\Product\Widget\Chooser">
                 <data>
                     <item name="button" type="array">
                         <item name="open" type="string">Select Product...</item>
@@ -131,7 +131,7 @@
         <description>Link to a Specified Category</description>
         <parameter name="id_path" type="block" visible="true" required="true" sort_order="10" translate="label">
             <label>Category</label>
-            <block class="Magento\Adminhtml\Block\Catalog\Category\Widget\Chooser">
+            <block class="Magento\Backend\Block\Catalog\Category\Widget\Chooser">
                 <data>
                     <item name="button" type="array">
                         <item name="open" type="string">Select Category...</item>

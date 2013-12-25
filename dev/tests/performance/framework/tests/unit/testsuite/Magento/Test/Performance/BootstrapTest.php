@@ -34,7 +34,10 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         // Delete a directory, where tests do some temporary work
         $tmpDir = $this->_getBaseFixtureDir() . '/config_dist/tmp';
-        \Magento\Io\File::rmdirRecursive($tmpDir);
+        $filesystemAdapter = new \Magento\Filesystem\Driver\File();
+        if ($filesystemAdapter->isExists($tmpDir)) {
+            $filesystemAdapter->deleteDirectory($tmpDir);
+        }
     }
 
     /**

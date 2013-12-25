@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category;
 
-class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * @var string

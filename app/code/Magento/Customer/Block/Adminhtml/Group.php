@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml;
 
-class Group extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Group extends \Magento\Backend\Block\Widget\Grid\Container
 {
 
     /**

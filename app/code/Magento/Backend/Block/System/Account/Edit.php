@@ -34,7 +34,7 @@
 
 namespace Magento\Backend\Block\System\Account;
 
-class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     protected function _construct()
     {

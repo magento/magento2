@@ -268,7 +268,11 @@ class Queue extends \Magento\Core\Model\Template
             $name = $item->getSubscriberFullName();
 
             $sender->emulateDesign($item->getStoreId());
-            $successSend = $sender->send($email, $name, array('subscriber' => $item));
+            $successSend = $this->_appState->emulateAreaCode(
+                self::DEFAULT_DESIGN_AREA,
+                array($sender, 'send'),
+                array($email, $name, array('subscriber' => $item))
+            );
             $sender->revertDesign();
 
             if ($successSend) {

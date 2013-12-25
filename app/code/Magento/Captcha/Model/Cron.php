@@ -46,9 +46,9 @@ class Cron
     protected $_adminHelper;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\Filesystem\Directory\WriteInterface
      */
-    protected $_filesystem;
+    protected $_mediaDirectory;
 
     /**
      * @var \Magento\Core\Model\StoreManager
@@ -77,7 +77,7 @@ class Cron
         $this->_resLogFactory = $resLogFactory;
         $this->_helper = $helper;
         $this->_adminHelper = $adminHelper;
-        $this->_filesystem = $filesystem;
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
         $this->_storeManager = $storeManager;
     }
 
@@ -120,12 +120,13 @@ class Cron
         \Magento\Core\Model\Store $store = null
     ) {
         $expire = time() - $helper->getConfig('timeout', $store) * 60;
-        $imageDirectory = $helper->getImgDir($website);
-        foreach ($this->_filesystem->getNestedKeys($imageDirectory) as $filePath) {
-            if ($this->_filesystem->isFile($filePath)
+        $imageDirectory = $this->_mediaDirectory->getRelativePath($helper->getImgDir($website));
+        foreach ($this->_mediaDirectory->read($imageDirectory) as $filePath) {
+            if ($this->_mediaDirectory->isFile($filePath)
                 && pathinfo($filePath, PATHINFO_EXTENSION) == 'png'
-                && $this->_filesystem->getMTime($filePath) < $expire) {
-                $this->_filesystem->delete($filePath);
+                && $this->_mediaDirectory->stat($filePath)['mtime'] < $expire
+            ) {
+                $this->_mediaDirectory->delete($filePath);
             }
         }
     }

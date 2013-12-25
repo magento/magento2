@@ -62,15 +62,6 @@
                         <argument name="id" xsi:type="string">status</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="reauthorize">
-                    <arguments>
-                        <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Reauthorize</argument>
-                        <argument name="index" xsi:type="string">reauthorize</argument>
-                        <argument name="id" xsi:type="string">reauthorize</argument>
-                        <argument name="sortable" xsi:type="string">0</argument>
-                        <argument name="filter" xsi:type="string">0</argument>
-                    </arguments>
-                </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="activate">
                     <arguments>
                         <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate</argument>

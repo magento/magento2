@@ -204,7 +204,7 @@ class Merchant
     protected function _getAddRowButtonHtml($container, $template, $title='Add')
     {
         if (!isset($this->_addRowButtonHtml[$container])) {
-            $this->_addRowButtonHtml[$container] = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->_addRowButtonHtml[$container] = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                     ->setType('button')
                     ->setClass('add ' . $this->_getDisabled())
                     ->setLabel(__($title))
@@ -218,7 +218,7 @@ class Merchant
     protected function _getRemoveRowButtonHtml($selector = 'tr', $title = 'Remove')
     {
         if (!$this->_removeRowButtonHtml) {
-            $this->_removeRowButtonHtml = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->_removeRowButtonHtml = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                     ->setType('button')
                     ->setClass('delete ' . $this->_getDisabled())
                     ->setLabel(__($title))

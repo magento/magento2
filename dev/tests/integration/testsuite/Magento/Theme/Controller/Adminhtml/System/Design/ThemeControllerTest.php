@@ -35,15 +35,11 @@ class ThemeControllerTest extends \Magento\Backend\Utility\Controller
     /** @var \Magento\Filesystem */
     protected $_filesystem;
 
-    /** @var \Magento\App\Dir */
-    protected $_dirs;
-
     protected function setUp()
     {
         parent::setUp();
 
         $this->_filesystem = $this->_objectManager->get('Magento\Filesystem');
-        $this->_dirs = $this->_objectManager->get('Magento\App\Dir');
     }
 
     /**
@@ -60,6 +56,12 @@ class ThemeControllerTest extends \Magento\Backend\Utility\Controller
                 'size' => '28'
             )
         );
+
+        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->get('Magento\Filesystem\DirectoryList');
+        /** @var $directoryList \Magento\Filesystem\DirectoryList */
+        $directoryList->addDirectory(\Magento\Filesystem::SYS_TMP,
+            array('path' => '/'));
 
         $theme = $this->_objectManager->create('Magento\View\Design\ThemeInterface')->getCollection()->getFirstItem();
 
@@ -81,13 +83,13 @@ class ThemeControllerTest extends \Magento\Backend\Utility\Controller
          * Copy file to writable directory.
          * Uploader can copy(upload) and then remove this temporary file.
          */
-        $fileName = implode(DIRECTORY_SEPARATOR, array(__DIR__, '_files', 'simple-js-file.js'));
-        $varDir = $this->_dirs->getDir(\Magento\App\Dir::VAR_DIR);
-        $destinationFilePath = $varDir . DIRECTORY_SEPARATOR . 'simple-js-file.js';
+        $fileName = __DIR__ . '/_files/simple-js-file.js';
+        $varDir = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $rootDir = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $destinationFilePath = 'simple-js-file.js';
 
-        $this->_filesystem->copy($fileName, $destinationFilePath);
-        $this->_filesystem->has($destinationFilePath);
+        $rootDir->copyFile($rootDir->getRelativePath($fileName), $destinationFilePath, $varDir);
 
-        return $destinationFilePath;
+        return $varDir->getAbsolutePath($destinationFilePath);
     }
 }

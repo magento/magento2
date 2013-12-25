@@ -69,9 +69,10 @@
                         this.options.shippingSelector, $.proxy(this._submitUpdateOrder, this, $(this.options.shippingSubmitFormSelector).prop('action'), this.options.updateContainerSelector));
                 this._updateOrderSubmit(!$(this.options.shippingSubmitFormSelector).find(this.options.shippingSelector).val());
             } else {
-                this.element.on('input propertychange', ":input[name]", $.proxy(this._updateOrderSubmit, this, true, this._onShippingChange))
+                var isDisable = (this.isShippingSubmitForm && this.element.find(this.options.shippingSelector).val());
+                this.element.on('input propertychange', ":input[name]", $.proxy(this._updateOrderSubmit, this, isDisable, this._onShippingChange))
                     .find('select').not(this.options.shippingSelector).on('change', this._propertyChange);
-                this._updateOrderSubmit(!this.element.find(this.options.shippingSelector).val());
+                this._updateOrderSubmit(isDisable);
             }
 
         },

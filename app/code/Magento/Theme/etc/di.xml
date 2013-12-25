@@ -64,4 +64,9 @@
             <instance type="Magento\Theme\Model\Layout\Config\Data" />
         </param>
     </type>
+    <type name="Magento\Theme\Model\Wysiwyg\Storage">
+        <param name="helper">
+            <instance type="Magento\Theme\Helper\Storage\Proxy" />
+        </param>
+    </type>
 </config>

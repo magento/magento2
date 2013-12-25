@@ -66,7 +66,7 @@ class Dirs
                     continue;
                 }
                 // Unlink files and add directories to stack
-                $child = $entry . DIRECTORY_SEPARATOR . $child;
+                $child = $entry . '/' . $child;
                 if (is_dir($child) && !is_link($child)) {
                     $stack[] = $child;
                 } else {

@@ -35,7 +35,7 @@
 
 namespace Magento\SalesRule\Block\Adminhtml\Promo;
 
-class Quote extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Quote extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected function _construct()
     {

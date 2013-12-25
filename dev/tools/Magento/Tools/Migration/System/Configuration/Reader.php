@@ -81,7 +81,7 @@ class Reader
     public function getConfiguration()
     {
         $files = $this->_fileManager->getFileList(
-            $this->_basePath . DIRECTORY_SEPARATOR
+            $this->_basePath . '/'
             . \Magento\Tools\Migration\System\Configuration\Reader::SYSTEM_CONFIG_PATH_PATTERN
         );
         $result = array();

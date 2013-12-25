@@ -97,21 +97,21 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
              * Check order existing
              */
             if (!$order->getId()) {
-                $this->_getSession()->addError(__('The order no longer exists.'));
+                $this->messageManager->addError(__('The order no longer exists.'));
                 return false;
             }
             /**
              * Check shipment is available to create separate from invoice
              */
             if ($order->getForcedShipmentWithInvoice()) {
-                $this->_getSession()->addError(__('Cannot do shipment for the order separately from invoice.'));
+                $this->messageManager->addError(__('Cannot do shipment for the order separately from invoice.'));
                 return false;
             }
             /**
              * Check shipment create availability
              */
             if (!$order->canShip()) {
-                $this->_getSession()->addError(__('Cannot do shipment for the order.'));
+                $this->messageManager->addError(__('Cannot do shipment for the order.'));
                 return false;
             }
             $savedQtys = $this->_getItemQtys();
@@ -190,7 +190,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
         if ($shipment) {
             $this->_title->add(__('New Shipment'));
 
-            $comment = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getCommentText(true);
+            $comment = $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
             if ($comment) {
                 $shipment->setCommentText($comment);
             }
@@ -213,7 +213,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
     {
         $data = $this->getRequest()->getPost('shipment');
         if (!empty($data['comment_text'])) {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setCommentText($data['comment_text']);
+            $this->_objectManager->get('Magento\Backend\Model\Session')->setCommentText($data['comment_text']);
         }
 
         try {
@@ -255,15 +255,15 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $shipmentCreatedMessage = __('The shipment has been created.');
             $labelCreatedMessage    = __('You created the shipping label.');
 
-            $this->_getSession()->addSuccess($isNeedCreateLabel ? $shipmentCreatedMessage . ' ' . $labelCreatedMessage
+            $this->messageManager->addSuccess($isNeedCreateLabel ? $shipmentCreatedMessage . ' ' . $labelCreatedMessage
                 : $shipmentCreatedMessage);
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getCommentText(true);
+            $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
         } catch (\Magento\Core\Exception $e) {
             if ($isNeedCreateLabel) {
                 $responseAjax->setError(true);
                 $responseAjax->setMessage($e->getMessage());
             } else {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $this->_redirect('sales/*/new', array('order_id' => $this->getRequest()->getParam('order_id')));
             }
         } catch (\Exception $e) {
@@ -273,7 +273,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                 $responseAjax->setMessage(
                     __('An error occurred while creating shipping label.'));
             } else {
-                $this->_getSession()->addError(__('Cannot save shipment.'));
+                $this->messageManager->addError(__('Cannot save shipment.'));
                 $this->_redirect('sales/*/new', array('order_id' => $this->getRequest()->getParam('order_id')));
             }
 
@@ -302,12 +302,12 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                     $historyItem->setIsCustomerNotified(1);
                     $historyItem->save();
                 }
-                $this->_getSession()->addSuccess(__('You sent the shipment.'));
+                $this->messageManager->addSuccess(__('You sent the shipment.'));
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('Cannot send shipment information.'));
+            $this->messageManager->addError(__('Cannot send shipment information.'));
         }
         $this->_redirect('sales/*/view', array(
             'shipment_id' => $this->getRequest()->getParam('shipment_id')
@@ -496,7 +496,8 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             return false;
         }
         $shipment->setPackages($this->getRequest()->getParam('packages'));
-        $response = $this->_objectManager->create('Magento\Shipping\Model\Shipping')->requestToShipment($shipment);
+        $response = $this->_objectManager->create('Magento\Shipping\Model\Shipping\Labels')
+            ->requestToShipment($shipment);
         if ($response->hasErrors()) {
             throw new \Magento\Core\Exception($response->getErrors());
         }
@@ -540,7 +541,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $shipment = $this->_initShipment();
             if ($this->_createShippingLabel($shipment)) {
                 $shipment->save();
-                $this->_getSession()->addSuccess(__('You created the shipping label.'));
+                $this->messageManager->addSuccess(__('You created the shipping label.'));
                 $response->setOk(true);
             }
         } catch (\Magento\Core\Exception $e) {
@@ -572,9 +573,9 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                     $pdf = new \Zend_Pdf();
                     $page = $this->_createPdfPageFromImageString($labelContent);
                     if (!$page) {
-                        $this->_getSession()
-                            ->addError(__('We don\'t recognize or support the file extension in this shipment: %1.',
-                                $shipment->getIncrementId()));
+                        $this->messageManager->addError(
+                            __('We don\'t recognize or support the file extension in this shipment: %1.', $shipment->getIncrementId())
+                        );
                     }
                     $pdf->pages[] = $page;
                     $pdfContent = $pdf->render();
@@ -587,11 +588,10 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                 );
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->_getSession()
-                ->addError(__('An error occurred while creating shipping label.'));
+            $this->messageManager->addError(__('An error occurred while creating shipping label.'));
        }
        $this->_redirect('sales/order_shipment/view', array(
            'shipment_id' => $this->getRequest()->getParam('shipment_id')
@@ -662,17 +662,14 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
 
         if (!empty($labelsContent)) {
             $outputPdf = $this->_combineLabelsPdf($labelsContent);
-            $this->_fileFactory->create('ShippingLabels.pdf', $outputPdf->render(), 'application/pdf');
-            return;
+            return $this->_fileFactory->create('ShippingLabels.pdf', $outputPdf->render(), 'application/pdf');
         }
 
         if ($createdFromOrders) {
-            $this->_getSession()
-                ->addError(__('There are no shipping labels related to selected orders.'));
+            $this->messageManager->addError(__('There are no shipping labels related to selected orders.'));
             $this->_redirect('sales/order/index');
         } else {
-            $this->_getSession()
-                ->addError(__('There are no shipping labels related to selected shipments.'));
+            $this->messageManager->addError(__('There are no shipping labels related to selected shipments.'));
             $this->_redirect('sales/order_shipment/index');
         }
     }
@@ -710,10 +707,9 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
      */
     protected function _createPdfPageFromImageString($imageString)
     {
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = $this->_objectManager->get('Magento\Filesystem');
-        /** @var $tmpDir \Magento\App\Dir */
-        $tmpDir = $this->_objectManager->get('Magento\App\Dir', $filesystem->getWorkingDirectory());
+        /** @var \Magento\Filesystem\Directory\Write $directory */
+        $directory = $this->_objectManager->get('Magento\Filesystem')
+            ->getDirectoryWrite(\Magento\Filesystem::TMP);
         $image = imagecreatefromstring($imageString);
         if (!$image) {
             return false;
@@ -724,12 +720,11 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
         $page = new \Zend_Pdf_Page($xSize, $ySize);
 
         imageinterlace($image, 0);
-        $tmpFileName = $tmpDir->getDir(\Magento\App\Dir::TMP) . 'shipping_labels_'
-                     . uniqid(mt_rand()) . time() . '.png';
+        $tmpFileName = $directory->getAbsolutePath('shipping_labels_' . uniqid(mt_rand()) . time() . '.png');
         imagepng($image, $tmpFileName);
         $pdfImage = \Zend_Pdf_Image::imageWithPath($tmpFileName);
         $page->drawImage($pdfImage, 0, 0, $xSize, $ySize);
-        $filesystem->delete($tmpFileName);
+        $directory->delete($directory->getRelativePath($tmpFileName));
         return $page;
     }
 

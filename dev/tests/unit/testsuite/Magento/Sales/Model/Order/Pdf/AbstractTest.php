@@ -46,7 +46,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $string = $this->getMock('Magento\Stdlib\String', array(), array(), '', false);
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
         $translate = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
-        $coreDir = $this->getMock('Magento\App\Dir', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $shippingConfig = $this->getMock('Magento\Shipping\Model\Config', array(), array(), '', false);
         $pdfItemsFactory = $this->getMock('Magento\Sales\Model\Order\Pdf\ItemsFactory', array(), array(), '', false);
         $localeMock = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false, false);
@@ -108,7 +108,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         // Test model
         /** @var \Magento\Sales\Model\Order\Pdf\AbstractPdf $model */
         $model = $this->getMockForAbstractClass('Magento\Sales\Model\Order\Pdf\AbstractPdf',
-            array($paymentData, $string, $coreStoreConfig, $translate, $coreDir, $shippingConfig,
+            array($paymentData, $string, $coreStoreConfig, $translate, $filesystem, $shippingConfig,
                 $pdfConfig, $pdfTotalFactory, $pdfItemsFactory, $localeMock),
             '', true, false, true, array('drawLineBlocks')
         );

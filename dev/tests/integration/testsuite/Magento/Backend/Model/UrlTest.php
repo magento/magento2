@@ -108,7 +108,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->setRouteName('default_router');
 
         $this->_model->setRequest($request);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Session\AbstractSession')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Session\SessionManagerInterface')
             ->setData('_form_key', 'salt');
         $this->assertEquals($expectedHash, $this->_model->getSecretKey($routeName, $controller, $action));
     }
@@ -159,7 +159,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $request->setControllerName('controller')->setActionName('action');
         $request->initForward()->setControllerName(uniqid())->setActionName(uniqid());
         $this->_model->setRequest($request);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Session\AbstractSession')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Session\SessionManagerInterface')
             ->setData('_form_key', 'salt');
         $this->assertEquals(
             $encryptor->getHash('controller' . 'action' . 'salt'),

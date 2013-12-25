@@ -1,6 +1,6 @@
 <?php
 /**
- * Test for \Magento\Filesystem\Stream\Local
+ * Test for \Magento\Filesystem\Directory\Write
  *
  * Magento
  *
@@ -76,7 +76,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         return array(
             array('newDir1', 0777, "newDir1"),
             array('newDir1', 0777, "root_dir1/subdir1/subdir2"),
-            array('newDir2', 0777, "root_dir2/subdir")
+            array('newDir2', 0755, "root_dir2/subdir"),
+            array('newDir1', 0777, ".")
         );
     }
 
@@ -120,15 +121,14 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function testRename($basePath, $permissions, $name, $newName)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
-        $directory->create($name);
+        $directory->touch($name);
         $created = $directory->read();
-        $directory->rename($name, $newName);
+        $directory->renameFile($name, $newName);
         $renamed = $directory->read();
         $this->assertTrue(in_array($name, $created));
         $this->assertTrue(in_array($newName, $renamed));
         $this->assertFalse(in_array($name, $renamed));
     }
-
 
     /**
      * Data provider for testRename
@@ -138,7 +138,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function renameProvider()
     {
         return array(
-            array('newDir1', 0777, 'first_name', 'second_name')
+            array('newDir1', 0777, 'first_name.txt', 'second_name.txt')
         );
     }
 
@@ -157,14 +157,12 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $dir1 = $this->getDirectoryInstance($firstDir, $permission);
         $dir2 = $this->getDirectoryInstance($secondDir, $permission);
 
-        $dir1->create($name);
+        $dir1->touch($name);
         $created = $dir1->read();
-        $dir1->rename($name, $newName, $dir2);
+        $dir1->renameFile($name, $newName, $dir2);
         $oldPlace = $dir1->read();
-        $newPlace = $dir2->read();
 
         $this->assertTrue(in_array($name, $created));
-        $this->assertTrue(in_array($newName, $newPlace));
         $this->assertFalse(in_array($name, $oldPlace));
     }
 
@@ -176,7 +174,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function renameTargetDirProvider()
     {
         return array(
-            array('dir1', 'dir2', 0777, 'first_name', 'second_name')
+            array('dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt')
         );
     }
 
@@ -194,7 +192,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $directory = $this->getDirectoryInstance($basePath, $permissions);
         $file = $directory->openFile($name, 'w+');
         $file->close();
-        $directory->copy($name, $newName);
+        $directory->copyFile($name, $newName);
         $this->assertTrue($directory->isExist($name));
         $this->assertTrue($directory->isExist($newName));
     }
@@ -229,7 +227,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
 
         $file = $dir1->openFile($name, 'w+');
         $file->close();
-        $dir1->copy($name, $newName, $dir2);
+        $dir1->copyFile($name, $newName, $dir2);
 
         $this->assertTrue($dir1->isExist($name));
         $this->assertTrue($dir2->isExist($newName));
@@ -330,40 +328,11 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test for writeFile method
-     *
-     * @dataProvider writeFileProvider
-     * @param string $basePath
-     * @param int $permissions
-     * @param string $path
-     * @param string $content
-     * @param int $mode
-     * @param int $bytes
-     */
-    public function testWriteFile($basePath, $permissions, $path, $content, $mode, $bytes)
-    {
-        $directory = $this->getDirectoryInstance($basePath, $permissions);
-        $this->assertEquals($bytes, $directory->writeFile($path, $content, $mode));
-    }
-
-    /**
-     * Data provider for testWriteFile
-     *
-     * @return array
-     */
-    public function writeFileProvider()
-    {
-        return array(
-            array('newDir1', 0777, 'newFile.txt', 'content', 0777, 7),
-            array('newDir1', 0777, 'subdirectory/newFile.txt', 'content', 0777, 7)
-        );
-    }
-
-    /**
      * Tear down
      */
     public function tearDown()
     {
+        /** @var Write $directory */
         foreach ($this->testDirectories as $directory) {
             if ($directory->isExist()) {
                 $directory->delete();
@@ -382,11 +351,16 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     private function getDirectoryInstance($path, $permissions)
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
-        $writeFactory = Bootstrap::getObjectManager()->create(
-            'Magento\Filesystem\File\WriteFactory', array('path' => $fullPath)
+        $config = array(
+            'path' => $fullPath,
+            'permissions' => $permissions,
+            'allow_create_dirs' => true
         );
-        $write =  new Write($fullPath, $writeFactory, $permissions);
-        $this->testDirectories[] = $write;
-        return $write;
+        $objectManager = Bootstrap::getObjectManager();
+        $directoryFactory = $objectManager->create('Magento\Filesystem\Directory\WriteFactory');
+        $directory = $directoryFactory->create($config,
+            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\Filesystem\DirectoryList')));
+        $this->testDirectories[] = $directory;
+        return $directory;
     }
 }

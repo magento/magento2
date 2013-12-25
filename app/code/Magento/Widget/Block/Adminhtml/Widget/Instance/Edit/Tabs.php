@@ -33,7 +33,7 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit;
 
-class Tabs extends \Magento\Adminhtml\Block\Widget\Tabs
+class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * Internal constructor

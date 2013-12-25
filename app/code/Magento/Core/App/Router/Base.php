@@ -354,14 +354,14 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Build controller class name
      *
-     * @param string $realModule
+     * @param string $module
      * @param string $controller
      * @return string
      */
-    public function getControllerClassName($realModule, $controller)
+    public function getControllerClassName($module, $controller)
     {
         return \Magento\Core\Helper\String::buildClassName(array(
-            $realModule,
+            $module,
             'Controller',
             $controller
         ));

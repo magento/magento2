@@ -25,30 +25,45 @@
 
 namespace Magento\Install\App\Action\Plugin;
 
+use Magento\Filesystem,
+    Magento\Filesystem\FilesystemException,
+    Magento\Filesystem\Directory\Write,
+    Magento\App\State,
+    Magento\Logger;
+
 class Dir
 {
     /**
      * Application state
      *
-     * @var \Magento\App\State
+     * @var State
      */
-    protected $_appState;
+    protected $appState;
 
     /**
      * Directory list
      *
-     * @var \Magento\App\Dir
+     * @var Write
      */
-    protected $_dir;
+    protected $varDirectory;
 
     /**
-     * @param \Magento\App\State $state
-     * @param \Magento\App\Dir $dir
+     * Logger
+     *
+     * @var Logger
      */
-    public function __construct(\Magento\App\State $state, \Magento\App\Dir $dir)
+    protected $logger;
+
+    /**
+     * @param State $state
+     * @param Filesystem $filesystem
+     * @param Logger $logger
+     */
+    public function __construct(State $state, Filesystem $filesystem, Logger $logger)
     {
-        $this->_appState = $state;
-        $this->_dir = $dir;
+        $this->appState = $state;
+        $this->varDirectory = $filesystem->getDirectoryWrite(Filesystem::VAR_DIR);
+        $this->logger = $logger;
     }
 
     /**
@@ -59,9 +74,15 @@ class Dir
      */
     public function beforeDispatch($arguments)
     {
-        if (!$this->_appState->isInstalled()) {
-            foreach (glob($this->_dir->getDir(\Magento\App\Dir::VAR_DIR) . '/*', GLOB_ONLYDIR) as $dir) {
-                \Magento\Io\File::rmdirRecursive($dir);
+        if (!$this->appState->isInstalled()) {
+            foreach ($this->varDirectory->read() as $dir) {
+                if ($this->varDirectory->isDirectory($dir)) {
+                    try {
+                        $this->varDirectory->delete($dir);
+                    } catch (FilesystemException $exception) {
+                        $this->logger->log($exception->getMessage());
+                    }
+                }
             }
         }
         return $arguments;

@@ -49,8 +49,9 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Task: MAGETWO-18162');
         $this->_baseDir = realpath(__DIR__ . '/../../../_files/fallback');
-        $this->_viewDir = $this->_baseDir . DIRECTORY_SEPARATOR . 'design';
+        $this->_viewDir = $this->_baseDir . '/design';
     }
 
     /**
@@ -61,15 +62,24 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
     protected function _buildModel()
     {
         // Prepare config with directories
-        $dirs = new \Magento\App\Dir(
-            $this->_baseDir,
-            array(),
-            array(\Magento\App\Dir::THEMES => $this->_viewDir)
+        $filesystem = Bootstrap::getObjectManager()->create(
+            'Magento\Filesystem',
+            array(
+                'directoryList' => Bootstrap::getObjectManager()->create(
+                    'Magento\Filesystem\DirectoryList',
+                    array(
+                        'root' => $this->_baseDir,
+                        'directories' => array(
+                            \Magento\Filesystem::THEMES => array('path' => $this->_viewDir)
+                        )
+                    )
+                )
+            )
         );
 
         return Bootstrap::getObjectManager()->create(
             'Magento\View\Design\FileResolution\Strategy\Fallback',
-            array('fallbackFactory' => new Factory($dirs))
+            array('fallbackFactory' => new Factory($filesystem))
         );
     }
 
@@ -85,8 +95,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         /** @var $collection \Magento\Core\Model\Theme\Collection */
         $collection = Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Theme\Collection');
-        $themeModel = $collection->setBaseDir($this->_viewDir)
-            ->addDefaultPattern()
+        $themeModel = $collection->addDefaultPattern()
             ->addFilter('theme_path', $themePath)
             ->addFilter('area', $area)
             ->getFirstItem();
@@ -108,7 +117,6 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         $model = $this->_buildModel($area, $themePath, null);
         $themeModel = $this->_getThemeModel($area, $themePath);
 
-        $expectedFilename = str_replace('/', DS, $expectedFilename);
         $actualFilename = $model->getFile($area, $themeModel, $file, $module);
         if ($expectedFilename) {
             $this->assertStringMatchesFormat($expectedFilename, $actualFilename);
@@ -166,7 +174,6 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         $model = $this->_buildModel($area, $themePath, $locale);
         $themeModel = $this->_getThemeModel($area, $themePath);
 
-        $expectedFilename = str_replace('/', DIRECTORY_SEPARATOR, $expectedFilename);
         $actualFilename = $model->getFile($area, $themeModel, 'i18n/' . $locale . '.csv');
 
         if ($expectedFilename) {
@@ -213,7 +220,6 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         $model = $this->_buildModel();
         $themeModel = $this->_getThemeModel($area, $themePath);
 
-        $expectedFilename = str_replace('/', DIRECTORY_SEPARATOR, $expectedFilename);
         $actualFilename = $model->getViewFile($area, $themeModel, $locale, $file, $module);
         if ($expectedFilename) {
             $this->assertStringMatchesFormat($expectedFilename, $actualFilename);

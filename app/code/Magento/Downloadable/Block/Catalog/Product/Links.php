@@ -57,9 +57,17 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
+     * @param \Magento\Theme\Helper\Layout $layoutHelper
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Tax\Model\Calculation $calculationModel
      * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
@@ -68,6 +76,11 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Math\Random $mathRandom,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Wishlist\Helper\Data $wishlistHelper,
+        \Magento\Catalog\Helper\Product\Compare $compareProduct,
+        \Magento\Theme\Helper\Layout $layoutHelper,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Tax\Model\Calculation $calculationModel,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Helper\Data $coreData,
@@ -76,7 +89,20 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_calculationModel = $calculationModel;
         $this->jsonEncoder = $jsonEncoder;
         $this->coreData = $coreData;
-        parent::__construct($context, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
+        parent::__construct(
+            $context,
+            $catalogConfig,
+            $registry,
+            $taxData,
+            $catalogData,
+            $mathRandom,
+            $cartHelper,
+            $wishlistHelper,
+            $compareProduct,
+            $layoutHelper,
+            $imageHelper,
+            $data
+        );
     }
 
     /**
@@ -135,7 +161,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         }
 
         $taxHelper = $this->_taxData;
-        $coreHelper = $this->helper('Magento\Core\Helper\Data');
+        $coreHelper = $this->coreData;
         $_priceInclTax = $taxHelper->getPrice($link->getProduct(), $price, true);
         $_priceExclTax = $taxHelper->getPrice($link->getProduct(), $price);
 
@@ -165,7 +191,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     public function getCurrencyPrice($price)
     {
         $store = $this->getProduct()->getStore();
-        return $this->helper('Magento\Core\Helper\Data')->currencyByStore($price, $store, false);
+        return $this->coreData->currencyByStore($price, $store, false);
     }
 
     /**

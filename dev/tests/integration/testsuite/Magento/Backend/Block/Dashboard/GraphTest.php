@@ -40,9 +40,11 @@ class GraphTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Backend\Block\Dashboard\Graph');
-        $this->_block->setDataHelperName('Magento\Backend\Helper\Dashboard\Order');
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\View\LayoutInterface $layout */
+        $layout = $objectManager->get('Magento\View\LayoutInterface');
+        $this->_block = $layout->createBlock('Magento\Backend\Block\Dashboard\Graph');
+        $this->_block->setDataHelper($objectManager->get('Magento\Backend\Helper\Dashboard\Order'));
     }
 
     public function testGetChartUrl()

@@ -117,8 +117,7 @@ class Template extends \Magento\Backend\App\Action
 
         $template = $this->_initTemplate('id');
         if (!$template->getId() && $id) {
-            $this->_objectManager->get('Magento\Backend\Model\Session')
-                ->addError(__('This email template no longer exists.'));
+            $this->messageManager->addError(__('This email template no longer exists.'));
             $this->_redirect('adminhtml/*/');
             return;
         }
@@ -143,13 +142,12 @@ class Template extends \Magento\Backend\App\Action
 
             $template->save();
             $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
-            $this->_objectManager->get('Magento\Backend\Model\Session')
-                ->addSuccess(__('The email template has been saved.'));
+            $this->messageManager->addSuccess(__('The email template has been saved.'));
             $this->_redirect('adminhtml/*');
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Backend\Model\Session')
                 ->setData('email_template_form_data', $request->getParams());
-            $this->_objectManager->get('Magento\Backend\Model\Session')->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_forward('new');
         }
 
@@ -162,15 +160,14 @@ class Template extends \Magento\Backend\App\Action
             try {
                 $template->delete();
                  // display success message
-                $this->_objectManager->get('Magento\Backend\Model\Session')
-                    ->addSuccess(__('The email template has been deleted.'));
+                $this->messageManager->addSuccess(__('The email template has been deleted.'));
                 // go to grid
                 $this->_redirect('adminhtml/*/');
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('An error occurred while deleting email template data. Please review log and try again.')
                 );
                 $this->_objectManager->get('Magento\Logger')->logException($e);
@@ -183,8 +180,7 @@ class Template extends \Magento\Backend\App\Action
             }
         }
         // display error message
-        $this->_objectManager->get('Magento\Backend\Model\Session')
-            ->addError(__('We can\'t find an email template to delete.'));
+        $this->messageManager->addError(__('We can\'t find an email template to delete.'));
         // go to grid
         $this->_redirect('adminhtml/*/');
     }

@@ -27,6 +27,9 @@
 
 namespace Magento\Sitemap\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SitemapTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,6 +61,21 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sitemap\Model\Resource\Cms\Page
      */
     protected $_sitemapCmsPageMock;
+
+    /**
+     * @var \Magento\Filesystem
+     */
+    protected $_filesystemMock;
+
+    /**
+     * @var \Magento\Filesystem\Directory\Write
+     */
+    protected $_directoryMock;
+
+    /**
+     * @var \Magento\Filesystem\File\Write
+     */
+    protected $_fileMock;
 
     /**
      * Set helper mocks, create resource model mock
@@ -106,14 +124,33 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('0.25'));
 
         $this->_resourceMock = $this->getMockBuilder('Magento\Sitemap\Model\Resource\Sitemap')
-            ->setMethods(array(
-                '_construct', 'beginTransaction', 'rollBack', 'save', 'addCommitCallback', 'commit', '__wakeup'
-            ))
+            ->setMethods(
+                array('_construct', 'beginTransaction', 'rollBack', 'save', 'addCommitCallback', 'commit', '__wakeup')
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->_resourceMock->expects($this->any())
             ->method('addCommitCallback')
             ->will($this->returnSelf());
+
+        $this->_fileMock = $this->getMockBuilder('Magento\Filesystem\File\Write')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_directoryMock = $this->getMockBuilder('Magento\Filesystem\Directory\Write')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_directoryMock->expects($this->any())
+            ->method('openFile')
+            ->will($this->returnValue($this->_fileMock));
+
+        $this->_filesystemMock = $this->getMockBuilder('Magento\Filesystem')
+            ->setMethods(array('getDirectoryWrite'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_filesystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->will($this->returnValue($this->_directoryMock));
     }
 
     /**
@@ -124,18 +161,8 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotAllowedPath()
     {
-        $fileMock = $this->getMockBuilder('Magento\Io\File')
-            ->setMethods(array('allowedPath', 'getCleanPath'))
-            ->getMock();
-        $fileMock->expects($this->once())
-            ->method('allowedPath')
-            ->will($this->returnValue(false));
-
-        $fileMock->expects($this->any())
-            ->method('getCleanPath')
-            ->will($this->returnArgument(0));
-
-        $model = $this->_getModelMock($fileMock);
+        $model = $this->_getModelMock();
+        $model->setSitemapPath('../');
         $model->save();
     }
 
@@ -147,20 +174,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public function testPathNotExists()
     {
-        $fileMock = $this->getMockBuilder('Magento\Io\File')
-            ->setMethods(array('allowedPath', 'getCleanPath', 'fileExists'))
-            ->getMock();
-        $fileMock->expects($this->once())
-            ->method('allowedPath')
-            ->will($this->returnValue(true));
-        $fileMock->expects($this->any())
-            ->method('getCleanPath')
-            ->will($this->returnArgument(0));
-        $fileMock->expects($this->once())
-            ->method('fileExists')
+        $this->_directoryMock->expects($this->once())
+            ->method('isExist')
             ->will($this->returnValue(false));
 
-        $model = $this->_getModelMock($fileMock);
+        $model = $this->_getModelMock();
         $model->save();
     }
 
@@ -172,24 +190,14 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public function testPathNotWritable()
     {
-        $fileMock = $this->getMockBuilder('Magento\Io\File')
-            ->setMethods(array('allowedPath', 'getCleanPath', 'fileExists', 'isWriteable'))
-            ->getMock();
-        $fileMock->expects($this->once())
-            ->method('allowedPath')
+        $this->_directoryMock->expects($this->once())
+            ->method('isExist')
             ->will($this->returnValue(true));
-        $fileMock->expects($this->any())
-            ->method('getCleanPath')
-            ->will($this->returnArgument(0));
-        $fileMock->expects($this->once())
-            ->method('fileExists')
-            ->will($this->returnValue(true));
-        $fileMock->expects($this->once())
-            ->method('isWriteable')
+        $this->_directoryMock->expects($this->once())
+            ->method('isWritable')
             ->will($this->returnValue(false));
 
-        /** @var $model \Magento\Sitemap\Model\Sitemap */
-        $model = $this->_getModelMock($fileMock);
+        $model = $this->_getModelMock();
         $model->save();
     }
 
@@ -203,23 +211,14 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     //@codingStandardsIgnoreEnd
     public function testFilenameInvalidChars()
     {
-        $fileMock = $this->getMockBuilder('Magento\Io\File')
-            ->setMethods(array('allowedPath', 'getCleanPath', 'fileExists', 'isWriteable'))
-            ->getMock();
-        $fileMock->expects($this->once())
-            ->method('allowedPath')
+        $this->_directoryMock->expects($this->once())
+            ->method('isExist')
             ->will($this->returnValue(true));
-        $fileMock->expects($this->any())
-            ->method('getCleanPath')
-            ->will($this->returnArgument(0));
-        $fileMock->expects($this->once())
-            ->method('fileExists')
-            ->will($this->returnValue(true));
-        $fileMock->expects($this->once())
-            ->method('isWriteable')
+        $this->_directoryMock->expects($this->once())
+            ->method('isWritable')
             ->will($this->returnValue(true));
 
-        $model = $this->_getModelMock($fileMock);
+        $model = $this->_getModelMock();
         $model->setSitemapFilename('*sitemap?.xml');
         $model->save();
     }
@@ -237,15 +236,15 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     public static function sitemapDataProvider()
     {
         $expectedSingleFile = array(
-            'sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-single.xml'
+            '/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-single.xml'
         );
 
         $expectedMultiFile = array(
-            'sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-1-1.xml',
-            'sitemap-1-2.xml' => __DIR__ . '/_files/sitemap-1-2.xml',
-            'sitemap-1-3.xml' => __DIR__ . '/_files/sitemap-1-3.xml',
-            'sitemap-1-4.xml' => __DIR__ . '/_files/sitemap-1-4.xml',
-            'sitemap.xml'     => __DIR__ . '/_files/sitemap-index.xml'
+            '/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-1-1.xml',
+            '/sitemap-1-2.xml' => __DIR__ . '/_files/sitemap-1-2.xml',
+            '/sitemap-1-3.xml' => __DIR__ . '/_files/sitemap-1-3.xml',
+            '/sitemap-1-4.xml' => __DIR__ . '/_files/sitemap-1-4.xml',
+            '/sitemap.xml'     => __DIR__ . '/_files/sitemap-index.xml'
         );
 
         return array(
@@ -288,15 +287,15 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     public static function robotsDataProvider()
     {
         $expectedSingleFile = array(
-            'sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-single.xml'
+            '/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-single.xml'
         );
 
         $expectedMultiFile = array(
-            'sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-1-1.xml',
-            'sitemap-1-2.xml' => __DIR__ . '/_files/sitemap-1-2.xml',
-            'sitemap-1-3.xml' => __DIR__ . '/_files/sitemap-1-3.xml',
-            'sitemap-1-4.xml' => __DIR__ . '/_files/sitemap-1-4.xml',
-            'sitemap.xml'     => __DIR__ . '/_files/sitemap-index.xml'
+            '/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-1-1.xml',
+            '/sitemap-1-2.xml' => __DIR__ . '/_files/sitemap-1-2.xml',
+            '/sitemap-1-3.xml' => __DIR__ . '/_files/sitemap-1-3.xml',
+            '/sitemap-1-4.xml' => __DIR__ . '/_files/sitemap-1-4.xml',
+            '/sitemap.xml'     => __DIR__ . '/_files/sitemap-index.xml'
         );
 
         return array(
@@ -359,15 +358,14 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      * @param array $robotsInfo
      * @return \Magento\Sitemap\Model\Sitemap|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _prepareSitemapModelMock(&$actualData, $maxLines, $maxFileSize,
-        $expectedFile, $expectedWrites, $robotsInfo
+    protected function _prepareSitemapModelMock(
+        &$actualData,
+        $maxLines,
+        $maxFileSize,
+        $expectedFile,
+        $expectedWrites,
+        $robotsInfo
     ) {
-        $fileMock = $this->getMockBuilder('Magento\Io\File')
-            ->setMethods(array('streamWrite', 'open', 'streamOpen', 'streamClose',
-                'allowedPath', 'getCleanPath', 'fileExists', 'isWriteable', 'mv', 'read', 'write'))
-            ->getMock();
-        $this->_prepareValidFileMock($fileMock);
-
         // Check that all $expectedWrites lines were written
         $actualData = array();
         $currentFile = '';
@@ -379,13 +377,13 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         };
 
         // Check that all expected lines were written
-        $fileMock->expects($this->exactly($expectedWrites))
-            ->method('streamWrite')
+        $this->_fileMock->expects($this->exactly($expectedWrites))
+            ->method('write')
             ->will($this->returnCallback($streamWriteCallback));
 
         // Check that all expected file descriptors were created
-        $fileMock->expects($this->exactly(count($expectedFile)))
-            ->method('streamOpen')
+        $this->_directoryMock->expects($this->exactly(count($expectedFile)))
+            ->method('openFile')
             ->will($this->returnCallback(
                 function ($file) use (&$currentFile) {
                     $currentFile = $file;
@@ -393,16 +391,16 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ));
 
         // Check that all file descriptors were closed
-        $fileMock->expects($this->exactly(count($expectedFile)))
-            ->method('streamClose');
+        $this->_fileMock->expects($this->exactly(count($expectedFile)))
+            ->method('close');
 
         if (count($expectedFile) == 1) {
-            $fileMock->expects($this->once())
-                ->method('mv')
+            $this->_directoryMock->expects($this->once())
+                ->method('renameFile')
                 ->will($this->returnCallback(
                     function ($from, $to) {
-                        \PHPUnit_Framework_Assert::assertEquals('sitemap-1-1.xml', $from);
-                        \PHPUnit_Framework_Assert::assertEquals('sitemap.xml', $to);
+                        \PHPUnit_Framework_Assert::assertEquals('/sitemap-1-1.xml', $from);
+                        \PHPUnit_Framework_Assert::assertEquals('/sitemap.xml', $to);
                     }
                 ));
         }
@@ -416,12 +414,12 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         if (isset($robotsInfo['robotsFinish'])) {
             $robotsFinish = $robotsInfo['robotsFinish'];
         }
-        $fileMock->expects($this->any())
-            ->method('read')
+        $this->_directoryMock->expects($this->any())
+            ->method('readFile')
             ->will($this->returnValue($robotsStart));
-        $fileMock->expects($this->any())
+        $this->_directoryMock->expects($this->any())
             ->method('write')
-            ->with($this->equalTo('/project/robots.txt'), $this->equalTo($robotsFinish));
+            ->with($this->equalTo('robots.txt'), $this->equalTo($robotsFinish));
 
 
         // Mock helper methods
@@ -439,40 +437,18 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->method('getEnableSubmissionRobots')
             ->will($this->returnValue($pushToRobots));
 
-        $model = $this->_getModelMock($fileMock, true);
+        $model = $this->_getModelMock(true);
 
         return $model;
     }
 
     /**
-     * Prepare file io mock with all validation passed
-     *
-     * @param $fileMock
-     */
-    protected function _prepareValidFileMock($fileMock)
-    {
-        $fileMock->expects($this->any())
-            ->method('allowedPath')
-            ->will($this->returnValue(true));
-        $fileMock->expects($this->any())
-            ->method('getCleanPath')
-            ->will($this->returnArgument(0));
-        $fileMock->expects($this->any())
-            ->method('fileExists')
-            ->will($this->returnValue(true));
-        $fileMock->expects($this->any())
-            ->method('isWriteable')
-            ->will($this->returnValue(true));
-    }
-
-    /**
      * Get model mock object
      *
-     * @param \Magento\Io\File|PHPUnit_Framework_MockObject_MockObject $fileIoMock
      * @param bool $mockBeforeSave
      * @return \Magento\Sitemap\Model\Sitemap|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getModelMock($fileIoMock = null, $mockBeforeSave = false)
+    protected function _getModelMock($mockBeforeSave = false)
     {
         $methods = array('_construct', '_getResource', '_getBaseDir', '_getFileObject', '_afterSave',
             '_getStoreBaseUrl', '_getCurrentDateTime', '_getCategoryItemsCollection', '_getProductItemsCollection',
@@ -533,20 +509,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->method('_getResource')
             ->will($this->returnValue($this->_resourceMock));
         $model->expects($this->any())
-            ->method('_getBaseDir')
-            ->will($this->returnValue('/project'));
-        $model->expects($this->any())
             ->method('_getStoreBaseUrl')
             ->will($this->returnValue('http://store.com/'));
-        if ($fileIoMock) {
-            $model->expects($this->any())
-                ->method('_getFileObject')
-                ->will($this->returnValue($fileIoMock));
-        }
         $model->expects($this->any())
             ->method('_getCurrentDateTime')
             ->will($this->returnValue('2012-12-21T00:00:00-08:00'));
-
         $model->expects($this->any())
             ->method('_getDocumentRoot')
             ->will($this->returnValue('/project'));
@@ -587,11 +554,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->_sitemapCmsPageMock));
 
-        $adapterMock = $this->getMockBuilder('Magento\Filesystem\AdapterInterface')
-            ->getMock();
-        $filesystem = new \Magento\Filesystem($adapterMock);
-
-
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments('Magento\Sitemap\Model\Sitemap', array(
             'categoryFactory' => $categoryFactory,
@@ -599,7 +561,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             'cmsFactory' => $cmsFactory,
             'coreData' => $this->_helperMockCore,
             'sitemapData' => $this->_helperMockSitemap,
-            'filesystem' => $filesystem
+            'filesystem' => $this->_filesystemMock
         ));
         $constructArguments['resource'] = null;
         return $constructArguments;

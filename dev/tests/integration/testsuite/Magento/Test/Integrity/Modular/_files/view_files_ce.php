@@ -27,9 +27,7 @@
  */
 return array(
     array('adminhtml', 'images/ajax-loader.gif'),
-    array('adminhtml', 'Magento_Adminhtml::images/error_msg_icon.gif'),
     array('adminhtml', 'images/fam_bullet_disk.gif'),
-    array('adminhtml', 'Magento_Adminhtml::images/fam_bullet_success.gif'),
     array('adminhtml', 'images/fam_link.gif'),
     array('adminhtml', 'images/grid-cal.gif'),
     array('adminhtml', 'images/rule_chooser_trigger.gif'),

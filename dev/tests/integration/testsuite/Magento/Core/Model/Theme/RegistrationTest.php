@@ -44,6 +44,11 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
+            \Magento\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/_files/design'),
+            )
+        ));
         $this->_theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\View\Design\ThemeInterface');
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -58,9 +63,8 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function registerThemes()
     {
-        $basePath = realpath(__DIR__ . '/../_files/design');
-        $pathPattern = implode(DIRECTORY_SEPARATOR, array('frontend', '*', 'theme.xml'));
-        $this->_model->register($basePath, $pathPattern);
+        $pathPattern = 'frontend/*/theme.xml';
+        $this->_model->register($pathPattern);
         return $this;
     }
 

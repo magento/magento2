@@ -42,6 +42,25 @@ class Theme extends \Magento\Backend\Block\Template
     protected $_buttons = array();
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Core\Helper\Data $coreHelper,
+        array $data = array()
+    ) {
+        $this->_coreHelper = $coreHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Add button
      *
      * @param \Magento\Backend\Block\Widget\Button $button
@@ -108,7 +127,7 @@ class Theme extends \Magento\Backend\Block\Template
         );
 
         /** @var $helper \Magento\Core\Helper\Data */
-        $helper = $this->helper('Magento\Core\Helper\Data');
+        $helper = $this->_coreHelper;
         return $helper->jsonEncode($options);
     }
 

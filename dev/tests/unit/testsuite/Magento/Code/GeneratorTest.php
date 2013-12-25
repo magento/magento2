@@ -62,6 +62,17 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $_autoloader;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Generator\Io
+     */
+    protected $_ioObjectMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem
+     */
+    protected $_filesystemMock;
+
+
     protected function setUp()
     {
         $this->_generator = $this->getMockForAbstractClass('Magento\Code\Generator\EntityAbstract',
@@ -70,6 +81,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_autoloader = $this->getMock('Magento\Autoload\IncludePath',
             array('getFile'), array(), '', false
         );
+        $this->_ioObjectMock = $this->getMockBuilder('\Magento\Code\Generator\Io')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_filesystemMock = $this->getMockBuilder('\Magento\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function tearDown()
@@ -90,7 +107,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetGeneratedEntities()
     {
-        $this->_model = new \Magento\Code\Generator();
+        $this->_model = new \Magento\Code\Generator(
+            $this->_generator,
+            $this->_autoloader,
+            $this->_ioObjectMock,
+            $this->_filesystemMock
+        );
         $this->assertEquals(array_values($this->_expectedEntities), $this->_model->getGeneratedEntities());
     }
 
@@ -108,7 +130,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('generate')
             ->will($this->returnValue(true));
 
-        $this->_model = new \Magento\Code\Generator($this->_generator, $this->_autoloader);
+        $this->_model = new \Magento\Code\Generator(
+            $this->_generator,
+            $this->_autoloader,
+            $this->_ioObjectMock,
+            $this->_filesystemMock
+        );
 
         $this->assertEquals(
             \Magento\Code\Generator::GENERATION_SUCCESS,
@@ -128,7 +155,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->with($className . $entityType)
             ->will($this->returnValue(true));
 
-        $this->_model = new \Magento\Code\Generator($this->_generator, $this->_autoloader);
+        $this->_model = new \Magento\Code\Generator(
+            $this->_generator,
+            $this->_autoloader,
+            $this->_ioObjectMock,
+            $this->_filesystemMock
+        );
 
         $this->assertEquals(
             \Magento\Code\Generator::GENERATION_SKIP,
@@ -142,7 +174,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_autoloader->staticExpects($this->never())
             ->method('getFile');
 
-        $this->_model = new \Magento\Code\Generator($this->_generator, $this->_autoloader);
+        $this->_model = new \Magento\Code\Generator(
+            $this->_generator,
+            $this->_autoloader,
+            $this->_ioObjectMock,
+            $this->_filesystemMock
+        );
 
         $this->assertEquals(
             \Magento\Code\Generator::GENERATION_ERROR,
@@ -162,7 +199,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('generate')
             ->will($this->returnValue(false));
 
-        $this->_model = new \Magento\Code\Generator($this->_generator, $this->_autoloader);
+        $this->_model = new \Magento\Code\Generator(
+            $this->_generator,
+            $this->_autoloader,
+            $this->_ioObjectMock,
+            $this->_filesystemMock
+        );
 
         $expectedEntities = array_values($this->_expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));

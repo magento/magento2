@@ -53,17 +53,25 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_salesConfig;
 
     /**
+     * @var \Magento\Sales\Helper\Reorder
+     */
+    protected $_reorderHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Sales\Model\Config $salesConfig
+     * @param \Magento\Sales\Helper\Reorder $reorderHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Sales\Helper\Reorder $reorderHelper,
         array $data = array()
     ) {
+        $this->_reorderHelper = $reorderHelper;
         $this->_coreRegistry = $registry;
         $this->_salesConfig = $salesConfig;
         parent::__construct($context, $data);
@@ -203,7 +211,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::reorder')
-            && $this->helper('Magento\Sales\Helper\Reorder')->isAllowed($order->getStore())
+            && $this->_reorderHelper->isAllowed($order->getStore())
             && $order->canReorderIgnoreSalable()
         ) {
             $this->_addButton('order_reorder', array(

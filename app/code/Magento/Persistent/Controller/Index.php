@@ -60,29 +60,19 @@ class Index extends \Magento\App\Action\Action
     protected $_persistentObserver;
 
     /**
-     * Core session model
-     *
-     * @var \Magento\Core\Model\Session
-     */
-    protected $_session;
-
-    /**
      * Construct
      *
      * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Session $session
      * @param \Magento\Persistent\Model\Observer $persistentObserver
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Session $session,
         \Magento\Persistent\Model\Observer $persistentObserver,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession
     ) {
-        $this->_session = $session;
         $this->_persistentObserver = $persistentObserver;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
@@ -166,7 +156,7 @@ class Index extends \Magento\App\Action\Action
      */
     public function expressCheckoutAction()
     {
-        $this->_session->addNotice(__('Your shopping cart has been updated with new prices.'));
+        $this->messageManager->addNotice(__('Your shopping cart has been updated with new prices.'));
         $this->_redirect('checkout/cart');
     }
 }

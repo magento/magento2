@@ -38,6 +38,11 @@ class Labels extends \Magento\Shipping\Model\Shipping
     protected $_authSession;
 
     /**
+     * @var \Magento\Shipping\Model\Shipment\Request
+     */
+    protected $_request;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -57,9 +62,11 @@ class Labels extends \Magento\Shipping\Model\Shipping
         \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Math\Division $mathDivision,
-        \Magento\Backend\Model\Auth\Session $authSession
+        \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Shipping\Model\Shipment\Request $request
     ) {
         $this->_authSession = $authSession;
+        $this->_request = $request;
         parent::__construct(
             $coreStoreConfig,
             $shippingConfig,
@@ -113,7 +120,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
         }
 
         /** @var $request \Magento\Shipping\Model\Shipment\Request */
-        $request = $this->_rateRequestFactory->create();
+        $request = $this->_request;
         $request->setOrderShipment($orderShipment);
         $request->setShipperContactPersonName($admin->getName());
         $request->setShipperContactPersonFirstName($admin->getFirstname());

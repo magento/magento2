@@ -34,7 +34,7 @@
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
 
 class Qty
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Input
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
 {
     /**
      * Returns whether this qty field must be inactive

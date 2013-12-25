@@ -29,6 +29,11 @@
         \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
         \Magento\Core\Model\App\Area::PART_CONFIG
     );
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
+    \Magento\Filesystem::PARAM_APP_DIRS => array(
+        \Magento\Filesystem::THEMES => array('path' => realpath(__DIR__)),
+    ),
+));
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
     'preferences' => array(
         'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'
@@ -38,6 +43,5 @@
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Core\Model\Theme\Registration');
 $registration->register(
-    __DIR__,
-    implode(DIRECTORY_SEPARATOR, array('*', '*', 'theme.xml'))
+    implode('/', array('*', '*', 'theme.xml'))
 );

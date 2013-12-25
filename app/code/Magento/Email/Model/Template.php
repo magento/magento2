@@ -130,11 +130,6 @@ class Template extends \Magento\Core\Model\Template
     protected $_emailFilterFactory;
 
     /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dir;
-
-    /**
      * Types of template
      */
     const TYPE_TEXT = 1;
@@ -152,7 +147,6 @@ class Template extends \Magento\Core\Model\Template
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\ConfigInterface $coreConfig
      * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
-     * @param \Magento\App\Dir $dir
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param array $data
      *
@@ -170,7 +164,6 @@ class Template extends \Magento\Core\Model\Template
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\ConfigInterface $coreConfig,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
-        \Magento\App\Dir $dir,
         \Magento\Email\Model\Template\Config $emailConfig,
         array $data = array()
     ) {
@@ -180,7 +173,6 @@ class Template extends \Magento\Core\Model\Template
         $this->_viewFileSystem = $viewFileSystem;
         $this->_coreConfig = $coreConfig;
         $this->_emailFilterFactory = $emailFilterFactory;
-        $this->_dir = $dir;
         $this->_emailConfig = $emailConfig;
         parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
     }
@@ -206,8 +198,8 @@ class Template extends \Magento\Core\Model\Template
         $fileName = $store->getConfig(self::XML_PATH_DESIGN_EMAIL_LOGO);
         if ($fileName) {
             $uploadDir = \Magento\Backend\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
-            $fullFileName = $this->_dir->getDir('media') . DS . $uploadDir . DS . $fileName;
-            if ($this->_filesystem->isFile($fullFileName)) {
+            $mediaDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+            if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
                 return $this->_storeManager->getStore()->getBaseUrl('media') . $uploadDir . '/' . $fileName;
             }
         }
@@ -292,7 +284,8 @@ class Template extends \Magento\Core\Model\Template
         $templateTypeCode = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
         $this->setTemplateType($templateTypeCode);
 
-        $templateText = $this->_filesystem->read($templateFile);
+        $modulesDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $templateText = $modulesDirectory->readFile($modulesDirectory->getRelativePath($templateFile));
 
         if (preg_match('/<!--@subject\s*(.*?)\s*@-->/u', $templateText, $matches)) {
             $this->setTemplateSubject($matches[1]);

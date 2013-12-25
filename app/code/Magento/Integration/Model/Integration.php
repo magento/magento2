@@ -31,14 +31,15 @@ namespace Magento\Integration\Model;
  * @method Integration setName(\string $name)
  * @method \string getEmail()
  * @method Integration setEmail(\string $email)
- * @method \int getStatus()
  * @method Integration setStatus(\int $value)
  * @method \int getType()
  * @method Integration setType(\int $value)
- * @method \string getEndpoint()
  * @method Integration setConsumerId(\string $consumerId)
  * @method \string getConsumerId()
+ * @method \string getEndpoint()
  * @method Integration setEndpoint(\string $endpoint)
+ * @method \string getIdentityLinkUrl()
+ * @method Integration setIdentityLinkUrl(\string $identityLinkUrl)
  * @method \string getCreatedAt()
  * @method Integration setCreatedAt(\string $createdAt)
  * @method \string getUpdatedAt()
@@ -67,8 +68,10 @@ class Integration extends \Magento\Core\Model\AbstractModel
     const NAME = 'name';
     const EMAIL = 'email';
     const ENDPOINT = 'endpoint';
+    const IDENTITY_LINK_URL = 'identity_link_url';
     const SETUP_TYPE = 'setup_type';
     const CONSUMER_ID = 'consumer_id';
+    const STATUS = 'status';
     /**#@-*/
 
     /**
@@ -131,5 +134,15 @@ class Integration extends \Magento\Core\Model\AbstractModel
     public function loadByConsumerId($consumerId)
     {
         return $this->load($consumerId, self::CONSUMER_ID);
+    }
+
+    /**
+     * Get integration status. Cast to the type of STATUS_* constants in order to make strict comparison valid.
+     *
+     * @return int
+     */
+    public function getStatus()
+    {
+        return (int)$this->getData(self::STATUS);
     }
 }

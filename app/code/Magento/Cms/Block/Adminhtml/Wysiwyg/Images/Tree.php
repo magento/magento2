@@ -119,10 +119,10 @@ class Tree extends \Magento\Backend\Block\Template
         if ($path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath()) {
             $path = str_replace($this->_cmsWysiwygImages->getStorageRoot(), '', $path);
             $relative = array();
-            foreach (explode(DIRECTORY_SEPARATOR, $path) as $dirName) {
+            foreach (explode('/', $path) as $dirName) {
                 if ($dirName) {
                     $relative[] =  $dirName;
-                    $treePath[] =  $this->_cmsWysiwygImages->idEncode(implode(DIRECTORY_SEPARATOR, $relative));
+                    $treePath[] =  $this->_cmsWysiwygImages->idEncode(implode('/', $relative));
                 }
             }
         }

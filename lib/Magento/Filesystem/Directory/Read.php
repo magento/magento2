@@ -18,6 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @category    Magento
+ * @package     Magento
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,59 +31,103 @@ use Magento\Filesystem\FilesystemException;
 class Read implements ReadInterface
 {
     /**
+     * Directory path
+     *
      * @var string
      */
     protected $path;
 
     /**
+     * @var string
+     */
+    protected $scheme;
+
+    /**
+     * File factory
+     *
      * @var \Magento\Filesystem\File\ReadFactory
      */
     protected $fileFactory;
 
     /**
-     * @param string $path
+     * Filesystem driver
+     *
+     * @var \Magento\Filesystem\DriverInterface
+     */
+    protected $driver;
+
+    /**
+     * Constructor. Set properties.
+     *
+     * @param array $config
      * @param \Magento\Filesystem\File\ReadFactory $fileFactory
+     * @param \Magento\Filesystem\DriverInterface $driver
      */
-    public function __construct($path, \Magento\Filesystem\File\ReadFactory $fileFactory)
-    {
-        $this->path = rtrim($path, '/') . '/';
+    public function __construct
+    (
+        array $config,
+        \Magento\Filesystem\File\ReadFactory $fileFactory,
+        \Magento\Filesystem\DriverInterface $driver
+    ) {
+        $this->setProperties($config);
         $this->fileFactory = $fileFactory;
+        $this->driver = $driver;
     }
 
     /**
-     * @param string $path
-     * @return string
+     * Set properties from config
+     *
+     * @param array $config
+     * @throws \Magento\Filesystem\FilesystemException
      */
-    public function getAbsolutePath($path)
+    protected function setProperties(array $config)
     {
-        return $this->path . ltrim($path, '/');
-    }
-
-    /**
-     * @param string $path
-     * @return string
-     */
-    protected function getRelativePath($path)
-    {
-        if (strpos($path, $this->path) === 0) {
-            $result = substr($path, strlen($this->path));
-        } else {
-            $result = $path;
+        if (!empty($config['path'])) {
+            $this->path = rtrim(str_replace('\\', '/', $config['path']), '/') . '/';
         }
-        return $result;
+
+        if (!empty($config['protocol'])) {
+            $this->scheme = $config['protocol'];
+        }
     }
 
+    /**
+     * Retrieves absolute path
+     * E.g.: /var/www/application/file.txt
+     *
+     * @param string $path
+     * @param string $schema
+     * @return string
+     */
+    public function getAbsolutePath($path = null, $schema = null)
+    {
+        return $this->driver->getAbsolutePath($this->path, $path, $schema);
+    }
+
+    /**
+     * Retrieves relative path
+     *
+     * @param string $path
+     * @return string
+     */
+    public function getRelativePath($path = null)
+    {
+        return $this->driver->getRelativePath($this->path, $path);
+    }
     /**
      * Validate of path existence
      *
      * @param string $path
-     * @throws FilesystemException
+     * @return bool
+     * @throws \Magento\Filesystem\FilesystemException
      */
     protected function assertExist($path)
     {
-        if ($this->isExist($path) === false) {
-            throw new FilesystemException(sprintf('The path "%s" doesn\'t exist', $this->getAbsolutePath($path)));
+        $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        if ($this->driver->isExists($absolutePath) === false) {
+            throw new FilesystemException(sprintf('The path "%s" doesn\'t exist', $absolutePath));
         }
+        return true;
     }
 
     /**
@@ -95,12 +141,13 @@ class Read implements ReadInterface
         $this->assertExist($path);
 
         $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
-        $iterator = new \FilesystemIterator($this->getAbsolutePath($path), $flags);
+        $iterator = new \FilesystemIterator($this->driver->getAbsolutePath($this->path, $path), $flags);
         $result = array();
         /** @var \FilesystemIterator $file */
         foreach ($iterator as $file) {
             $result[] = $this->getRelativePath($file->getPathname());
         }
+        sort($result);
         return $result;
     }
 
@@ -108,16 +155,22 @@ class Read implements ReadInterface
      * Search all entries for given regex pattern
      *
      * @param string $pattern
+     * @param string $path [optional]
      * @return array
      */
-    public function search($pattern)
+    public function search($pattern, $path = null)
     {
         clearstatcache();
+        if ($path) {
+            $absolutePath = $this->driver->getAbsolutePath($this->path, $this->getRelativePath($path));
+        } else {
+            $absolutePath = $this->path;
+        }
 
         $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
         $iterator = new \RegexIterator(
             new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($this->path, $flags)
+                new \RecursiveDirectoryIterator($absolutePath, $flags), \RecursiveIteratorIterator::CHILD_FIRST
             ),
             $pattern
         );
@@ -126,20 +179,20 @@ class Read implements ReadInterface
         foreach ($iterator as $file) {
             $result[] = $this->getRelativePath($file->getPathname());
         }
+        sort($result);
         return $result;
     }
 
     /**
      * Check a file or directory exists
      *
-     * @param string|null $path
+     * @param string $path [optional]
      * @return bool
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function isExist($path = null)
     {
-        clearstatcache();
-
-        return file_exists($this->getAbsolutePath($path));
+        return $this->driver->isExists($this->driver->getAbsolutePath($this->path, $path));
     }
 
     /**
@@ -147,12 +200,12 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @return array
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function stat($path)
     {
         $this->assertExist($path);
-
-        return stat($this->getAbsolutePath($path));
+        return $this->driver->stat($this->driver->getAbsolutePath($this->path, $path));
     }
 
     /**
@@ -160,41 +213,77 @@ class Read implements ReadInterface
      *
      * @param string $path
      * @return bool
+     * @throws \Magento\Filesystem\FilesystemException
      */
     public function isReadable($path)
     {
-        clearstatcache();
-
-        return is_readable($this->getAbsolutePath($path));
+        return $this->driver->isReadable($this->driver->getAbsolutePath($this->path, $path));
     }
 
     /**
      * Open file in read mode
      *
      * @param string $path
+     * @param string|null $protocol
+     *
      * @return \Magento\Filesystem\File\ReadInterface
      */
-    public function openFile($path)
+    public function openFile($path, $protocol = null)
     {
-        return $this->fileFactory->create($this->getAbsolutePath($path));
+        return $this->fileFactory->create($this->driver->getAbsolutePath($this->path, $path), $protocol, $this->driver);
     }
 
     /**
      * Retrieve file contents from given path
      *
      * @param string $path
+     * @param string|null $flag
+     * @param resource|null $context
+     * @param string|null $protocol
      * @return string
      * @throws FilesystemException
      */
-    public function readFile($path)
+    public function readFile($path, $flag = null, $context = null, $protocol = null)
     {
-        $absolutePath = $this->getAbsolutePath($path);
-        clearstatcache();
-        if (is_file($absolutePath) === false) {
-            throw new FilesystemException(
-                sprintf('The file "%s" either doesn\'t exist or not a file', $absolutePath)
-            );
-        }
-        return file_get_contents($absolutePath);
+        $absolutePath = $this->driver->getAbsolutePath($this->path, $path, $protocol);
+
+        /** @var \Magento\Filesystem\File\Read $fileReader */
+        $fileReader = $this->fileFactory->create($absolutePath, $protocol, $this->driver);
+        return $fileReader->readAll($flag, $context);
+    }
+
+    /**
+     * Check whether given path is file
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isFile($path)
+    {
+        return $this->driver->isFile($this->driver->getAbsolutePath($this->path, $path));
+    }
+
+    /**
+     * Check whether given path is directory
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isDirectory($path)
+    {
+        return $this->driver->isDirectory($this->driver->getAbsolutePath($this->path, $path));
+    }
+
+    /**
+     * Checks is directory contains path
+     * Utility method.
+     *
+     * @param string $path
+     * @param string $directory
+     * @return bool
+     */
+    public function isPathInDirectory($path, $directory)
+    {
+        return $this->driver->isPathInDirectory($path, $directory);
     }
 }

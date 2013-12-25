@@ -40,7 +40,7 @@ class Currency extends \Magento\Backend\Block\Template
 
     protected function _prepareLayout()
     {
-        $this->addChild('save_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label' => __('Save Currency Rates'),
                 'class' => 'save',
                 'data_attribute' => array(
@@ -48,13 +48,13 @@ class Currency extends \Magento\Backend\Block\Template
                         'button' => array('event' => 'save', 'target' => '#rate-form'),
         ))));
 
-        $this->addChild('reset_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label' => __('Reset'),
                 'onclick' => 'document.location.reload()',
                 'class' => 'reset'
         ));
 
-        $this->addChild('import_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+        $this->addChild('import_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label' => __('Import'),
                 'class' => 'add',
                 'type' => 'submit',

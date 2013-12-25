@@ -83,6 +83,11 @@
             <instance type="Magento\Backend\Model\Url\Proxy" />
         </param>
     </type>
+    <type name="\Magento\Backend\Model\Observer">
+        <param name="backendSession">
+            <instance type="Magento\Backend\Model\Session\Proxy" />
+        </param>
+    </type>
     <type name="Magento\Backend\Model\Url">
         <param name="authSession">
             <instance type="Magento\Backend\Model\Auth\Session\Proxy" />
@@ -148,6 +153,36 @@
                     <acl>Magento_Sales::sales</acl>
                 </sales>
             </value>
+        </param>
+    </type>
+    <virtualType name="Magento\Backend\Model\Auth\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>admin</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Backend\Model\Auth\Session">
+        <param name="storage">
+            <instance type="Magento\Backend\Model\Auth\Session\Storage" />
+        </param>
+    </type>
+    <virtualType name="Magento\Backend\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>adminhtml</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Backend\Model\Session">
+        <param name="storage">
+            <instance type="Magento\Backend\Model\Session\Storage" />
+        </param>
+    </type>
+    <virtualType name="Magento\Backend\Model\Session\Quote\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>adminhtml_quote</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Backend\Model\Session\Quote">
+        <param name="storage">
+            <instance type="Magento\Backend\Model\Session\Quote\Storage" />
         </param>
     </type>
 </config>

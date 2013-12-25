@@ -33,7 +33,7 @@
  */
 namespace Magento\Connect\Block\Adminhtml\Extension\Custom;
 
-class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Constructor

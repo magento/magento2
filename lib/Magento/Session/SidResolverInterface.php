@@ -36,16 +36,16 @@ interface SidResolverInterface
     const SESSION_ID_QUERY_PARAM = 'SID';
 
     /**
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SessionManagerInterface $session
      * @return string
      */
-    public function getSid(\Magento\Core\Model\Session\AbstractSession $session);
+    public function getSid(\Magento\Session\SessionManagerInterface $session);
 
     /**
      * Get session id query param
      *
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SessionManagerInterface $session
      * @return string
      */
-    public function getSessionIdQueryParam(\Magento\Core\Model\Session\AbstractSession $session);
+    public function getSessionIdQueryParam(\Magento\Session\SessionManagerInterface $session);
 }

@@ -78,7 +78,7 @@ abstract class AbstractController extends \Magento\App\Action\Action
         }
 
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages('Magento\Catalog\Model\Session');
+        $this->_view->getLayout()->initMessages();
 
         $navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
@@ -162,17 +162,15 @@ abstract class AbstractController extends \Magento\App\Action\Action
         foreach ($items as $item) {
             try {
                 $cart->addOrderItem($item);
-            } catch (\Magento\Core\Exception $e){
+            } catch (\Magento\Core\Exception $e) {
                 if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
-                    $this->_objectManager->get('Magento\Checkout\Model\Session')->addNotice($e->getMessage());
+                    $this->messageManager->addNotice($e->getMessage());
                 } else {
-                    $this->_objectManager->get('Magento\Checkout\Model\Session')->addError($e->getMessage());
+                    $this->messageManager->addError($e->getMessage());
                 }
                 $this->_redirect('*/*/history');
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Checkout\Model\Session')->addException($e,
-                    __('We cannot add this item to your shopping cart.')
-                );
+                $this->messageManager->addException($e, __('We cannot add this item to your shopping cart.'));
                 $this->_redirect('checkout/cart');
             }
         }

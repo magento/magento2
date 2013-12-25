@@ -34,7 +34,7 @@
 
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Newsletter;
 
-class Form extends \Magento\Adminhtml\Block\Widget
+class Form extends \Magento\Backend\Block\Widget
 {
 
     protected function _construct()

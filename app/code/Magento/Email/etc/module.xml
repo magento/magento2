@@ -25,6 +25,10 @@
 -->
 <config>
     <module name="Magento_Email" version="1.0.0.0" active="true">
+        <sequence>
+            <module name="Magento_Core"/>
+            <module name="Magento_Cms"/>
+        </sequence>
         <depends>
             <module name="Magento_Core"/>
             <module name="Magento_Cms" />

@@ -27,6 +27,8 @@
 
 namespace Magento\TestFramework;
 
+use Magento\Filesystem;
+
 /**
  * Encapsulates application installation, initialization and uninstall
  *
@@ -139,13 +141,13 @@ class Application
 
         $generationDir = "$installDir/generation";
         $this->_initParams = array(
-            \Magento\App\Dir::PARAM_APP_DIRS => array(
-                \Magento\App\Dir::CONFIG      => $this->_installEtcDir,
-                \Magento\App\Dir::VAR_DIR     => $installDir,
-                \Magento\App\Dir::MEDIA       => "$installDir/media",
-                \Magento\App\Dir::STATIC_VIEW => "$installDir/pub_static",
-                \Magento\App\Dir::PUB_VIEW_CACHE => "$installDir/pub_cache",
-                \Magento\App\Dir::GENERATION => $generationDir,
+            Filesystem::PARAM_APP_DIRS => array(
+                Filesystem::CONFIG      => array('path' => $this->_installEtcDir),
+                Filesystem::VAR_DIR     => array('path' => $installDir),
+                Filesystem::MEDIA       => array('path' => "$installDir/media"),
+                Filesystem::STATIC_VIEW => array('path' => "$installDir/pub_static"),
+                Filesystem::PUB_VIEW_CACHE => array('path' => "$installDir/pub_cache"),
+                Filesystem::GENERATION => array('path' => $generationDir)
             ),
             \Magento\App\State::PARAM_MODE => $appMode
         );
@@ -235,6 +237,22 @@ class Application
 
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
         \Magento\Phrase::setRenderer($objectManager->get('Magento\Phrase\Renderer\Placeholder'));
+
+        /** @var \Magento\Filesystem\DirectoryList\Verification $verification */
+        $verification = $objectManager->get('Magento\Filesystem\DirectoryList\Verification');
+        $verification->createAndVerifyDirectories();
+
+        $directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
+        $directoryListConfig = $objectManager->get('Magento\Filesystem\DirectoryList\Configuration');
+        $directoryListConfig->configure($directoryList);
+
+        $directories = isset($overriddenParams[\Magento\Filesystem::PARAM_APP_DIRS])
+            ? $overriddenParams[\Magento\Filesystem::PARAM_APP_DIRS]
+            : array();
+        foreach ($directories as $code => $configOverrides) {
+            $config = array_merge($directoryList->getConfig($code), $configOverrides);
+            $directoryList->addDirectory($code, $config);
+        }
     }
 
     /**
@@ -280,12 +298,12 @@ class Application
     {
         $this->_ensureDirExists($this->_installDir);
         $this->_ensureDirExists($this->_installEtcDir);
-        $this->_ensureDirExists($this->_installDir . DIRECTORY_SEPARATOR . 'media');
-        $this->_ensureDirExists($this->_installDir . DIRECTORY_SEPARATOR . 'static');
+        $this->_ensureDirExists($this->_installDir . '/media');
+        $this->_ensureDirExists($this->_installDir . '/static');
 
         // Copy configuration files
         $globalConfigFiles = glob(
-            $this->_globalConfigDir . DIRECTORY_SEPARATOR . '{*,*' . DIRECTORY_SEPARATOR . '*}.xml', GLOB_BRACE
+            $this->_globalConfigDir . '/{*,*/*}.xml', GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
             $targetFile = $this->_installEtcDir . str_replace($this->_globalConfigDir, '', $file);
@@ -296,10 +314,10 @@ class Application
         foreach ($this->_moduleEtcFiles as $file) {
             $targetModulesDir = $this->_installEtcDir . '/modules';
             $this->_ensureDirExists($targetModulesDir);
-            copy($file, $targetModulesDir . DIRECTORY_SEPARATOR . basename($file));
+            copy($file, $targetModulesDir . '/' . basename($file));
         }
 
-        /* Make sure that local.xml contains an invalid installation date */
+        /* Make sure that local.xml does not contain an invalid installation date */
         $installDate = (string)$this->_localXml->install->date;
         if ($installDate && strtotime($installDate)) {
             throw new \Magento\Exception('Local configuration must contain an invalid installation date.');
@@ -398,7 +416,20 @@ class Application
      */
     protected function _cleanupFilesystem()
     {
-        \Magento\Io\File::rmdirRecursive($this->_installDir);
+        if (!is_dir($this->_installDir)) {
+            return;
+        }
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(
+                $this->_installDir,
+                \FilesystemIterator::SKIP_DOTS
+            ),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($iterator as $path) {
+            $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+        }
+        rmdir($this->_installDir);
     }
 
     /**

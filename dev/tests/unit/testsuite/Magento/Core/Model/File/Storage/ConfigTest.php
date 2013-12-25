@@ -26,59 +26,49 @@ namespace Magento\Core\Model\File\Storage;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\File\Storage\Config
+     * Test for save method
      */
-    protected $_model;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_streamMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_streamFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_fileStorageMock;
-
-    /**
-     * @var array
-     */
-    protected  $_config = array();
-
-    protected function setUp()
-    {
-        $this->_fileStorageMock = $this->getMock('Magento\Core\Model\File\Storage', array(), array(), '', false);
-        $this->_fileStorageMock
-             ->expects($this->once())
-             ->method('getScriptConfig')
-             ->will($this->returnValue($this->_config));
-        $this->_streamFactoryMock =
-            $this->getMock('Magento\Filesystem\Stream\LocalFactory', array('create'), array(), '', false);
-        $this->_streamMock = $this->getMock('Magento\Filesystem\StreamInterface');
-        $this->_streamFactoryMock
-            ->expects($this->any())->method('create')->will($this->returnValue($this->_streamMock));
-        $this->_model = new \Magento\Core\Model\File\Storage\Config(
-            $this->_fileStorageMock,
-            $this->_streamFactoryMock,
-            'cacheFile'
-        );
-    }
-
-    protected function tearDown()
-    {
-        unset($this->_model);
-    }
-
     public function testSave()
     {
-        $this->_streamMock->expects($this->once())->method('open')->with('w');
-        $this->_streamMock->expects($this->once())->method('write')->with(json_encode($this->_config));
-        $this->_streamMock->expects($this->once())->method('close');
-        $this->_model->save();
+        $config = array();
+        $fileStorageMock = $this->getMock('Magento\Core\Model\File\Storage', array(), array(), '', false);
+        $fileStorageMock
+            ->expects($this->once())
+            ->method('getScriptConfig')
+            ->will($this->returnValue($config));
+
+        $file = $this->getMock(
+            'Magento\Filesystem\File\Write', array('lock', 'write', 'unlock', 'close'), array(), '', false
+        );
+        $file->expects($this->once())
+            ->method('lock');
+        $file->expects($this->once())
+            ->method('write')
+            ->with(json_encode($config));
+        $file->expects($this->once())
+            ->method('unlock');
+        $file->expects($this->once())
+            ->method('close');
+        $directory = $this->getMock(
+            'Magento\Filesystem\Direcoty\Write', array('openFile', 'getRelativePath'), array(), '', false
+        );
+        $directory->expects($this->once())
+            ->method('getRelativePath')
+            ->will($this->returnArgument(0));
+        $directory->expects($this->once())
+            ->method('openFile')
+            ->with('cacheFile')
+            ->will($this->returnValue($file));
+        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::PUB)
+            ->will($this->returnValue($directory));
+        $model = new \Magento\Core\Model\File\Storage\Config(
+            $fileStorageMock,
+            $filesystem,
+            'cacheFile'
+        );
+        $model->save();
     }
 }

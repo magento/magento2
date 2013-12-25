@@ -36,6 +36,6 @@
         <add id="Magento_Sales::sales_transactions" title="Transactions" module="Magento_Sales" sortOrder="70" parent="Magento_Sales::sales_operation" action="sales/transactions" resource="Magento_Sales::transactions"/>
         <add id="Magento_Sales::sales_recurring_profile" title="Recurring Billing" module="Magento_Sales" sortOrder="80" parent="Magento_Sales::sales_operation" action="sales/recurring_profile" resource="Magento_Sales::recurring_profile"/>
         <add id="Magento_Sales::sales_billing_agreement" title="Billing Agreements" module="Magento_Sales" sortOrder="60" parent="Magento_Sales::sales_operation" action="sales/billing_agreement" resource="Magento_Sales::billing_agreement"/>
-        <add id="Magento_Sales::system_order_statuses" title="Order Status" module="Magento_Sales" sortOrder="40" parent="Magento_Adminhtml::stores_settings" action="sales/order_status" resource="Magento_Sales::order_statuses"/>
+        <add id="Magento_Sales::system_order_statuses" title="Order Status" module="Magento_Sales" sortOrder="40" parent="Magento_Backend::stores_settings" action="sales/order_status" resource="Magento_Sales::order_statuses"/>
     </menu>
 </config>

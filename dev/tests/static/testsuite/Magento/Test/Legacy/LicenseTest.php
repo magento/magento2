@@ -63,7 +63,7 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
             $root, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS
         ));
 
-        $rootFolderName = substr(strrchr($root, DIRECTORY_SEPARATOR), 1);
+        $rootFolderName = substr(strrchr($root, '/'), 1);
         $extensions = '(xml|css|php|phtml|js|dist|sample|additional)';
         $paths =  array(
             $rootFolderName . '/[^/]+\.' . $extensions,

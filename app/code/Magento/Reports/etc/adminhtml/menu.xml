@@ -28,7 +28,7 @@
 <config>
     <menu>
         <add id="Magento_Reports::report" title="Reports" module="Magento_Reports" sortOrder="60" resource="Magento_Reports::report"/>
-        <add id="Magento_Reports::report_marketing" title="Marketing" module="Magento_Adminhtml" sortOrder="10" parent="Magento_Reports::report" resource="Magento_Reports::report_marketing"/>
+        <add id="Magento_Reports::report_marketing" title="Marketing" module="Magento_Backend" sortOrder="10" parent="Magento_Reports::report" resource="Magento_Reports::report_marketing"/>
         <add id="Magento_Reports::report_salesroot" title="Sales" module="Magento_Reports" sortOrder="40" parent="Magento_Reports::report" resource="Magento_Reports::salesroot"/>
         <add id="Magento_Reports::report_salesroot_sales" title="Orders" module="Magento_Reports" sortOrder="10" parent="Magento_Reports::report_salesroot" action="reports/report_sales/sales" resource="Magento_Reports::salesroot_sales"/>
         <add id="Magento_Reports::report_salesroot_tax" title="Tax" module="Magento_Reports" sortOrder="20" parent="Magento_Reports::report_salesroot" action="reports/report_sales/tax" resource="Magento_Reports::tax"/>

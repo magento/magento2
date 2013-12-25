@@ -24,16 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Catalog\Helper;
 
 /**
  * Catalog data helper
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Helper;
-
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     const PRICE_SCOPE_GLOBAL               = 0;
@@ -73,28 +68,28 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @var int
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * Core registry
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
      */
-    protected $_catalogProduct = null;
+    protected $_catalogProduct;
 
     /**
      * Catalog category
      *
      * @var \Magento\Catalog\Helper\Category
      */
-    protected $_catalogCategory = null;
+    protected $_catalogCategory;
 
     /**
      * @var \Magento\Stdlib\String

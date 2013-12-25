@@ -35,15 +35,23 @@ class Link extends \Magento\View\Element\Html\Link
     protected $_moduleManager;
 
     /**
+     * @var \Magento\Checkout\Helper\Cart
+     */
+    protected $_cartHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Module\Manager $moduleManager
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Module\Manager $moduleManager,
+        \Magento\Checkout\Helper\Cart $cartHelper,
         array $data = array()
     ) {
+        $this->_cartHelper = $cartHelper;
         parent::__construct($context, $data);
         $this->_moduleManager = $moduleManager;
     }
@@ -85,7 +93,7 @@ class Link extends \Magento\View\Element\Html\Link
     protected function _getItemCount()
     {
         $count = $this->getSummaryQty();
-        return $count ? $count : $this->helper('Magento\Checkout\Helper\Cart')->getSummaryCount();
+        return $count ? $count : $this->_cartHelper->getSummaryCount();
     }
 
     /**

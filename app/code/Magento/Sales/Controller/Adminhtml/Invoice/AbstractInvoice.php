@@ -113,7 +113,7 @@ class AbstractInvoice
                     $historyItem->setIsCustomerNotified(1);
                     $historyItem->save();
                 }
-                $this->_getSession()->addSuccess(__('We sent the message.'));
+                $this->messageManager->addSuccess(__('We sent the message.'));
                 $this->_redirect('sales/invoice/view', array(
                     'order_id'  => $invoice->getOrder()->getId(),
                     'invoice_id'=> $invoiceId,

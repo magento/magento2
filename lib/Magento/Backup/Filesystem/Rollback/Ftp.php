@@ -93,7 +93,7 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
     protected function _validateFtp()
     {
         $validationFilename = '~validation-' . microtime(true) . '.tmp';
-        $validationFilePath = $this->_snapshot->getBackupsDir() . DS . $validationFilename;
+        $validationFilePath = $this->_snapshot->getBackupsDir() . '/' . $validationFilename;
 
         $fh = @fopen($validationFilePath, 'w');
         @fclose($fh);
@@ -103,7 +103,7 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
         }
 
         $rootDir = $this->_snapshot->getRootDir();
-        $ftpPath = $this->_snapshot->getFtpPath() . DS . str_replace($rootDir, '', $validationFilePath);
+        $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($rootDir, '', $validationFilePath);
 
         $fileExistsOnFtp = $this->_ftpClient->fileExists($ftpPath);
         @unlink($validationFilePath);
@@ -132,7 +132,7 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
      */
     protected function _createTmpDir()
     {
-        $tmpDir = $this->_snapshot->getBackupsDir() . DS . '~tmp-' . microtime(true);
+        $tmpDir = $this->_snapshot->getBackupsDir() . '/~tmp-' . microtime(true);
 
         $result = @mkdir($tmpDir);
 
@@ -157,8 +157,8 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
         $iterator = new \Magento\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_snapshot->getIgnorePaths());
 
         foreach ($iterator as $item) {
-            $ftpPath = $this->_snapshot->getFtpPath() . DS . str_replace($rootDir, '', $item->__toString());
-            $ftpPath = str_replace(DS, '/', $ftpPath);
+            $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($rootDir, '', $item->__toString());
+            $ftpPath = str_replace('\\', '/', $ftpPath);
 
             $this->_ftpClient->delete($ftpPath);
         }
@@ -179,8 +179,8 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
         $iterator = new \Magento\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_snapshot->getIgnorePaths());
 
         foreach ($filesystemIterator as $item) {
-            $ftpPath = $this->_snapshot->getFtpPath() . DS . str_replace($tmpDir, '', $item->__toString());
-            $ftpPath = str_replace(DS, '/', $ftpPath);
+            $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($tmpDir, '', $item->__toString());
+            $ftpPath = str_replace('\\', '/', $ftpPath);
 
             if ($item->isLink()) {
                 continue;

@@ -79,7 +79,7 @@ class Rate extends \Magento\Backend\App\Action
 
         $this->_title->add(__('New Tax Rate'));
 
-        $rateModel->setData($this->_objectManager->get('Magento\Adminhtml\Model\Session')->getFormData(true));
+        $rateModel->setData($this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true));
 
         if ($rateModel->getZipIsRange() && !$rateModel->hasTaxPostcode()) {
             $rateModel->setTaxPostcode($rateModel->getZipFrom() . '-' . $rateModel->getZipTo());
@@ -120,14 +120,14 @@ class Rate extends \Magento\Backend\App\Action
             try {
                 $rateModel->save();
 
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(__('The tax rate has been saved.'));
+                $this->messageManager->addSuccess(__('The tax rate has been saved.'));
                 $this->getResponse()->setRedirect($this->getUrl("*/*/"));
                 return true;
             } catch (\Magento\Core\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setFormData($ratePost);
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($ratePost);
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             }
 
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
@@ -238,18 +238,15 @@ class Rate extends \Magento\Backend\App\Action
                 try {
                     $rateModel->delete();
 
-                    $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                        ->addSuccess(__('The tax rate has been deleted.'));
+                    $this->messageManager->addSuccess(__('The tax rate has been deleted.'));
                     $this->getResponse()->setRedirect($this->getUrl("*/*/"));
                     return true;
                 }
                 catch (\Magento\Core\Exception $e) {
-                    $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                        ->addError($e->getMessage());
+                    $this->messageManager->addError($e->getMessage());
                 }
                 catch (\Exception $e) {
-                    $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                        ->addError(__('Something went wrong deleting this rate.'));
+                    $this->messageManager->addError(__('Something went wrong deleting this rate.'));
                 }
                 if ($referer = $this->getRequest()->getServer('HTTP_REFERER')) {
                     $this->getResponse()->setRedirect($referer);
@@ -258,8 +255,9 @@ class Rate extends \Magento\Backend\App\Action
                     $this->getResponse()->setRedirect($this->getUrl("*/*/"));
                 }
             } else {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addError(__('Something went wrong deleting this rate because of an incorrect rate ID.'));
+                $this->messageManager->addError(
+                    __('Something went wrong deleting this rate because of an incorrect rate ID.')
+                );
                 $this->getResponse()->setRedirect($this->getUrl('tax/*/'));
             }
         }
@@ -358,18 +356,14 @@ class Rate extends \Magento\Backend\App\Action
                 $importHandler = $this->_objectManager->create('Magento\Tax\Model\Rate\CsvImportHandler');
                 $importHandler->importFromCsvFile($this->getRequest()->getFiles('import_rates_file'));
 
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addSuccess(__('The tax rate has been imported.'));
+                $this->messageManager->addSuccess(__('The tax rate has been imported.'));
             } catch (\Magento\Core\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addError(__('Invalid file upload attempt'));
+                $this->messageManager->addError(__('Invalid file upload attempt'));
             }
         } else {
-            $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                ->addError(__('Invalid file upload attempt'));
+            $this->messageManager->addError(__('Invalid file upload attempt'));
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }

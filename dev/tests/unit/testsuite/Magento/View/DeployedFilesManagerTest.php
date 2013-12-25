@@ -49,8 +49,8 @@ class DeployedFilesManagerTest extends \PHPUnit_Framework_TestCase
     public static function buildDeployedFilePathDataProvider()
     {
         return array(
-            'no module' => array('a', 't', 'f', null, str_replace('/', DIRECTORY_SEPARATOR, 'a/t/f')),
-            'with module' => array('a', 't', 'f', 'm', str_replace('/', DIRECTORY_SEPARATOR, 'a/t/m/f')),
+            'no module' => array('a', 't', 'f', null, 'a/t/f'),
+            'with module' => array('a', 't', 'f', 'm', 'a/t/m/f'),
         );
     }
 }

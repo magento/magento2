@@ -26,33 +26,95 @@
  */
 
 namespace Magento\Backup;
+require_once __DIR__ . '/_files/Gz.php';
+require_once __DIR__ . '/_files/Tar.php';
+require_once __DIR__ . '/_files/Fs.php';
+require_once __DIR__ . '/_files/Helper.php';
+require_once(__DIR__ . '/_files/io.php');
 
 class NomediaTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreate()
+    /**
+     * @var \Magento\Filesystem
+     */
+    protected $_filesystemMock;
+
+    /**
+     * @var \Magento\Backup\Factory
+     */
+    protected $_backupFactoryMock;
+
+    /**
+     * @var \Magento\Backup\Db
+     */
+    protected $_backupDbMock;
+
+    protected function setUp()
     {
-        $dir = $this->getMock('Magento\App\Dir', array(), array(), '', false);
-        $backupFactory = $this->getMock('Magento\Backup\Factory', array(), array(), '', false);
-        $snapshot = $this->getMock('Magento\Backup\Snapshot', array('create'), array($dir, $backupFactory));
-        $snapshot->expects($this->any())
+        $this->_backupDbMock = $this->getMock('Magento\Backup\Db', array(), array(), '', false);
+        $this->_backupDbMock->expects($this->any())
+            ->method('setBackupExtension')
+            ->will($this->returnSelf());
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('setTime')
+            ->will($this->returnSelf());
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('setBackupsDir')
+            ->will($this->returnSelf());
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('setResourceModel')
+            ->will($this->returnSelf());
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('getBackupPath')
+            ->will($this->returnValue('\unexistingpath'));
+
+        $this->_backupDbMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue(true));
 
+        $this->_filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_backupFactoryMock = $this->getMock('Magento\Backup\Factory', array(), array(), '', false);
+        $this->_backupFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->_backupDbMock));
+    }
 
-        $model = new \Magento\Backup\Nomedia($snapshot);
+    /**
+     * @param string $action
+     * @dataProvider actionProvider
+     */
+    public function testAction($action)
+    {
+        $this->_backupFactoryMock->expects($this->once())->method('create');
 
-        $rootDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
+        $rootDir = __DIR__ . '/_files/data';
 
-        $model = new \Magento\Backup\Nomedia($snapshot);
+        $model = new \Magento\Backup\Nomedia($this->_filesystemMock, $this->_backupFactoryMock);
         $model->setRootDir($rootDir);
+        $model->$action();
+        $this->assertTrue($model->getIsSuccess());
 
-        $this->assertTrue($model->create());
         $this->assertEquals(
             array(
-                $rootDir . DIRECTORY_SEPARATOR . 'media',
-                $rootDir . DIRECTORY_SEPARATOR . 'pub' . DIRECTORY_SEPARATOR . 'media',
+                $rootDir . '/media',
+                $rootDir . '/pub/media',
             ),
-            $snapshot->getIgnorePaths()
+            $model->getIgnorePaths()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function actionProvider()
+    {
+        return array(
+            array('create'),
+            array('rollback'),
         );
     }
 }

@@ -50,11 +50,6 @@ class Authentication
     protected $_url;
 
     /**
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $_session;
-
-    /**
      * @var \Magento\App\ResponseInterface
      */
     protected $_response;
@@ -65,24 +60,29 @@ class Authentication
     protected $_actionFlag;
 
     /**
+     * @var \Magento\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Backend\Model\Url $url
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\App\ActionFlag $actionFlag
+     * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Url $url,
         \Magento\App\ResponseInterface $response,
-        \Magento\App\ActionFlag $actionFlag
+        \Magento\App\ActionFlag $actionFlag,
+        \Magento\Message\ManagerInterface $messageManager
     ) {
         $this->_auth = $auth;
-        $this->_session = $session;
         $this->_url = $url;
         $this->_response = $response;
         $this->_actionFlag = $actionFlag;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -160,7 +160,7 @@ class Authentication
             $this->_auth->login($username, $password);
         } catch (\Magento\Backend\Model\Auth\Exception $e) {
             if (!$request->getParam('messageSent')) {
-                $this->_session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $request->setParam('messageSent', true);
                 $outputValue = false;
             }

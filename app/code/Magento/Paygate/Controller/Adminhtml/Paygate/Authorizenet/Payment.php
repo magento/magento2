@@ -38,17 +38,17 @@ class Payment extends \Magento\Backend\App\Action
     /**
      * Session quote
      *
-     * @var \Magento\Adminhtml\Model\Session\Quote
+     * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Adminhtml\Model\Session\Quote $sessionQuote
+     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Adminhtml\Model\Session\Quote $sessionQuote
+        \Magento\Backend\Model\Session\Quote $sessionQuote
     ) {
         $this->_sessionQuote = $sessionQuote;
         parent::__construct($context);

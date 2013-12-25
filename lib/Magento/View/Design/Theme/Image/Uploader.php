@@ -94,6 +94,6 @@ class Uploader
         if (!$upload->save($destinationPath)) {
             throw new \Magento\Exception(__('Image can not be saved.'));
         }
-        return $destinationPath . DIRECTORY_SEPARATOR . $upload->getUploadedFileName();
+        return $destinationPath . '/' . $upload->getUploadedFileName();
     }
 }

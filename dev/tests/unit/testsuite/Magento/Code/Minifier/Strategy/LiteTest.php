@@ -24,8 +24,64 @@
 
 namespace Magento\Code\Minifier\Strategy;
 
+use Magento\Filesystem,
+    Magento\Filesystem\Directory\Read,
+    Magento\Filesystem\Directory\Write;
+
 class LiteTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystem;
+
+    /**
+     * @var Read | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $rootDirectory;
+
+    /**
+     * @var Write | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pubViewCacheDir;
+
+    /**
+     * @var \Magento\Code\Minifier\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $adapter;
+
+    /**
+     * Set up before each test
+     */
+    public function setUp()
+    {
+        $this->rootDirectory = $this->getMock(
+            'Magento\Filesystem\Directory\Read',
+            array(), array(), '', false
+        );
+        $this->pubViewCacheDir = $this->getMock(
+            'Magento\Filesystem\Directory\Write',
+            array(), array(), '', false
+        );
+        $this->filesystem = $this->getMock(
+            'Magento\Filesystem',
+            array('getDirectoryWrite', 'getDirectoryRead', '__wakeup'),
+            array(), '', false
+        );
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Filesystem::ROOT)
+            ->will($this->returnValue($this->rootDirectory));
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Filesystem::PUB_VIEW_CACHE)
+            ->will($this->returnValue($this->pubViewCacheDir));
+        $this->adapter = $this->getMockForAbstractClass('Magento\Code\Minifier\AdapterInterface', array(), '', false);
+    }
+
+    /**
+     * Test for minifyFile if case update is needed
+     */
     public function testGetMinifiedFile()
     {
         $originalFile = __DIR__ . '/original/some.js';
@@ -33,46 +89,44 @@ class LiteTest extends \PHPUnit_Framework_TestCase
         $content = 'content';
         $minifiedContent = 'minified content';
 
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-        $filesystem->expects($this->once())
-            ->method('read')
+        $this->rootDirectory->expects($this->once())
+            ->method('readFile')
             ->with($originalFile)
             ->will($this->returnValue($content));
-        $filesystem->expects($this->once())
-            ->method('write')
+        $this->pubViewCacheDir->expects($this->once())
+            ->method('writeFile')
             ->with($minifiedFile, $minifiedContent);
 
-        $adapter = $this->getMockForAbstractClass('Magento\Code\Minifier\AdapterInterface', array(), '', false);
-        $adapter->expects($this->once())
+        $this->adapter->expects($this->once())
             ->method('minify')
             ->with($content)
             ->will($this->returnValue($minifiedContent));
 
-        $strategy = new \Magento\Code\Minifier\Strategy\Lite($adapter, $filesystem);
+        $strategy = new Lite($this->adapter, $this->filesystem);
         $strategy->minifyFile($originalFile, $minifiedFile);
     }
 
+    /**
+     * Test for minifyFile if case update is NOT needed
+     */
     public function testGetMinifiedFileNoUpdateNeeded()
     {
         $originalFile = __DIR__ . '/original/some.js';
         $minifiedFile = __DIR__ . '/some.min.js';
 
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-        $filesystem->expects($this->once())
-            ->method('has')
+        $this->pubViewCacheDir->expects($this->once())
+            ->method('isExist')
             ->with($minifiedFile)
             ->will($this->returnValue(true));
-        $filesystem->expects($this->never())
-            ->method('read');
-        $filesystem->expects($this->never())
-            ->method('write');
 
-        $adapter = $this->getMockForAbstractClass('Magento\Code\Minifier\AdapterInterface', array(), '', false);
-        $adapter->expects($this->never())
-            ->method('minify');
+        $this->rootDirectory->expects($this->never())
+            ->method('readFile');
+        $this->pubViewCacheDir->expects($this->never())
+            ->method('writeFile');
 
-        $strategy = new \Magento\Code\Minifier\Strategy\Lite($adapter, $filesystem);
+        $this->adapter->expects($this->never())->method('minify');
 
+        $strategy = new Lite($this->adapter, $this->filesystem);
         $strategy->minifyFile($originalFile, $minifiedFile);
     }
 }

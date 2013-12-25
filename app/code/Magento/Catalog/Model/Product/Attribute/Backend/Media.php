@@ -50,19 +50,9 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_mediaConfig;
 
     /**
-     * @var \Magento\Filesystem $filesystem
+     * @var \Magento\Filesystem\Directory\WriteInterface
      */
-    protected $_filesystem;
-
-    /**
-     * @var string
-     */
-    protected $_baseMediaPath;
-
-    /**
-     * @var string
-     */
-    protected $_baseTmpMediaPath;
+    protected $_mediaDirectory;
 
     /**
      * Core data
@@ -101,7 +91,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
      */
@@ -112,7 +101,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        \Magento\App\Dir $dirs,
         \Magento\Filesystem $filesystem,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
     ) {
@@ -122,13 +110,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_coreData = $coreData;
         $this->_resourceModel = $resourceProductAttribute;
         $this->_mediaConfig = $mediaConfig;
-        $this->_filesystem = $filesystem;
-        $this->_filesystem->setIsAllowCreateDirectories(true);
-        $this->_filesystem->setWorkingDirectory($dirs->getDir(\Magento\App\Dir::MEDIA));
-        $this->_baseMediaPath = $this->_mediaConfig->getBaseMediaPath();
-        $this->_baseTmpMediaPath = $this->_mediaConfig->getBaseTmpMediaPath();
-        $this->_filesystem->ensureDirectoryExists($this->_baseMediaPath);
-        $this->_filesystem->ensureDirectoryExists($this->_baseTmpMediaPath);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+
+        $this->_mediaDirectory->create($this->_mediaConfig->getBaseMediaPath());
+        $this->_mediaDirectory->create($this->_mediaConfig->getBaseTmpMediaPath());
 
         parent::__construct($logger);
     }
@@ -361,11 +346,13 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param boolean                    $move              if true, it will move source file
      * @param boolean                    $exclude           mark image as disabled in product page view
      * @return string
+     * @throws \Magento\Core\Exception
      */
     public function addImage(\Magento\Catalog\Model\Product $product, $file,
         $mediaAttribute = null, $move = false, $exclude = true
     ) {
-        if (!$this->_filesystem->isFile($file, $this->_baseTmpMediaPath)) {
+        $file = $this->_mediaDirectory->getRelativePath($file);
+        if (!$this->_mediaDirectory->isFile($file)) {
             throw new \Magento\Core\Exception(__('The image does not exist.'));
         }
 
@@ -377,7 +364,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         $fileName       = \Magento\Core\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
         $dispretionPath = \Magento\Core\Model\File\Uploader::getDispretionPath($fileName);
-        $fileName       = $dispretionPath . DS . $fileName;
+        $fileName       = $dispretionPath . '/' . $fileName;
 
         $fileName = $this->_getNotDuplicatedFilename($fileName, $dispretionPath);
 
@@ -387,15 +374,15 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             /** @var $storageHelper \Magento\Core\Helper\File\Storage\Database */
             $storageHelper = $this->_fileStorageDb;
             if ($move) {
-                $this->_filesystem->rename($file, $destinationFile, $this->_baseTmpMediaPath);
+                $this->_mediaDirectory->renameFile($file, $destinationFile);
 
                 //If this is used, filesystem should be configured properly
                 $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
             } else {
-                $this->_filesystem->copy($file, $destinationFile, $this->_baseTmpMediaPath);
+                $this->_mediaDirectory->copyFile($file, $destinationFile);
 
                 $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
-                $this->_filesystem->changePermissions($destinationFile, 0777, false, $this->_baseTmpMediaPath);
+                $this->_mediaDirectory->changePermissions($destinationFile, 0777);
             }
         } catch (\Exception $e) {
             throw new \Magento\Core\Exception(
@@ -403,7 +390,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             );
         }
 
-        $fileName = str_replace(DS, '/', $fileName);
+        $fileName = str_replace('\\', '/', $fileName);
 
         $attrCode = $this->getAttribute()->getAttributeCode();
         $mediaGalleryData = $product->getData($attrCode);
@@ -645,18 +632,16 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $this->_mediaConfig->getMediaShortUrl($destinationFile)
             );
 
-            $this->_filesystem->delete($this->_mediaConfig->getTmpMediaPath($file), $this->_baseTmpMediaPath);
-            $this->_filesystem->delete($this->_mediaConfig->getMediaPath($destinationFile), $this->_baseMediaPath);
+            $this->_mediaDirectory->delete($this->_mediaConfig->getTmpMediaPath($file));
+            $this->_mediaDirectory->delete($this->_mediaConfig->getMediaPath($destinationFile));
         } else {
-            $this->_filesystem->rename(
+            $this->_mediaDirectory->renameFile(
                 $this->_mediaConfig->getTmpMediaPath($file),
-                $this->_mediaConfig->getMediaPath($destinationFile),
-                $this->_baseTmpMediaPath,
-                $this->_baseMediaPath
+                $this->_mediaConfig->getMediaPath($destinationFile)
             );
         }
 
-        return str_replace(DS, '/', $destinationFile);
+        return str_replace('\\', '/', $destinationFile);
     }
 
     /**
@@ -668,14 +653,12 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected function _getUniqueFileName($file)
     {
         if ($this->_fileStorageDb->checkDbUsage()) {
-            $destFile = $this->_fileStorageDb
-                ->getUniqueFilename(
-                    $this->_mediaConfig->getBaseMediaUrlAddition(),
-                    $file
-                );
+            $destFile = $this->_fileStorageDb->getUniqueFilename($this->_mediaConfig->getBaseMediaUrlAddition(), $file);
         } else {
-            $destFile = dirname($file) . DS
-                . \Magento\Core\Model\File\Uploader::getNewFileName($this->_mediaConfig->getMediaPath($file));
+            $destFile = dirname($file) . '/'
+                . \Magento\Core\Model\File\Uploader::getNewFileName(
+                    $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file))
+                );
         }
 
         return $destFile;
@@ -692,25 +675,24 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         try {
             $destinationFile = $this->_getUniqueFileName($file);
 
-            if (!$this->_filesystem->isFile($this->_mediaConfig->getMediaPath($file), $this->_baseMediaPath)) {
+            if (!$this->_mediaDirectory->isFile($this->_mediaConfig->getMediaPath($file))) {
                 throw new \Exception();
             }
 
             if ($this->_fileStorageDb->checkDbUsage()) {
-                $this->_fileStorageDb
-                    ->copyFile($this->_mediaConfig->getMediaShortUrl($file),
-                               $this->_mediaConfig->getMediaShortUrl($destinationFile));
-
-                $this->_filesystem->delete($this->_mediaConfig->getMediaPath($destinationFile), $this->_baseMediaPath);
+                $this->_fileStorageDb->copyFile(
+                    $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaShortUrl($file)),
+                    $this->_mediaConfig->getMediaShortUrl($destinationFile)
+                );
+                $this->_mediaDirectory->delete($this->_mediaConfig->getMediaPath($destinationFile));
             } else {
-                $this->_filesystem->copy(
+                $this->_mediaDirectory->copyFile(
                     $this->_mediaConfig->getMediaPath($file),
-                    $this->_mediaConfig->getMediaPath($destinationFile),
-                    $this->_baseMediaPath
+                    $this->_mediaConfig->getMediaPath($destinationFile)
                 );
             }
 
-            return str_replace(DS, '/', $destinationFile);
+            return str_replace('\\', '/', $destinationFile);
         } catch (\Exception $e) {
             $file = $this->_mediaConfig->getMediaPath($file);
             throw new \Magento\Core\Exception(
@@ -747,9 +729,9 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected function _getNotDuplicatedFilename($fileName, $dispretionPath)
     {
-        $fileMediaName = $dispretionPath . DS
+        $fileMediaName = $dispretionPath . '/'
                   . \Magento\Core\Model\File\Uploader::getNewFileName($this->_mediaConfig->getMediaPath($fileName));
-        $fileTmpMediaName = $dispretionPath . DS
+        $fileTmpMediaName = $dispretionPath . '/'
                   . \Magento\Core\Model\File\Uploader::getNewFileName($this->_mediaConfig->getTmpMediaPath($fileName));
 
         if ($fileMediaName != $fileTmpMediaName) {

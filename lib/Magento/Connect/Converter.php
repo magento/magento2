@@ -257,7 +257,7 @@ final class Converter
             }
 
             $result = rtrim($result, "\\/");
-            $packageXml = $result . DS . "package.xml";
+            $packageXml = $result . '/package.xml';
             if(!file_exists($packageXml)) {
                 throw new \Exception("No package.xml found inside '{$sourceFile}'");
             }
@@ -276,9 +276,9 @@ final class Converter
              */
             if(false === $destFile) {
                 $pathinfo = pathinfo($sourceFile);
-                $destFile = $pathinfo['dirname'] . DS .$pathinfo['filename'].'-converted';
+                $destFile = $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '-converted';
                 if(isset($pathinfo['extension'])) {
-                    $destFile .= ".".$pathinfo['extension'];
+                    $destFile .= "." . $pathinfo['extension'];
                 }
             }
             
@@ -287,7 +287,8 @@ final class Converter
             $mageObject->setTarget($target);            
             $validRoles = array_keys($targets);
             $data = $pearObject->getFilelist();
-            $pathSource = dirname($pearObject->getPackageFile()).DS.$pearObject->getName()."-".$pearObject->getVersion();            
+            $pathSource = dirname($pearObject->getPackageFile())
+                . '/' . $pearObject->getName() . "-" . $pearObject->getVersion();
 
             $filesToDo = array();
             foreach($data as $file =>$row) {
@@ -298,8 +299,8 @@ final class Converter
                 }
                 $baseName = ltrim($targets[$role], "\\/.");
                 $baseName = rtrim($baseName, "\\/");
-                $sourceFile = $pathSource.DS.$name;
-                $targetFile = $outDir . DS . $baseName . DS. $name;
+                $sourceFile = $pathSource . '/' . $name;
+                $targetFile = $outDir . '/' . $baseName . '/' . $name;
                 if(file_exists($sourceFile)) {
                     \Magento\System\Dirs::mkdirStrict(dirname($targetFile));
                     $copy = @copy($sourceFile, $targetFile);
@@ -316,7 +317,7 @@ final class Converter
             }
             $mageObject->save(getcwd());
             @chdir($cwd);            
-            $filename = $outDir. DS . $mageObject->getReleaseFilename().".tgz";         
+            $filename = $outDir . '/' . $mageObject->getReleaseFilename() . '.tgz';
             if(@file_exists($targetArchive)) {
                 @unlink($targetArchive);
             }

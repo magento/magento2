@@ -1,3 +1,50 @@
+2.0.0.0-dev57
+=============
+* Fixed bugs:
+  * Fixed [MAP]: "Click for price" link is broken on the category page
+  * Fixed tax rule search on the grid
+  * Fixed redirect on dashboard if "Search", "Reset", "Export" buttons are clicked on several pages
+  * Fixed switching user to alternate store-view when clicking on the Category (with Add Store Code to Urls="Yes" in the config)
+  * Fixed printing Order/Shipping/Credit Memo from backend
+  * Fixed 404 Error on attempt to print Shipping Label
+  * Fixed duplication of JavaScript Resources in head on frontend
+  * Fixed inconsistency with disabled states on Configurable product page in the Plushe theme
+  * Fixed 3D Secure Information absence on Admin Order Info page
+  * Fixed possibility to download or revert Backup
+  * Fixed session fixation in user registration during checkout
+  * Fixed fatal error during login to backend
+  * Fixed inline translations in the Adminhtml area
+  * Fixed partial refunds/invoices in Payflow Pro
+  * Fixed the issue with ignoring area in design emulation
+  * Fixed order placing with virtual product using Express Checkout
+  * Fixed the error during order placement with Recurring profile payment
+  * Fixed wrong redirect after customer registration during multishipping checkout
+  * Fixed inability to crate shipping labels
+  * Fixed inability to switch language, if the default language is English
+  * Fixed an issue with incorrect XML appearing in cache after some actions on the frontend
+  * Fixed product export
+  * Fixed inability to configure memcache as session save handler
+* GitHub requests:
+  * [#406](https://github.com/magento/magento2/pull/406) -- Remove cast to (int) for the varch increment_id
+  * [#425](https://github.com/magento/magento2/issues/425) -- Installation of dev53 fails
+  * [#324](https://github.com/magento/magento2/pull/324) -- ImportExport: Easier debugging
+* Modularity improvements:
+  * Removed \Magento\App\Helper\HelperFactory
+  * Removed the "helper" method from the abstract block interface
+  * Layout page type config moved to library
+  * Design loader moved to library
+  * Theme label moved to library
+  * Remaining part from Adminhtml moved to the appropriate modules. Adminhtml module has been eliminated
+  * Core Session and Cookie models decomposed and moved to library
+    * \Magento\Stdlib\Cookie library created
+    * Session Manager and Session Config interfaces provided
+    * Session save handler interface created
+    * Session storage interface created, session does not extend \Magento\Object anymore
+    * Session validator interface created
+    * Session generic wrapper moved to library
+    * Messages functionality moved from the Session model as separate component, message manager interface created
+    * Sid resolver interface created to handle session sid from request
+  
 2.0.0.0-dev56
 =============
 * Fixed bugs:
@@ -23,7 +70,7 @@
   * Ability to delete API integrations that were not created using configuration files
 * Removed System REST menu item and all associated UX flows:
   * Users, Roles, and Webhook Subscriptions sub-menu items were removed
-* Removed the Webhook module
+* Removed the Webhook module until it can be refactored to use the new Authorization service
 
 2.0.0.0-dev55
 =============

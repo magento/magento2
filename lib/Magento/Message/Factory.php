@@ -30,35 +30,15 @@ namespace Magento\Message;
 class Factory
 {
     /**
-     * Error type
-     */
-    const ERROR = 'error';
-
-    /**
-     * Warning type
-     */
-    const WARNING = 'warning';
-
-    /**
-     * Notice type
-     */
-    const NOTICE = 'notice';
-
-    /**
-     * Success type
-     */
-    const SUCCESS = 'success';
-
-    /**
      * Allowed message types
      *
      * @var array
      */
     protected $types = array(
-        self::ERROR,
-        self::WARNING,
-        self::NOTICE,
-        self::SUCCESS,
+        MessageInterface::TYPE_ERROR,
+        MessageInterface::TYPE_WARNING,
+        MessageInterface::TYPE_NOTICE,
+        MessageInterface::TYPE_SUCCESS,
     );
 
     /**
@@ -81,80 +61,23 @@ class Factory
     /**
      * Create message instance with specified parameters
      *
-     * @param $type
-     * @param string $code
-     * @param string $class
-     * @param string $method
+     * @param string $type
+     * @param string $text
      * @throws \InvalidArgumentException
-     * @return AbstractMessage
+     * @return MessageInterface
      */
-    public function create($type, $code = '', $class = '', $method = '')
+    public function create($type, $text)
     {
         if (!in_array($type, $this->types)) {
             throw new \InvalidArgumentException('Wrong message type');
         }
 
         $className = 'Magento\Message\\' . ucfirst($type);
-        $message = $this->objectManager->create($className, array('code' => $code));
-        if (!($message instanceof AbstractMessage)) {
-            throw new \InvalidArgumentException($className . ' doesn\'t extends \Magento\Message\AbstractMessage');
+        $message = $this->objectManager->create($className, array('text' => $text));
+        if (!($message instanceof MessageInterface)) {
+            throw new \InvalidArgumentException($className . ' doesn\'t implement \Magento\Message\MessageInterface');
         }
 
-        $message->setClass($class);
-        $message->setMethod($method);
-
         return $message;
-    }
-
-    /**
-     * Create error message
-     *
-     * @param $code
-     * @param string $class
-     * @param string $method
-     * @return Error
-     */
-    public function error($code, $class='', $method='')
-    {
-        return $this->create(self::ERROR, $code, $class, $method);
-    }
-
-    /**
-     * Create warning message
-     *
-     * @param $code
-     * @param string $class
-     * @param string $method
-     * @return Warning
-     */
-    public function warning($code, $class='', $method='')
-    {
-        return $this->create(self::WARNING, $code, $class, $method);
-    }
-
-    /**
-     * Create notice message
-     *
-     * @param $code
-     * @param string $class
-     * @param string $method
-     * @return Notice
-     */
-    public function notice($code, $class='', $method='')
-    {
-        return $this->create(self::NOTICE, $code, $class, $method);
-    }
-
-    /**
-     * Create success message
-     *
-     * @param $code
-     * @param string $class
-     * @param string $method
-     * @return Success
-     */
-    public function success($code, $class='', $method='')
-    {
-        return $this->create(self::SUCCESS, $code, $class, $method);
     }
 }

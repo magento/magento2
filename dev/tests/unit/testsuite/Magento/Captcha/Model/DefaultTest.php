@@ -241,7 +241,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
             array(
                 'user_create_word' => array(
                     'data' => 'AbCdEf5',
-                    'expires' => time() - 60
+                    'expires' => time() - 360
                 )
             )
         );
@@ -255,7 +255,12 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getSessionStub()
     {
-        $session = $this->getMock('Magento\Customer\Model\Session', array('isLoggedIn'), array(), '', false);
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $sessionArgs = $helper->getConstructArguments('Magento\Customer\Model\Session', array(
+            'storage' => new \Magento\Session\Storage
+        ));
+        $session = $this->getMock('Magento\Customer\Model\Session',
+            array('isLoggedIn', 'getUserCreateWord'), $sessionArgs);
         $session->expects($this->any())
             ->method('isLoggedIn')
             ->will($this->returnValue(false));

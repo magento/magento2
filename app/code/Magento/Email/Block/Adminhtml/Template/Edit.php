@@ -34,7 +34,7 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
-class Edit extends \Magento\Adminhtml\Block\Widget
+class Edit extends \Magento\Backend\Block\Widget
 {
     /**
      * @var \Magento\Core\Model\Registry
@@ -69,12 +69,18 @@ class Edit extends \Magento\Adminhtml\Block\Widget
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Email\Model\Template\Config $emailConfig
+     * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
      */
     public function __construct(
@@ -84,8 +90,10 @@ class Edit extends \Magento\Adminhtml\Block\Widget
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Email\Model\Template\Config $emailConfig,
+        \Magento\Core\Helper\Data $coreHelper,
         array $data = array()
     ) {
+        $this->_coreHelper = $coreHelper;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_registryManager = $registry;
         $this->_menuConfig = $menuConfig;
@@ -97,7 +105,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
     protected function _prepareLayout()
     {
         $this->setChild('back_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Back'),
@@ -107,7 +115,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
                 )
         );
         $this->setChild('reset_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Reset'),
@@ -116,7 +124,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
                 )
         );
         $this->setChild('delete_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Delete Template'),
@@ -126,7 +134,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
                 )
         );
         $this->setChild('to_plain_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Convert to Plain Text'),
@@ -136,7 +144,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
                 )
         );
         $this->setChild('to_html_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Return Html Version'),
@@ -147,7 +155,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
                 )
         );
         $this->setChild('toggle_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Toggle Editor'),
@@ -157,7 +165,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
                 )
         );
         $this->setChild('preview_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Preview Template'),
@@ -166,7 +174,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
                 )
         );
         $this->setChild('save_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Save Template'),
@@ -176,7 +184,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
                 )
         );
         $this->setChild('load_button',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
                         'label'   => __('Load Template'),
@@ -374,7 +382,7 @@ class Edit extends \Magento\Adminhtml\Block\Widget
         $paths = $template->getSystemConfigPathsWhereUsedAsDefault();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);
         if ($asJSON) {
-            return $this->helper('Magento\Core\Helper\Data')->jsonEncode($pathsParts);
+            return $this->_coreHelper->jsonEncode($pathsParts);
         }
         return $pathsParts;
     }

@@ -35,20 +35,23 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     protected $_moduleReader;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Config\FileIteratorFactory
      */
-    protected $_applicationDirs;
+    protected $iteratorFactory;
 
     /**
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\App\Dir $applicationDirs
+     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
         \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\App\Dir $applicationDirs
+        \Magento\Filesystem $filesystem,
+        \Magento\Config\FileIteratorFactory $iteratorFactory
     ) {
+        $this->iteratorFactory = $iteratorFactory;
+        $this->filesystem = $filesystem;
         $this->_moduleReader = $moduleReader;
-        $this->_applicationDirs = $applicationDirs;
     }
 
     /**
@@ -58,19 +61,19 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     {
         switch ($scope) {
             case 'primary':
-                $appConfigDir = $this->_applicationDirs->getDir(\Magento\App\Dir::CONFIG);
-                // Create pattern similar to app/etc/{*config.xml,*/*config.xml}
-                $filePattern = $appConfigDir . DIRECTORY_SEPARATOR
-                    . '{*' . $filename . ',*' . DIRECTORY_SEPARATOR . '*' . $filename . '}';
-                $fileList = glob($filePattern, GLOB_BRACE);
+                $directory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
+                $iterator = $this->iteratorFactory->create(
+                    $directory,
+                    $directory->search('#' . preg_quote($filename) . '$#')
+                );
                 break;
             case 'global':
-                $fileList = $this->_moduleReader->getConfigurationFiles($filename);
+                $iterator = $this->_moduleReader->getConfigurationFiles($filename);
                 break;
             default:
-                $fileList = $this->_moduleReader->getConfigurationFiles($scope . DIRECTORY_SEPARATOR . $filename);
+                $iterator = $this->_moduleReader->getConfigurationFiles($scope . '/' . $filename);
                 break;
         }
-        return $fileList;
+        return $iterator;
     }
 }

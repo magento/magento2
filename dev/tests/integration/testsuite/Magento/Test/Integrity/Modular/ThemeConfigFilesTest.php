@@ -40,13 +40,13 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
     /**
      * Returns a string that represents the path to the config file, starting in the app directory.
      *
-     * Format is glob, so * is allowed.
+     * Format is regex
      *
      * @return string
      */
-    protected function _getConfigFilePathGlob()
+    protected function _getConfigFilePathRegex()
     {
-        return '/*/*/*/etc/page_layouts.xml';
+        return '#/etc/page_layouts\.xml$#';
     }
 
     /**

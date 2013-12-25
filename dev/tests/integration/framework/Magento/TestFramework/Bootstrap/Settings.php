@@ -146,7 +146,7 @@ class Settings
      */
     protected function _resolvePath($relativePath)
     {
-        return $this->_baseDir . DIRECTORY_SEPARATOR . $relativePath;
+        return $this->_baseDir . '/' . $relativePath;
     }
 
     /**

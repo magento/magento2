@@ -46,10 +46,8 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema
-            = $moduleReader->getModuleDir('etc', 'Magento_Index') . DIRECTORY_SEPARATOR . 'indexers_merged.xsd';
-        $this->_perFileSchema
-            = $moduleReader->getModuleDir('etc', 'Magento_Index') . DIRECTORY_SEPARATOR . 'indexers.xsd';
+        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Index') . '/indexers_merged.xsd';
+        $this->_perFileSchema = $moduleReader->getModuleDir('etc', 'Magento_Index') . '/indexers.xsd';
     }
 
     /**

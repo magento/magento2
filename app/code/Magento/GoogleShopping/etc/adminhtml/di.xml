@@ -26,5 +26,5 @@
  */
 -->
 <config>
-    <preference for="Magento\Core\Model\Session\AbstractSession" type="Magento\Backend\Model\Session" />
+    <preference for="Magento\Session\SessionManagerInterface" type="Magento\Backend\Model\Session" />
 </config>

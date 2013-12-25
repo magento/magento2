@@ -26,59 +26,88 @@
  */
 
 namespace Magento\Backup;
+require_once __DIR__ . '/_files/Gz.php';
+require_once __DIR__ . '/_files/Tar.php';
+require_once __DIR__ . '/_files/Fs.php';
+require_once __DIR__ . '/_files/Helper.php';
+require_once(__DIR__ . '/_files/io.php');
+
 
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem
      */
-    protected $_dirMock;
+    protected $_filesystemMock;
 
     /**
      * @var \Magento\Backup\Factory
      */
     protected $_backupFactoryMock;
 
+    /**
+     * @var \Magento\Backup\Db
+     */
+    protected $_backupDbMock;
+
     protected function setUp()
     {
-        $this->_dirMock = $this->getMock('Magento\App\Dir', array(), array(), '', false);
+        $this->_backupDbMock = $this->getMock('Magento\Backup\Db', array(), array(), '', false);
+        $this->_backupDbMock->expects($this->any())
+            ->method('setBackupExtension')
+            ->will($this->returnSelf());
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('setTime')
+            ->will($this->returnSelf());
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('setBackupsDir')
+            ->will($this->returnSelf());
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('setResourceModel')
+            ->will($this->returnSelf());
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('getBackupPath')
+            ->will($this->returnValue('\unexistingpath'));
+
+        $this->_backupDbMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue(true));
+
+        $this->_filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $this->_backupFactoryMock = $this->getMock('Magento\Backup\Factory', array(), array(), '', false);
+        $this->_backupFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->_backupDbMock));
     }
+
     /**
      * @param string $action
      * @dataProvider actionProvider
      */
     public function testAction($action)
     {
-        $snapshot = $this->getMock(
-            'Magento\Backup\Snapshot',
-            array('create', 'rollback', 'getDbBackupFilename'),
-            array($this->_dirMock, $this->_backupFactoryMock)
-        );
-        $snapshot->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue(true));
-        $snapshot->expects($this->any())
-            ->method('rollback')
-            ->will($this->returnValue(true));
-        $snapshot->expects($this->once())
-            ->method('getDbBackupFilename')
-            ->will($this->returnValue('var/backup/2.gz'));
+        $this->_backupFactoryMock->expects($this->once())->method('create');
 
-        $rootDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
+        $rootDir = __DIR__ . '/_files/data';
 
-        $model = new \Magento\Backup\Media($snapshot);
+        $model = new \Magento\Backup\Media($this->_filesystemMock, $this->_backupFactoryMock);
         $model->setRootDir($rootDir);
+        $model->$action();
+        $this->assertTrue($model->getIsSuccess());
 
         $this->assertTrue($model->$action());
 
-        $this->assertEquals(
-            array(
-                $rootDir . DIRECTORY_SEPARATOR . 'code',
-                $rootDir . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'tmp',
-            ),
-            $snapshot->getIgnorePaths()
-        );
+        $paths = $model->getIgnorePaths();
+        $path1 = str_replace('\\', '/', $paths[0]);
+        $path2 = str_replace('\\', '/', $paths[1]);
+        $rootDir = str_replace('\\', '/', $rootDir);
+
+        $this->assertEquals($rootDir . '/code', $path1);
+        $this->assertEquals($rootDir . '/var/log', $path2);
     }
 
     /**
@@ -89,41 +118,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         return array(
             array('create'),
             array('rollback'),
-        );
-    }
-
-    /**
-     * @param string $method
-     * @param $parameter
-     * @dataProvider methodsProvider
-     */
-    public function testProxyMethod($method, $parameter)
-    {
-        $snapshot = $this->getMock('Magento\Backup\Snapshot',
-            array($method),
-            array($this->_dirMock, $this->_backupFactoryMock));
-        $snapshot->expects($this->once())
-            ->method($method)
-            ->with($parameter)
-            ->will($this->returnValue($snapshot));
-
-        $model = new \Magento\Backup\Media($snapshot);
-        $this->assertEquals($model, $model->$method($parameter));
-    }
-
-    /**
-     * @return array
-     */
-    public function methodsProvider()
-    {
-        $snapshot = $this->getMock('Magento\Backup\Snapshot', array(), array(), '', false);
-        return array(
-            array('setBackupExtension', 'test'),
-            array('setResourceModel', new \Magento\Backup\Media($snapshot)),
-            array('setTime', 1),
-            array('setBackupsDir', 'test/test'),
-            array('addIgnorePaths', 'test/test'),
-            array('setRootDir', 'test/test'),
         );
     }
 }

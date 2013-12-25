@@ -70,24 +70,34 @@ class Config
     protected $_persistentFactory;
 
     /**
+     * Filesystem
+     *
+     * @var \Magento\Filesystem\Directory\Read;
+     */
+    protected $_modulesDirectory;
+
+    /**
      * @param \Magento\Config\DomFactory $domFactory
      * @param \Magento\Module\Dir\Reader $moduleReader
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Config\DomFactory $domFactory,
         \Magento\Module\Dir\Reader $moduleReader,
         \Magento\View\LayoutInterface $layout,
         \Magento\App\State $appState,
-        \Magento\Persistent\Model\Factory $persistentFactory
+        \Magento\Persistent\Model\Factory $persistentFactory,
+        \Magento\Filesystem $filesystem
     ) {
         $this->_domFactory = $domFactory;
         $this->_moduleReader = $moduleReader;
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
+        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
     }
 
     /**
@@ -111,11 +121,15 @@ class Config
     protected function _getConfigDomXPath()
     {
         if (is_null($this->_configDomXPath)) {
-            $filePath = $this->_configFilePath;
-            if (!is_file($filePath) || !is_readable($filePath)) {
-                throw new \Magento\Core\Exception(__('We cannot load the configuration from file %1.', $filePath));
+            $filePath = $this->_modulesDirectory->getRelativePath($this->_configFilePath);
+            $isFile = $this->_modulesDirectory->isFile($filePath);
+            $isReadable = $this->_modulesDirectory->isReadable($filePath);
+            if (!$isFile || !$isReadable) {
+                throw new \Magento\Core\Exception(
+                    __('We cannot load the configuration from file %1.', $this->_configFilePath)
+                );
             }
-            $xml = file_get_contents($filePath);
+            $xml = $this->_modulesDirectory->readFile($filePath);
             /** @var \Magento\Config\Dom $configDom */
             $configDom = $this->_domFactory->createDom(
                 array(

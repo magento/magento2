@@ -54,6 +54,11 @@ class JsTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_helperMock;
+
     protected function setUp()
     {
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
@@ -71,18 +76,18 @@ class JsTest extends \PHPUnit_Framework_TestCase
         $this->_themeContext->expects($this->any())->method('getStagingTheme')
             ->will($this->returnValue($this->_theme));
 
+        $this->_helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
+
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $constructArguments = $objectManagerHelper->getConstructArguments(
+
+        $this->_model = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js',
             array(
                 'urlBuilder' => $this->_urlBuilder,
                 'themeContext' => $this->_themeContext,
                 'formFactory' => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
-        ));
-        $this->_model = $this->getMock(
-            'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js',
-            array('helper'),
-            $constructArguments
+                'coreHelper' => $this->_helperMock
+            )
         );
     }
 
@@ -142,10 +147,15 @@ class JsTest extends \PHPUnit_Framework_TestCase
             ->method('getFilesByType')
             ->with(\Magento\View\Design\Theme\Customization\File\Js::TYPE)
             ->will($this->returnValue(array()));
-        $helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $this->_model->expects($this->once())->method('helper')->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
 
-        $this->_model->getFiles();
+        $customization->expects($this->once())
+            ->method('generateFileInfo')
+            ->with(array())
+            ->will($this->returnValue(array('js' => 'files')));
+
+        $this->_helperMock->expects($this->once())
+            ->method('jsonEncode')->with(array('js' => 'files'))->will($this->returnValue('someData'));
+
+        $this->assertEquals('someData', $this->_model->getFiles());
     }
 }

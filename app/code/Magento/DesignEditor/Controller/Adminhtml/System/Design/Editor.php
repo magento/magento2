@@ -138,12 +138,12 @@ class Editor extends \Magento\Backend\App\Action
 
             $this->_view->renderLayout();
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addException($e, $e->getMessage());
+            $this->messageManager->addException($e, $e->getMessage());
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_redirect('adminhtml/*/');
             return;
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('Sorry, there was an unknown error.'));
+            $this->messageManager->addException($e, __('Sorry, there was an unknown error.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_redirect('adminhtml/*/');
             return;
@@ -178,7 +178,7 @@ class Editor extends \Magento\Backend\App\Action
                 ? __('You assigned a new theme to your store view.')
                 : __('You assigned a theme to your live store.');
             if ($reportToSession) {
-                $this->_getSession()->addSuccess($successMessage);
+                $this->messageManager->addSuccess($successMessage);
             }
             $response = array(
                 'message' => $successMessage,
@@ -285,15 +285,15 @@ class Editor extends \Magento\Backend\App\Action
             $themeCopy->getThemeImage()->createPreviewImageCopy($theme->getPreviewImage());
             $themeCopy->save();
             $copyService->copy($theme, $themeCopy);
-            $this->_getSession()->addSuccess(
+            $this->messageManager->addSuccess(
                 __('You saved a duplicate copy of this theme in "My Customizations."')
             );
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $this->_objectManager->get('Magento\Logger')->logException($e);
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
-            $this->_getSession()->addError(__('You cannot duplicate this theme.'));
+            $this->messageManager->addError(__('You cannot duplicate this theme.'));
         }
         $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
     }
@@ -500,7 +500,7 @@ class Editor extends \Magento\Backend\App\Action
             $storeViewBlock->setData('actionOnAssign', 'refresh');
             $this->_view->renderLayout();
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('We can\'t load the list of themes.'));
+            $this->messageManager->addError(__('We can\'t load the list of themes.'));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }

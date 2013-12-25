@@ -25,3 +25,6 @@
 -->
 <config>
 </config>
+
+<!--/var/www/magetwo-firedrakes.localhost/app/code/Magento/Email/etc/di.xml-->
+<!--/var/www/magetwo-firedrakes.localhost/app/etc/code/Magento/Email/etc/di.xml-->

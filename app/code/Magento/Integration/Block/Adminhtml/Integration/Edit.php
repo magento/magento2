@@ -29,7 +29,7 @@ namespace Magento\Integration\Block\Adminhtml\Integration;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration;
 
-class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
@@ -38,17 +38,25 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
      */
     protected $_registry = null;
 
+    /** @var \Magento\Integration\Helper\Data */
+    protected $_integrationHelper;
+
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Integration\Helper\Data $integrationHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Integration\Helper\Data $integrationHelper,
         array $data = array()
     ) {
         $this->_registry = $registry;
+        $this->_integrationHelper = $integrationHelper;
         parent::__construct($context, $data);
     }
 
@@ -63,6 +71,12 @@ class Edit extends \Magento\Adminhtml\Block\Widget\Form\Container
         parent::_construct();
         $this->_removeButton('reset');
         $this->_removeButton('delete');
+
+        if ($this->_integrationHelper->isConfigType(
+            $this->_registry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION))
+        ) {
+            $this->_removeButton('save');
+        }
 
         if ($this->_isNewIntegration()) {
             $this->removeButton('save')->addButton(

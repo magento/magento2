@@ -36,6 +36,25 @@ class Link extends AbstractRenderer
     protected $_row;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        \Magento\Core\Helper\Data $coreHelper,
+        array $data = array()
+    ) {
+        $this->_coreHelper = $coreHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Render grid row
      *
      * @param \Magento\Object $row
@@ -129,7 +148,7 @@ class Link extends AbstractRenderer
     protected function _getAttributes()
     {
         /** @var \Magento\Core\Helper\Data $helper */
-        $helper = $this->helper('Magento\Core\Helper\Data');
+        $helper = $this->_coreHelper;
         $attributes = ['title' => $this->getCaption()];
 
         foreach ($this->_getDataAttributes() as $key => $attr) {

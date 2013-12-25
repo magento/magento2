@@ -75,7 +75,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         $this->fallbackFactory = $this->getMock(
             'Magento\View\Design\Fallback\Factory',
             array('createLocaleFileRule', 'createFileRule', 'createViewFileRule'),
-            array($this->getMock('Magento\App\Dir', array(), array(), '', false))
+            array($this->getMock('Magento\Filesystem', array(), array(), '', false))
         );
         $this->fallbackFactory
             ->expects($this->any())->method('createLocaleFileRule')->will($this->returnValue($this->fallbackLocale));
@@ -117,7 +117,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
 
         $filename = $fallback->getFile('area', $this->theme, 'file.txt', $fullModuleName);
 
-        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, $expectedFileName), $filename);
+        $this->assertEquals($expectedFileName, $filename);
     }
 
     /**
@@ -178,7 +178,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
 
         $filename = $fallback->getLocaleFile('area', $this->theme, 'locale', 'file.txt');
 
-        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, $expectedFileName), $filename);
+        $this->assertEquals($expectedFileName, $filename);
     }
 
     /**
@@ -220,7 +220,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
 
         $filename = $fallback->getViewFile('area', $this->theme, 'locale', 'file.txt', $fullModuleName);
 
-        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, $expectedFileName), $filename);
+        $this->assertEquals($expectedFileName, $filename);
     }
 
     /**
@@ -229,11 +229,15 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFileSystemMock($targetFile)
     {
-        $targetFile = str_replace('/', DIRECTORY_SEPARATOR, $targetFile);
-
-        $filesystem = $this->getMock('Magento\Filesystem', array('has'), array(), '', false);
-        $filesystem->expects($this->any())
-            ->method('has')
+        $directoryMock = $this->getMock(
+            'Magento\Filesystem\Directory\Read',
+            array('isExist', 'getRelativePath'), array(), '', false
+        );
+        $directoryMock->expects($this->any())
+            ->method('getRelativePath')
+            ->will($this->returnArgument(0));
+        $directoryMock->expects($this->any())
+            ->method('isExist')
             ->will(
                 $this->returnCallback(
                     function ($tryFile) use ($targetFile) {
@@ -241,6 +245,11 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
                     }
                 )
             );
+        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false);
+        $filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Filesystem::ROOT)
+            ->will($this->returnValue($directoryMock));
 
         return $filesystem;
     }

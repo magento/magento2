@@ -50,11 +50,16 @@ class BeginTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLicenseHtmlWhenFileExists($fileName, $expectedTxt)
     {
+        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $directoryMock->expects($this->once())
+            ->method('readFile')
+            ->with($this->equalTo($fileName))
+            ->will($this->returnValue($expectedTxt));
+
         $fileSystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
         $fileSystem->expects($this->once())
-            ->method('read')
-            ->with($this->equalTo(BP . DS . $fileName))
-            ->will($this->returnValue($expectedTxt));
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($directoryMock));
 
         $block = $this->_objectManager->getObject('Magento\Install\Block\Begin',
             array('filesystem' => $fileSystem, 'eulaFile' => $fileName));

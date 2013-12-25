@@ -47,7 +47,7 @@ class Request
     {
         $request = $request ? : new \Zend_Controller_Request_Http();
         $this->_pathInfo = str_replace('..', '', ltrim($request->getPathInfo(), '/'));
-        $this->_filePath = str_replace('/', DS, $workingDir . DS . $this->_pathInfo);
+        $this->_filePath = $workingDir . '/' . $this->_pathInfo;
     }
 
     /**

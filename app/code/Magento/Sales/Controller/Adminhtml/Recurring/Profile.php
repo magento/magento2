@@ -63,7 +63,6 @@ class Profile extends \Magento\Backend\App\Action
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Sales::sales_recurring_profile');
         $this->_view->renderLayout();
-        return $this;
     }
 
     /**
@@ -80,7 +79,7 @@ class Profile extends \Magento\Backend\App\Action
             $this->_view->renderLayout();
             return;
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
@@ -96,7 +95,7 @@ class Profile extends \Magento\Backend\App\Action
             $this->_view->loadLayout()->renderLayout();
             return;
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
@@ -139,11 +138,11 @@ class Profile extends \Magento\Backend\App\Action
                     $profile->activate();
                     break;
             }
-            $this->_getSession()->addSuccess(__('The profile state has been updated.'));
+            $this->messageManager->addSuccess(__('The profile state has been updated.'));
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('We could not update the profile.'));
+            $this->messageManager->addError(__('We could not update the profile.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         if ($profile) {
@@ -164,14 +163,14 @@ class Profile extends \Magento\Backend\App\Action
             $profile->fetchUpdate();
             if ($profile->hasDataChanges()) {
                 $profile->save();
-                $this->_getSession()->addSuccess(__('You updated the profile.'));
+                $this->messageManager->addSuccess(__('You updated the profile.'));
             } else {
-                $this->_getSession()->addNotice(__('The profile has no changes.'));
+                $this->messageManager->addNotice(__('The profile has no changes.'));
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('We could not update the profile.'));
+            $this->messageManager->addError(__('We could not update the profile.'));
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
         if ($profile) {

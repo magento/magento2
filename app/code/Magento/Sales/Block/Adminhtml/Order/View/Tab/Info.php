@@ -35,7 +35,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 class Info
     extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
-    implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
+    implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Retrieve order model instance

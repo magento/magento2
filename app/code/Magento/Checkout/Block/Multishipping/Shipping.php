@@ -41,17 +41,25 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     protected $_filterGridFactory;
 
     /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $_taxHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Filter\Object\GridFactory $filterGridFactory
      * @param \Magento\Checkout\Model\Type\Multishipping $multishipping
+     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Filter\Object\GridFactory $filterGridFactory,
         \Magento\Checkout\Model\Type\Multishipping $multishipping,
+        \Magento\Tax\Helper\Data $taxHelper,
         array $data = array()
     ) {
+        $this->_taxHelper = $taxHelper;
         $this->_filterGridFactory = $filterGridFactory;
         $this->_multishipping = $multishipping;
         parent::__construct($context, $data);
@@ -146,6 +154,6 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     public function getShippingPrice($address, $price, $flag)
     {
-        return $address->getQuote()->getStore()->convertPrice($this->helper('Magento\Tax\Helper\Data')->getShippingPrice($price, $flag, $address), true);
+        return $address->getQuote()->getStore()->convertPrice($this->_taxHelper->getShippingPrice($price, $flag, $address), true);
     }
 }

@@ -82,7 +82,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Installer data model to store data between installations steps
      *
-     * @var \Magento\Install\Model\Installer\Data|\Magento\Core\Model\Session\Generic
+     * @var \Magento\Install\Model\Installer\Data|\Magento\Session\Generic
      */
     protected $_dataModel;
 
@@ -115,13 +115,6 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_appState;
 
     /**
-     * Core Dir model
-     *
-     * @var \Magento\App\Dir
-     */
-    protected $_coreDir;
-
-    /**
      * Locale model
      *
      * @var \Magento\Core\Model\LocaleInterface
@@ -142,7 +135,6 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * @param \Magento\Filesystem $filesystem
      * @param \Magento\Install\Model\Installer\Data $installerData
      * @param \Magento\App\State $appState
-     * @param \Magento\App\Dir $coreDir
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\ObjectManager $objectManager
      */
@@ -153,7 +145,6 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         \Magento\Filesystem $filesystem,
         \Magento\Install\Model\Installer\Data $installerData,
         \Magento\App\State $appState,
-        \Magento\App\Dir $coreDir,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\ObjectManager $objectManager
     ) {
@@ -164,7 +155,6 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_installerData = $installerData;
         $this->_installer->setDataModel($this->_installerData);
         $this->_appState = $appState;
-        $this->_coreDir = $coreDir;
         $this->_locale = $locale;
         $this->_objectManager = $objectManager;
     }
@@ -370,11 +360,14 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
             /**
              * Change directories mode to be writable by apache user
              */
-            $this->_filesystem->changePermissions($this->_coreDir->getDir('var'), 0777, true);
+            $this->_filesystem
+                ->getDirectoryWrite(\Magento\Filesystem::VAR_DIR)
+                ->changePermissions('', 0777);
+
             return $encryptionKey;
         } catch (\Exception $e) {
             if ($e instanceof \Magento\Core\Exception) {
-                foreach ($e->getMessages(\Magento\Message\Factory::ERROR) as $errorMessage) {
+                foreach ($e->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR) as $errorMessage) {
                     $this->addError($errorMessage);
                 }
             } else {
@@ -409,11 +402,13 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_cleanUpDatabase();
 
         /* Remove temporary directories and local.xml */
-        foreach (glob($this->_coreDir->getDir(\Magento\App\Dir::VAR_DIR) . '/*', GLOB_ONLYDIR) as $dir) {
-            $this->_filesystem->delete($dir);
+        $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        foreach ($varDirectory->read() as $path) {
+            if ($varDirectory->isDirectory($path)) {
+                $varDirectory->delete($path);
+            }
         }
-        $this->_filesystem->delete($this->_coreDir->getDir(\Magento\App\Dir::CONFIG)
-            . DIRECTORY_SEPARATOR . '/local.xml');
+        $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::CONFIG)->delete('local.xml');
         return true;
     }
 

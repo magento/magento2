@@ -135,6 +135,14 @@ abstract class AbstractAction extends \Magento\App\Action\Action
     }
 
     /**
+     * @return \Magento\Message\ManagerInterface
+     */
+    protected function getMessageManager()
+    {
+        return $this->messageManager;
+    }
+
+    /**
      * Define active menu item in menu block
      * @param string $itemId current active menu item
      * @return \Magento\Backend\App\AbstractAction
@@ -209,7 +217,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
 
     /**
      * @param \Magento\App\RequestInterface $request
-     * @return $this|mixed
+     * @return \Magento\App\ResponseInterface
      */
     public function dispatch(\Magento\App\RequestInterface $request)
     {
@@ -218,7 +226,8 @@ abstract class AbstractAction extends \Magento\App\Action\Action
         }
 
         if ($request->isDispatched() && $request->getActionName() !== 'denied' && !$this->_isAllowed()) {
-            return $this->_forward('denied');
+            $this->_forward('denied');
+            return $this->_response;
         }
 
         if ($this->_isUrlChecked()) {
@@ -334,7 +343,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
     {
         $this->_getSession()->setIsUrlNotice($this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED));
         $this->getResponse()->setRedirect($this->getUrl($path, $arguments));
-        return $this;
+        return $this->getResponse();
     }
 
     protected function _forward($action, $controller = null, $module = null, array $params = null)
@@ -381,7 +390,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
      */
     protected function _outTemplate($tplName, $data = array())
     {
-        $this->_view->getLayout()->initMessages('Magento\Backend\Model\Session');
+        $this->_view->getLayout()->initMessages();
         $block = $this->_view->getLayout()
             ->createBlock('Magento\Backend\Block\Template')->setTemplate("{$tplName}.phtml");
         foreach ($data as $index => $value) {

@@ -34,10 +34,10 @@
 
 namespace Magento\Backend\Block\Dashboard;
 
-class Diagrams extends \Magento\Adminhtml\Block\Widget\Tabs
+class Diagrams extends \Magento\Backend\Block\Widget\Tabs
 {
 
-    protected $_template = 'Magento_Adminhtml::widget/tabshoriz.phtml';
+    protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
     protected function _construct()
     {

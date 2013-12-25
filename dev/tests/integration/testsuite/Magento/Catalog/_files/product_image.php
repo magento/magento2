@@ -25,10 +25,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$mediaDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Catalog\Model\Product\Media\Config')->getBaseMediaPath();
-$dir = $mediaDir . '/m/a';
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$mediaPath = $objectManager->get('Magento\Filesystem')->getPath(\Magento\Filesystem::MEDIA);
+$additionalPath = $objectManager->get('Magento\Catalog\Model\Product\Media\Config')->getBaseMediaPath();
+$dir = $mediaPath . '/' . $additionalPath . '/m/a';
 if (!is_dir($dir)) {
     mkdir($dir, 0777, true);
 }
-copy(__DIR__ . '/magento_image.jpg', $mediaDir . '/m/a/magento_image.jpg');
+copy(__DIR__ . '/magento_image.jpg', $dir . '/magento_image.jpg');

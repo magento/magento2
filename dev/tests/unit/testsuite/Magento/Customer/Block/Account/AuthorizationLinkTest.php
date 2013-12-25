@@ -64,14 +64,12 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $context = $this->_objectManager->getObject('Magento\View\Element\Template\Context');
-
-        $context->getHelperFactory()->expects($this->any())->method('get')->will($this->returnValue($this->_helper));
-
         $this->_block = $this->_objectManager->getObject(
             'Magento\Customer\Block\Account\AuthorizationLink',
             array(
                 'context' => $context,
                 'session' => $this->_session,
+                'customerHelper' => $this->_helper,
             )
         );
     }

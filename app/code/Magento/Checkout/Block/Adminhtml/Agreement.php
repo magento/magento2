@@ -34,7 +34,7 @@
 
 namespace Magento\Checkout\Block\Adminhtml;
 
-class Agreement extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Agreement extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected function _construct()
     {

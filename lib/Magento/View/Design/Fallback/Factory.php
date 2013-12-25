@@ -24,7 +24,7 @@
 
 namespace Magento\View\Design\Fallback;
 
-use Magento\App\Dir;
+use Magento\Filesystem;
 use Magento\View\Design\Fallback\Rule\Composite;
 use Magento\View\Design\Fallback\Rule\ModularSwitch;
 use Magento\View\Design\Fallback\Rule\RuleInterface;
@@ -39,16 +39,18 @@ use Magento\View\Design\Fallback\Rule\Theme;
 class Factory
 {
     /**
-     * @var Dir
+     * @var Filesystem
      */
-    protected $dirs;
+    protected $filesystem;
 
     /**
-     * @param Dir $dirs
+     * Constructor
+     *
+     * @param Filesystem $filesystem
      */
-    public function __construct(Dir $dirs)
+    public function __construct(Filesystem $filesystem)
     {
-        $this->dirs = $dirs;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -58,7 +60,7 @@ class Factory
      */
     public function createLocaleFileRule()
     {
-        $themesDir = $this->dirs->getDir(Dir::THEMES);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
         return new Theme(
             new Simple("$themesDir/<area>/<theme_path>/i18n/<locale>")
         );
@@ -71,8 +73,8 @@ class Factory
      */
     public function createFileRule()
     {
-        $themesDir = $this->dirs->getDir(Dir::THEMES);
-        $modulesDir = $this->dirs->getDir(Dir::MODULES);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
+        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES);
         return new ModularSwitch(
             new Theme(
                 new Simple(
@@ -101,9 +103,9 @@ class Factory
      */
     public function createViewFileRule()
     {
-        $themesDir = $this->dirs->getDir(Dir::THEMES);
-        $modulesDir = $this->dirs->getDir(Dir::MODULES);
-        $pubLibDir = $this->dirs->getDir(Dir::PUB_LIB);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
+        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES);
+        $pubLibDir = $this->filesystem->getPath(Filesystem::PUB_LIB);
         return new ModularSwitch(
             new Composite(
                 array(

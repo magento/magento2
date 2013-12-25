@@ -35,15 +35,23 @@ class Link extends \Magento\View\Element\Html\Link
     protected $_moduleManager;
 
     /**
+     * @var \Magento\Checkout\Helper\Data
+     */
+    protected $_checkoutHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Module\Manager $moduleManager
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Module\Manager $moduleManager,
+        \Magento\Checkout\Helper\Data $checkoutHelper,
         array $data = array()
     ) {
+        $this->_checkoutHelper = $checkoutHelper;
         parent::__construct($context, $data);
         $this->_moduleManager = $moduleManager;
     }
@@ -63,7 +71,7 @@ class Link extends \Magento\View\Element\Html\Link
      */
     protected function _toHtml()
     {
-        if (!$this->helper('Magento\Checkout\Helper\Data')->canOnepageCheckout()
+        if (!$this->_checkoutHelper->canOnepageCheckout()
             || !$this->_moduleManager->isOutputEnabled('Magento_Checkout')
         ) {
             return '';

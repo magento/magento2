@@ -24,6 +24,8 @@
 
 namespace Magento\View\Element;
 
+use Magento\Filesystem;
+
 /**
  * Base html block
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -60,12 +62,9 @@ class Template extends AbstractBlock
     protected $_allowSymlinks;
 
     /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dirs;
-
-    /**
-     * @var \Magento\Filesystem
+     * Filesystem instance
+     *
+     * @var Filesystem
      */
     protected $_filesystem;
 
@@ -97,16 +96,27 @@ class Template extends AbstractBlock
     protected $_appState;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param array $data
+     * Root directory instance
      *
-     * @todo Remove injection of the core helper from this class and its descendants, because it's no longer used
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $directory;
+
+    /**
+     * Media directory instance
+     *
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $mediaDirectory;
+
+    /**
+     * @param Template\Context $context
+     * @param array $data
      */
     public function __construct(
         Template\Context $context,
         array $data = array()
     ) {
-        $this->_dirs = $context->getDirs();
         $this->_filesystem = $context->getFilesystem();
         $this->_viewFileSystem = $context->getViewFileSystem();
         $this->templateEnginePool = $context->getEnginePool();
@@ -126,7 +136,7 @@ class Template extends AbstractBlock
          * In case template was passed through constructor
          * we assign it to block's property _template
          * Mainly for those cases when block created
-         * not via \Magento\View\LayoutInterface::addBlock()
+         * not via \Magento\View\Model\LayoutInterface::addBlock()
          */
         if ($this->hasData('template')) {
             $this->setTemplate($this->getData('template'));
@@ -208,13 +218,12 @@ class Template extends AbstractBlock
      */
     public function fetchView($fileName)
     {
-        $viewShortPath = str_replace($this->_dirs->getDir(\Magento\App\Dir::ROOT), '', $fileName);
-        \Magento\Profiler::start('TEMPLATE:' . $fileName, array('group' => 'TEMPLATE', 'file_name' => $viewShortPath));
+        $relativeFilePath = $this->getRootDirectory()->getRelativePath($fileName);
+        \Magento\Profiler::start(
+            'TEMPLATE:' . $fileName, array('group' => 'TEMPLATE', 'file_name' => $relativeFilePath)
+        );
 
-        if (($this->_filesystem->isPathInDirectory($fileName, $this->_dirs->getDir(\Magento\App\Dir::APP))
-                || $this->_filesystem->isPathInDirectory($fileName, $this->_dirs->getDir(\Magento\App\Dir::THEMES))
-                || $this->isAllowSymlinks()) && $this->_filesystem->isFile($fileName)
-        ) {
+        if ($this->isTemplateFileValid($fileName)) {
             $extension = pathinfo($fileName, PATHINFO_EXTENSION);
             $templateEngine = $this->templateEnginePool->get($extension);
             $html = $templateEngine->render($this, $fileName, $this->_viewVars);
@@ -281,15 +290,78 @@ class Template extends AbstractBlock
     }
 
     /**
-     * Get is allowed symlinks flag
+     * Get is allowed symliks flag
      *
      * @return bool
      */
     protected function isAllowSymlinks()
     {
-        if (is_null($this->_allowSymlinks)) {
+        if (null === $this->_allowSymlinks) {
             $this->_allowSymlinks = $this->_storeConfig->getConfigFlag(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK);
         }
         return $this->_allowSymlinks;
+    }
+
+    /**
+     * Instantiates filesystem directory
+     *
+     * @return \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected function getRootDirectory()
+    {
+        if (null === $this->directory) {
+            $this->directory = $this->_filesystem->getDirectoryRead(Filesystem::ROOT);
+        }
+
+        return $this->directory;
+    }
+
+    /**
+     * Get media directory
+     *
+     * @return \Magento\Filesystem\Directory\Read
+     */
+    protected function getMediaDirectory()
+    {
+        if (!$this->mediaDirectory) {
+            $this->mediaDirectory = $this->_filesystem->getDirectoryRead(Filesystem::MEDIA);
+        }
+        return $this->mediaDirectory;
+    }
+
+    /**
+     * Checks whether the provided file can be rendered.
+     *
+     * Available directories which are allowed to be rendered
+     * (the template file should be located under these directories):
+     *  - app
+     *  - design
+     *
+     * @param string $fileName
+     * @return bool
+     */
+    protected function isTemplateFileValid($fileName)
+    {
+        $fileName = str_replace('\\', '/', $fileName);
+
+        $themesDir = str_replace('\\', '/', $this->_filesystem->getPath(Filesystem::THEMES));
+        $appDir = str_replace('\\', '/', $this->_filesystem->getPath(Filesystem::APP));
+        return (
+            $this->isPathInDirectory($fileName, $appDir)
+            || $this->isPathInDirectory($fileName, $themesDir)
+            || $this->isAllowSymlinks()
+        ) && $this->getRootDirectory()->isFile($this->getRootDirectory()->getRelativePath($fileName));
+    }
+
+    /**
+     * Checks whether path related to the directory
+     *
+     * @param string $path
+     * @param string $directory
+     * @return bool
+     */
+    protected function isPathInDirectory($path, $directory)
+    {
+        return 0 === strpos($path, $directory);
     }
 }

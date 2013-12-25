@@ -49,7 +49,7 @@ class Config extends \Magento\Config\AbstractXml
      * @param \Magento\Validator\UniversalFactory $builderFactory
      */
     public function __construct(
-        array $configFiles,
+        $configFiles,
         \Magento\Validator\UniversalFactory $builderFactory
     ) {
         parent::__construct($configFiles);

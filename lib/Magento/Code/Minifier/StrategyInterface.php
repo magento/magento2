@@ -32,8 +32,8 @@ interface StrategyInterface
     /**
      * Generates minified file
      *
-     * @param string $originalFile
-     * @param string $targetFile
+     * @param string $originalFile path relative to pub/view_cache
+     * @param string $targetFile path relative to pub/view_cache
      */
     public function minifyFile($originalFile, $targetFile);
 }

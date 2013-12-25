@@ -57,6 +57,7 @@
         <includePath>.</includePath>
         <ini name="date.timezone" value="America/Los_Angeles"/>
         <ini name="xdebug.max_nesting_level" value="200"/>
+        <ini name="memory_limit" value="2048M"/>
         <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
         <const name="TESTS_LOCAL_CONFIG_FILE" value="etc/local-mysql.xml"/>
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
@@ -66,7 +67,7 @@
         <!-- Whether to cleanup the application before running tests or not -->
         <const name="TESTS_CLEANUP" value="enabled"/>
         <!-- Memory usage and estimated leaks thresholds -->
-        <const name="TESTS_MEM_USAGE_LIMIT" value=""/>
+        <!--<const name="TESTS_MEM_USAGE_LIMIT" value="1024M"/>-->
         <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
         <!-- CSV Profiler Output file -->
         <!--<const name="TESTS_PROFILER_FILE" value="profiler.csv"/>-->
@@ -79,6 +80,8 @@
         <!-- Connection parameters for MongoDB library tests -->
         <!--<const name="MONGODB_CONNECTION_STRING" value="mongodb://localhost:27017"/>-->
         <!--<const name="MONGODB_DATABASE_NAME" value="magento_integration_tests"/>-->
+        <const name="MEMCACHE_SESSION_SAVE_PATH" value=""/>
+        <const name="MEMCACHED_SESSION_SAVE_PATH" value="tcp://127.0.0.1:11211?persistent=1::sess_prefix=custom_prefix"/>
     </php>
     <!-- Test listeners -->
     <listeners>

@@ -34,14 +34,14 @@ class Observer
     /**
      * Install Session
      *
-     * @var \Magento\Core\Model\Session\Generic
+     * @var \Magento\Session\Generic
      */
     protected $_session;
 
     /**
-     * @param \Magento\Core\Model\Session\Generic $session
+     * @param \Magento\Session\Generic $session
      */
-    public function __construct(\Magento\Core\Model\Session\Generic $session)
+    public function __construct(\Magento\Session\Generic $session)
     {
         $this->_session = $session;
     }

@@ -82,6 +82,10 @@ class Manager
                 $integrationData[Integration::ENDPOINT] =
                     $integrationDetails[Converter::KEY_AUTHENTICATION_ENDPOINT_URL];
             }
+            if (isset($integrationDetails[Converter::KEY_IDENTITY_LINKING_URL])) {
+                $integrationData[Integration::IDENTITY_LINK_URL] =
+                    $integrationDetails[Converter::KEY_IDENTITY_LINKING_URL];
+            }
             $integrationData[Integration::SETUP_TYPE] = Integration::TYPE_CONFIG;
             // If it already exists, update it
             $integration = $this->_integrationService->findByName($name);

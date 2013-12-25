@@ -110,8 +110,7 @@ class Quote extends \Magento\Backend\App\Action
         if ($id) {
             $model->load($id);
             if (! $model->getRuleId()) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(
-                    __('This rule no longer exists.'));
+                $this->messageManager->addError(__('This rule no longer exists.'));
                 $this->_redirect('sales_rule/*');
                 return;
             }
@@ -120,7 +119,7 @@ class Quote extends \Magento\Backend\App\Action
         $this->_title->add($model->getRuleId() ? $model->getName() : __('New Cart Price Rule'));
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Adminhtml\Model\Session')->getPageData(true);
+        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }
@@ -168,12 +167,12 @@ class Quote extends \Magento\Backend\App\Action
                     }
                 }
 
-                $session = $this->_objectManager->get('Magento\Adminhtml\Model\Session');
+                $session = $this->_objectManager->get('Magento\Backend\Model\Session');
 
                 $validateResult = $model->validateData(new \Magento\Object($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
-                        $session->addError($errorMessage);
+                        $this->messageManager->addError($errorMessage);
                     }
                     $session->setPageData($data);
                     $this->_redirect('sales_rule/*/edit', array('id'=>$model->getId()));
@@ -200,7 +199,7 @@ class Quote extends \Magento\Backend\App\Action
                 $session->setPageData($model->getData());
 
                 $model->save();
-                $session->addSuccess(__('The rule has been saved.'));
+                $this->messageManager->addSuccess(__('The rule has been saved.'));
                 $session->setPageData(false);
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('sales_rule/*/edit', array('id' => $model->getId()));
@@ -209,7 +208,7 @@ class Quote extends \Magento\Backend\App\Action
                 $this->_redirect('sales_rule/*/');
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
                 $id = (int)$this->getRequest()->getParam('rule_id');
                 if (!empty($id)) {
                     $this->_redirect('sales_rule/*/edit', array('id' => $id));
@@ -219,10 +218,11 @@ class Quote extends \Magento\Backend\App\Action
                 return;
 
             } catch (\Exception $e) {
-                $this->_getSession()->addError(
-                    __('An error occurred while saving the rule data. Please review the log and try again.'));
+                $this->messageManager->addError(
+                    __('An error occurred while saving the rule data. Please review the log and try again.')
+                );
                 $this->_objectManager->get('Magento\Logger')->logException($e);
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->setPageData($data);
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
                 $this->_redirect('sales_rule/*/edit', array('id' => $this->getRequest()->getParam('rule_id')));
                 return;
             }
@@ -238,22 +238,20 @@ class Quote extends \Magento\Backend\App\Action
                 $model = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
                 $model->load($id);
                 $model->delete();
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addSuccess(
-                    __('The rule has been deleted.'));
+                $this->messageManager->addSuccess(__('The rule has been deleted.'));
                 $this->_redirect('sales_rule/*/');
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('An error occurred while deleting the rule. Please review the log and try again.'));
                 $this->_objectManager->get('Magento\Logger')->logException($e);
                 $this->_redirect('sales_rule/*/edit', array('id' => $this->getRequest()->getParam('id')));
                 return;
             }
         }
-        $this->_objectManager->get('Magento\Adminhtml\Model\Session')->addError(
-            __('We can\'t find a rule to delete.'));
+        $this->messageManager->addError(__('We can\'t find a rule to delete.'));
         $this->_redirect('sales_rule/*/');
     }
 
@@ -420,8 +418,8 @@ class Quote extends \Magento\Backend\App\Action
                     $generator->setData($data);
                     $generator->generatePool();
                     $generated = $generator->getGeneratedCount();
-                    $this->_getSession()->addSuccess(__('%1 coupon(s) have been generated.', $generated));
-                    $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
+                    $this->messageManager->addSuccess(__('%1 coupon(s) have been generated.', $generated));
+                    $this->_view->getLayout()->initMessages();
                     $result['messages']  = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
                 }
             } catch (\Magento\Core\Exception $e) {

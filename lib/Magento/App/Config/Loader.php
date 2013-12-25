@@ -25,8 +25,6 @@
  */
 namespace Magento\App\Config;
 
-use \Magento\App\Dir;
-
 class Loader
 {
     /**
@@ -44,7 +42,7 @@ class Loader
      *
      * @var string
      */
-    protected $_dirs;
+    protected $_dir;
 
     /**
      * Custom config file
@@ -61,12 +59,12 @@ class Loader
     protected $_idAttributes = array('/config/resource' => 'name', '/config/connection' => 'name');
 
     /**
-     * @param Dir $dirs
+     * @param \Magento\Filesystem\DirectoryList $dirList
      * @param string $customFile
      */
-    public function __construct(Dir $dirs, $customFile = null)
+    public function __construct(\Magento\Filesystem\DirectoryList $dirList, $customFile = null)
     {
-        $this->_dir = $dirs->getDir(Dir::CONFIG);
+        $this->_dir = $dirList->getDir(\Magento\Filesystem::CONFIG);
         $this->_customFile = $customFile;
     }
 
@@ -79,14 +77,14 @@ class Loader
     {
         $localConfig = new \Magento\Config\Dom('<config/>', $this->_idAttributes);
 
-        $localConfigFile = $this->_dir . DIRECTORY_SEPARATOR . self::LOCAL_CONFIG_FILE;
+        $localConfigFile = $this->_dir . '/' . self::LOCAL_CONFIG_FILE;
         if (file_exists($localConfigFile)) {
             // 1. app/etc/local.xml
             $localConfig->merge(file_get_contents($localConfigFile));
 
             // 2. app/etc/<dir>/<file>.xml
             if (preg_match('/^[a-z\d_-]+(\/|\\\)+[a-z\d_-]+\.xml$/', $this->_customFile)) {
-                $localConfigExtraFile = $this->_dir . DIRECTORY_SEPARATOR . $this->_customFile;
+                $localConfigExtraFile = $this->_dir . '/' . $this->_customFile;
                 $localConfig->merge(file_get_contents($localConfigExtraFile));
             }
         }

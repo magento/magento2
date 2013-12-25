@@ -304,7 +304,8 @@ class Configuration
     protected function _saveViewConfiguration(\DOMDocument $config)
     {
         $targetPath = $this->_theme->getCustomization()->getCustomViewConfigPath();
-        $this->_filesystem->setIsAllowCreateDirectories(true)->write($targetPath, $config->saveXML());
+        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $directory->writeFile($directory->getRelativePath($targetPath), $config->saveXML());
         return $this;
     }
 }

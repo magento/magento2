@@ -35,7 +35,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 class History
     extends \Magento\Backend\Block\Template
-    implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
+    implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
 
     protected $_template = 'order/view/tab/history.phtml';

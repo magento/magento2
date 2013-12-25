@@ -134,7 +134,7 @@ class DataFixture
                 if (is_callable($fixtureMethod)) {
                     $result[] = $fixtureMethod;
                 } else {
-                    $result[] = $this->_fixtureBaseDir . DIRECTORY_SEPARATOR . $fixture;
+                    $result[] = $this->_fixtureBaseDir . '/' . $fixture;
                 }
             }
         }

@@ -34,7 +34,7 @@
 
 namespace Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer;
 
-class Action extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Action
+class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
     /**
      * Renderer for "Action" column in Newsletter templates grid

@@ -553,14 +553,22 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     }
 
     /**
+     * @param \Magento\Backend\Helper\Dashboard\AbstractDashboard $dataHelper
+     */
+    public function setDataHelper(\Magento\Backend\Helper\Dashboard\AbstractDashboard $dataHelper)
+    {
+        $this->_dataHelper = $dataHelper;
+    }
+
+    /**
      * Prepare chart data
      *
      * @return void
      */
     protected function _prepareData()
     {
-        if (!is_null($this->getDataHelperName())) {
-            $availablePeriods = array_keys($this->helper('Magento\Backend\Helper\Dashboard\Data')->getDatePeriods());
+        if (!is_null($this->_dataHelper)) {
+            $availablePeriods = array_keys($this->_dashboardData->getDatePeriods());
             $period = $this->getRequest()->getParam('period');
             $this->getDataHelper()->setParam('period',
                ($period && in_array($period, $availablePeriods)) ? $period : '24h'

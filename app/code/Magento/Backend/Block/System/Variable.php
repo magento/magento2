@@ -34,7 +34,7 @@
 
 namespace Magento\Backend\Block\System;
 
-class Variable extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Variable extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Block constructor

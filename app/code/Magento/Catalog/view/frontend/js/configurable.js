@@ -330,7 +330,10 @@
                     var allowedProducts = [];
                     if (prevConfig) {
                         for (var j = 0; j < options[i].products.length; j++) {
-                            if (prevConfig.config.allowedProducts && prevConfig.config.allowedProducts.indexOf(options[i].products[j]) > -1) {
+                            // prevConfig.config can be undefined
+                            if (prevConfig.config &&
+                                prevConfig.config.allowedProducts &&
+                                prevConfig.config.allowedProducts.indexOf(options[i].products[j]) > -1) {
                                 allowedProducts.push(options[i].products[j]);
                             }
                         }

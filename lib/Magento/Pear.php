@@ -36,18 +36,13 @@ namespace Magento;
 // Looks like PEAR is being developed without E_NOTICE (1.7.0RC1)
 error_reporting(E_ALL & ~E_NOTICE);
 
-// just a shortcut
-if (!defined('DS')) {
-    define('DS', DIRECTORY_SEPARATOR);
-}
-
 // add PEAR lib in include_path if needed
 $_includePath = get_include_path();
-$_pearDir = dirname(dirname(__DIR__)) . DS . 'downloader' . DS . 'pearlib';
+$_pearDir = dirname(dirname(__DIR__)) . '/downloader/pearlib';
 if (!getenv('PHP_PEAR_INSTALL_DIR')) {
     putenv('PHP_PEAR_INSTALL_DIR=' . $_pearDir);
 }
-$_pearPhpDir = $_pearDir . DS . 'php';
+$_pearPhpDir = $_pearDir . '/php';
 if (strpos($_includePath, $_pearPhpDir) === false) {
     if (substr($_includePath, 0, 2) === '.' . PATH_SEPARATOR) {
         $_includePath = '.' . PATH_SEPARATOR . $_pearPhpDir . PATH_SEPARATOR . substr($_includePath, 2);
@@ -109,7 +104,7 @@ class Pear
 
     public function getPearDir()
     {
-        return $this->getBaseDir().DS.'downloader'.DS.'pearlib';
+        return $this->getBaseDir() . '/downloader/pearlib';
     }
 
     public function getConfig()
@@ -117,20 +112,20 @@ class Pear
         if (!$this->_config) {
             $pear_dir = $this->getPearDir();
 
-            $config = PEAR_Config::singleton($pear_dir.DS.'pear.ini', '-');
+            $config = PEAR_Config::singleton($pear_dir . '/pear.ini', '-');
 
             $config->set('auto_discover', 1);
             $config->set('cache_ttl', 60);
             #$config->set('preferred_state', 'beta');
 
             $config->set('bin_dir', $pear_dir);
-            $config->set('php_dir', $pear_dir.DS.'php');
-            $config->set('download_dir', $pear_dir.DS.'download');
-            $config->set('temp_dir', $pear_dir.DS.'temp');
-            $config->set('data_dir', $pear_dir.DS.'data');
-            $config->set('cache_dir', $pear_dir.DS.'cache');
-            $config->set('test_dir', $pear_dir.DS.'tests');
-            $config->set('doc_dir', $pear_dir.DS.'docs');
+            $config->set('php_dir', $pear_dir . '/php');
+            $config->set('download_dir', $pear_dir . '/download');
+            $config->set('temp_dir', $pear_dir . '/temp');
+            $config->set('data_dir', $pear_dir . '/data');
+            $config->set('cache_dir', $pear_dir . '/cache');
+            $config->set('test_dir', $pear_dir . '/tests');
+            $config->set('doc_dir', $pear_dir . '/docs');
 
             $mageDir = $config->get('mage_dir');
 
@@ -145,11 +140,11 @@ class Pear
             $reg = $this->getRegistry();
             $config->setRegistry($reg);
 
-            PEAR_DependencyDB::singleton($config, $pear_dir.DS.'php'.DS.'.depdb');
+            PEAR_DependencyDB::singleton($config, $pear_dir . '/php/.depdb');
 
             PEAR_Frontend::setFrontendObject($this->getFrontend());
 
-            PEAR_Command::registerCommands(false, $pear_dir.DS.'php'.DS.'PEAR'.DS.'Command'.DS);
+            PEAR_Command::registerCommands(false, $pear_dir . '/php/PEAR/Command/');
 
             $this->_config = $config;
         }
@@ -164,7 +159,7 @@ class Pear
     public function getRegistry($redirectOnChange=true)
     {
         if (!$this->_registry) {
-            $this->_registry = new \Magento\Pear\Registry($this->getPearDir().DS.'php');
+            $this->_registry = new \Magento\Pear\Registry($this->getPearDir() . '/php');
 
             $changed = false;
             foreach ($this->getMagentoChannels() as $channel) {
@@ -175,7 +170,7 @@ class Pear
             }
 
             if ($changed) {
-                $this->_registry = new \Magento\Pear\Registry($this->getPearDir().DS.'php');
+                $this->_registry = new \Magento\Pear\Registry($this->getPearDir() . '/php');
             }
 //            if ($changed && self::$reloadOnRegistryUpdate && empty($_GET['pear_registry'])) {
 //                echo "TEST:";
@@ -209,7 +204,7 @@ class Pear
     public function run($command, $options=array(), $params=array())
     {
         @set_time_limit(0);
-        @ini_set('memory_limit', '256M');
+        @ini_set('memory_limit', '2048M');
 
         if (empty($this->_cmdCache[$command])) {
             $cmd = PEAR_Command::factory($command, $this->getConfig());

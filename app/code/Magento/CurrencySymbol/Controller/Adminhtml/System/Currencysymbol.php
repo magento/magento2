@@ -70,14 +70,12 @@ class Currencysymbol extends \Magento\Backend\App\Action
             }
         }
 
-        /** @var \Magento\Backend\Model\Session $backendSession */
-        $backendSession = $this->_objectManager->get('Magento\Backend\Model\Session');
         try {
             $this->_objectManager->create('Magento\CurrencySymbol\Model\System\Currencysymbol')
                 ->setCurrencySymbolsData($symbolsDataArray);
-            $backendSession->addSuccess(__('The custom currency symbols were applied.'));
+            $this->messageManager->addSuccess(__('The custom currency symbols were applied.'));
         } catch (\Exception $e) {
-            $backendSession->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));

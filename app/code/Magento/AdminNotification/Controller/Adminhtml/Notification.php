@@ -49,13 +49,12 @@ class Notification extends \Magento\Backend\App\AbstractAction
             try {
                 $this->_objectManager->create('Magento\AdminNotification\Model\NotificationService')
                     ->markAsRead($notificationId);
-                $this->_session->addSuccess(
-                    __('The message has been marked as Read.')
-                );
+                $this->messageManager->addSuccess(__('The message has been marked as Read.'));
             } catch (\Magento\Core\Exception $e) {
-                $this->_session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_session->addException($e,
+                $this->messageManager->addException(
+                    $e,
                     __("We couldn't mark the notification as Read because of an error.")
                 );
             }
@@ -92,7 +91,7 @@ class Notification extends \Magento\Backend\App\AbstractAction
     {
         $ids = $this->getRequest()->getParam('notification');
         if (!is_array($ids)) {
-            $this->_session->addError(__('Please select messages.'));
+            $this->messageManager->addError(__('Please select messages.'));
         } else {
             try {
                 foreach ($ids as $id) {
@@ -103,13 +102,12 @@ class Notification extends \Magento\Backend\App\AbstractAction
                             ->save();
                     }
                 }
-                $this->_getSession()->addSuccess(
-                    __('A total of %1 record(s) have been marked as Read.', count($ids))
-                );
+                $this->messageManager->addSuccess(__('A total of %1 record(s) have been marked as Read.', count($ids)));
             } catch (\Magento\Core\Exception $e) {
-                $this->_session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_session->addException($e,
+                $this->messageManager->addException(
+                    $e,
                     __("We couldn't mark the notification as Read because of an error.")
                 );
             }
@@ -131,13 +129,14 @@ class Notification extends \Magento\Backend\App\AbstractAction
             try {
                 $model->setIsRemove(1)
                     ->save();
-                $this->_session->addSuccess(
+                $this->messageManager->addSuccess(
                     __('The message has been removed.')
                 );
             } catch (\Magento\Core\Exception $e) {
-                $this->_session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_session->addException($e,
+                $this->messageManager->addException(
+                    $e,
                     __("We couldn't remove the messages because of an error.")
                 );
             }
@@ -152,9 +151,7 @@ class Notification extends \Magento\Backend\App\AbstractAction
     {
         $ids = $this->getRequest()->getParam('notification');
         if (!is_array($ids)) {
-            $this->_session->addError(
-                __('Please select messages.')
-            );
+            $this->messageManager->addError(__('Please select messages.'));
         } else {
             try {
                 foreach ($ids as $id) {
@@ -165,14 +162,11 @@ class Notification extends \Magento\Backend\App\AbstractAction
                             ->save();
                     }
                 }
-                $this->_getSession()->addSuccess(
-                    __('Total of %1 record(s) have been removed.', count($ids))
-                );
+                $this->messageManager->addSuccess(__('Total of %1 record(s) have been removed.', count($ids)));
             } catch (\Magento\Core\Exception $e) {
-                $this->_session->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_session->addException($e,
-                    __("We couldn't remove the messages because of an error."));
+                $this->messageManager->addException($e, __("We couldn't remove the messages because of an error."));
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));

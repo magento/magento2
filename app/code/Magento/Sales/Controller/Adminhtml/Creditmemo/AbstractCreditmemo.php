@@ -104,7 +104,7 @@ class AbstractCreditmemo extends \Magento\Backend\App\Action
                     $historyItem->save();
                 }
 
-                $this->_getSession()->addSuccess(__('We sent the message.'));
+                $this->messageManager->addSuccess(__('We sent the message.'));
                 $this->_redirect('sales/order_creditmemo/view', array(
                     'creditmemo_id' => $creditmemoId
                 ));

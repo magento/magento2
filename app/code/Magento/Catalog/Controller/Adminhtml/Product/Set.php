@@ -160,12 +160,12 @@ class Set extends \Magento\Backend\App\Action
                 $model->initFromSkeleton($this->getRequest()->getParam('skeleton_set'));
             }
             $model->save();
-            $this->_getSession()->addSuccess(__('You saved the attribute set.'));
+            $this->messageManager->addSuccess(__('You saved the attribute set.'));
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
             $hasError = true;
         } catch (\Exception $e) {
-            $this->_getSession()->addException($e,
+            $this->messageManager->addException($e,
                 __('An error occurred while saving the attribute set.'));
             $hasError = true;
         }
@@ -174,7 +174,7 @@ class Set extends \Magento\Backend\App\Action
             if ($this->getRequest()->getPost('return_session_messages_only')) {
                 /** @var $block \Magento\View\Element\Messages */
                 $block = $this->_objectManager->get('Magento\View\Element\Messages');
-                $block->setMessages($this->_getSession()->getMessages(true));
+                $block->setMessages($this->messageManager->getMessages(true));
                 $body = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array(
                     'messages' => $block->getGroupedHtml(),
                     'error'    => $hasError,
@@ -191,7 +191,7 @@ class Set extends \Magento\Backend\App\Action
         } else {
             $response = array();
             if ($hasError) {
-                $this->_view->getLayout()->initMessages('Magento\Adminhtml\Model\Session');
+                $this->_view->getLayout()->initMessages();
                 $response['error']   = 1;
                 $response['message'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
             } else {
@@ -228,10 +228,10 @@ class Set extends \Magento\Backend\App\Action
                 ->setId($setId)
                 ->delete();
 
-            $this->_getSession()->addSuccess(__('The attribute set has been removed.'));
+            $this->messageManager->addSuccess(__('The attribute set has been removed.'));
             $this->getResponse()->setRedirect($this->getUrl('catalog/*/'));
         } catch (\Exception $e) {
-            $this->_getSession()->addError(__('An error occurred while deleting this set.'));
+            $this->messageManager->addError(__('An error occurred while deleting this set.'));
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
     }

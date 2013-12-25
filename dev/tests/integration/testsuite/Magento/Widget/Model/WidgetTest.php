@@ -65,16 +65,16 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('Functionality is failed because widget'
             . ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces'
             . ' "new_products" widget in Catalog module');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get('Magento\Core\Model\App')
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_backend');
-        $expectedPubFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Dir')
-                ->getDir(\Magento\App\Dir::STATIC_VIEW) . "/adminhtml/magento_backend/en_US/{$expectedFile}";
+        $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('magento_backend');
+        $expectedPubFile = $objectManager->get('Magento\Filesystem')
+                ->getPath(\Magento\Filesystem::STATIC_VIEW) . "/adminhtml/magento_backend/en_US/{$expectedFile}";
         if (file_exists($expectedPubFile)) {
             unlink($expectedPubFile);
         }
-        $expectedPubFile = str_replace('/', DIRECTORY_SEPARATOR, $expectedPubFile);
+
         $url = $this->_model->getPlaceholderImageUrl($type);
         $this->assertStringEndsWith($expectedFile, $url);
         $this->assertFileExists($expectedPubFile);
@@ -106,16 +106,11 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPlaceholderImageUrlAtTheme()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\App\Dir $dir */
-        $dir = $objectManager->get('Magento\App\Dir');
-
-        $property = new \ReflectionProperty($dir, '_dirs');
-        $property->setAccessible(true);
-        $dirs = $property->getValue($dir);
-        $dirs[\Magento\App\Dir::THEMES] = dirname(__DIR__) . '/_files/design';
-        $property->setValue($dir, $dirs);
-
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
+            \Magento\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/_files/design')
+            )
+        ));
         $actualFile = $this->testGetPlaceholderImageUrl(
             'Magento\Catalog\Block\Product\Widget\NewWidget',
             'Magento_Catalog/images/product_widget_new.gif'

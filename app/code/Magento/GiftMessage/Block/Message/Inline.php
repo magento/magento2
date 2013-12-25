@@ -55,17 +55,25 @@ class Inline extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $_imageHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage,
+        \Magento\Catalog\Helper\Image $imageHelper,
         array $data = array()
     ) {
+        $this->_imageHelper = $imageHelper;
         $this->_giftMessageMessage = $giftMessageMessage;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
@@ -132,7 +140,7 @@ class Inline extends \Magento\View\Element\Template
      */
     protected function _initMessage()
     {
-        $this->_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage(
+        $this->_giftMessage = $this->_giftMessageMessage->getGiftMessage(
             $this->getEntity()->getGiftMessageId()
         );
         return $this;
@@ -181,7 +189,7 @@ class Inline extends \Magento\View\Element\Template
         if ($entity) {
             if (!$entity->getGiftMessage()) {
                 $entity->setGiftMessage(
-                    $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($entity->getGiftMessageId())
+                    $this->_giftMessageMessage->getGiftMessage($entity->getGiftMessageId())
                 );
             }
             return $entity->getGiftMessage();
@@ -313,7 +321,7 @@ class Inline extends \Magento\View\Element\Template
      */
     public function getThumbnailUrl($product)
     {
-        return (string)$this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail')
+        return (string)$this->_imageHelper->init($product, 'thumbnail')
             ->resize($this->getThumbnailSize());
     }
 

@@ -33,7 +33,7 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Block\Widget;
 
-class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
+class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Cms\Model\BlockFactory
@@ -48,6 +48,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory
      * @param array $data
@@ -55,13 +56,14 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Cms\Model\BlockFactory $blockFactory,
         \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_blockFactory = $blockFactory;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     /**
@@ -130,7 +132,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Prepare Cms static blocks collection
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
@@ -141,7 +143,7 @@ class Chooser extends \Magento\Adminhtml\Block\Widget\Grid
     /**
      * Prepare columns for Cms blocks grid
      *
-     * @return \Magento\Adminhtml\Block\Widget\Grid
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {

@@ -27,7 +27,6 @@
 namespace Magento\View\Design\FileResolution;
 
 use Magento\App\State;
-use Magento\App\Dir;
 
 /**
  * StrategyPool Test
@@ -47,11 +46,6 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     protected $appState;
 
     /**
-     * @var Dir|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dirs;
-
-    /**
      * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
@@ -65,13 +59,18 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
         $this->appState = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $this->dirs = new Dir('base_dir');
-        $this->filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->filesystem = $this->getMock('Magento\Filesystem', array('getPath'), array(), '', false);
+        $pathMap = array(
+            array(\Magento\Filesystem::VAR_DIR, 'base_dir/var'),
+            array(\Magento\Filesystem::ROOT, 'base_dir')
+        );
+        $this->filesystem->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValueMap($pathMap));
 
         $this->model = new StrategyPool(
             $this->objectManager,
             $this->appState,
-            $this->dirs,
             $this->filesystem
         );
     }
@@ -92,7 +91,6 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
 
         $strategy = new \StdClass;
         $mapDir = 'base_dir/var/' . StrategyPool::FALLBACK_MAP_DIR;
-        $mapDir = str_replace('/', DIRECTORY_SEPARATOR, $mapDir);
         $map = array(
             array(
                 'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy',

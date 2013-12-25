@@ -56,7 +56,7 @@ class IncludePath
         if (strpos($class, self::NS_SEPARATOR) !== false) {
             $class = ltrim(str_replace(self::NS_SEPARATOR, '_', $class), '_');
         }
-        return str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+        return str_replace('_', '/', $class) . '.php';
     }
 
     /**

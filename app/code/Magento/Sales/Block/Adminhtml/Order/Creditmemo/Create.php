@@ -30,7 +30,7 @@
 
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 
-class Create extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry

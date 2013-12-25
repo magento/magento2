@@ -23,8 +23,7 @@
  */
 
 define('BP', realpath(__DIR__ . '/../../../../'));
-define('TESTS_TEMP_DIR', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tmp');
-define('DS', DIRECTORY_SEPARATOR);
+define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');
 
 require BP . '/app/functions.php';
 require BP . '/app/autoload.php';
@@ -36,7 +35,8 @@ require BP . '/app/autoload.php';
     realpath(BP . '/lib'),
 ));
 if (is_dir(TESTS_TEMP_DIR)) {
-    \Magento\Io\File::rmdirRecursive(TESTS_TEMP_DIR);
+    $filesystemAdapter = new \Magento\Filesystem\Driver\File();
+    $filesystemAdapter->deleteDirectory(TESTS_TEMP_DIR);
 }
 mkdir(TESTS_TEMP_DIR);
 
@@ -47,8 +47,8 @@ function tool_autoloader($className)
     if (strpos($className, 'Magento\\Tools\\') === false) {
         return false;
     }
-    $filePath = str_replace('\\', DS, $className);
-    $filePath = BP . DS . 'dev' . DS . 'tools' . DS . $filePath . '.php';
+    $filePath = str_replace('\\', '/', $className);
+    $filePath = BP . '/dev/tools/' . $filePath . '.php';
 
     if (file_exists($filePath)) {
         include_once($filePath);

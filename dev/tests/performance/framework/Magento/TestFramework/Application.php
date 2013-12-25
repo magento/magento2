@@ -194,7 +194,10 @@ class Application
      */
     protected function _updateFilesystemPermissions()
     {
-        \Magento\Io\File::chmodRecursive($this->getObjectManager()->get('Magento\App\Dir')->getDir('var'), 0777);
+        /** @var \Magento\Filesystem\Directory\Write $varDirectory */
+        $varDirectory = $this->getObjectManager()->get('Magento\Filesystem')
+            ->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $varDirectory->changePermissions('', 0777);
     }
 
     /**

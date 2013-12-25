@@ -36,7 +36,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeId')
             ->will($this->returnValue(2));
 
-        $dirs = $this->getMock('Magento\App\Dir', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
 
         $urlBuilder = $this->getMock('Magento\UrlInterface', array(), array(), '', false);
         $urlBuilder->expects($this->once())
@@ -49,8 +49,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlBuilder')
             ->will($this->returnValue($urlBuilder));
         $context->expects($this->any())
-            ->method('getDirs')
-            ->will($this->returnValue($dirs));
+            ->method('getFilesystem')
+            ->will($this->returnValue($filesystem));
 
         $data = array(
             'context' => $context,

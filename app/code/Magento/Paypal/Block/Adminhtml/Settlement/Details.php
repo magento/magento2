@@ -33,7 +33,7 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\Settlement;
 
-class Details extends \Magento\Adminhtml\Block\Widget\Form\Container
+class Details extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Block construction

@@ -223,9 +223,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $fileResolverMock = $this->getMockBuilder('Magento\Core\Model\Config\FileResolver')
                                 ->disableOriginalConstructor()
                                 ->getMock();
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
+        /** @var $directory  \Magento\Filesystem\Directory\Read */
+        $directory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $fileIteratorFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Config\FileIteratorFactory');
+        $fileIterator = $fileIteratorFactory->create($directory, array(
+            $directory->getRelativePath(__DIR__ . '/_files/test_section_config.xml')));
         $fileResolverMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValue(array(__DIR__ . '/_files/test_section_config.xml')));
+            ->will($this->returnValue($fileIterator));
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
             'Magento\Backend\Model\Config\Structure\Reader' => array(

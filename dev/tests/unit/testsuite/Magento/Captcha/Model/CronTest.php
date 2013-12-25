@@ -50,6 +50,11 @@ class CronTest extends \PHPUnit_Framework_TestCase
     protected $_filesystem;
 
     /**
+     * @var \Magento\Filesystem\DirectoryWriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_directory;
+
+    /**
      * @var \Magento\Core\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManager;
@@ -72,7 +77,12 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', array(), array(), '', false);
         $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', array(), array(), '', false);
         $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+
+        $this->_filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->will($this->returnValue($this->_directory));
 
         $this->_model = new \Magento\Captcha\Model\Cron(
             $this->getMock('Magento\Captcha\Model\Resource\LogFactory', array(), array(), '', false),
@@ -111,15 +121,15 @@ class CronTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($timeout));
 
         $timesToCall = isset($website) ? 2 : 1;
-        $this->_filesystem->expects($this->exactly($timesToCall))
-            ->method('getNestedKeys')
+        $this->_directory->expects($this->exactly($timesToCall))
+            ->method('read')
             ->will($this->returnValue(array($filename)));
-        $this->_filesystem->expects($this->exactly($timesToCall))->method('isFile')->will($this->returnValue($isFile));
-        $this->_filesystem->expects($this->any())->method('getMTime')->will($this->returnValue($mTime));
+        $this->_directory->expects($this->exactly($timesToCall))->method('isFile')->will($this->returnValue($isFile));
+        $this->_directory->expects($this->any())->method('stat')->will($this->returnValue(array('mtime' => $mTime)));
         if ($mustDelete) {
-            $this->_filesystem->expects($this->exactly($timesToCall))->method('delete')->with($filename);
+            $this->_directory->expects($this->exactly($timesToCall))->method('delete')->with($filename);
         } else {
-            $this->_filesystem->expects($this->never())->method('delete');
+            $this->_directory->expects($this->never())->method('delete');
         }
         $this->_model->deleteExpiredImages();
     }

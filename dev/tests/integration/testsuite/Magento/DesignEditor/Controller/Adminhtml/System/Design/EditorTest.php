@@ -59,7 +59,7 @@ class EditorTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/system_design_editor/launch');
         $this->assertSessionMessages($this->equalTo(
             array('We can\'t find theme "' . $wrongThemeId . '".')),
-            \Magento\Message\Factory::ERROR
+            \Magento\Message\MessageInterface::TYPE_ERROR
         );
         $expected = 'http://localhost/index.php/backend/admin/system_design_editor/index/';
         $this->assertRedirect($this->stringStartsWith($expected));

@@ -48,7 +48,7 @@ class Registry //extends PEAR_Registry
                     } else {
                         $file = '.pearrc';
                     }
-                    $this->_config = &new PEAR_Config($this->statedir . DIRECTORY_SEPARATOR .
+                    $this->_config = &new PEAR_Config($this->statedir . '/' .
                         $file, '-'); // NO SYSTEM INI FILE
                     $this->_config->setRegistry($this);
                     $this->_config->set('php_dir', $this->install_dir);
@@ -57,9 +57,9 @@ class Registry //extends PEAR_Registry
                 if (PEAR::isError($this->_dependencyDB)) {
                     // attempt to recover by removing the dep db
                     if (file_exists($this->_config->get('php_dir', null, 'pear.php.net') .
-                        DIRECTORY_SEPARATOR . '.depdb')) {
+                        '/' . '.depdb')) {
                         @unlink($this->_config->get('php_dir', null, 'pear.php.net') .
-                            DIRECTORY_SEPARATOR . '.depdb');
+                            '/' . '.depdb');
                     }
                     $this->_dependencyDB = &PEAR_DependencyDB::singleton($this->_config);
                     if (PEAR::isError($this->_dependencyDB)) {

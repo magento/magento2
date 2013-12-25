@@ -183,7 +183,7 @@ class Category extends \Magento\App\Action\Action
                     ->addBodyClass('category-' . $category->getUrlKey());
             }
 
-            $this->_view->getLayout()->initMessages(array('Magento\Catalog\Model\Session', 'Magento\Checkout\Model\Session'));
+            $this->_view->getLayout()->initMessages();
             $this->_view->renderLayout();
         } elseif (!$this->getResponse()->isRedirect()) {
             $this->_forward('noroute');

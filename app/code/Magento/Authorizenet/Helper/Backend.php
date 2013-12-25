@@ -32,27 +32,6 @@ namespace Magento\Authorizenet\Helper;
 class Backend extends Data
 {
     /**
-     * @var \Magento\Backend\Model\Url
-     */
-    protected $_urlBuilder;
-
-    /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Backend\Model\Url $urlBuilder
-     */
-    public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Backend\Model\Url $urlBuilder
-    ) {
-        parent::__construct($context, $storeManager, $orderFactory);
-        $this->_urlBuilder = $urlBuilder;
-    }
-
-    /**
      * Return URL for admin area
      *
      * @param string $route

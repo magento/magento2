@@ -25,7 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-define('DS', DIRECTORY_SEPARATOR);
 define('BP', realpath(__DIR__ . '/../../../../'));
 require BP . '/app/autoload.php';
 \Magento\Autoload\IncludePath::addIncludePath(array(
@@ -40,8 +39,8 @@ function tool_autoloader($className)
     if (strpos($className, 'Magento\\Tools\\') === false) {
         return false;
     }
-    $filePath = str_replace('\\', DS, $className);
-    $filePath = BP . DS . 'dev' . DS . 'tools' . DS . $filePath . '.php';
+    $filePath = str_replace('\\', '/', $className);
+    $filePath = BP . '/dev/tools/' . $filePath . '.php';
 
     if (file_exists($filePath)) {
         include_once($filePath);

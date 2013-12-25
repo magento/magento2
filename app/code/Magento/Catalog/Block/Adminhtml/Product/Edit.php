@@ -55,10 +55,16 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $jsonEncoder;
 
     /**
+     * @var \Magento\Catalog\Helper\Product
+     */
+    protected $_productHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Catalog\Helper\Product $productHelper
      * @param array $data
      */
     public function __construct(
@@ -66,8 +72,10 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Catalog\Helper\Product $productHelper,
         array $data = array()
     ) {
+        $this->_productHelper = $productHelper;
         $this->_attributeSetFactory = $attributeSetFactory;
         $this->_coreRegistry = $registry;
         $this->jsonEncoder = $jsonEncoder;
@@ -99,7 +107,7 @@ class Edit extends \Magento\Backend\Block\Widget
     protected function _prepareLayout()
     {
         if (!$this->getRequest()->getParam('popup')) {
-            $this->addChild('back_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+            $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label' => __('Back'),
                 'title' => __('Back'),
                 'onclick' => 'setLocation(\''
@@ -107,7 +115,7 @@ class Edit extends \Magento\Backend\Block\Widget
                 'class' => 'action-back'
             ));
         } else {
-            $this->addChild('back_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+            $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label' => __('Close Window'),
                 'onclick' => 'window.close()',
                 'class' => 'cancel'
@@ -115,7 +123,7 @@ class Edit extends \Magento\Backend\Block\Widget
         }
 
         if (!$this->getProduct()->isReadonly()) {
-            $this->addChild('reset_button', 'Magento\Adminhtml\Block\Widget\Button', array(
+            $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
                 'label' => __('Reset'),
                 'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('_current' => true)) . '\')'
             ));
@@ -262,7 +270,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getFieldsAutogenerationMasks()
     {
-        return $this->helper('Magento\Catalog\Helper\Product')->getFieldsAutogenerationMasks();
+        return $this->_productHelper->getFieldsAutogenerationMasks();
     }
 
     /**
@@ -272,7 +280,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getAttributesAllowedForAutogeneration()
     {
-        return $this->helper('Magento\Catalog\Helper\Product')->getAttributesAllowedForAutogeneration();
+        return $this->_productHelper->getAttributesAllowedForAutogeneration();
     }
 
     /**

@@ -61,7 +61,7 @@ class Statuses extends \Magento\Backend\Block\Widget\Grid\Column
      *
      * @param string $value
      * @param  \Magento\Core\Model\AbstractModel $row
-     * @param \Magento\Adminhtml\Block\Widget\Grid\Column $column
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @param bool $isExport
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

@@ -38,23 +38,15 @@ class CssResolver
     /**
      * @var \Magento\Filesystem
      */
-    protected $_filesystem;
-
-    /**
-     * @var \Magento\App\Dir
-     */
-    protected $_dirs;
+    protected $filesystem;
 
     /**
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\App\Dir $dirs
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
-        \Magento\App\Dir $dirs
+        \Magento\Filesystem $filesystem
     ) {
-        $this->_filesystem = $filesystem;
-        $this->_dirs = $dirs;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -70,20 +62,46 @@ class CssResolver
      */
     public function replaceCssRelativeUrls($cssContent, $originalPath, $newPath, $cbRelUrlToPublicPath = null)
     {
-        $newPath = $this->_filesystem->normalizePath($newPath);
         $relativeUrls = $this->_extractCssRelativeUrls($cssContent);
         foreach ($relativeUrls as $urlNotation => $originalRelativeUrl) {
             if ($cbRelUrlToPublicPath) {
                 $filePath = call_user_func($cbRelUrlToPublicPath, $originalRelativeUrl, $originalPath);
             } else {
-                $filePath = $this->_filesystem->normalizePath(dirname($originalPath) . '/' . $originalRelativeUrl);
+                $filePath = dirname($originalPath) . '/' . $originalRelativeUrl;
             }
-            $filePath = $this->_filesystem->normalizePath($filePath);
-            $relativePath = $this->_getFileRelativePath($newPath, $filePath);
+            $filePath = $this->_normalizePath(str_replace('\\', '/', $filePath));
+            $relativePath = $this->_getFileRelativePath(
+                $this->_normalizePath(str_replace('\\', '/', $newPath)), $filePath
+            );
             $urlNotationNew = str_replace($originalRelativeUrl, $relativePath, $urlNotation);
             $cssContent = str_replace($urlNotation, $urlNotationNew, $cssContent);
         }
         return $cssContent;
+    }
+
+    /**
+     * Remove unmeaning path chunks from path
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function _normalizePath($path)
+    {
+        $parts = explode('/', $path);
+        $result = array();
+
+        foreach ($parts as $part) {
+            if ('..' === $part) {
+                if (!count($result) || ($result[count($result) - 1] == '..')) {
+                    $result[] = $part;
+                } else {
+                    array_pop($result);
+                }
+            } else if ('.' !== $part) {
+                $result[] = $part;
+            }
+        }
+        return implode('/', $result);
     }
 
     /**
@@ -121,8 +139,7 @@ class CssResolver
          * Thus, calculating relative path is not possible in general case. So we just assume,
          * that urls follow the structure of directory paths.
          */
-        $topDir = $this->_dirs->getDir(\Magento\App\Dir::ROOT);
-        $topDir = $this->_filesystem->normalizePath($topDir);
+        $topDir = $this->filesystem->getPath(\Magento\Filesystem::ROOT);
         if (strpos($file, $topDir) !== 0 || strpos($referencedFile, $topDir) !== 0) {
             throw new \Magento\Exception('Offset can be calculated for internal resources only.');
         }

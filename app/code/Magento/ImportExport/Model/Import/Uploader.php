@@ -67,6 +67,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
         \Magento\Core\Helper\File\Storage $coreFileStorage,
         \Magento\Image\AdapterFactory $imageFactory,
         \Magento\Core\Model\File\Validator\NotProtectedExtension $validator,
+        \Magento\Filesystem $filesystem,
         $filePath = null
     ) {
         if (!is_null($filePath)) {
@@ -76,6 +77,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
     }
 
     /**
@@ -100,7 +102,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
      */
     public function move($fileName)
     {
-        $filePath = realpath($this->getTmpDir() . DS . $fileName);
+        $filePath = $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName);
         $this->_setUploadFile($filePath);
         $result = $this->save($this->getDestDir());
         $result['name'] = self::getCorrectFileName($result['name']);
@@ -111,10 +113,11 @@ class Uploader extends \Magento\Core\Model\File\Uploader
      * Prepare information about the file for moving
      *
      * @param string $filePath
+     * @throws \Magento\Core\Exception
      */
     protected function _setUploadFile($filePath)
     {
-        if (!is_readable($filePath)) {
+        if (!$this->_directory->isReadable($filePath)) {
             throw new \Magento\Core\Exception("File '{$filePath}' was not found or has read restriction.");
         }
         $this->_file = $this->_readFileInfo($filePath);
@@ -131,13 +134,12 @@ class Uploader extends \Magento\Core\Model\File\Uploader
     protected function _readFileInfo($filePath)
     {
         $fileInfo = pathinfo($filePath);
-
         return array(
             'name' => $fileInfo['basename'],
             'type' => $this->_getMimeTypeByExt($fileInfo['extension']),
             'tmp_name' => $filePath,
             'error' => 0,
-            'size' => filesize($filePath)
+            'size' => $this->_directory->stat($filePath)['size']
         );
     }
 
@@ -147,7 +149,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
     protected function _validateFile()
     {
         $filePath = $this->_file['tmp_name'];
-        if (is_readable($filePath)) {
+        if ($this->_directory->isReadable($filePath)) {
             $this->_fileExists = true;
         } else {
             $this->_fileExists = false;
@@ -197,7 +199,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
      */
     public function setTmpDir($path)
     {
-        if (is_string($path) && is_readable($path)) {
+        if (is_string($path) && $this->_directory->isReadable($path)) {
             $this->_tmpDir = $path;
             return true;
         }
@@ -222,7 +224,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
      */
     public function setDestDir($path)
     {
-        if (is_string($path) && is_writable($path)) {
+        if (is_string($path) && $this->_directory->isWritable($path)) {
             $this->_destDir = $path;
             return true;
         }
@@ -238,9 +240,8 @@ class Uploader extends \Magento\Core\Model\File\Uploader
      */
     protected function _moveFile($tmpPath, $destPath)
     {
-        $sourceFile = realpath($tmpPath);
-        if ($sourceFile !== false) {
-            return copy($sourceFile, $destPath);
+        if ($this->_directory->isFile($tmpPath)) {
+            return $this->_directory->copyFile($tmpPath, $destPath);
         } else {
             return false;
         }

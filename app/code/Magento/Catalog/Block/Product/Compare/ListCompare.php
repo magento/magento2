@@ -105,19 +105,30 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     protected $_coreData;
 
     /**
+     * @var \Magento\Wishlist\Helper\Data
+     */
+    protected $_wishlistHelper;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
+     * @param \Magento\Theme\Helper\Layout $layoutHelper
+     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Log\Model\Visitor $logVisitor
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
@@ -126,7 +137,11 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Math\Random $mathRandom,
-        \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Wishlist\Helper\Data $wishlistHelper,
+        \Magento\Catalog\Helper\Product\Compare $compareProduct,
+        \Magento\Theme\Helper\Layout $layoutHelper,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
@@ -134,6 +149,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
+        $this->_wishlistHelper = $wishlistHelper;
         $this->_coreData = $coreData;
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -146,7 +162,11 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
             $taxData,
             $catalogData,
             $mathRandom,
-            $catalogProductCompare,
+            $cartHelper,
+            $wishlistHelper,
+            $compareProduct,
+            $layoutHelper,
+            $imageHelper,
             $data
         );
     }
@@ -166,7 +186,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
             $urlParamName   => $continueUrl
         );
 
-        return $this->helper('Magento\Wishlist\Helper\Data')->getAddUrlWithParams($product, $params);
+        return $this->_wishlistHelper->getAddUrlWithParams($product, $params);
     }
 
     /**
@@ -191,7 +211,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     public function getItems()
     {
         if (is_null($this->_items)) {
-            $this->_catalogProductCompare->setAllowUsedFlat(false);
+            $this->_compareProduct->setAllowUsedFlat(false);
 
             $this->_items = $this->_itemCollectionFactory->create();
             $this->_items->useProductItem(true)

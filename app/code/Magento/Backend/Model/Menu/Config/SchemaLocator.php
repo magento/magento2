@@ -46,7 +46,7 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Backend') . DIRECTORY_SEPARATOR . 'menu.xsd';
+        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Backend') . '/menu.xsd';
     }
 
     /**

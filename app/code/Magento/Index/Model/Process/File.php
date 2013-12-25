@@ -24,13 +24,30 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Index\Model\Process;
+
+use Magento\Filesystem\FilesystemException;
+use Magento\Filesystem\File\WriteInterface;
+
 /**
  * Process file entity
  */
-namespace Magento\Index\Model\Process;
-
-class File extends \Magento\Io\File
+class File
 {
+    /**
+     * Stream handle instance
+     *
+     * @var WriteInterface
+     */
+    protected $_streamHandler;
+
+    /**
+     * Is stream locked
+     *
+     * @var bool
+     */
+    protected $_streamLocked;
+
     /**
      * Process lock flag:
      * - true  - if process is already locked by another user
@@ -42,6 +59,14 @@ class File extends \Magento\Io\File
     protected $_processLocked = null;
 
     /**
+     * @param WriteInterface $streamHandler
+     */
+    public function __construct(WriteInterface $streamHandler)
+    {
+        $this->_streamHandler = $streamHandler;
+    }
+
+    /**
      * Lock process file
      *
      * @param bool $nonBlocking
@@ -49,18 +74,18 @@ class File extends \Magento\Io\File
      */
     public function processLock($nonBlocking = true)
     {
-        if (!$this->_streamHandler) {
-            return false;
-        }
-        $this->_streamLocked = true;
-        $lock = LOCK_EX;
+        $lockMode = LOCK_EX;
         if ($nonBlocking) {
-            $lock = $lock | LOCK_NB;
+            $lockMode = $lockMode | LOCK_NB;
         }
-        $result = flock($this->_streamHandler, $lock);
+        try {
+            $this->_streamHandler->lock($lockMode);
+            $this->_streamLocked  = true;
+        } catch (FilesystemException $e) {
+            $this->_streamLocked = false;
+        }
         // true if process is locked by other user
-        $this->_processLocked = !$result;
-        return $result;
+        $this->_processLocked = !$this->_streamLocked;
     }
 
     /**
@@ -71,7 +96,13 @@ class File extends \Magento\Io\File
     public function processUnlock()
     {
         $this->_processLocked = null;
-        return parent::streamUnlock();
+        try {
+            $this->_streamHandler->unlock();
+            $this->_streamLocked = false;
+        } catch (FilesystemException $e) {
+            $this->_streamLocked = true;
+        }
+        return !$this->_streamLocked;
     }
 
     /**
@@ -89,16 +120,18 @@ class File extends \Magento\Io\File
         if ($this->_processLocked !== null) {
             return $this->_processLocked;
         } else {
-            if (flock($this->_streamHandler, LOCK_EX | LOCK_NB)) {
+            try {
+                $this->_streamHandler->lock(LOCK_EX | LOCK_NB);
                 if ($needUnlock) {
-                    flock($this->_streamHandler, LOCK_UN);
-                    $this->_processLocked = false;
+                    $this->_streamHandler->unlock();
+                    $this->_streamLocked = false;
                 } else {
                     $this->_streamLocked = true;
                 }
                 return false;
+            } catch (FilesystemException $e) {
+                return true;
             }
-            return true;
         }
     }
 }

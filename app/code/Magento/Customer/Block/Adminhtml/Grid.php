@@ -33,7 +33,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml;
 
-class Grid extends \Magento\Adminhtml\Block\Widget\Grid
+class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * @var \Magento\Core\Model\System\Store
@@ -51,25 +51,35 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
     protected $_groupsFactory;
 
     /**
+     * @var \Magento\Customer\Helper\Data
+     */
+    protected $_customerHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
      * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory
+     * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Url $urlModel,
+        \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory,
         \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory,
+        \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {
+        $this->_customerHelper = $customerHelper;
         $this->_systemStore = $systemStore;
         $this->_customersFactory = $customersFactory;
         $this->_groupsFactory = $groupsFactory;
-        parent::__construct($context, $urlModel, $data);
+        parent::__construct($context, $urlModel, $backendHelper, $data);
     }
 
     protected function _construct()
@@ -227,7 +237,7 @@ class Grid extends \Magento\Adminhtml\Block\Widget\Grid
              'url'      => $this->getUrl('customer/*/massUnsubscribe')
         ));
 
-        $groups = $this->helper('Magento\Customer\Helper\Data')->getGroups()->toOptionArray();
+        $groups = $this->_customerHelper->getGroups()->toOptionArray();
 
         array_unshift($groups, array('label'=> '', 'value'=> ''));
         $this->getMassactionBlock()->addItem('assign_group', array(

@@ -108,7 +108,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Add fields to form and create template info form
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @return \Magento\Adminhtml\Block\Widget\Form
+     * @return \Magento\Backend\Block\Widget\Form
      */
     protected function _prepareForm()
     {
@@ -168,7 +168,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         ));
 
         $insertVariableButton = $this->getLayout()
-            ->createBlock('Magento\Adminhtml\Block\Widget\Button', '', array('data' => array(
+            ->createBlock('Magento\Backend\Block\Widget\Button', '', array('data' => array(
                 'type' => 'button',
                 'label' => __('Insert Variable...'),
                 'onclick' => 'templateControl.openVariableChooser();return false;'

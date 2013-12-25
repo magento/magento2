@@ -59,8 +59,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('pdf.xml', 'scope')
             ->will($this->returnValue(array(
-                __DIR__ . '/_files/pdf_one.xml',
-                __DIR__ . '/_files/pdf_two.xml',
+                file_get_contents(__DIR__ . '/_files/pdf_one.xml'),
+                file_get_contents(__DIR__ . '/_files/pdf_two.xml'),
             )));
 
         $this->_converter = $this->getMock('Magento\Sales\Model\Order\Pdf\Config\Converter', array('convert'));

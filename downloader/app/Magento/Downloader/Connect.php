@@ -28,14 +28,9 @@ namespace Magento\Downloader;
 
 error_reporting(E_ALL & ~E_NOTICE);
 
-// just a shortcut
-if (!defined('DS')) {
-    define('DS', DIRECTORY_SEPARATOR);
-}
-
 // add Magento lib in include_path if needed
 $_includePath = get_include_path();
-$_libDir = dirname(__DIR__) . DS . 'lib';
+$_libDir = dirname(__DIR__) . '/lib';
 if (strpos($_includePath, $_libDir) === false) {
     if (substr($_includePath, 0, 2) === '.' . PATH_SEPARATOR) {
         $_includePath = '.' . PATH_SEPARATOR . $_libDir . PATH_SEPARATOR . substr($_includePath, 2);
@@ -146,7 +141,7 @@ class Connect
                 $this->_config=$config;
                 $this->_sconfig=$cache;
             }
-            $this->_config->magento_root = dirname(__DIR__).DS.'..';
+            $this->_config->magento_root = dirname(__DIR__) . '/..';
             \Magento\Connect\Command::setConfigObject($this->_config);
         }
         return $this->_config;
@@ -162,8 +157,8 @@ class Connect
     {
         if(!$this->_sconfig || $reload) {
             $this->_sconfig = new \Magento\Connect\Singleconfig(
-                $this->getConfig()->magento_root . DIRECTORY_SEPARATOR
-                . $this->getConfig()->downloader_path . DIRECTORY_SEPARATOR
+                $this->getConfig()->magento_root . '/'
+                . $this->getConfig()->downloader_path . '/'
                 . \Magento\Connect\Singleconfig::DEFAULT_SCONFIG_FILENAME
             );
         }
@@ -228,7 +223,7 @@ class Connect
             $entries = @scandir($path);
             foreach ($entries as $entry) {
                 if ($entry != '.' && $entry != '..') {
-                    $this->delTree($path.DS.$entry);
+                    $this->delTree($path . '/' . $entry);
                 }
             }
             @rmdir($path);
@@ -249,7 +244,7 @@ class Connect
     public function run($command, $options=array(), $params=array())
     {
         @set_time_limit(0);
-        @ini_set('memory_limit', '256M');
+        @ini_set('memory_limit', '2048M');
 
         if (empty($this->_cmdCache[$command])) {
             \Magento\Connect\Command::getCommands();

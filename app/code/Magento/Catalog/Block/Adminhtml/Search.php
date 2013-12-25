@@ -35,7 +35,7 @@
 
 namespace Magento\Catalog\Block\Adminhtml;
 
-class Search extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Search extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected function _construct()
     {

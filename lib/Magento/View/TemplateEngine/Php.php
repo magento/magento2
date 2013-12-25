@@ -38,6 +38,19 @@ class Php implements TemplateEngineInterface
     protected $_currentBlock;
 
     /**
+     * @var
+     */
+    protected $_helperFactory;
+
+    /**
+     * @param \Magento\ObjectManager $helperFactory
+     */
+    public function __construct(\Magento\ObjectManager $helperFactory)
+    {
+        $this->_helperFactory = $helperFactory;
+    }
+
+    /**
      * Render output
      *
      * Include the named PHTML template using the given block as the $this
@@ -108,5 +121,24 @@ class Php implements TemplateEngineInterface
     public function __get($name)
     {
         return $this->_currentBlock->$name;
+    }
+
+    /**
+     * Get helper singleton
+     *
+     * @param string $className
+     * @return \Magento\App\Helper\AbstractHelper
+     * @throws \LogicException
+     */
+    public function helper($className)
+    {
+        $helper = $this->_helperFactory->get($className);
+        if (false === ($helper instanceof \Magento\App\Helper\AbstractHelper)) {
+            throw new \LogicException(
+                $className . ' doesn\'t extends Magento\App\Helper\AbstractHelper'
+            );
+        }
+
+        return $helper;
     }
 }

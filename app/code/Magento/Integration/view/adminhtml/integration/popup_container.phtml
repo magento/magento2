@@ -28,10 +28,11 @@
 ?>
 <script type="text/javascript">
     window.integration = new Integration(
-        '<?php echo $this->getUrl('*/*/permissionsDialog', ['id' => ':id']); ?>',
-        '<?php echo $this->getUrl('*/*/tokensDialog', ['id' => ':id']); ?>',
-        '', // Not implemented
-        '' // Not implemented
+        '<?php echo $this->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
+        '<?php echo $this->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
+        '<?php echo $this->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
+        '<?php echo $this->getUrl('*/*'); ?>',
+        '<?php echo $this->getUrl('*/*/loginSuccessCallback'); ?>'
     );
 </script>
 <div id="integration-popup-container" style="display:none;"></div>

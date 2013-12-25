@@ -35,20 +35,34 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     protected $_moduleReader;
 
     /**
-     * @var \Magento\App\Dir
+     * @var \Magento\Filesystem\Directory\ReadInterface
      */
-    protected $_applicationDirs;
+    protected $themesDirectory;
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\App\Dir $applicationDirs
+     * @var \Magento\Config\FileIteratorFactory
+     */
+    protected $iteratorFactory;
+
+    /**
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $modulesDirectory;
+
+    /**
+     * @param \Magento\Filesystem                   $filesystem
+     * @param \Magento\Module\Dir\Reader            $moduleReader
+     * @param \Magento\Config\FileIteratorFactory   $iteratorFactory
      */
     public function __construct(
-        \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\App\Dir $applicationDirs
-    ) {
-        $this->_moduleReader = $moduleReader;
-        $this->_applicationDirs = $applicationDirs;
+        \Magento\Filesystem                 $filesystem,
+        \Magento\Module\Dir\Reader          $moduleReader,
+        \Magento\Config\FileIteratorFactory $iteratorFactory
+    ){
+        $this->themesDirectory  = $filesystem->getDirectoryRead(\Magento\Filesystem::THEMES);
+        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $this->iteratorFactory  = $iteratorFactory;
+        $this->_moduleReader    = $moduleReader;
     }
 
     /**
@@ -56,18 +70,18 @@ class FileResolver implements \Magento\Config\FileResolverInterface
      */
     public function get($filename, $scope)
     {
-        $fileList = array();
         switch ($scope) {
             case 'global':
-                $fileList = $this->_moduleReader->getConfigurationFiles($filename);
+                $iterator = $this->_moduleReader->getConfigurationFiles($filename);
                 break;
             case 'design':
-                $fileList = glob($this->_applicationDirs->getDir(\Magento\App\Dir::THEMES)
-                . "/*/*/etc/$filename", GLOB_NOSORT | GLOB_BRACE);
+                $fileList = $this->themesDirectory->search('#/' . preg_quote($filename) . '$#');
+                $iterator = $this->iteratorFactory->create($this->themesDirectory, $fileList);
                 break;
             default:
+                $iterator = $this->iteratorFactory->create($this->themesDirectory, array());;
                 break;
         }
-        return $fileList;
+        return $iterator;
     }
 }

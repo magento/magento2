@@ -34,6 +34,9 @@
         <param name="customerResource">
             <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
         </param>
+        <param name="storage">
+            <instance type="Magento\Customer\Model\Session\Storage" />
+        </param>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">

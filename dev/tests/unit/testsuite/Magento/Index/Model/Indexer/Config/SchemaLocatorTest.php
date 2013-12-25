@@ -54,7 +54,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSchema()
     {
-        $expectedSchema = 'some_path' . DIRECTORY_SEPARATOR . 'indexers_merged.xsd';
+        $expectedSchema = 'some_path/indexers_merged.xsd';
         $this->assertEquals($expectedSchema, $this->_model->getSchema());
     }
 
@@ -63,7 +63,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPerFileSchema()
     {
-        $expectedSchema = 'some_path' . DIRECTORY_SEPARATOR . 'indexers.xsd';
+        $expectedSchema = 'some_path/indexers.xsd';
         $this->assertEquals($expectedSchema, $this->_model->getPerFileSchema());
     }
 }

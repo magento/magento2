@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Block\Media;
 
-class Uploader extends \Magento\Adminhtml\Block\Widget
+class Uploader extends \Magento\Backend\Block\Widget
 {
     /**
      * @var \Magento\Object

@@ -35,11 +35,36 @@ class Factory
     private $_objectManager;
 
     /**
+     * Backup type constant for database backup
+     */
+    const TYPE_DB = 'db';
+
+    /**
+     * Backup type constant for filesystem backup
+     */
+    const TYPE_FILESYSTEM = 'filesystem';
+
+    /**
+     * Backup type constant for full system backup(database + filesystem)
+     */
+    const TYPE_SYSTEM_SNAPSHOT = 'snapshot';
+
+    /**
+     * Backup type constant for media and database backup
+     */
+    const TYPE_MEDIA = 'media';
+
+    /**
+     * Backup type constant for full system backup excluding media folder
+     */
+    const TYPE_SNAPSHOT_WITHOUT_MEDIA = 'nomedia';
+
+    /**
      * List of supported a backup types
      *
      * @var array
      */
-    private $_allowedTypes = array('db', 'snapshot', 'filesystem', 'media', 'nomedia');
+    protected $_allowedTypes;
 
     /**
      * @param \Magento\ObjectManager $objectManager
@@ -47,6 +72,13 @@ class Factory
     public function __construct(\Magento\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
+        $this->_allowedTypes = array(
+            self::TYPE_DB,
+            self::TYPE_FILESYSTEM,
+            self::TYPE_SYSTEM_SNAPSHOT,
+            self::TYPE_MEDIA,
+            self::TYPE_SNAPSHOT_WITHOUT_MEDIA,
+        );
     }
 
     /**

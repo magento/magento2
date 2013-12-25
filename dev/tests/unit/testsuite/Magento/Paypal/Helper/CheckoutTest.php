@@ -52,11 +52,11 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     {
         $this->_session = $this->getMockBuilder('Magento\Checkout\Model\Session')
             ->disableOriginalConstructor()
-            ->setMethods(array('getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId'))
+            ->setMethods(array('getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId', '__wakeup'))
             ->getMock();
         $this->_quoteFactory = $this->getMockBuilder('Magento\Sales\Model\QuoteFactory')
             ->disableOriginalConstructor()
-            ->setMethods(array('create'))
+            ->setMethods(array('create', '__wakeup'))
             ->getMock();
 
         $this->_checkout = new \Magento\Paypal\Helper\Checkout($this->_session, $this->_quoteFactory);

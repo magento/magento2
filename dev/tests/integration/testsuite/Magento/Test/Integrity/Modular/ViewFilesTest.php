@@ -162,7 +162,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     public function viewFilesFromModulesCodeDataProvider()
     {
         $allFiles = array();
-        foreach (glob(__DIR__ . DS . '_files' . DS . 'view_files*.php') as $file) {
+        foreach (glob(__DIR__ . '/_files/view_files*.php') as $file) {
             $allFiles = array_merge($allFiles, include($file));
         }
         return $this->_removeDisabledModulesFiles($allFiles);

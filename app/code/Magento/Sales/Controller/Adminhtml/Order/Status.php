@@ -113,7 +113,7 @@ class Status extends \Magento\Backend\App\Action
             $this->_setActiveMenu('Magento_Sales::system_order_statuses');
             $this->_view->renderLayout();
         } else {
-            $this->_getSession()->addError(
+            $this->messageManager->addError(
                 __('We can\'t find this order status.')
             );
             $this->_redirect('sales/');
@@ -146,7 +146,7 @@ class Status extends \Magento\Backend\App\Action
                     ->load($statusCode);
             // check if status exist
             if ($isNew && $status->getStatus()) {
-                $this->_getSession()->addError(
+                $this->messageManager->addError(
                     __('We found another order status with the same order status code.')
                 );
                 $this->_getSession()->setFormData($data);
@@ -158,13 +158,13 @@ class Status extends \Magento\Backend\App\Action
 
             try {
                 $status->save();
-                $this->_getSession()->addSuccess(__('You have saved the order status.'));
+                $this->messageManager->addSuccess(__('You have saved the order status.'));
                 $this->_redirect('sales/*/');
                 return;
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException(
+                $this->messageManager->addException(
                     $e,
                     __('We couldn\'t add your order status because something went wrong saving.')
                 );
@@ -205,19 +205,19 @@ class Status extends \Magento\Backend\App\Action
             if ($status && $status->getStatus()) {
                 try {
                     $status->assignState($state, $isDefault);
-                    $this->_getSession()->addSuccess(__('You have assigned the order status.'));
+                    $this->messageManager->addSuccess(__('You have assigned the order status.'));
                     $this->_redirect('sales/*/');
                     return;
                 } catch (\Magento\Core\Exception $e) {
-                    $this->_getSession()->addError($e->getMessage());
+                    $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->_getSession()->addException(
+                    $this->messageManager->addException(
                         $e,
                         __('An error occurred while assigning order status. Status has not been assigned.')
                     );
                 }
             } else {
-                $this->_getSession()->addError(__('We can\'t find this order status.'));
+                $this->messageManager->addError(__('We can\'t find this order status.'));
             }
             $this->_redirect('sales/*/assign');
             return;
@@ -232,17 +232,17 @@ class Status extends \Magento\Backend\App\Action
         if ($status) {
             try {
                 $status->unassignState($state);
-                $this->_getSession()->addSuccess(__('You have unassigned the order status.'));
+                $this->messageManager->addSuccess(__('You have unassigned the order status.'));
             } catch (\Magento\Core\Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException(
+                $this->messageManager->addException(
                     $e,
                     __('Something went wrong while we were unassigning the order.')
                 );
             }
         } else {
-            $this->_getSession()->addError(__('We can\'t find this order status.'));
+            $this->messageManager->addError(__('We can\'t find this order status.'));
         }
         $this->_redirect('sales/*/');
     }

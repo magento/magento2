@@ -27,7 +27,7 @@
 -->
 <config>
     <menu>
-        <add id="Magento_Connect::system_extensions" title="Magento Connect" module="Magento_Connect" sortOrder="20" parent="Magento_Adminhtml::system" resource="Magento_Adminhtml::extensions"/>
+        <add id="Magento_Connect::system_extensions" title="Magento Connect" module="Magento_Connect" sortOrder="20" parent="Magento_Backend::system" resource="Magento_Adminhtml::extensions"/>
         <add id="Magento_Connect::system_extensions_local" title="Connect Manager" module="Magento_Connect" sortOrder="10" parent="Magento_Connect::system_extensions" action="adminhtml/extension_local" resource="Magento_Adminhtml::local"/>
         <add id="Magento_Connect::system_extensions_custom" title="Package Extensions" module="Magento_Connect" sortOrder="20" parent="Magento_Connect::system_extensions" action="adminhtml/extension_custom" resource="Magento_Adminhtml::custom"/>
     </menu>

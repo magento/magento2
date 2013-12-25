@@ -24,5 +24,5 @@
  */
 -->
 <config>
-    <template id="wishlist_email_email_template" label="Wishlist Sharing" file="share_notification.html" type="html"/>
+    <template id="wishlist_email_email_template" label="Wishlist Sharing" file="share_notification.html" type="html" module="Magento_Wishlist"/>
 </config>

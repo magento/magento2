@@ -34,7 +34,7 @@
 namespace Magento\Reports\Block\Adminhtml\Product\Downloads\Renderer;
 
 class Purchases
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders Purchases value

@@ -40,7 +40,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form
     /**
      * Modify structure of new status form
      *
-     * @return \Magento\Adminhtml\Block\Widget\Form
+     * @return \Magento\Backend\Block\Widget\Form
      */
     protected function _prepareForm()
     {

@@ -30,7 +30,7 @@
 namespace Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer;
 
 class Date
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Date
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 {
     /**
      * Retrieve date format

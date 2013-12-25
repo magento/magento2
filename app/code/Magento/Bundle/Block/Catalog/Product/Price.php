@@ -48,6 +48,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Tax\Model\Calculation $taxCalc
      * @param array $data
      */
@@ -59,10 +60,21 @@ class Price extends \Magento\Catalog\Block\Product\Price
         \Magento\Core\Model\Registry $registry,
         \Magento\Stdlib\String $string,
         \Magento\Math\Random $mathRandom,
+        \Magento\Checkout\Helper\Cart $cartHelper,
         \Magento\Tax\Model\Calculation $taxCalc,
         array $data = array()
     ) {
-        parent::__construct($context, $jsonEncoder, $catalogData, $taxData, $registry, $string, $mathRandom, $data);
+        parent::__construct(
+            $context,
+            $jsonEncoder,
+            $catalogData,
+            $taxData,
+            $registry,
+            $string,
+            $mathRandom,
+            $cartHelper,
+            $data
+        );
         $this->_taxCalc = $taxCalc;
     }
 
@@ -92,7 +104,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
             $product->getPriceModel()->getIsPricesCalculatedByIndex() !== false) {
             return false;
         }
-        return $this->helper('Magento\Tax\Helper\Data')->displayBothPrices();
+        return $this->_taxData->displayBothPrices();
     }
 
     /**

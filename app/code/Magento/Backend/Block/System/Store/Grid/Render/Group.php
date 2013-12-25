@@ -35,7 +35,7 @@
 namespace Magento\Backend\Block\System\Store\Grid\Render;
 
 class Group
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     public function render(\Magento\Object $row)
     {

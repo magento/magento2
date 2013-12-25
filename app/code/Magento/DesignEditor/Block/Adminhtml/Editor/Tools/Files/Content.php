@@ -41,7 +41,7 @@ class Content
      */
     public function getHeaderText()
     {
-        return __('CSS Editor ') . __($this->helper('Magento\Theme\Helper\Storage')->getStorageTypeName());
+        return __('CSS Editor ') . __($this->_storageHelper->getStorageTypeName());
     }
     /**
      * Javascript setup object for filebrowser instance
@@ -66,6 +66,6 @@ class Content
             'showBreadcrumbs' => false
         ));
 
-        return $this->helper('Magento\Core\Helper\Data')->jsonEncode($setupObject);
+        return $this->_coreHelper->jsonEncode($setupObject);
     }
 }

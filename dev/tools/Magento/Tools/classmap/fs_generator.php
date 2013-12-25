@@ -28,8 +28,8 @@ $path = false;
 if (isset($argv[1])) {
     if (realpath($argv[1])) {
         $path = realpath($argv[1]);
-    } elseif (realpath(getcwd() . DIRECTORY_SEPARATOR . $argv[1])) {
-        $path = realpath(getcwd() . DIRECTORY_SEPARATOR . $argv[1]);
+    } elseif (realpath(getcwd() . '/' . $argv[1])) {
+        $path = realpath(getcwd() . '/' . $argv[1]);
     }
 }
 
@@ -39,7 +39,7 @@ if (!$path) {
 }
 
 
-$basePath = realpath(__DIR__ . '/../../../') . DIRECTORY_SEPARATOR;
+$basePath = realpath(__DIR__ . '/../../../') . '/';
 $directory  = new RecursiveDirectoryIterator($path);
 $iterator   = new RecursiveIteratorIterator($directory);
 $regex      = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);

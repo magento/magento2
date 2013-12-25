@@ -62,22 +62,22 @@ if (isset($options['help'])) {
 
 $logger->log('Deploying...', \Zend_Log::INFO);
 try {
-    $config = new \Magento\Tools\View\Generator\Config(BP, $options);
-
-    $filesystem = new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local);
-    $dirs = new \Magento\App\Dir($config->getSourceDir());
     $objectManager = new \Magento\ObjectManager\ObjectManager();
     $entityFactory = new Magento\Core\Model\EntityFactory($objectManager);
-    $themes = new \Magento\Core\Model\Theme\Collection($entityFactory, $filesystem, $dirs);
+    $filesystem = $entityFactory->create('Magento\Filesystem', array(
+        'directoryList' => new \Magento\Filesystem\DirectoryList(BP)
+    ));
+    $config = new \Magento\Tools\View\Generator\Config($filesystem, $options);
+    $fileIteratorFactory = new \Magento\Config\FileIteratorFactory();
+    $themes = new \Magento\Core\Model\Theme\Collection($entityFactory, $filesystem, $fileIteratorFactory);
     $themes->setItemObjectClass('\Magento\Tools\View\Generator\ThemeLight');
     $themes->addDefaultPattern('*');
 
-    $fallbackFactory = new \Magento\View\Design\Fallback\Factory($dirs);
+    $fallbackFactory = new \Magento\View\Design\Fallback\Factory($filesystem);
     $generator = new \Magento\Tools\View\Generator\CopyRule($filesystem, $themes,
         $fallbackFactory->createViewFileRule());
     $copyRules = $generator->getCopyRules();
-
-    $cssUrlResolver = new \Magento\View\Url\CssResolver($filesystem, $dirs);
+    $cssUrlResolver = new \Magento\View\Url\CssResolver($filesystem);
     $deployment = new \Magento\Tools\View\Generator\ThemeDeployment(
         $cssUrlResolver,
         $config->getDestinationDir(),

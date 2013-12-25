@@ -102,18 +102,18 @@ implements \Iterator
     
     public function getDownloaderPath()
     {
-        return $this->magento_root . DIRECTORY_SEPARATOR . $this->downloader_path;
+        return $this->magento_root . '/' . $this->downloader_path;
     }
     
     public function getPackagesCacheDir()
     {
-        return $this->getDownloaderPath() . DIRECTORY_SEPARATOR . self::DEFAULT_CACHE_PATH;        
+        return $this->getDownloaderPath() . '/' . self::DEFAULT_CACHE_PATH;
     }
     
     public function getChannelCacheDir($channel)
     {
         $channel = trim( $channel, "\\/");
-        return $this->getPackagesCacheDir(). DIRECTORY_SEPARATOR . $channel; 
+        return $this->getPackagesCacheDir() . '/' . $channel;
     }
     
     

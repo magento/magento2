@@ -32,12 +32,13 @@ class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        // List of all resources.xml
-        $xmlFiles = \Magento\TestFramework\Utility\Files::init()->getConfigFiles(
-            '{*/resources.xml,resources.xml}',
-            array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'),
-            false
-        );
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $filesystem \Magento\Filesystem */
+        $filesystem = $objectManager->get('Magento\Filesystem');
+        $appDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::APP);
+        $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
+        $xmlFiles = $fileIteratorFactory->create($appDirectory, $appDirectory->search('#/resources\.xml$#'));
+
         $fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');

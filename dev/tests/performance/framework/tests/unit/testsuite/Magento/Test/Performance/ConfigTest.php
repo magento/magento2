@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
+        $this->_fixtureDir = __DIR__ . '/_files';
         $this->_fixtureConfigData = require $this->_fixtureDir . '/config_data.php';
         $this->_object = new \Magento\TestFramework\Performance\Config(
             $this->_fixtureConfigData, $this->_fixtureDir, $this->_getFixtureAppBaseDir()
@@ -78,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getFixtureAppBaseDir()
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'app_base_dir';
+        return __DIR__ . '/_files/app_base_dir';
     }
 
     /**
@@ -95,49 +95,49 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ),
             'invalid scenarios format' => array(
                 require __DIR__ . '/_files/config_data_invalid_scenarios_format.php',
-                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                __DIR__ . '/_files',
                 'InvalidArgumentException',
                 "'scenario' => 'scenarios' option must be an array",
             ),
             'no scenario title' => array(
                 require __DIR__ . '/_files/config_no_title.php',
-                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                __DIR__ . '/_files',
                 'InvalidArgumentException',
                 'Scenario must have a title',
             ),
             'bad users scenario argument' => array(
                 require __DIR__ . '/_files/config_bad_users.php',
-                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                __DIR__ . '/_files',
                 'InvalidArgumentException',
                 "Scenario 'Scenario' must have a positive integer argument 'users'.",
             ),
             'bad loops scenario argument' => array(
                 require __DIR__ . '/_files/config_bad_loops.php',
-                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                __DIR__ . '/_files',
                 'InvalidArgumentException',
                 "Scenario 'Scenario' must have a positive integer argument 'loops'.",
             ),
             'invalid scenario fixtures format' => array(
                 require __DIR__ . '/_files/config_invalid_fixtures_format.php',
-                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                __DIR__ . '/_files',
                 'InvalidArgumentException',
                 "'fixtures' for scenario 'Scenario' must be represented by an array",
             ),
             'no scenario file defined' => array(
                 require __DIR__ . '/_files/config_no_file_defined.php',
-                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                __DIR__ . '/_files',
                 'InvalidArgumentException',
                 "File is not defined for scenario 'Scenario'",
             ),
             'non-existing scenario file' => array(
                 require __DIR__ . '/_files/config_non_existing_file.php',
-                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                __DIR__ . '/_files',
                 'InvalidArgumentException',
                 "File non_existing_file.jmx doesn't exist for scenario 'Scenario'",
             ),
             'non-existing scenario fixture' => array(
                 require __DIR__ . '/_files/config_non_existing_fixture.php',
-                __DIR__ . DIRECTORY_SEPARATOR . '_files',
+                __DIR__ . '/_files',
                 'InvalidArgumentException',
                 "Fixture 'non_existing_fixture.php' doesn't exist",
             ),
@@ -230,7 +230,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetReportDir()
     {
-        $expectedReportDir = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'report';
+        $expectedReportDir = __DIR__ . '/_files/report';
         $this->assertEquals($expectedReportDir, $this->_object->getReportDir());
     }
 }

@@ -32,7 +32,6 @@
             <module name="Magento_Catalog"/>
             <module name="Magento_Core"/>
             <module name="Magento_Customer"/>
-            <module name="Magento_Adminhtml"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Theme"/>
             <module name="Magento_Eav"/>

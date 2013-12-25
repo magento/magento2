@@ -118,12 +118,15 @@ class OauthV1 implements OauthV1Interface
     /**
      * {@inheritdoc}
      */
-    public function createAccessToken($consumerId)
+    public function createAccessToken($consumerId, $clearExistingToken = false)
     {
-        // TODO: This implementation is temporary and should be changed after requirements clarification
         try {
             $consumer = $this->_consumerFactory->create()->load($consumerId);
             $existingToken = $this->_tokenProvider->getTokenByConsumerId($consumer->getId());
+            if ($existingToken && $clearExistingToken) {
+                $existingToken->delete();
+                unset($existingToken);
+            }
         } catch (\Exception $e) {
         }
         if (!isset($existingToken)) {
@@ -160,6 +163,20 @@ class OauthV1 implements OauthV1Interface
     {
         try {
             return $this->_consumerFactory->create()->load($consumerId);
+        } catch (\Magento\Core\Exception $exception) {
+            throw $exception;
+        } catch (\Exception $exception) {
+            throw new \Magento\Oauth\Exception(__('Unexpected error. Unable to load oAuth consumer account.'));
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadConsumerByKey($key)
+    {
+        try {
+            return $this->_consumerFactory->create()->load($key, 'key');
         } catch (\Magento\Core\Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
@@ -214,6 +231,21 @@ class OauthV1 implements OauthV1Interface
         $data = $consumer->getData();
         $consumer->delete();
         return $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteToken($consumerId)
+    {
+        try {
+            $consumer = $this->_consumerFactory->create()->load($consumerId);
+            $existingToken = $this->_tokenProvider->getTokenByConsumerId($consumer->getId());
+            $existingToken->delete();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**

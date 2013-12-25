@@ -31,4 +31,14 @@
             </value>
         </param>
     </type>
+    <virtualType name="Magento\Newsletter\Model\Session\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>newsletter</value>
+        </param>
+    </virtualType>
+    <type name="Magento\Newsletter\Model\Session">
+        <param name="storage">
+            <instance type="Magento\Newsletter\Model\Session\Storage" />
+        </param>
+    </type>
 </config>

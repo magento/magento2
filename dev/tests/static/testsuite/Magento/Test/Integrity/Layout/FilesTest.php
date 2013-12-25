@@ -37,7 +37,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_schemaFile = \Magento\TestFramework\Utility\Files::init()->getModuleFile(
-            'Magento', 'Core', 'etc' . DIRECTORY_SEPARATOR . 'layout_single.xsd'
+            'Magento', 'Core', 'etc/layout_single.xsd'
         );
     }
 

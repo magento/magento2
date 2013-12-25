@@ -34,7 +34,7 @@
 
 namespace Magento\Backend\Block\Dashboard;
 
-class Grid extends \Magento\Adminhtml\Block\Widget\Grid
+class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     protected $_template = 'dashboard/grid.phtml';
 

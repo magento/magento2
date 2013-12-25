@@ -53,7 +53,7 @@ class FormKeyValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $formKey
-     * param bool $expected
+     * @param bool $expected
      * @dataProvider validateDataProvider
      */
     public function testValidate($formKey, $expected)

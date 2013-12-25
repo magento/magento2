@@ -34,7 +34,7 @@
 
 namespace Magento\Reports\Block\Adminhtml\Sales;
 
-class Sales extends \Magento\Adminhtml\Block\Widget\Grid\Container
+class Sales extends \Magento\Backend\Block\Widget\Grid\Container
 {
     protected $_template = 'report/grid/container.phtml';
 

@@ -34,7 +34,7 @@
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer;
 
 class Used
-    extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\Text
+    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     public function render(\Magento\Object $row)
     {

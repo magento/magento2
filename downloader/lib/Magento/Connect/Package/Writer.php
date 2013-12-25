@@ -125,11 +125,11 @@ class Writer
             if (is_dir($file) || is_file($file)) {
                 $fileName = basename($file);
                 $filePath = dirname($file);
-                @mkdir($root . DS . $filePath, 0777, true);
+                @mkdir($root . '/' . $filePath, 0777, true);
                 if (is_file($file)) {
-                    copy($file, $root . DS . $filePath . DS . $fileName);
+                    copy($file, $root . '/' . $filePath . '/' . $fileName);
                 } else {
-                    @mkdir($root . DS . $filePath . $fileName, 0777);
+                    @mkdir($root . '/' . $filePath . $fileName, 0777);
                 }
             }
         }
@@ -145,7 +145,7 @@ class Writer
     */
     public function addPackageXml($content)
     {
-        file_put_contents($this->_temporaryPackageDir . DS . self::DEFAULT_NAME_PACKAGE_CONFIG, $content);
+        file_put_contents($this->_temporaryPackageDir . '/' . self::DEFAULT_NAME_PACKAGE_CONFIG, $content);
         return $this;
     }
 

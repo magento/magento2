@@ -36,36 +36,6 @@ namespace Magento\Catalog\Block\Product\Compare;
 
 abstract class AbstractCompare extends \Magento\Catalog\Block\Product\AbstractProduct
 {
-    /**
-     * Catalog product compare
-     *
-     * @var \Magento\Catalog\Helper\Product\Compare
-     */
-    protected $_catalogProductCompare = null;
-
-    /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
-        array $data = array()
-    ) {
-        $this->_catalogProductCompare = $catalogProductCompare;
-        parent::__construct($context, $catalogConfig, $registry, $taxData, $catalogData, $mathRandom, $data);
-    }
 
     /**
      * Retrieve Product Compare Helper
@@ -74,7 +44,7 @@ abstract class AbstractCompare extends \Magento\Catalog\Block\Product\AbstractPr
      */
     protected function _getHelper()
     {
-        return $this->_catalogProductCompare;
+        return $this->_compareProduct;
     }
 
     /**

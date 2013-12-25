@@ -34,7 +34,7 @@
  
 namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
 
-class Sender extends \Magento\Adminhtml\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     public function render(\Magento\Object $row)
     {

@@ -39,7 +39,7 @@ class DefaultTotals extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals
     /**
      * Retrieve quote session object
      *
-     * @return \Magento\Adminhtml\Model\Session\Quote
+     * @return \Magento\Backend\Model\Session\Quote
      */
     protected function _getSession()
     {

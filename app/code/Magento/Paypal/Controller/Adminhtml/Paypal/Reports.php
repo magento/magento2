@@ -132,19 +132,19 @@ class Reports extends \Magento\Backend\App\Action
                     $fetched = $reports->fetchAndSave(
                         \Magento\Paypal\Model\Report\Settlement::createConnection($config)
                     );
-                    $this->_getSession()->addSuccess(
+                    $this->messageManager->addSuccess(
                         __("We fetched %1 report rows from '%2@%3'.", $fetched,
                             $config['username'], $config['hostname'])
                     );
                 } catch (\Exception $e) {
-                    $this->_getSession()->addError(
+                    $this->messageManager->addError(
                         __("We couldn't fetch reports from '%1@%2'.", $config['username'], $config['hostname'])
                     );
                     $this->_logger->logException($e);
                 }
             }
         } catch (\Magento\Core\Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_logger->logException($e);
         }

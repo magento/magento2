@@ -29,7 +29,7 @@ namespace Magento\Tax\Block\Adminhtml\Rate;
 class ImportExportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Adminhtml\Block\Tax\Rate\ImportExport
+     * @var \Magento\Tax\Block\Adminhtml\Rate\ImportExport
      */
     protected $_block = null;
 

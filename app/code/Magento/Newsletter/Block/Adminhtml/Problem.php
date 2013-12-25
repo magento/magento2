@@ -68,7 +68,7 @@ class Problem extends \Magento\Backend\Block\Template
     protected function _prepareLayout()
     {
         $this->setChild('deleteButton',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button', 'del.button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button', 'del.button')
                 ->setData(
                     array(
                         'label' => __('Delete Selected Problems'),
@@ -78,7 +78,7 @@ class Problem extends \Magento\Backend\Block\Template
         );
 
         $this->setChild('unsubscribeButton',
-            $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Button', 'unsubscribe.button')
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button', 'unsubscribe.button')
                 ->setData(
                     array(
                         'label' => __('Unsubscribe Selected'),

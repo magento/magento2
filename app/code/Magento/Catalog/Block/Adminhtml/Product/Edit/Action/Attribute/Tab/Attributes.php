@@ -44,10 +44,16 @@ class Attributes
     protected $_productFactory;
 
     /**
+     * @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
+     */
+    protected $_attributeAction;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeAction
      * @param array $data
      */
     public function __construct(
@@ -55,8 +61,10 @@ class Attributes
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeAction,
         array $data = array()
     ) {
+        $this->_attributeAction = $attributeAction;
         $this->_productFactory = $productFactory;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -106,7 +114,7 @@ class Attributes
      */
     public function getAttributes()
     {
-        return $this->helper('Magento\Catalog\Helper\Product\Edit\Action\Attribute')
+        return $this->_attributeAction
             ->getAttributes()->getItems();
     }
 

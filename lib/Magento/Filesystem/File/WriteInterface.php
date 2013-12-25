@@ -56,10 +56,10 @@ interface WriteInterface extends ReadInterface
     /**
      * Portable advisory file locking
      *
-     * @param bool $exclusive
+     * @param int $lockMode
      * @return bool
      */
-    public function lock($exclusive = true);
+    public function lock($lockMode = LOCK_EX);
 
     /**
      * File unlocking

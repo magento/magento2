@@ -26,7 +26,6 @@ namespace Magento\View\Design\FileResolution;
 
 use Magento\Exception;
 use Magento\App\State;
-use Magento\App\Dir;
 use Magento\Filesystem;
 use Magento\ObjectManager;
 
@@ -56,11 +55,6 @@ class StrategyPool
      * @var Filesystem
      */
     protected $filesystem;
-
-    /**
-     * @var Dir
-     */
-    protected $dirs;
 
     /**
      * Pool of strategy objects
@@ -95,19 +89,16 @@ class StrategyPool
     /**
      * @param ObjectManager $objectManager
      * @param State $appState
-     * @param Dir $dirs
      * @param Filesystem $filesystem
      */
     public function __construct(
         ObjectManager $objectManager,
         State $appState,
-        Dir $dirs,
         Filesystem $filesystem
     ) {
         $this->objectManager = $objectManager;
         $this->appState = $appState;
         $this->filesystem = $filesystem;
-        $this->dirs = $dirs;
     }
 
     /**
@@ -192,11 +183,10 @@ class StrategyPool
     {
         switch ($className) {
             case 'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy':
-                $mapDir = $this->dirs->getDir(Dir::VAR_DIR) . DIRECTORY_SEPARATOR
-                    . self::FALLBACK_MAP_DIR;
+                $mapDir = $this->filesystem->getPath(Filesystem::VAR_DIR) . '/' . self::FALLBACK_MAP_DIR;
                 $arguments = array(
-                    'mapDir' => str_replace('/', DIRECTORY_SEPARATOR, $mapDir),
-                    'baseDir' => $this->dirs->getDir(Dir::ROOT),
+                    'mapDir' => $mapDir,
+                    'baseDir' => $this->filesystem->getPath(Filesystem::ROOT),
                 );
                 break;
             default:

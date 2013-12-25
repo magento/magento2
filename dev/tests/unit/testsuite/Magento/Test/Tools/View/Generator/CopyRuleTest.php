@@ -29,14 +29,14 @@ require_once __DIR__ . '/../../../../../../../../tools/Magento/Tools/View/Genera
 class CopyRuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Generator_CopyRule
+     * @var \Magento\Tools\View\Generator\CopyRule
      */
     protected $_object;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_filesystem;
+    protected $_directoryMock;
 
     /**
      * @var \Magento\Core\Model\Theme\Collection
@@ -50,22 +50,32 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array('searchKeys', 'isDirectory'), array(
-            $this->getMockForAbstractClass('Magento\Filesystem\AdapterInterface')
-        ));
+        $filesystemMock = $this->getMock(
+            'Magento\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false
+        );
+        $this->_directoryMock = $this->getMock(
+            '\Magento\Filesystem\Directory\Read',
+            array('search', 'isDirectory', 'getAbsolutePath'),
+            array(),
+            '',
+            false
+        );
+        $filesystemMock->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($this->_directoryMock));
         $this->_themeCollection = $this->getMock(
             'Magento\Core\Model\Theme\Collection',
             array('isLoaded'),
             array(
                 $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false),
-                $this->_filesystem,
-                new \Magento\App\Dir(__DIR__)
+                $filesystemMock,
+                $this->getMock('\Magento\Config\FileIteratorFactory', array(), array(), '', false)
             )
         );
         $this->_themeCollection->expects($this->any())->method('isLoaded')->will($this->returnValue(true));
         $this->_fallbackRule = $this->getMockForAbstractClass('Magento\View\Design\Fallback\Rule\RuleInterface');
         $this->_object = new \Magento\Tools\View\Generator\CopyRule(
-            $this->_filesystem,
+            $filesystemMock,
             $this->_themeCollection,
             $this->_fallbackRule
         );
@@ -74,7 +84,7 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->_object = null;
-        $this->_filesystem = null;
+        $this->_directoryMock = null;
         $this->_themeCollection = null;
         $this->_fallbackRule = null;
     }
@@ -97,12 +107,17 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
             ->method('getPatternDirs')
             ->will($this->returnValueMap($patternDirMap))
         ;
-        $this->_filesystem
+        $this->_directoryMock
             ->expects($this->atLeastOnce())
-            ->method('searchKeys')
+            ->method('search')
             ->will($this->returnValueMap($filesystemGlobMap))
         ;
-        $this->_filesystem
+        $this->_directoryMock
+            ->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnArgument(0))
+        ;
+        $this->_directoryMock
             ->expects($this->atLeastOnce())
             ->method('isDirectory')
             ->will($this->returnValue(true))
@@ -151,12 +166,6 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
                     $fixture['theme_customizing_one_module']['expected_result'],
                     $fixture['theme_customizing_no_modules']['expected_result']
                 ),
-            ),
-            'mixed directory separators in fallback pattern' => array(
-                array($fixture['fallback_pattern_mixing_slashes']['theme']),
-                $patternDirMap,
-                $filesystemGlobMap,
-                $fixture['fallback_pattern_mixing_slashes']['expected_result'],
             ),
         );
     }

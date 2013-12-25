@@ -28,74 +28,91 @@ namespace Magento\App\Error;
 class HandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Logger mock
+     *
+     * @var \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_loggerMock;
+    protected $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Filesystem mock
+     *
+     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dirMock;
+    protected $filesystem;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject
+     * App state mock
+     *
+     * @var  \Magento\App\State|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_appStateMock;
+    protected $appState;
+
+    /**
+     * Handler instance
+     *
+     * @var \Magento\App\Error\Handler
+     */
+    protected $handler;
 
     protected function setUp()
     {
-        $this->_loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->_dirMock = $this->getMock('Magento\App\Dir', array(), array(BP), '', true);
-        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $this->filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->appState = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->handler = new \Magento\App\Error\Handler($this->logger, $this->filesystem, $this->appState);
     }
 
     /**
+     * Test for processException method print
+     *
      * @covers \Magento\Error\Handler::processException
      */
     public function testProcessExceptionPrint()
     {
-        $handler = new \Magento\App\Error\Handler($this->_loggerMock, $this->_dirMock, $this->_appStateMock);
-        $this->_appStateMock->expects($this->any())->method('getMode')
+        $this->appState->expects($this->any())->method('getMode')
             ->will($this->returnValue(\Magento\App\State::MODE_DEVELOPER));
         $exception = new \Exception('TestMessage');
 
         ob_start();
-        $handler->processException($exception);
+        $this->handler->processException($exception);
         $actualResult = ob_get_contents();
         ob_end_clean();
         $this->assertRegExp('/TestMessage/', $actualResult);
     }
 
     /**
+     * Test for processException method report
+     *
      * @covers \Magento\Error\Handler::processException
      */
     public function testProcessExceptionReport()
     {
-        $handler = new \Magento\App\Error\Handler($this->_loggerMock, $this->_dirMock, $this->_appStateMock);
-        $this->_appStateMock->expects($this->any())->method('getMode')
+        $this->appState->expects($this->any())->method('getMode')
             ->will($this->returnValue(\Magento\App\State::MODE_DEFAULT));
-        $this->_dirMock->expects($this->atLeastOnce())
-            ->method('getDir')
-            ->with(\Magento\App\Dir::PUB)
-            ->will($this->returnValue(dirname(__DIR__) . DS . '..' . DS . '_files'));
+        $this->filesystem->expects($this->atLeastOnce())
+            ->method('getPath')
+            ->with(\Magento\Filesystem::PUB)
+            ->will($this->returnValue(dirname(__DIR__) . '/../_files'));
 
         $exception = new \Exception('TestMessage');
-        $handler->processException($exception);
+        $this->handler->processException($exception);
     }
 
     /**
+     * Test for setting error handler and logging
+     *
      * @covers \Magento\Error\Handler::handler
      * @throws \Exception
      */
     public function testErrorHandlerLogging()
     {
-        $handler = new \Magento\App\Error\Handler($this->_loggerMock, $this->_dirMock, $this->_appStateMock);
-        $this->_appStateMock->expects($this->any())->method('getMode')
+        $this->appState->expects($this->any())->method('getMode')
             ->will($this->returnValue(\Magento\App\State::MODE_DEFAULT));
-        $this->_loggerMock->expects($this->once())
+        $this->logger->expects($this->once())
             ->method('log')
             ->with($this->stringContains('testErrorHandlerLogging'), \Zend_Log::ERR);
-        set_error_handler(array($handler, 'handler'));
+        set_error_handler(array($this->handler, 'handler'));
         try {
             trigger_error('testErrorHandlerLogging', E_USER_NOTICE);
             restore_error_handler();
@@ -106,16 +123,17 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for setting error handler and printing
+     *
      * @covers \Magento\Error\Handler::handler
      * @expectedException \Exception
      * @throws \Exception
      */
     public function testErrorHandlerPrint()
     {
-        $handler = new \Magento\App\Error\Handler($this->_loggerMock, $this->_dirMock, $this->_appStateMock);
-        $this->_appStateMock->expects($this->any())->method('getMode')
+        $this->appState->expects($this->any())->method('getMode')
             ->will($this->returnValue(\Magento\App\State::MODE_DEVELOPER));
-        set_error_handler(array($handler, 'handler'));
+        set_error_handler(array($this->handler, 'handler'));
         try {
             trigger_error('testErrorHandlerPrint', E_USER_NOTICE);
         } catch (\Exception $e) {

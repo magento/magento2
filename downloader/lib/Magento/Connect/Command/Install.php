@@ -73,10 +73,10 @@ final class Install extends \Magento\Connect\Command
                 $config->magento_root=dirname(dirname($_SERVER['SCRIPT_FILENAME']));
             }
             chdir($config->magento_root);
-            $dirCache = DIRECTORY_SEPARATOR . $config->downloader_path . DIRECTORY_SEPARATOR
+            $dirCache = '/' . $config->downloader_path . '/'
                 . \Magento\Connect\Config::DEFAULT_CACHE_PATH;
-            $dirTmp = DIRECTORY_SEPARATOR . \Magento\Connect\Package\Reader::PATH_TO_TEMPORARY_DIRECTORY;
-            $dirMedia = DIRECTORY_SEPARATOR . 'media';
+            $dirTmp = '/' . \Magento\Connect\Package\Reader::PATH_TO_TEMPORARY_DIRECTORY;
+            $dirMedia = '/media';
             $isWritable = true;
             if ($ftp) {
                 $cwd=$ftpObj->getcwd();
@@ -92,7 +92,7 @@ final class Install extends \Magento\Connect\Command
                 @mkdir($config->magento_root . $dirTmp,0777,true);
                 @mkdir($config->magento_root . $dirMedia,0777,true);
                 $isWritable = is_writable($config->magento_root)
-                              && is_writable($config->magento_root . DIRECTORY_SEPARATOR . $config->downloader_path)
+                              && is_writable($config->magento_root . '/' . $config->downloader_path)
                               && is_writable($config->magento_root . $dirCache)
                               && is_writable($config->magento_root . $dirTmp)
                               && is_writable($config->magento_root . $dirMedia);
@@ -307,7 +307,7 @@ final class Install extends \Magento\Connect\Command
                             $this->ui()->output('Changed locally: ');
                             foreach ($modifications as $row) {
                                 if (!$ftp) {
-                                    $this->ui()->output($config->magento_root . DS . $row);
+                                    $this->ui()->output($config->magento_root . '/' . $row);
                                 } else {
                                     $this->ui()->output($row);
                                 }
@@ -317,8 +317,8 @@ final class Install extends \Magento\Connect\Command
 
                     if ($ftp) {
                         $cwd=$ftpObj->getcwd();
-                        $dir=$cwd . DIRECTORY_SEPARATOR .$config->downloader_path . DIRECTORY_SEPARATOR
-                             . \Magento\Connect\Config::DEFAULT_CACHE_PATH . DIRECTORY_SEPARATOR . trim( $pChan, "\\/");
+                        $dir=$cwd . '/' .$config->downloader_path . '/'
+                             . \Magento\Connect\Config::DEFAULT_CACHE_PATH . '/' . trim( $pChan, "\\/");
                         $ftpObj->mkdirRecursive($dir,0777);
                         $ftpObj->chdir($cwd);
                     } else {
@@ -327,7 +327,7 @@ final class Install extends \Magento\Connect\Command
                     }
                     $dir = $config->getChannelCacheDir($pChan);
                     $packageFileName = $pName . "-" . $pVer . ".tgz";
-                    $file = $dir . DIRECTORY_SEPARATOR . $packageFileName;
+                    $file = $dir . '/' . $packageFileName;
                     if (!@file_exists($file)) {
                         $this->ui()->output("Starting to download $packageFileName ...");
                         $rest->downloadPackageFileOfRelease($pName, $pVer, $file);

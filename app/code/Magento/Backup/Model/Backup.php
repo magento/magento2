@@ -49,7 +49,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     /**
      * Gz file pointer
      *
-     * @var \Magento\Filesystem\Stream\Zlib
+     * @var \Magento\Filesystem\File\WriteInterface
      */
     protected $_stream = null;
 
@@ -83,10 +83,16 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     protected $_encryptor;
 
     /**
+     * @var \Magento\Filesystem\Directory\WriteInterface
+     */
+    protected $varDirectory;
+
+    /**
      * @param \Magento\Backup\Helper\Data $helper
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
@@ -94,14 +100,14 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Encryption\EncryptorInterface $encryptor,
+        \Magento\Filesystem $filesystem,
         $data = array()
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($data);
 
-        $adapter = new \Magento\Filesystem\Adapter\Zlib(self::COMPRESS_RATE);
-        $this->_filesystem = new \Magento\Filesystem($adapter);
-        $this->_filesystem->setIsAllowCreateDirectories(true);
+        $this->_filesystem = $filesystem;
+        $this->varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
         $this->_helper = $helper;
         $this->_locale = $locale;
         $this->_backendAuthSession = $authSession;
@@ -156,7 +162,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         $backupData = $this->_helper->extractDataFromFilename($fileName);
 
         $this->addData(array(
-            'id'   => $filePath . DS . $fileName,
+            'id'   => $filePath . '/' . $fileName,
             'time' => (int)$backupData->getTime(),
             'path' => $filePath,
             'extension' => $this->_helper->getExtensionByType($backupData->getType()),
@@ -176,7 +182,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      */
     public function exists()
     {
-        return $this->_filesystem->isFile($this->_getFilePath());
+        return $this->varDirectory->isFile($this->_getFilePath());
     }
 
     /**
@@ -240,7 +246,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
             throw new \Magento\Core\Exception(__('Please correct the order of creation for a new backup.'));
         }
 
-        $this->_filesystem->write($this->_getFilePath(), $content);
+        $this->varDirectory->writeFile($this->_getFilePath(), $content);
         return $this;
     }
 
@@ -256,7 +262,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
             throw new \Magento\Core\Exception(__("The backup file does not exist."));
         }
 
-        return $this->_filesystem->read($this->_getFilePath());
+        return $this->varDirectory->read($this->_getFilePath());
     }
 
     /**
@@ -271,7 +277,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
             throw new \Magento\Core\Exception(__("The backup file does not exist."));
         }
 
-        $this->_filesystem->delete($this->_getFilePath());
+        $this->varDirectory->delete($this->_getFilePath());
         return $this;
     }
 
@@ -289,22 +295,25 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
             throw new \Magento\Backup\Exception(__('The backup file path was not specified.'));
         }
 
-        if ($write && $this->_filesystem->isFile($this->_getFilePath())) {
-            $this->_filesystem->delete($this->_getFilePath());
+        if ($write && $this->varDirectory->isFile($this->_getFilePath())) {
+            $this->varDirectory->delete($this->_getFilePath());
         }
-        if (!$write && !$this->_filesystem->isFile($this->_getFilePath())) {
+        if (!$write && !$this->varDirectory->isFile($this->_getFilePath())) {
             throw new \Magento\Backup\Exception(__('The backup file "%1" does not exist.', $this->getFileName()));
         }
 
         $mode = $write ? 'wb' . self::COMPRESS_RATE : 'rb';
 
         try {
-            $compressStream = 'compress.zlib://';
-            $workingDirectory = $this->_filesystem->getWorkingDirectory();
-            $this->_stream = $this->_filesystem->createAndOpenStream($compressStream . $this->_getFilePath(), $mode,
-                $compressStream . $workingDirectory);
+            /** @var \Magento\Filesystem\Directory\WriteInterface $varDirectory */
+            $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+            $this->_stream = $varDirectory->openFile(
+                $this->_getFilePath(),
+                $mode,
+                \Magento\Filesystem::WRAPPER_CONTENT_ZLIB
+            );
         }
-        catch (\Magento\Filesystem\Exception $e) {
+        catch (\Magento\Filesystem\FilesystemException $e) {
             throw new \Magento\Backup\Exception\NotEnoughPermissions(
                 __('Sorry, but we cannot read from or write to backup file "%1".', $this->getFileName())
             );
@@ -316,7 +325,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     /**
      * Get zlib handler
      *
-     * @return \Magento\Filesystem\Stream\Zlib
+     * @return \Magento\Filesystem\File\WriteInterface
      * @throws \Magento\Backup\Exception
      */
     protected function _getStream()
@@ -360,7 +369,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         try {
             $this->_getStream()->write($string);
         }
-        catch (\Magento\Filesystem\Exception $e) {
+        catch (\Magento\Filesystem\FilesystemException $e) {
             throw new \Magento\Backup\Exception(__('Something went wrong writing to the backup file "%1".',
                 $this->getFileName()));
         }
@@ -390,11 +399,11 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
             return ;
         }
 
-        $stream = $this->_filesystem->createAndOpenStream($this->_getFilePath(), 'r');
-        while ($buffer = $stream->read(1024)) {
-            echo $buffer;
-        }
-        $stream->close();
+        /** @var \Magento\Filesystem\Directory\ReadInterface $zlibDirectory */
+        $zlibDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ZLIB);
+        $zlibDirectory = $zlibDirectory->readFile($this->_getFilePath());
+
+        echo $zlibDirectory;
     }
 
     /**
@@ -407,7 +416,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         }
 
         if ($this->exists()) {
-            $this->setData('size', $this->_filesystem->getFileSize($this->_getFilePath()));
+            $this->setData('size', $this->varDirectory->stat($this->_getFilePath())['size']);
             return $this->getData('size');
         }
 
@@ -427,36 +436,12 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     }
 
     /**
-     * Load backup by it's type and creation timestamp
-     *
-     * @param int $timestamp
-     * @param string $type
-     * @return \Magento\Backup\Model\Backup
-     */
-    public function loadByTimeAndType($timestamp, $type)
-    {
-        $backupId = $timestamp . '_' . $type;
-
-        foreach ($this->_fsCollection as $backup) {
-            if ($backup->getId() == $backupId) {
-                $this->setType($backup->getType())
-                    ->setTime($backup->getTime())
-                    ->setName($backup->getName())
-                    ->setPath($backup->getPath());
-                break;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Get file path.
      *
      * @return string
      */
     protected function _getFilePath()
     {
-        return $this->getPath() . DS . $this->getFileName();
+        return $this->varDirectory->getRelativePath($this->getPath() . '/' . $this->getFileName());
     }
 }

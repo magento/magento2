@@ -26,7 +26,7 @@
 <config>
     <router id="admin">
         <route id="adminhtml">
-            <module name="Magento_Theme_Adminhtml" />
+            <module name="Magento_Theme" />
         </route>
     </router>
 </config>

@@ -41,14 +41,24 @@ class Download extends \Magento\App\Action\Action
     protected $_fileResponseFactory;
 
     /**
+     * Filesystem instance
+     *
+     * @var \Magento\Filesystem
+     */
+    protected $_filesystem;
+    
+    /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\App\Response\Http\FileFactory $fileResponseFactory
+     * @param \Magento\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\App\Response\Http\FileFactory $fileResponseFactory
+        \Magento\App\Response\Http\FileFactory $fileResponseFactory,
+        \Magento\Filesystem $filesystem
     ) {
         $this->_fileResponseFactory = $fileResponseFactory;
+        $this->_filesystem = $filesystem;
         parent::__construct($context);
     }
 
@@ -65,13 +75,21 @@ class Download extends \Magento\App\Action\Action
                 throw new \Exception();
             }
 
-            $filePath = $this->_objectManager->get('Magento\App\Dir')
-                ->getDir(\Magento\App\Dir::ROOT) . $info['order_path'];
-            if ((!is_file($filePath) || !is_readable($filePath)) && !$this->_processDatabaseFile($filePath)) {
+            /** @var \Magento\Filesystem\Directory\Read $directory */
+            $directory = $this->_objectManager->get('Magento\Filesystem')
+                ->getDirectoryWrite(\Magento\Filesystem::ROOT);
+
+            $relativePath = $info['order_path'];
+            $filePath = $directory->getAbsolutePath($relativePath);
+            if ((!$directory->isFile($relativePath) || !$directory->isReadable($relativePath))
+                && !$this->_processDatabaseFile($filePath)
+            ) {
                 //try get file from quote
-                $filePath = $this->_objectManager->get('Magento\App\Dir')
-                    ->getDir(\Magento\App\Dir::ROOT) . $info['quote_path'];
-                if ((!is_file($filePath) || !is_readable($filePath)) && !$this->_processDatabaseFile($filePath)) {
+                $relativePath = $info['quote_path'];
+                $filePath = $directory->getAbsolutePath($relativePath);
+                if ((!$directory->isFile($relativePath) || !$directory->isReadable($relativePath))
+                    && !$this->_processDatabaseFile($filePath)
+                ) {
                     throw new \Exception();
                 }
             }
@@ -105,17 +123,14 @@ class Download extends \Magento\App\Action\Action
             return false;
         }
 
-        $directory = dirname($filePath);
-        @mkdir($directory, 0777, true);
-
-        $io = new \Magento\Io\File();
-        $io->cd($directory);
-
-        $io->streamOpen($filePath);
-        $io->streamLock(true);
-        $io->streamWrite($file->getContent());
-        $io->streamUnlock();
-        $io->streamClose();
+        /** @var \Magento\Filesystem\Directory\WriteInterface $directory */
+        $directory = $this->_objectManager->get('Magento\Filesystem')
+            ->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $stream = $directory->openFile($filePath, 'w+');
+        $stream->lock();
+        $stream->write($filePath, $file->getContent());
+        $stream->unlock();
+        $stream->close();
 
         return true;
     }

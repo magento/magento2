@@ -34,6 +34,15 @@ interface ReadInterface
     public function read($length);
 
     /**
+     * Reads the line with specified number of bytes from the current position.
+     *
+     * @param int $length The number of bytes to read
+     * @param string $ending [optional]
+     * @return string
+     */
+    public function readLine($length, $ending = null);
+
+    /**
      * Reads one CSV row from the file
      *
      * @param int $length [optional] <p>

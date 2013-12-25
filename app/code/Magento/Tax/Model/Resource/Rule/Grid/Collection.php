@@ -28,11 +28,13 @@ namespace Magento\Tax\Model\Resource\Rule\Grid;
 class Collection extends \Magento\Tax\Model\Resource\Calculation\Rule\Collection
 {
     /**
+     * Process loaded collection data
+     *
      * @return \Magento\Tax\Model\Resource\Rule\Grid\Collection
      */
-    protected function _initSelect()
+    protected function _afterLoadData()
     {
-        parent::_initSelect();
+        parent::_afterLoadData();
         $this->addCustomerTaxClassesToResult();
         $this->addProductTaxClassesToResult();
         $this->addRatesToResult();

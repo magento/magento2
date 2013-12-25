@@ -39,15 +39,23 @@ class Fieldset
     protected $_authSession;
 
     /**
+     * @var \Magento\Core\Helper\Js
+     */
+    protected $_jsHelper;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Core\Helper\Js $jsHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Core\Helper\Js $jsHelper,
         array $data = array()
     ) {
+        $this->_jsHelper = $jsHelper;
         $this->_authSession = $authSession;
         parent::__construct($context, $data);
     }
@@ -203,7 +211,7 @@ class Fieldset
     {
         $htmlId = $element->getHtmlId();
         $output = "Fieldset.applyCollapse('{$htmlId}');";
-        return $this->helper('Magento\Core\Helper\Js')->getScript($output);
+        return $this->_jsHelper->getScript($output);
     }
 
     /**

@@ -71,6 +71,7 @@ class Install
      *
      * @param array $arguments
      * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @return \Magento\App\ResponseInterface
      */
     public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
     {
@@ -79,8 +80,8 @@ class Install
             $this->_response->setRedirect(
                 $this->_url->getUrl('install')
             );
-            return;
+            return $this->_response;
         }
-        $invocationChain->proceed($arguments);
+        return $invocationChain->proceed($arguments);
     }
 }

@@ -40,13 +40,16 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         self::$_baseDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                 ->get('Magento\Cms\Helper\Wysiwyg\Images')
                 ->getCurrentPath() . 'MagentoCmsModelWysiwygImagesStorageTest';
-        mkdir(self::$_baseDir, 0777);
-        touch(self::$_baseDir . DIRECTORY_SEPARATOR . '1.swf');
+        if (!file_exists(self::$_baseDir)) {
+            mkdir(self::$_baseDir, 0777);
+        }
+        touch(self::$_baseDir . '/1.swf');
     }
 
     public static function tearDownAfterClass()
     {
-        \Magento\Io\File::rmdirRecursive(self::$_baseDir);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Filesystem\Driver\File')->deleteDirectory(self::$_baseDir);
     }
 
     /**
@@ -54,13 +57,13 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFilesCollection()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get('Magento\Core\Model\App')
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
+        $objectManager->get('Magento\View\DesignInterface')
             ->setDesignTheme('magento_backend');
         /** @var $model \Magento\Cms\Model\Wysiwyg\Images\Storage */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Cms\Model\Wysiwyg\Images\Storage');
+        $model = $objectManager->create('Magento\Cms\Model\Wysiwyg\Images\Storage');
         $collection = $model->getFilesCollection(self::$_baseDir, 'media');
         $this->assertInstanceOf('Magento\Cms\Model\Wysiwyg\Images\Storage\Collection', $collection);
         foreach ($collection as $item) {
@@ -79,15 +82,14 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetThumbsPath()
     {
-        $filesystem = new \Magento\Filesystem(new \Magento\Filesystem\Adapter\Local);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $filesystem = $objectManager->get('Magento\Filesystem');
         $session = $objectManager->get('Magento\Backend\Model\Session');
         $backendUrl = $objectManager->get('Magento\Backend\Model\Url');
         $imageFactory = $objectManager->get('Magento\Image\AdapterFactory');
         $viewUrl = $objectManager->get('Magento\View\Url');
         $imageHelper = $objectManager->get('Magento\Cms\Helper\Wysiwyg\Images');
         $coreFileStorageDb = $objectManager->get('Magento\Core\Helper\File\Storage\Database');
-        $dir = $objectManager->get('Magento\App\Dir');
         $storageCollectionFactory = $objectManager->get('Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory');
         $storageFileFactory = $objectManager->get('Magento\Core\Model\File\Storage\FileFactory');
         $storageDatabaseFactory = $objectManager->get('Magento\Core\Model\File\Storage\DatabaseFactory');
@@ -102,7 +104,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $filesystem,
             $imageFactory,
             $viewUrl,
-            $dir,
             $storageCollectionFactory,
             $storageFileFactory,
             $storageDatabaseFactory,
@@ -110,7 +111,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $uploaderFactory
         );
         $this->assertStringStartsWith(
-            realpath(\Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir()),
+            str_replace('\\', '/', $filesystem->getPath(\Magento\Filesystem::MEDIA)),
             $model->getThumbsPath()
         );
     }

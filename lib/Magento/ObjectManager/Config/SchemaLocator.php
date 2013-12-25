@@ -34,7 +34,7 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return realpath(__DIR__ . '/../etc/') . DIRECTORY_SEPARATOR . 'config.xsd';
+        return realpath(__DIR__ . '/../etc/') . '/config.xsd';
     }
 
     /**

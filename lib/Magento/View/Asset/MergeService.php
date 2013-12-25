@@ -45,11 +45,6 @@ class MergeService
     protected $filesystem;
 
     /**
-     * @var \Magento\App\Dir
-     */
-    protected $dirs;
-
-    /**
      * @var \Magento\App\State
      */
     protected $state;
@@ -58,20 +53,17 @@ class MergeService
      * @param \Magento\ObjectManager $objectManager
      * @param ConfigInterface $config
      * @param \Magento\Filesystem $filesystem,
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\App\State $state
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         ConfigInterface $config,
         \Magento\Filesystem $filesystem,
-        \Magento\App\Dir $dirs,
         \Magento\App\State $state
     ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
         $this->filesystem = $filesystem;
-        $this->dirs = $dirs;
         $this->state = $state;
     }
 
@@ -114,7 +106,6 @@ class MergeService
      */
     public function cleanMergedJsCss()
     {
-        $mergedDir = $this->dirs->getDir(\Magento\App\Dir::PUB_VIEW_CACHE) . '/' . Merged::PUBLIC_MERGE_DIR;
-        $this->filesystem->delete($mergedDir);
+        $this->filesystem->getDirectoryWrite(\Magento\Filesystem::PUB_VIEW_CACHE)->delete(Merged::PUBLIC_MERGE_DIR);
     }
 }

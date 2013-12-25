@@ -24,12 +24,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * @category   Magento
- * @package    Magento_Core
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Core\Model\Session;
 
 class Pool
@@ -53,13 +47,13 @@ class Pool
      * @param string $instanceName
      * @param array $data
      * @throws \LogicException
-     * @return \Magento\Core\Model\Session\AbstractSession
+     * @return \Magento\Session\SessionManagerInterface
      */
     public function get($instanceName, $data = array())
     {
         $object = $this->_objectManager->get($instanceName, array('data' => $data));
-        if (!$object instanceof \Magento\Core\Model\Session\AbstractSession) {
-            throw new \LogicException($instanceName . ' doesn\'t extend \Magento\Core\Model\Session\AbstractSession');
+        if (!$object instanceof \Magento\Session\SessionManagerInterface) {
+            throw new \LogicException($instanceName . ' doesn\'t implement \Magento\Session\SessionManagerInterface');
         }
 
         return $object;

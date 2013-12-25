@@ -35,7 +35,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
 class Properties
     extends \Magento\Widget\Block\Adminhtml\Widget\Options
-    implements \Magento\Adminhtml\Block\Widget\Tab\TabInterface
+    implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Prepare label for tab

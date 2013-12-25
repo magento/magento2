@@ -41,9 +41,9 @@ class Alerts extends \Magento\Backend\Block\Template
 
     protected function _prepareLayout()
     {
-        $accordion = $this->getLayout()->createBlock('Magento\Adminhtml\Block\Widget\Accordion')
+        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')
             ->setId('productAlerts');
-        /* @var $accordion \Magento\Adminhtml\Block\Widget\Accordion */
+        /* @var $accordion \Magento\Backend\Block\Widget\Accordion */
 
         $alertPriceAllow = $this->_storeConfig->getConfig('catalog/productalert/allow_price');
         $alertStockAllow = $this->_storeConfig->getConfig('catalog/productalert/allow_stock');

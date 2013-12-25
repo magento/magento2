@@ -39,13 +39,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         \Magento\Data\Form::setElementRenderer(
             $this->getLayout()->createBlock(
-                'Magento\Adminhtml\Block\Widget\Form\Renderer\Element',
+                'Magento\Backend\Block\Widget\Form\Renderer\Element',
                 $this->getNameInLayout() . '_element'
             )
         );
         \Magento\Data\Form::setFieldsetRenderer(
             $this->getLayout()->createBlock(
-                'Magento\Adminhtml\Block\Widget\Form\Renderer\Fieldset',
+                'Magento\Backend\Block\Widget\Form\Renderer\Fieldset',
                 $this->getNameInLayout() . '_fieldset'
             )
         );

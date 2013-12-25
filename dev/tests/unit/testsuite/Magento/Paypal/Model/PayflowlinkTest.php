@@ -89,7 +89,7 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getOrder', '__wakeup'))
             ->getMock();
         $payment->expects($this->any())
-            ->method('getOrder')
+            ->method('getOrder', '__wakeup')
             ->will($this->returnValue($order));
         $request = new \Magento\Paypal\Model\Payflow\Request;
         $this->_modelClass = $this->getMock(

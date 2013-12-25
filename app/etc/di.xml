@@ -63,6 +63,12 @@
     <preference for="Magento\View\Design\Theme\Domain\StagingInterface" type="Magento\Core\Model\Theme\Domain\Staging" />
     <preference for="Magento\Json\EncoderInterface" type="Magento\Json\Encoder" />
     <preference for="Magento\Json\DecoderInterface" type="Magento\Json\Decoder" />
+    <preference for="Magento\Message\ManagerInterface" type="Magento\Message\Manager" />
+    <type name="Magento\Message\Manager">
+        <param name="session">
+            <instance type="Magento\Message\Session\Proxy" />
+        </param>
+    </type>
     <type name="Magento\View\BlockPool" shared="false" />
     <type name="Magento\App\Request\Http">
         <param name="pathInfoProcessor">
@@ -70,6 +76,19 @@
         </param>
     </type>
     <preference for="Magento\Error\HandlerInterface" type="Magento\App\Error\Handler" />
+    <preference for="Magento\Session\SaveHandlerInterface" type="Magento\Session\SaveHandler" />
+    <type name="Magento\Session\SaveHandler">
+        <param name="saveMethod">
+            <value type="argument">Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_METHOD</value>
+        </param>
+    </type>
+    <type name="Magento\Session\SaveHandlerFactory">
+        <param name="handlers">
+            <value>
+                <db>Magento\Session\SaveHandler\DbTable</db>
+            </value>
+        </param>
+    </type>
     <preference for="Magento\Module\Output\ConfigInterface" type="Magento\Core\Model\Module\Output\Config" />
     <preference for="Magento\View\Design\Theme\CustomizationInterface" type="Magento\View\Design\Theme\Customization" />
     <preference for="Magento\Image\Adapter\ConfigInterface" type="Magento\Core\Model\Image\Adapter\Config" />
@@ -151,11 +170,6 @@
     <type name="Magento\Install\Model\Installer">
         <param name="config">
             <instance type="Magento\Core\Model\Config\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Filesystem" shared="false">
-        <param name="adapter">
-            <instance type="Magento\Filesystem\Adapter\Local" />
         </param>
     </type>
     <type name="Magento\Data\Structure" shared="false" />
@@ -256,19 +270,19 @@
             <value>
                 <urlLib>
                     <key type="const">Magento\Core\Model\Store::URL_TYPE_LIB</key>
-                    <value type="const">Magento\App\Dir::PUB_LIB</value>
+                    <value type="const">Magento\Filesystem::PUB_LIB</value>
                 </urlLib>
                 <urlMedia>
                     <key type="const">Magento\Core\Model\Store::URL_TYPE_MEDIA</key>
-                    <value type="const">Magento\App\Dir::MEDIA</value>
+                    <value type="const">Magento\Filesystem::MEDIA</value>
                 </urlMedia>
                 <urlStatic>
                     <key type="const">Magento\Core\Model\Store::URL_TYPE_STATIC</key>
-                    <value type="const">Magento\App\Dir::STATIC_VIEW</value>
+                    <value type="const">Magento\Filesystem::STATIC_VIEW</value>
                 </urlStatic>
                 <urlCache>
                     <key type="const">Magento\Core\Model\Store::URL_TYPE_CACHE</key>
-                    <value type="const">Magento\App\Dir::PUB_VIEW_CACHE</value>
+                    <value type="const">Magento\Filesystem::PUB_VIEW_CACHE</value>
                 </urlCache>
             </value>
         </param>
@@ -276,6 +290,14 @@
     <type name="Magento\HTTP\PhpEnvironment\RemoteAddress">
         <param name="alternativeHeaders">
             <value/>
+        </param>
+    </type>
+    <type name="Magento\Filesystem">
+        <param name="fileReadFactory">
+            <instance type="Magento\Filesystem\File\ReadFactory" />
+        </param>
+        <param name="fileWriteFactory">
+            <instance type="Magento\Filesystem\File\WriteFactory" />
         </param>
     </type>
     <type name="Magento\App\FrontController">

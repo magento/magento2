@@ -28,62 +28,79 @@ namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\View\Layout\Element as LayoutElement;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockObjectManager;
-
     /** @var \Magento\Integration\Controller\Adminhtml\Integration */
-    protected $_integrationContr;
+    protected $_controller;
 
     /** @var \Magento\TestFramework\Helper\ObjectManager $objectManagerHelper */
     protected $_objectManagerHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockApp;
+    /** @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_objectManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockLayoutFilter;
+    /** @var \Magento\Core\Model\App|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_appMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockConfig;
+    /** @var \Magento\Core\Model\Layout\Filter\Acl|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_layoutFilterMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockEventManager;
+    /** @var \Magento\Core\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockTranslateModel;
+    /** @var \Magento\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_eventManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockBackendModSess;
+    /** @var \Magento\Core\Model\Translate|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_translateModelMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockBackendCntCtxt;
+    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_backendSessionMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockIntegrationSvc;
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_backendActionCtxMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockOauthSvc;
+    /** @var \Magento\Integration\Service\IntegrationV1|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_integrationSvcMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockRegistry;
+    /** @var \Magento\Integration\Service\OauthV1|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_oauthSvcMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockRequest;
+    /** @var \Magento\Core\Model\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_registryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockResponse;
+    /** @var \Magento\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockConfigScope;
+    /** @var \Magento\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_responseMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_mockIntegrationData;
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    protected $_messageManager;
+
+    /** @var \Magento\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_configScopeMock;
+
+    /** @var \Magento\Integration\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_integrationHelperMock;
+
+    /** @var \Magento\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_viewMock;
+
+    /** @var \Magento\Core\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_layoutMergeMock;
+
+    /** @var \Magento\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_layoutMock;
+
+    /** Sample integration ID */
+    const INTEGRATION_ID = 1;
 
     /**
      * Setup object manager and initialize mocks
@@ -92,48 +109,51 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\TestFramework\Helper\ObjectManager $objectManagerHelper */
         $this->_objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
+        $this->_objectManagerMock = $this->getMockBuilder('Magento\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
         // Initialize mocks which are used in several test cases
-        $this->_mockApp = $this->getMockBuilder('Magento\Core\Model\App')
+        $this->_appMock = $this->getMockBuilder('Magento\Core\Model\App')
             ->setMethods(array('getConfig'))
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockConfig = $this->getMockBuilder('Magento\Core\Model\Config')->disableOriginalConstructor()
+        $this->_configMock = $this->getMockBuilder('Magento\Core\Model\Config')->disableOriginalConstructor()
             ->getMock();
-        $this->_mockApp->expects($this->any())->method('getConfig')->will($this->returnValue($this->_mockConfig));
-        $this->_mockEventManager = $this->getMockBuilder('Magento\Event\ManagerInterface')
+        $this->_appMock->expects($this->any())->method('getConfig')->will($this->returnValue($this->_configMock));
+        $this->_eventManagerMock = $this->getMockBuilder('Magento\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockLayoutFilter = $this->getMockBuilder('Magento\Core\Model\Layout\Filter\Acl')
+        $this->_layoutFilterMock = $this->getMockBuilder('Magento\Core\Model\Layout\Filter\Acl')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockBackendModSess = $this->getMockBuilder('Magento\Backend\Model\Session')
+        $this->_backendSessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockTranslateModel = $this->getMockBuilder('Magento\Core\Model\Translate')
+        $this->_translateModelMock = $this->getMockBuilder('Magento\Core\Model\Translate')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockIntegrationSvc = $this->getMockBuilder('Magento\Integration\Service\IntegrationV1')
+        $this->_integrationSvcMock = $this->getMockBuilder('Magento\Integration\Service\IntegrationV1')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockOauthSvc = $this->getMockBuilder('Magento\Integration\Service\OauthV1')
+        $this->_oauthSvcMock = $this->getMockBuilder('Magento\Integration\Service\OauthV1')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockRequest = $this->getMockBuilder('Magento\App\Request\Http')
+        $this->_requestMock = $this->getMockBuilder('Magento\App\Request\Http')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockResponse = $this->getMockBuilder('Magento\App\Response\Http')
+        $this->_responseMock = $this->getMockBuilder('Magento\App\Response\Http')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockRegistry = $this->getMockBuilder('Magento\Core\Model\Registry')
+        $this->_registryMock = $this->getMockBuilder('Magento\Core\Model\Registry')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockConfigScope = $this->getMockBuilder('Magento\Config\ScopeInterface')
+        $this->_configScopeMock = $this->getMockBuilder('Magento\Config\ScopeInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_mockIntegrationData = $this->getMockBuilder('Magento\Integration\Helper\Data')
+        $this->_integrationHelperMock = $this->getMockBuilder('Magento\Integration\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_messageManager = $this->getMockBuilder('Magento\Message\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -142,55 +162,61 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $this->_verifyLoadAndRenderLayout();
         // renderLayout
-        $this->_integrationContr = $this->_createIntegrationController();
-        $this->_integrationContr->indexAction();
+        $this->_controller = $this->_createIntegrationController();
+        $this->_controller->indexAction();
     }
 
     public function testNewAction()
     {
         $this->_verifyLoadAndRenderLayout();
         // verify the request is forwarded to 'edit' action
-        $this->_mockRequest->expects($this->any())->method('setActionName')->with('edit')
-            ->will($this->returnValue($this->_mockRequest));
+        $this->_requestMock->expects($this->any())->method('setActionName')->with('edit')
+            ->will($this->returnValue($this->_requestMock));
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->newAction();
     }
 
     public function testEditAction()
     {
-        $this->_mockIntegrationSvc->expects($this->any())->method('get')->with(1)->will(
-            $this->returnValue($this->_getSampleIntegrationData())
-        );
-        $this->_mockRequest->expects($this->any())->method('getParam')->will($this->returnValue('1'));
+        $this->_integrationSvcMock
+            ->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->will($this->returnValue($this->_getSampleIntegrationData()));
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getParam')
+            ->with($this->equalTo(Integration::PARAM_INTEGRATION_ID))
+            ->will($this->returnValue(self::INTEGRATION_ID));
         // put data in session, the magic function getFormData is called so, must match __call method name
-        $this->_mockBackendModSess->expects($this->any())
-            ->method('__call')->will(
-                $this->returnValue(
-                    array(
-                        Info::DATA_ID => 1,
-                        'name' => 'testIntegration'
-                    )
-                )
-            );
+        $this->_backendSessionMock->expects($this->any())
+            ->method('__call')
+            ->will($this->returnValueMap([
+                ['setIntegrationData'],
+                ['getIntegrationData', [
+                    Info::DATA_ID => self::INTEGRATION_ID,
+                    Info::DATA_NAME => 'testIntegration'
+                ]]
+            ]));
         $this->_verifyLoadAndRenderLayout();
-        $integrationContr = $this->_createIntegrationController();
-        $integrationContr->editAction();
+        $controller = $this->_createIntegrationController();
+        $controller->editAction();
     }
 
     public function testEditActionNonExistentIntegration()
     {
         $exceptionMessage = 'This integration no longer exists.';
         // verify the error
-        $this->_mockBackendModSess->expects($this->once())
+        $this->_messageManager->expects($this->once())
             ->method('addError')
             ->with($this->equalTo($exceptionMessage));
-        $this->_mockRequest->expects($this->any())->method('getParam')->will($this->returnValue('1'));
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         // put data in session, the magic function getFormData is called so, must match __call method name
-        $this->_mockBackendModSess->expects($this->any())
+        $this->_backendSessionMock->expects($this->any())
             ->method('__call')->will($this->returnValue(array('name' => 'nonExistentInt')));
 
         $invalidIdException = new \Magento\Integration\Exception($exceptionMessage);
-        $this->_mockIntegrationSvc->expects($this->any())
+        $this->_integrationSvcMock->expects($this->any())
             ->method('get')->will($this->throwException($invalidIdException));
         $this->_verifyLoadAndRenderLayout();
         $integrationContr = $this->_createIntegrationController();
@@ -201,7 +227,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $exceptionMessage = 'Integration ID is not specified or is invalid.';
         // verify the error
-        $this->_mockBackendModSess->expects($this->once())
+        $this->_messageManager->expects($this->once())
             ->method('addError')
             ->with($this->equalTo($exceptionMessage));
         $this->_verifyLoadAndRenderLayout();
@@ -213,26 +239,30 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $exceptionMessage = 'Integration ID is not specified or is invalid.';
         // verify the error
-        $this->_mockBackendModSess->expects($this->once())
+        $this->_messageManager->expects($this->once())
             ->method('addError')
             ->with($this->equalTo($exceptionMessage));
-        $this->_integrationContr = $this->_createIntegrationController();
-        $this->_integrationContr->editAction();
+        $this->_controller = $this->_createIntegrationController();
+        $this->_controller->editAction();
     }
 
     public function testSaveAction()
     {
         // Use real translate model
-        $this->_mockTranslateModel = null;
-        $this->_mockRequest->expects($this->any())
-            ->method('getPost')->will($this->returnValue(array(Integration::PARAM_INTEGRATION_ID => 1)));
-        $this->_mockRequest->expects($this->any())->method('getParam')->will($this->returnValue('1'));
+        $this->_translateModelMock = null;
+        $this->_requestMock->expects($this->any())
+            ->method('getPost')->will($this->returnValue([Integration::PARAM_INTEGRATION_ID => self::INTEGRATION_ID]));
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         $intData = $this->_getSampleIntegrationData();
-        $this->_mockIntegrationSvc->expects($this->any())->method('get')->with(1)->will($this->returnValue($intData));
-        $this->_mockIntegrationSvc->expects($this->any())->method('update')->with($this->anything())
+        $this->_integrationSvcMock
+            ->expects($this->any())
+            ->method('get')
+            ->with(self::INTEGRATION_ID)
+            ->will($this->returnValue($intData));
+        $this->_integrationSvcMock->expects($this->any())->method('update')->with($this->anything())
             ->will($this->returnValue($intData));
         // verify success message
-        $this->_mockBackendModSess->expects($this->once())->method('addSuccess')
+        $this->_messageManager->expects($this->once())->method('addSuccess')
             ->with(__('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME]));
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->saveAction();
@@ -240,16 +270,16 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveActionException()
     {
-        $this->_mockRequest->expects($this->any())->method('getParam')->will($this->returnValue('1'));
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
 
         // Have integration service throw an exception to test exception path
         $exceptionMessage = 'Internal error. Check exception log for details.';
-        $this->_mockIntegrationSvc->expects($this->any())
+        $this->_integrationSvcMock->expects($this->any())
             ->method('get')
-            ->with(1)
+            ->with(self::INTEGRATION_ID)
             ->will($this->throwException(new \Magento\Core\Exception($exceptionMessage)));
         // Verify error
-        $this->_mockBackendModSess->expects($this->once())->method('addError')
+        $this->_messageManager->expects($this->once())->method('addError')
             ->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->saveAction();
@@ -257,16 +287,17 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveActionIntegrationException()
     {
-        $this->_mockRequest->expects($this->any())->method('getParam')->will($this->returnValue('1'));
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
 
         // Have integration service throw an exception to test exception path
         $exceptionMessage = 'Internal error. Check exception log for details.';
-        $this->_mockIntegrationSvc->expects($this->any())
+        $this->_integrationSvcMock->expects($this->any())
             ->method('get')
-            ->with(1)
+            ->with(self::INTEGRATION_ID)
             ->will($this->throwException(new \Magento\Integration\Exception($exceptionMessage)));
         // Verify error
-        $this->_mockBackendModSess->expects($this->once())->method('addError')
+        $this->_messageManager->expects($this->once())
+            ->method('addError')
             ->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->saveAction();
@@ -274,21 +305,23 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveActionNew()
     {
-        $intData = $this->_getSampleIntegrationData()->getData();
+        $integration = $this->_getSampleIntegrationData();
         //No id when New Integration is Post-ed
-        unset($intData[Info::DATA_ID]);
-        $this->_mockRequest->expects($this->any())->method('getPost')->will($this->returnValue($intData));
-        $intData[Info::DATA_ID] = 1;
-        $this->_mockIntegrationSvc->expects($this->any())->method('create')->with($this->anything())
-            ->will($this->returnValue($intData));
-        $this->_mockIntegrationSvc->expects($this->any())->method('get')->with(1)->will(
+        $integration->unsetData(array(IntegrationModel::ID, 'id'));
+        $this->_requestMock->expects($this->any())->method('getPost')->will(
+            $this->returnValue($integration->getData())
+        );
+        $integration->setData('id', self::INTEGRATION_ID);
+        $this->_integrationSvcMock->expects($this->any())->method('create')->with($this->anything())
+            ->will($this->returnValue($integration));
+        $this->_integrationSvcMock->expects($this->any())->method('get')->with(self::INTEGRATION_ID)->will(
             $this->returnValue(null)
         );
         // Use real translate model
-        $this->_mockTranslateModel = null;
+        $this->_translateModelMock = null;
         // verify success message
-        $this->_mockBackendModSess->expects($this->once())->method('addSuccess')
-            ->with(__('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME]));
+        $this->_messageManager->expects($this->once())->method('addSuccess')
+            ->with(__('The integration \'%1\' has been saved.', $integration->getName()));
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->saveAction();
     }
@@ -296,15 +329,15 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     public function testDeleteAction()
     {
         $intData = $this->_getSampleIntegrationData();
-        $this->_mockRequest->expects($this->once())->method('getParam')->will($this->returnValue('1'));
-        $this->_mockIntegrationSvc->expects($this->any())->method('get')->with($this->anything())
+        $this->_requestMock->expects($this->once())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_integrationSvcMock->expects($this->any())->method('get')->with($this->anything())
             ->will($this->returnValue($intData));
-        $this->_mockIntegrationSvc->expects($this->any())->method('delete')->with($this->anything())
+        $this->_integrationSvcMock->expects($this->any())->method('delete')->with($this->anything())
             ->will($this->returnValue($intData));
         // Use real translate model
-        $this->_mockTranslateModel = null;
+        $this->_translateModelMock = null;
         // verify success message
-        $this->_mockBackendModSess->expects($this->once())->method('addSuccess')
+        $this->_messageManager->expects($this->once())->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->deleteAction();
@@ -314,17 +347,17 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $intData = $this->_getSampleIntegrationData();
         $intData[Info::DATA_CONSUMER_ID] = 1;
-        $this->_mockRequest->expects($this->once())->method('getParam')->will($this->returnValue('1'));
-        $this->_mockIntegrationSvc->expects($this->any())->method('get')->with($this->anything())
+        $this->_requestMock->expects($this->once())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_integrationSvcMock->expects($this->any())->method('get')->with($this->anything())
             ->will($this->returnValue($intData));
-        $this->_mockIntegrationSvc->expects($this->once())->method('delete')->with($this->anything())
+        $this->_integrationSvcMock->expects($this->once())->method('delete')->with($this->anything())
             ->will($this->returnValue($intData));
-        $this->_mockOauthSvc->expects($this->once())->method('deleteConsumer')->with($this->anything())
+        $this->_oauthSvcMock->expects($this->once())->method('deleteConsumer')->with($this->anything())
             ->will($this->returnValue($intData));
         // Use real translate model
-        $this->_mockTranslateModel = null;
+        $this->_translateModelMock = null;
         // verify success message
-        $this->_mockBackendModSess->expects($this->once())->method('addSuccess')
+        $this->_messageManager->expects($this->once())->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->deleteAction();
@@ -334,31 +367,31 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $intData = $this->_getSampleIntegrationData();
         $intData[Info::DATA_SETUP_TYPE] = IntegrationModel::TYPE_CONFIG;
-        $this->_mockRequest->expects($this->once())->method('getParam')->will($this->returnValue('1'));
-        $this->_mockIntegrationSvc->expects($this->any())->method('get')->with($this->anything())
+        $this->_requestMock->expects($this->once())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_integrationSvcMock->expects($this->any())->method('get')->with($this->anything())
             ->will($this->returnValue($intData));
-        $this->_mockIntegrationData->expects($this->once())->method('isConfigType')->with($intData)
+        $this->_integrationHelperMock->expects($this->once())->method('isConfigType')->with($intData)
             ->will($this->returnValue(true));
         // verify error message
-        $this->_mockBackendModSess->expects($this->once())->method('addError')
+        $this->_messageManager->expects($this->once())->method('addError')
             ->with(__('Uninstall the extension to remove integration \'%1\'.', $intData[Info::DATA_NAME]));
-        $this->_mockIntegrationSvc->expects($this->never())->method('delete');
+        $this->_integrationSvcMock->expects($this->never())->method('delete');
         // Use real translate model
-        $this->_mockTranslateModel = null;
+        $this->_translateModelMock = null;
         // verify success message
-        $this->_mockBackendModSess->expects($this->never())->method('addSuccess');
+        $this->_messageManager->expects($this->never())->method('addSuccess');
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->deleteAction();
     }
 
     public function testDeleteActionMissingId()
     {
-        $this->_mockIntegrationSvc->expects($this->never())->method('get');
-        $this->_mockIntegrationSvc->expects($this->never())->method('delete');
+        $this->_integrationSvcMock->expects($this->never())->method('get');
+        $this->_integrationSvcMock->expects($this->never())->method('delete');
         // Use real translate model
-        $this->_mockTranslateModel = null;
+        $this->_translateModelMock = null;
         // verify error message
-        $this->_mockBackendModSess->expects($this->once())->method('addError')
+        $this->_messageManager->expects($this->once())->method('addError')
             ->with(__('Integration ID is not specified or is invalid.'));
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->deleteAction();
@@ -367,16 +400,16 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     public function testDeleteActionForServiceIntegrationException()
     {
         $intData = $this->_getSampleIntegrationData();
-        $this->_mockIntegrationSvc->expects($this->any())->method('get')->with($this->anything())
+        $this->_integrationSvcMock->expects($this->any())->method('get')->with($this->anything())
             ->will($this->returnValue($intData));
-        $this->_mockRequest->expects($this->once())->method('getParam')->will($this->returnValue('1'));
+        $this->_requestMock->expects($this->once())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         // Use real translate model
-        $this->_mockTranslateModel = null;
+        $this->_translateModelMock = null;
         $exceptionMessage = __("Integration with ID '%1' doesn't exist.", $intData[Info::DATA_ID]);
         $invalidIdException = new \Magento\Integration\Exception($exceptionMessage);
-        $this->_mockIntegrationSvc->expects($this->once())->method('delete')
+        $this->_integrationSvcMock->expects($this->once())->method('delete')
             ->will($this->throwException($invalidIdException));
-        $this->_mockBackendModSess->expects($this->once())->method('addError')
+        $this->_messageManager->expects($this->once())->method('addError')
             ->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->deleteAction();
@@ -385,19 +418,122 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     public function testDeleteActionForServiceGenericException()
     {
         $intData = $this->_getSampleIntegrationData();
-        $this->_mockIntegrationSvc->expects($this->any())->method('get')->with($this->anything())
+        $this->_integrationSvcMock->expects($this->any())->method('get')->with($this->anything())
             ->will($this->returnValue($intData));
-        $this->_mockRequest->expects($this->once())->method('getParam')->will($this->returnValue('1'));
+        $this->_requestMock->expects($this->once())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         // Use real translate model
-        $this->_mockTranslateModel = null;
+        $this->_translateModelMock = null;
         $exceptionMessage = __("Integration with ID '%1' doesn't exist.", $intData[Info::DATA_ID]);
         $invalidIdException = new \Exception($exceptionMessage);
-        $this->_mockIntegrationSvc->expects($this->once())->method('delete')
+        $this->_integrationSvcMock->expects($this->once())->method('delete')
             ->will($this->throwException($invalidIdException));
         //Generic Exception(non-Service) should never add the message in session for user display
-        $this->_mockBackendModSess->expects($this->never())->method('addError');
+        $this->_messageManager->expects($this->never())->method('addError');
         $integrationContr = $this->_createIntegrationController();
         $integrationContr->deleteAction();
+    }
+
+    public function testPermissionsDialog()
+    {
+        $controller = $this->_createIntegrationController();
+
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getParam')
+            ->with($this->equalTo(Integration::PARAM_INTEGRATION_ID))
+            ->will($this->returnValue(self::INTEGRATION_ID));
+
+        $this->_integrationSvcMock
+            ->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->will($this->returnValue($this->_getSampleIntegrationData()));
+
+        // @codingStandardsIgnoreStart
+        $handle = <<<HANDLE
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <handle id="adminhtml_integration_activate_permissions_webapi">
+       <referenceBlock name="integration.activate.permissions.tabs">
+          <block class="Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi" name="integration_activate_permissions_tabs_webapi" template="integration/activate/permissions/tab/webapi.phtml"/>
+          <action method="addTab">
+             <argument name="name" xsi:type="string">integration_activate_permissions_tabs_webapi</argument>
+             <argument name="block" xsi:type="string">integration_activate_permissions_tabs_webapi</argument>
+          </action>
+       </referenceBlock>
+    </handle>
+</layout>
+HANDLE;
+        // @codingStandardsIgnoreEnd
+
+        $layoutUpdates = new LayoutElement($handle);
+        $this->_registryMock->expects($this->any())->method('register');
+
+        $this->_layoutMergeMock
+            ->expects($this->once())
+            ->method('getFileLayoutUpdatesXml')
+            ->will($this->returnValue($layoutUpdates));
+
+        $this->_viewMock
+            ->expects($this->once())
+            ->method('loadLayout')
+            ->with($this->equalTo(['adminhtml_integration_activate_permissions_webapi']));
+
+        $controller->permissionsDialogAction();
+    }
+
+    public function testTokensDialog()
+    {
+        $controller = $this->_createIntegrationController();
+        $this->_registryMock->expects($this->any())->method('register');
+
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap([
+            [Integration::PARAM_INTEGRATION_ID, null, self::INTEGRATION_ID],
+            [Integration::PARAM_REAUTHORIZE, 0, 0]
+        ]));
+
+        $this->_integrationSvcMock
+            ->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->will($this->returnValue($this->_getIntegrationModelMock()));
+
+        $this->_oauthSvcMock->expects($this->once())->method('createAccessToken')->will($this->returnValue(true));
+
+        $this->_viewMock->expects($this->any())->method('loadLayout');
+        $this->_viewMock->expects($this->any())->method('renderLayout');
+
+        $controller->tokensDialogAction();
+    }
+
+    public function testTokensExchangeReauthorize()
+    {
+        $controller = $this->_createIntegrationController();
+
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap([
+            [Integration::PARAM_INTEGRATION_ID, null, self::INTEGRATION_ID],
+            [Integration::PARAM_REAUTHORIZE, 0, 1]
+        ]));
+
+        $this->_integrationSvcMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->will($this->returnValue($this->_getIntegrationModelMock()));
+
+        $this->_oauthSvcMock->expects($this->once())->method('deleteToken');
+        $this->_oauthSvcMock->expects($this->once())->method('postToConsumer');
+
+        $this->_messageManager->expects($this->once())->method('addNotice');
+        $this->_messageManager->expects($this->never())->method('addError');
+        $this->_messageManager->expects($this->never())->method('addSuccess');
+
+        $this->_viewMock->expects($this->once())->method('loadLayout');
+        $this->_viewMock->expects($this->once())->method('renderLayout');
+
+        $this->_responseMock->expects($this->once())->method('getBody');
+        $this->_responseMock->expects($this->once())->method('setBody');
+
+        $controller->tokensExchangeAction();
     }
 
     /**
@@ -408,16 +544,18 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected function _createIntegrationController()
     {
         // Mock Layout passed into constructor
-        $viewMock = $this->getMock('Magento\App\ViewInterface');
-        $layoutMock = $this->getMock('Magento\View\LayoutInterface');
-        $layoutMergeMock = $this->getMockBuilder('Magento\Core\Model\Layout\Merge')
+        $this->_viewMock = $this->getMock('Magento\App\ViewInterface');
+        $this->_layoutMock = $this->getMock('Magento\View\LayoutInterface');
+        $this->_layoutMergeMock = $this->getMockBuilder('Magento\Core\Model\Layout\Merge')
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock->expects($this->any())->method('getUpdate')->will($this->returnValue($layoutMergeMock));
+        $this->_layoutMock->expects($this->any())
+            ->method('getUpdate')
+            ->will($this->returnValue($this->_layoutMergeMock));
         $testElement = new \Magento\Simplexml\Element('<test>test</test>');
-        $layoutMock->expects($this->any())->method('getNode')->will($this->returnValue($testElement));
+        $this->_layoutMock->expects($this->any())->method('getNode')->will($this->returnValue($testElement));
         // for _setActiveMenu
-        $viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
+        $this->_viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->_layoutMock));
         $blockMock = $this->getMockBuilder('Magento\Backend\Block\Menu')
             ->disableOriginalConstructor()
             ->getMock();
@@ -430,37 +568,38 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $loggerMock->expects($this->any())->method('logException')->will($this->returnSelf());
         $menuMock->expects($this->any())->method('getParentItems')->will($this->returnValue(array()));
         $blockMock->expects($this->any())->method('getMenuModel')->will($this->returnValue($menuMock));
-        $layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));
-        $layoutMock->expects($this->any())->method('getBlock')->will($this->returnValue($blockMock));
+        $this->_layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));
+        $this->_layoutMock->expects($this->any())->method('getBlock')->will($this->returnValue($blockMock));
         $contextParameters = array(
-            'view' => $viewMock,
-            'objectManager' => $this->_mockObjectManager,
-            'session' => $this->_mockBackendModSess,
-            'translator' => $this->_mockTranslateModel,
-            'request' => $this->_mockRequest,
-            'response' => $this->_mockResponse,
+            'view' => $this->_viewMock,
+            'objectManager' => $this->_objectManagerMock,
+            'session' => $this->_backendSessionMock,
+            'translator' => $this->_translateModelMock,
+            'request' => $this->_requestMock,
+            'response' => $this->_responseMock,
+            'messageManager' => $this->_messageManager
         );
 
-        $this->_mockBackendCntCtxt = $this->_objectManagerHelper
+        $this->_backendActionCtxMock = $this->_objectManagerHelper
             ->getObject(
                 'Magento\Backend\App\Action\Context',
                 $contextParameters
             );
         $subControllerParams = array(
-            'context' => $this->_mockBackendCntCtxt,
-            'integrationService' => $this->_mockIntegrationSvc,
-            'oauthService' => $this->_mockOauthSvc,
-            'registry' => $this->_mockRegistry,
+            'context' => $this->_backendActionCtxMock,
+            'integrationService' => $this->_integrationSvcMock,
+            'oauthService' => $this->_oauthSvcMock,
+            'registry' => $this->_registryMock,
             'logger' => $loggerMock,
-            'integrationData' => $this->_mockIntegrationData
+            'integrationData' => $this->_integrationHelperMock
         );
         /** Create IntegrationController to test */
-        $integrationContr = $this->_objectManagerHelper
+        $controller = $this->_objectManagerHelper
             ->getObject(
                 'Magento\Integration\Controller\Adminhtml\Integration',
                 $subControllerParams
             );
-        return $integrationContr;
+        return $controller;
     }
 
     /**
@@ -471,13 +610,13 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected function _verifyLoadAndRenderLayout()
     {
         $map = array(
-            array('Magento\Core\Model\Config', $this->_mockConfig),
-            array('Magento\Core\Model\Layout\Filter\Acl', $this->_mockLayoutFilter),
-            array('Magento\Backend\Model\Session', $this->_mockBackendModSess),
-            array('Magento\Core\Model\Translate', $this->_mockTranslateModel),
-            array('Magento\Config\ScopeInterface', $this->_mockConfigScope)
+            array('Magento\Core\Model\Config', $this->_configMock),
+            array('Magento\Core\Model\Layout\Filter\Acl', $this->_layoutFilterMock),
+            array('Magento\Backend\Model\Session', $this->_backendSessionMock),
+            array('Magento\Core\Model\Translate', $this->_translateModelMock),
+            array('Magento\Config\ScopeInterface', $this->_configScopeMock)
         );
-        $this->_mockObjectManager->expects($this->any())
+        $this->_objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap($map));
     }
@@ -485,16 +624,37 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * Return sample Integration Data
      *
-     * @return array
+     * @return \Magento\Object
      */
     protected function _getSampleIntegrationData()
     {
         return new \Magento\Object(array(
             Info::DATA_NAME => 'nameTest',
-            Info::DATA_ID => '1',
+            Info::DATA_ID => self::INTEGRATION_ID,
+            'id' => self::INTEGRATION_ID, // This will allow usage of both getIntegrationId() and getId()
             Info::DATA_EMAIL => 'test@magento.com',
             Info::DATA_ENDPOINT => 'http://magento.ll/endpoint',
             Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL
         ));
+    }
+
+    /**
+     * Return integration model mock with sample data.
+     *
+     * @return \Magento\Integration\Model\Integration|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getIntegrationModelMock()
+    {
+        $integrationModelMock = $this->getMock(
+            'Magento\Integration\Model\Integration', ['save', '__wakeup'], [], '', false
+        );
+
+        $integrationModelMock->expects($this->any())->method('setStatus')->will($this->returnSelf());
+        $integrationModelMock
+            ->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($this->_getSampleIntegrationData()));
+
+        return $integrationModelMock;
     }
 }

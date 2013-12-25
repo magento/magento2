@@ -135,7 +135,7 @@ class Generator
 
         $this->_basePath = realpath(__DIR__ . '/../../../../../..');
 
-        $this->_artifactsPath = realpath(__DIR__) . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR;
+        $this->_artifactsPath = realpath(__DIR__) . '/log/';
     }
 
     /**
@@ -146,7 +146,7 @@ class Generator
      */
     public function getModuleName($fileName)
     {
-        $parts = array_reverse(explode(DIRECTORY_SEPARATOR, $fileName));
+        $parts = array_reverse(explode('/', $fileName));
         $module = $parts[3] . '_' . $parts[2];
         return $module;
     }
@@ -231,13 +231,7 @@ class Generator
      */
     public function getEtcDirPattern($codePool = '*', $namespace = '*')
     {
-        return $this->getBasePath() . DIRECTORY_SEPARATOR
-        . 'app' . DIRECTORY_SEPARATOR
-        . 'code' . DIRECTORY_SEPARATOR
-        . $codePool . DIRECTORY_SEPARATOR //code pool
-        . $namespace . DIRECTORY_SEPARATOR //namespace
-        . '*' . DIRECTORY_SEPARATOR //module name
-        . 'etc' . DIRECTORY_SEPARATOR;
+        return $this->getBasePath() . '/app/code/' . $codePool . '/' . $namespace . '/*/etc/';
     }
 
     /**
@@ -515,7 +509,7 @@ class Generator
 
         /** @var $dom \DOMDocument **/
         foreach ($this->_parsedDomList as $originFile => $dom) {
-            $file = str_replace('adminhtml.xml', 'adminhtml' . DIRECTORY_SEPARATOR . 'acl.xml', $originFile);
+            $file = str_replace('adminhtml.xml', 'adminhtml' . '/acl.xml', $originFile);
             $dom->preserveWhiteSpace = false;
             $dom->formatOutput = true;
 

@@ -30,14 +30,9 @@ namespace Magento\View\Asset\MergeStrategy;
 class Direct implements \Magento\View\Asset\MergeStrategyInterface
 {
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\Filesystem\Directory\Write
      */
-    protected $filesystem;
-
-    /**
-     * @var \Magento\App\Dir
-     */
-    protected $dirs;
+    private $_directory;
 
     /**
      * @var \Magento\View\Url\CssResolver
@@ -46,17 +41,14 @@ class Direct implements \Magento\View\Asset\MergeStrategyInterface
 
     /**
      * @param \Magento\Filesystem $filesystem
-     * @param \Magento\App\Dir $dirs
      * @param \Magento\View\Url\CssResolver $cssUrlResolver
      */
     public function __construct(
         \Magento\Filesystem $filesystem,
-        \Magento\App\Dir $dirs,
         \Magento\View\Url\CssResolver $cssUrlResolver
     ) {
-        $this->filesystem = $filesystem;
-        $this->dirs = $dirs;
-        $this->cssUrlResolver = $cssUrlResolver;
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::PUB);
+        $this->_cssUrlResolver = $cssUrlResolver;
     }
 
     /**
@@ -65,9 +57,7 @@ class Direct implements \Magento\View\Asset\MergeStrategyInterface
     public function mergeFiles(array $publicFiles, $destinationFile, $contentType)
     {
         $mergedContent = $this->composeMergedContent($publicFiles, $destinationFile, $contentType);
-
-        $this->filesystem->setIsAllowCreateDirectories(true);
-        $this->filesystem->write($destinationFile, $mergedContent);
+        $this->_directory->writeFile($this->_directory->getRelativePath($destinationFile), $mergedContent);
     }
 
     /**
@@ -82,15 +72,15 @@ class Direct implements \Magento\View\Asset\MergeStrategyInterface
     protected function composeMergedContent(array $publicFiles, $targetFile, $contentType)
     {
         $result = array();
-        $isCss = $contentType == \Magento\View\Publisher::CONTENT_TYPE_CSS;
+        $isCss = ($contentType == \Magento\View\Publisher::CONTENT_TYPE_CSS) ? true : false;
 
         foreach ($publicFiles as $file) {
-            if (!$this->filesystem->has($file)) {
+            if (!$this->_directory->isExist($this->_directory->getRelativePath($file))) {
                 throw new \Magento\Exception("Unable to locate file '{$file}' for merging.");
             }
-            $content = $this->filesystem->read($file);
+            $content = $this->_directory->readFile($this->_directory->getRelativePath($file));
             if ($isCss) {
-                $content = $this->cssUrlResolver->replaceCssRelativeUrls($content, $file, $targetFile);
+                $content = $this->_cssUrlResolver->replaceCssRelativeUrls($content, $file, $targetFile);
             }
             $result[] = $content;
         }

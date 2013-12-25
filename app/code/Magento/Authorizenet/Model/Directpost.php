@@ -76,7 +76,7 @@ class Directpost extends \Magento\Paygate\Model\Authorizenet
      * @param \Magento\Paygate\Model\Authorizenet\RequestFactory $requestFactory
      * @param \Magento\Paygate\Model\Authorizenet\ResultFactory $resultFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Core\Model\Session\AbstractSession $session
+     * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Paygate\Helper\Data $paygateData
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
@@ -99,7 +99,7 @@ class Directpost extends \Magento\Paygate\Model\Authorizenet
         \Magento\Paygate\Model\Authorizenet\RequestFactory $requestFactory,
         \Magento\Paygate\Model\Authorizenet\ResultFactory $resultFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Core\Model\Session\AbstractSession $session,
+        \Magento\Session\SessionManagerInterface $session,
         \Magento\Paygate\Helper\Data $paygateData,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,

@@ -34,6 +34,8 @@
     /** @var $_product \Magento\Catalog\Model\Product */
     $_product = $this->getProduct();
     $_msrpPrice = "";
+    $priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElementIdPrefix() : 'product-price-';
+    $priceElementId = $priceElementIdPrefix . $_product->getId() . $this->getIdSuffix();
 ?>
     <div class="price-box map info">
     <?php $_price = $this->helper('Magento\Tax\Helper\Data')->getPrice($_product, $_product->getMsrp()) ?>

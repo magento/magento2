@@ -58,7 +58,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
         $html = '<table id="gallery" class="gallery" border="0" cellspacing="3" cellpadding="0">';
         $html .= '<thead id="gallery_thead" class="gallery"><tr class="gallery"><td class="gallery" valign="middle" align="center">Big Image</td><td class="gallery" valign="middle" align="center">Thumbnail</td><td class="gallery" valign="middle" align="center">Small Thumb</td><td class="gallery" valign="middle" align="center">Sort Order</td><td class="gallery" valign="middle" align="center">Delete</td></tr></thead>';
         $widgetButton = $this->getForm()->getParent()->getLayout();
-        $buttonHtml = $widgetButton->createBlock('Magento\Adminhtml\Block\Widget\Button')
+        $buttonHtml = $widgetButton->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData(
                     array(
 					    'label'     => 'Add New Image',
