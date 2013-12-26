@@ -76,13 +76,20 @@ if (file_exists($classMapPath)) {
 }
 
 if (!defined('BARE_BOOTSTRAP')) {
-    if (file_exists(BP . '/maintenance.flag')) {
-        if (PHP_SAPI == 'cli') {
-            echo 'Service temporarily unavailable due to maintenance downtime.';
-        } else {
-            include_once BP . '/pub/errors/503.php';
+    $maintenanceFile = BP . '/maintenance.flag';
+
+    if (file_exists($maintenanceFile)) {
+
+        $allowedIps = array_map('trim', file($maintenanceFile));
+
+        if (!in_array($_SERVER['REMOTE_ADDR'], $allowedIps)) {
+            if (PHP_SAPI == 'cli') {
+                echo 'Service temporarily unavailable due to maintenance downtime.';
+            } else {
+                include_once BP . '/pub/errors/503.php';
+            }
+            exit;
         }
-        exit;
     }
 
     if (!empty($_SERVER['MAGE_PROFILER'])) {
