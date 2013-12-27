@@ -34,15 +34,16 @@ class Stock extends \Magento\ProductAlert\Block\Product\View
     /**
      * Prepare stock info
      *
-     * @return void
+     * @param string $template
+     * @return \Magento\View\Element\Template
      */
-    protected function _prepareLayout()
+    public function setTemplate($template)
     {
-        parent::_prepareLayout();
         if (!$this->_helper->isStockAlertAllowed() || !$this->_product || $this->_product->isAvailable()) {
-            $this->setTemplate('');
-            return;
+            $template = '';
+        } else {
+            $this->setSignupUrl($this->_helper->getSaveUrl('stock'));
         }
-        $this->setSignupUrl($this->_helper->getSaveUrl('stock'));
+        return parent::setTemplate($template);
     }
 }

@@ -43,27 +43,29 @@
     </a>
 </div>
 <div class="order subtitle caption"><strong><?php echo __('Items Invoiced') ?></strong></div>
-<table class="data table order items invoice" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">
-    <thead>
-        <tr>
-            <th class="col name"><?php echo __('Product Name') ?></th>
-            <th class="col sku"><?php echo __('SKU') ?></th>
-            <th class="col price"><?php echo __('Price') ?></th>
-            <th class="col qty"><?php echo __('Qty Invoiced') ?></th>
-            <th class="col subtotal"><?php echo __('Subtotal') ?></th>
-        </tr>
-    </thead>
-    <tfoot>
-        <?php echo $this->getInvoiceTotalsHtml($_invoice)?>
-    </tfoot>
-    <?php $_items = $_invoice->getAllItems(); ?>
-    <?php $_count = count($_items) ?>
-    <?php foreach ($_items as $_item): ?>
-    <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
-    <tbody>
-        <?php echo $this->getItemHtml($_item) ?>
-    </tbody>
-    <?php endforeach; ?>
-</table>
+<div class="wrapper table order items invoice">
+    <table class="data table order items invoice" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">
+        <thead>
+            <tr>
+                <th class="col name"><?php echo __('Product Name') ?></th>
+                <th class="col sku"><?php echo __('SKU') ?></th>
+                <th class="col price"><?php echo __('Price') ?></th>
+                <th class="col qty"><?php echo __('Qty Invoiced') ?></th>
+                <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <?php echo $this->getInvoiceTotalsHtml($_invoice)?>
+        </tfoot>
+        <?php $_items = $_invoice->getAllItems(); ?>
+        <?php $_count = count($_items) ?>
+        <?php foreach ($_items as $_item): ?>
+        <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
+        <tbody>
+            <?php echo $this->getItemHtml($_item) ?>
+        </tbody>
+        <?php endforeach; ?>
+    </table>
+</div>
 <?php echo $this->getInvoiceCommentsHtml($_invoice)?>
 <?php endforeach; ?>

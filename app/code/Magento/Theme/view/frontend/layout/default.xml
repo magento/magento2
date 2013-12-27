@@ -26,7 +26,7 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <block class="Magento\Theme\Block\Html" name="root" output="1" template="3columns.phtml">
         <block class="Magento\Theme\Block\Html\Head" name="head" as="head">
-            <block class="Magento\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme:js/cookie.phtml"/>
+            <block class="Magento\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme::js/cookie.phtml"/>
         </block>
         <container name="after_body_start" as="after_body_start" label="Page Top"/>
         <container name="header-container" label="Page Header Container" as="header-container" htmlTag="header" htmlClass="header">

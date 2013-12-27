@@ -208,7 +208,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function sendPaymentFailedEmail($checkout, $message, $checkoutType = 'onepage')
     {
-        /* @var $translate \Magento\Core\Model\Translate */
         $this->_translator->setTranslateInline(false);
 
         /** @var \Magento\Email\Model\Template $mailTemplate */

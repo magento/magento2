@@ -236,14 +236,17 @@ abstract class AbstractElement extends \Magento\Data\Form\AbstractForm
     public function getElementHtml()
     {
         $html = '';
-        if ($this->getBeforeElementHtml()) {
+        if ($this->getBeforeElementHtml() && $this->getBeforeElementHtml() != '') {
             $html .= '<label class="addbefore" for="' . $this->getHtmlId() . '">' . $this->getBeforeElementHtml() . '</label>';
         }
         $html .= '<input id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" '
             . $this->_getUiId()
             . ' value="' . $this->getEscapedValue() . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>';
-        if ($this->getAfterElementHtml()) {
-            $html.= '<label class="addafter" for="' . $this->getHtmlId() . '">' . $this->getAfterElementHtml() . '</label>';
+        if ($this->getAfterElementJs() && $this->getAfterElementJs() != '') {
+            $html .= $this->getAfterElementJs();
+        }
+        if ($this->getAfterElementHtml() && $this->getAfterElementHtml() != '') {
+            $html .= '<label class="addafter" for="' . $this->getHtmlId() . '">' . $this->getAfterElementHtml() . '</label>';
         }
         return $html;
     }
@@ -256,6 +259,11 @@ abstract class AbstractElement extends \Magento\Data\Form\AbstractForm
     public function getAfterElementHtml()
     {
         return $this->getData('after_element_html');
+    }
+
+    public function getAfterElementJs()
+    {
+        return $this->getData('after_element_js');
     }
 
     /**

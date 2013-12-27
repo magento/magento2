@@ -79,25 +79,8 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testStat()
     {
         $this->driver->expects($this->once())
-            ->method('isExists')
-            ->will($this->returnValue(true));
-        $this->driver->expects($this->once())
             ->method('stat')
             ->will($this->returnValue(array('some-stat-data')));
         $this->assertEquals(array('some-stat-data'), $this->read->stat('correct-path'));
     }
-
-    /**
-     * @expectedException \Magento\Filesystem\FilesystemException
-     */
-    public function testAssertExist()
-    {
-        $this->driver->expects($this->once())
-            ->method('isExists')
-            ->will($this->returnValue(false));
-        $this->read->stat('wrong-path');
-    }
-
-
-
 }

@@ -95,7 +95,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         );
         $directory->expects($this->once())
             ->method('search')
-            ->with('#' . preg_quote($filename) . '$#')
+            ->with(sprintf('{%1$s,*/%1$s}', $filename))
             ->will($this->returnValue($fileList));
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')

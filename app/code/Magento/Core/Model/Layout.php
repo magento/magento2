@@ -762,7 +762,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
                 $this->_structure->setAsChild($name, $parentName, $alias);
             } else {
                 $this->_logger
-                    ->log("Broken reference: the '{$name}' element cannot be added as child to '{$parentName}, "
+                    ->log("Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', "
                         . 'because the latter doesn\'t exist', \Zend_Log::CRIT
                     );
             }

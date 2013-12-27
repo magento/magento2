@@ -34,9 +34,6 @@
 
 namespace Magento\Catalog\Model\Layer\Filter;
 
-/**
- * @SuppressWarnings(PHPMD.LongVariable)
- */
 class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
     /**
@@ -79,7 +76,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @var \Magento\Catalog\Model\Layer\Filter\Price\Algorithm
      */
-    protected $_catalogLayerFilterPriceAlgorithm;
+    protected $_priceAlgorithm;
 
     /**
      * Customer session
@@ -94,7 +91,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $catalogLayerFilterPriceAlgorithm
+     * @param \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
      */
@@ -104,13 +101,13 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $catalogLayerFilterPriceAlgorithm,
+        \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_resource = $filterPriceFactory->create();
         $this->_customerSession = $customerSession;
-        $this->_catalogLayerFilterPriceAlgorithm = $catalogLayerFilterPriceAlgorithm;
+        $this->_priceAlgorithm = $priceAlgorithm;
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($filterItemFactory, $storeManager, $catalogLayer, $data);
         $this->_requestVar = 'price';
@@ -289,7 +286,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         ) {
             return array();
         }
-        $this->_catalogLayerFilterPriceAlgorithm->setPricesModel($this)->setStatistics(
+        $this->_priceAlgorithm->setPricesModel($this)->setStatistics(
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
@@ -300,11 +297,11 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
             if ($appliedInterval[0] == $appliedInterval[1] || $appliedInterval[1] === '0') {
                 return array();
             }
-            $this->_catalogLayerFilterPriceAlgorithm->setLimits($appliedInterval[0], $appliedInterval[1]);
+            $this->_priceAlgorithm->setLimits($appliedInterval[0], $appliedInterval[1]);
         }
 
         $items = array();
-        foreach ($this->_catalogLayerFilterPriceAlgorithm->calculateSeparators() as $separator) {
+        foreach ($this->_priceAlgorithm->calculateSeparators() as $separator) {
             $items[] = array(
                 'label' => $this->_renderRangeLabel($separator['from'], $separator['to']),
                 'value' => (($separator['from'] == 0) ? '' : $separator['from'])

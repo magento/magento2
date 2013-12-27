@@ -49,22 +49,25 @@ class Cart
     protected $_storeManager;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Core\App\Action\FormKeyValidator
      */
-    protected $messageManager;
+    protected $_formKeyValidator;
 
     /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
+        $this->_formKeyValidator = $formKeyValidator;
         $this->_storeConfig = $storeConfig;
         $this->_checkoutSession = $checkoutSession;
         $this->_storeManager = $storeManager;
@@ -418,6 +421,11 @@ class Cart
      */
     public function updatePostAction()
     {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            $this->_redirect('*/*/');
+            return;
+        }
+
         $updateAction = (string)$this->getRequest()->getParam('update_cart_action');
 
         switch ($updateAction) {

@@ -244,7 +244,7 @@ class Storage
         if (!$this->mediaWriteDirectory->isExist($currentPath)) {
             throw new \Magento\Core\Exception(__('We cannot find a directory with this name.'));
         }
-        $paths = $this->mediaWriteDirectory->search('#.*#', $currentPath);
+        $paths = $this->mediaWriteDirectory->search('.*', $currentPath);
         $directories = array();
         foreach ($paths as $path) {
             if ($this->mediaWriteDirectory->isDirectory($path)) {
@@ -261,7 +261,7 @@ class Storage
      */
     public function getFilesCollection()
     {
-        $paths = $this->mediaWriteDirectory->search('#.*#', $this->_helper->getCurrentPath());
+        $paths = $this->mediaWriteDirectory->search('.*', $this->_helper->getCurrentPath());
         $files = array();
         $requestParams = $this->_helper->getRequestParams();
         $storageType = $this->_helper->getStorageType();

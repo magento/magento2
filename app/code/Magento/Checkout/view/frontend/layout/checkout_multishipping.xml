@@ -24,12 +24,8 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Multishipping Checkout" design_abstraction="custom">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">1column.phtml</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="content">
+    <update handle="page_two_columns_left"/>
+    <referenceContainer name="left">
         <block class="Magento\Checkout\Block\Multishipping\State" name="checkout_state" template="multishipping/state.phtml"/>
     </referenceContainer>
 </layout>

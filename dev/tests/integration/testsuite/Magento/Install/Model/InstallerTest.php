@@ -192,15 +192,37 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $configFile = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir() . '/etc/local.xml';
         copy($configFile, self::$_tmpConfigFile);
 
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /**
+         * @var $cache \Magento\App\Cache
+         */
+        $cache = $objectManager->create('Magento\App\Cache');
+        /**
+         * @var $appState \Magento\App\State
+         */
+        $appState = $objectManager->get('Magento\App\State');
+
+        $cache->save('testValue', 'testName');
+        $this->assertEquals('testValue', $cache->load('testName'));
+
+        //to test it works - set state to uninstalled
+        $appState->setInstallDate(null);
+        $this->assertFalse($appState->isInstalled());
+
         $this->_getModel(true)->finish();
 
+        $this->assertFalse($cache->load('testName'), 'Cache was not cleaned');
+        $this->assertTrue(
+            $appState->isInstalled(),
+            'In-memory application installation state was not changed right after finishing installation phase'
+        );
+
         /** @var $cacheState \Magento\App\Cache\StateInterface */
-        $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\StateInterface');
+        $cacheState = $objectManager->create('Magento\App\Cache\StateInterface');
 
         /** @var \Magento\App\Cache\TypeListInterface $cacheTypeList */
-        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\TypeListInterface');
+        $cacheTypeList = $objectManager->create('Magento\App\Cache\TypeListInterface');
         $types = array_keys($cacheTypeList->getTypes());
         foreach ($types as $type) {
             $this->assertTrue(

@@ -223,6 +223,55 @@ class File implements \Magento\Filesystem\DriverInterface
     }
 
     /**
+     * Read directory
+     *
+     * @param string $path
+     * @return array
+     * @throws FilesystemException
+     */
+    public function readDirectory($path)
+    {
+        try {
+            $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+            $iterator = new \FilesystemIterator($path, $flags);
+            $result = array();
+            /** @var \FilesystemIterator $file */
+            foreach ($iterator as $file) {
+                $result[] = $file->getPathname();
+            }
+            sort($result);
+            return $result;
+        } catch (\Exception $e) {
+            throw new FilesystemException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Search paths by given regex
+     *
+     * @param string $pattern
+     * @param string $path
+     * @return array
+     * @throws FilesystemException
+     */
+    public function search($pattern, $path)
+    {
+        clearstatcache();
+        $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
+        $result = @glob($globPattern, GLOB_BRACE);
+        if ($result === false) {
+            throw new FilesystemException(
+                sprintf('The "%s" pattern cannot be processed in "%s" path %s',
+                    $pattern,
+                    $path,
+                    $this->getWarningMessage()
+                ));
+        }
+        return $result;
+    }
+
+
+    /**
      * Renames a file or directory
      *
      * @param string $oldPath

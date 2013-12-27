@@ -45,7 +45,7 @@ class Tablerate
     /**
      * @var string
      */
-    protected $_default_condition_name = 'package_weight';
+    protected $_defaultConditionName = 'package_weight';
 
     /**
      * @var array
@@ -150,7 +150,7 @@ class Tablerate
 
         if (!$request->getConditionName()) {
             $conditionName = $this->getConfigData('condition_name');
-            $request->setConditionName($conditionName ? $conditionName : $this->_default_condition_name);
+            $request->setConditionName($conditionName ? $conditionName : $this->_defaultConditionName);
         }
 
          // Package weight and qty free shipping
@@ -187,6 +187,14 @@ class Tablerate
             $method->setCost($rate['cost']);
 
             $result->append($method);
+        } else {
+            /** @var \Magento\Shipping\Model\Rate\Result\Error $error */
+            $error = $this->_rateErrorFactory->create(array('data' => array(
+                'carrier'       => $this->_code,
+                'carrier_title' => $this->getConfigData('title'),
+                'error_message' => $this->getConfigData('specificerrmsg'),
+            )));
+            $result->append($error);
         }
 
         return $result;

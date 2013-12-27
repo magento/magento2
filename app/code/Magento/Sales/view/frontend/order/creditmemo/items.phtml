@@ -44,29 +44,31 @@
 </div>
 
 <div class="order subtitle caption"><strong><?php echo __('Items Refunded') ?></strong></div>
-<table class="data table order items creditmemo" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
-    <thead>
-        <tr>
-            <th class="col name"><?php echo __('Product Name') ?></th>
-            <th class="col sku"><?php echo __('SKU') ?></th>
-            <th class="col price"><?php echo __('Price') ?></th>
-            <th class="col qty"><?php echo __('Qty') ?></th>
-            <th class="col subtotal"><?php echo __('Subtotal') ?></th>
-            <th class="col discount"><?php echo __('Discount Amount') ?></th>
-            <th class="col total"><?php echo __('Row Total') ?></th>
-        </tr>
-    </thead>
-    <tfoot>
-       <?php echo $this->getTotalsHtml($_creditmemo);?>
-    </tfoot>
-    <?php $_items = $_creditmemo->getAllItems(); ?>
-    <?php $_count = count($_items) ?>
-    <?php foreach ($_items as $_item): ?>
-    <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
-    <tbody>
-        <?php echo $this->getItemHtml($_item) ?>
-    </tbody>
-    <?php endforeach; ?>
-</table>
+<div class="wrapper table order items creditmemo">
+    <table class="data table order items creditmemo" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
+        <thead>
+            <tr>
+                <th class="col name"><?php echo __('Product Name') ?></th>
+                <th class="col sku"><?php echo __('SKU') ?></th>
+                <th class="col price"><?php echo __('Price') ?></th>
+                <th class="col qty"><?php echo __('Qty') ?></th>
+                <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+                <th class="col discount"><?php echo __('Discount Amount') ?></th>
+                <th class="col total"><?php echo __('Row Total') ?></th>
+            </tr>
+        </thead>
+        <tfoot>
+           <?php echo $this->getTotalsHtml($_creditmemo);?>
+        </tfoot>
+        <?php $_items = $_creditmemo->getAllItems(); ?>
+        <?php $_count = count($_items) ?>
+        <?php foreach ($_items as $_item): ?>
+        <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
+        <tbody>
+            <?php echo $this->getItemHtml($_item) ?>
+        </tbody>
+        <?php endforeach; ?>
+    </table>
+</div>
 <?php echo $this->getCommentsHtml($_creditmemo)?>
 <?php endforeach; ?>

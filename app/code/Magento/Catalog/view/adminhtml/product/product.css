@@ -484,14 +484,16 @@
 .field-price .control,
 .field-special_price .control,
 .field-msrp .control,
-.field-weight .control {
+.field-weight .control,
+.field-quantity_and_stock_status .control {
     position: relative;
 }
 
 .field-price label.mage-error,
 .field-special_price label.mage-error,
 .field-msrp label.mage-error,
-.field-weight label.mage-error {
+.field-weight label.mage-error,
+.field-quantity_and_stock_status label.mage-error {
     position: absolute;
     left: 0;
     top: 30px;

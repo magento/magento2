@@ -33,7 +33,7 @@
             topLevelHoverClass: 'hover',
             expandedTopLevel: '.more',
             hoverInTimeout: 300,
-            hoverOutTimeout: 2000,
+            hoverOutTimeout: 500,
             submenuAnimationSpeed: 200,
             collapsable: true,
             collapsableDropdownTemplate:

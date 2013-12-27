@@ -169,7 +169,7 @@ class Review extends \Magento\Backend\App\Action
             $nextId = (int) $this->getRequest()->getParam('next_item');
             $url = $this->getUrl($this->getRequest()->getParam('ret') == 'pending' ? '*/*/pending' : '*/*/');
             if ($nextId) {
-                $url = $this->getUrl('adminhtml/*/edit', array('id' => $nextId));
+                $url = $this->getUrl('catalog/*/edit', array('id' => $nextId));
             }
             return $this->getResponse()->setRedirect($url);
         }
@@ -186,9 +186,9 @@ class Review extends \Magento\Backend\App\Action
 
             $this->messageManager->addSuccess(__('The review has been deleted.'));
             if( $this->getRequest()->getParam('ret') == 'pending' ) {
-                $this->getResponse()->setRedirect($this->getUrl('adminhtml/*/pending'));
+                $this->getResponse()->setRedirect($this->getUrl('catalog/*/pending'));
             } else {
-                $this->getResponse()->setRedirect($this->getUrl('adminhtml/*/'));
+                $this->getResponse()->setRedirect($this->getUrl('catalog/*/'));
             }
             return;
         } catch (\Magento\Core\Exception $e) {

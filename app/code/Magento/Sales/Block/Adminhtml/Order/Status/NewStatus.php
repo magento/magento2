@@ -33,7 +33,8 @@ class NewStatus extends \Magento\Backend\Block\Widget\Form\Container
     {
         $this->_objectId = 'status';
         $this->_controller = 'adminhtml_order_status';
-        $this->_mode = 'new';
+        $this->_blockGroup = 'Magento_Sales';
+        $this->_mode = 'newStatus';
 
         parent::_construct();
         $this->_updateButton('save', 'label', __('Save Status'));

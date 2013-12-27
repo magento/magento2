@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Model\Billing;
+
 /**
  * Billing Agreement abstract model
  *
@@ -46,8 +48,6 @@
  * @method string getAgreementLabel()
  * @method \Magento\Sales\Model\Billing\Agreement setAgreementLabel(string $value)
  */
-namespace Magento\Sales\Model\Billing;
-
 class Agreement extends \Magento\Payment\Model\Billing\AbstractAgreement
 {
     const STATUS_ACTIVE     = 'active';

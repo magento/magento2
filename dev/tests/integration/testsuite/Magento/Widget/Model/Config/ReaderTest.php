@@ -45,7 +45,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
         $dirPath = ltrim(str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__))
             . '/_files', '/');
-        $this->directoryList->addDirectory(\Magento\Filesystem::MODULES, array('path' => $dirPath));
+        $this->directoryList->addDirectory(\Magento\Filesystem::MODULES, array('path' => $dirPath . '/code'));
         $this->directoryList->addDirectory(\Magento\Filesystem::CONFIG, array('path' => $dirPath));
         $this->directoryList->addDirectory(\Magento\Filesystem::ROOT, array('path' => $dirPath));
 

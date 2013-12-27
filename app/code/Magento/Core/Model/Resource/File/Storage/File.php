@@ -75,7 +75,7 @@ class File
                 if ($directoryInstance->isDirectory($path)) {
                     $directories[] = array(
                         'name' => $itemName,
-                        'path' => dirname($path)
+                        'path' => (dirname($path) == '.') ? '/' : dirname($path)
                     );
                 } else {
                     $files[] = $path;

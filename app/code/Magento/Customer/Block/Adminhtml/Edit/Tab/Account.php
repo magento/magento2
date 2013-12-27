@@ -299,7 +299,7 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
             $prefix = $form->getHtmlIdPrefix();
 
             $note = __('Please select a website which contains store view');
-            $form->getElement('website_id')->setAfterElementHtml(
+            $form->getElement('website_id')->setAfterElementJs(
                 '<script type="text/javascript">'
                 . "
                 var {$prefix}_websites = " . $this->_jsonEncoder->encode($websites) . ";

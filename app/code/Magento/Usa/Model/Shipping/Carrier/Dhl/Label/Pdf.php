@@ -50,14 +50,31 @@ class Pdf
     protected $_request;
 
     /**
+     * @var Pdf\PageBuilder
+     */
+    protected $_pageBuilder;
+
+    /**
+     * @var Pdf\PageFactory
+     */
+    protected $_pageFactory;
+
+    /**
      * Dhl International Label Creation Class constructor
      *
      * @param array $arguments
+     * @param Pdf\PageBuilder $pageBuilder
+     * @param Pdf\PageFactory $pageFactory
      */
-    public function __construct(array $arguments)
-    {
-        $this->_info    = $arguments['info'];
+    public function __construct(
+        array $arguments,
+        \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\PageBuilder $pageBuilder,
+        \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\PageFactory $pageFactory
+    ) {
+        $this->_info = $arguments['info'];
         $this->_request = $arguments['request'];
+        $this->_pageBuilder = $pageBuilder;
+        $this->_pageFactory = $pageFactory;
     }
 
     /**
@@ -69,14 +86,10 @@ class Pdf
     {
         $pdf = new \Zend_Pdf();
 
-        $pdfBuilder = new \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\PageBuilder();
-
-        $template = new \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\Page(\Zend_Pdf_Page::SIZE_A4_LANDSCAPE);
-        $pdfBuilder->setPage($template)
+        $template = $this->_pageFactory->create(array('param1' => \Zend_Pdf_Page::SIZE_A4_LANDSCAPE));
+        $this->_pageBuilder->setPage($template)
             ->addProductName((string)$this->_info->ProductShortName)
             ->addProductContentCode((string)$this->_info->ProductContentCode)
-        //->addUnitId({unitId})
-        //->addReferenceData({referenceData})
             ->addSenderInfo($this->_info->Shipper)
             ->addOriginInfo((string)$this->_info->OriginServiceArea->ServiceAreaCode)
             ->addReceiveInfo($this->_info->Consignee)
@@ -101,8 +114,8 @@ class Pdf
         $packages = array_values($this->_request->getPackages());
         $i = 0;
         foreach ($this->_info->Pieces->Piece as $piece) {
-            $page = new \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\Page($template);
-            $pdfBuilder->setPage($page)
+            $page = $this->_pageFactory->create(array('param1' => $template));
+                $this->_pageBuilder->setPage($page)
                 ->addPieceNumber((int)$piece->PieceNumber, (int)$this->_info->Piece)
                 ->addContentInfo($packages[$i])
                 ->addPieceIdBarcode(

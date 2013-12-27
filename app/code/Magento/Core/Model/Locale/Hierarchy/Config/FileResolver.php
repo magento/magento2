@@ -58,7 +58,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
         if ($this->directoryRead->isExist('locale')) {
             $result = $this->iteratorFactory->create(
                 $this->directoryRead,
-                $this->directoryRead->search('#' . preg_quote($filename) . '$#', 'locale')
+                $this->directoryRead->search('/locale/*/' . $filename)
             );
         }
         return $result;

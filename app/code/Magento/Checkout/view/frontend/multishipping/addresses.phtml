@@ -52,7 +52,7 @@
                     <td class="col product"><?php echo $this->getItemHtml($_item->getQuoteItem()) ?></td>
                     <td class="col qty">
                         <div class="control qty">
-                            <input type="text" name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $this->escapeHtml($_item->getQty()) ?>" size="2" class="input-text qty" data-validate="{number: true}"/>
+                            <input type="number" name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $this->escapeHtml($_item->getQty()) ?>" size="2" class="input-text qty" data-validate="{number: true}"/>
                         </div>
                     </td>
                     <td class="col address">

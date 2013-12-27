@@ -408,7 +408,7 @@ class PageBuilder
         if (!strlen($code)) {
             throw new \InvalidArgumentException(__('Destination facility code is empty'));
         }
-        $this->_page->drawText($code, $this->_x(144), $this->_y(186), null,
+        $this->_page->drawText($code, $this->_x(144), $this->_y(186), 'UTF-8',
             \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf\Page::ALIGN_CENTER
         );
 
@@ -559,7 +559,7 @@ class PageBuilder
     {
         $this->_page->saveGS();
 
-        if(!strlen($number) || !strlen($barCode)) {
+        if (!strlen($number) || !strlen($barCode)) {
             throw new \InvalidArgumentException(__('Waybill barcode information is missing'));
         }
         $image = new \Zend_Pdf_Resource_Image_Png("data://image/png;base64," . $barCode);

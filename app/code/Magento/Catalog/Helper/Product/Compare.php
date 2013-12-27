@@ -97,6 +97,11 @@ class Compare extends \Magento\Core\Helper\Url
     protected $_itemCollectionFactory;
 
     /**
+     * @var \Magento\Data\Form\FormKey
+     */
+    protected $_formKey;
+
+    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
@@ -104,6 +109,7 @@ class Compare extends \Magento\Core\Helper\Url
      * @param \Magento\Log\Model\Visitor $logVisitor
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\Session $catalogSession
+     * @param \Magento\Data\Form\FormKey $formKey
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
@@ -112,13 +118,15 @@ class Compare extends \Magento\Core\Helper\Url
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Log\Model\Visitor $logVisitor,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Catalog\Model\Session $catalogSession
+        \Magento\Catalog\Model\Session $catalogSession,
+        \Magento\Data\Form\FormKey $formKey
     ) {
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_logVisitor = $logVisitor;
         $this->_customerSession = $customerSession;
         $this->_catalogSession = $catalogSession;
+        $this->_formKey = $formKey;
         parent::__construct($context, $storeManager);
     }
 
@@ -152,7 +160,8 @@ class Compare extends \Magento\Core\Helper\Url
     {
         return array(
             'product' => $product->getId(),
-            \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
+            \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl(),
+            'form_key' => $this->_formKey->getFormKey(),
         );
     }
 

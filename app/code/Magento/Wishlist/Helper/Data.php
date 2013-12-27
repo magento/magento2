@@ -398,7 +398,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve URL for adding item to shoping cart from shared wishlist
+     * Retrieve URL for adding item to shopping cart from shared wishlist
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string

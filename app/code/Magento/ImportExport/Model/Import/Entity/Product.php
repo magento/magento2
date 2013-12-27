@@ -1033,6 +1033,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             'value'          => $storeValue
                         );
                     }
+                    /*
+                    If the store based values are not provided for a particular store,
+                    we default to the default scope values.
+                    In this case, remove all the existing store based values stored in the table.
+                    */
+                    $where = $this->_connection->quoteInto('store_id NOT IN (?)', array_keys($storeValues)) .
+                        $this->_connection->quoteInto(' AND attribute_id = ?', $attributeId) .
+                        $this->_connection->quoteInto(' AND entity_id = ?', $productId) .
+                        $this->_connection->quoteInto(' AND entity_type_id = ?', $this->_entityTypeId);
+                    $this->_connection->delete($tableName, $where);
                 }
             }
             $this->_connection->insertOnDuplicate($tableName, $tableData, array('value'));

@@ -29,7 +29,7 @@
  */
 ?>
 <?php if ($this->includeTax() && $this->getTotalExclTax()>=0):?>
-<tr>
+<tr class="row-totals">
     <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
         <strong><?php echo __('Grand Total Excl. Tax')?></strong>
     </td>
@@ -38,7 +38,7 @@
     </td>
 </tr>
 <?php echo $this->renderTotals('taxes', $this->getColspan()); ?>
-<tr>
+<tr class="row-totals">
     <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
         <strong><?php echo __('Grand Total Incl. Tax')?></strong>
     </td>
@@ -47,7 +47,7 @@
     </td>
 </tr>
 <?php else:?>
-<tr>
+<tr class="row-totals">
     <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
         <strong><?php echo $this->getTotal()->getTitle() ?></strong>
     </td>

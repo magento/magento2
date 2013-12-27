@@ -391,7 +391,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
         if ($storeId === null && $productIds === null) {
             // Keeping public interface
             $adapter->update($this->getTable('catalogsearch_query'), array('is_processed' => 0));
-            $adapter->truncateTable($this->getTable('catalogsearch_result'));
+            $adapter->delete($this->getTable('catalogsearch_result'));
             $this->_eventManager->dispatch('catalogsearch_reset_search_result');
         } else {
             // Optimized deletion only product-related records

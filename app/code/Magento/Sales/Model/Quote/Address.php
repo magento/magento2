@@ -336,27 +336,66 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected function _beforeSave()
     {
         parent::_beforeSave();
+        $this->_populateBeforeSaveData();
+        return $this;
+    }
+
+    /**
+     * Set the required fields
+     */
+    protected function _populateBeforeSaveData()
+    {
         if ($this->getQuote()) {
-            $quoteId = $this->getQuote()->getId();
-            if ($quoteId) {
-                $this->setQuoteId($quoteId);
-            } else {
-                $this->_dataSaveAllowed = false;
+            $this->_dataSaveAllowed = (bool)$this->getQuote()->getId();
+
+            if ($this->getQuote()->getId()) {
+                $this->setQuoteId($this->getQuote()->getId());
             }
             $this->setCustomerId($this->getQuote()->getCustomerId());
+
             /**
              * Init customer address id if customer address is assigned
              */
             if ($this->getCustomerAddress()) {
                 $this->setCustomerAddressId($this->getCustomerAddress()->getId());
             }
+
+            $this->setSameAsBilling((int)$this->_isSameAsBilling());
         }
-        if ($this->getAddressType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING
-            && $this->getSameAsBilling() === null
-        ) {
-            $this->setSameAsBilling(1);
-        }
-        return $this;
+    }
+
+    /**
+     * Returns true if shipping address is same as billing
+     *
+     * @return bool
+     */
+    protected function _isSameAsBilling()
+    {
+        return $this->getAddressType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING
+            && ($this->_isNotRegisteredCustomer() || $this->_isDefaultShippingNullOrSameAsBillingAddress());
+    }
+
+    /**
+     * Checks if the user is a registered customer
+     *
+     * @return bool
+     */
+    protected function _isNotRegisteredCustomer()
+    {
+        return !$this->getQuote()->getCustomerId() || $this->getCustomerAddressId() === null;
+    }
+
+    /**
+     * Returns true if shipping address is same as billing or it is undefined
+     *
+     * @return bool
+     */
+    protected function _isDefaultShippingNullOrSameAsBillingAddress()
+    {
+        $customer = $this->getQuote()->getCustomer();
+        return !$customer->getDefaultShippingAddress()
+            || $customer->getDefaultBillingAddress() && $customer->getDefaultShippingAddress()
+                && $customer->getDefaultBillingAddress()->getId() == $customer->getDefaultShippingAddress()->getId();
     }
 
     /**

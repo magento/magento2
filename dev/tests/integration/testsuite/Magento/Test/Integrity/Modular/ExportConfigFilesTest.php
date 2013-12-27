@@ -35,9 +35,12 @@ class ExportConfigFilesTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $filesystem \Magento\Filesystem */
         $filesystem = $objectManager->get('Magento\Filesystem');
-        $appDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::APP);
+        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
         $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
-        $xmlFiles = $fileIteratorFactory->create($appDirectory, $appDirectory->search('#/export\.xml$#'));
+        $xmlFiles = $fileIteratorFactory->create(
+            $modulesDirectory,
+            $modulesDirectory->search('/*/*/etc/{*/export.xml,export.xml}')
+        );
 
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
         $validationStateMock->expects($this->any())->method('isValidated')

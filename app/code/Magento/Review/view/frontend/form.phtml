@@ -28,6 +28,7 @@
 <div class="content">
 <?php if ($this->getAllowWriteReviewFlag()): ?>
 <form action="<?php echo $this->getAction() ?>" method="post" id="review-form">
+    <?php echo $this->getBlockHtml('formkey'); ?>
     <?php echo $this->getChildHtml('form_fields_before')?>
     <fieldset class="fieldset" data-hasrequired="<?php __('* Required Fields'); ?>">
         <legend class="legend"><span><?php echo __("You're reviewing:"); ?></span><strong><?php echo $this->escapeHtml($this->getProductInfo()->getName()) ?></strong></legend><br />

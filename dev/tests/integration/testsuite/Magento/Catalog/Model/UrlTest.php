@@ -230,11 +230,4 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($result, $this->_model->generatePath($type, $product, $category, $parentPath));
     }
-
-    public function testGenerateUniqueIdPath()
-    {
-        $path = $this->_model->generateUniqueIdPath();
-        $this->assertNotEmpty($path);
-        $this->assertContains('_', $path);
-    }
 }

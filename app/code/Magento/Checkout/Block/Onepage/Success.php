@@ -56,7 +56,7 @@ class Success extends \Magento\View\Element\Template
     protected $_agreementFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Recurring\Profile\Collection
+     * @var \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory
      */
     protected $_recurringProfileCollectionFactory;
 

@@ -75,7 +75,7 @@
             <td class="col qty">
             <?php if ($_item->isSaleable()) : ?>
                 <div class="control qty">
-                    <input type="text" name="super_group[<?php echo $_item->getId() ?>]"
+                    <input type="number" name="super_group[<?php echo $_item->getId() ?>]"
                            maxlength="12"
                            value="<?php echo $_item->getQty() * 1 ?>"
                            title="<?php echo __('Qty') ?>"

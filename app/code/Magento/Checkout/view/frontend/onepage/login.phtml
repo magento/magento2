@@ -36,6 +36,7 @@
     <div class="title"><strong><?php echo __('Login') ?></strong></div>
     <div class="content">
         <form class="form login" id="login-form" action="<?php echo $this->getPostAction() ?>" method="post">
+            <?php echo $this->getBlockHtml('formkey'); ?>
             <fieldset class="fieldset login" data-hasrequired="<?php echo __('* Required Fields') ?>">
                 <p class="field note"><?php echo __('Already registered?') ?> <?php echo __('Please log in below:') ?></p>
                 <div class="field email required">

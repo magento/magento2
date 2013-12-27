@@ -461,7 +461,8 @@ input[type="tel"],
 input[type="url"],
 input[type="email"],
 input[type="datetime"],
-input[type="password"] {
+input[type="password"],
+input[type="number"] {
     .inputText();
 }
 
@@ -472,6 +473,12 @@ input[type="button"] {
 
 input[type="reset"] {
     &:extend(.secondary.action all);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 select {
@@ -539,7 +546,8 @@ textarea {
     input[type="url"].valid,
     input[type="email"].valid,
     input[type="datetime"].valid,
-    input[type="password"].valid {
+    input[type="password"].valid,
+    input[type="number"].valid {
         border-color: @validHilight !important;
     }
     // Validation error
@@ -551,7 +559,8 @@ textarea {
     input[type="url"].mage-error,
     input[type="email"].mage-error,
     input[type="datetime"].mage-error,
-    input[type="password"].mage-error {
+    input[type="password"].mage-error,
+    input[type="number"].mage-error {
         border-color: @nonValidHilight !important;
     }
     div.mage-error[generated] {

@@ -53,7 +53,7 @@
                     <argument name="rowUrl" xsi:type="array">
                         <item name="path" xsi:type="string">catalog/product_review</item>
                         <item name="extraParamsTemplate" xsi:type="array">
-                            <item name="customerid" xsi:type="string">getCustomerId</item>
+                            <item name="customerId" xsi:type="string">getCustomerId</item>
                         </item>
                     </argument>
                 </arguments>

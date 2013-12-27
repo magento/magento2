@@ -55,12 +55,55 @@
                         $('#checkout-progress-wrapper .content').toggle();
                     });
 
+                (function() {
+                    var productInfoMain = $('.product.info.main'),
+                        productInfoAdditional = $("#product-info-additional");
+
+                    if(!productInfoAdditional.length) {
+
+                        var productTitle = productInfoMain.find(".page.title.product").clone(),
+                            productStock = productInfoMain.find(".stock:not(.alert)").clone();
+
+                        productInfoAdditional = $("<div/>", {
+                            id: "product-info-additional",
+                            addClass: "product info additional"
+                        });
+
+                        $('.catalog-product-view .column.main')
+                            .prepend(productInfoAdditional);
+
+                        productInfoAdditional
+                            .append(productTitle)
+                            .append(productStock);
+
+                    } else {
+                        productInfoAdditional.removeClass("hidden");
+                    }
+
+                    productInfoMain.addClass("responsive");
+
+                })();
+
+
             },
 
             // Switch to Desktop Version
             exit: function() {
                 // minicart
                 $('.action.showcart').removeClass('is-disabled');
+
+                (function() {
+
+                    var productInfoMain = $('.product.info.main'),
+                        productInfoAdditional = $("#product-info-additional");
+
+                    if(productInfoAdditional.length) {
+                        productInfoAdditional.addClass("hidden");
+                        productInfoMain.removeClass("responsive");
+                    }
+
+                })();
+
             }
         });
     });

@@ -139,7 +139,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         $result = $adapter->fetchOne($select, $bind);
         if ($result) {
             throw new \Magento\Customer\Exception(
-                __('Customer with the same email already exists.'),
+                __('Customer with the same email already exists in associated website.'),
                 \Magento\Customer\Model\Customer::EXCEPTION_EMAIL_EXISTS
             );
         }

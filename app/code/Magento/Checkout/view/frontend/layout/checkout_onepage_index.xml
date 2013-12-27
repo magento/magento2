@@ -24,8 +24,8 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <update handle="page_one_column"/>
-    <referenceContainer name="content">
+    <update handle="page_two_columns_left"/>
+    <referenceContainer name="left">
         <container name="checkout.progress.wrapper" label="Checkout Progress Wrapper" htmlTag="div" htmlId="checkout-progress-wrapper">
             <block class="Magento\Checkout\Block\Onepage\Progress" name="checkout.progress" before="-" template="onepage/progress.phtml"/>
         </container>

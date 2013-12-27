@@ -29,6 +29,13 @@ namespace Magento\Backend\Model\Auth;
 /**
  * Backend Auth session model
  *
+ * @method \Magento\User\Model\User|null getUser()
+ * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
+ * @method \Magento\Acl|null getAcl()
+ * @method \Magento\Backend\Model\Auth\Session setAcl(\Magento\Acl $value)
+ * @method int getUpdatedAt()
+ * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
  */

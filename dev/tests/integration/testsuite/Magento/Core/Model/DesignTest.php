@@ -128,6 +128,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
         $cacheId = 'design_change_' . md5($storeId . $date);
 
+        /** @var \Magento\Core\Model\Design $design */
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Design');
         $design->loadChange($storeId, $date);

@@ -35,9 +35,12 @@ class EavAttributesConfigFilesTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $filesystem \Magento\Filesystem */
         $filesystem = $objectManager->get('Magento\Filesystem');
-        $appDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::APP);
+        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
         $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
-        $xmlFiles = $fileIteratorFactory->create($appDirectory, $appDirectory->search('#/eav_attributes\.xml$#'));
+        $xmlFiles = $fileIteratorFactory->create(
+            $modulesDirectory,
+            $modulesDirectory->search('/*/*/etc/{*/eav_attributes.xml,eav_attributes.xml}')
+        );
 
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
         $validationStateMock->expects($this->any())->method('isValidated')

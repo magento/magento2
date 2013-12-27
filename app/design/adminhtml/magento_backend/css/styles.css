@@ -172,9 +172,11 @@ button.primary,
 .catalog-product-new .actions-split > .action-toggle.primary,
 .catalog-product-edit .actions-split > .action-toggle.primary,
 .catalog-product-index .actions-split > .action-toggle.primary,
+.adminhtml-integration-new .actions-split > .action-toggle.primary,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
-.catalog-product-index .actions-split.btn-round .action-default.primary {
+.catalog-product-index .actions-split.btn-round .action-default.primary,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary {
   font: 14px/19px 'Open Sans', sans-serif;
   font-weight: 500;
   background: #f2ebde;
@@ -367,6 +369,9 @@ button.primary:active,
 .catalog-product-index .actions-split > .action-toggle.primary:hover,
 .catalog-product-index .actions-split > .action-toggle.primary:focus,
 .catalog-product-index .actions-split > .action-toggle.primary:active,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:hover,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:focus,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:active,
 .catalog-product-new .actions-split.btn-round .action-default.primary:hover,
 .catalog-product-new .actions-split.btn-round .action-default.primary:focus,
 .catalog-product-new .actions-split.btn-round .action-default.primary:active,
@@ -375,7 +380,10 @@ button.primary:active,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:active,
 .catalog-product-index .actions-split.btn-round .action-default.primary:hover,
 .catalog-product-index .actions-split.btn-round .action-default.primary:focus,
-.catalog-product-index .actions-split.btn-round .action-default.primary:active {
+.catalog-product-index .actions-split.btn-round .action-default.primary:active,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:hover,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:focus,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:active {
   background: #cac3b4;
   color: #676056;
 }
@@ -437,9 +445,11 @@ button.primary:active,
 .catalog-product-new .actions-split > .action-toggle.primary:active,
 .catalog-product-edit .actions-split > .action-toggle.primary:active,
 .catalog-product-index .actions-split > .action-toggle.primary:active,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:active,
 .catalog-product-new .actions-split.btn-round .action-default.primary:active,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:active,
-.catalog-product-index .actions-split.btn-round .action-default.primary:active {
+.catalog-product-index .actions-split.btn-round .action-default.primary:active,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:active {
   border: 1px solid #989287;
 }
 .DefaultButton:visited,
@@ -500,9 +510,11 @@ button.primary:visited,
 .catalog-product-new .actions-split > .action-toggle.primary:visited,
 .catalog-product-edit .actions-split > .action-toggle.primary:visited,
 .catalog-product-index .actions-split > .action-toggle.primary:visited,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:visited,
 .catalog-product-new .actions-split.btn-round .action-default.primary:visited,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:visited,
-.catalog-product-index .actions-split.btn-round .action-default.primary:visited {
+.catalog-product-index .actions-split.btn-round .action-default.primary:visited,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:visited {
   color: #676056;
 }
 .DefaultButton[disabled],
@@ -621,12 +633,16 @@ button.primary.disabled,
 .catalog-product-edit .actions-split > .action-toggle.primary.disabled,
 .catalog-product-index .actions-split > .action-toggle.primary[disabled],
 .catalog-product-index .actions-split > .action-toggle.primary.disabled,
+.adminhtml-integration-new .actions-split > .action-toggle.primary[disabled],
+.adminhtml-integration-new .actions-split > .action-toggle.primary.disabled,
 .catalog-product-new .actions-split.btn-round .action-default.primary[disabled],
 .catalog-product-new .actions-split.btn-round .action-default.primary.disabled,
 .catalog-product-edit .actions-split.btn-round .action-default.primary[disabled],
 .catalog-product-edit .actions-split.btn-round .action-default.primary.disabled,
 .catalog-product-index .actions-split.btn-round .action-default.primary[disabled],
-.catalog-product-index .actions-split.btn-round .action-default.primary.disabled {
+.catalog-product-index .actions-split.btn-round .action-default.primary.disabled,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary[disabled],
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary.disabled {
   cursor: not-allowed;
   opacity: 0.5;
   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
@@ -863,6 +879,10 @@ button.primary.disabled:active,
 .catalog-product-index .actions-split > .action-toggle.primary.disabled:hover,
 .catalog-product-index .actions-split > .action-toggle.primary[disabled]:active,
 .catalog-product-index .actions-split > .action-toggle.primary.disabled:active,
+.adminhtml-integration-new .actions-split > .action-toggle.primary[disabled]:hover,
+.adminhtml-integration-new .actions-split > .action-toggle.primary.disabled:hover,
+.adminhtml-integration-new .actions-split > .action-toggle.primary[disabled]:active,
+.adminhtml-integration-new .actions-split > .action-toggle.primary.disabled:active,
 .catalog-product-new .actions-split.btn-round .action-default.primary[disabled]:hover,
 .catalog-product-new .actions-split.btn-round .action-default.primary.disabled:hover,
 .catalog-product-new .actions-split.btn-round .action-default.primary[disabled]:active,
@@ -874,7 +894,11 @@ button.primary.disabled:active,
 .catalog-product-index .actions-split.btn-round .action-default.primary[disabled]:hover,
 .catalog-product-index .actions-split.btn-round .action-default.primary.disabled:hover,
 .catalog-product-index .actions-split.btn-round .action-default.primary[disabled]:active,
-.catalog-product-index .actions-split.btn-round .action-default.primary.disabled:active {
+.catalog-product-index .actions-split.btn-round .action-default.primary.disabled:active,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary[disabled]:hover,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary.disabled:hover,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary[disabled]:active,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary.disabled:active {
   color: #676056;
   background: #f2ebde;
   border: 1px solid #ada89e;
@@ -930,9 +954,11 @@ button.primary,
 .catalog-product-new .actions-split > .action-toggle.primary,
 .catalog-product-edit .actions-split > .action-toggle.primary,
 .catalog-product-index .actions-split > .action-toggle.primary,
+.adminhtml-integration-new .actions-split > .action-toggle.primary,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
 .catalog-product-index .actions-split.btn-round .action-default.primary,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary,
 .PrimaryAddButton,
 .PrimarySplitButton > .action-toggle.primary,
 input[type=button].primary,
@@ -983,9 +1009,11 @@ button.primary,
 .catalog-product-new .actions-split > .action-toggle.primary,
 .catalog-product-edit .actions-split > .action-toggle.primary,
 .catalog-product-index .actions-split > .action-toggle.primary,
+.adminhtml-integration-new .actions-split > .action-toggle.primary,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
-.catalog-product-index .actions-split.btn-round .action-default.primary {
+.catalog-product-index .actions-split.btn-round .action-default.primary,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary {
   color: #fff;
   background: #007dbd;
   border: 1px solid #0574ad;
@@ -1092,12 +1120,16 @@ button.primary:hover,
 .catalog-product-edit .actions-split > .action-toggle.primary:hover,
 .catalog-product-index .actions-split > .action-toggle.primary:focus,
 .catalog-product-index .actions-split > .action-toggle.primary:hover,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:focus,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:hover,
 .catalog-product-new .actions-split.btn-round .action-default.primary:focus,
 .catalog-product-new .actions-split.btn-round .action-default.primary:hover,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:focus,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:hover,
 .catalog-product-index .actions-split.btn-round .action-default.primary:focus,
-.catalog-product-index .actions-split.btn-round .action-default.primary:hover {
+.catalog-product-index .actions-split.btn-round .action-default.primary:hover,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:focus,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:hover {
   color: #fff;
   background: #026294;
   border: 1px solid #026294;
@@ -1153,9 +1185,11 @@ button.primary:active,
 .catalog-product-new .actions-split > .action-toggle.primary:active,
 .catalog-product-edit .actions-split > .action-toggle.primary:active,
 .catalog-product-index .actions-split > .action-toggle.primary:active,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:active,
 .catalog-product-new .actions-split.btn-round .action-default.primary:active,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:active,
-.catalog-product-index .actions-split.btn-round .action-default.primary:active {
+.catalog-product-index .actions-split.btn-round .action-default.primary:active,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:active {
   color: #fff;
   background: #026294;
   border: 1px solid #004c74;
@@ -1211,9 +1245,11 @@ button.primary:visited,
 .catalog-product-new .actions-split > .action-toggle.primary:visited,
 .catalog-product-edit .actions-split > .action-toggle.primary:visited,
 .catalog-product-index .actions-split > .action-toggle.primary:visited,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:visited,
 .catalog-product-new .actions-split.btn-round .action-default.primary:visited,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:visited,
-.catalog-product-index .actions-split.btn-round .action-default.primary:visited {
+.catalog-product-index .actions-split.btn-round .action-default.primary:visited,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:visited {
   color: #fff;
 }
 .PrimaryButton[disabled]:hover,
@@ -1420,6 +1456,10 @@ button.primary.disabled:active,
 .catalog-product-index .actions-split > .action-toggle.primary.disabled:hover,
 .catalog-product-index .actions-split > .action-toggle.primary[disabled]:active,
 .catalog-product-index .actions-split > .action-toggle.primary.disabled:active,
+.adminhtml-integration-new .actions-split > .action-toggle.primary[disabled]:hover,
+.adminhtml-integration-new .actions-split > .action-toggle.primary.disabled:hover,
+.adminhtml-integration-new .actions-split > .action-toggle.primary[disabled]:active,
+.adminhtml-integration-new .actions-split > .action-toggle.primary.disabled:active,
 .catalog-product-new .actions-split.btn-round .action-default.primary[disabled]:hover,
 .catalog-product-new .actions-split.btn-round .action-default.primary.disabled:hover,
 .catalog-product-new .actions-split.btn-round .action-default.primary[disabled]:active,
@@ -1431,7 +1471,11 @@ button.primary.disabled:active,
 .catalog-product-index .actions-split.btn-round .action-default.primary[disabled]:hover,
 .catalog-product-index .actions-split.btn-round .action-default.primary.disabled:hover,
 .catalog-product-index .actions-split.btn-round .action-default.primary[disabled]:active,
-.catalog-product-index .actions-split.btn-round .action-default.primary.disabled:active {
+.catalog-product-index .actions-split.btn-round .action-default.primary.disabled:active,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary[disabled]:hover,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary.disabled:hover,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary[disabled]:active,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary.disabled:active {
   color: #fff;
   background: #007dbd;
   border: 1px solid #0574ad;
@@ -1479,6 +1523,7 @@ button.primary.disabled:active,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
 .catalog-product-index .actions-split.btn-round .action-default.primary,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary,
 .PrimarySplitButton.btn-round .action-default.primary,
 .sales-order-index .page-actions .add,
 .adminhtml-rma-index .page-actions .add,
@@ -1520,7 +1565,8 @@ button.primary.disabled:active,
 .catalog-product-set-index .page-actions .add,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
-.catalog-product-index .actions-split.btn-round .action-default.primary {
+.catalog-product-index .actions-split.btn-round .action-default.primary,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary {
   width: 36px;
   height: 31px;
   overflow: hidden;
@@ -1570,7 +1616,8 @@ button.primary.disabled:active,
 .catalog-product-set-index .page-actions .add:focus,
 .catalog-product-new .actions-split.btn-round .action-default.primary:focus,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:focus,
-.catalog-product-index .actions-split.btn-round .action-default.primary:focus {
+.catalog-product-index .actions-split.btn-round .action-default.primary:focus,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:focus {
   outline: none;
 }
 .PrimaryAddButton > span,
@@ -1615,7 +1662,8 @@ button.primary.disabled:active,
 .catalog-product-set-index .page-actions .add > span,
 .catalog-product-new .actions-split.btn-round .action-default.primary > span,
 .catalog-product-edit .actions-split.btn-round .action-default.primary > span,
-.catalog-product-index .actions-split.btn-round .action-default.primary > span {
+.catalog-product-index .actions-split.btn-round .action-default.primary > span,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary > span {
   text-indent: -999em;
   display: block;
   width: 34px;
@@ -1663,7 +1711,8 @@ button.primary.disabled:active,
 .catalog-product-set-index .page-actions .add > span:before,
 .catalog-product-new .actions-split.btn-round .action-default.primary > span:before,
 .catalog-product-edit .actions-split.btn-round .action-default.primary > span:before,
-.catalog-product-index .actions-split.btn-round .action-default.primary > span:before {
+.catalog-product-index .actions-split.btn-round .action-default.primary > span:before,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary > span:before {
   text-indent: 0;
   font-family: 'MUI-Icons';
   font-weight: normal;
@@ -1722,43 +1771,51 @@ button.primary.disabled:active,
 .eq-ie9 .catalog-product-set-index .page-actions .add > span:before,
 .eq-ie9 .catalog-product-new .actions-split.btn-round .action-default.primary > span:before,
 .eq-ie9 .catalog-product-edit .actions-split.btn-round .action-default.primary > span:before,
-.eq-ie9 .catalog-product-index .actions-split.btn-round .action-default.primary > span:before {
+.eq-ie9 .catalog-product-index .actions-split.btn-round .action-default.primary > span:before,
+.eq-ie9 .adminhtml-integration-new .actions-split.btn-round .action-default.primary > span:before {
   line-height: 31px;
 }
 .PrimarySplitButton.btn-round .action-default.primary,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
 .catalog-product-index .actions-split.btn-round .action-default.primary,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
-.catalog-product-index .actions-split.btn-round .action-default.primary {
+.catalog-product-index .actions-split.btn-round .action-default.primary,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary {
   border-radius: 2px 0 0 2px;
 }
 .PrimarySplitButton.btn-round .action-default.primary:focus,
 .catalog-product-new .actions-split.btn-round .action-default.primary:focus,
 .catalog-product-edit .actions-split.btn-round .action-default.primary:focus,
-.catalog-product-index .actions-split.btn-round .action-default.primary:focus {
+.catalog-product-index .actions-split.btn-round .action-default.primary:focus,
+.adminhtml-integration-new .actions-split.btn-round .action-default.primary:focus {
   outline: none;
 }
 .PrimarySplitButton > .action-default.primary,
 .catalog-product-new .actions-split > .action-default.primary,
 .catalog-product-edit .actions-split > .action-default.primary,
-.catalog-product-index .actions-split > .action-default.primary {
+.catalog-product-index .actions-split > .action-default.primary,
+.adminhtml-integration-new .actions-split > .action-default.primary {
   border-radius: 2px 0 0 2px;
 }
 .PrimarySplitButton > .action-default.primary:focus,
 .catalog-product-new .actions-split > .action-default.primary:focus,
 .catalog-product-edit .actions-split > .action-default.primary:focus,
-.catalog-product-index .actions-split > .action-default.primary:focus {
+.catalog-product-index .actions-split > .action-default.primary:focus,
+.adminhtml-integration-new .actions-split > .action-default.primary:focus {
   outline: none;
 }
 .PrimarySplitButton > .action-toggle.primary,
 .catalog-product-new .actions-split > .action-toggle.primary,
 .catalog-product-edit .actions-split > .action-toggle.primary,
 .catalog-product-index .actions-split > .action-toggle.primary,
+.adminhtml-integration-new .actions-split > .action-toggle.primary,
 .catalog-product-new .actions-split > .action-toggle.primary,
 .catalog-product-edit .actions-split > .action-toggle.primary,
-.catalog-product-index .actions-split > .action-toggle.primary {
+.catalog-product-index .actions-split > .action-toggle.primary,
+.adminhtml-integration-new .actions-split > .action-toggle.primary {
   overflow: hidden;
   z-index: 1;
   padding: 0;
@@ -1775,19 +1832,22 @@ button.primary.disabled:active,
 .PrimarySplitButton > .action-toggle.primary:focus,
 .catalog-product-new .actions-split > .action-toggle.primary:focus,
 .catalog-product-edit .actions-split > .action-toggle.primary:focus,
-.catalog-product-index .actions-split > .action-toggle.primary:focus {
+.catalog-product-index .actions-split > .action-toggle.primary:focus,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:focus {
   outline: none;
 }
 .PrimarySplitButton > .action-toggle.primary:before,
 .catalog-product-new .actions-split > .action-toggle.primary:before,
 .catalog-product-edit .actions-split > .action-toggle.primary:before,
-.catalog-product-index .actions-split > .action-toggle.primary:before {
+.catalog-product-index .actions-split > .action-toggle.primary:before,
+.adminhtml-integration-new .actions-split > .action-toggle.primary:before {
   text-align: center;
 }
 .PrimarySplitButton .dropdown-menu,
 .catalog-product-new .actions-split .dropdown-menu,
 .catalog-product-edit .actions-split .dropdown-menu,
-.catalog-product-index .actions-split .dropdown-menu {
+.catalog-product-index .actions-split .dropdown-menu,
+.adminhtml-integration-new .actions-split .dropdown-menu {
   left: 0;
   right: auto;
   z-index: 1;
@@ -1795,7 +1855,8 @@ button.primary.disabled:active,
 .PrimarySplitButton .dropdown-menu > li > .item,
 .catalog-product-new .actions-split .dropdown-menu > li > .item,
 .catalog-product-edit .actions-split .dropdown-menu > li > .item,
-.catalog-product-index .actions-split .dropdown-menu > li > .item {
+.catalog-product-index .actions-split .dropdown-menu > li > .item,
+.adminhtml-integration-new .actions-split .dropdown-menu > li > .item {
   padding: 9px 10px 10px;
 }
 .PrimarySplitButton.active > .action-toggle.primary,
@@ -1805,7 +1866,9 @@ button.primary.disabled:active,
 .catalog-product-edit .actions-split.active > .action-toggle.primary,
 .catalog-product-edit .actions-split.active > .action-toggle.primary:hover,
 .catalog-product-index .actions-split.active > .action-toggle.primary,
-.catalog-product-index .actions-split.active > .action-toggle.primary:hover {
+.catalog-product-index .actions-split.active > .action-toggle.primary:hover,
+.adminhtml-integration-new .actions-split.active > .action-toggle.primary,
+.adminhtml-integration-new .actions-split.active > .action-toggle.primary:hover {
   background: #026294;
   border: 1px solid #004c74;
 }
@@ -5858,6 +5921,7 @@ tr.dynamic-grid input.input-text {
 #up_sell_product_grid table.data th > span,
 #related_product_grid table.data th > span,
 #productGrid_table th > span,
+#customerGrid_table th > span,
 #setGrid_table th > span,
 #attributeGrid_table th > span,
 .custom-options .data-table th > span,
@@ -6932,6 +6996,12 @@ table .col-draggable .draggable-handle {
 .adminhtml-system-currency-index .page-actions.fixed .import-service {
   display: inline-block;
   float: none;
+}
+.fpt-item-container select {
+  width: 100%;
+}
+.fpt-item-container select:first-child {
+  margin-bottom: 8px;
 }
 .clearfix:before,
 .clearfix:after,
@@ -8675,9 +8745,6 @@ table .col-draggable .draggable-handle {
 /*
     Dashboard
 -------------------------------------- */
-.dashboard-inner {
-  border: 1px solid #ccc;
-}
 .adminhtml-dashboard-index .col-2-left-layout,
 .adminhtml-dashboard-index .col-1-layout {
   min-width: 0;
@@ -8686,18 +8753,39 @@ table .col-draggable .draggable-handle {
   width: 38%;
   padding: 1%;
 }
+.adminhtml-dashboard-index .side-col .entry-edit {
+  padding: 10px 15px 10px 10px;
+  margin-bottom: 5px;
+}
+.adminhtml-dashboard-index .side-col .entry-edit .entry-edit-head {
+  margin-bottom: 20px;
+}
+.adminhtml-dashboard-index .side-col .entry-edit .entry-edit-head h4 {
+  margin: 0;
+}
+.adminhtml-dashboard-index .side-col .entry-edit fieldset {
+  padding: 0;
+  border: 0;
+}
+.adminhtml-dashboard-index .side-col .entry-edit fieldset .grid {
+  padding-bottom: 0;
+}
 .adminhtml-dashboard-index .col-2-left-layout .main-col {
   min-width: 0;
   width: 60%;
+  padding: 16px 30px 30px;
+}
+.adminhtml-dashboard-index .col-2-left-layout .main-col .store-switcher-alt {
+  margin-bottom: 15px;
+}
+.adminhtml-dashboard-index .col-2-left-layout .main-col .store-switcher-alt > strong {
+  padding-left: 0;
 }
 .dashboard-container {
   border-radius: 0;
 }
 .dashboard-container.col-2-left-layout:before {
   left: 40%;
-}
-.dashboard-container .dashboard-inner {
-  padding: 20px;
 }
 .dashboard-inner .tabs-horiz > li a {
   padding-left: 14px;
@@ -8964,26 +9052,31 @@ table .col-draggable .draggable-handle {
 }
 .sales-order-create-index thead .col-entity_id,
 .sales-order-create-index .col-entity_id,
-.sales-order-create-index .col-qty {
+.sales-order-create-index .col-qty,
+.checkout-index-index .col-qty {
   width: 50px;
 }
-.sales-order-create-index .col-in_products {
+.sales-order-create-index .col-in_products,
+.checkout-index-index .col-in_products {
   text-align: center;
 }
 .sales-order-create-index .col-sku,
-.sales-order-create-index .col-remove {
+.sales-order-create-index .col-remove,
+.checkout-index-index .col-remove {
   width: 120px;
 }
 .sales-order-create-index .col-price {
   width: 70px;
 }
-.sales-order-create-index .order-search-items .col-name {
+.sales-order-create-index .order-search-items .col-name,
+.checkout-index-index #source_products_table .col-name {
   width: 50%;
 }
 .sales-order-create-index .order-items.fieldset-wrapper .fieldset-wrapper-title,
 .sales-order-create-index .order-search-items.fieldset-wrapper .fieldset-wrapper-title,
 .sales-order-create-index .order-additional-area.fieldset-wrapper .fieldset-wrapper-title,
-.sales-order-create-index .order-errors .fieldset-wrapper-title {
+.sales-order-create-index .order-errors .fieldset-wrapper-title,
+.checkout-index-index .checkout-errors .fieldset-wrapper-title {
   border-bottom: 0;
   margin: 0;
 }
@@ -8994,7 +9087,8 @@ table .col-draggable .draggable-handle {
 .sales-order-create-index .order-items.fieldset-wrapper .title,
 .sales-order-create-index .order-additional-area.fieldset-wrapper .title,
 .sales-order-create-index .order-search-items.fieldset-wrapper .title,
-.sales-order-create-index .order-errors .title {
+.sales-order-create-index .order-errors .title,
+.checkout-index-index .checkout-errors .title {
   border-bottom: 1px solid #ededed;
   float: none;
   margin: 0 0 18px;
@@ -9002,7 +9096,8 @@ table .col-draggable .draggable-handle {
 }
 .sales-order-create-index .order-items.fieldset-wrapper .actions,
 .sales-order-create-index .order-search-items.fieldset-wrapper .actions,
-.sales-order-create-index #order-errors .actions {
+.sales-order-create-index #order-errors .actions,
+.checkout-index-index .checkout-errors .fieldset-wrapper-title .actions {
   float: none;
   border: 1px solid #c0bbaf;
   border-bottom: 0;
@@ -9019,7 +9114,8 @@ table .col-draggable .draggable-handle {
   padding: 0 8px;
   position: relative;
 }
-.sales-order-create-index #order-data .fieldset-wrapper .actions .action-add {
+.sales-order-create-index #order-data .fieldset-wrapper .actions .action-add,
+.checkout-index-index .checkout-errors .fieldset-wrapper-title .actions .action-add {
   margin: 7px 8px 8px 0;
 }
 .sales-order-create-index .order-additional-area.fieldset-wrapper .actions {
@@ -9027,8 +9123,9 @@ table .col-draggable .draggable-handle {
   margin: 0 0 8px;
   padding: 0;
 }
-.sales-order-create-index #order-data .fieldset-wrapper .actions .action-delete {
-  margin: 11px 0 0;
+.sales-order-create-index #order-data .fieldset-wrapper .actions .action-delete,
+.checkout-index-index .checkout-errors .fieldset-wrapper-title .actions .action-delete {
+  margin: 13px 0 0;
 }
 .sales-order-create-index .ui-dialog .downloadable.information .link .label {
   margin-left: 0;
@@ -9050,6 +9147,47 @@ table .col-draggable .draggable-handle {
   display: inline-block;
   margin: 0 0 0 10px;
   width: 60px;
+}
+.tax.summary-total .summary-collapse {
+  cursor: pointer;
+  display: inline-block;
+}
+.tax.summary-total .summary-collapse:before {
+  content: "\e02d";
+  color: #816063;
+  background: #f2ebde;
+  display: inline-block;
+  text-indent: 0;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  overflow: hidden;
+  font-family: 'MUI-Icons';
+  border: 1px solid #ada89e;
+  font-style: normal;
+  vertical-align: top;
+  margin-right: 7px;
+  font-weight: normal;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  border-radius: 2px;
+}
+.tax.summary-total .summary-collapse:hover:before {
+  background: #cac3b4;
+}
+.tax.summary-total.show-details .summary-collapse:before {
+  content: "\e03a";
+}
+tr.row-totals:nth-child(even) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(even) td,
+tr.row-totals:nth-child(even) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(even) ~ tr.row-totals:nth-child(even) td,
+tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(odd) ~ tr.row-totals:nth-child(even) td {
+  background: #fbfaf6;
+}
+tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(odd) ~ tr.row-totals:nth-child(odd) td,
+tr.row-totals:nth-child(even) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(even) ~ tr.row-totals:nth-child(odd) td,
+tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(odd) td {
+  background: #fff;
 }
 /* ----------------------------------- */
 #order-data .page-actions {
@@ -9937,8 +10075,55 @@ table.items-to-invoice tbody tr:hover td {
   margin-top: 5px;
 }
 /*
+    Categories
+-------------------------------------- */
+.category-content .form-inline.permissions-custom-options .messages li {
+  margin-top: 0;
+}
+.category-content .form-inline.permissions-custom-options .data-table {
+  margin-bottom: 25px;
+}
+/*
+    Marketing - Email Reminders
+-------------------------------------- */
+.lt-1280 .adminhtml-reminder-edit #customerGrid .grid .filter .range div.date {
+  min-width: 0;
+}
+/*
+    Customers - Manage Shopping Cart
+-------------------------------------- */
+.checkout-index-index .products-search {
+  margin-top: 35px;
+}
+.checkout-index-index .products-search > .actions {
+  text-align: right;
+  margin: 10px 0;
+}
+.checkout-index-index .shopping-cart-items > .actions {
+  margin-bottom: 15px;
+}
+.checkout-index-index .shopping-cart-items .box-left,
+.checkout-index-index .shopping-cart-items .box.right {
+  width: 49%;
+}
+.checkout-index-index .shopping-cart-items .box-left fieldset,
+.checkout-index-index .shopping-cart-items .box.right fieldset {
+  border-radius: 5px;
+}
+.checkout-index-index .shopping-cart-items .box-left {
+  float: left;
+}
+.checkout-index-index .shopping-cart-items .box.right {
+  float: right;
+}
+.checkout-index-index .grid table .action-configure {
+  float: right;
+}
+/*
     Clearfix
 -------------------------------------- */
+.shopping-cart-items:before,
+.shopping-cart-items:after,
 .image-panel:before,
 .image-panel:after,
 .images:before,
@@ -9950,6 +10135,7 @@ table.items-to-invoice tbody tr:hover td {
   content: "";
   display: table;
 }
+.shopping-cart-items:after,
 .image-panel:after,
 .images:after,
 .tax-rate-popup .field:after,

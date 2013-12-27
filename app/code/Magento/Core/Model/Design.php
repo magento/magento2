@@ -74,11 +74,11 @@ class Design extends \Magento\Core\Model\AbstractModel
     protected $_dateTime;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param Context $context
+     * @param Registry $registry
+     * @param LocaleInterface $locale
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -91,9 +91,9 @@ class Design extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_locale = $locale;
         $this->_dateTime = $dateTime;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**

@@ -64,7 +64,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
                 $directory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
                 $iterator = $this->iteratorFactory->create(
                     $directory,
-                    $directory->search('#' . preg_quote($filename) . '$#')
+                    $directory->search('{' . $filename . ',*/' . $filename . '}')
                 );
                 break;
             case 'global':

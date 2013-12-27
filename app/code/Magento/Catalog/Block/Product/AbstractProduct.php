@@ -87,7 +87,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      * @var \Magento\Core\Model\Registry
      */
     protected $_coreRegistry = null;
-    
+
     /**
      * Catalog data
      *
@@ -152,7 +152,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      * @param \Magento\Theme\Helper\Layout $layoutHelper
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -399,6 +399,11 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return $this->getData('product');
     }
 
+    /**
+     * Retrieve tier price template
+     *
+     * @return string
+     */
     public function getTierPriceTemplate()
     {
         if (!$this->hasData('tier_price_template')) {
@@ -407,6 +412,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
 
         return $this->getData('tier_price_template');
     }
+
     /**
      * Returns product tier price block html
      *
@@ -421,7 +427,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return $this->_getPriceBlock($product->getTypeId())
             ->setTemplate($this->getTierPriceTemplate())
             ->setProduct($product)
-            ->setInGrouped($this->getProduct()->isGrouped())
+            ->setInGrouped($product->isGrouped())
             ->toHtml();
     }
 

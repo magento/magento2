@@ -1321,17 +1321,17 @@ class Flat extends \Magento\Index\Model\Resource\AbstractResource
      */
     public function getParentDesignCategory($category)
     {
-        $adapter    = $this->_getReadAdapter();
-        $levelField = $adapter->quoteIdentifier('level');
-        $pathIds    = array_reverse($category->getPathIds());
-        $select = $adapter->select()
-            ->from(array('main_table' => $this->getMainStoreTable($category->getStoreId())), '*')
-            ->where('entity_id IN (?)', $pathIds)
-            ->where('custom_use_parent_settings = ?', 0)
-            ->where($levelField . ' != ?', 0)
-            ->order('level ' . \Magento\DB\Select::SQL_DESC);
-        $result = $adapter->fetchRow($select);
-        return $this->_categoryFactory->create()->setData($result);
+        $pathIds = array_reverse($category->getPathIds());
+        $collection = clone $category->getCollection();
+        $collection
+            ->setMainTable($this->getMainStoreTable($category->getStoreId()))
+            ->addFieldToSelect('*')
+            ->addFieldToFilter('entity_id', array('in' => $pathIds))
+            ->addFieldToFilter('custom_use_parent_settings', array(array('eq' => 0), array('null' => 0)))
+            ->addFieldToFilter('level', array('neq' => 0))
+            ->setOrder('level', 'DESC')
+            ->load();
+        return $collection->getFirstItem();
     }
 
     /**

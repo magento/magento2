@@ -27,6 +27,7 @@ namespace Magento\View\Layout\File\Source\Override;
 use Magento\View\Layout\File\SourceInterface;
 use Magento\View\Design\ThemeInterface;
 use Magento\Filesystem;
+use Magento\Filesystem\Directory\ReadInterface;
 use Magento\View\Layout\File\Factory;
 use Magento\Exception;
 
@@ -36,9 +37,9 @@ use Magento\Exception;
 class Theme implements SourceInterface
 {
     /**
-     * @var Filesystem
+     * @var ReadInterface
      */
-    private $filesystem;
+    protected $themesDirectory;
 
     /**
      * @var Factory
@@ -53,7 +54,7 @@ class Theme implements SourceInterface
         Filesystem $filesystem,
         Factory $fileFactory
     ) {
-        $this->filesystem = $filesystem;
+        $this->themesDirectory = $filesystem->getDirectoryRead(Filesystem::THEMES);
         $this->fileFactory = $fileFactory;
     }
 
@@ -69,13 +70,8 @@ class Theme implements SourceInterface
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
-        $patternForSearch = str_replace(
-            array('/', '\*'),
-            array('\/', '[\S]+'),
-            preg_quote("~{$themePath}/{$namespace}_{$module}/layout/override/theme/*/{$filePath}.xml~")
-        );
-
-        $files = $this->filesystem->getDirectoryRead(Filesystem::THEMES)->search($patternForSearch);
+        $searchPattern = "{$themePath}/{$namespace}_{$module}/layout/override/theme/*/{$filePath}.xml";
+        $files = $this->themesDirectory->search($searchPattern);
 
         if (empty($files)) {
             return array();
@@ -86,12 +82,12 @@ class Theme implements SourceInterface
         while ($currentTheme = $currentTheme->getParentTheme()) {
             $themes[$currentTheme->getCode()] = $currentTheme;
         }
-
         $result = array();
-        $pattern = "#(?<module>[^/]+)/layout/override/theme/(?<themeName>[^/]+)/"
-            . preg_quote(rtrim($filePath, '*'))
-            . "[^/]*\.xml$#i";
-        foreach ($files as $filename) {
+        $pattern = "#/(?<module>[^/]+)/layout/override/theme/(?<themeName>[^/]+)/"
+            . strtr(preg_quote($filePath), array('\*' => '[^/]+'))
+            . "\.xml$#i";
+        foreach ($files as $file) {
+            $filename = $this->themesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;
             }

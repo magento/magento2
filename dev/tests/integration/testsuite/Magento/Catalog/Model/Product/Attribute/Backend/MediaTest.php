@@ -127,28 +127,36 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave()
     {
+        $fileName = 'magento_image.jpg';
+        $fileLabel = 'Magento image';
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product');
         $product->setData('media_gallery', array('images' => array(
-            'image'   => array('file' => 'magento_image.jpg'),
+            'image' => array(
+                'file' => $fileName,
+                'label' => $fileLabel,
+            ),
         )));
-
+        $product->setData('image', $fileName);
         $this->_model->beforeSave($product);
         $this->assertStringStartsWith('./magento_image', $product->getData('media_gallery/images/image/new_file'));
+        $this->assertEquals($fileLabel, $product->getData('image_label'));
 
         $product->setIsDuplicate(true);
         $product->setData('media_gallery', array('images' => array(
-            'image'     => array(
-                'value_id'  => '100',
-                'file'      => 'magento_image.jpg'
-            )
+            'image' => array(
+                'value_id' => '100',
+                'file' => $fileName,
+                'label' => $fileLabel,
+            ),
         )));
         $this->_model->beforeSave($product);
         $this->assertStringStartsWith('./magento_image', $product->getData('media_gallery/duplicate/100'));
+        $this->assertEquals($fileLabel, $product->getData('image_label'));
 
         /* affect of beforeSave */
-        $this->assertNotEquals('magento_image.jpg', $this->_model->getRenamedImage('magento_image.jpg'));
+        $this->assertNotEquals($fileName, $this->_model->getRenamedImage($fileName));
         $this->assertEquals('test.jpg', $this->_model->getRenamedImage('test.jpg'));
     }
 

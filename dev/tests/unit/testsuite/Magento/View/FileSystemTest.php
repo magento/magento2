@@ -145,4 +145,37 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $actual = $this->_model->getViewFile($file, $params);
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * @param string $path
+     * @param string $expectedResult
+     * @dataProvider normalizePathDataProvider
+     */
+    public function testNormalizePath($path, $expectedResult)
+    {
+        $result = $this->_model->normalizePath($path);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function normalizePathDataProvider()
+    {
+        return array(
+            'standard path' => array(
+                '/dir/somedir/somefile.ext',
+                '/dir/somedir/somefile.ext'
+            ),
+            'one dot path' => array(
+                '/dir/somedir/./somefile.ext',
+                '/dir/somedir/somefile.ext',
+            ),
+            'two dots path' => array(
+                '/dir/somedir/../somefile.ext',
+                '/dir/somefile.ext',
+            ),
+            'two times two dots path' => array(
+                '/dir/../somedir/../somefile.ext',
+                '/somefile.ext',
+            ),
+        );
+    }
 }

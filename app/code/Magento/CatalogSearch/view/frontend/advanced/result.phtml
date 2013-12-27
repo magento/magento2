@@ -22,9 +22,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php if($this->getResultCount()): ?>
+<?php if($results = $this->getResultCount()): ?>
     <div class="search found">
-        <?php echo __('<strong>%1 item(s)</strong> were found using the following search criteria', $this->getResultCount()); ?>
+        <?php if ($results == 1) : ?>
+            <?php echo __('<strong>%1 item</strong> were found using the following search criteria', $results); ?>
+        <?php else: ?>
+            <?php echo __('<strong>%1 items</strong> were found using the following search criteria', $results); ?>
+        <?php endif; ?>
     </div>
 <?php else: ?>
     <div class="message error">

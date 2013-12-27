@@ -420,6 +420,25 @@ hr {
   background: #f8f8f8;
   padding: 30px;
 }
+.visuallyHidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.visuallyHidden.focusable:active,
+.visuallyHidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
 .primary.action,
 .action.myPrimary,
 input[type="submit"],
@@ -483,8 +502,8 @@ input[type="button"],
 .form.search.advanced .actions .action,
 .form.orders.search .actions .action,
 .form.contact .actions .action,
-.data.table.wishlist + .actions .primary .action.share,
-.data.table.wishlist + .actions .primary .action.update,
+.wrapper.table + .actions .primary .action.share,
+.wrapper.table + .actions .primary .action.update,
 .recurring.order.details > .actions .primary .action,
 .form.send.confirmation .action.send,
 .action.myPrimary,
@@ -549,8 +568,8 @@ input[type="button"],
 .form.search.advanced .actions .action,
 .form.orders.search .actions .action,
 .form.contact .actions .action,
-.data.table.wishlist + .actions .primary .action.share,
-.data.table.wishlist + .actions .primary .action.update,
+.wrapper.table + .actions .primary .action.share,
+.wrapper.table + .actions .primary .action.update,
 .recurring.order.details > .actions .primary .action,
 .form.send.confirmation .action.send {
   background-color: #da370a;
@@ -745,12 +764,12 @@ input[type="button"]:hover,
 .form.contact .actions .action:focus,
 .form.contact .actions .action:active,
 .form.contact .actions .action:hover,
-.data.table.wishlist + .actions .primary .action.share:focus,
-.data.table.wishlist + .actions .primary .action.share:active,
-.data.table.wishlist + .actions .primary .action.share:hover,
-.data.table.wishlist + .actions .primary .action.update:focus,
-.data.table.wishlist + .actions .primary .action.update:active,
-.data.table.wishlist + .actions .primary .action.update:hover,
+.wrapper.table + .actions .primary .action.share:focus,
+.wrapper.table + .actions .primary .action.share:active,
+.wrapper.table + .actions .primary .action.share:hover,
+.wrapper.table + .actions .primary .action.update:focus,
+.wrapper.table + .actions .primary .action.update:active,
+.wrapper.table + .actions .primary .action.update:hover,
 .recurring.order.details > .actions .primary .action:focus,
 .recurring.order.details > .actions .primary .action:active,
 .recurring.order.details > .actions .primary .action:hover,
@@ -771,7 +790,7 @@ input[type="reset"],
 .data.comparison .cell.remove .action.delete,
 .sidebar .minilist.products.items .action.tocart,
 .find.orders .action.submit,
-.form.send.friend .actions > .primary .action.add,
+.form.send.friend .fieldset.recipients .actions .action.add,
 .paypal.review.view .actions .action.update,
 .shipping-tracking-popup .action.close,
 .action.mySecondary,
@@ -785,7 +804,7 @@ input[type="reset"],
 .data.comparison .cell.remove .action.delete,
 .sidebar .minilist.products.items .action.tocart,
 .find.orders .action.submit,
-.form.send.friend .actions > .primary .action.add,
+.form.send.friend .fieldset.recipients .actions .action.add,
 .paypal.review.view .actions .action.update,
 .shipping-tracking-popup .action.close {
   background-color: #c2c2c2;
@@ -827,9 +846,9 @@ input[type="reset"]:hover,
 .find.orders .action.submit:focus,
 .find.orders .action.submit:active,
 .find.orders .action.submit:hover,
-.form.send.friend .actions > .primary .action.add:focus,
-.form.send.friend .actions > .primary .action.add:active,
-.form.send.friend .actions > .primary .action.add:hover,
+.form.send.friend .fieldset.recipients .actions .action.add:focus,
+.form.send.friend .fieldset.recipients .actions .action.add:active,
+.form.send.friend .fieldset.recipients .actions .action.add:hover,
 .paypal.review.view .actions .action.update:focus,
 .paypal.review.view .actions .action.update:active,
 .paypal.review.view .actions .action.update:hover,
@@ -938,13 +957,13 @@ input[type="reset"],
 .form.password.reset .action.add,
 .form.paypal.review .action.add,
 .form.send.confirmation .action.add,
-.form.send.friend .actions > .primary .action.add,
+.form.send.friend .fieldset.recipients .actions .action.add,
 .form.search.advanced .actions .action,
 .form.orders.search .actions .action,
 .form.contact .actions .action,
 .paypal.review.view .actions .action.update,
-.data.table.wishlist + .actions .primary .action.share,
-.data.table.wishlist + .actions .primary .action.update,
+.wrapper.table + .actions .primary .action.share,
+.wrapper.table + .actions .primary .action.update,
 .shipping-tracking-popup .action.close,
 .recurring.order.details > .actions .primary .action,
 .form.send.confirmation .action.send {
@@ -1195,7 +1214,8 @@ input[type="tel"],
 input[type="url"],
 input[type="email"],
 input[type="datetime"],
-input[type="password"] {
+input[type="password"],
+input[type="number"] {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -ms-box-sizing: border-box;
@@ -1218,7 +1238,8 @@ input[type="tel"]:focus,
 input[type="url"]:focus,
 input[type="email"]:focus,
 input[type="datetime"]:focus,
-input[type="password"]:focus {
+input[type="password"]:focus,
+input[type="number"]:focus {
   border-color: #999999;
 }
 .control input[type="text"],
@@ -1227,7 +1248,8 @@ input[type="password"]:focus {
 .control input[type="url"],
 .control input[type="email"],
 .control input[type="datetime"],
-.control input[type="password"] {
+.control input[type="password"],
+.control input[type="number"] {
   width: 100%;
 }
 input[type="text"]:disabled,
@@ -1236,7 +1258,8 @@ input[type="tel"]:disabled,
 input[type="url"]:disabled,
 input[type="email"]:disabled,
 input[type="datetime"]:disabled,
-input[type="password"]:disabled {
+input[type="password"]:disabled,
+input[type="number"]:disabled {
   opacity: 0.5;
 }
 input[type="text"]::-webkit-input-placeholder,
@@ -1245,7 +1268,8 @@ input[type="tel"]::-webkit-input-placeholder,
 input[type="url"]::-webkit-input-placeholder,
 input[type="email"]::-webkit-input-placeholder,
 input[type="datetime"]::-webkit-input-placeholder,
-input[type="password"]::-webkit-input-placeholder {
+input[type="password"]::-webkit-input-placeholder,
+input[type="number"]::-webkit-input-placeholder {
   line-height: 1.333;
 }
 input[type="text"]:-ms-input-placeholder,
@@ -1254,7 +1278,8 @@ input[type="tel"]:-ms-input-placeholder,
 input[type="url"]:-ms-input-placeholder,
 input[type="email"]:-ms-input-placeholder,
 input[type="datetime"]:-ms-input-placeholder,
-input[type="password"]:-ms-input-placeholder {
+input[type="password"]:-ms-input-placeholder,
+input[type="number"]:-ms-input-placeholder {
   line-height: 1.333;
 }
 .eq-ie8 input[type="text"],
@@ -1263,8 +1288,14 @@ input[type="password"]:-ms-input-placeholder {
 .eq-ie8 input[type="url"],
 .eq-ie8 input[type="email"],
 .eq-ie8 input[type="datetime"],
-.eq-ie8 input[type="password"] {
+.eq-ie8 input[type="password"],
+.eq-ie8 input[type="number"] {
   padding-top: 8px;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 select {
   -moz-box-sizing: border-box;
@@ -1329,7 +1360,8 @@ textarea:disabled {
 .fieldset input[type="url"].valid,
 .fieldset input[type="email"].valid,
 .fieldset input[type="datetime"].valid,
-.fieldset input[type="password"].valid {
+.fieldset input[type="password"].valid,
+.fieldset input[type="number"].valid {
   border-color: #42b649 !important;
 }
 .fieldset textarea.mage-error,
@@ -1340,7 +1372,8 @@ textarea:disabled {
 .fieldset input[type="url"].mage-error,
 .fieldset input[type="email"].mage-error,
 .fieldset input[type="datetime"].mage-error,
-.fieldset input[type="password"].mage-error {
+.fieldset input[type="password"].mage-error,
+.fieldset input[type="number"].mage-error {
   border-color: #da370a !important;
 }
 .fieldset div.mage-error[generated] {
@@ -4472,6 +4505,7 @@ body {
   border-radius: 0 0 5px 5px;
   overflow: hidden;
   z-index: 5;
+  display: none;
 }
 .block.search .search.autocomplete ul {
   padding: 0;
@@ -4559,9 +4593,19 @@ body {
   font-weight: 200;
   font-size: 20px;
 }
+.column.main .block > .title .qty.counter,
+.sidebar .block > .title .qty.counter {
+  font-size: 16px;
+}
 .column.main .block.filter .item,
 .sidebar .block.filter .item {
   margin-bottom: 10px;
+}
+.qty.counter:before {
+  content: "(";
+}
+.qty.counter:after {
+  content: ")";
 }
 .sidebar .block > .title strong {
   font-size: 18px;
@@ -5222,10 +5266,6 @@ body {
     Magento_Checkout
     One page
 -------------------------------------- */
-.block.progress.onepage {
-  float: left;
-  width: 200px;
-}
 .block.progress.onepage .content > dt {
   font-size: 16px;
   font-weight: 400;
@@ -5272,10 +5312,6 @@ body {
 .block.progress.onepage .payment.method .data.table td,
 .order.details .block.order .payment.method .data.table td {
   padding: 5px;
-}
-.opc.wrapper {
-  float: right;
-  width: 725px;
 }
 .opc.wrapper > .opc {
   padding: 0;
@@ -5720,8 +5756,6 @@ body {
   margin: 0;
   list-style-type: none;
   list-style-image: none;
-  float: left;
-  width: 200px;
 }
 .multicheckout.progress li {
   font-size: 16px;
@@ -5730,19 +5764,6 @@ body {
 }
 .multicheckout.progress li.active {
   font-weight: bold;
-}
-.multicheckout.progress + .form.address.edit {
-  float: right;
-  width: 725px;
-}
-.multicheckout.form.address,
-.multicheckout.form.billing,
-.multicheckout.form.shipping,
-.multicheckout.form.overview,
-.multicheckout.success,
-.multicheckout.change.billing {
-  float: right;
-  width: 725px;
 }
 .multicheckout .title {
   *zoom: 1;
@@ -6011,11 +6032,6 @@ body {
 }
 .multicheckout.form.address .control.address select {
   max-width: 450px;
-}
-.checkout-multishipping-address-newshipping .form.address.edit,
-.checkout-multishipping-address-editshipping .form.address.edit {
-  float: right;
-  width: 725px;
 }
 .block.gift.message {
   margin: 30px 0 0;
@@ -7193,6 +7209,10 @@ body {
   text-align: center;
   padding: 0 4px;
 }
+.action.showcart .qty:before,
+.action.showcart .qty:after {
+  content: "";
+}
 .action.showcart .qty.empty {
   display: none;
 }
@@ -7560,6 +7580,10 @@ span.widget.link {
 .data.comparison .cell.attribute {
   font-size: 12px;
 }
+.data.comparison .cell.attribute img {
+  max-width: 100%;
+  height: auto;
+}
 .data.comparison td:last-child {
   border-right: 1px solid #e5e5e5;
 }
@@ -7899,11 +7923,15 @@ span.widget.link {
 .sidebar .minilist.products.items .item.product {
   margin: 0 0 20px;
   padding: 0;
-  position: relative;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 .sidebar .minilist.products.items .item.product .product.actions {
   visibility: hidden;
+  -webkit-transition: visibility 0.01s ease-in-out 0.1s;
+  -moz-transition: visibility 0.01s ease-in-out 0.1s;
+  transition: visibility 0.01s ease-in-out 0.1s;
 }
 .sidebar .minilist.products.items .item.product:hover .product.actions {
   visibility: visible;
@@ -7920,13 +7948,23 @@ span.widget.link {
   overflow: hidden;
 }
 .sidebar .minilist.products.items .actions {
-  bottom: 0;
+  /*        */
+
+}
+.sidebar .minilist.products.items .primary {
+  bottom: -10px;
   left: 0;
   position: absolute;
 }
 .sidebar .minilist.products.items .action.tocart {
   padding: 5px 11px;
   display: inline-block;
+}
+.sidebar .minilist.products.items .secondary {
+  position: absolute;
+  left: 100%;
+  margin-left: -5px;
+  top: 0;
 }
 .block.widget.photos {
   margin: 0 0 30px;
@@ -8430,6 +8468,10 @@ span.widget.link {
   margin-bottom: 20px;
 }
 .products.wrapper.grid .products.list .item.product {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
   float: left;
   width: 16.666666666666664%;
   margin-right: 0%;
@@ -9069,6 +9111,10 @@ span.widget.link {
 }
 .product.attibute.sku .type:after {
   content: '#';
+}
+.product.attibute.description img {
+  max-width: 100%;
+  height: auto;
 }
 @media only screen and (max-width: 99999px) {
   .product.data {
@@ -10758,22 +10804,17 @@ img[align="right"] {
   padding-right: 20px;
   float: left;
 }
-.form.send.friend .fieldset.recipients .fields .action.delete {
+.form.send.friend .fieldset.recipients .action.delete {
   position: absolute;
   right: 0;
   top: 50%;
 }
-.form.send.friend .actions > .primary {
-  float: right;
-  text-align: right;
-}
-.form.send.friend .actions > .primary .action.submit {
-  float: right;
-  margin-left: 10px;
-}
-.form.send.friend .actions > .primary .limit {
+.form.send.friend .fieldset.recipients .actions {
+  width: 100%;
   margin: 0;
-  display: inline-block;
+}
+.form.send.friend .fieldset.recipients .actions .primary {
+  float: left;
 }
 .form.address.edit .field.company,
 .form.edit.account .field.password.current,
@@ -11194,59 +11235,67 @@ img[align="right"] {
   margin: 0;
 }
 /*
+    Wishlist sidebar
+-------------------------------------- */
+.block.wishlist .subtitle {
+  display: block;
+  font-weight: 600;
+  margin: 0 0 15px;
+}
+/*
     My Account -> My Wishlist
 -------------------------------------- */
-.data.table.wishlist {
+.wrapper.table .data.table.wishlist {
   margin-bottom: 15px;
 }
-.data.table.wishlist thead th {
+.wrapper.table .data.table.wishlist thead th {
   padding-top: 0;
   padding-bottom: 10px;
   text-align: left;
   font-weight: 400;
   font-size: 16px;
 }
-.data.table.wishlist td,
-.data.table.wishlist th {
+.wrapper.table .data.table.wishlist td,
+.wrapper.table .data.table.wishlist th {
   padding: 16px 10px 10px;
   vertical-align: top;
 }
-.data.table.wishlist td:first-child,
-.data.table.wishlist th:first-child {
+.wrapper.table .data.table.wishlist td:first-child,
+.wrapper.table .data.table.wishlist th:first-child {
   padding-left: 20px;
 }
-.data.table.wishlist td:last-child,
-.data.table.wishlist th:last-child {
+.wrapper.table .data.table.wishlist td:last-child,
+.wrapper.table .data.table.wishlist th:last-child {
   padding-right: 20px;
 }
-.data.table.wishlist tbody tr:nth-child(even) {
+.wrapper.table .data.table.wishlist tbody tr:nth-child(even) {
   background: #f8f8f8;
 }
-.data.table.wishlist textarea {
+.wrapper.table .data.table.wishlist textarea {
   width: 100%;
 }
-.data.table.wishlist .box.tocart .qty {
+.wrapper.table .data.table.wishlist .box.tocart .qty {
   width: 50px;
 }
-.data.table.wishlist + .actions .primary {
-  margin-bottom: 15px;
-}
-.data.table.wishlist + .actions .primary .action.share,
-.data.table.wishlist + .actions .primary .action.update {
-  padding: 5px 11px;
-}
-.data.table.wishlist + .actions .primary .action.update {
-  margin-left: 5px;
-}
-.data.table.wishlist .col.photo {
+.wrapper.table .data.table.wishlist .col.photo {
   width: 100px;
 }
-.data.table.wishlist .col.actions {
+.wrapper.table .data.table.wishlist .col.actions {
   width: 200px;
 }
-.data.table.wishlist .col.actions .price-excluding-tax,
-.data.table.wishlist .col.actions .price-including-tax {
+.wrapper.table .data.table.wishlist .col.actions .price-excluding-tax,
+.wrapper.table .data.table.wishlist .col.actions .price-including-tax {
   display: block;
+}
+.wrapper.table + .actions .primary {
+  margin-bottom: 15px;
+}
+.wrapper.table + .actions .primary .action.share,
+.wrapper.table + .actions .primary .action.update {
+  padding: 5px 11px;
+}
+.wrapper.table + .actions .primary .action.update {
+  margin-left: 5px;
 }
 /*
     Page -> Advanced Search
@@ -11904,6 +11953,20 @@ img[align="right"] {
 }
 /* Smartphones (portrait) ----------- */
 @media only screen and (max-width: 640px) {
+  .scrollTable .wrapper.table,
+  .sales-order-history .wrapper.table,
+  .review-customer-index .wrapper.table,
+  .sales-order-view .wrapper.table,
+  .sales-order-invoice .wrapper.table,
+  .sales-order-shipment .wrapper.table,
+  .sales-order-creditmemo .wrapper.table,
+  .checkout-onepage-index .order-review .wrapper.table,
+  .downloadable-customer-products .wrapper.table,
+  .form.wishlist.items .wrapper.table,
+  .block.dashboard.orders .wrapper.table,
+  .block.billing.agreements .wrapper.table {
+    overflow-x: auto;
+  }
   html {
     height: 100%;
   }
@@ -12423,9 +12486,6 @@ img[align="right"] {
     float: none;
     margin-bottom: 30px;
   }
-  .footer .block.newsletter input[type="text"] {
-    height: 33px;
-  }
   .footer .links {
     width: 45%;
     margin: 0 5% 0 0;
@@ -12549,6 +12609,7 @@ img[align="right"] {
     max-width: 100%;
   }
   .cart.main.actions {
+    text-align: center;
     *zoom: 1;
   }
   .cart.main.actions:before,
@@ -12559,8 +12620,7 @@ img[align="right"] {
   .cart.main.actions:after {
     clear: both;
   }
-  .cart.main.actions .action.update,
-  .cart.main.actions .action.continue {
+  .cart.main.actions .action.update {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -12578,9 +12638,9 @@ img[align="right"] {
     border: none;
     background-color: #c2c2c2;
     color: #ffffff;
+    margin-top: 15px;
   }
-  .cart.main.actions .action.update span,
-  .cart.main.actions .action.continue span {
+  .cart.main.actions .action.update span {
     font-size: 18px;
   }
   .cart.main.actions .action.continue {
@@ -12930,7 +12990,6 @@ img[align="right"] {
     font-size: 16px;
   }
   .opc.wrapper .order-review .review.table.wrapper {
-    overflow-x: scroll;
     margin-bottom: 10px;
   }
   .opc.wrapper .order-review .order.review.data th,
@@ -13555,15 +13614,8 @@ img[align="right"] {
     width: 100%;
     margin-left: 0;
   }
-  .form.send.friend .actions > .primary {
+  .form.send.friend .fieldset.recipients .actions .primary {
     float: none;
-  }
-  .form.send.friend .actions > .primary .action.submit {
-    float: none;
-    margin-left: 0;
-  }
-  .form.send.friend .actions > .primary .action.add {
-    margin-top: 10px;
   }
   /*
       *    Mage_Customer
@@ -13576,38 +13628,77 @@ img[align="right"] {
     float: none;
   }
   .col2-left-layout.account .column.left {
+    border-top: 4px solid #e5e5e5;
     display: block;
     width: 100%;
     float: none;
     margin-top: 20px;
+    padding-top: 20px;
   }
+  .accountActions .primary,
+  .accountActions .secondary,
   .account .column.main .my-account .actions .primary,
-  .account .column.main .block .actions .primary,
-  .account .column.main .form .actions .primary,
   .account .column.main .my-account .actions .secondary,
+  .account .column.main .block .actions .primary,
   .account .column.main .block .actions .secondary,
-  .account .column.main .form .actions .secondary {
+  .account .column.main .form .actions .primary,
+  .account .column.main .form .actions .secondary,
+  .account .column.main > .actions .primary,
+  .account .column.main > .actions .secondary {
     float: none;
   }
+  .accountActions .primary .action,
+  .account .column.main .my-account .actions .primary .action,
+  .account .column.main .block .actions .primary .action,
+  .account .column.main .form .actions .primary .action,
+  .account .column.main > .actions .primary .action {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    margin: 0 auto 15px;
+    padding: 10px;
+    width: 100%;
+    max-width: 100%;
+    line-height: 1;
+    float: none;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: none;
+    background-color: #da370a;
+    color: #ffffff;
+  }
+  .accountActions .primary .action span,
+  .account .column.main .my-account .actions .primary .action span,
+  .account .column.main .block .actions .primary .action span,
+  .account .column.main .form .actions .primary .action span,
+  .account .column.main > .actions .primary .action span {
+    font-size: 18px;
+  }
+  .accountActions .secondary,
   .account .column.main .my-account .actions .secondary,
   .account .column.main .block .actions .secondary,
-  .account .column.main .form .actions .secondary {
+  .account .column.main .form .actions .secondary,
+  .account .column.main > .actions .secondary {
     margin-bottom: 15px;
   }
+  .accountActions .secondary .action.back,
   .account .column.main .my-account .actions .secondary .action.back,
   .account .column.main .block .actions .secondary .action.back,
-  .account .column.main .form .actions .secondary .action.back {
+  .account .column.main .form .actions .secondary .action.back,
+  .account .column.main > .actions .secondary .action.back {
     display: block;
     float: none;
-    text-align: left;
+    text-align: center;
   }
   .account > .block,
   .account .my-account > .block {
     margin-bottom: 20px;
   }
   .billing-agreements > .actions,
-  .recurring-profiles .buttons-set,
-  .newsletter.manage > .actions {
+  .recurring-profiles .buttons-set {
     text-align: center;
     margin-bottom: 20px;
   }
@@ -13666,9 +13757,6 @@ img[align="right"] {
   .block.dashboard .recent.orders .col.shipping {
     display: none;
   }
-  .block.dashboard.orders {
-    overflow-x: scroll;
-  }
   .block.dashboard:not(.welcome):not(.orders) .content {
     padding: 20px;
     margin: 0 -20px;
@@ -13711,7 +13799,26 @@ img[align="right"] {
     width: 100%;
   }
   .form.newsletter .action.save {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    margin: 0 auto 15px;
+    padding: 10px;
     width: 100%;
+    max-width: 100%;
+    line-height: 1;
+    float: none;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: none;
+    background-color: #da370a;
+    color: #ffffff;
+  }
+  .form.newsletter .action.save span {
+    font-size: 18px;
   }
   .account .column.main .tags.items.cloud .item {
     font-size: 18px;
@@ -13737,58 +13844,21 @@ img[align="right"] {
     padding-bottom: 6px;
   }
   /*
-       My Account -> Downloadable products
-       -------------------------------------- */
-  .downloadable-customer-products .column.main {
-    overflow-x: scroll;
-  }
-  /*
-      My Account -> My Reviews
-      -------------------------------------- */
-  .review-customer-index .column.main {
-    overflow-x: scroll;
-  }
-  /*
       My Account -> Wishlist
       -------------------------------------- */
-  .account .form.wishlist.items .wishlist.table.wrapper {
-    overflow-x: scroll;
+  .account .form.wishlist.items .data.table.wishlist {
+    margin-bottom: 0;
   }
-  .account .form.wishlist.items .wishlist.table.wrapper thead {
+  .account .form.wishlist.items .data.table.wishlist thead {
     display: none;
   }
-  .account .form.wishlist.items .wishlist.table.wrapper textarea {
+  .account .form.wishlist.items .data.table.wishlist textarea {
     width: 15em;
-  }
-  .account .form.wishlist.items .actions .primary .action {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
-    display: block;
-    margin: 0 auto 15px;
-    padding: 10px;
-    width: 100%;
-    max-width: 100%;
-    line-height: 1;
-    float: none;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    border: none;
-    background-color: #da370a;
-    color: #ffffff;
-  }
-  .account .form.wishlist.items .actions .primary .action span {
-    font-size: 18px;
   }
   /*
      *    My Account -> My orders
      *
     ----------------------------------------------------------------------------- */
-  .sales-order-history .column.main {
-    overflow-x: scroll;
-  }
   .order.details .order.toolbar {
     clear: both;
     float: none;
@@ -13842,8 +13912,11 @@ img[align="right"] {
   .order.details > .actions {
     margin-bottom: 20px;
   }
-  .order.details.items {
-    overflow-x: scroll;
+  .order.details .wrapper.table {
+    margin-bottom: 45px;
+  }
+  .order.details .wrapper.table .data.table.order {
+    margin-bottom: 0;
   }
   .widget.static.block {
     margin-bottom: 15px;
@@ -13907,19 +13980,19 @@ img[align="right"] {
   .product.photo .notice {
     display: none;
   }
-  .product.info.main .page.title.product {
+  .product.info.additional .page.title.product {
     margin-bottom: 10px;
+  }
+  .product.info.additional .stock {
+    margin: 15px 0;
+  }
+  .product.info.main.responsive .page.title,
+  .product.info.main.responsive .stock:not(.alert) {
+    display: none;
   }
   .product.info.main .price-box {
     border: none !important;
     margin: 0;
-  }
-  .product.info.main .stock {
-    clear: right;
-    float: right;
-  }
-  .product.info.main .stock.alert {
-    float: none;
   }
   .product.info.main .prices.tier {
     clear: both;
@@ -14020,6 +14093,20 @@ img[align="right"] {
   .product.info.main .table.data.grouped {
     width: 100%;
     clear: both;
+  }
+  .catalog-product-view .column.main {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+  .catalog-product-view .column.main .product.info.additional,
+  .catalog-product-view .column.main .product.media {
+    -webkit-order: -1;
+    -ms-flex-order: -1;
+    order: -1;
   }
   .product.media .img.photo.container {
     height: auto !important;
@@ -14282,7 +14369,8 @@ img[align="right"] {
     margin: 0 0 10px;
   }
   input[type="password"],
-  input[type="text"] {
+  input[type="text"],
+  input[type="number"] {
     font-size: 18px;
   }
   .fieldset > .field > .label {
@@ -14517,8 +14605,7 @@ img[align="right"] {
     font-size: 18px;
   }
   /*
-      Magento_Catalog
-      Compare
+      Magento_Catalog Compare
   -------------------------------------- */
   .catalog-product-compare-index .action.print {
     margin: -20px 0 20px;

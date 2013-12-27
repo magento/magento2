@@ -129,6 +129,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     public function xmlConfigFileProvider()
     {
         $fileList = $this->getXmlConfigFiles();
+        $result = array();
         foreach ($fileList as $fileContent) {
             $result[] = array($fileContent);
         }
@@ -146,7 +147,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
         $directory = $objectManager->get('Magento\Filesystem')->getDirectoryRead(\Magento\Filesystem::MODULES);
         return $objectManager->get('\Magento\Config\FileIteratorFactory')->create(
             $directory,
-            $directory->search($this->_getConfigFilePathRegex())
+            $directory->search($this->_getConfigFilePathGlob())
         );
     }
 
@@ -164,7 +165,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected abstract function _getConfigFilePathRegex();
+    protected abstract function _getConfigFilePathGlob();
 
     /**
      * Returns a path to the per file XSD file, relative to the modules directory.

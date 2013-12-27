@@ -41,4 +41,9 @@
             </value>
         </param>
     </type>
+    <type name="Magento\Downloadable\Block\Sales\Order\Email\Items\Downloadable">
+        <param name="urlGenerator">
+            <instance type="Magento\Core\Model\Url\Proxy"/>
+        </param>
+    </type>
 </config>

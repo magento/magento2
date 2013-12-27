@@ -203,3 +203,21 @@
         margin: 0;
     }
 }
+
+.iconShowText() {
+    text-indent: 0;
+    line-height:inherit;
+    height:inherit;
+}
+
+.iconRemove(@position: 'after') when (@position = 'after') {
+    &:after {
+        display: none;
+    }
+}
+
+.iconRemove(@position: 'after') when (@position = 'before') {
+    &:before {
+        display: none;
+    }
+}

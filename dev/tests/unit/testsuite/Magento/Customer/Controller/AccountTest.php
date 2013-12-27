@@ -33,11 +33,41 @@ namespace Magento\Customer\Controller;
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Customer\Controller\Account
+     */
+    protected $object;
+
+    /**
+     * @var \Magento\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $response;
+
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSession;
+
+    /**
+     * @var \Magento\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $url;
+
+    /**
+     * @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManager;
+
+    /**
      * List of actions that are allowed for not authorized users
      *
      * @var array
      */
-    protected $_openActions = array(
+    protected $openActions = array(
         'create',
         'login',
         'logoutsuccess',
@@ -53,30 +83,48 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     );
 
     /**
-     * @var \Magento\Customer\Controller\Account
-     */
-    protected $_model;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManagerMock;
+    protected $_formKeyValidator;
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
-        $arguments = array(
-            'urlFactory' => $this->getMock('Magento\Core\Model\UrlFactory', array(), array(), '', false),
-            'customerFactory' => $this->getMock('Magento\Customer\Model\CustomerFactory', array(), array(), '', false),
-            'formFactory' => $this->getMock('Magento\Customer\Model\FormFactory', array(), array(), '', false),
-            'addressFactory' => $this->getMock('Magento\Customer\Model\AddressFactory', array(), array(), '', false),
+        $this->request = $this->getMock(
+            'Magento\App\RequestInterface',
+            ['isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam'],
+            [],
+            '',
+            false
         );
-        $constructArguments = $objectManagerHelper->getConstructArguments(
-            'Magento\Customer\Controller\Account',
-            $arguments
+        $this->response = $this->getMock(
+            'Magento\App\ResponseInterface',
+            ['setRedirect', 'sendResponse'],
+            [],
+            '',
+            false
         );
-        $this->_model = $objectManagerHelper->getObject('Magento\Customer\Controller\Account', $constructArguments);
+        $this->customerSession = $this->getMock(
+            '\Magento\Customer\Model\Session',
+            ['isLoggedIn', 'getLastCustomerId', 'getBeforeAuthUrl', 'setBeforeAuthUrl'],
+            [],
+            '',
+            false
+        );
+        $this->url = $this->getMockForAbstractClass('\Magento\UrlInterface');
+        $this->objectManager = $this->getMock('\Magento\ObjectManager\ObjectManager', ['get'], [], '', false);
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_formKeyValidator = $this->getMock(
+            'Magento\Core\App\Action\FormKeyValidator', array(), array(), '', false
+        );
+        $this->object = $objectManager->getObject('Magento\Customer\Controller\Account', [
+            'request' => $this->request,
+            'response' => $this->response,
+            'customerSession' => $this->customerSession,
+            'url' => $this->url,
+            'objectManager' => $this->objectManager,
+            'formKeyValidator' => $this->_formKeyValidator,
+            ''
+        ]);
     }
 
     /**
@@ -84,10 +132,32 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllowedActions()
     {
-        $this->assertAttributeEquals($this->_openActions, '_openActions', $this->_model);
-
+        $this->assertAttributeEquals($this->openActions, '_openActions', $this->object);
+        /**
+         * @TODO: [TD] Protected methods must be tested via public. Eliminate _getAllowedActions method and write test
+         *   for dispatch method using this property instead.
+         */
         $method = new \ReflectionMethod('Magento\Customer\Controller\Account', '_getAllowedActions');
         $method->setAccessible(true);
-        $this->assertEquals($this->_openActions, $method->invoke($this->_model));
+        $this->assertEquals($this->openActions, $method->invoke($this->object));
+    }
+
+    public function testLoginPostActionWhenRefererSetBeforeAuthUrl()
+    {
+        $this->_formKeyValidator->expects($this->once())->method('validate')->will($this->returnValue(true));
+        $this->objectManager->expects($this->any())->method('get')
+            ->will($this->returnValueMap([
+                ['Magento\Customer\Helper\Data', new \Magento\Object(['account_url' => 1])],
+                ['Magento\Core\Model\Store\Config', new \Magento\Object(['config_flag' => 1])],
+                ['Magento\Core\Helper\Data', $this->getMock('Magento\Core\Helper\Data', [], [], '', false)],
+            ]));
+        $this->customerSession->expects($this->at(0))->method('isLoggedIn')->with()->will($this->returnValue(0));
+        $this->customerSession->expects($this->at(4))->method('isLoggedIn')->with()->will($this->returnValue(1));
+        $this->request->expects($this->once())->method('getParam')
+            ->with(\Magento\Customer\Helper\Data::REFERER_QUERY_PARAM_NAME)
+            ->will($this->returnValue('referer'));
+        $this->url->expects($this->once())->method('isOwnOriginUrl')->with();
+
+        $this->object->loginPostAction();
     }
 }

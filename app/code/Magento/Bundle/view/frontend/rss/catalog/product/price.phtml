@@ -32,7 +32,11 @@
 ?>
 
 <?php $_product = $this->getProduct() ?>
-<?php list($_minimalPrice, $_maximalPrice) = $_product->getPriceModel()->getPrices($_product) ?>
+<?php
+/** @var \Magento\Bundle\Model\Product\Price $_priceModel */
+$_priceModel = $_product->getPriceModel()
+?>
+<?php list($_minimalPrice, $_maximalPrice) = $_priceModel->getTotalPrices($_product) ?>
 <?php $_id = $_product->getId() ?>
 
 <?php $_weeeTaxAmount = 0; ?>

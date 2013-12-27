@@ -141,7 +141,7 @@ Packaging.prototype = {
                 height = parseFloat(pack.select('input[name="container_height"]')[0].value);
                 packagesParams[packageId] = {
                     container:                  pack.select('select[name="package_container"]')[0].value,
-                    customs_value:              parseInt(pack.select('input[name="package_customs_value"]')[0].value, 10),
+                    customs_value:              parseFloat(pack.select('input[name="package_customs_value"]')[0].value, 10),
                     weight:                     isNaN(weight) ? '' : weight,
                     length:                     isNaN(length) ? '' : length,
                     width:                      isNaN(width) ? '' : width,

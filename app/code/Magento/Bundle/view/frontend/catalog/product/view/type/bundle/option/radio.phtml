@@ -80,7 +80,7 @@
                     <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
                            id="bundle-option-<?php echo $_option->getId() ?>-qty-input"
                            class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
-                           type="text"
+                           type="number"
                            name="bundle_option_qty[<?php echo $_option->getId() ?>]"
                            value="<?php echo $_defaultQty ?>"/>
                 </div>

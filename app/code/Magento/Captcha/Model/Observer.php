@@ -94,6 +94,11 @@ class Observer
     protected $messageManager;
 
     /**
+     * @var \Magento\App\Response\RedirectInterface
+     */
+    protected $redirect;
+
+    /**
      * @param Resource\LogFactory $resLogFactory
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Checkout\Model\Type\Onepage $typeOnepage
@@ -104,6 +109,9 @@ class Observer
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\App\ActionFlag $actionFlag
      * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\App\Response\RedirectInterface $redirect
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
@@ -115,7 +123,8 @@ class Observer
         \Magento\Core\Model\Url $urlManager,
         \Magento\App\RequestInterface $request,
         \Magento\App\ActionFlag $actionFlag,
-        \Magento\Message\ManagerInterface $messageManager
+        \Magento\Message\ManagerInterface $messageManager,
+        \Magento\App\Response\RedirectInterface $redirect
     ) {
         $this->_resLogFactory = $resLogFactory;
         $this->_session = $session;
@@ -127,6 +136,7 @@ class Observer
         $this->_request = $request;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
+        $this->redirect = $redirect;
     }
 
     /**
@@ -145,7 +155,7 @@ class Observer
             if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $controller->getResponse()->setRedirect($this->_urlManager->getUrl('*/*/forgotpassword'));
+                $this->redirect->redirect($controller->getResponse(), '*/*/forgotpassword');
             }
         }
         return $this;
@@ -161,11 +171,12 @@ class Observer
         $formId = 'contact_us';
         $captcha = $this->_helper->getCaptcha($formId);
         if ($captcha->isRequired()) {
+            /** @var \Magento\App\Action\Action $controller */
             $controller = $observer->getControllerAction();
             if (!$captcha->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA.'));
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $controller->getResponse()->setRedirect($this->_urlManager->getUrl('contacts/index/index'));
+                $this->redirect->redirect($controller->getResponse(), 'contacts/index/index');
             }
         }
     }
@@ -209,12 +220,14 @@ class Observer
         $formId = 'user_create';
         $captchaModel = $this->_helper->getCaptcha($formId);
         if ($captchaModel->isRequired()) {
+            /** @var \Magento\App\Action\Action $controller */
             $controller = $observer->getControllerAction();
             if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->_session->setCustomerFormData($controller->getRequest()->getPost());
-                $controller->getResponse()->setRedirect($this->_urlManager->getUrl('*/*/create'));
+                $url = $this->_urlManager->getUrl('*/*/create', array('_nosecret' => true));
+                $controller->getResponse()->setRedirect($this->redirect->error($url));
             }
         }
         return $this;

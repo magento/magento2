@@ -381,23 +381,4 @@ abstract class AbstractAction extends \Magento\App\Action\Action
         }
         return true;
     }
-
-    /**
-     * Render specified template
-     *
-     * @param string $tplName
-     * @param array $data parameters required by template
-     */
-    protected function _outTemplate($tplName, $data = array())
-    {
-        $this->_view->getLayout()->initMessages();
-        $block = $this->_view->getLayout()
-            ->createBlock('Magento\Backend\Block\Template')->setTemplate("{$tplName}.phtml");
-        foreach ($data as $index => $value) {
-            $block->assign($index, $value);
-        }
-        $html = $block->toHtml();
-        $this->_objectManager->get('Magento\Core\Model\Translate')->processResponseBody($html);
-        $this->getResponse()->setBody($html);
-    }
 }

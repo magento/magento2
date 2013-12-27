@@ -58,7 +58,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
         \Magento\Filesystem                 $filesystem,
         \Magento\Module\Dir\Reader          $moduleReader,
         \Magento\Config\FileIteratorFactory $iteratorFactory
-    ){
+    ) {
         $this->themesDirectory  = $filesystem->getDirectoryRead(\Magento\Filesystem::THEMES);
         $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
         $this->iteratorFactory  = $iteratorFactory;
@@ -75,8 +75,10 @@ class FileResolver implements \Magento\Config\FileResolverInterface
                 $iterator = $this->_moduleReader->getConfigurationFiles($filename);
                 break;
             case 'design':
-                $fileList = $this->themesDirectory->search('#/' . preg_quote($filename) . '$#');
-                $iterator = $this->iteratorFactory->create($this->themesDirectory, $fileList);
+                $iterator = $this->iteratorFactory->create(
+                    $this->themesDirectory,
+                    $this->themesDirectory->search('/*/*/etc/' . $filename)
+                );
                 break;
             default:
                 $iterator = $this->iteratorFactory->create($this->themesDirectory, array());;

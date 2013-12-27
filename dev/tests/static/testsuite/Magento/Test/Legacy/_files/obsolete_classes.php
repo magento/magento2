@@ -845,6 +845,7 @@ return array(
         . ' and \Magento\Catalog\Block\Product\View\BaseImage classes'
     ),
     array('Magento\Wishlist\Block\Links', 'Magento\Wishlist\Block\Link'),
+    array('Magento\Wishlist\Block\Render\Item\Price'),
     array('Mage_Adminhtml_Block_Api_Tab_Userroles'),
     array('Mage_Adminhtml_Block_Api_Tab_Roleinfo'),
     array('Mage_Adminhtml_Block_Api_Tab_Rolesusers'),

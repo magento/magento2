@@ -303,7 +303,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         * Check that error message is set
         */
         $this->assertSessionMessages(
-            $this->equalTo(array('Customer with the same email already exists.')),
+            $this->equalTo(array('Customer with the same email already exists in associated website.')),
             \Magento\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertEquals($post, \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

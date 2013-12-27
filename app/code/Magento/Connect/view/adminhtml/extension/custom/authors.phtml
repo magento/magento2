@@ -28,13 +28,13 @@
 var id = 0;
 var authorTemplate =
     '<tr>'+
-        '<td>'+
+        '<td class="col-name">'+
             '<input type="text" class="input-text required-entry" name="authors[name][]" id="authors_name_{{id}}" value="{{name}}"/>'+
         '</td>'+
-        '<td>'+
+        '<td class="col-user">'+
             '<input type="text" class="input-text required-entry" name="authors[user][]" id="authors_user_{{id}}" value="{{user}}"/>'+
         '</td>'+
-        '<td>'+
+        '<td class="col-email">'+
             '<input type="text" class="input-text required-entry validate-email" name="authors[email][]" id="authors_email_{{id}}" value="{{email}}"/>'+
         '</td>'+
         '<td class="col-delete">'+
@@ -62,12 +62,17 @@ function addAuthor(data)
         <table class="data-table" cellspacing="0">
             <thead>
                 <tr>
-                    <th><?php echo __("Name") ?><span class="required">*</span></th>
-                    <th><?php echo __("User") ?><span class="required">*</span></th>
-                    <th><?php echo __("Email") ?><span class="required">*</span></th>
-                    <th class="col-delete"><?php echo __("Remove") ?><span class="required">*</span></th>
+                    <th class="col-name required"><?php echo __("Name") ?></th>
+                    <th class="col-user required"><?php echo __("User") ?></th>
+                    <th class="col-email required"><?php echo __("Email") ?></th>
+                    <th class="col-delete"><?php echo __("Remove") ?></th>
                 </tr>
             </thead>
+            <tfoot>
+            <tr>
+                <td colspan="4"><?php echo $this->getAddAuthorButtonHtml() ?></td>
+            </tr>
+            </tfoot>
             <tbody id="authors_container">
                 <script type="text/javascript">
                 <?php if (count($this->getAuthors())): ?>
@@ -79,11 +84,6 @@ function addAuthor(data)
                 <?php endif;?>
                 </script>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4"><?php echo $this->getAddAuthorButtonHtml() ?></td>
-                </tr>
-            </tfoot>
         </table>
     </div>
 </fieldset>

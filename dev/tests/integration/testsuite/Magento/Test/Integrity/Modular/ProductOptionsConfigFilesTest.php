@@ -36,9 +36,12 @@ class ProductOptionsConfigFilesTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $filesystem \Magento\Filesystem */
         $filesystem = $objectManager->get('Magento\Filesystem');
-        $appDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::APP);
+        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
         $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
-        $xmlFiles = $fileIteratorFactory->create($appDirectory, $appDirectory->search('#/product_options\.xml$#'));
+        $xmlFiles = $fileIteratorFactory->create(
+            $modulesDirectory,
+            $modulesDirectory->search('/*/*/etc/{*/product_options.xml,product_options.xml}')
+        );
 
         $fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));

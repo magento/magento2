@@ -32,65 +32,126 @@ namespace Magento\ProductAlert\Block\Product\View;
 class StockTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Helper\Data
      */
-    protected $_objectManager;
+    protected $_helper;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     */
+    protected $_product;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Registry
+     */
+    protected $_registry;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Product\View\Stock
+     */
+    protected $_block;
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Layout
+     */
+    protected $_layout;
 
     protected function setUp()
     {
-        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_helper = $this->getMock(
+            'Magento\ProductAlert\Helper\Data', array('isStockAlertAllowed', 'getSaveUrl'), array(), '', false
+        );
+        $this->_product = $this->getMock(
+            'Magento\Catalog\Model\Product', array('isAvailable', 'getId', '__wakeup'), array(), '', false
+        );
+        $this->_product->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->_registry = $this->getMockBuilder('Magento\Core\Model\Registry')
+            ->disableOriginalConstructor()
+            ->setMethods(array('registry'))
+            ->getMock();
+        $this->_block = $objectManager->getObject(
+            'Magento\ProductAlert\Block\Product\View\Stock',
+            array(
+                'helper' => $this->_helper,
+                'registry' => $this->_registry,
+            )
+        );
+        $this->_layout = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
     }
 
-    public function testPrepareLayoutUrlIsSet()
+    public function testSetTemplateStockUrlAllowed()
     {
-        $helper = $this->getMockBuilder('Magento\ProductAlert\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(array('isStockAlertAllowed', 'getSaveUrl'))
-            ->getMock();
-        $helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
-        $helper->expects($this->once())
+        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
+        $this->_helper->expects($this->once())
             ->method('getSaveUrl')
             ->with('stock')
             ->will($this->returnValue('http://url'));
 
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(array('isAvailable', 'getId', '__wakeup'))
-            ->getMock();
-        $product->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $product->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
+        $this->_product->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
 
-        $registry = $this->getMockBuilder('Magento\Core\Model\Registry')
-            ->disableOriginalConstructor()
-            ->setMethods(array('registry'))
-            ->getMock();
-        $registry->expects($this->once())
+        $this->_registry->expects($this->once())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->will($this->returnValue($this->_product));
 
-        $block = $this->_objectManager->getObject(
-            'Magento\ProductAlert\Block\Product\View\Stock',
-            array(
-                'helper' => $helper,
-                'registry' => $registry,
-            )
-        );
+        $this->_block->setLayout($this->_layout);
+        $this->_block->setTemplate('path/to/template.phtml');
 
-        $layout = $this->getMockBuilder('Magento\Core\Model\Layout')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $block->setTemplate('path/to/template.phtml');
-        $block->setLayout($layout);
-
-        $this->assertEquals('path/to/template.phtml', $block->getTemplate());
-        $this->assertEquals('http://url', $block->getSignupUrl());
+        $this->assertEquals('path/to/template.phtml', $this->_block->getTemplate());
+        $this->assertEquals('http://url', $this->_block->getSignupUrl());
     }
 
-    public function testPrepareLayoutTemplateReseted()
+    /**
+     * @param bool $stockAlertAllowed
+     * @param bool $productAvailable
+     * @dataProvider setTemplateStockUrlNotAllowedDataProvider
+     */
+    public function testSetTemplateStockUrlNotAllowed($stockAlertAllowed, $productAvailable)
     {
-        $block = $this->_objectManager->getObject('Magento\ProductAlert\Block\Product\View\Stock');
-        $this->assertEquals('', $block->getTemplate());
+        $this->_helper
+            ->expects($this->once())
+            ->method('isStockAlertAllowed')
+            ->will($this->returnValue($stockAlertAllowed));
+        $this->_helper->expects($this->never())->method('getSaveUrl');
+
+        $this->_product->expects($this->any())->method('isAvailable')->will($this->returnValue($productAvailable));
+
+        $this->_registry->expects($this->once())
+            ->method('registry')
+            ->with('current_product')
+            ->will($this->returnValue($this->_product));
+
+        $this->_block->setLayout($this->_layout);
+        $this->_block->setTemplate('path/to/template.phtml');
+
+        $this->assertEquals('', $this->_block->getTemplate());
+        $this->assertNull($this->_block->getSignupUrl());
+    }
+
+    public function setTemplateStockUrlNotAllowedDataProvider()
+    {
+        return array(
+            'stock alert not allowed' => array(false, false),
+            'product is available (no alert)' => array(true, true),
+            'stock alert not allowed and product is available' => array(false, true),
+        );
+    }
+
+    public function testSetTemplateNoProduct()
+    {
+        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
+        $this->_helper->expects($this->never())->method('getSaveUrl');
+
+        $this->_registry->expects($this->once())
+            ->method('registry')
+            ->with('current_product')
+            ->will($this->returnValue(null));
+
+        $this->_block->setLayout($this->_layout);
+        $this->_block->setTemplate('path/to/template.phtml');
+
+        $this->assertEquals('', $this->_block->getTemplate());
+        $this->assertNull($this->_block->getSignupUrl());
     }
 }

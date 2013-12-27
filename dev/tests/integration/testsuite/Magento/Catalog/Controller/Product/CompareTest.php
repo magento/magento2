@@ -35,11 +35,14 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testAddAction()
     {
         $this->_requireVisitorWithNoProducts();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Data\Form\FormKey $formKey */
+        $formKey = $objectManager->get('Magento\Data\Form\FormKey');
 
-        $this->dispatch('catalog/product_compare/add/product/1?nocookie=1');
+        $this->dispatch('catalog/product_compare/add/product/1/form_key/' . $formKey->getFormKey() . '?nocookie=1');
 
         /** @var $messageManager \Magento\Message\Manager */
-        $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Message\Manager');
+        $messageManager = $objectManager->get('Magento\Message\Manager');
         $this->assertInstanceOf('Magento\Message\Success', $messageManager->getMessages()->getLastAddedMessage());
         $this->assertContains('Simple Product 1 Name',
             (string)$messageManager->getMessages()->getLastAddedMessage()->getText());

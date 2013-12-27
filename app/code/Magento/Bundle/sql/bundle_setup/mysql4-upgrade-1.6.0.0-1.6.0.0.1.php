@@ -24,6 +24,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/** @var $installer \Magento\Catalog\Model\Resource\Setup */
+$installer = $this;
+
 /** @var $this \Magento\Catalog\Model\Resource\Setup */
 $installFile = __DIR__ . '/upgrade-1.6.0.0-1.6.0.0.1.php';
 

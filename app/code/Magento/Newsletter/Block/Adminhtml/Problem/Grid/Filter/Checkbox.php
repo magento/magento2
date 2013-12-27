@@ -36,7 +36,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Problem\Grid\Filter;
 
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
-     public function getCondition()
+    public function getCondition()
     {
         return array();
     }

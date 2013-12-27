@@ -19,41 +19,21 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Magento
- * @package     Magento_Wishlist
+ * @package     Magento_Customer
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/** @var $installer \Magento\Customer\Model\Resource\Setup */
+$installer = $this;
+$connection = $installer->getConnection();
+
 /**
- * Wishlist block for rendering price of item with product
- *
- * @category   Magento
- * @package    Magento_Wishlist
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Add unique index for customer_entity table
  */
-namespace Magento\Wishlist\Block\Render\Item;
-
-class Price extends \Magento\View\Element\Template
-{
-    /**
-     * Returns html for rendering non-configured product
-     */
-    public function getCleanProductPriceHtml()
-    {
-        $renderer = $this->getCleanRenderer();
-        if (!$renderer) {
-            return '';
-        }
-
-        $product = $this->getProduct();
-        if ($product->canConfigure()) {
-            $product = clone $product;
-            $product->setCustomOptions(array());
-        }
-
-        return $renderer->setProduct($product)
-            ->setDisplayMinimalPrice($this->getDisplayMinimalPrice())
-            ->setIdSuffix($this->getIdSuffix())
-            ->toHtml();
-    }
-}
+$connection->addIndex(
+    $installer->getTable('customer_entity'),
+    $installer->getIdxName('customer_entity', array('email', 'website_id')),
+    array('email', 'website_id'),
+    \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+);

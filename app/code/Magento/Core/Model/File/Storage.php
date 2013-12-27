@@ -242,7 +242,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
                 'source'                        => $sourceModel->getStorageName(),
                 'destination'                   => $destinationModel->getStorageName(),
                 'destination_storage_type'      => $storageDest,
-                'destination_connection_name'   => (string) $destinationModel->getConfigConnectionName(),
+                'destination_connection_name'   => (string) $destinationModel->getConnectionName(),
                 'has_errors'                    => false,
                 'timeout_reached'               => false
             );

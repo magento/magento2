@@ -68,20 +68,11 @@ class Theme implements SourceInterface
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
-        $patternForSearch = str_replace(
-            array('/', '\*'),
-            array('\/', '[\S]+'),
-            preg_quote("~{$themePath}/{$namespace}_{$module}/layout/{$filePath}.xml~")
-        );
-        $files = $this->themesDirectory->search($patternForSearch);
-        foreach ($files as $key => $file) {
-            $files[$key] = $this->themesDirectory->getAbsolutePath($file);
-        }
+        $files = $this->themesDirectory->search("{$themePath}/{$namespace}_{$module}/layout/{$filePath}.xml");
         $result = array();
-        $pattern = "#" . preg_quote($themePath) . "/(?<moduleName>[^/]+)/layout/"
-            . preg_quote(rtrim($filePath, '*'))
-            . "[^/]*\.xml$#i";
-        foreach ($files as $filename) {
+        $pattern = "#/(?<moduleName>[^/]+)/layout/" . strtr(preg_quote($filePath), array('\*' => '[^/]+')) . "\.xml$#i";
+        foreach ($files as $file) {
+            $filename = $this->themesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;
             }
