@@ -80,7 +80,12 @@ if (!defined('BARE_BOOTSTRAP')) {
 
     if (file_exists($maintenanceFile)) {
 
-        $allowedIps = array_map('trim', file($maintenanceFile));
+        $ips_file = BP . '/app/etc/allowed_ips.xml';
+        $allowedIps = array();
+        if (file_exists($ips_file)) {
+            $allowedIps = (array) simplexml_load_file($ips_file);
+            $allowedIps = array_map('trim', array_pop($allowedIps));
+        }
 
         if (!in_array($_SERVER['REMOTE_ADDR'], $allowedIps)) {
             if (PHP_SAPI == 'cli') {
