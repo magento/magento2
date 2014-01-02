@@ -51,20 +51,6 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $_wishlist;
 
     /**
-     * List of block settings to render prices for different product types
-     *
-     * @var array
-     */
-    protected $_itemPriceBlockTypes = array();
-
-    /**
-     * List of block instances to render prices for different product types
-     *
-     * @var array
-     */
-    protected $_cachedItemPriceBlocks = array();
-
-    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -123,20 +109,6 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
             $layoutHelper,
             $imageHelper,
             $data
-        );
-    }
-
-    /**
-     * Internal constructor, that is called from real constructor
-     *
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->addItemPriceBlockType(
-            'default',
-            'Magento\Wishlist\Block\Render\Item\Price',
-            'render/item/price.phtml'
         );
     }
 
@@ -366,45 +338,6 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     public function hasWishlistItems()
     {
         return $this->getWishlistItemsCount() > 0;
-    }
-
-    /**
-     * Adds special block to render price for item with specific product type
-     *
-     * @param string $type
-     * @param string $block
-     * @param string $template
-     */
-    public function addItemPriceBlockType($type, $block = '', $template = '')
-    {
-        if ($type) {
-            $this->_itemPriceBlockTypes[$type] = array(
-                'block' => $block,
-                'template' => $template
-            );
-        }
-    }
-
-    /**
-     * Returns block to render item with some product type
-     *
-     * @param string $productType
-     * @return \Magento\View\Element\Template
-     */
-    protected function _getItemPriceBlock($productType)
-    {
-        if (!isset($this->_itemPriceBlockTypes[$productType])) {
-            $productType = 'default';
-        }
-
-        if (!isset($this->_cachedItemPriceBlocks[$productType])) {
-            $blockType = $this->_itemPriceBlockTypes[$productType]['block'];
-            $template = $this->_itemPriceBlockTypes[$productType]['template'];
-            $block = $this->getLayout()->createBlock($blockType)
-                ->setTemplate($template);
-            $this->_cachedItemPriceBlocks[$productType] = $block;
-        }
-        return $this->_cachedItemPriceBlocks[$productType];
     }
 
     /**

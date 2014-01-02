@@ -142,7 +142,7 @@ class View
     public function getCreateDate()
     {
         return $this->formatDate(
-            $this->getCustomer()->getCreatedAtTimestamp(),
+            $this->getCustomer()->getCreatedAt(),
             \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM,
             true
         );

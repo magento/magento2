@@ -36,6 +36,16 @@
     <listeners>
         <listener class="Magento\TestFramework\Listener\GarbageCleanup" file="framework/Magento/TestFramework/Listener/GarbageCleanup.php"/>
     </listeners>
+    <filter>
+        <whitelist addUncoveredFilesFromWhiteList="true">
+            <directory suffix=".php">../../../app/code/Magento</directory>
+            <directory suffix=".php">../../../lib/Magento</directory>
+            <exclude>
+                <directory suffix=".php">../../../app/code/Magento/*/sql</directory>
+                <directory suffix=".php">../../../app/code/Magento/*/data</directory>
+            </exclude>
+        </whitelist>
+    </filter>
     <logging>
         <!--coverage_html_placeholder
             <log type="coverage-html" target="{{coverage_dir}}/test-reports/coverage" charset="UTF-8" yui="true" highlight="true"/>

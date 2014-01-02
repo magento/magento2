@@ -68,7 +68,7 @@
                 <div id="messages" data-container-for="messages">
                     <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
                 </div>
-                <form method="post" action="" id="login-form">
+                <form method="post" action="" id="login-form" autocomplete="off">
                     <fieldset class="fieldset">
                         <legend class="legend"><span><?php echo __('Welcome') ?></span></legend><br/>
                         <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
@@ -81,6 +81,8 @@
                         <div class="field field-password">
                             <label for="login" class="label"><?php echo __('Password:') ?></label>
                             <div class="control">
+                                <!-- This is a dummy hidden field to trick firefox from auto filling the password -->
+                                <input type="text" class="input-text no-display" name="dummy" id="dummy" />
                                 <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" placeholder="password" />
                             </div>
                         </div>

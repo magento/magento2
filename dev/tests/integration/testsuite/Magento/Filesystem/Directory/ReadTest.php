@@ -115,8 +115,8 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function searchProvider()
     {
         return array(
-            array('foo', '/bar/', array('bar/baz/file_one.txt', 'bar/file_two.txt')),
-            array('foo', '/\.txt/', array('bar/baz/file_one.txt', 'bar/file_two.txt', 'file_three.txt')),
+            array('foo', 'bar/*', array('bar/file_two.txt', 'bar/baz')),
+            array('foo', '/*/*.txt', array('bar/file_two.txt')),
             array('foo', '/notfound/', array())
         );
     }

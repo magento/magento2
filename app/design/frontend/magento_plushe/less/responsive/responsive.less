@@ -120,6 +120,12 @@
 /* Smartphones (portrait) ----------- */
 @media only screen
 and (max-width : @breakPoint1) {
+    .scrollTable {
+        .wrapper.table {
+            overflow-x: auto;
+        }
+    }
+
     html {
         height: 100%;
     }
@@ -544,9 +550,6 @@ and (max-width : @breakPoint1) {
             width: 100%;
             float: none;
             margin-bottom: 30px;
-            input[type="text"] {
-                height: 33px;
-            }
         }
         .links {
             width: 45%;
@@ -670,11 +673,12 @@ and (max-width : @breakPoint1) {
     .cart {
         // Main actions
         &.main.actions {
+            text-align: center;
             .clearfix();
             .action {
-                &.update,
-                &.continue {
+                &.update {
                     .mobileSecondaryAction();
+                    margin-top: 15px;
                 }
                 &.continue {
                     position: relative;
@@ -1079,7 +1083,6 @@ and (max-width : @breakPoint1) {
         .order-review {
             font-size: 16px;
             .review.table.wrapper {
-                overflow-x: scroll;
                 margin-bottom: 10px;
             }
             .order.review.data {
@@ -1526,14 +1529,9 @@ Multishipping
     }
 
     .form.send.friend {
-        .actions > .primary {
-            .action.submit {
-                float: none;
-                margin-left: 0;
-            }
-            float: none;
-            .action.add {
-                margin-top: 10px;
+        .fieldset.recipients {
+            .actions .primary {
+                 float: none;
             }
         }
     }
@@ -1550,10 +1548,46 @@ Multishipping
             float: none;
         }
         .column.left {
+            border-top: 4px solid @primary2;
             display: block;
             width: 100%;
             float: none;
             margin-top: 20px;
+            padding-top: 20px;
+        }
+    }
+
+    .sales-order-history,
+    .review-customer-index,
+    .sales-order-view,
+    .sales-order-invoice,
+    .sales-order-shipment,
+    .sales-order-creditmemo,
+    .checkout-onepage-index .order-review,
+    .downloadable-customer-products,
+    .form.wishlist.items,
+    .block.dashboard.orders,
+    .block.billing.agreements {
+        &:extend(.scrollTable all);
+    }
+
+    .accountActions {
+        .primary,
+        .secondary {
+            float: none;
+        }
+        .primary {
+            .action {
+                .mobilePrimaryAction();
+            }
+        }
+        .secondary {
+            margin-bottom: 15px;
+            .action.back {
+                display: block;
+                float: none;
+                text-align: center;
+            }
         }
     }
 
@@ -1563,19 +1597,11 @@ Multishipping
             .block,
             .form {
                 .actions {
-                    .primary,
-                    .secondary {
-                        float: none;
-                    }
-                    .secondary {
-                        margin-bottom: 15px;
-                        .action.back {
-                            display: block;
-                            float: none;
-                            text-align: left;
-                        }
-                    }
+                    &:extend(.accountActions all);
                 }
+            }
+            > .actions {
+                &:extend(.accountActions all);
             }
         }
         > .block,
@@ -1585,8 +1611,7 @@ Multishipping
     }
 
     .billing-agreements > .actions,
-    .recurring-profiles .buttons-set,
-    .newsletter.manage > .actions {
+    .recurring-profiles .buttons-set {
         text-align: center;
         margin-bottom: 20px;
     }
@@ -1640,9 +1665,6 @@ Multishipping
                 display: none;
             }
         }
-        &.orders {
-            overflow-x: scroll;
-        }
     }
 
     .block.dashboard:not(.welcome):not(.orders) {
@@ -1694,7 +1716,7 @@ Multishipping
 
     .form.newsletter {
         .action.save {
-            width: 100%;
+            .mobilePrimaryAction();
         }
     }
 
@@ -1721,43 +1743,20 @@ Multishipping
             }
         }
     }
-    /*
-     My Account -> Downloadable products
-     -------------------------------------- */
-    .downloadable-customer-products {
-        .column.main {
-            overflow-x: scroll;
-        }
-    }
 
-    /*
-    My Account -> My Reviews
-    -------------------------------------- */
-    .review-customer-index {
-        .column.main {
-            overflow-x: scroll;
-        }
-    }
 
     /*
     My Account -> Wishlist
     -------------------------------------- */
     .account {
         .form.wishlist.items {
-            .wishlist.table.wrapper {
-                overflow-x: scroll;
+            .data.table.wishlist {
+                margin-bottom: 0;
                 thead {
                     display: none;
                 }
                 textarea {
                     width: 15em;
-                }
-            }
-            .actions {
-                .primary {
-                    .action {
-                        .mobilePrimaryAction();
-                    }
                 }
             }
         }
@@ -1767,11 +1766,7 @@ Multishipping
    *    My Account -> My orders
    *
   ----------------------------------------------------------------------------- */
-    .sales-order-history {
-        .column.main {
-            overflow-x: scroll;
-        }
-    }
+
 
     .order.details {
         .order.toolbar {
@@ -1832,8 +1827,11 @@ Multishipping
         > .actions {
             margin-bottom: 20px;
         }
-        &.items {
-            overflow-x: scroll;
+        .wrapper.table {
+            margin-bottom: 45px;
+            .data.table.order {
+                margin-bottom: 0;
+            }
         }
     }
 
@@ -1913,20 +1911,25 @@ Multishipping
         display: none;
     }
 
-    .product.info.main {
+    .product.info.additional {
         .page.title.product {
             margin-bottom: 10px;
+        }
+        .stock {
+            margin: 15px 0;
+        }
+    }
+
+    .product.info.main {
+        &.responsive {
+            .page.title,
+            .stock:not(.alert) {
+                display: none;
+            }
         }
         .price-box {
             border: none !important;
             margin: 0;
-        }
-        .stock {
-            clear: right;
-            float: right;
-            &.alert {
-                float: none;
-            }
         }
         .prices.tier  {
             clear: both;
@@ -2003,6 +2006,21 @@ Multishipping
         .table.data.grouped {
             width: 100%;
             clear: both;
+        }
+    }
+
+    .catalog-product-view .column.main {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        .product.info.additional,
+        .product.media {
+            -webkit-order: -1;
+            -ms-flex-order: -1;
+            order: -1;
         }
     }
 
@@ -2235,7 +2253,8 @@ Multishipping
     }
 
     input[type="password"],
-    input[type="text"] {
+    input[type="text"],
+    input[type="number"] {
         font-size: 18px;
     }
 

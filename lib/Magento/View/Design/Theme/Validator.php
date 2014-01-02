@@ -68,7 +68,7 @@ class Validator
                   'message' => __('Field can\'t be empty')),
             array('name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
                   'options' => array('pattern' => '/^(\d+\.\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)$|^\*$/'),
-                  'message' => __('Theme version has not compatible format'))
+                  'message' => __('Theme version has not compatible format.'))
         );
 
         $this->addDataValidators('theme_version', $versionValidators);

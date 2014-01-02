@@ -34,9 +34,7 @@
 <?php if (!$this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()): ?>
     <a data-toggle="dropdown" class="action showcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
         <span class="text"><?php echo __('My Cart'); ?></span>
-        <span class="qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>">
-            <?php echo $_cartQty ?>
-        </span>
+        <span class="counter qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>"><?php echo ($_cartQty == 1) ? __('1 item') : __('%1 items',$_cartQty) ?></span>
     </a>
     <div data-target="dropdown" class="block minicart<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>">
         <button title="<?php echo __('Close'); ?>" type="button" class="action close" data-toggle="dropdown">

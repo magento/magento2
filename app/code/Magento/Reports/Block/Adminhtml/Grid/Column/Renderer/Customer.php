@@ -52,7 +52,7 @@ class Customer
         }
 
         return sprintf('<a href="%s">%s</a>',
-            $this->getUrl('adminhtml/catalog_product_review', array('customerId' => $id)),
+            $this->getUrl('catalog/product_review/', array('customerId' => $id)),
             __('Show Reviews')
         );
     }

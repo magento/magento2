@@ -42,7 +42,7 @@
         </div>
         <?php endif;?>
     </div>
-    <iframe name="preview_iframe" id="preview_iframe" frameborder="0"></iframe>
+    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?php echo __('Preview') ?>" width="100%" onload="iframeSetHeight()"></iframe>
     <?php echo $this->getChildHtml('preview_form'); ?>
 </div>
 
@@ -69,6 +69,15 @@ function unBlockPreview() {
 
 Event.observe(window, 'load', preview);
 Event.observe(previewIframe, 'load', unBlockPreview);
+
+function iframeSetHeight() {
+    var iFrameID = document.getElementById('preview_iframe');
+    if(iFrameID) {
+        iFrameID.height = "";
+        iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+    }
+}
+
 //]]>
 </script>
 </body>

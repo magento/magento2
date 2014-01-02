@@ -105,7 +105,7 @@ class Link extends \Magento\View\Element\Html\Link
     protected function _createLabel($count)
     {
         if ($count == 1) {
-            return __('My Cart (%1 item)', $count);
+            return __('My Cart (1 item)');
         } elseif ($count > 0) {
             return __('My Cart (%1 items)', $count);
         } else {

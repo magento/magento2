@@ -41,12 +41,20 @@ class CssResolver
     protected $filesystem;
 
     /**
+     * @var \Magento\View\FileSystem
+     */
+    protected $viewFileSystem;
+
+    /**
      * @param \Magento\Filesystem $filesystem
+     * @param \Magento\View\FileSystem $viewFileSystem
      */
     public function __construct(
-        \Magento\Filesystem $filesystem
+        \Magento\Filesystem $filesystem,
+        \Magento\View\FileSystem $viewFileSystem
     ) {
         $this->filesystem = $filesystem;
+        $this->viewFileSystem = $viewFileSystem;
     }
 
     /**
@@ -62,6 +70,8 @@ class CssResolver
      */
     public function replaceCssRelativeUrls($cssContent, $originalPath, $newPath, $cbRelUrlToPublicPath = null)
     {
+        $originalPath = $this->viewFileSystem->normalizePath($originalPath);
+        $newPath = $this->viewFileSystem->normalizePath($newPath);
         $relativeUrls = $this->_extractCssRelativeUrls($cssContent);
         foreach ($relativeUrls as $urlNotation => $originalRelativeUrl) {
             if ($cbRelUrlToPublicPath) {
@@ -69,39 +79,14 @@ class CssResolver
             } else {
                 $filePath = dirname($originalPath) . '/' . $originalRelativeUrl;
             }
-            $filePath = $this->_normalizePath(str_replace('\\', '/', $filePath));
+            $filePath = $this->viewFileSystem->normalizePath(str_replace('\\', '/', $filePath));
             $relativePath = $this->_getFileRelativePath(
-                $this->_normalizePath(str_replace('\\', '/', $newPath)), $filePath
+                str_replace('\\', '/', $newPath), $filePath
             );
             $urlNotationNew = str_replace($originalRelativeUrl, $relativePath, $urlNotation);
             $cssContent = str_replace($urlNotation, $urlNotationNew, $cssContent);
         }
         return $cssContent;
-    }
-
-    /**
-     * Remove unmeaning path chunks from path
-     *
-     * @param string $path
-     * @return string
-     */
-    protected function _normalizePath($path)
-    {
-        $parts = explode('/', $path);
-        $result = array();
-
-        foreach ($parts as $part) {
-            if ('..' === $part) {
-                if (!count($result) || ($result[count($result) - 1] == '..')) {
-                    $result[] = $part;
-                } else {
-                    array_pop($result);
-                }
-            } else if ('.' !== $part) {
-                $result[] = $part;
-            }
-        }
-        return implode('/', $result);
     }
 
     /**

@@ -40,13 +40,13 @@ class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConf
     /**
      * Returns a string that represents the path to the config file, starting in the app directory.
      *
-     * Format is regex
+     * Format is glob, so * is allowed.
      *
      * @return string
      */
-    protected function _getConfigFilePathRegex()
+    protected function _getConfigFilePathGlob()
     {
-        return '#/etc/widget\.xml$#';
+        return '/*/*/etc/widget.xml';
     }
 
     /**

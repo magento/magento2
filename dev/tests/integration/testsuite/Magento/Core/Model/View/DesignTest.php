@@ -202,10 +202,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('::no_scope.ext'),
-            array('./file.ext'),
             array('../file.ext'),
-            array('dir/./file.ext'),
-            array('dir/../file.ext'),
         );
     }
 

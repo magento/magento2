@@ -19,21 +19,13 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/* @var $this \Magento\Wishlist\Block\Customer\Wishlist_Render_Item_Price */
+/* @var $this \Magento\Wishlist\Block\Link */
 ?>
-
-<?php echo $this->getCleanProductPriceHtml(); ?>
-
-<?php /* @var $product \Magento\Catalog\Model\Product */ ?>
-<?php $product = $this->getProduct(); ?>
-<?php $finalPrice = $product->getFinalPrice(1); ?>
-<?php if ($product->canConfigure()): ?>
-    <p class="configured-price">
-        <span class="price-label"><?php echo __('Configured Price:') ?></span>
-        <span class="price"><?php echo $this->helper('Magento\Core\Helper\Data')->currency($finalPrice, true, false); ?></span>
-    </p>
-<?php endif; ?>
+<li class="link wishlist">
+    <a <?php echo $this->getLinkAttributes() ?>><?php echo $this->escapeHtml($this->getLabel())?>
+        <?php echo ($this->getCounter()) ? '<span class="counter qty">' . $this->escapeHtml($this->getCounter()) . '</span>' : ''; ?>
+    </a>
+</li>

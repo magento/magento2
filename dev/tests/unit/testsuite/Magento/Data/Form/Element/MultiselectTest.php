@@ -53,4 +53,14 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
         $elementHtml = $this->_model->getElementHtml();
         $this->assertContains('<input type="hidden"', $elementHtml);
     }
+
+    /**
+     * Verify that js element is added
+     */
+    public function testGetAfterElementJs()
+    {
+        $this->_model->setAfterElementJs('<script language="text/javascript">var website = "website1";</script>');
+        $elementHtml = $this->_model->getAfterElementJs();
+        $this->assertContains('var website = "website1";', $elementHtml);
+    }
 }

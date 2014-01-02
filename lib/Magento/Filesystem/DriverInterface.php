@@ -114,6 +114,25 @@ interface DriverInterface
     public function createDirectory($path, $permissions);
 
     /**
+     * Read directory
+     *
+     * @param string $path
+     * @return array
+     * @throws FilesystemException
+     */
+    public function readDirectory($path);
+
+    /**
+     * Search paths by given regex
+     *
+     * @param string $pattern
+     * @param string $path
+     * @return array
+     * @throws FilesystemException
+     */
+    public function search($pattern, $path);
+
+    /**
      * Renames a file or directory
      *
      * @param string $oldPath

@@ -58,19 +58,19 @@ window.matchMedia = window.matchMedia || (function( doc, undefined ) {
 /*! matchMedia() polyfill addListener/removeListener extension. Author & copyright (c) 2012: Scott Jehl. Dual MIT/BSD license */
 (function(){
   // monkeypatch unsupported addListener/removeListener with polling
-  if( !window.matchMedia( "" ).addListener ){
+  if( !window.matchMedia( "all" ).addListener ){
     var oldMM = window.matchMedia;
-    
+
     window.matchMedia = function( q ){
       var ret = oldMM( q ),
         listeners = [],
-        last = false,
+        last = ret.matches,
         timer,
         check = function(){
           var list = oldMM( q ),
             unmatchToMatch = list.matches && !last,
             matchToUnmatch = !list.matches && last;
-                                                
+
                                         //fire callbacks only if transitioning to or from matched state
           if( unmatchToMatch || matchToUnmatch ){
             for( var i =0, il = listeners.length; i< il; i++ ){
@@ -97,7 +97,7 @@ window.matchMedia = window.matchMedia || (function( doc, undefined ) {
           clearInterval( timer );
         }
       };
-      
+
       return ret;
     };
   }
@@ -105,7 +105,7 @@ window.matchMedia = window.matchMedia || (function( doc, undefined ) {
 
 var mediaCheck = function( options ) {
   var mq,
-      matchMedia = (window.matchMedia !== undefined & window.matchMedia('').addListener !== undefined);
+      matchMedia = (window.matchMedia !== undefined & window.matchMedia("all").addListener !== undefined);
       
   mqChange = function( mq, options ) {
     if ( mq.matches ) {

@@ -27,32 +27,34 @@
     <?php $billingAgreements = $this->getBillingAgreements(); ?>
     <?php if (count($billingAgreements) > 0): ?>
         <?php echo $this->getChildHtml('pager'); ?>
-        <table id="billing-agreements" class="data table billing agreements">
-            <thead>
-            <tr>
-                <th class="col id"><?php echo __('Reference ID'); ?></th>
-                <th class="col status"><?php echo __('Status'); ?></th>
-                <th class="col created"><?php echo __('Created At'); ?></th>
-                <th class="col updated"><?php echo __('Updated At'); ?></th>
-                <th class="col payment"><?php echo __('Payment Method'); ?></th>
-                <th class="col actions">&nbsp;</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($billingAgreements as $item): ?>
+        <div class="wrapper table billing agreements">
+            <table id="billing-agreements" class="data table billing agreements">
+                <thead>
                 <tr>
-                    <td class="col id"><?php echo $this->getItemValue($item, 'reference_id') ?></td>
-                    <td class="col status"><?php echo $this->getItemValue($item, 'status') ?></td>
-                    <td class="col created"><?php echo $this->getItemValue($item, 'created_at') ?></td>
-                    <td class="col updated"><?php echo $this->getItemValue($item, 'updated_at') ?></td>
-                    <td class="col payment"><?php echo $this->getItemValue($item, 'payment_method_label') ?></td>
-                    <td class="col actions">
-                        <a href="<?php echo $this->getItemValue($item, 'edit_url') ?>"><?php echo __('View') ?></a>
-                    </td>
+                    <th class="col id"><?php echo __('Reference ID'); ?></th>
+                    <th class="col status"><?php echo __('Status'); ?></th>
+                    <th class="col created"><?php echo __('Created At'); ?></th>
+                    <th class="col updated"><?php echo __('Updated At'); ?></th>
+                    <th class="col payment"><?php echo __('Payment Method'); ?></th>
+                    <th class="col actions">&nbsp;</th>
                 </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <?php foreach ($billingAgreements as $item): ?>
+                    <tr>
+                        <td class="col id"><?php echo $this->getItemValue($item, 'reference_id') ?></td>
+                        <td class="col status"><?php echo $this->getItemValue($item, 'status') ?></td>
+                        <td class="col created"><?php echo $this->getItemValue($item, 'created_at') ?></td>
+                        <td class="col updated"><?php echo $this->getItemValue($item, 'updated_at') ?></td>
+                        <td class="col payment"><?php echo $this->getItemValue($item, 'payment_method_label') ?></td>
+                        <td class="col actions">
+                            <a href="<?php echo $this->getItemValue($item, 'edit_url') ?>"><?php echo __('View') ?></a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     <?php else: ?>
         <div class="message info empty"><span><?php echo __('There are no billing agreements yet.') ?></span></div>
     <?php endif; ?>

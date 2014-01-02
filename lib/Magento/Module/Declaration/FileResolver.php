@@ -32,21 +32,21 @@ class FileResolver implements \Magento\Config\FileResolverInterface
      *
      * @var \Magento\Filesystem\Directory\ReadInterface
      */
-    protected $directoryReadModule;
+    protected $modulesDirectory;
 
     /**
      * Config directory with read access
      *
      * @var \Magento\Filesystem\Directory\ReadInterface
      */
-    protected $directoryReadConfig;
+    protected $configDirectory;
 
     /**
      * Root directory with read access
      *
      * @var \Magento\Filesystem\Directory\ReadInterface
      */
-    protected $directoryReadRoot;
+    protected $rootDirectory;
 
     /**
      * File iterator factory
@@ -64,9 +64,9 @@ class FileResolver implements \Magento\Config\FileResolverInterface
         \Magento\Config\FileIteratorFactory $iteratorFactory
     ) {
         $this->iteratorFactory      = $iteratorFactory;
-        $this->directoryReadModules = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
-        $this->directoryReadConfig  = $filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
-        $this->directoryReadRoot     = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $this->configDirectory  = $filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
+        $this->rootDirectory     = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
     }
 
     /**
@@ -75,28 +75,26 @@ class FileResolver implements \Magento\Config\FileResolverInterface
      */
     public function get($filename, $scope)
     {
-        $appCodeDir =  $this->directoryReadRoot->getRelativePath(
-            $this->directoryReadModules->getAbsolutePath()
-        );
-        $configDir =  $this->directoryReadRoot->getRelativePath(
-            $this->directoryReadConfig->getAbsolutePath()
-        );
-        $moduleFileList = $this->directoryReadRoot->search('#.*?/module.xml$#', $appCodeDir);
+        $moduleDir = $this->modulesDirectory->getAbsolutePath();
+        $configDir =  $this->configDirectory->getAbsolutePath();
 
-        $mageScopePath = $appCodeDir . '/Magento/';
+        $mageScopePath = $moduleDir . '/Magento';
         $output = array(
             'base' => array(),
             'mage' => array(),
             'custom' => array(),
         );
-        foreach ($moduleFileList as $file) {
+        $files = glob($moduleDir . '*/*/etc/module.xml');
+        foreach ($files as $file) {
             $scope = strpos($file, $mageScopePath) === 0 ? 'mage' : 'custom';
-            $output[$scope][] = $file;
+            $output[$scope][] = $this->rootDirectory->getRelativePath($file);
         }
-        $output['base'] = $this->directoryReadRoot->search('#/module.xml$#', $configDir);
-
+        $files = glob($configDir . '*/module.xml');
+        foreach ($files as $file) {
+            $output['base'][] = $this->rootDirectory->getRelativePath($file);
+        }
         return $this->iteratorFactory->create(
-            $this->directoryReadRoot,
+            $this->rootDirectory,
             array_merge($output['mage'], $output['custom'], $output['base'])
         );
     }

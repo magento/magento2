@@ -28,12 +28,14 @@
  * Customer login form template
  *
  * @see \Magento\Customer\Block\Form\Login
+ * @var $this \Magento\Customer\Block\Form\Login
  */
 ?>
 <div class="block customer login">
     <div class="title"><strong><?php echo __('Registered Customers') ?></strong></div>
     <div class="content">
         <form class="form login" action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+            <?php echo $this->getBlockHtml('formkey'); ?>
             <fieldset class="fieldset login" data-hasrequired="<?php echo __('* Required Fields') ?>">
                 <p class="field note"><?php echo __('If you have an account with us, log in using your email address.') ?></p>
                 <div class="field email required">

@@ -34,7 +34,7 @@
                 <argument name="path" xsi:type="string">catalogsearch/term/popular</argument>
             </arguments>
         </block>
-        <block class="Magento\View\Element\Html\Link\Current" ifconfig="catalog/seo/search_terms" name="catalog-search-advanced-link">
+        <block class="Magento\View\Element\Html\Link\Current" name="catalog-search-advanced-link">
             <arguments>
                 <argument name="label" xsi:type="string">Advanced Search</argument>
                 <argument name="path" xsi:type="string">catalogsearch/advanced</argument>

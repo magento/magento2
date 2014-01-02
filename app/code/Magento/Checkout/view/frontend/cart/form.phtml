@@ -28,6 +28,7 @@
 <div class="cart table wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
     <?php echo $this->getChildHtml('form_before') ?>
     <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="form-validate" >
+        <?php echo $this->getBlockHtml('formkey'); ?>
         <table id="shopping-cart-table" class="cart items data">
             <thead>
                 <tr>

@@ -35,31 +35,32 @@
     </div>
     <div class="content">
         <h2 class="subtitle caption"><?php echo __('Agreement Information') ?></h2>
-        <table class="data table">
-            <thead>
-                <tr>
-                    <th class="col id"><?php echo __('Reference ID:'); ?></th>
-                    <th class="col status"><?php echo __('Status:'); ?></th>
-                    <th class="col created"><?php echo __('Created:'); ?></th>
-                    <?php if($this->getAgreementUpdatedAt()): ?>
-                        <th class="col updated"><?php echo __('Updated:'); ?></th>
-                    <?php endif; ?>
-                    <th class="col payment"><?php echo __('Payment Method:'); ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col id"><?php echo $this->escapeHtml($this->getReferenceId()); ?></td>
-                    <td class="col status"><?php echo $this->getAgreementStatus() ?></td>
-                    <td class="col created"><?php echo $this->escapeHtml($this->getAgreementCreatedAt()) ?></td>
-                    <?php if($this->getAgreementUpdatedAt()): ?>
-                        <td class="col updated"><?php echo $this->escapeHtml($this->getAgreementUpdatedAt()); ?></td>
-                    <?php endif; ?>
-                    <td class="col payment"><?php echo $this->getPaymentMethodTitle() ?></td>
-                </tr>
-            </tbody>
-        </table>
-
+        <div class="wrapper table billing agreements">
+            <table class="data table">
+                <thead>
+                    <tr>
+                        <th class="col id"><?php echo __('Reference ID:'); ?></th>
+                        <th class="col status"><?php echo __('Status:'); ?></th>
+                        <th class="col created"><?php echo __('Created:'); ?></th>
+                        <?php if($this->getAgreementUpdatedAt()): ?>
+                            <th class="col updated"><?php echo __('Updated:'); ?></th>
+                        <?php endif; ?>
+                        <th class="col payment"><?php echo __('Payment Method:'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col id"><?php echo $this->escapeHtml($this->getReferenceId()); ?></td>
+                        <td class="col status"><?php echo $this->getAgreementStatus() ?></td>
+                        <td class="col created"><?php echo $this->escapeHtml($this->getAgreementCreatedAt()) ?></td>
+                        <?php if($this->getAgreementUpdatedAt()): ?>
+                            <td class="col updated"><?php echo $this->escapeHtml($this->getAgreementUpdatedAt()); ?></td>
+                        <?php endif; ?>
+                        <td class="col payment"><?php echo $this->getPaymentMethodTitle() ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <?php $relatedOrders = $this->getRelatedOrders() ?>
         <?php if(count($relatedOrders) > 0): ?>
         <?php echo $this->getChildHtml('pager'); ?>

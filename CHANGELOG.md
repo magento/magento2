@@ -1,3 +1,84 @@
+2.0.0.0-dev58
+=============
+* Fixed bugs:
+  * Security improved for the Login, Update Cart, Add to Compare, Review, and Add entire wishlist actions on the frontend
+  * Removed warnings on category pages when Flat Catalog Category is enabled
+  * Fixed product price displayed in wrong currency after switching currency on the frontend
+  * Fixed the Save & Duplicate action in product creation
+  * Fixed big image scaling in product description
+  * Fixed admin dashboard styling issue
+  * Fixed validation message for the Quantity field on the product page in the backend
+  * Fixed the email template for sharing a Wishlist
+  * Fixed the response of the drop-down menu in the Plushe theme
+  * Fixed the missing Related Banners tab for Catalog Price Rule
+  * Fixed inability to enable the duplicated product
+  * Removed warnings on saving payment method configuration
+  * Fixed gift messages displaying on the Order View page after admin edits
+  * Fixed inability to create a new order status
+  * Fixed the behavior of the Save and Previous and the Previous buttons on the Edit Review page
+  * Fixed inability to delete a website if the number of websites is less or equal to two
+  * Fixed Export on the All Customers page
+  * Fixed inability to add products to the Shopping Cart from the Category page in Internet Explorer
+  * Fixed logo on the backend login page
+  * Fixed visual elements to indicate that Tax details can be expanded on the order creation page in the backend
+  * Fixed the CMS page preview design
+  * Fixed the newsletter template preview design
+  * Fixed the Matched Customers grid design in the Email Reminder Rules
+  * Fixed the theme version validation message displayed when creating a new theme
+  * Fixed performance degradation during installation wizard execution
+  * Fixed cron shell script
+  * Fixed user login on the frontend, when the Redirect Customer to Account Dashboard after Logging option is set to No
+  * Fixed errors in requests to shipping carrier (DHL International) when the shipping address contains letters with diacritic marks
+  * Fixed invalid account creation date
+  * Fixed displaying Product Alert links on product view page when the functionality is disabled
+  * Fixed the absence of some bundle options when configuring a bundle product in the Shopping Cart on the frontend
+  * Fixed the issue which allowed to view and cancel billing agreements belonging to another customer
+  * Fixed the content spoofing vulnerability when Solr was used
+  * Fixed a potential XSS vulnerability in customer login
+  * Fixed RSS feed for categories containing bundle product(s)
+  * Fixed inability to place an order with 3D Secure in Internet Explorer 10
+  * Fixed inability to place an order with PayPal Payflow Link and PayPal Payments Advanced
+  * Fixed integrity constraint violation in catalog URL rewrites
+  * Fixed the absence of the error when a wrong website code is specified during a website creation
+  * Fixed saving in the backend a new customer address, which contains new customer address attributes configured to be not visible on frontend
+  * Fixed USPS shipping method in the checkout
+  * Fixed placing orders with recurring profile items via PayPal Express Checkout
+  * Fixed email template creation in the backend
+  * Fixed the issue with default billing address being used instead of default shipping address during admin order creation
+  * Fixed inability to choose DB as Media Storage
+  * Fixed PHP issues found during the UI testing of the backend
+  * Fixed shipping label creation for USPS Priority Mail Shipping methods
+  * Fixed the issue which allowed to create customers with duplicate email
+  * Fixed the abstract product block error in the tier price template getter
+  * Fixed system message displaying in the backend
+  * Fixed the "404" error on customer review page
+  * Fixed autocomplete enabled on the admin login page
+  * Fixed the 3D Secure iframe
+  * Fixed the indicators of mandatory fields on the Package Extension page
+  * Fixed product image scaling on the Compare Products page
+  * Fixed product page design for products with the Fixed Product Tax attribute
+  * Removed spaces between parentheses and numbers in the Cart, Wishlist, and Compare Products blocks
+  * Fixed the message displaying the quantity for products found on the Advanced Search page
+  * Fixed incorrect caching of locale settings and URL settings during web installation
+  * Fixed inability to use a newly created store for admin user roles
+  * Fixed absence of the Advanced Search field on the frontend, when the Popular Search Terms functionality is disabled
+  * Fixed incorrect link to downloadable product(s) in the email invoice copy
+  * Fixed customs monetary value in labels/package info for international shipments
+  * Fixed importing for files with blank URL Key field on the store view level
+  * Fixed table rate error message
+  * Fixed frontend login without pre-set cookies
+  * Fixed date resetting to 1 Jan 1970 after saving a design change in the admin panel in case date format is DD/MM/YY
+  * Fixed CAPTCHA on multi-address checkout flow
+  * Fixed view files population tool
+* GitHub requests:
+  * [#122](https://github.com/magento/magento2/pull/122) -- Added support of federal units of Brazil with 27 states
+  * [#184](https://github.com/magento/magento2/issues/184) -- Removed unused blocks and methods in Magento_Wishlist module
+  * [#390](https://github.com/magento/magento2/pull/390) -- Support of alphanumeric order increment ids by the quote resource model
+* Themes update:
+  * Responsive design improvements
+* Improvements in code coverage calculation:
+  * Code coverage calculation approach for unit tests was changed from blacklist to whitelist
+
 2.0.0.0-dev57
 =============
 * Fixed bugs:
@@ -44,7 +125,7 @@
     * Session generic wrapper moved to library
     * Messages functionality moved from the Session model as separate component, message manager interface created
     * Sid resolver interface created to handle session sid from request
-  
+
 2.0.0.0-dev56
 =============
 * Fixed bugs:

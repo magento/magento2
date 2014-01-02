@@ -43,7 +43,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function getTitle()
     {
-        return __('My Wish List <small>(%1)</small>', $this->getItemCount());
+        return __('My Wish List');
     }
 
     /**

@@ -96,6 +96,11 @@ class Product extends \Magento\App\Action\Action
     protected $_storeManager;
 
     /**
+     * @var \Magento\Core\App\Action\FormKeyValidator
+     */
+    protected $_formKeyValidator;
+
+    /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -108,6 +113,7 @@ class Product extends \Magento\App\Action\Action
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Session\Generic $reviewSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
         \Magento\App\Action\Context $context,
@@ -121,7 +127,8 @@ class Product extends \Magento\App\Action\Action
         \Magento\Core\Model\Session $session,
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Session\Generic $reviewSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
@@ -134,6 +141,7 @@ class Product extends \Magento\App\Action\Action
         $this->_ratingFactory = $ratingFactory;
         $this->_session = $session;
         $this->_catalogDesign = $catalogDesign;
+        $this->_formKeyValidator = $formKeyValidator;
 
         parent::__construct($context);
     }
@@ -244,7 +252,10 @@ class Product extends \Magento\App\Action\Action
 
         $review = $this->_reviewFactory->create()->load($reviewId);
         /* @var $review \Magento\Review\Model\Review */
-        if (!$review->getId() || !$review->isApproved() || !$review->isAvailableOnStore($this->_storeManager->getStore())) {
+        if (!$review->getId()
+            || !$review->isApproved()
+            || !$review->isAvailableOnStore($this->_storeManager->getStore())
+        ) {
             return false;
         }
 
@@ -258,6 +269,11 @@ class Product extends \Magento\App\Action\Action
      */
     public function postAction()
     {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
+            return;
+        }
+
         $data = $this->_reviewSession->getFormData(true);
         if ($data) {
             $rating = array();

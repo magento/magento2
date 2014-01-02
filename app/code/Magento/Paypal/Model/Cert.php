@@ -134,8 +134,7 @@ class Cert extends \Magento\Core\Model\AbstractModel
      */
     protected function _removeOutdatedCertFile()
     {
-        $pattern = sprintf('#cert_%s#' . $this->getWebsiteId());
-
+        $pattern = sprintf('cert_%s*' . $this->getWebsiteId());
         $entries = $this->varDirectory->search($pattern, self::BASEPATH_PAYPAL_CERT);
         foreach ($entries as $entry) {
             $this->varDirectory->delete($entry);

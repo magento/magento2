@@ -45,7 +45,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
         \Magento\Filesystem $filesystem,
         \Magento\Email\Model\Template\Config\FileIteratorFactory $iteratorFactory
     ) {
-        $this->directoryRead = $filesystem->getDirectoryRead(\Magento\Filesystem::APP);
+        $this->directoryRead = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
         $this->iteratorFactory = $iteratorFactory;
     }
 
@@ -55,10 +55,8 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     public function get($filename, $scope)
     {
         $iterator = $this->iteratorFactory->create(
-            array(
-                'directory' => $this->directoryRead,
-                'paths' => $this->directoryRead->search('#' . preg_quote($filename) . '$#')
-            )
+            $this->directoryRead,
+            $this->directoryRead->search('/*/*/etc/' . $filename)
         );
         return $iterator;
     }

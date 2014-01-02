@@ -484,7 +484,7 @@ class Website extends \Magento\Core\Model\AbstractModel
             return false;
         }
         if (is_null($this->_isCanDelete)) {
-            $this->_isCanDelete = ($this->_websiteFactory->create()->getCollection()->getSize() > 2)
+            $this->_isCanDelete = ($this->_websiteFactory->create()->getCollection()->getSize() > 1)
                 && !$this->getIsDefault();
         }
         return $this->_isCanDelete;

@@ -210,7 +210,6 @@ class Write extends Read implements WriteInterface
      */
     public function changePermissions($path, $permissions)
     {
-        $this->assertExist($path);
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         return $this->driver->changePermissions($absolutePath, $permissions);
     }

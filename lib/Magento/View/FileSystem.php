@@ -62,7 +62,7 @@ class FileSystem
      */
     public function getFilename($fileId, array $params = array())
     {
-        $filePath = $this->_viewService->extractScope($fileId, $params);
+        $filePath = $this->_viewService->extractScope($this->normalizePath($fileId), $params);
         $this->_viewService->updateDesignParams($params);
         return $this->_resolutionPool->getFileStrategy(!empty($params['skipProxy']))
             ->getFile($params['area'], $params['themeModel'], $filePath, $params['module']);
@@ -92,7 +92,7 @@ class FileSystem
      */
     public function getViewFile($fileId, array $params = array())
     {
-        $filePath = $this->_viewService->extractScope($fileId, $params);
+        $filePath = $this->_viewService->extractScope($this->normalizePath($fileId), $params);
         $this->_viewService->updateDesignParams($params);
         $skipProxy = isset($params['skipProxy']) && $params['skipProxy'];
         return $this->_resolutionPool->getViewStrategy($skipProxy)->getViewFile($params['area'],
@@ -113,7 +113,7 @@ class FileSystem
         $strategy = $this->_resolutionPool->getViewStrategy($skipProxy);
         if ($strategy instanceof \Magento\View\Design\FileResolution\Strategy\View\NotifiableInterface) {
             /** @var $strategy \Magento\View\Design\FileResolution\Strategy\View\NotifiableInterface  */
-            $filePath = $this->_viewService->extractScope($fileId, $params);
+            $filePath = $this->_viewService->extractScope($this->normalizePath($fileId), $params);
             $this->_viewService->updateDesignParams($params);
             $strategy->setViewFilePathToMap(
                 $params['area'], $params['themeModel'], $params['locale'], $params['module'], $filePath, $targetPath
@@ -121,5 +121,30 @@ class FileSystem
         }
 
         return $this;
+    }
+
+    /**
+     * Remove unmeaning path chunks from path
+     *
+     * @param string $path
+     * @return string
+     */
+    public function normalizePath($path)
+    {
+        $parts = explode('/', $path);
+        $result = array();
+
+        foreach ($parts as $part) {
+            if ('..' === $part) {
+                if (!count($result) || ($result[count($result) - 1] == '..')) {
+                    $result[] = $part;
+                } else {
+                    array_pop($result);
+                }
+            } else if ('.' !== $part) {
+                $result[] = $part;
+            }
+        }
+        return implode('/', $result);
     }
 }

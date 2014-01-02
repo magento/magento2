@@ -67,7 +67,7 @@ class FileFactory
      */
     public function create($fileName, $content, $contentType = 'application/octet-stream', $contentLength = null)
     {
-        $filesystem = $this->_filesystem;
+        $dir = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
         $isFile = false;
         $file = null;
         if (is_array($content)) {
@@ -77,7 +77,7 @@ class FileFactory
             if ($content['type'] == 'filename') {
                 $isFile = true;
                 $file = $content['value'];
-                $contentLength = $filesystem->getFileSize($file);
+                $contentLength = $dir->stat($file)['size'];
             }
         }
 
@@ -91,24 +91,22 @@ class FileFactory
 
         if (!is_null($content)) {
             if ($isFile) {
-                $this->_response->clearBody();
-                $this->_response->sendHeaders();
-
-                if (!$filesystem->isFile($file)) {
+                if (!$dir->isFile($file)) {
                     throw new \Exception(__('File not found'));
                 }
-                $stream = $filesystem->fileOpen($file, 'r');
-                while ($buffer = $filesystem->fileRead($stream, 1024)) {
-                    print $buffer;
+                $this->_response->sendHeaders();
+                $stream = $dir->openFile($file, 'r');
+                while (!$stream->eof()) {
+                    echo $stream->read(1024);
                 }
+                $stream->close();
                 flush();
-                $filesystem->fileClose($stream);
                 if (!empty($content['rm'])) {
-                    $filesystem->deleteFile($file);
+                    $dir->delete($file);
                 }
-
                 exit(0);
             } else {
+                $this->_response->clearBody();
                 $this->_response->setBody($content);
             }
         }

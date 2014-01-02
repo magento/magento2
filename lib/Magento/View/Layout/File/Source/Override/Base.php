@@ -68,21 +68,14 @@ class Base implements SourceInterface
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
-        $patternForSearch = str_replace(
-            array('/', '\*'),
-            array('\/', '[\S]+'),
-            preg_quote("~{$themePath}/{$namespace}_{$module}/layout/override/base/{$filePath}.xml~")
-        );
-        $files = $this->themesDirectory
-            ->search($patternForSearch);
-        foreach ($files as $key => $file) {
-            $files[$key] = $this->themesDirectory->getAbsolutePath($file);
-        }
+        $searchPattern = "{$themePath}/{$namespace}_{$module}/layout/override/base/{$filePath}.xml";
+        $files = $this->themesDirectory->search($searchPattern);
         $result = array();
-        $pattern = "#/(?<moduleName>[^/]+)/layout/override/base/"
-            . preg_quote(rtrim($filePath, '*'))
-            . "[^/]*\.xml$#i";
-        foreach ($files as $filename) {
+        $pattern = "#(?<moduleName>[^/]+)/layout/override/base/"
+            . strtr(preg_quote($filePath), array('\*' => '[^/]+'))
+            . "\.xml$#i";
+        foreach ($files as $file) {
+            $filename = $this->themesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;
             }

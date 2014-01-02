@@ -88,7 +88,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if ($prevId !== false) {
             $this->addButton('previous', array(
                 'label' => __('Previous'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/*', array('id' => $prevId)) . '\')'
+                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('id' => $prevId)) . '\')'
             ), 3, 10);
 
             $this->addButton('save_and_previous', array(
@@ -130,7 +130,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
             $this->addButton('next', array(
                 'label' => __('Next'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/*', array('id' => $nextId)) . '\')'
+                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('id' => $nextId)) . '\')'
             ), 3, 105);
         }
         $this->_updateButton('save', 'label', __('Save Review'));
@@ -164,7 +164,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->getRequest()->getParam('ret', false) == 'pending') {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('adminhtml/*/pending') .'\')' );
+            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('catalog/*/pending') .'\')' );
             $this->_updateButton(
                 'delete',
                 'onclick',

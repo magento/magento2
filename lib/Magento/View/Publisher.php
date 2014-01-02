@@ -188,6 +188,8 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
      */
     protected function _publishFile($filePath, $params, $sourcePath)
     {
+        $filePath = $this->_viewFileSystem->normalizePath($filePath);
+        $sourcePath = $this->_viewFileSystem->normalizePath($sourcePath);
         $targetPath = $this->_buildPublishedFilePath($filePath, $params, $sourcePath);
 
         /* Validate whether file needs to be published */
@@ -271,7 +273,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
         }
 
         return ($this->_viewService->getAppMode() == \Magento\App\State::MODE_DEVELOPER)
-            && $this->_getExtension($filePath) == self::CONTENT_TYPE_CSS;
+        && $this->_getExtension($filePath) == self::CONTENT_TYPE_CSS;
     }
 
     /**
@@ -354,7 +356,12 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
             return $relatedPathPublic;
         };
         try {
-            $content = $this->_cssUrlResolver->replaceCssRelativeUrls($content, $sourcePath, $publicPath, $callback);
+            $content = $this->_cssUrlResolver->replaceCssRelativeUrls(
+                $content,
+                $this->_viewFileSystem->normalizePath($sourcePath),
+                $this->_viewFileSystem->normalizePath($publicPath),
+                $callback
+            );
         } catch (\Magento\Exception $e) {
             $this->_logger->logException($e);
         }
@@ -384,7 +391,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
     protected function _getRelatedViewFile($fileId, $parentFilePath, $parentFileName, &$params)
     {
         if (strpos($fileId, \Magento\View\Service::SCOPE_SEPARATOR)) {
-            $filePath = $this->_viewService->extractScope($fileId, $params);
+            $filePath = $this->_viewService->extractScope($this->_viewFileSystem->normalizePath($fileId), $params);
         } else {
             /* Check if module file overridden on theme level based on _module property and file path */
             $themesPath = $this->_filesystem->getPath(\Magento\Filesystem::THEMES);

@@ -139,19 +139,7 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
 
         $pathsToThemeConfig = array();
         foreach ($this->getTargetPatterns() as $directoryPath) {
-
-            $directoryPath = preg_replace_callback('/[\\\\^$.[\\]|()?*+{}\\-\\/]/', function ($matches) {
-                switch ($matches[0]) {
-                    case '*':
-                        return '.*';
-                    case '?':
-                        return '.';
-                    default:
-                        return '\\' . $matches[0];
-                }
-            }, $directoryPath);
-
-            $themeConfigs = $this->_directory->search('#' . $directoryPath . '#');
+            $themeConfigs = $this->_directory->search($directoryPath);
             foreach ($themeConfigs as &$relPathToTheme) {
                 $relPathToTheme = $this->_directory->getAbsolutePath($relPathToTheme);
             }

@@ -24,6 +24,7 @@
  */
 ?>
 <?php
+/** @var \Magento\Checkout\Block\Onepage\Payment $_paymentBlock */
 $_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
 $_registerParam = $this->getRequest()->getParam('register');
 ?>
@@ -58,6 +59,7 @@ $_registerParam = $this->getRequest()->getParam('register');
                         })
                         .opcheckout({
                             quoteBaseGrandTotal: <?php echo (float)$_paymentBlock->getQuoteBaseGrandTotal() ?>,
+                            hasRecurringItems: <?php echo $_paymentBlock->hasRecurringItems() ? 'true' : 'false' ?>,
                             progressUrl: '<?php echo $this->getUrl('checkout/onepage/progress') ?>',
                             reviewUrl: '<?php echo $this->getUrl('checkout/onepage/review') ?>',
                             failureUrl: '<?php echo $this->getUrl('checkout/cart') ?>',

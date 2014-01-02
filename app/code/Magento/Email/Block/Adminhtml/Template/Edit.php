@@ -419,12 +419,12 @@ class Edit extends \Magento\Backend\Block\Widget
         if ($paths) {
             /** @var $menu \Magento\Backend\Model\Menu */
             $menu = $this->_menuConfig->getMenu();
-            $item = $menu->get('Magento_Adminhtml::system');
+            $item = $menu->get('Magento_Backend::stores');
             // create prefix path parts
             $prefixParts[] = array(
                 'title' => __($item->getTitle()),
             );
-            $item = $menu->get('Magento_Adminhtml::system_config');
+            $item = $menu->get('Magento_Backend::system_config');
             $prefixParts[] = array(
                 'title' => __($item->getTitle()),
                 'url' => $this->getUrl('adminhtml/system_config/'),

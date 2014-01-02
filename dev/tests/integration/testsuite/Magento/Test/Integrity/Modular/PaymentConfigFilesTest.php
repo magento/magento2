@@ -40,13 +40,13 @@ class PaymentConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCon
     /**
      * Returns a string that represents the path to the config file, starting in the app directory.
      *
-     * Format is regex
+     * Format is glob, so * is allowed.
      *
      * @return string
      */
-    protected function _getConfigFilePathRegex()
+    protected function _getConfigFilePathGlob()
     {
-        return '#/etc/payment\.xml$#';
+        return '/*/*/etc/payment.xml';
     }
 
     /**

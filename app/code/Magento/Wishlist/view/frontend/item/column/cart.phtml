@@ -34,7 +34,7 @@ $options = $this->getChildBlock('customer.wishlist.item.options')
 <?php echo $this->getPriceHtml($product, empty($options));?>
 <div class="box tocart">
     <?php if ($item->canHaveQty() && $item->getProduct()->isVisibleInSiteVisibility()): ?>
-        <input type="text" class="input-text qty" data-validate="{required:true,'validate-greater-than-zero':true}"
+        <input type="number" class="input-text qty" data-validate="{required:true,'validate-greater-than-zero':true}"
                name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>">
     <?php endif; ?>
     <?php if ($product->isSaleable()): ?>

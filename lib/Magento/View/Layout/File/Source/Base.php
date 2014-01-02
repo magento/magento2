@@ -68,22 +68,12 @@ class Base implements SourceInterface
     {
         $namespace = $module = '*';
         $area = $theme->getArea();
-        $patternForSearch = str_replace(
-            array('/', '\*'),
-            array('\/', '[\S]+'),
-            preg_quote("~{$namespace}/{$module}/view/{$area}/layout/{$filePath}.xml~")
-        );
-        $files = $this->modulesDirectory->search($patternForSearch);
-        foreach ($files as $key => $file) {
-            $files[$key] = $this->modulesDirectory->getAbsolutePath($file);
-        }
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/"
-            . preg_quote($area)
-            . "/layout/"
-            . preg_quote(rtrim($filePath, '*'))
-            . "[^/]*\.xml$#i";
+        $files = $this->modulesDirectory->search("$namespace/$module/view/{$area}/layout/{$filePath}.xml");
         $result = array();
-        foreach ($files as $filename) {
+        $filePath = strtr(preg_quote($filePath), array('\*' => '[^/]+'));
+        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/layout/" . $filePath . "\.xml$#i";
+        foreach ($files as $file) {
+            $filename = $this->modulesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;
             }

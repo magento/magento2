@@ -52,19 +52,27 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     protected $_itemsFactory;
 
     /**
+     * @var \Magento\Core\Model\Url
+     */
+    protected $urlGenerator;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
+     * @param \Magento\Core\Model\Url $urlGenerator
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
+        \Magento\Core\Model\Url $urlGenerator,
         array $data = array()
     ) {
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
+        $this->urlGenerator = $urlGenerator;
         parent::__construct($context, $data);
     }
 
@@ -94,7 +102,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 
     public function getPurchasedLinkUrl($item)
     {
-        return $this->getUrl('downloadable/download/link', array(
+        return $this->urlGenerator->getUrl('downloadable/download/link', array(
             'id'        => $item->getLinkHash(),
             '_store'    => $this->getOrder()->getStore(),
             '_secure'   => true,

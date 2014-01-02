@@ -54,6 +54,11 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_filesystem;
 
     /**
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $_pubDirectory;
+
+    /**
      * @var \Magento\Filesystem\Directory\Write
      */
     protected $_configDirectory;
@@ -88,6 +93,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_request = $request;
         $this->_storeManager = $storeManager;
         $this->_filesystem = $filesystem;
+        $this->_pubDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::PUB_LIB);
         $this->_configDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::CONFIG);
         $this->messageManager = $messageManager;
     }
@@ -198,10 +204,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     protected function _checkUrl($baseUrl)
     {
         try {
-            $directory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::PUB_LIB);
-            $files = $directory->search('/.+\.(html?|js|css|gif|jpe?g|png)$/');
-
-            $staticFile = isset($files[0]) ? $files[0] : null;
+            $staticFile = $this->_findFirstFileRelativePath('', '/.+\.(html?|js|css|gif|jpe?g|png)$/');
             $staticUrl = $baseUrl . $this->_filesystem->getUri(\Magento\Filesystem::PUB_LIB) . '/' . $staticFile;
             $client = new \Magento\HTTP\ZendClient($staticUrl);
             $response = $client->request('GET');
@@ -217,6 +220,35 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
             );
             throw new \Magento\Core\Exception(__('Response from the server is invalid.'));
         }
+    }
+
+    /**
+     * Find a relative path to a first file located in a directory or its descendants
+     *
+     * @param string $dir Directory to search for a file within
+     * @param string $pattern PCRE pattern a file name has to match
+     * @return string|null
+     */
+    protected function _findFirstFileRelativePath($dir, $pattern = '/.*/')
+    {
+        $childDirs = array();
+        foreach ($this->_pubDirectory->read($dir) as $itemName) {
+            $itemPath = $dir . '/' . $itemName;
+            if ($this->_pubDirectory->isFile($itemPath)) {
+                if (preg_match($pattern, $itemName)) {
+                    return $itemName;
+                }
+            } else {
+                $childDirs[$itemName] = $itemPath;
+            }
+        }
+        foreach ($childDirs as $dirName => $dirPath) {
+            $filePath = $this->_findFirstFileRelativePath($dirPath, $pattern);
+            if ($filePath) {
+                return $dirName . '/' . $filePath;
+            }
+        }
+        return null;
     }
 
     public function replaceTmpInstallDate($date = 'now')

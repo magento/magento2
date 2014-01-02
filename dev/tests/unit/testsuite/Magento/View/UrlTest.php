@@ -94,6 +94,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $dFManager = $this->getMock('Magento\View\DeployedFilesManager', array(), array(), '',
             false
         );
+        $viewFilesystem = $this->getMock('Magento\View\Filesystem', array(), array(), '', false);
 
         // 8. Get default fake url map
         $urlMap = array('fake' => array('key' => "some_key", 'value' => "some_value"));
@@ -101,7 +102,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         // Create model to be tested
         /** @var $model \Magento\View\Url|\PHPUnit_Framework_MockObject_MockObject */
         $model = new \Magento\View\Url(
-            $filesystem, $urlBuilder, $urlConfig, $viewService, $publisher, $dFManager, $urlMap
+            $filesystem, $urlBuilder, $urlConfig, $viewService, $publisher, $dFManager, $viewFilesystem, $urlMap
         );
 
         // Test

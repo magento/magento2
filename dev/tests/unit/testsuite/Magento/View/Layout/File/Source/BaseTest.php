@@ -49,15 +49,23 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->directory = $this->getMock(
             'Magento\Filesystem\Directory\Read',
-            array('getAbsolutePath', 'search'), array(), '', false
+            array(),
+            array(),
+            '',
+            false
         );
         $filesystem = $this->getMock(
-            'Magento\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false
+            'Magento\Filesystem',
+            array('getDirectoryRead', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(\Magento\Filesystem::MODULES)
             ->will($this->returnValue($this->directory));
+
         $this->fileFactory = $this->getMock('Magento\View\Layout\File\Factory', array(), array(), '', false);
         $this->model = new Base($filesystem, $this->fileFactory);
     }
@@ -99,8 +107,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ->expects($this->at($key))
                 ->method('create')
                 ->with(sprintf($handlePath, $file['module'], $file['handle']), $moduleName)
-                ->will($this->returnValue($checkResult[$key]))
-            ;
+                ->will($this->returnValue($checkResult[$key]));
         }
 
         $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
@@ -122,7 +129,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array(
-                    array('handle' => 'preset/4', 'module' => 'Fourth'),
+                    array('handle' => 'preset/4', 'module' => 'Four'),
                 ),
                 'preset/4',
             ),

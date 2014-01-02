@@ -40,7 +40,7 @@
     <div class="field number required">
         <label for="<?php echo $_code ?>_cc_number" class="label"><span><?php echo __('Credit Card Number') ?></span></label>
         <div class="control">
-            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo __('Credit Card Number') ?>" class="input-text" value="" data-validate='{required:true, "validate-cc-number":"#<?php echo $_code ?>_cc_type", "validate-cc-type":"#<?php echo $_code ?>_cc_type"}'/>
+            <input type="number" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo __('Credit Card Number') ?>" class="input-text" value="" data-validate='{required:true, "validate-cc-number":"#<?php echo $_code ?>_cc_type", "validate-cc-type":"#<?php echo $_code ?>_cc_type"}'/>
         </div>
     </div>
     <div class="field date required" id="<?php echo $_code ?>_cc_type_exp_div">
@@ -74,7 +74,7 @@
     <div class="field cvv required" id="<?php echo $_code ?>_cc_type_cvv_div">
         <label for="<?php echo $_code ?>_cc_cid" class="label"><span><?php echo __('Card Verification Number') ?></span></label>
         <div class="control">
-            <input type="text" title="<?php echo __('Card Verification Number') ?>" class="input-text cvv" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{required:true, "validate-cc-cvn":"#<?php echo $_code ?>_cc_type"}' />
+            <input type="number" title="<?php echo __('Card Verification Number') ?>" class="input-text cvv" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{required:true, "validate-cc-cvn":"#<?php echo $_code ?>_cc_type"}' />
             <div class="note">
                 <a href="#" class="action cvv" data-mage-init='{toggleAdvanced: {toggleContainers: "#<?php echo $_code ?>_cc_type_cvv_div .tooltip"}}'><span><?php echo __('What is this?') ?></span></a>
             </div>

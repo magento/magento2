@@ -75,7 +75,7 @@
                         infoList: false,
                         addToCartUrl: '<?php echo $this->getItemAddToCartUrl('%item%');?>' ,
                         confirmRemoveMessage: '<?php echo __('Are you sure you want to remove this product from your wishlist?') ?>',
-                        addAllToCartUrl : '<?php echo $this->getUrl('*/*/allcart', array('wishlist_id' => $this->getWishlistInstance()->getId())) ?>',
+                        addAllToCartUrl : '<?php echo $this->getAddAllToCartUrl(); ?>',
                         commentString : ''
                     });
                 });

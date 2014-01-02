@@ -151,18 +151,8 @@ class CopyRule
             $firstPlaceholderPos = strpos($dirPattern, '*');
             $patternBaseDir = substr($dirPattern, 0, $firstPlaceholderPos);
             $patternTrailing = substr($dirPattern, $firstPlaceholderPos);
-            $patternTrailing = preg_replace_callback('/[\\\\^$.[\\]|()?*+{}\\-\\/]/', function ($matches) {
-                switch ($matches[0]) {
-                    case '*':
-                        return '.*';
-                    case '?':
-                        return '.';
-                    default:
-                        return '\\'.$matches[0];
-                }
-            }, $patternTrailing, -1);
 
-            $paths = $directoryHandler->search('#' . $patternTrailing . '#', $patternBaseDir);
+            $paths = $directoryHandler->search($patternTrailing, $patternBaseDir);
         } else {
             // pattern is already a valid path containing no placeholders
             $paths = array($dirPattern);

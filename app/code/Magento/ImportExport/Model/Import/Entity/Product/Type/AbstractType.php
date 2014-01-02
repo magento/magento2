@@ -259,10 +259,10 @@ abstract class AbstractType
      *
      * @param array $rowData
      * @param int $rowNum
-     * @param boolean $checkRequiredAttributes OPTIONAL Flag which can disable validation required values.
+     * @param boolean $isNewProduct OPTIONAL
      * @return boolean
      */
-    public function isRowValid(array $rowData, $rowNum, $checkRequiredAttributes = true)
+    public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
         $error    = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
@@ -272,16 +272,19 @@ abstract class AbstractType
                 // check value for non-empty in the case of required attribute?
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
                     $error |= !$this->_entityModel->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
-                } elseif (
-                    $this->_isAttributeRequiredCheckNeeded($attrCode)
-                    && $checkRequiredAttributes
-                    && \Magento\ImportExport\Model\Import\Entity\Product::SCOPE_DEFAULT == $rowScope
-                    && $attrParams['is_required']
-                ) {
-                    $this->_entityModel->addRowError(
-                        \Magento\ImportExport\Model\Import\Entity\Product::ERROR_VALUE_IS_REQUIRED, $rowNum, $attrCode
-                    );
-                    $error = true;
+                } elseif ($this->_isAttributeRequiredCheckNeeded($attrCode) && $attrParams['is_required']) {
+                    // For the default scope - if this is a new product or
+                    // for an old product, if the imported doc has the column present for the attrCode
+                    if (\Magento\ImportExport\Model\Import\Entity\Product::SCOPE_DEFAULT == $rowScope &&
+                        ($isNewProduct || array_key_exists($attrCode, $rowData))
+                    ) {
+                        $this->_entityModel->addRowError(
+                            \Magento\ImportExport\Model\Import\Entity\Product::ERROR_VALUE_IS_REQUIRED,
+                            $rowNum,
+                            $attrCode
+                        );
+                        $error = true;
+                    }
                 }
             }
         }

@@ -26,13 +26,14 @@
 <?php
 $_helper = $this->helper('Magento\Catalog\Helper\Product\Compare');
 $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
+$count = $_helper->getItemCount();
 ?>
 <div class="block compare">
     <div class="title">
         <strong>
             <span class="text"><?php echo __('Compare Products') ?></span>
-            <?php if($_helper->getItemCount() > 0): ?>
-                <span class="qty"><?php echo __('%1', $_helper->getItemCount()) ?></span>
+            <?php if($count > 0): ?>
+                <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
             <?php endif; ?>
         </strong>
     </div>

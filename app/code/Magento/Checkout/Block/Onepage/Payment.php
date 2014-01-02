@@ -54,4 +54,14 @@ class Payment extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     {
         return (float)$this->getQuote()->getBaseGrandTotal();
     }
+
+    /**
+     * Check whether the quote has recurring items
+     *
+     * @return bool
+     */
+    public function hasRecurringItems()
+    {
+       return $this->getQuote()->hasRecurringItems();
+    }
 }
