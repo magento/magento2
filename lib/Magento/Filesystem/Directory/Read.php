@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -131,6 +131,23 @@ class Read implements ReadInterface
         return $result;
     }
 
+    /**
+     * Read recursively
+     *
+     * @param null $path
+     * @return array
+     */
+    public function readRecursively($path = null)
+    {
+        $result = array();
+        $paths = $this->driver->readDirectoryRecursively($this->driver->getAbsolutePath($this->path, $path));
+        /** @var \FilesystemIterator $file */
+        foreach ($paths as $file) {
+            $result[] = $this->getRelativePath($file);
+        }
+        sort($result);
+        return $result;
+    }
     /**
      * Search all entries for given regex pattern
      *

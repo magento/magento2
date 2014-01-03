@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento;
@@ -193,7 +193,7 @@ class Filesystem
      * @var \Magento\Filesystem\WrapperFactory
      */
     protected $wrapperFactory;
-    
+
     /**
      * @var \Magento\Filesystem\Directory\WriteInterface[]
      */
@@ -267,11 +267,18 @@ class Filesystem
      * @param string $protocol
      * @return mixed
      */
-    public function getRemoteResource($path, $protocol)
+    public function getRemoteResource($path, $protocol = null)
     {
         if (!$this->fileReadFactory) {
             // case when a temporary Filesystem object is used for loading primary configuration
             return null;
+        }
+
+        if (empty($protocol)) {
+            $protocol = strtolower(parse_url($path, PHP_URL_SCHEME));
+            if ($protocol) {
+                $path = preg_replace('#.+://#', '', $path); // Strip down protocol from path
+            }
         }
 
         if (!array_key_exists($protocol, $this->remoteResourceInstances)) {

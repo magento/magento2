@@ -23,7 +23,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Integrity
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Test\Integrity;
@@ -169,13 +169,8 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         }
         $badClasses = array();
         $badUsages = array();
-        $isBug = false;
         foreach ($classes as $class) {
             try {
-                if ('Magento\Catalog\Model\Resource\Convert' == $class) {
-                    $isBug = true;
-                    continue;
-                }
                 if (strrchr($class, '\\') == false) {
                     $badUsages[] = $class;
                     continue;
@@ -198,9 +193,6 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         }
         if ($badUsages) {
             $this->fail("Bad usages of classes in $path: \n" . implode("\n", $badUsages));
-        }
-        if ($isBug) {
-            $this->markTestIncomplete('Bug MAGE-4763');
         }
     }
 

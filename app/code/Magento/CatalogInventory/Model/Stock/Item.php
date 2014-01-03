@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -739,9 +739,6 @@ class Item extends \Magento\Core\Model\AbstractModel
         }
 
         $qtyIncrements = $this->getQtyIncrements();
-        if (!$qtyIncrements){
-            $qtyIncrements = $this->getDefaultQtyIncrements();
-        }
 
         if ($qtyIncrements && ($this->mathDivision->getExactDivision($qty, $qtyIncrements) != 0)) {
             $result->setHasError(true)
@@ -752,7 +749,7 @@ class Item extends \Magento\Core\Model\AbstractModel
                 ->setQuoteMessageIndex('qty');
             if ($this->getIsChildItem()) {
                 $result->setMessage(
-                    __('You can buy %1 only in increments of %2.',$this->getProductName(), $qtyIncrements * 1)
+                    __('You can buy %1 only in increments of %2.', $this->getProductName(), $qtyIncrements * 1)
                 );
             } else {
                 $result->setMessage(

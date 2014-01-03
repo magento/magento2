@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Sales
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,5 +55,39 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
         $shipment->sendEmail(true);
         $this->assertNotEmpty($shipment->getEmailSent());
         $this->assertEquals('frontend', $paymentInfoBlock->getArea());
+    }
+
+    /**
+     * Check the correctness and stability of set/get packages of shipment
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     */
+    public function testPackages()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get('Magento\App\State')->setAreaCode('frontend');
+        $order = $objectManager->create('Magento\Sales\Model\Order');
+        $order->loadByIncrementId('100000001');
+        $order->setCustomerEmail('customer@example.com');
+
+        $payment = $order->getPayment();
+        $paymentInfoBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Payment\Helper\Data')
+            ->getInfoBlock($payment);
+        $payment->setBlockMock($paymentInfoBlock);
+
+        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+        $shipment = $objectManager->create('Magento\Sales\Model\Order\Shipment');
+        $shipment->setOrder($order);
+
+        $packages = array(array('1'), array('2'));
+
+        $shipment->addItem($objectManager->create('Magento\Sales\Model\Order\Shipment\Item'));
+        $shipment->setPackages($packages);
+        $this->assertEquals($packages, $shipment->getPackages());
+        $shipment->save();
+        $shipment->save();
+        $shipment->load($shipment->getId());
+        $this->assertEquals($packages, $shipment->getPackages());
     }
 }

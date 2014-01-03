@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,24 +60,29 @@ class Region implements \Magento\Data\Form\Element\Renderer\RendererInterface
 
     /**
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Escaper $escaper
      */
     public function __construct(
         \Magento\Directory\Model\CountryFactory $countryFactory,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Escaper $escaper
     ) {
         $this->_countryFactory = $countryFactory;
+        $this->_directoryHelper = $directoryHelper;
         $this->_escaper = $escaper;
     }
 
     public function render(\Magento\Data\Form\Element\AbstractElement $element)
     {
-        $html = '<div class="field field-region required">'."\n";
-
         $countryId = false;
+        $isRegionRequired = false;
         if ($country = $element->getForm()->getElement('country_id')) {
             $countryId = $country->getValue();
+            $isRegionRequired = $this->_directoryHelper->isRegionRequired($countryId);
         }
+
+        $html = '<div class="field field-region ' . (($isRegionRequired) ? 'required' : '') . '">'."\n";
 
         $regionCollection = false;
         if ($countryId) {
@@ -109,6 +114,10 @@ class Region implements \Magento\Data\Form\Element\Renderer\RendererInterface
         $regionHtmlId = $element->getHtmlId();
         $regionIdHtmlId = str_replace('region', 'region_id', $regionHtmlId);
 
+        if ($isRegionRequired) {
+            $element->addClass('required-entry');
+        }
+
         if ($regionCollection && count($regionCollection) > 0) {
             $elementClass = $element->getClass();
             $html.= '<label class="label" for="' . $regionIdHtmlId . '"><span>' . $element->getLabel() . '</span>'
@@ -131,12 +140,9 @@ class Region implements \Magento\Data\Form\Element\Renderer\RendererInterface
             $html.= '</div>';
             $element->setClass($elementClass);
         } else {
-            $element->setClass('input-text');
             $html.= '<label class="label" for="' . $regionHtmlId . '"><span>'
                 . $element->getLabel()
                 . '</span></label>';
-
-            $element->setRequired(false);
             $html.= '<div class="control">';
             $html .= '<input id="' . $regionHtmlId . '" name="' . $regionHtmlName
                 . '" value="' . $element->getEscapedValue() . '" '

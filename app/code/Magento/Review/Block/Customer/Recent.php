@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,6 +44,11 @@ class Recent extends \Magento\View\Element\Template
     protected $_collection;
 
     /**
+     * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
+     */
+    protected $_collectionFactory;
+
+    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -60,7 +65,7 @@ class Recent extends \Magento\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
-        $this->_collection = $collectionFactory->create();
+        $this->_collectionFactory = $collectionFactory;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
     }
@@ -87,6 +92,7 @@ class Recent extends \Magento\View\Element\Template
 
     protected function _initCollection()
     {
+        $this->_collection = $this->_collectionFactory->create();
         $this->_collection
             ->addStoreFilter($this->_storeManager->getStore()->getId())
             ->addCustomerFilter($this->_customerSession->getCustomerId())

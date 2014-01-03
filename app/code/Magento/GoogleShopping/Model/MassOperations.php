@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,7 +55,7 @@ class MassOperations
     /**
      * Item factory
      *
-     * @var \Magento\GoogleShopping\Model\Service\ItemFactory
+     * @var \Magento\GoogleShopping\Model\ItemFactory
      */
     protected $_itemFactory;
 
@@ -82,7 +82,7 @@ class MassOperations
 
     /**
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory
-     * @param \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory
+     * @param \Magento\GoogleShopping\Model\ItemFactory $itemFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -93,7 +93,7 @@ class MassOperations
      */
     public function __construct(
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory,
-        \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory,
+        \Magento\GoogleShopping\Model\ItemFactory $itemFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -172,7 +172,8 @@ class MassOperations
                     $product = $this->_productFactory->create()->setStoreId($storeId)->load($productId);
 
                     if ($product->getId()) {
-                        $this->_itemFactory->create()->insertItem($product)->save();
+                        $item = $this->_itemFactory->create();
+                        $item->insertItem($product)->save();
                         // The product was added successfully
                         $totalAdded++;
                     }

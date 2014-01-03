@@ -18,15 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Downloadable\Helper;
 
 use Magento\Filesystem;
+use Magento\Core\Exception as CoreException;
 
 /**
  * Downloadable Products Download Helper
@@ -65,7 +64,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
     /**
      * Resource open handle
      *
-     * @var resource
+     * @var \Magento\Filesystem\File\ReadInterface
      */
     protected $_handle          = null;
 
@@ -129,7 +128,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
     protected $_filesystem;
 
     /**
-     * Working Directory (Could be MEDIA or HTTP).
+     * Working Directory (valid for LINK_TYPE_FILE only).
      * @var \Magento\Filesystem\Directory\Read
      */
     protected $_workingDirectory;
@@ -164,28 +163,27 @@ class Download extends \Magento\App\Helper\AbstractHelper
      * Retrieve Resource file handle (socket, file pointer etc)
      *
      * @return \Magento\Filesystem\File\ReadInterface
-     * @throws \Magento\Core\Exception|\Exception
+     * @throws CoreException|\Exception
      */
     protected function _getHandle()
     {
         if (!$this->_resourceFile) {
-            throw new \Magento\Core\Exception(__('Please set resource file and link type.'));
+            throw new CoreException(__('Please set resource file and link type.'));
         }
 
         if (is_null($this->_handle)) {
             if ($this->_linkType == self::LINK_TYPE_URL) {
-                $this->_workingDirectory = $this->_filesystem->getDirectoryRead(Filesystem::HTTP);
-                $this->_handle = $this->_workingDirectory->openFile($this->_resourceFile);
+                $this->_handle = $this->_filesystem->getRemoteResource($this->_resourceFile);
             } elseif ($this->_linkType == self::LINK_TYPE_FILE) {
                 $this->_workingDirectory = $this->_filesystem->getDirectoryRead(Filesystem::MEDIA);
                 $fileExists = $this->_downloadableFile->ensureFileInFilesystem($this->_resourceFile);
                 if ($fileExists) {
-                    $this->_handle = $this->_workingDirectory->openFile($this->_resourceFile, '???');
+                    $this->_handle = $this->_workingDirectory->openFile($this->_resourceFile);
                 } else {
-                    throw new \Magento\Core\Exception(__('Invalid download link type.'));
+                    throw new CoreException(__('Invalid download link type.'));
                 }
             } else {
-                throw new \Magento\Core\Exception(__('Invalid download link type.'));
+                throw new CoreException(__('Invalid download link type.'));
             }
         }
         return $this->_handle;
@@ -194,30 +192,36 @@ class Download extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve file size in bytes
      */
-    public function getFilesize()
+    public function getFileSize()
     {
-        return $this->_workingDirectory->stat($this->_resourceFile)['size'];
+        return $this->_getHandle()->stat($this->_resourceFile)['size'];
     }
 
     /**
+     * Return MIME type of a file.
+     *
      * @return string
      */
     public function getContentType()
     {
         $this->_getHandle();
         if ($this->_linkType == self::LINK_TYPE_FILE) {
-            if (function_exists('mime_content_type') && ($contentType = mime_content_type($this->_resourceFile))) {
+            if (function_exists('mime_content_type')
+                && ($contentType = mime_content_type($this->_workingDirectory->getAbsolutePath($this->_resourceFile)))
+            ) {
                 return $contentType;
             } else {
                 return $this->_downloadableFile->getFileType($this->_resourceFile);
             }
         } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            return $this->_workingDirectory->stat($this->_resourceFile)['type'];
+            return $this->_handle->stat($this->_resourceFile)['type'];
         }
         return $this->_contentType;
     }
 
     /**
+     * Return name of the file
+     *
      * @return string
      */
     public function getFilename()
@@ -226,11 +230,13 @@ class Download extends \Magento\App\Helper\AbstractHelper
         if ($this->_linkType == self::LINK_TYPE_FILE) {
             return pathinfo($this->_resourceFile, PATHINFO_BASENAME);
         } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            $stat = $this->_workingDirectory->stat($this->_resourceFile);
+            $stat = $this->_handle->stat($this->_resourceFile);
             if (isset($stat['disposition'])) {
                 $contentDisposition = explode('; ', $stat['disposition']);
-                if (!empty($contentDisposition[1]) && strpos($contentDisposition[1], 'filename=') !== false) {
-                    return substr($contentDisposition[1], 9);
+                if (!empty($contentDisposition[1])
+                    && preg_match('/filename=([^ ]+)/', $contentDisposition[1], $matches)
+                ) {
+                    return $matches[1];
                 }
             }
             $fileName = @pathinfo($this->_resourceFile, PATHINFO_BASENAME);
@@ -247,6 +253,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
      * @param string $resourceFile
      * @param string $linkType
      * @return \Magento\Downloadable\Helper\Download
+     * @throws \InvalidArgumentException
      */
     public function setResource($resourceFile, $linkType = self::LINK_TYPE_FILE)
     {
@@ -265,17 +272,14 @@ class Download extends \Magento\App\Helper\AbstractHelper
         return $this;
     }
 
+    /**
+     * Output file contents
+     */
     public function output()
     {
         $handle = $this->_getHandle();
-        if ($this->_linkType == self::LINK_TYPE_FILE) {
-            while (true == ($buffer = $handle->read(1024))) {
-                print $buffer;
-            }
-        } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            while (!$handle->eof()) {
-                print $handle->read(1024);
-            }
+        while (true == ($buffer = $handle->read(1024))) {
+            print $buffer;
         }
     }
 

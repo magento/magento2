@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Theme
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,11 +53,17 @@ class Css
     protected $_customCssFile;
 
     /**
+     * @var \Magento\Theme\Helper\Data
+     */
+    protected $helper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Theme\Model\Uploader\Service $uploaderService
+     * @param \Magento\Theme\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
@@ -66,10 +72,12 @@ class Css
         \Magento\Data\FormFactory $formFactory,
         \Magento\ObjectManager $objectManager,
         \Magento\Theme\Model\Uploader\Service $uploaderService,
+        \Magento\Theme\Helper\Data $helper,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $formFactory, $objectManager, $data);
         $this->_uploaderService = $uploaderService;
+        $this->helper = $helper;
     }
 
     /**
@@ -290,7 +298,7 @@ class Css
     }
 
     /**
-     * Get url to downlaod CSS file
+     * Get URL to download CSS file
      *
      * @param string $fileId
      * @param int $themeId
@@ -300,7 +308,7 @@ class Css
     {
         return $this->getUrl('adminhtml/*/downloadCss', array(
             'theme_id' => $themeId,
-            'file'     => $this->_coreData->urlEncode($fileId)
+            'file'     => $this->helper->urlEncode($fileId)
         ));
     }
 }

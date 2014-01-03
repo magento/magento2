@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Resource\File\Storage;
@@ -29,68 +29,101 @@ namespace Magento\Core\Model\Resource\File\Storage;
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\File\Storage\File
+     * @var \Magento\Core\Model\Resource\File\Storage\File
      */
-    protected $_model;
+    protected $storageFile;
+    /**
+     * @var \Magento\Core\Helper\File\Media|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
 
     /**
-     * @var \Magento\Core\Helper\File\Media
+     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_loggerMock;
+    protected $filesystemMock;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_filesystemMock;
+    protected $directoryReadMock;
 
     /**
-     * @var \Magento\Filesystem\Directory\Read
+     * Set up
      */
-    protected $_directoryReadMock;
-
     protected function setUp()
     {
-        $this->_loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->_filesystemMock = $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
-        $this->_directoryReadMock =
-            $this->getMock('Magento\Filesystem\Directory\Read', array('isDirectory', 'read'), array(), '', false);
-        $this->_directoryReadMock
-            ->expects($this->any())
-            ->method('isDirectory')
-            ->will($this->returnValue(true));
-        $this->_directoryReadMock
-            ->expects($this->any())
-            ->method('read')
-            ->with('pub')
-            ->will($this->returnValue(array(
-                'media/customer',
-                'media/downloadable',
-                'media/theme',
-                'media/theme_customization',
-                'media')
-            ));
-        $this->_filesystemMock
-            ->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with('media')
-            ->will($this->returnValue($this->_directoryReadMock));
-        $this->_model = new \Magento\Core\Model\Resource\File\Storage\File(
-            $this->_filesystemMock,
-            $this->_loggerMock
+        $this->loggerMock =
+            $this->getMock('Magento\Logger', array(), array(), '', false);
+        $this->filesystemMock =
+            $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $this->directoryReadMock =
+            $this->getMock('Magento\Filesystem\Directory\Read',
+                array('isDirectory', 'readRecursively'), array(), '', false);
+
+        $this->storageFile = new \Magento\Core\Model\Resource\File\Storage\File(
+            $this->filesystemMock,
+            $this->loggerMock
         );
     }
 
+    protected function tearDown()
+    {
+        unset($this->storageFile);
+    }
+
+    /**
+     * test get storage data
+     */
     public function testGetStorageData()
     {
-        $directories = array(
-            array('name' => 'customer', 'path' => 'media'),
-            array('name' => 'downloadable', 'path' => 'media'),
-            array('name' => 'theme', 'path' => 'media'),
-            array('name' => 'theme_customization', 'path' => 'media'),
-            array('name' => 'media', 'path' => '/'),
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with($this->equalTo(\Magento\FileSystem::MEDIA))
+            ->will($this->returnValue($this->directoryReadMock));
+
+        $this->directoryReadMock->expects($this->any())
+            ->method('isDirectory')
+            ->will($this->returnValueMap(
+                array(
+                    array('/', true),
+                    array('folder_one', true),
+                    array('file_three.txt', false),
+                    array('folder_one/.svn', false),
+                    array('folder_one/file_one.txt', false),
+                    array('folder_one/folder_two', true),
+                    array('folder_one/folder_two/.htaccess', false),
+                    array('folder_one/folder_two/file_two.txt', false)
+                )
+            ));
+
+        $paths = array(
+            'folder_one',
+            'file_three.txt',
+            'folder_one/.svn',
+            'folder_one/file_one.txt',
+            'folder_one/folder_two',
+            'folder_one/folder_two/.htaccess',
+            'folder_one/folder_two/file_two.txt'
         );
-        $expected = array('files' => array(), 'directories' => $directories);
-        $actual = $this->_model->getStorageData('pub');
+        sort($paths);
+        $this->directoryReadMock->expects($this->once())
+            ->method('readRecursively')
+            ->with($this->equalTo('/'))
+            ->will($this->returnValue($paths));
+
+        $expected = array(
+            'files' => array(
+                'file_three.txt',
+                'folder_one/file_one.txt',
+                'folder_one/folder_two/file_two.txt'
+            ),
+            'directories' => array(
+                array('name' => 'folder_one', 'path' => '/'),
+                array('name' => 'folder_two', 'path' => 'folder_one'),
+            )
+        );
+        $actual = $this->storageFile->getStorageData();
+
         $this->assertEquals($expected, $actual);
     }
 }

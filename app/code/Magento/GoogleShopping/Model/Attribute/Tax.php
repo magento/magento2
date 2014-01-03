@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,6 +45,9 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      */
     protected $_taxData = null;
 
+    /** @var \Magento\GoogleCheckout\Helper\Data  */
+    protected $checkoutDataHelper;
+
     /**
      * Config
      *
@@ -60,6 +63,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
      * @param \Magento\GoogleShopping\Helper\Price $gsPrice
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
+     * @param \Magento\GoogleCheckout\Helper\Data $checkoutDataHelper
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -73,6 +77,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\GoogleShopping\Helper\Product $gsProduct,
         \Magento\GoogleShopping\Helper\Price $gsPrice,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
+        \Magento\GoogleCheckout\Helper\Data $checkoutDataHelper,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -80,6 +85,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     ) {
         $this->_config = $config;
         $this->_taxData = $taxData;
+        $this->checkoutDataHelper = $checkoutDataHelper;
         parent::__construct(
             $context,
             $registry,
@@ -155,7 +161,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         if (strpos($zip, '-') == -1) {
             return array($zip);
         } else {
-            return $this->_gsData->zipRangeToZipPattern($zip);
+            return $this->checkoutDataHelper->zipRangeToZipPattern($zip);
         }
     }
 }

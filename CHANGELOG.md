@@ -1,3 +1,36 @@
+2.0.0.0-dev59
+=============
+* Fixed bugs:
+  * Fixed invalid year in exception log errors
+  * Fixed the double-serialization in saving data for shipments
+  * Fixed an issue with adding a gift wrapping for multiple items
+  * Fixed shipping labels generation for DHL
+  * Fixed an issue with lost product price and weight during import
+  * Fixed a fatal error when a file reference is added to the HTML head
+  * Fixed an issue with printing orders containing downloadable product(s)
+  * Fixed an issue with the 'Same as shipping' check box not being selected on the Review Order page for PayPal Express checkout
+  * Fixed an issue with Email Templates preview showing a blank page
+  * Fixed an issue with a refund creation from the PayPal side
+  * Removed the occurrences of the non-existing Mage_Catalog_Model_Resource_Convert resource model
+  * Fixed an issue with a coupon usage after applying it with multiple addresses
+  * Fixed the Abandoned Cart emails sending
+  * Fixed an issue where users with "Reorder" permission could not perform reorder
+  * Fixed an issue with adding items from wishlist to the Shopping Cart with quantity increments enabled
+  * Fixed an issue with the catalog_url indexer incorrect rewrites history for categories
+  * Fixed an issue in saving an integration with a duplicate name
+  * Fixed an issue when a customer could see someone's else reviews on the private Account Dashboard
+  * Fixed an issue when a "New Theme" page was displayed as broken when trying to create a theme with incorrect "Version" value
+  * Fixed an issue in saving an integration with XSS injection in the required fields
+  * Fixed an issue with the Mini Shopping Cart when it contained virtual product
+  * Fixed an issue in disabling the Shopping Cart sidebar
+  * Fixed an issue when the "Adminhtml" cookie was not set when a user logged in to the backend
+  * Fixed an issue when the "Persistent_shopping_cart" cookie was not set after customer's login
+  * Fixed inability to publish products to Google Shopping
+  * Fixed inability to download or revert the backup
+  * Fixed inability to create a customer account when placing an order with a downloadable product
+* Various improvements:
+  * Disabled PHP errors, notices and warnings output in the production mode, to prevent exposing sensitive information
+
 2.0.0.0-dev58
 =============
 * Fixed bugs:

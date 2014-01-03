@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,6 +36,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * Path to csv file to import
      */
     const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
+
+    /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
+    protected $_helper;
 
     /**
      * Test store parametes
@@ -300,15 +305,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     protected $_iteratorPageSize = 100;
 
     /**
-     * @var \Magento\Catalog\Helper\Data
-     */
-    protected $_catalogDataMock;
-
-    /**
      * Init entity adapter model
      */
     protected function setUp()
     {
+        $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $addExpectations = false;
         $deleteBehavior  = false;
         $testName = $this->getName(true);
@@ -322,7 +323,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $doubleOptions = true;
         }
 
-        $this->_catalogDataMock = $this->getMock(
+        $catalogDataMock = $this->getMock(
             'Magento\Catalog\Helper\Data', array('__construct'), array(), '', false
         );
 
@@ -338,7 +339,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
                 array(), array(), '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
                 array(), array(), '', false),
-            $this->_catalogDataMock,
+            $catalogDataMock,
             $coreStoreConfig,
             new \Magento\Stdlib\DateTime,
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
@@ -916,5 +917,42 @@ class OptionTest extends \PHPUnit_Framework_TestCase
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
             ),
         );
+    }
+
+    public function testParseRequiredData()
+    {
+        $modelData = $this->getMock('stdClass', array('getNextBunch'), array(), '', false);
+        $modelData->expects($this->at(0))
+            ->method('getNextBunch')
+            ->will($this->returnValue(array(array(
+                'sku' => 'simple3',
+                '_custom_option_type' => 'field',
+                '_custom_option_title' => 'Title',
+            ))));
+        $modelData->expects($this->at(1))
+            ->method('getNextBunch')
+            ->will($this->returnValue(null));
+
+        $productModel = $this->getMock('stdClass', array('getProductEntitiesInfo'), array(),
+            '', false);
+        $productModel->expects($this->any())
+            ->method('getProductEntitiesInfo')
+            ->will($this->returnValue(array()));
+
+        $productEntity = $this->getMock('\Magento\ImportExport\Model\Import\Entity\Product', array(), array(),
+            '', false);
+
+        $model = $this->_helper->getObject('Magento\ImportExport\Model\Import\Entity\Product\Option', array(
+            'data' => array(
+                'data_source_model' => $modelData,
+                'product_model' => $productModel,
+                'option_collection' => $this->_helper->getObject('stdClass'),
+                'product_entity' => $productEntity,
+                'collection_by_pages_iterator' => $this->_helper->getObject('stdClass'),
+                'page_size' => 5000,
+                'stores' => array(),
+            )
+        ));
+        $this->assertTrue($model->importData());
     }
 }

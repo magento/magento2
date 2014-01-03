@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -234,13 +234,7 @@ class Packaging extends \Magento\Backend\Block\Template
      */
     public function getPackages()
     {
-        $packages = $this->getShipment()->getPackages();
-        if ($packages) {
-            $packages = unserialize($packages);
-        } else {
-            $packages = array();
-        }
-        return $packages;
+        return $this->getShipment()->getPackages();
     }
 
     /**

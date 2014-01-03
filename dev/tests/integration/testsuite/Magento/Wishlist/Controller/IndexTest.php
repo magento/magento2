@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Wishlist
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -98,5 +98,25 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->assertNotContains('<script>alert("xss");</script>', (string)$message->getText());
         }
         $this->assertTrue($isProductNamePresent, 'Product name was not found in session messages');
+    }
+
+    /**
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_product_qty_increments.php
+     */
+    public function testAllcartAction()
+    {
+        $formKey = $this->_objectManager->get('Magento\Data\Form\FormKey')->getFormKey();
+        $this->getRequest()->setParam('form_key', $formKey);
+        $this->dispatch('wishlist/index/allcart');
+
+        /** @var \Magento\Checkout\Model\Cart $cart */
+        $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+        $quoteCount = $cart->getQuote()->getItemsCollection()->count();
+
+        $this->assertEquals(0, $quoteCount);
+        $this->assertSessionMessages(
+            $this->contains('You can buy this product only in increments of 5 for "Simple Product".'),
+            \Magento\Message\MessageInterface::TYPE_ERROR
+        );
     }
 }

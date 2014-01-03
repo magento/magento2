@@ -19,12 +19,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\View\Element\Template" name="root" output="1" template="Magento_Backend::system/email/template/preview.phtml">
+    <block class="Magento\View\Element\Template" name="root" output="1" template="Magento_Email::template/preview.phtml">
         <block class="Magento\Email\Block\Adminhtml\Template\Preview" name="content" as="content"/>
     </block>
 </layout>

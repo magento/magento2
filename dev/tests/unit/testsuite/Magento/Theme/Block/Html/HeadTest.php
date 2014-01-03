@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,6 +41,9 @@ class HeadTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /** @var  \Magento\View\Element\Template\Context */
+    protected $_context;
+
     protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
@@ -50,6 +53,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             'Magento\Theme\Block\Html\Head',
             array('assets' => $this->_pageAssets, 'objectManager' => $this->_objectManager)
         );
+        $this->_context = $arguments['context'];
         $this->_block = $objectManagerHelper->getObject('Magento\Theme\Block\Html\Head', $arguments);
     }
 
@@ -76,5 +80,34 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($assetRemoteFile));
 
         $this->_block->addRss('RSS Feed', 'http://127.0.0.1/test.rss');
+    }
+
+    public function testGetFaviconFile()
+    {
+        $storeMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
+        $storeMock->expects($this->any())
+            ->method('getBaseUrl')
+            ->will($this->returnValue('baseUrl/'));
+        $this->_context->getStoreManager()
+            ->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($storeMock));
+
+        $this->_context->getStoreConfig()
+            ->expects($this->any())
+            ->method('getConfig')
+            ->will($this->returnValue('storeConfig'));
+
+        $mediaDirMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $mediaDirMock->expects($this->any())
+            ->method('isFile')
+            ->with('favicon/storeConfig')
+            ->will($this->returnValue(true));
+        $this->_context->getFilesystem()
+            ->expects($this->once())
+            ->method('getDirectoryRead')
+            ->will($this->returnValue($mediaDirMock));
+
+        $this->assertEquals('baseUrl/favicon/storeConfig', $this->_block->getFaviconFile());
     }
 }

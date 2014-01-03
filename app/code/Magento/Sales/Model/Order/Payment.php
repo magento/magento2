@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -816,8 +816,8 @@ class Payment extends \Magento\Payment\Model\Info
         $creditmemo->setPaymentRefundDisallowed(true)
             ->setAutomaticallyCreated(true)
             ->register()
-            ->addComment(__('The credit memo has been created automatically.'))
-            ->save();
+            ->addComment(__('The credit memo has been created automatically.'));
+        $creditmemo->save();
 
         $this->_updateTotals(array(
             'amount_refunded' => $creditmemo->getGrandTotal(),
