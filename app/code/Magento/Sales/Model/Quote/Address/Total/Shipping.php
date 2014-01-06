@@ -182,10 +182,9 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     {
         $amount = $address->getShippingAmount();
         if ($amount != 0 || $address->getShippingDescription()) {
-            $title = __('Shipping & Handling');
-            if ($address->getShippingDescription()) {
-                $title .= ' (' . $address->getShippingDescription() . ')';
-            }
+            $shippingDescription = $address->getShippingDescription();
+            $title = $shippingDescription ? __('Shipping & Handling (%s)', $shippingDescription) : __('Shipping & Handling');
+            
             $address->addTotal(array(
                 'code' => $this->getCode(),
                 'title' => $title,
