@@ -226,7 +226,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _getMenuIterator($menu)
     {
-        return $this->_iteratorFactory->create(array('iterator' => $menu->getIterator()));
+        return $this->_iteratorFactory->create(array($menu->getIterator()));
     }
 
     /**

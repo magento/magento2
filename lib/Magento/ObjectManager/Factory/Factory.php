@@ -91,11 +91,13 @@ class Factory implements \Magento\ObjectManager\Factory
     {
         $resolvedArguments = array();
         $arguments = $this->_config->getArguments($requestedType, $arguments);
-        foreach ($parameters as $parameter) {
+        foreach ($parameters as $key => $parameter) {
             list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
             $argument = null;
             if (array_key_exists($paramName, $arguments)) {
                 $argument = $arguments[$paramName];
+            } elseif (isset($arguments[$key])) {
+                $argument = $arguments[$key];
             } elseif (array_key_exists('options', $arguments) && array_key_exists($paramName, $arguments['options'])) {
                 // The parameter name doesn't exist in the arguments, but it is contained in the 'options' argument.
                 $argument = $arguments['options'][$paramName];
