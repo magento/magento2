@@ -1,0 +1,22 @@
+Added,添加日期
+"An error occurred while deleting email template data. Please review log and try again.",删除电子邮件模板数据时发生错误。请查看日志并重试。
+"Are you sure that you want to strip tags?",您是否确认要取消标签？
+Communications,通讯
+"Edit Email Template",编辑邮件模板
+"Edit System Template",编辑系统模板
+"Email Preview",邮件预览
+"Failed to load template. See error log for details.",不能加载模板，打开错误日志查看详细描述。
+GLOBAL,全局
+"Insert Variable...",插入变量...
+"Load Template",加载模板
+"Load default template",加载默认模板
+"New Email Template",新组
+"New System Template",新系统模板
+"Return Html Version",返回Html版本
+"The email template has been deleted.",电子邮件模板已被删除。
+"The email template has been saved.",邮件模板已保存。
+"This email template no longer exists.",邮件模板不再存在。
+"Toggle Editor",切换编辑器
+"Used Currently For",当前用于
+"Used as Default For",用作默认值
+"We can't find an email template to delete.",找不到要删除的邮件模板。
