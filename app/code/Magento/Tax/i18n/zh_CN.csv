@@ -51,6 +51,7 @@ Country,国家
 "Grand Total Excl. Tax",合计不含税
 "Grand Total Incl. Tax",合计含税
 "Import Tax Rates",导入税率
+"Import and Export Tax Rates",导入和导出税率
 "Import/Export Tax Rates",导入/导出税率
 "Inc. Tax",含税
 "Incl. Tax",含税
@@ -70,7 +71,9 @@ Name,姓名
 "New Tax Rate",新税率
 "New Tax Rule",新的税规则
 No,否
+"No (price without tax)",无（不含税价格）
 None,无
+Note:,注意：
 "Orders, Invoices, Credit Memos Display Settings",订单、收据、信用记录显示设置
 "Original price only",仅原价
 "Please fill all required fields with valid information.",请正确填写所有必填字段。
@@ -142,6 +145,7 @@ Taxes,税
 Total,总数
 "Unit Price",单价
 Yes,是
+"Yes (only price with tax)",是（只显示含税价格）
 "You cannot delete this tax class because it is used for %1 %2(s).","您不能删除税类，因为它正在被%1 %2（s）使用。"
 "You cannot delete this tax class because it is used in Tax Rules. You have to delete the rules it is used in first.",由于该税类被用于税规则所以你不能删除它。必须首先删除这个规则。
 "Zip code should not contain characters other than digits.",邮编必须为数字。

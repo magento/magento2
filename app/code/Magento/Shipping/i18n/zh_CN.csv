@@ -1,6 +1,7 @@
 " for more information or ",欲知详情或
 "# of Items (and above)","# 商品（上述）"
 "# of Items vs. Destination","# 商品 vs. 目标"
+"All Allowed Countries",所有允许的国家
 "Allow Shipping to Multiple Addresses",允许发送到多个地址
 "Calculate Handling Fee",计算的手续费
 Carrier:,运营商：
@@ -36,6 +37,7 @@ None,无
 Options,选项
 "Order Subtotal (and above)",订单小计（以上）
 Origin,原始
+"Per Item",每商品
 "Per Order",每订单
 "Per Package",每个包裹
 Percent,百分之
@@ -57,6 +59,7 @@ Region/State,地区/州
 "Shipped or billed on:",发送或扣款于：
 "Shipping Methods",运送方式
 "Shipping Methods Section",发送方法选择
+"Shipping Price",运费
 "Shipping Settings",发送设置
 "Shipping Settings Section",发送设置区域
 "Show Method if Not Applicable",如果不可用，显示其他方法
@@ -64,6 +67,7 @@ Region/State,地区/州
 "Something went wrong while importing table rates.",导入费率表发生错误。
 "Sorry, but we can't deliver to the destination country with this shipping module.",很抱歉，该货运模块不支持运送到目的地国家。
 "Sort Order",排序顺序
+"Specific Countries",指定国家
 Status:,状态：
 "Store Pickup",店铺取货
 "Street Address",街道地址

@@ -30,6 +30,7 @@ Min,最小
 Minimum,最小
 Name,姓名
 "New Extension",新扩展
+Notes,注意
 "PHP Version",PHP版本
 Package,包裹
 "Package Extensions",包扩展
@@ -37,7 +38,10 @@ Package,包裹
 "Package Info",包信息
 Packages,包裹
 Path,路径
+Release,发布
 "Release Info",发布信息
+"Release Stability",发行稳定性
+"Release Version",发布版本
 Remove,删除
 "Save As...",另存为...
 "Save Data and Create Package",保存数据并创建包

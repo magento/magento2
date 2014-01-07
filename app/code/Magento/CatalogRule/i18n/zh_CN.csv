@@ -29,13 +29,16 @@ Discount,折扣账户
 "General Information",常规信息
 ID,ID
 Inactive,未激活
+"New Catalog Price Rule",新产品目录价格规则
 "New Rule",新规则
 No,否
 Priority,优先级
 "Product Attribute",产品属性
+Promo,促销
 Promotions,促销
 Rule,规则名称
 "Rule Information",规则信息
+"Rule Name",规则名
 "Save and Apply",保存并应用
 "Save and Continue Edit",保存并继续编辑
 "Start Date",开始日期

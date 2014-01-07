@@ -32,9 +32,11 @@ Path,路径
 "Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.",文件中请仅仅使用字符（a-z或A-Z）、数字（0-9）或者下划线（_）。空格和其他支付都是不允许的。
 Priority,优先级
 "Products Options",产品选项
+"Save & Generate",保存并生成
 "Search Engine Submission Settings",搜索引擎提交设置
 Sitemap,站点结构图
 "Sitemap File Limits",站点地图文件限制
+"Sitemap Information",站点结构图信息
 "Something went wrong generating the sitemap.",产生站点地图发生错误。
 "Store View",店铺视图
 "The priority must be between 0 and 1.",优先级必须介于0和1之间。
@@ -49,3 +51,5 @@ Weekly,每周
 "XML Sitemap",XML站点地图
 "XML Sitemap Section",XML站点地图区域
 Yearly,每年
+"example: ""sitemap/"" or ""/"" for base path (path must be writeable)","例如： ""sitemap/"" 或 ""/"" 可代表路径根（路径必须可写）"
+"example: sitemap.xml",例如：sitemap.xml

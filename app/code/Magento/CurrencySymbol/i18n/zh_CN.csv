@@ -1,8 +1,14 @@
+"All possible rates were fetched, please click on ""Save"" to apply",将自动获取所有可能的费率，请单击“保存”以应用
+"All rates were fetched, please click on ""Save"" to apply",所有费率已获取，请单击“保存”已应用
+"All valid rates have been saved.",所有有效的评级均已保存。
 "Currency Rates",汇率
 "Currency Symbols",货币符号
+"Import Service",导入服务
 "Manage Currency Rates",管理汇率
+"Old rate:",原本的比例：
 "Please correct the input data for %1 => %2 rate","请纠正%1 => %2汇率的输入数据"
 "Please specify a correct Import Service.",请指定正确的导入服务。
+"Save Currency Rates",保存汇率
 "Save Currency Symbols",保存货币符号
 Symbol,符号
 System,系统

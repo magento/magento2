@@ -58,6 +58,7 @@ Processing...,处理中...
 "This is an invalid amount for refund.",这是一个无效的退款总额。
 "This is an invalid split tenderId ID.",这是一个无效的拆分投标ID。
 Title,标题
+"To cancel pending authorizations and release amounts that have already been processed during this payment, click Cancel.",要取消挂起的授权，并释放支付过程中已经被处理的授权，请点击取消。
 "Transaction Key",交易密钥
 "We canceled your payment and released any money we were holding.",取消了您的支付并且解冻了我们正在持有的金额。
 "You can't use any more credit cards for this payment, and you don't have enough to pay for this purchase. Sorry, but we'll have to cancel your transaction.",您不能再使用任何信用卡完成该支付，并且您没有足够的钱来完成此次购买。很抱歉，我们不得不取消您的交易。

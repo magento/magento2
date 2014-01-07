@@ -41,6 +41,7 @@ Fonts,字体
 "Image Sizing",图片尺寸调整
 "Insert file",插入文件
 JS,JS
+Loading...,正在加载...
 "Magento Admin Panel",Magento管理面板
 "My Customizations",我的定制
 "Page Text",页文本
@@ -75,6 +76,8 @@ JS,JS
 "Toggle Page Text",转换页文本
 "Update the CSS code to overwrite the default styles or upload your own CSS file.",更新CSS代码来覆盖默认风格或者上传您自己的CSS文件。
 "Upload Custom CSS",上传定制的CSS
+"Upload File",上传文件
+"Upload Files",上传文件
 "Upload a Logo",上传LOGO
 "Upload an Image",上传图片
 "Variable Text",变量文本

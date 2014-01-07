@@ -60,6 +60,7 @@ AutoSweep,自动清理
 "Billing Address",账单地址
 "Billing Agreement Signup",记账协议注册
 "Bonus for first ACH Use",首次使用ACH奖励
+"Both IPN and PDT",IPN和PDT
 "Buyer Credit Payment",买家信用支付
 "Buyer claims that a possible duplicate payment was made to the merchant.",买家声称商家可能发生重复支付。
 "Buyer claims that he did not receive goods or service.",买家声称他没有收到货物或服务。
@@ -174,8 +175,10 @@ Help,帮助
 "IPN ""%1"". %2 Transaction amount %3. Transaction ID: ""%4""","IPN ""%1""。 %2 交易额 %3。 交易ID： ""%4"""
 "IPN ""%1"". A dispute has been resolved and closed. %2 Transaction amount %3.","IPN ""%1""。 一个争议已经被解决并关闭。 %2 交易额 %3。"
 "IPN ""%1"". Case type ""%2"". Case ID ""%3"" %4","IPN ""%1""。 案例类型""%2""。 案例ID ""%3"" %4"
+"IPN (Instant Payment Notification) Only",仅IPN（即时支付通知）
 "If empty, a default value will be used. Custom URL may be provided by CardinalCommerce agreement.","如果为空，则会使用默认值。自定义URL可通过 CardinalCommerce 协议提供。"
 "If you do not have multiple users set up on your account, please re-enter your Vendor/Merchant Login here.",如果没有在您的账号设置多个用户，请重新输入“买家/商户”登录。
+"Important: ",重要：
 Incentive,奖励
 "Invoice ID",发票ID
 "Issuer Liability",发卡人责任
@@ -237,6 +240,7 @@ No,否
 Order,订单
 "Order ID","订单 ID"
 "Order Valid Period (days)",订单有效期（天）
+"PDT (Payment Data Transfer) Only",仅限PDT（支付数据传输）
 "Page Background Color",页面背景色
 "Page Style",页面样式
 "Part of the address information matched",地址信息中部分匹配

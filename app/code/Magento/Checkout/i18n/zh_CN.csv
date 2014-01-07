@@ -125,6 +125,7 @@ Move,移动
 "My Cart",我的购物车
 "My Cart (%1 item)","我的购物车（%1 个条目）"
 "My Cart (%1 items)","我的购物车（%1 个条目）"
+"My Cart (1 item)",我的购物车（1个条目）
 "My Cart Link",我的购物车链接
 "New Address",新地址
 "New Condition",新条件
@@ -212,8 +213,10 @@ Sales,销售
 "Show Content as",显示内容为
 "Sign up with us to save time on your next checkout:",注册账号以便下次结账节省时间：
 "Some products quantities were recalculated because of quantity increment mismatch.",由于数量增加不匹配，一些产品书数量被重新计算了。
+"Something went wrong  while deleting this condition.",当删除条件时发生错误。
 "Something went wrong processing your order. Please try again later.",处理订单时发生错误，请稍后再试。
 "Something went wrong while processing your payment.",当处理支付时发生错误。
+"Something went wrong while saving this condition.",当存储条件时发生错误。
 "Sorry, guest checkout is not enabled.",很抱歉，访客结账是不允许的。
 "Sorry, no quotes are available for this order at this time.",抱歉，当前该订单中没有报价可用。
 "Sorry, no quotes are available for this order.","很抱歉， 没有有效的订单报价。"
@@ -232,6 +235,7 @@ Telephone,电话
 Text,文字
 "Thank you for your purchase!",感谢您的购买！
 "Thanks for your order. We'll send you emails with order details and tracking information.","感谢您订购。 我们将发送一封带有订单详细和跟踪信息的邮件给您。"
+"The condition has been deleted.",条件已经被成功存储。
 "The condition has been saved.",条件已保存。
 "The coupon code ""%1"" is not valid.","无效的优惠券代码""%1"""
 "The coupon code ""%1"" was applied.","优惠券代码""%1""被应用"

@@ -5,6 +5,7 @@
 Administrator,管理员
 "All Reviews",所有评论
 "All Reviews of Customer `%1`","顾客 '%1' 的所有评论"
+"All Reviews of Product `%1`",所有产品评论`%1`
 "Allow Guests to Write Reviews",允许访客撰写评论
 "Are you sure you want to do this?",您是否确认要这样做？
 "Are you sure?",您是否确认？
@@ -44,6 +45,7 @@ Product,产品名
 "Product Rating:",产品评分：
 "Product Review (submitted on %1):","产品评论（提交于 %1）"
 "Product Reviews",产品评论
+"Product Store Name",产品店铺名
 "Products Reviews",产品评论
 Quantity,数量
 Rating:,评分：
@@ -54,6 +56,8 @@ Review,评论
 Review(s),评论（s）
 SKU,SKU
 "Save Review",保存评论
+"Save and Next",存储并继续
+"Save and Previous",存储并回退
 Status,状态
 "Storage key was not set",存储键未设置
 "Submit Review",提交评论

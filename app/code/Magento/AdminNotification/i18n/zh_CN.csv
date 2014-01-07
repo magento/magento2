@@ -1,3 +1,8 @@
+"1 Hour",1小时
+"12 Hours",12小时
+"2 Hours",2小时
+"24 Hours",24小时
+"6 Hours",6小时
 "A total of %1 record(s) have been marked as Read.",共%1条记录已经被标记为已读。
 Acknowledge,告知
 Actions,操作
@@ -5,6 +10,7 @@ Actions,操作
 "Close popup",关闭弹出
 "Critical System Messages",危急的系统消息
 "Date Added",添加日期
+"Incoming Message",收到的信息
 "Last Update",最后更新
 "Major System Messages",重要的系统消息
 "Mark as Read",标记为已读
@@ -17,6 +23,7 @@ Notifications,通知
 "Please go to <a href=""%1"">Cache Management</a> and refresh cache types.","请去<a href=""%1"">缓存管理</a>刷新缓存类型。"
 "Please select messages.",请选择一条信息。
 "Read Details",阅读详情
+"Read details",阅读详情
 Remove,删除
 "See All (%1 unread)",查看所有（%1未读）
 Severity,严重程度
@@ -34,6 +41,8 @@ Severity,严重程度
 "Wrong message type",错误的消息类型
 "You have %1 new system message",您有%1条新系统消息
 "You have %1 new system messages",您有%1条新系统消息
+"Your web server is configured incorrectly. As a result, configuration files with sensitive information are accessible from the outside. Please contact your hosting provider.",您的Web服务器配置有误。因此，包含敏感信息的配置文件将能从外部访问。请联系您的主机托管商。
+close,关闭
 critical,重要
 major,主要
 minor,次要

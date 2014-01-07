@@ -13,8 +13,12 @@
 "3 Day Select",3天选择
 "Access ID",访问ID
 "Access License Number",访问许可编号
+"Access denied.",访问被拒绝
 "Account ID",账户ID
 "Account Number",账户号码
+"Account Status",账户状态
+"Add New Role",添加新角色
+"Add New User",添加新用户
 "Additional Protection Configuration Value",额外的保护已启用
 "Additional Protection Enabled",额外的保护已启用
 "Additional Protection Min Subtotal",额外的保护减去小计
@@ -23,6 +27,9 @@
 Adult,成人
 "Adult Signature Required",需要核对签名
 "Allowed Methods",允许的方式
+"An error occurred while deleting this role.",删除该角色时发生错误。
+"An error occurred while saving this role.",保存该角色时出现了错误。
+Assigned,已分配
 "Bound Printed Matter",有封面的印刷品
 "Break bulk economy",经济式拆分
 "Break bulk express",快速式拆分
@@ -42,6 +49,8 @@ Container,容器
 "Default Package Height",默认包裹高度
 "Default Package Length",默认包裹长度
 "Default Package Width",默认包裹宽度
+"Delete Role",删除角色
+"Delete User",删除用户
 Delivered,已交付
 "Delivery Confirmation",交付确认
 Depth,深度
@@ -59,6 +68,8 @@ Documents,文档
 Dropoff,自取
 "Easy shop",轻松购物
 "Economy select",选择经济的
+"Edit Role",编辑角色
+"Edit User",编辑用户
 "Empty response",无需应答
 "Enable Negotiated Rates",启用协商费率
 "Enabled for Checkout",为付款启用
@@ -88,9 +99,21 @@ FedEx,FedEx
 "FedEx Tube","FedEx 包装管"
 "First Overnight",次日达
 First-Class,一类
+"First-Class Mail International Large Envelope",头等国际邮件大包
+"First-Class Mail International Letter",头等国际邮件信
+"First-Class Mail International Postcard",头等国际邮件明信片
+"First-Class Mail Large Envelope",头等邮件大包
+"First-Class Mail Large Postcards",头等邮件大明信片
+"First-Class Mail Letter",头等邮件信
+"First-Class Mail Parcel",头等邮件小包
+"First-Class Mail Postcards",头等邮件明信片
+"First-Class Package International Service",头等国际包裹服务
+"First-Class Package Service",头等包裹服务
+"First-Class Package Service Hold For Pickup",头等包裹服务上门取件
 Flat,扁平
 "Flat-Rate Box",平纸箱
 "Flat-Rate Envelope",平信封
+"Forgot your user name or password?",忘记了您的用户名或密码？
 "Free Method",免费方法
 "Free Shipping Amount Threshold",免费运送数量限制
 Freight,送达
@@ -99,6 +122,10 @@ Freight,送达
 "Gateway XML URL","网关 XML URL"
 Gift,礼品
 Girth,周长
+"Global Express Guaranteed (GXG)",全球快递担保（GXG）
+"Global Express Guaranteed Document",全球快递担保文档
+"Global Express Guaranteed Non-Document Non-Rectangular",全球快递担保非文档、非矩形
+"Global Express Guaranteed Non-Document Rectangular",全球快递担保非文档、矩形
 "Globalmail business",全球邮寄业务
 Ground,地面
 "Ground Commercial",地面运送
@@ -130,6 +157,7 @@ Letter,信件
 Library,图书馆
 Live,动态
 "Live account",活动账号
+"Log into Magento Admin Page",登录到Magento管理页面
 Machinable,可加工
 "Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)",最大包裹重量（可支持的最大包裹重量请咨询您的物流公司）
 "Media Mail",媒体邮件
@@ -140,6 +168,8 @@ Merchandise,商品
 "Minimum Package Weight (Please consult your shipping carrier for minimum supported shipping weight)",最小包裹重量（可支持的最小包裹重量请咨询您的物流公司）
 Mode,模式
 "National Freight",全国达
+"New Role",新角色
+"New User",新用户
 "Next Afternoon",第二天下午
 "Next Day Air",下一日空运
 "Next Day Air Early AM",下一日空运朝至
@@ -171,14 +201,74 @@ Pallet,托盘
 Parcel,小包
 "Parcel Post",邮政包裹
 Password,密码
+Permissions,权限
 "Pickup Method",取货方法
 "Piece Id barcode is missing","价格 ID 条码丢失"
 "Piece number information is missing",价格数字信息丢失
+"Please enter a valid email.",请输入有效邮件。
 "Please format your response correctly.",请正确格式化返回应答。
 "Please make sure to use only digits here. No dashes are allowed.",请在这里只使用数字，不能使用横线。
 "Please, specify origin country",请指定发起国家
 Pounds,磅
 "Priority Mail",优先邮件
+"Priority Mail Express",快递
+"Priority Mail Express Flat Rate Boxes",快递统价盒子
+"Priority Mail Express Flat Rate Boxes Hold For Pickup",快递统价盒子
+"Priority Mail Express Flat Rate Envelope",快递统价封袋
+"Priority Mail Express Flat Rate Envelope Hold For Pickup",快递统价封袋上门取件
+"Priority Mail Express Hold For Pickup",快递上门取件
+"Priority Mail Express International",国际快递
+"Priority Mail Express International Flat Rate Boxes",国际快递统价盒子
+"Priority Mail Express International Flat Rate Envelope",国际快递统价封袋
+"Priority Mail Express International Legal Flat Rate Envelope",国际快递法定统价封袋
+"Priority Mail Express International Padded Flat Rate Envelope",国际快递填充的统价封袋
+"Priority Mail Express Legal Flat Rate Envelope",快递法定的统价封袋
+"Priority Mail Express Legal Flat Rate Envelope Hold For Pickup",快递法定的统价封袋上门取件
+"Priority Mail Express Padded Flat Rate Envelope",快递填充的统价封袋
+"Priority Mail Express Padded Flat Rate Envelope Hold For Pickup",快递填充的统价封袋上门取件
+"Priority Mail Express Sunday/Holiday Delivery",快递周日/假日发货
+"Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes",快递周日/假日发货统价盒子
+"Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope",快递周日/假日发货统价封袋
+"Priority Mail Express Sunday/Holiday Delivery Legal Flat Rate Envelope",快递周日/假日发合法统价封袋
+"Priority Mail Express Sunday/Holiday Delivery Padded Flat Rate Envelope",快递周日/假日发货填充的统价封袋
+"Priority Mail Flat Rate Envelope",快递统价封袋
+"Priority Mail Flat Rate Envelope Hold For Pickup",快递统价上门取件
+"Priority Mail Gift Card Flat Rate Envelope",快递礼物卡统价封袋
+"Priority Mail Gift Card Flat Rate Envelope Hold For Pickup",快递礼物卡统价封袋上门取件
+"Priority Mail Hold For Pickup",快递上门取件
+"Priority Mail International",国际快递
+"Priority Mail International DVD Flat Rate priced box",国际快递DVD统价盒子
+"Priority Mail International Flat Rate Envelope",国际快递统价封袋
+"Priority Mail International Gift Card Flat Rate Envelope",国际快递礼物卡统价封袋
+"Priority Mail International Large Flat Rate Box",国际快递大统价盒
+"Priority Mail International Large Video Flat Rate priced box",国际快递大视频统价盒
+"Priority Mail International Legal Flat Rate Envelope",国际快递法定统价盒
+"Priority Mail International Medium Flat Rate Box",国际快递中等统价盒
+"Priority Mail International Padded Flat Rate Envelope",国际快递填充的统价封袋
+"Priority Mail International Small Flat Rate Box",国际快递小统价盒
+"Priority Mail International Small Flat Rate Envelope",国际快递小统价封袋
+"Priority Mail International Window Flat Rate Envelope",国际快递窗口统价封袋
+"Priority Mail Large Flat Rate Box",快递大统价盒
+"Priority Mail Large Flat Rate Box Hold For Pickup",快递大统价盒上门取件
+"Priority Mail Legal Flat Rate Envelope",快递法定统价封袋
+"Priority Mail Legal Flat Rate Envelope Hold For Pickup",快递法定小统价封袋上门取件
+"Priority Mail Medium Flat Rate Box",快递中价盒
+"Priority Mail Medium Flat Rate Box Hold For Pickup",快递中统价盒上门取件
+"Priority Mail Padded Flat Rate Envelope",快递填充的统价封袋
+"Priority Mail Padded Flat Rate Envelope Hold For Pickup",快递填充的统价封袋上门取件
+"Priority Mail Regional Rate Box A",快递区域费率盒A
+"Priority Mail Regional Rate Box A Hold For Pickup",快递区域费率盒A上门取件
+"Priority Mail Regional Rate Box B",快递区域费率盒B
+"Priority Mail Regional Rate Box B Hold For Pickup",快递区域费率盒B上门取件
+"Priority Mail Regional Rate Box C",快递区域费率盒C
+"Priority Mail Regional Rate Box C Hold For Pickup",快递区域费率盒C上门取件
+"Priority Mail Small Flat Rate Box",快递小统价盒
+"Priority Mail Small Flat Rate Box Hold For Pickup","快递小统价盒上门取件""
+Priority Mail Small Flat Rate Envelope"""
+"Priority Mail Small Flat Rate Envelope",快递小统价封袋
+"Priority Mail Small Flat Rate Envelope Hold For Pickup",快递小统价封袋上门取件
+"Priority Mail Window Flat Rate Envelope",快递窗口统计封袋
+"Priority Mail Window Flat Rate Envelope Hold For Pickup",快递窗口统计封袋上门取件
 "Priority Overnight",第二天优先
 "Product content code is invalid",产品内容代码无效
 "Product name is missing",产品名称丢失
@@ -191,15 +281,28 @@ Regular,常规
 "Request Courier",需要快递员
 Required,必须
 "Required for negotiated rates; 6-character UPS",对于协议汇率是必须的；6-字符UPS
+"Reset Password",重设密码
 Residential,住宅
 "Residential Delivery",住宅送货
+"Resource Access",资源访问
+Resources,资源
 "Response is in the wrong format",响应的格式有误
+"Retrieve Password",找回密码
 Return,退货
+"Role Info",角色信息
+"Role Information",角色信息
+"Role Name",角色名称
+"Role Resources",角色资源
+"Role Users",角色用户
+Roles,角色
+"Roles Resources",角色资源
 Round,周围
 "Routing barcode is missing",流转条码丢失
 "Same day",当天
 Sample,范例
 "Sandbox Mode",沙箱模式
+"Save Role",保存角色
+"Save User",保存用户
 "Second Day Service",第二日服务
 "Secure Gateway URL",安全网关URL
 Secureline,安全线
@@ -232,15 +335,19 @@ Sprintline,Sprintline
 Station,站台
 Subtotal,小计
 "Subtotal With Discount",不含折扣小计
+"The email address is empty.",电子邮件地址为空。
 "The field is applicable if the Smart Post method is selected.","如果Smart Post方法被选择该字段是可接受的。"
 "The response is in wrong format.",响应格式有误。
 "There is no items in this order",该订单不包含商品
 "Third Party",第三方
+"This account is",该账户为
+"This account is inactive.",该账户未被激活。
 "This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.",如果重量超过%1%2可以拆分整个订单重量到多个小包以确保货运费用计算更精确
 "This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges.",如果超过70公斤允许拆分整个订单重量到多个小包以确保更精确的运费结算。
 "This enables or disables SSL verification of the Magento server by UPS.",这里启用或禁止由UPS发起的Magento服务器的SSL校验.
 "This is used when ""Additional Protection Value"" is set to ""Configuration"". Enter only a numeric amount.","当""额外的保护值""设置为""配置""被使用。仅输入数量。"
 "This shipping method is not available. Please specify the zip code.",无效的货运方法，请指定邮政编码。
+"This user no longer exists.",该用户已不存在。
 Title,标题
 "To Lower",要降低
 "To Upper",要升高
@@ -280,7 +387,13 @@ USPS,USPS
 "United Parcel Service",美国联合包裹服务
 "United Parcel Service XML",美国联合包裹服务XML
 "Unknown error",未知错误
+"User Email",用户邮件
 "User ID",用户ID
+"User Info",用户信息
+"User Information",用户信息
+"User Role",用户角色
+"User Roles Information",用户角色信息
+Users,用户
 Variable,变量
 "Waybill barcode information is missing","Waybill 条码信息丢失"
 "We don't have a way to ship to the selected shipping address. Please choose another address or edit the current address.",无法发送到选择的运送地址，请选择另一个地址或者编辑当前地址。
@@ -297,6 +410,7 @@ Width,宽
 "Wrong Content Type",错误的内容类型
 "Wrong Region",地区错误
 Yes,是
+"You cannot delete your own account.",您无法删除自己的账户。
 "Your Packaging",您的包裹
 cm,厘米
 inch,英寸

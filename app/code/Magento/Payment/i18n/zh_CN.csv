@@ -3,6 +3,7 @@
 "3D Secure Card Validation","3D 安全信用卡验证"
 "<label>Make Check payable to:</label> %1","<label>用支票付款给：</label> %1"
 "A value is required for live mode. Refer to your CardinalCommerce agreement.","动态模式需要提供值。请参考您的CardinalCommerce 协议。"
+"All Allowed Countries",所有允许的国家
 "Allow Initial Fee Failure",允许初始费用失败
 "American Express",美国运通
 "An internal reference ID is required to save the payment profile.",保存支付配置文件时需要提供内部参考ID。
@@ -74,6 +75,7 @@ Password,密码
 "Severe validation removes chargeback liability on merchant.",严格的验证可避免分行的退款责任。
 "Shipping Amount",运送量
 "Sort Order",排序顺序
+"Specific Countries",指定国家
 "Start Date",开始日期
 "Subscriber Name",订阅者姓名
 "Switch/Solo/Maestro Issue Number",Switch/Solo/Maestro卡号

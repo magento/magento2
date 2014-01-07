@@ -1,18 +1,25 @@
 " Copy",复制
+"A total of %1 record(s) were updated.",共%1条记录被更新。
 Action,操作
 "Add New Template",添加新模板
 "Add to Queue",添加到队列
+Added,添加日期
 "Allow Guest Subscription",允许游客订阅
+"An error occurred while deleting this template.",删除该模板时发生错误。
+"An error occurred while saving this template.",保存该模板时出现了错误。
 "Are you sure that you want to delete this template?",您是否确认要删除该模板？
 "Are you sure that you want to strip all tags?",您确认要去除所有标签吗？
 Back,返回
 Cancel,取消
 Cancelled,已取消
+"Choose Store View:",选择店铺视图：
 "Confirmation Email Sender",确认电子邮件发送者
 "Confirmation Email Template",确认电子邮件模板
 "Convert to Plain Text",转换为纯文本
 "Create Newsletter Template",创建新闻邮件模板
 Customer,顾客
+"Customer First Name",顾客名字
+"Customer Last Name",顾客姓氏
 Delete,删除
 "Delete Selected Problems",删除已选择的问题
 "Delete Template",删除模板
@@ -24,6 +31,9 @@ Delete,删除
 "Edit Template",编辑模板
 Email,电子邮件
 "Enter your email address",输入邮件地址
+"Error Code",错误代码
+"Error Text",错误文本
+"Excel XML","Excel XML"
 Guest,访客
 ID,ID
 Message,信息
@@ -33,6 +43,7 @@ Message,信息
 Newsletter,新闻邮件
 "Newsletter Message Preview",新闻邮件消息预览
 "Newsletter Problem Reports",新闻邮件问题报表
+"Newsletter Problems Report",新闻邮件问题报表
 "Newsletter Queue",新闻邮件队列
 "Newsletter Section",新闻邮件区域
 "Newsletter Styles",新闻邮件风格
@@ -41,17 +52,24 @@ Newsletter,新闻邮件
 "Newsletter Template",新闻邮件模板
 "Newsletter Templates",新闻邮件模板
 "No Templates Found",模板未找到
+"Not Activated",未激活
 "Not Sent",未发送
 Pause,暂停
 Paused,已暂停
+"Please correct the newsletter template and try again.",请纠正新闻邮件模板然后重试。
 "Please enter a valid email address.",请输入有效的电子邮件地址。
+"Please enter new template name.",请输入新的模板名字。
+"Please select one or more subscribers.",请选择一个或多个订阅者。
 Preview,预览
 "Preview Template",预览模板
 Processed,已处理
+"Queue Date Start",排队开始日期
 "Queue End",队列完成
 "Queue Information",队列信息
 "Queue Newsletter...",队列新闻邮件...
 "Queue Start",队列开始
+"Queue Start Date",队列数据开始
+"Queue Subject",队列主题
 Recipients,收件人
 Reset,重置状态
 Resume,恢复
@@ -76,6 +94,8 @@ Store,商店
 "Store View",店铺视图
 Subject,主题
 Subscribe,订阅
+Subscribed,已订阅
+Subscriber,订阅者
 Subscribers,订阅者
 "Subscribers From",订阅者来自
 "Subscription Options",订阅选项
@@ -89,19 +109,29 @@ Subscribers,订阅者
 "Template Type",模板类型
 "Thank you for your subscription.",感谢您的订阅。
 "The confirmation request has been sent.",确认请求已经被发出。
+"The newsletter queue has been saved.",新闻邮件队列已经被成功存储。
+"The newsletter template has been deleted.",新闻邮件模板已经被成功删除。
+"The newsletter template has been saved.",新闻邮件模板已经被成功存储。
+"The problems you identified have been deleted.",您标识的问题已经被删除。
 "There are no subscribers selected.",没有选择任何订阅者。
 "There was a problem with the subscription: %1","订阅 %1 遇到问题"
 "This email address is already assigned to another user.",该电子邮件地址已分配给另一用户。
 "This is an invalid subscription ID.",这是一个无效的订阅ID。
 "This is an invalid subscription confirmation code.",这事一个无效的订阅确认码。
+"Total of %1 record(s) were deleted",共删除%1条记录
 Type,类型
+Unconfirmed,未确认
+Unsubscribe,退订
 "Unsubscribe Selected",退订所选者
+Unsubscribed,已退订
 "Unsubscription Email Sender",退订邮件发送程序
 "Unsubscription Email Template",退订邮件模板
 "View Newsletter",查看新闻邮件
 "We cannot mark as received subscriber.",无法标记为可接收的订阅者。
+"We found no problems.",我们未发现问题。
 "We removed the subscription.",已成功移除该订阅。
 "We saved the subscription.",已成功存储该订阅。
+"We unsubscribed the people you identified.",已经退订了新闻邮件模板已经被成功存储。标识的人。
 Website,网站
 "You have been unsubscribed.",您已经退订。
 "You selected an invalid queue.",您选择了一个无效的队列。

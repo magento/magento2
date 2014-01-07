@@ -9,6 +9,8 @@ Action,操作
 Block,区块
 "Block Information",块信息
 "Block Title",区块标题
+Blocks,块
+"Browse Files...",浏览文件...
 "Browser Capabilities Detection",浏览器功能检测
 CMS,CMS
 "CMS Home Page",CMS首页
@@ -66,6 +68,7 @@ Layout,布局
 "Meta Data",元数据
 "Meta Description",元描述
 "Meta Keywords",元关键词
+Modified,修改的
 "New Block",新块
 "New Folder Name:",新文件夹名称：
 "New Page",新页面
@@ -77,12 +80,15 @@ Layout,布局
 Pages,页面
 "Please correct the folder name. Use only letters, numbers, underscores and dashes.",请纠正目录名，要求仅仅输入字母、数字、下划线和中划线
 "Redirect to CMS-page if Cookies are Disabled","如果 Cookie 被禁用，则重定向到 CMS 页面"
+"Relative to Web Site Base URL",相对的站点基础URL
 "Save Block",保存区块
 "Save Page",保存页面
 "Save Process",保存过程
 "Show Breadcrumbs for CMS Pages","显示 CMS 页面的面包屑"
 "Show Notice if JavaScript is Disabled","如果 JavaScript 被禁用，则显示通知"
 "Something went wrong connecting to the host. Error#%1 - %2.","连接主机时发生错误。 错误#%1 - %2。""Static Blocks"
+"Something went wrong while saving the page.",当存储页面时发生错误。
+"Static Blocks",静态块
 Status,状态
 "Storage Root",存储根目录
 "Store View",店铺视图
@@ -97,8 +103,10 @@ Template,模板
 "This block no longer exists.",区块已不存在。
 "This page no longer exists.",该页面已不存在。
 Title,标题
-"URL Key","URL Key"
+"URL Key",URL键
 "WYSIWYG Options","WYSIWYG 选项"
+"We can't find a block to delete.",找不到要删除的块。
+"We can't find a page to delete.",找不到要删除的页。
 "We cannot create a new directory.",不能创建新目录。
 "We cannot delete directory %1.",不能删除目录%1。
 "We cannot delete root directory %1.",不能删除根目录%1。

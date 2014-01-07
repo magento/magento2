@@ -3,6 +3,8 @@
 "API Users",所有API用户
 "Add New API Role",添加新的API角色
 "Add New API User",添加新的API用户
+"Authentication header format is invalid.",无效的认证头信息是。
+"Authentication header is absent.",缺少认证头信息。
 "Available APIs",可用的APIs
 "Company Name",公司名
 "Contact Email",联络邮件
@@ -27,11 +29,14 @@
 "New API User",新的API用户
 "No Roles Found",找不到角色
 "No Users Found",找不到用户
+"No permissions requested",没有要求的的权限
 "Not allowed parameters: %1. Please use only %2 and %3.","不允许的参数： %1。 请仅使用%2和%3。"
 "Operation ""%1"" not found.","操作""%1""没发现。"
 "Operation allowed only in HTTPS",仅允许HTTPS
 "Request does not match any route.",请求不匹配任何路由。
 "Request method is invalid.",请求方法无效。
+"Resource Access",资源访问
+Resources,资源
 "Role Users Information",角色用户信息
 "SOAP Settings",SOAP设置
 "Save API Role",存储API角色

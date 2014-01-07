@@ -1,8 +1,10 @@
 Add,添加
 "Add New Row",添加新行
+"All Files",所有文件
 "Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with '_'.","建议对文件名使用字母、横线，以及下划线字符。错误的字符将被使用 '_'替换。"
 Availability:,可用性：
 Back,返回
+"Browse Files...",浏览文件...
 Canceled,已取消
 Date,日期
 "Default Link Title",默认链接标题
@@ -25,6 +27,7 @@ From:,来自：
 "Incl. Tax",含税
 "Invalid download link type.",无效的下载链接类型。
 Invoiced,已出发票
+Links,链接
 "Links can be purchased separately",链接可单独购买
 List,列表
 "Max. Downloads",最大下载数
@@ -53,6 +56,7 @@ Remove,删除
 "Remove Item",删除条目
 SKU,SKU
 Sample,范例
+Samples,样本
 "See price before order confirmation.",确认订单前显示价格。
 Shareable,可分享
 Shipped,已发货
@@ -69,11 +73,14 @@ Title,标题
 To:,至：
 U,U
 Unlimited,无限
+"Upload Files",上传文件
 "Use Content-Disposition",用户内容描述
 "Use Default Value",使用默认值
 "View Order",查看订单
 "What's this?",这是什么？
 "You have not purchased any downloadable products.",你还没有购买任何可下载产品。
+[GLOBAL],[全局]
+"[STORE VIEW]",[店铺视图]
 attachment,附件
 download,下载
 inline,内联

@@ -32,6 +32,7 @@ Continue,继续
 "E-mail is not specified",未指定邮件地址
 "Empty custom option title.",空的定制选标题。
 "Entity Attributes",编辑属性
+"Entity Type",实体类型
 "Entity adapter object must be an instance of %1 or %2",尸体适配器对象必须是%1或%2的实例
 "Entity is unknown",未知实体
 "Entity type model must be an instance of \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType","实体类型模块必须为\Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType的实例"

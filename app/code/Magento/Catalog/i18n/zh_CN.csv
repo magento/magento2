@@ -4,10 +4,13 @@
 "%1 and above","%1 及以上"
 "%1 incl tax",%1含税
 "%1 incl tax.",%1含税。
+"%1 items",%1个条目
 "%1 x %2 px.","%1 x %2 px。"
 "(Copy data from: %1)",（从%1复制数据）
 "* Required Fields",*必要字段
 "-- Please Select --","-- 请选择 --"
+"-- Please Select a Category --","-- 请选择一个分类 --"
+"1 item",1个条目
 24h,24小时
 "86400 by default, if not set. To refresh instantly, clear the Blocks HTML Output cache.",如果未设置默认86400秒。为了立即刷新，清除块HTML输出缓存。
 "<label class=""label""><span>from</span></label>","<label class=""label""><span>从</span></label>"
@@ -17,6 +20,7 @@
 "A product type is not defined for the indexer.",索引器中产品类型未定义。
 "A total of %1 record(s) have been deleted.",共%1条记录已经被删除。
 "A total of %1 record(s) have been updated.",共%1条记录已经被更新。
+"A total of %1 record(s) were updated.",共%1条记录被更新。
 "ALL GROUPS",所有组
 AM,AM
 Action,操作
@@ -65,7 +69,11 @@ All,全部
 Amount,数量
 "An attribute group named ""/name/"" already exists"".","一个命名为""/name/""属性组名已经存在""。"
 "An attribute with this code already exists.",同样代码的属性已经存在。
+"An error occurred while deleting record(s).",删除记录时出错。
+"An error occurred while deleting this set.",删除该集合时发生错误。
+"An error occurred while saving review.",保存评论时出错。
 "An error occurred while saving the attribute set.",保存属性集时发生错误。
+"An error occurred while updating the selected review(s).",更新所选评论时出现了错误。
 "Anchor Custom Text",自定义文本锚点
 "Anchor Custom Title",自定义标题锚点
 "Apply MAP (Default Value)",MAP应用（预设值）
@@ -101,6 +109,7 @@ Bottom/Left,底部/左侧
 Bottom/Right,底部/右侧
 "Browse By",浏览者：
 "Bundle Items",捆绑项
+"Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.",与动态价格的捆绑不能包含自定义的选项。选项将无法保存。
 "Buy %1",买%1
 "Buy %1 for",买%1用
 "Buy %1 for %2",以%2买%1
@@ -214,6 +223,7 @@ Duplicate,副本
 Edit,编辑
 "Edit Product Attribute",编辑产品属性
 "Edit Product Attribute ""%1""","编辑产品属性""%1"""
+"Edit Review",编辑评论
 "Edit Search",编辑搜索
 "Edit Set Name",编辑集名称
 Email,电子邮件
@@ -246,6 +256,8 @@ Global,全局
 "Globally Editable",全局范围内可编辑
 "Go to Home Page",前往主页
 Grid,网格
+"Grid (default) / List",网格（默认）/列表
+"Grid Only",仅网格
 "Grouped Products",分组产品
 Groups,组
 Hidden,隐藏
@@ -258,6 +270,7 @@ ID,"产品 ID"
 "If there are no custom parent categories, please use the default parent category. You can reassign the category at any time in <a href=""%1"" target=""_blank"">Products > Categories</a>.","如果没有定制的父分类，请使用默认的父分类。你能任何时候在<a href=""%1"" target=""_blank"">产品 > 分类重新对其分配。"
 Image,图案
 "Image Management",图片管理
+"Images (.gif, .jpg, .png)",图像（.gif、.jpg、.png）
 "Import Options",导入选项
 "In Cart",购物车
 "In Stock",有货
@@ -284,8 +297,11 @@ Label,标签
 "Link to a Specified Category",链接到指定的分类
 "Link to a Specified Product",链接到指定产品
 List,列表
+"List (default) / Grid",列表（默认）/网格
 "List Mode",列表模式
+"List Only",仅列表
 "List of Products that are set as New",名单被定为新产品
+Loading...,正在加载...
 "Look for our special back-to-school items and save bunches!",查找特价的back-to-school条目并存储一批！
 "Make Base",设置为基本
 "Manage Attribute Sets",管理属性集
@@ -297,6 +313,7 @@ List,列表
 "Manage Product Sets",管理产品设置
 "Manage Stock",库存管理
 "Manage Titles (Size, Color, etc.)",管理名称（尺寸，颜色等）
+Manual,手工
 "Mask for Meta Description",为元数据描述的伪装
 "Mask for Meta Keywords",为元数据关键字的伪装
 "Mask for Meta Title",为元数据标题的伪装
@@ -321,6 +338,8 @@ Move,移动
 N/A,N/A
 Name,姓名
 "Name in %1",%1的名称
+"New Attribute",新属性
+"New Category",新分类
 "New Product",新产品
 "New Product Attribute",新产品属性
 "New Product Template",新的产品模板
@@ -332,6 +351,7 @@ Name,姓名
 "New Products Names Only Template",新产品名字仅仅模板
 "New Root Category",新建根类别
 "New Search",新搜索
+"New Set",新集合
 "New Set Name",新集名称
 "New Subcategory",新建子类别
 "New attribute set name",新属性集名称
@@ -359,6 +379,7 @@ OR,或
 PM,PM
 "Page Title Separator",页面标题分隔器
 "Parent Category",父分类
+"Parent Product Thumbnail",父产品缩略图
 Pending,挂起
 "Pending Reviews RSS",挂起评论RSS
 "Please add rows to option.",请添加选项行。
@@ -369,9 +390,11 @@ Pending,挂起
 "Please leave blank if it is not an image.",如果它不是图片请留空。
 "Please make sure to define SKU values for all processed products.",请确保为所有处理的产品定义SKU值。
 "Please select a static block.",请选择一个静态块。
+"Please select catalog searches.",请选择产品目录搜索。
 "Please select items.",请选择条目。
 "Please select product(s).",请选择产品。
 "Please select products for attributes update.",请选择那些属性更新的产品。
+"Please select review(s).",请选择评论。
 "Please specify date required option(s).",请指定日期需要的选项。
 "Please specify the number of products, that will not be divided into subintervals.",请注明不会被划分成子区间的产品的数量。
 "Please specify the product required option(s).",请指定产品需要的选项。
@@ -411,6 +434,7 @@ Product,产品名
 "Product Reviews",产品评论
 "Product Template",产品模板
 "Product Templates",产品模板
+"Product Thumbnail Itself",产品缩略图本身
 "Product URL Suffix",产品URL前缀
 "Product is not loaded",产品尚未加载
 "Product offline",产品下线
@@ -531,6 +555,7 @@ Text,文字
 "The BuyRequest instance in options group is incorrect.",选项组中BuyRequest实例是不正确的。
 "The From Date value should be less than or equal to the To Date value.",开始日期应该小于等于结束如期。
 "The attribute model is not defined.",属性模型未定义。
+"The attribute set has been removed.",属性集已删除。
 "The base directory to upload file is not specified.",文件上传的基本目录尚未指定。
 "The category must be an instance of \Magento\Catalog\Model\Category.","分类必须是\Magento\Catalog\Model\Category的实例。"
 "The configuration item instance in options group is incorrect.",选项组中配置条目实例是不正确的。
@@ -578,7 +603,9 @@ Title,标题
 Top/Left,顶部/左侧
 Top/Right,顶部/右侧
 "Total incl. Tax: %1","含税总价： %1"
+"Total of %1 record(s) were deleted",共删除%1条记录
 Type,类型
+"URL Redirects",URL转向
 "URL Rewrite Management",URL重写管理
 "Unable to save product",不能存储产品
 "Unable to save the category",不能存储分类
@@ -588,6 +615,7 @@ Up-sells,追加销售
 Update,更新
 "Update Attributes",更新属性
 "Upload Image",上传图片
+"Use All Available Attributes",使用全部可用属性
 "Use Canonical Link Meta Tag For Categories","类别使用规范链接 Meta 标签"
 "Use Canonical Link Meta Tag For Products",为产品使用标准的链接元数据标签
 "Use Categories Path for Product URLs","产品 URL 使用分类路径"
@@ -668,6 +696,9 @@ Yes,是
 "You saved the review.",您已经存储了该评论。
 "Zoom In",放大
 "Zoom Out",缩小
+[GLOBAL],[全局]
+"[STORE VIEW]",[店铺视图]
+[WEBSITE],[网站]
 and,和
 "begin typing to add value",开始输入来添加值
 each,每个

@@ -2,9 +2,12 @@
 "A consumer with ID %1 does not exist",ID为%1的消费者不存在。
 "A consumer with the ID %1 does not exist",ID为%1的消费者不存在。
 "A token with consumer ID %1 does not exist",消费者ID为%1的令牌不存在。
+"Access Token",存取令牌
+"Access Token Secret",存取令牌秘钥
 "Access token has been revoked",存取令牌已经被撤销。
 "Add New Integration",添加新集成
 "An error occurred validating the nonce",当前校验发生错误
+"Are you sure ?",你确定吗？
 Authentication,认证
 "Callback URL",回调URL
 "Cannot convert to access token due to token is not request type",由于令牌不是请求类型不能转成换存取令牌
@@ -15,6 +18,8 @@ Authentication,认证
 "Cleanup entries older than X minutes.",清除早于X非整的条目.
 "Client ID",客户ID
 "Client Secret",客户密钥
+"Consumer Key",消费者键
+"Consumer Secret",消费者密钥
 "Consumer Settings",消费者设置
 "Consumer key has expired",消费者密钥已经过期
 "Consumer key is not the correct length",消费者密钥长度错误。
@@ -23,9 +28,11 @@ Deactivate,钝化
 "Edit ""%1"" Integration","编辑""%1""集成"
 "Expiration Period",过期时间
 Extensions,扩展
+"Identity link URL",标识链接URL
 "Incorrect timestamp value in the oauth_timestamp parameter",在oauth_timestamp参数中时间戳值不正确
 "Integer. Launch cleanup in X OAuth requests. 0 (not recommended) - to disable cleanup","整数. 在X OAuth请求中运行清除例程。 0 （不推荐） - 禁止清除"
 Integration,集成
+"Integration Details",集成详细
 "Integration ID is not specified or is invalid.",未指定或指定了无效的集成ID。
 "Integration Info",集成信息
 "Integration Information",集成信息
@@ -33,6 +40,7 @@ Integration,集成
 "Integration Tokens for Extensions",扩展的集成令牌
 Integrations,集成
 "Integrations Configuration",继承配置
+"Internal error. Check exception log for details.",内部错误。检查异常日志看详细原因。
 "Invalid Callback URL",无效的回调URL
 "Invalid Rejected Callback URL",无效的拒绝回调URL
 "New Integration",新集成
@@ -43,6 +51,7 @@ OAuth,OAuth
 "OAuth consumer credentials HTTP Post timeout",OAuth消费者凭证HTTP发送最大超时
 "Please enter endpoint for oAuth.",请输入oAuth的端点。
 "Request token is not associated with the specified consumer",请求令牌与指定的消费者未关联。
+"Save & Activate",存储并激活
 "Specified token does not exist",指定的令牌不存在
 "The integration '%1' has been saved.",集成'%1'已经被存储。
 "The integration was not saved.",该集成未被存储。
@@ -60,8 +69,11 @@ OAuth,OAuth
 "Token verifier and verifier token do not match",令牌核验者与核验者令牌不匹配
 "Unable to post data to consumer due to an unexpected error",由于不期望的错误导致不能发送数据到消费者
 "Unexpected error. Unable to create OAuth Consumer account.",不期望的错误。不能创建OAuth消费者账号。
+"Unexpected error. Unable to create oAuth consumer account.",不期望的错误。不能创建oAuth消费者账户。
+"Unexpected error. Unable to load oAuth consumer account.",不期望的错误。不能加载oAuth消费者账户。
 "Uninstall the extension to remove this integration",卸载扩展来移除集成
 "User type is unknown",未知的用户类型
 "Verifier is invalid",核验者是无效的
 "Verifier is not the correct length",核验者长度不正确
+"View ""%1"" Integration","查看""%1""集成"
 "When using Oauth for token exchange, enter URL where Oauth credentials can be POST-ed. We strongly recommend you to use https://",当使用令牌交换的Oauth，输入Oauth证书能被发布的URL。我们强烈推荐你使用https：//
