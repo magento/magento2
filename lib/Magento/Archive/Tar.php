@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Archive
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -200,6 +200,7 @@ class Tar extends \Magento\Archive\AbstractArchive implements \Magento\Archive\A
      */
     protected function _setCurrentFile($file)
     {
+        $file = str_replace('\\', '/', $file);
         $this->_currentFile = $file .((!is_link($file) && is_dir($file) && substr($file, -1) != '/') ? '/' : '');
         return $this;
     }
@@ -234,6 +235,7 @@ class Tar extends \Magento\Archive\AbstractArchive implements \Magento\Archive\A
      */
     protected function _setCurrentPath($path)
     {
+        $path = str_replace('\\', '/', $path);
         if ($this->_skipRoot && is_dir($path)) {
             $this->_currentPath = $path . (substr($path, -1) != '/' ? '/' : '');
         } else {

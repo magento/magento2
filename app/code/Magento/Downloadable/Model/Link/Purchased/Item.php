@@ -20,52 +20,52 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Downloadable\Model\Link\Purchased;
+
+use Magento\Downloadable\Model\Resource\Link\Purchased\Item as Resource;
 
 /**
  * Downloadable links purchased item model
  *
- * @method \Magento\Downloadable\Model\Resource\Link\Purchased\Item _getResource()
- * @method \Magento\Downloadable\Model\Resource\Link\Purchased\Item getResource()
+ * @method Resource _getResource()
+ * @method Resource getResource()
  * @method int getPurchasedId()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setPurchasedId(int $value)
+ * @method Item setPurchasedId($value)
  * @method int getOrderItemId()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setOrderItemId(int $value)
+ * @method Item setOrderItemId($value)
  * @method int getProductId()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setProductId(int $value)
+ * @method Item setProductId($value)
  * @method string getLinkHash()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setLinkHash(string $value)
+ * @method Item setLinkHash($value)
  * @method int getNumberOfDownloadsBought()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setNumberOfDownloadsBought(int $value)
+ * @method Item setNumberOfDownloadsBought($value)
  * @method int getNumberOfDownloadsUsed()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setNumberOfDownloadsUsed(int $value)
+ * @method Item setNumberOfDownloadsUsed($value)
  * @method int getLinkId()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setLinkId(int $value)
+ * @method Item setLinkId($value)
  * @method string getLinkTitle()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setLinkTitle(string $value)
+ * @method Item setLinkTitle($value)
  * @method int getIsShareable()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setIsShareable(int $value)
+ * @method Item setIsShareable($value)
  * @method string getLinkUrl()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setLinkUrl(string $value)
+ * @method Item setLinkUrl($value)
  * @method string getLinkFile()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setLinkFile(string $value)
+ * @method Item setLinkFile($value)
  * @method string getLinkType()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setLinkType(string $value)
+ * @method Item setLinkType($value)
  * @method string getStatus()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setStatus(string $value)
+ * @method Item setStatus($value)
  * @method string getCreatedAt()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setCreatedAt(string $value)
+ * @method Item setCreatedAt($value)
  * @method string getUpdatedAt()
- * @method \Magento\Downloadable\Model\Link\Purchased\Item setUpdatedAt(string $value)
+ * @method Item setUpdatedAt($value)
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model\Link\Purchased;
-
 class Item extends \Magento\Core\Model\AbstractModel
 {
     const XML_PATH_ORDER_ITEM_STATUS = 'catalog/downloadable/order_item_status';
@@ -90,6 +90,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * Check order item id
      *
      * @return \Magento\Core\Model\AbstractModel
+     * @throws \Exception
      */
     public function _beforeSave()
     {

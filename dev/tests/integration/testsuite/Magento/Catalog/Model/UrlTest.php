@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -158,10 +158,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             $this->_model->getUnusedPath(1, 'simple-product.html', 'product/2', 'simple-product')
         );
 
-        $this->markTestIncomplete('Bug MAGETWO-144');
-
-        $this->assertEquals('category-3.html', $this->_model->getUnusedPath(1, 'category-2.html', 'category/5',
-            'category-2'));
+        $this->assertEquals(
+            'category-2-1.html', $this->_model->getUnusedPath(1, 'category-2.html', 'category/5', 'category-2')
+        );
     }
 
     public function testGetProductUrlSuffix()

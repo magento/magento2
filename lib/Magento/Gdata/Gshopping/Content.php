@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Gdata
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -87,8 +87,6 @@ class Content extends \Zend_Gdata
     public function __construct($client = null, $accountId = null, $applicationId = 'MyCompany-MyApp-1.0')
     {
         $this->_accountId = $accountId;
-        $this->registerPackage('Magento_Gdata_Gshopping');
-        $this->registerPackage('Magento_Gdata_Gshoppinge_Extension');
         parent::__construct($client, $applicationId);
         $this->_httpClient->setParameterPost('service', self::AUTH_SERVICE_NAME);
     }
@@ -156,15 +154,26 @@ class Content extends \Zend_Gdata
     }
 
     /**
+     * Create new entry
+     *
+     * @return Entry
+     */
+    public function newEntry()
+    {
+        $entry = new Entry();
+        $entry->setService($this);
+        return $entry;
+    }
+
+    /**
      * Create new item's query object
      *
-     * @return \Magento\Gdata\Gshopping\ItemQuery
+     * @return ItemQuery
      */
     public function newItemQuery()
     {
-        $itemQuery = new \Magento\Gdata\Gshopping\ItemQuery();
+        $itemQuery = new ItemQuery();
         $itemQuery->setFeedUri($this->_getItemsUri());
-
         return $itemQuery;
     }
 

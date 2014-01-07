@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -332,6 +332,22 @@ abstract class AbstractType
         }
 
         return $resultAttrs;
+    }
+
+    /**
+     * Clear empty columns in the Row Data
+     *
+     * @param array $rowData
+     * @return array
+     */
+    public function clearEmptyData(array $rowData)
+    {
+        foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
+            if (!$attrParams['is_static'] && empty($rowData[$attrCode])) {
+                unset($rowData[$attrCode]);
+            }
+        }
+        return $rowData;
     }
 
     /**

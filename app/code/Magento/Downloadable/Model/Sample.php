@@ -20,9 +20,11 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Downloadable\Model;
 
 /**
  * Downloadable sample model
@@ -40,12 +42,8 @@
  * @method int getSortOrder()
  * @method \Magento\Downloadable\Model\Sample setSortOrder(int $value)
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model;
-
 class Sample extends \Magento\Core\Model\AbstractModel
 {
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';

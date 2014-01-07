@@ -24,3 +24,7 @@ suhosin.session.cryptua = off
 ; and disables mcrypt if this line is missing in local php.ini
 
 extension=mcrypt.so
+
+; Disable PHP errors, notices and warnings output in production mode to prevent exposing sensitive information.
+
+display_errors = Off

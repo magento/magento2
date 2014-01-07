@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -111,6 +111,59 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                     'msrp_enabled' => 1, 'msrp_display_actual_price_type' => 2
                 )
             ),
+        );
+    }
+
+    /**
+     * @dataProvider clearEmptyDataDataProvider
+     */
+    public function testClearEmptyData($rowData, $expectedAttributes)
+    {
+        $actualAttributes = $this->_model->clearEmptyData($rowData);
+        foreach ($expectedAttributes as $key => $value) {
+            $this->assertArrayHasKey($key, $actualAttributes);
+            $this->assertEquals($value, $actualAttributes[$key]);
+        }
+    }
+
+    public function clearEmptyDataDataProvider()
+    {
+        return array(
+            array(
+                array(
+                    'sku' => 'simple1',
+                    '_store' => '',
+                    '_attribute_set' => 'Default',
+                    '_type' => 'simple',
+                    'name' => 'Simple 01',
+                    'price' => 10
+                ),
+                array(
+                    'sku' => 'simple1',
+                    '_store' => '',
+                    '_attribute_set' => 'Default',
+                    '_type' => 'simple',
+                    'name' => 'Simple 01',
+                    'price' => 10
+                ),
+            ),
+            array(
+                array(
+                    'sku' => '',
+                    '_store' => 'German',
+                    '_attribute_set' => 'Default',
+                    '_type' => '',
+                    'name' => 'Simple 01 German',
+                    'price' => ''
+                ),
+                array(
+                    'sku' => '',
+                    '_store' => 'German',
+                    '_attribute_set' => 'Default',
+                    '_type' => '',
+                    'name' => 'Simple 01 German',
+                ),
+            )
         );
     }
 }

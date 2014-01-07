@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -30,6 +30,7 @@
 <p class="order-date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
 
 <div class="order details view">
+    <?php if (!$_order->getIsVirtual()): ?>
     <div class="block order shipping address">
         <div class="title">
             <strong><?php echo __('Shipping Address') ?></strong>
@@ -38,6 +39,7 @@
             <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
         </div>
     </div>
+    <?php endif; ?>
     <div class="block order billing address">
         <div class="title">
             <strong><?php echo __('Billing Address') ?></strong>

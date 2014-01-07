@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -131,9 +131,8 @@
             <?php elseif ($this->helper('Magento\Checkout\Helper\Data')->isCustomerMustBeLogged()): ?>
                 <button id="onepage-guest-register-button" type="button" class="action register" data-checkout='{"isGuestCheckoutAllowed":false, "registrationUrl":"<?php echo $this->helper('Magento\Checkout\Helper\Url')->getRegistrationUrl();?>"}'><span><?php echo __('Register') ?></span></button>
             <?php else: ?>
-                <form action="<?php echo $this->getUrl('persistent/index/saveMethod'); ?>">
-                    <button id="onepage-guest-register-button" type="submit" class="action register"><span><?php echo __('Register') ?></span></button>
-                </form>
+                <input type="hidden" name="checkout_method" id="login:register" value="register" checked="checked" />
+                <button id="onepage-guest-register-button" type="button" class="action register" data-checkout='{"isGuestCheckoutAllowed":true}'><span><?php echo __('Register') ?></span></button>
             <?php endif; ?>
         </div>
     </div>

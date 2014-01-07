@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -64,19 +64,22 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Logger $logger,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Stdlib\DateTime $dateTime
+        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
     ) {
         parent::__construct($resource);
         $this->_logger = $logger;
         $this->_locale = $locale;
         $this->_reportsFlagFactory = $reportsFlagFactory;
         $this->dateTime = $dateTime;
+        $this->timezoneValidator = $timezoneValidator;
     }
 
     /**
@@ -445,7 +448,9 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
 
             for ($i = count($transitions) - 1; $i >= 0; $i--) {
                 $tr = $transitions[$i];
-                if ($tr['ts'] > $to) {
+                try {
+                    $this->timezoneValidator->validate($tr['ts'], $to);
+                } catch (Exception $e) {
                     continue;
                 }
 
@@ -465,7 +470,6 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         return $tzTransitions;
     }
-
 
     /**
      * Retrieve store timezone offset from UTC in the form acceptable by SQL's CONVERT_TZ()

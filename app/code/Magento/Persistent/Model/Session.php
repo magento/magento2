@@ -20,23 +20,25 @@
  *
  * @category    Magento
  * @package     Magento_Persistent
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Persistent\Model;
 
 /**
  * Persistent Session Model
- *
- * @category   Magento
- * @package    Magento_Persistent
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Persistent\Model;
-
 class Session extends \Magento\Core\Model\AbstractModel
 {
+    /**
+     * Persistent cookie key length
+     */
     const KEY_LENGTH = 50;
+
+    /**
+     * Persistent cookie name
+     */
     const COOKIE_NAME = 'persistent_shopping_cart';
 
     /**
@@ -58,14 +60,14 @@ class Session extends \Magento\Core\Model\AbstractModel
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
      * Core data
      *
      * @var \Magento\Core\Helper\Data
      */
-    protected $_coreData = null;
+    protected $_coreData;
 
     /**
      * @var \Magento\Core\Model\Config
@@ -92,6 +94,11 @@ class Session extends \Magento\Core\Model\AbstractModel
     protected $mathRandom;
 
     /**
+     * @var \Magento\Session\Config\ConfigInterface
+     */
+    protected $sessionConfig;
+
+    /**
      * Construct
      *
      * @param \Magento\Core\Model\Context $context
@@ -102,6 +109,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Stdlib\Cookie $cookie
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -115,6 +123,7 @@ class Session extends \Magento\Core\Model\AbstractModel
         \Magento\Stdlib\Cookie $cookie,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Math\Random $mathRandom,
+        \Magento\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -124,6 +133,7 @@ class Session extends \Magento\Core\Model\AbstractModel
         $this->_coreConfig = $coreConfig;
         $this->_cookie = $cookie;
         $this->_storeManager = $storeManager;
+        $this->sessionConfig = $sessionConfig;
         $this->mathRandom = $mathRandom;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -224,8 +234,8 @@ class Session extends \Magento\Core\Model\AbstractModel
      */
     public function loadByCookieKey($key = null)
     {
-        if (is_null($key)) {
-            $key = $this->_cookie->get(\Magento\Persistent\Model\Session::COOKIE_NAME);
+        if (null === $key) {
+            $key = $this->_cookie->get(self::COOKIE_NAME);
         }
         if ($key) {
             $this->load($key, 'key');
@@ -268,7 +278,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      */
     public function removePersistentCookie()
     {
-        $this->_cookie->set(\Magento\Persistent\Model\Session::COOKIE_NAME, null);
+        $this->_cookie->set(self::COOKIE_NAME, null, null, $this->sessionConfig->getCookiePath());
         return $this;
     }
 
@@ -291,10 +301,7 @@ class Session extends \Magento\Core\Model\AbstractModel
         );
 
         if ($lifetime) {
-            $this->getResource()->deleteExpired(
-                $websiteId,
-                gmdate('Y-m-d H:i:s', time() - $lifetime)
-            );
+            $this->getResource()->deleteExpired($websiteId, gmdate('Y-m-d H:i:s', time() - $lifetime));
         }
 
         return $this;
@@ -307,7 +314,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      */
     protected function _afterDeleteCommit()
     {
-        $this->_cookie->set(\Magento\Persistent\Model\Session::COOKIE_NAME, null, 0);
+        $this->removePersistentCookie();
         return parent::_afterDeleteCommit();
     }
 

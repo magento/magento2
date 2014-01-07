@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    \Magento\Stdlib
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,6 +41,16 @@ class DateTime
     const DATETIME_PHP_FORMAT       = 'Y-m-d H:i:s';
     const DATE_PHP_FORMAT           = 'Y-m-d';
     /**#@-*/
+
+    /**
+     * Minimum allowed year value
+     */
+    const YEAR_MIN_VALUE = -10000;
+
+    /**
+     * Maximum allowed year value
+     */
+    const YEAR_MAX_VALUE = 10000;
 
     /**
      * Convert date to UNIX timestamp

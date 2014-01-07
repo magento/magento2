@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -138,7 +138,10 @@
                         $('sync_span').addClassName('no-display');
 
                         if (response.state == '<?php echo \Magento\Core\Model\File\Storage\Flag::STATE_FINISHED ?>') {
-                            window.location.reload();
+                            addAllowedStorage(
+                                $('system_media_storage_configuration_media_storage').value,
+                                $('system_media_storage_configuration_media_database').value
+                            );
                         } else if (response.state == '<?php echo \Magento\Core\Model\File\Storage\Flag::STATE_NOTIFIED ?>') {
                             if (response.has_errors) {
                                 enableSyncButton();
