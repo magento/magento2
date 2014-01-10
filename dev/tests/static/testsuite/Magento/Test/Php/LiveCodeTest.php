@@ -24,11 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Test\Php;
+use Magento\TestFramework\Utility;
+
 /**
  * Set of tests for static code analysis, e.g. code style, code complexity, copy paste detecting, etc.
  */
-namespace Magento\Test\Php;
-
 class LiveCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -48,7 +49,7 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_reportDir = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
+        self::$_reportDir = Utility\Files::init()->getPathToSource()
             . '/dev/tests/static/report';
         if (!is_dir(self::$_reportDir)) {
             mkdir(self::$_reportDir, 0777);
@@ -61,8 +62,8 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
         if ($type != '' && !preg_match('/\/$/', $type)) {
             $type = $type . '/';
         }
-        self::$_whiteList = self::_readLists(__DIR__ . '/_files/' . $type . 'whitelist/*.txt');
-        self::$_blackList = self::_readLists(__DIR__ . '/_files/' . $type . 'blacklist/*.txt');
+        self::$_whiteList = Utility\Files::readLists(__DIR__ . '/_files/' . $type . 'whitelist/*.txt');
+        self::$_blackList = Utility\Files::readLists(__DIR__ . '/_files/' . $type . 'blacklist/*.txt');
     }
 
     /**
@@ -157,40 +158,5 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
             $copyPasteDetector->run(array(), $blackList),
             "PHP Copy/Paste Detector has found error(s): See detailed report in $reportFile"
         );
-    }
-
-    /**
-     * Read all text files by specified glob pattern and combine them into an array of valid files/directories
-     *
-     * The Magento root path is prepended to all (non-empty) entries
-     *
-     * @param string $globPattern
-     * @return array
-     * @throws \Exception if any of the patterns don't return any result
-     */
-    protected static function _readLists($globPattern)
-    {
-        $patterns = array();
-        foreach (glob($globPattern) as $list) {
-            $patterns = array_merge($patterns, file($list, FILE_IGNORE_NEW_LINES));
-        }
-
-        // Expand glob patterns
-        $result = array();
-        foreach ($patterns as $pattern) {
-            if (0 === strpos($pattern, '#')) {
-                continue;
-            }
-            /**
-             * Note that glob() for directories will be returned as is,
-             * but passing directory is supported by the tools (phpcpd, phpmd, phpcs)
-             */
-            $files = glob(\Magento\TestFramework\Utility\Files::init()->getPathToSource() . '/' . $pattern, GLOB_BRACE);
-            if (empty($files)) {
-                throw new \Exception("The glob() pattern '{$pattern}' didn't return any result.");
-            }
-            $result = array_merge($result, $files);
-        }
-        return $result;
     }
 }

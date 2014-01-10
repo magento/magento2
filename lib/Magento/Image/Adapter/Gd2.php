@@ -60,13 +60,75 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Open image for processing
      *
      * @param string $filename
+     * @throws \OverflowException
      */
     public function open($filename)
     {
         $this->_fileName = $filename;
         $this->getMimeType();
         $this->_getFileAttributes();
+        if ($this->_isMemoryLimitReached()) {
+            throw new \OverflowException('Memory limit has been reached.');
+        }
         $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
+    }
+
+    /**
+     * Checks whether memory limit is reached.
+     *
+     * @return bool
+     */
+    protected function _isMemoryLimitReached()
+    {
+        $limit = $this->_convertToByte(ini_get('memory_limit'));
+        $requiredMemory = $this->_getImageNeedMemorySize($this->_fileName);
+        return (memory_get_usage(true) + $requiredMemory) > $limit;
+    }
+
+    /**
+     * Get image needed memory size
+     *
+     * @param string $file
+     * @return float|int
+     */
+    protected function _getImageNeedMemorySize($file)
+    {
+        $imageInfo = getimagesize($file);
+        if (!isset($imageInfo[0]) || !isset($imageInfo[1])) {
+            return 0;
+        }
+        if (!isset($imageInfo['channels'])) {
+            // if there is no info about this parameter lets set it for maximum
+            $imageInfo['channels'] = 4;
+        }
+        if (!isset($imageInfo['bits'])) {
+            // if there is no info about this parameter lets set it for maximum
+            $imageInfo['bits'] = 8;
+        }
+
+        return round(
+            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + Pow(2, 16)) * 1.65
+        );
+    }
+
+    /**
+     * Converts memory value (e.g. 64M, 129KB) to bytes.
+     * Case insensitive value might be used.
+     *
+     * @param string $memoryValue
+     * @return int
+     */
+    protected function _convertToByte($memoryValue)
+    {
+        if (stripos($memoryValue, 'G') !== false) {
+            return (int)$memoryValue * pow(1024, 3);
+        } elseif (stripos($memoryValue, 'M') !== false) {
+            return (int)$memoryValue * 1024 * 1024;
+        } elseif (stripos($memoryValue, 'KB') !== false) {
+            return (int)$memoryValue * 1024;
+        }
+
+        return (int)$memoryValue;
     }
 
     /**
@@ -96,9 +158,12 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
                 imagecopy(
                     $newImage,
                     $this->_imageHandler,
-                    0, 0,
-                    0, 0,
-                    $this->_imageSrcWidth, $this->_imageSrcHeight
+                    0,
+                    0,
+                    0,
+                    0,
+                    $this->_imageSrcWidth,
+                    $this->_imageSrcHeight
                 );
                 $this->_imageHandler = $newImage;
             }

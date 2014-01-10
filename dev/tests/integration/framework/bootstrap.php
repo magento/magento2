@@ -71,7 +71,7 @@ $bootstrap->runBootstrap();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
-Magento\TestFramework\Utility\Files::init(new Magento\TestFramework\Utility\Files($magentoBaseDir));
+Magento\TestFramework\Utility\Files::setInstance(new Magento\TestFramework\Utility\Files($magentoBaseDir));
 
 /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
 unset($bootstrap);

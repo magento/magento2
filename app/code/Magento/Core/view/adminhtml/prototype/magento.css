@@ -171,8 +171,8 @@
 .popup-window .page-actions {
     padding: 0;
     position: absolute;
-    right: 19px;
-    top: 29px;
+    right: 43px;
+    top: 30px;
     z-index: 2;
 }
 
@@ -183,90 +183,6 @@
 
 .popup-window .select + .mage-error {
     margin: 5px 0 0;
-}
-
-/*
-    Styles for tables in popup window
--------------------------------------- */
-
-.popup-window .data {
-    border-collapse: inherit; /* do not remove this! without this rule in FF when table has only 1 row bottom and side borders disappear */
-    width: 100%;
-}
-
-.popup-window .grid .data {
-    border-left: 1px solid #c0bbaf;
-    border-right: 1px solid #c0bbaf;
-}
-
-.popup-window .grid .data td:first-child {
-    border-left-width: 0;
-}
-
-.popup-window .grid .data td:last-child {
-    border-left-width: 0;
-    border-right-width: 0;
-}
-
-.popup-window .grid .data tr:last-child td {
-    border-bottom-color: #c0bbaf;
-}
-
-.popup-window .grid tr.headings th,
-.popup-window .grid tr.filter th {
-    background: #fff;
-    border-color: #c9c2b8;
-    border-width: 0 0 1px;
-    color: #666;
-    padding: 3px 7px;
-}
-
-.popup-window .grid tr.headings th a {
-    color: #666;
-}
-
-.popup-window .data tr.headings th:hover > span {
-    border-color: #cac2b5;
-}
-
-.popup-window .grid tr.headings th a:after {
-    color: #dbd6ce;
-}
-
-.popup-window .grid tr.headings th a:hover:after {
-    color: #cac2b5;
-}
-
-.popup-window .grid .filter input.input-text,
-.popup-window .grid .filter select {
-    background: #fff;
-    border: 1px solid #ccc;
-    color: #666;
-}
-
-.popup-window .grid tr th:first-child {
-    border: 0;
-}
-
-.popup-window .grid tbody tr:first-child td {
-    border-top: 1px solid #eae8e4;
-}
-
-.popup-window .grid tbody tr td,
-.popup-window .grid tbody tr td:hover {
-    border-bottom: 1px solid #eae8e4;
-    padding: 3px 7px;
-}
-
-.popup-window .grid tbody tr:nth-child(odd) td,
-.popup-window .grid tbody tr:nth-child(odd):hover td {
-    background: #fbfaf6;
-}
-
-.popup-window .grid tr.on-mouse td,
-.popup-window .grid table tbody tr.on-mouse:hover td,
-.popup-window .grid table tbody tr.on-mouse:nth-child(odd):hover td {
-    background-color: #f3efea;
 }
 
 .popup-window .data .col-id {
@@ -325,11 +241,27 @@
     margin: 0 5px 0 0;
 }
 
+.magento_message #contents-uploader {
+    margin: 0 0 18px;
+}
+
 .magento_message .fileinput-button {
     display: inline-block;
     cursor: pointer;
     float: none;
     vertical-align: middle;
+}
+
+.magento_message .fileinput-button span {
+    display: none;
+}
+
+.magento_message .fileinput-button input {
+    position: static;
+    border: none;
+    opacity: 1;
+    filter: alpha(opacity=1);
+    -moz-transform: none;
 }
 
 .magento_message .file-row {
@@ -422,7 +354,8 @@
 
 .ui-dialog .ui-dialog-title {
     color: #676056;
-    font: normal 20px/1 'CallunaSans';
+    font-size: 20px;
+    line-height: 1;
     display: block;
     padding: 19px 0 19px 20px;
     cursor: move;
@@ -464,10 +397,6 @@
     border: none;
 }
 
-.ui-dialog .ui-dialog-content {
-    padding: 10px 10px 0;
-}
-
 .ui-dialog .ui-dialog-content .fieldset {
     border-radius: 0;
     border: none;
@@ -475,7 +404,7 @@
 
 .ui-dialog .ui-dialog-content {
     overflow: auto;
-    padding: 25px 25px 0;
+    padding: 25px 25px 20px;
 }
 
 .ui-dialog .ui-dialog-content label.mage-error {
@@ -489,7 +418,7 @@
 
 .ui-dialog .ui-dialog-buttonpane {
     margin: 0;
-    padding: 25px;
+    padding: 0 25px 25px;
     border: none;
 }
 

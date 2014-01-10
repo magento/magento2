@@ -64,20 +64,29 @@ class Currency
     protected $_currencyLocator;
 
     /**
+     * @var \Magento\Directory\Model\Currency
+     */
+    protected $_baseCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator
+     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator,
+        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         array $data = array()
     ) {
         parent::__construct($context, $data);
         $this->_storeManager = $storeManager;
         $this->_currencyLocator = $currencyLocator;
+        $baseCurrencyCode = $this->_app->getBaseCurrencyCode();
+        $this->_baseCurrency = $currencyFactory->create()->load($baseCurrencyCode);
     }
 
     /**
@@ -131,7 +140,7 @@ class Currency
         if ($rate = $row->getData($this->getColumn()->getRateField())) {
             return floatval($rate);
         }
-        return $this->_storeManager->getStore()->getBaseCurrency()->getRate($this->_getCurrencyCode($row));
+        return $this->_baseCurrency->getRate($this->_getCurrencyCode($row));
     }
 
     /**

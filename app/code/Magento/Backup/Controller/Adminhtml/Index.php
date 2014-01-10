@@ -212,7 +212,13 @@ class Index extends \Magento\Backend\App\Action
         $fileName = $this->_objectManager->get('Magento\Backup\Helper\Data')
             ->generateBackupDownloadName($backup);
 
-        $response = $this->_fileFactory->create($fileName, null, 'application/octet-stream', $backup->getSize());
+        $response = $this->_fileFactory->create(
+            $fileName,
+            null,
+            \Magento\Filesystem::VAR_DIR,
+            'application/octet-stream',
+            $backup->getSize()
+        );
 
         $response->sendHeaders();
 

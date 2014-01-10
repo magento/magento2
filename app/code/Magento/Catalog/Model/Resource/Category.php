@@ -920,32 +920,19 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
                 ->from($table, 'position')
                 ->where('entity_id = :entity_id');
             $position = $adapter->fetchOne($select, array('entity_id' => $afterCategoryId));
-
-            $bind = array(
-                'position' => new \Zend_Db_Expr($positionField . ' + 1')
-            );
-            $where = array(
-                'parent_id = ?' => $newParent->getId(),
-                $positionField . ' > ?' => $position
-            );
-            $adapter->update($table, $bind, $where);
-        } elseif ($afterCategoryId !== null) {
-            $position = 0;
-            $bind = array(
-                'position' => new \Zend_Db_Expr($positionField . ' + 1')
-            );
-            $where = array(
-                'parent_id = ?' => $newParent->getId(),
-                $positionField . ' > ?' => $position
-            );
-            $adapter->update($table, $bind, $where);
+            $position += 1;
         } else {
-            $select = $adapter->select()
-                ->from($table, array('position' => new \Zend_Db_Expr('MIN(' . $positionField . ')')))
-                ->where('parent_id = :parent_id');
-            $position = $adapter->fetchOne($select, array('parent_id' => $newParent->getId()));
+            $position = 1;
         }
-        $position += 1;
+
+        $bind = array(
+            'position' => new \Zend_Db_Expr($positionField . ' + 1')
+        );
+        $where = array(
+            'parent_id = ?' => $newParent->getId(),
+            $positionField . ' >= ?' => $position
+        );
+        $adapter->update($table, $bind, $where);
 
         return $position;
     }

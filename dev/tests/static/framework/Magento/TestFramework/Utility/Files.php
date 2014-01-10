@@ -47,17 +47,25 @@ class Files
     protected $_path = '';
 
     /**
-     * Setter/Getter for an instance of self
+     * Setter for an instance of self
      *
-     * @param \Magento\TestFramework\Utility\Files $instance
+     * Also can unset the current instance, if no arguments are specified
+     *
+     * @param Files|null $instance
+     */
+    public static function setInstance(Files $instance = null)
+    {
+        self::$_instance = $instance;
+    }
+
+    /**
+     * Getter for an instance of self
+     *
      * @return \Magento\TestFramework\Utility\Files
      * @throws \Exception when there is no instance set
      */
-    public static function init(\Magento\TestFramework\Utility\Files $instance = null)
+    public static function init()
     {
-        if ($instance) {
-            self::$_instance = $instance;
-        }
         if (!self::$_instance) {
             throw new \Exception('Instance is not set yet.');
         }
@@ -633,8 +641,9 @@ class Files
             /**
              * Use realpath() instead of file_exists() to avoid incorrect work on Windows because of case insensitivity
              * of file names
+             * Note that realpath() automatically changes directory separator to the OS-native
              */
-            if (realpath($fullPath) == $fullPath) {
+            if (realpath($fullPath) == str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $fullPath)) {
                 $fileContent = file_get_contents($fullPath);
                 if (strpos($fileContent, 'namespace ' . $namespace) !== false &&
                     (strpos($fileContent, 'class ' . $className) !== false ||
@@ -714,5 +723,40 @@ class Files
         }
 
         return self::$_cache[$key];
+    }
+
+    /**
+     * Read all text files by specified glob pattern and combine them into an array of valid files/directories
+     *
+     * The Magento root path is prepended to all (non-empty) entries
+     *
+     * @param string $globPattern
+     * @return array
+     * @throws \Exception if any of the patterns don't return any result
+     */
+    public static function readLists($globPattern)
+    {
+        $patterns = array();
+        foreach (glob($globPattern) as $list) {
+            $patterns = array_merge($patterns, file($list, FILE_IGNORE_NEW_LINES));
+        }
+
+        // Expand glob patterns
+        $result = array();
+        foreach ($patterns as $pattern) {
+            if (0 === strpos($pattern, '#')) {
+                continue;
+            }
+            /**
+             * Note that glob() for directories will be returned as is,
+             * but passing directory is supported by the tools (phpcpd, phpmd, phpcs)
+             */
+            $files = glob(self::init()->getPathToSource() . '/' . $pattern, GLOB_BRACE);
+            if (empty($files)) {
+                throw new \Exception("The glob() pattern '{$pattern}' didn't return any result.");
+            }
+            $result = array_merge($result, $files);
+        }
+        return $result;
     }
 }

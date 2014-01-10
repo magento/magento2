@@ -1,5 +1,5 @@
-// /**
-//  * Magento
+/**
+ * Magento
  *
  * NOTICE OF LICENSE
  *
@@ -16,10 +16,12 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-//  */
+ *
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+@import "vars.less";
 
 /*
     Product Creation
@@ -38,12 +40,6 @@
     color: #7a7976;
 }
 
-.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back,
-.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:hover,
-.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:active,
-.eq-ie8 [class^=" newsletter-"] .page-actions .action-back,
-.eq-ie8 [class^=" newsletter-"] .page-actions .action-back:hover,
-.eq-ie8 [class^=" newsletter-"] .page-actions .action-back:active,
 .sales-order-create-index .page-actions-inner .cancel,
 .sales-order-create-index .page-actions-inner .cancel:hover,
 .sales-order-create-index .page-actions-inner .cancel:active {
@@ -103,9 +99,20 @@
     width: 100%;
 }
 
+#tab_content_downloadableInfo .data-table td {
+    vertical-align: top;
+    .row {
+        margin-bottom: 10px;
+    }
+}
+
 /*
     Customer
 ---------------------------------------*/
+.customer-index-edit .grid tr.headings th > span {
+    white-space: normal;
+}
+
 #customer_info_tabs_account_content #_accountsendemail {
     margin-top: 8px;
 }
@@ -464,6 +471,7 @@
 
 #export_filter_grid .grid select {
     margin-bottom: 0;
+    width: 86%;
 }
 
 #export_filter_grid .grid table td:first-child,
@@ -1619,6 +1627,17 @@
             }
         }
     }
+    .order-billing-method {
+        .payment-methods {
+            .fieldset {
+                padding: 0;
+                margin: 0;
+                .field {
+                    margin: 0 0 12px 0;
+                }
+            }
+        }
+    }
 }
 
 .tax.summary-total .summary-collapse {
@@ -1756,23 +1775,24 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
 }
 
 .overlay {
-    background: rgba(0, 0, 0, .3);
+    background: rgba(255, 255, 255, .5);
     border-radius: 5px;
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-}
 
-.overlay span {
-    color: #111;
-    font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -25px 0 0 -100px;
-    width: 200px;
+    span {
+        color: #111;
+        font-weight: bold;
+        position: absolute;
+        top: 56px;
+        left: 0;
+        margin: 0 8px;
+        padding: 10px;
+        background: #ffffff;
+    }
 }
 
 /*
@@ -2015,11 +2035,6 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
 .sales-order-index .col-1-layout table.data {
     table-layout: fixed;
     word-wrap: break-word;
-}
-
-.eq-ie8 .sales-order-index .col-1-layout table.data {
-    table-layout: auto;
-    word-wrap: normal;
 }
 
 [class^=" sales-"] .col-from-store {
@@ -2797,7 +2812,9 @@ table.items-to-invoice tbody tr:hover td {
 .tax-rate-popup .field:before,
 .tax-rate-popup .field:after,
 .clearfix:before,
-.clearfix:after {
+.clearfix:after,
+#tab_content_downloadableInfo .data-table td .row:before,
+#tab_content_downloadableInfo .data-table td .row:after {
     content: "";
     display: table;
 }
@@ -2806,6 +2823,9 @@ table.items-to-invoice tbody tr:hover td {
 .image-panel:after,
 .images:after,
 .tax-rate-popup .field:after,
-.clearfix:after {
+.clearfix:after,
+#tab_content_downloadableInfo .data-table td .row:after {
     clear: both;
 }
+
+@import "debug.less";

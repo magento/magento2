@@ -94,7 +94,7 @@ class Customer extends \Magento\Backend\App\Action
         $fileName = 'new_accounts.csv';
         /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
-        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile());
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\Filesystem::VAR_DIR);
     }
 
     /**
@@ -106,7 +106,11 @@ class Customer extends \Magento\Backend\App\Action
         $fileName = 'new_accounts.xml';
         /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
-        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile($fileName));
+        return $this->_fileFactory->create(
+            $fileName,
+            $exportBlock->getExcelFile($fileName),
+            \Magento\Filesystem::VAR_DIR
+        );
     }
 
     public function ordersAction()

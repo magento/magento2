@@ -386,7 +386,8 @@ class Customer
                 $address = $customer->getAddressItemById($addressId);
                 if (!$address || !$address->getId()) {
                     throw new \Magento\Core\Exception(
-                        __('The address with the specified ID not found.'));
+                        __('The address with the specified ID not found.')
+                    );
                 }
             } else {
                 $address = $this->_addressFactory->create();

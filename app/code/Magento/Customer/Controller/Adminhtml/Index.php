@@ -472,7 +472,7 @@ class Index extends \Magento\Backend\App\Action
         $fileName = 'customers.csv';
         $content = $this->_view->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Grid')->getCsvFile();
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\Filesystem::VAR_DIR);
     }
 
     /**
@@ -482,7 +482,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $fileName = 'customers.xml';
         $content = $this->_view->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Grid')->getExcelFile();
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\Filesystem::VAR_DIR);
     }
 
     /**
@@ -851,8 +851,8 @@ class Index extends \Magento\Backend\App\Action
 
         /** @var \Magento\Filesystem $filesystem */
         $filesystem = $this->_objectManager->get('Magento\Filesystem');
-        $directory = $filesystem->getDirectoryRead(\Magento\Filesystem:: MEDIA);
-        $fileName = 'customer/' . $file;
+        $directory = $filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        $fileName = 'customer' . '/' . ltrim($file, '/');
         $path = $directory->getAbsolutePath($fileName);
         if (!$directory->isFile($fileName)
             && !$this->_objectManager->get('Magento\Core\Helper\File\Storage')
@@ -877,7 +877,7 @@ class Index extends \Magento\Backend\App\Action
                     $contentType = 'application/octet-stream';
                     break;
             }
-            $stat = $directory->stat($fileName);
+            $stat = $directory->stat($path);
             $contentLength = $stat['size'];
             $contentModify = $stat['mtime'];
 
@@ -893,10 +893,14 @@ class Index extends \Magento\Backend\App\Action
             echo $directory->readFile($fileName);
         } else {
             $name = pathinfo($path, PATHINFO_BASENAME);
-            $this->_fileFactory->create($name, array(
-                'type'  => 'filename',
-                'value' => $fileName
-            ))->sendResponse();
+            $this->_fileFactory->create(
+                $name,
+                array(
+                    'type'  => 'filename',
+                    'value' => $fileName
+                ),
+                \Magento\Filesystem::MEDIA
+            )->sendResponse();
         }
 
         exit();

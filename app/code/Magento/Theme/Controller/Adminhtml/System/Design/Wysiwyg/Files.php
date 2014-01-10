@@ -147,10 +147,14 @@ class Files extends \Magento\Backend\App\Action
         /** @var $helper \Magento\Theme\Helper\Storage */
         $helper = $this->_objectManager->get('Magento\Theme\Helper\Storage');
         try {
-            return $this->_fileFactory->create($file, array(
-                'type'  => 'filename',
-                'value' => $helper->getThumbnailPath($file)
-            ));
+            return $this->_fileFactory->create(
+                $file,
+                array(
+                    'type'  => 'filename',
+                    'value' => $helper->getThumbnailPath($file)
+                ),
+                \Magento\Filesystem::MEDIA
+            );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_redirect('core/index/notfound');

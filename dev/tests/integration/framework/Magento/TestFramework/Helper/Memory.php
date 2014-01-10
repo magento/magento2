@@ -85,7 +85,11 @@ class Memory
     protected function _getUnixProcessMemoryUsage($pid)
     {
         // RSS - resident set size, the non-swapped physical memory
-        $output = $this->_shell->execute('ps --pid %s --format rss --no-headers', array($pid));
+        $command = 'ps --pid %s --format rss --no-headers';
+        if ($this->isMacOS()) {
+            $command = 'ps -p %s -o rss=';
+        }
+        $output = $this->_shell->execute($command, array($pid));
         $result = $output . 'k'; // kilobytes
         return self::convertToBytes($result);
     }
@@ -164,5 +168,16 @@ class Memory
             );
         }
         return preg_replace('/\D+/', '', $number);
+    }
+
+    /**
+     * Whether the operating system belongs to the Mac family
+     *
+     * @link http://php.net/manual/en/function.php-uname.php
+     * @return boolean
+     */
+    public static function isMacOs()
+    {
+        return (strtoupper(PHP_OS) === 'DARWIN');
     }
 }
