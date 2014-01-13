@@ -32,8 +32,9 @@ $fieldList = array(
     'minimal_price','cost','tier_price','weight'
 );
 foreach ($fieldList as $field) {
-    $applyTo = explode(',', $installer->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to'));
-    if (!in_array('bundle', $applyTo)) {
+    $applyToStr = $installer->getAttribute(Mage_Catalog_Model_Product::ENTITY, $field, 'apply_to');
+	$applyTo = explode(',', $applyToStr);
+	if (!empty($applyToStr) &&!in_array('bundle', $applyTo)) {
         $applyTo[] = 'bundle';
         $installer->updateAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to', implode(',', $applyTo));
     }
