@@ -63,7 +63,7 @@ class DefaultLocator
             $group = $request->getParam('group');
             $currencyCode =  $this->_app->getGroup($group)->getWebsite()->getBaseCurrencyCode();
         } else {
-            $currencyCode = $this->_app->getStore()->getBaseCurrencyCode();
+            $currencyCode = $this->_app->getBaseCurrencyCode();
         }
 
         return $currencyCode;

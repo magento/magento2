@@ -85,10 +85,10 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
             curl_setopt($this->_getResource(), $option, $value);
         }
 
-        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : 0;
+        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : true;
         curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYPEER, $verifyPeer);
 
-        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 0;
+        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 2;
         curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYHOST, $verifyHost);
 
         foreach ($this->_config as $param => $curlOption) {

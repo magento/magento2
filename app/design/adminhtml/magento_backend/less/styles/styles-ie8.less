@@ -1,0 +1,372 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+// Reset 'button view' for actions
+.eq-ie8 .customer-current-activity .action-refresh,
+.eq-ie8 .pager .action-next,
+.eq-ie8 .pager .action-previous,
+.eq-ie8 .pager .action-next:hover,
+.eq-ie8 .pager .action-previous:hover,
+.eq-ie8 .pager .action-next.disabled:focus,
+.eq-ie8 .pager .action-previous.disabled:focus,
+.eq-ie8 .pager .action-next.disabled:active,
+.eq-ie8 .pager .action-previous.disabled:active,
+.eq-ie8 .data-table .action-.delete,
+.eq-ie8 .data-table .action-.delete:hover,
+.eq-ie8 .data-table .action-.delete:active,
+.eq-ie8 .data-table .action-.delete.active,
+.eq-ie8 .data-table .action-delete,
+.eq-ie8 .data-table .action-delete:hover,
+.eq-ie8 .data-table .action-delete:active,
+.eq-ie8 .data-table .action-delete.active,
+.eq-ie8 .data-table .action-locked,
+.eq-ie8 .data-table .action-locked:hover,
+.eq-ie8 .data-table .action-locked:active,
+.eq-ie8 .data-table .action-locked.active,
+.eq-ie8 #product-variations-matrix .action-choose,
+.eq-ie8 #product-variations-matrix .action-choose:hover,
+.eq-ie8 #product-variations-matrix .action-choose:active,
+.eq-ie8 #product-variations-matrix .action-choose.active,
+.eq-ie8 .image-panel .action-close,
+.eq-ie8 .eq-ie8 .image-panel .action-close:hover,
+.eq-ie8 .image-panel .action-close:active,
+.eq-ie8 .image-panel .action-close.active,
+.eq-ie8 .image-panel-controls .action-remove,
+.eq-ie8 .image-panel-controls .action-remove:hover,
+.eq-ie8 .image-panel-controls .action-remove:active,
+.eq-ie8 .image-panel-controls .action-remove.active,
+.eq-ie8 .suggest-expandable .action-show-all,
+.eq-ie8 .suggest-expandable .action-show-all:hover,
+.eq-ie8 .suggest-expandable .action-show-all:active,
+.eq-ie8 .suggest-expandable .action-show-all.active,
+.eq-ie8 .vde-tools-header .action-close,
+.eq-ie8 .vde-tools-header .action-close:hover,
+.eq-ie8 .vde-tools-header .action-close:active,
+.eq-ie8 .vde-tools-header .action-close.active,
+.eq-ie8 .image .action-delete,
+.eq-ie8 .image .action-delete:hover,
+.eq-ie8 .image .action-delete:active,
+.eq-ie8 .image .action-delete.active,
+.eq-ie8 .fieldset-wrapper-title .actions .action-delete,
+.eq-ie8 .fieldset-wrapper-title .actions .action-delete:hover,
+.eq-ie8 .fieldset-wrapper-title .actions .action-delete:active,
+.eq-ie8 .fieldset-wrapper-title .actions .action-delete.active,
+.eq-ie8 .address-list-item-actions .action-delete,
+.eq-ie8 .address-list-item-actions .action-delete:hover,
+.eq-ie8 .address-list-item-actions .action-delete:active,
+.eq-ie8 .address-list-item-actions .action-delete.active,
+.eq-ie8 .notification .action-close,
+.eq-ie8 .notification .action-close:hover,
+.eq-ie8 .notification .action-close:active,
+.eq-ie8 .notification .action-close.active,
+.eq-ie8 .page-login .action-forgotpassword,
+.eq-ie8 .page-login .action-forgotpassword:hover,
+.eq-ie8 .page-login .action-forgotpassword:active,
+.eq-ie8 .page-login .action-forgotpassword.active,
+.eq-ie8 .page-login .action-back,
+.eq-ie8 .page-login .action-back:hover,
+.eq-ie8 .page-login .action-back:active,
+.eq-ie8 .page-login .action-back.active {
+    border: none;
+    border-radius: 0;
+    background: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    text-shadow: none;
+    filter: none;
+}
+
+// Variations Image Uploader
+
+.eq-ie8 .actions-image-uploader .action-upload {
+    filter: none;
+}
+
+// Forms
+
+.eq-ie8 select[disabled="disabled"][multiple="multiple"] option[selected="selected"] {
+    background-color: #ddd;
+}
+
+.eq-ie8 .fieldset {
+    border-width: 0 0 1px;
+}
+
+.eq-ie8 .fieldset .fieldset-wrapper .fieldset-wrapper-title,
+.eq-ie8 .fieldset-wrapper .fieldset-wrapper .fieldset-wrapper-title {
+    background: #f4f2ef;
+}
+
+.eq-ie8 .fieldset-alt,
+.eq-ie8 .fieldset-alt > .fieldset {
+    display: block;
+    width: 100%;
+}
+
+.eq-ie8 .fieldset-alt > .field {
+    display: inline-block;
+}
+
+.eq-ie8 .field.type-price .addon .addafter,
+.eq-ie8 .field-price .addon .addafter,
+.eq-ie8 .field-special_price .addon .addafter,
+.eq-ie8 .field-msrp .addon .addafter {
+    border-width: 1px 1px 1px 0;
+}
+
+.eq-ie8 .field-apply_to .multiselect {
+    height: 120px;
+}
+
+// Popups
+
+.eq-ie8 .popup-loading {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+}
+
+.eq-ie8 .loading-old,
+.eq-ie8 .loading-mask {
+    background: #fff;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+}
+
+// Global Navigation
+.eq-ie8 .navigation {
+    background: #726c62;
+}
+
+.eq-ie8 .navigation:before {
+    border-top: 1px solid #46433d;
+}
+
+.eq-ie8 .navigation .level-0.active > a {
+    background: #625d54;
+}
+
+.eq-ie8 .navigation .level-0.active > a,
+.eq-ie8 .navigation .level-0:hover > a,
+.eq-ie8 .navigation .level-0.hover > a {
+    border-top: 1px solid #46433d;
+    padding-top: 36px;
+}
+
+.eq-ie8 .navigation .level-0 > .submenu .column {
+    float: left;
+}
+
+.eq-ie8 .navigation .level-0.item-system > a,
+.eq-ie8 .navigation .level-0.item-system:hover > a,
+.eq-ie8 .navigation .level-0.item-system.hover > a,
+.eq-ie8 .navigation .level-0.item-stores > a,
+.eq-ie8 .navigation .level-0.item-stores:hover > a,
+.eq-ie8 .navigation .level-0.item-stores.hover > a {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.eq-ie8 .navigation .level-0.item-system > a:before,
+.eq-ie8 .navigation .level-0.item-system > a:after,
+.eq-ie8 .navigation .level-0.item-stores > a:before,
+.eq-ie8 .navigation .level-0.item-stores > a:after {
+    display: none;
+}
+
+.eq-ie8 .page-login .field-username label,
+.eq-ie8 .page-login .field-password label,
+.eq-ie8 .page-login .field-confirmation label {
+    display: block;
+}
+
+.eq-ie8 .message-noscript,
+.eq-ie8 .message-demo-mode {
+    border-bottom: 1px solid #46433d;
+}
+
+// Switcher
+.eq-ie8 .store-switcher-alt .store-selected:after {
+    vertical-align: middle;
+}
+
+.eq-ie8 .store-switcher-website {
+    border-bottom: 0;
+}
+
+.eq-ie8 .store-switcher-store-view {
+    border-bottom: 0;
+    border-top: 1px solid #e5e5e5;
+}
+
+.eq-ie8 .switcher-label:after {
+    content: 'off';
+    overflow: hidden;
+    white-space: nowrap;
+    text-indent: 100%;
+}
+
+.eq-ie8 .switcher.checked .switcher-label:after {
+    background-position: -34px 0;
+    content: 'on';
+}
+
+.eq-ie8 .switcher.checked .switcher-label:before {
+    content: attr(data-text-on);
+}
+
+// Table Grid
+
+.eq-ie8 .grid table td.empty-text {
+    border-width: 0 1px 1px;
+}
+
+.eq-ie8 .grid table tr td.empty-text {
+    border-width: 0 1px 1px;
+}
+
+.eq-ie8 .grid .filter .date img {
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+.eq-ie8 .massaction .entry-edit .field-row:first-child {
+    margin-right: 1px;
+}
+
+.eq-ie8 .massaction .entry-edit .field-row {
+    display: inline;
+}
+
+// Data table
+
+.eq-ie8 .data-table td,
+.eq-ie8 .data-table tbody tr td {
+    border-width: 0 0 1px;
+}
+
+.eq-ie8 .data-table td > .field {
+    margin-bottom: 0;
+}
+
+.eq-ie8 .data-table tfoot tr td {
+    border: none;
+}
+
+// Data table - alternative view
+
+.eq-ie8 .customer-information .data-table tbody tr td,
+.eq-ie8 .customer-information .data-table tbody tr th,
+.eq-ie8 .order-information .data-table tbody tr td,
+.eq-ie8 .order-information .data-table tbody tr th,
+.eq-ie8 .order-account-information .data-table tbody tr td,
+.eq-ie8 .order-account-information .data-table tbody tr th,
+.eq-ie8 [class^=" adminhtml-rma-"] .data-table tbody tr td,
+.eq-ie8 [class^=" adminhtml-rma-"] .data-table tbody tr th,
+.eq-ie8 [class^=" sales-transactions-"] .data-table tbody tr th,
+.eq-ie8 [class^=" sales-transactions-"] .data-table tbody tr td,
+.eq-ie8 [class^=" sales-"] .order-payment-method .data-table tbody tr th,
+.eq-ie8 [class^=" sales-"] .order-payment-method .data-table tbody tr td,
+.eq-ie8 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr th,
+.eq-ie8 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr td {
+    border-bottom: 1px solid #ededed;
+}
+
+// Widgets
+.eq-ie8 .widget-layout-updates .data-table {
+    table-layout: auto;
+}
+
+// Grid - Mass Action
+
+.eq-ie8 .massaction {
+    border-bottom: 2px solid #504d46;
+}
+
+// Header
+.eq-ie8 .header {
+    background: #f5f2ea;
+}
+
+.eq-ie8 .header-panel .dropdown-menu {
+    border: 1px solid #c3bcaf;
+}
+
+.eq-ie8 .header-panel .notifications-icon:before {
+    bottom: -6px;
+}
+
+.eq-ie8 .header-panel .notifications > .dropdown-menu > li:hover {
+    margin-top: 0;
+    padding-top: 13px;
+}
+
+.eq-ie8 .header-panel .dropdown-menu > li:hover:after {
+    display: block;
+}
+
+.eq-ie8 .header-panel .notifications > .dropdown-menu .action-close {
+    filter: none;
+}
+
+.eq-ie8 .header .header-panel .notifications .action-more {
+    filter: none;
+}
+
+.eq-ie8 .header .header-panel .notifications .action-more {
+    margin-bottom: -1px;
+}
+
+.eq-ie8 .autocomplete-results {
+    margin-top: -10px;
+}
+
+.eq-ie8 .search button[type="submit"]:before {
+    line-height: 1.3;
+}
+
+// Product Creation
+
+.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back,
+.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:hover,
+.eq-ie8 [class^=" catalog-product-"] .page-actions .action-back:active,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back:hover,
+.eq-ie8 [class^=" newsletter-"] .page-actions .action-back:active {
+    filter: none;
+    border: 0;
+}
+
+.eq-ie8 .sales-order-index .col-1-layout table.data {
+    table-layout: auto;
+    word-wrap: normal;
+}
+
+// Accordion
+.eq-ie8 .accordion .config legend {
+    position: absolute;
+    left: -999em;
+    display: block;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}

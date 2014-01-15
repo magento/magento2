@@ -32,7 +32,7 @@ require BP . '/app/autoload.php';
     dirname(__DIR__) . '/testsuite',
     BP . '/lib',
 ));
-\Magento\TestFramework\Utility\Files::init(new \Magento\TestFramework\Utility\Files(BP));
+\Magento\TestFramework\Utility\Files::setInstance(new \Magento\TestFramework\Utility\Files(BP));
 
 function tool_autoloader($className)
 {

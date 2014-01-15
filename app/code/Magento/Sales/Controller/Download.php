@@ -93,10 +93,14 @@ class Download extends \Magento\App\Action\Action
                     throw new \Exception();
                 }
             }
-            $this->_fileResponseFactory->create($info['title'], array(
-               'value' => $filePath,
-               'type'  => 'filename'
-            ));
+            $this->_fileResponseFactory->create(
+                $info['title'],
+                array(
+                    'value' => $filePath,
+                    'type'  => 'filename'
+                ),
+                \Magento\Filesystem::ROOT
+            );
         } catch (\Exception $e) {
             $this->_forward('noroute');
         }

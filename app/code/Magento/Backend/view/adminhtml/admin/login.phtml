@@ -26,7 +26,6 @@
 ?>
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo __('Log into Magento Admin Page') ?></title>
@@ -38,9 +37,11 @@
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/base.css') ?>" media="all" />
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/elements.css') ?>" media="all" />
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/form.css') ?>" media="all" />
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/styles.css') ?>" media="all" />
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/admin.css') ?>" media="all" />
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/header.css') ?>" media="all" />
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/pages.css') ?>" media="all" />
+    <?php /* <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/styles.css') ?>" media="all" /> */?>
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/utils.css') ?>" media="all" />
-
 
     <script src="<?php echo $this->getViewFileUrl('jquery/jquery.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('mage/jquery-no-conflict.js') ?>"></script>
@@ -55,9 +56,9 @@
     <script src="<?php echo $this->getViewFileUrl('prototype/prototype.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('scriptaculous/effects.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('mage/captcha.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('lib/modernizr.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('js/head.js') ?>"></script>
-
+    <script src="<?php echo $this->getViewFileUrl('modernizr/modernizr.js') ?>"></script>
+    <script src="<?php echo $this->getViewFileUrl('headjs/head.min.js') ?>"></script>
+</head>
 <body id="page-login" class="page-login" onload="document.forms['login-form'].username.focus();">
     <div class="wrapper">
         <div class="wrapper-inner">

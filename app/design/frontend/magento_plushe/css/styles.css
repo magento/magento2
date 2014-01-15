@@ -5278,6 +5278,19 @@ body {
   padding: 0;
   margin: 0 0 30px;
 }
+.block.progress.onepage dd.complete .cards.items dd {
+  margin-left: 0;
+}
+.block.progress.onepage dd.complete .cards.items dd .card.item {
+  font-size: 12px;
+  margin: 5px 0 10px;
+}
+.block.progress.onepage dd.complete .cards.items dd .card.item dt {
+  font-weight: bold;
+}
+.block.progress.onepage dd.complete .cards.items dd .card.item dd {
+  margin-bottom: 5px;
+}
 .block.progress.onepage address {
   font-style: normal;
 }

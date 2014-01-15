@@ -55,6 +55,7 @@ class FileFactory
      * @param string $fileName
      * @param string|array $content set to null to avoid starting output, $contentLength should be set explicitly in
      *                              that case
+     * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength explicit content length, if strlen($content) isn't applicable
      * @throws \Exception
@@ -65,9 +66,14 @@ class FileFactory
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function create($fileName, $content, $contentType = 'application/octet-stream', $contentLength = null)
-    {
-        $dir = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+    public function create(
+        $fileName,
+        $content,
+        $baseDir = \Magento\Filesystem::ROOT,
+        $contentType = 'application/octet-stream',
+        $contentLength = null
+    ) {
+        $dir = $this->_filesystem->getDirectoryWrite($baseDir);
         $isFile = false;
         $file = null;
         if (is_array($content)) {

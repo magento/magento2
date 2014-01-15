@@ -33,11 +33,21 @@
                     <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data" />
                 </entity_constraints>
             </rule>
+            <rule name="metadata_form_data">
+                <entity_constraints>
+                    <constraint alias="metadata_data_validator" class="Magento\Customer\Model\Metadata\Validator" />
+                </entity_constraints>
+            </rule>
         </rules>
         <groups>
             <group name="save">
                 <uses>
                     <use rule="check_eav"/>
+                </uses>
+            </group>
+            <group name="form">
+                <uses>
+                    <use rule="metadata_form_data"/>
                 </uses>
             </group>
         </groups>

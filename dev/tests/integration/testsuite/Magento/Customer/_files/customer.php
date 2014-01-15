@@ -28,9 +28,9 @@ $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Customer\Model\Customer');
 $customer
     ->setWebsiteId(1)
-    ->setEntityId(1)
+    ->setId(1)
     ->setEntityTypeId(1)
-    ->setAttributeSetId(0)
+    ->setAttributeSetId(1)
     ->setEmail('customer@example.com')
     ->setPassword('password')
     ->setGroupId(1)

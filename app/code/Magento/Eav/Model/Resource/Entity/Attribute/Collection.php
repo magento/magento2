@@ -135,7 +135,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                 'entity_attribute.attribute_id = main_table.attribute_id'
             );
             $this->addFieldToFilter('entity_attribute.attribute_set_id', $setId);
-            $this->setOrder('sort_order', self::SORT_ORDER_ASC);
+            $this->setOrder('entity_attribute.sort_order', self::SORT_ORDER_ASC);
         }
 
         return $this;

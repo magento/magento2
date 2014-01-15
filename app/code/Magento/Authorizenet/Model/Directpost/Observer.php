@@ -57,9 +57,9 @@ class Observer
     protected $_authorizenetData;
 
     /**
-     * @var \Magento\Authorizenet\Model\DirectpostFactory
+     * @var \Magento\Authorizenet\Model\Directpost
      */
-    protected $_modelFactory;
+    protected $_payment;
 
     /**
      * @var \Magento\Authorizenet\Model\Directpost\Session
@@ -75,7 +75,7 @@ class Observer
      * @param \Magento\Authorizenet\Helper\Data $authorizenetData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Authorizenet\Model\DirectpostFactory $modelFactory
+     * @param \Magento\Authorizenet\Model\Directpost $payment
      * @param \Magento\Authorizenet\Model\Directpost\Session $session
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
@@ -83,14 +83,14 @@ class Observer
         \Magento\Authorizenet\Helper\Data $authorizenetData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Authorizenet\Model\DirectpostFactory $modelFactory,
+        \Magento\Authorizenet\Model\Directpost $payment,
         \Magento\Authorizenet\Model\Directpost\Session $session,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_authorizenetData = $authorizenetData;
         $this->_coreData = $coreData;
-        $this->_modelFactory = $modelFactory;
+        $this->_payment = $payment;
         $this->_session = $session;
         $this->_storeManager = $storeManager;
     }
@@ -123,9 +123,11 @@ class Observer
 
         if ($order && $order->getId()) {
             $payment = $order->getPayment();
-            if ($payment && $payment->getMethod() == $this->_modelFactory->create()->getCode()) {
-                $request = $observer->getEvent()->getRequest();
-                $response = $observer->getEvent()->getResponse();
+            if ($payment && $payment->getMethod() == $this->_payment->getCode()) {
+                /** @var \Magento\Checkout\Controller\Action $controller */
+                $controller = $observer->getEvent()->getData('controller_action');
+                $request = $controller->getRequest();
+                $response = $controller->getResponse();
                 $result = $this->_coreData->jsonDecode($response->getBody('default'));
 
                 if (empty($result['error'])) {

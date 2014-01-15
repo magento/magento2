@@ -185,8 +185,6 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
             $nullCheck = true;
         }
 
-        $storeIds[0] = ($storeIds[0] == '') ? 0 : $storeIds[0];
-
         if ($nullCheck) {
             $select->where('store_id IN(?) OR store_id IS NULL', $storeIds);
         } else {

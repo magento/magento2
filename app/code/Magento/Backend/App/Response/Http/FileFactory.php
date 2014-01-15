@@ -104,15 +104,21 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
      * @param string $fileName
      * @param string|array $content set to null to avoid starting output, $contentLength should be set explicitly in
      * that case
+     * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength    explicit content length, if strlen($content) isn't applicable
      * @return \Magento\App\ResponseInterface
      */
-    public function create($fileName, $content, $contentType = 'application/octet-stream', $contentLength = null)
-    {
+    public function create(
+        $fileName,
+        $content,
+        $baseDir = \Magento\Filesystem::ROOT,
+        $contentType = 'application/octet-stream',
+        $contentLength = null
+    ) {
         if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
             return $this->_redirect($this->_backendUrl->getStartupPageUrl());
         }
-        return parent::create($fileName, $content, $contentType, $contentLength);
+        return parent::create($fileName, $content, $baseDir, $contentType, $contentLength);
     }
 }

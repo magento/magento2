@@ -115,7 +115,6 @@ class Grid
     {
         $collection = $this->_productFactory->create()->getCollection()
             ->setOrder('id')
-            ->setStore($this->getStore())
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
@@ -123,7 +122,7 @@ class Grid
             ->addAttributeToFilter('entity_id', array('nin' => $this->_getSelectedProducts()))
             ->addAttributeToFilter('type_id', array('in' => $this->getAllowedSelectionTypes()))
             ->addFilterByRequiredOptions()
-            ->addStoreFilter();
+            ->addStoreFilter(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
         if ($this->getFirstShow()) {
             $collection->addIdFilter('-1');
@@ -169,8 +168,6 @@ class Grid
             'header'    => __('Price'),
             'align'     => 'center',
             'type'      => 'currency',
-            'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
-            'rate'      => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
             'index'     => 'price',
             'header_css_class'=> 'col-price',
             'column_css_class'=> 'col-price'
@@ -206,11 +203,6 @@ class Grid
         } else {
             return array();
         }
-    }
-
-    public function getStore()
-    {
-        return $this->_storeManager->getStore();
     }
 
     /**

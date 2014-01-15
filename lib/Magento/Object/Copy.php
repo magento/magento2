@@ -105,6 +105,42 @@ class Copy
     }
 
     /**
+     * Get data from object|array to object|array containing fields
+     * from fieldset matching an aspect.
+     *
+     * @param string $fieldset
+     * @param string $aspect a field name
+     * @param array|\Magento\Object $source
+     * @param string $root
+     * @return array $data
+     */
+    public function getDataFromFieldset($fieldset, $aspect, $source, $root='global')
+    {
+        if (!(is_array($source) || $source instanceof \Magento\Object)) {
+            return null;
+        }
+        $fields = $this->_fieldsetConfig->getFieldset($fieldset, $root);
+        if (is_null($fields)) {
+            return null;
+        }
+
+        $data = array();
+        foreach ($fields as $code => $node) {
+            if (empty($node[$aspect])) {
+                continue;
+            }
+
+            $value = $this->_getFieldsetFieldValue($source, $code);
+
+            $targetCode = (string)$node[$aspect];
+            $targetCode = $targetCode == '*' ? $code : $targetCode;
+            $data[$targetCode] = $value;
+        }
+
+        return $data;
+    }
+
+    /**
      * Check if source and target are valid input for converting using fieldset
      *
      * @param array|\Magento\Object $source

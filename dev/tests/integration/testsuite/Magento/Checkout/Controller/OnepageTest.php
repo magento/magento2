@@ -52,6 +52,7 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('<li id="opc-payment"', $html);
         $this->assertSelectCount('[id="checkout-payment-method-load"]', 1, $html);
         $this->assertSelectCount('form[id="co-billing-form"][action=""]', 1, $html);
+        $this->assertSelectCount('form[id="co-payment-form"] input[name="form_key"]', 1, $html);
     }
 
     /**
@@ -91,6 +92,24 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/onepage/review');
         $this->assertContains('Place Order', $this->getResponse()->getBody());
         $this->assertContains('checkout-review', $this->getResponse()->getBody());
+    }
+
+    public function testSaveOrderActionWithoutFormKey()
+    {
+        $this->dispatch('checkout/onepage/saveOrder');
+        $this->assertRedirect($this->stringContains('checkout/onepage'));
+    }
+
+    public function testSaveOrderActionWithFormKey()
+    {
+        $formKey = $this->_objectManager->get('\Magento\Data\Form\FormKey');
+        $this->getRequest()->setParam('form_key', $formKey->getFormKey());
+        $this->dispatch('checkout/onepage/saveOrder');
+        $html = $this->getResponse()->getBody();
+        $this->assertEquals(
+            '{"success":false,"error":true,"error_messages":"Please specify a shipping method."}',
+            $html
+        );
     }
 }
 

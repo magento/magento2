@@ -1,3 +1,32 @@
+2.0.0.0-dev60
+=============
+* Fixed bugs:
+  * Fixed an issue with exceeding the memory limit when uploading very big images
+  * Fixed an issue in moving a category when $afterCategoryId is null
+  * Fixed an issue when products from a non-default website were not available as bundle items
+  * Fixed an issue when orders placed via Authorize.net had the wrong statuses
+  * Fixed an issue where orders placed via PayPal Express Checkout could not be placed if HTTPS was used on the frontend
+  * Fixed a security issue with a user session during registration
+  * Removed a CSRF vulnerability in checkout
+  * Fixed an issue with JavaScript static testing framework not handling corrupted paths in white/black lists properly
+  * Fixed an issue with Google Shopping synchronization
+  * Fixed the contextual help tooltip design
+  * Fixed an issue with the Authorize.net CC section UI on the Onepage Checkout page
+  * Fixed UI issues on the order pages in the backend
+  * Fixed UI issues in the backend for IE9
+  * Fixed UI issues on the Edit Customer page in the backend
+  * Fixed a UI issue with the image preview placeholder on the Edit Product page for IE9
+  * Fixed UI issues with forms in the backend
+  * Fixed UI issues with buttons in the backend
+  * Fixed an issue with a product status after a virtual product was duplicated
+  * Fixed a fatal error with attribute file from the customer account page in the backend
+  * Fixed a security issue when CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST where used with improper values sometimes
+  * Updated the field descriptions for Secure Base URL settings in the backend
+  * Fixed an issue in product duplication for multiple store views
+  * Consolidated several 3rd-party JavaScript libraries in the pub/lib directory, and fixed license notice texts to conform to the open source license requirements
+* Service Layer implementation:
+  * Implemented the initial set of services for the Customer module
+
 2.0.0.0-dev59
 =============
 * Fixed bugs:
@@ -103,6 +132,10 @@
   * Fixed date resetting to 1 Jan 1970 after saving a design change in the admin panel in case date format is DD/MM/YY
   * Fixed CAPTCHA on multi-address checkout flow
   * Fixed view files population tool
+  * Fixed DHL functionality of generation shipping labels
+  * Fixed target rule if it is applied for specific customer segment
+  * Fixed product importing that cleared price and weight
+  * Fixed fatal error when a file reference is added to HTML head
 * GitHub requests:
   * [#122](https://github.com/magento/magento2/pull/122) -- Added support of federal units of Brazil with 27 states
   * [#184](https://github.com/magento/magento2/issues/184) -- Removed unused blocks and methods in Magento_Wishlist module

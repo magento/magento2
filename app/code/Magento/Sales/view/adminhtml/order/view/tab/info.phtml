@@ -26,14 +26,18 @@
 ?>
 <?php /** @var $this \Magento\Sales\Block\Adminhtml\Order\View\Tab\Info */ ?>
 <?php $_order = $this->getOrder() ?>
+
 <div id="order-messages">
-        <?php echo $this->getChildHtml('order_messages') ?>
-    </div>
-    <?php echo $this->getChildHtml('order_info') ?>
-    <input type="hidden" name="order_id" value="<?php echo $_order->getId() ?>"/>
+    <?php echo $this->getChildHtml('order_messages') ?>
+</div>
+
+<?php echo $this->getChildHtml('order_info') ?>
+<input type="hidden" name="order_id" value="<?php echo $_order->getId() ?>"/>
+
 <?php if (!$_order->getIsVirtual()): ?>
 <div class="clearfix">
 <?php endif; ?>
+
     <div class="order-payment-method<?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?>">
         <?php /* Payment Method */ ?>
         <div class="fieldset-wrapper">
@@ -44,6 +48,11 @@
             <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
         </div>
     </div>
+
+<?php if ($_order->getIsVirtual()): ?>
+</div><?php /* opening div is in app\code\Magento\Sales\view\adminhtml\order\view\info.phtml */ ?>
+<?php endif; ?>
+
     <?php if (!$_order->getIsVirtual()): ?>
     <div class="order-shipping-method">
         <!--Shipping Method-->
@@ -76,16 +85,20 @@
         </div>
     </div>
     <?php endif; ?>
+
 <?php if (!$_order->getIsVirtual()): ?>
 </div>
 <?php endif; ?>
-    <?php echo $this->getGiftOptionsHtml() ?>
-    <div class="fieldset-wrapper">
-        <div class="fieldset-wrapper-title">
-            <span class="title"><?php echo __('Items Ordered') ?></span>
-        </div>
-        <?php echo $this->getItemsHtml() ?>
+
+<?php echo $this->getGiftOptionsHtml() ?>
+
+<div class="fieldset-wrapper">
+    <div class="fieldset-wrapper-title">
+        <span class="title"><?php echo __('Items Ordered') ?></span>
     </div>
+    <?php echo $this->getItemsHtml() ?>
+</div>
+
 <div class="clearfix">
     <div class="order-comments-history">
         <div class="fieldset-wrapper">
@@ -95,6 +108,7 @@
             <fieldset><?php echo $this->getChildHtml('order_history') ?></fieldset>
         </div>
     </div>
+
     <div class="order-totals">
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
@@ -104,7 +118,9 @@
         </div>
     </div>
 </div>
+
 <?php echo $this->getChildHtml('popup_window');?>
+
 <script type="text/javascript">
 //<![CDATA[
     /**

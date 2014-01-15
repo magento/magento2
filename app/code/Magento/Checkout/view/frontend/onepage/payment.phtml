@@ -23,6 +23,7 @@
  */
 ?>
 <form id="co-payment-form" class="form payments">
+    <?php echo $this->getBlockHtml('formkey') ?>
     <fieldset class="fieldset">
         <?php echo $this->getChildChildHtml('methods_additional') ?>
         <div id="checkout-payment-method-load"><?php echo $this->getChildHtml('methods') ?></div>

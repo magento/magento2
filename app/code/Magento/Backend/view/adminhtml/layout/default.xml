@@ -46,7 +46,7 @@
             </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="head-load-min-js">
                 <arguments>
-                    <argument name="file" xsi:type="string">head.load.min.js</argument>
+                    <argument name="file" xsi:type="string">headjs/head.load.min.js</argument>
                 </arguments>
             </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="underscore-js">

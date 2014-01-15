@@ -40,7 +40,7 @@
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="lib-flex-js">
             <arguments>
-                <argument name="file" xsi:type="string">lib/flex.js</argument>
+                <argument name="file" xsi:type="string">mage/flex.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="lib-fabridge-js">

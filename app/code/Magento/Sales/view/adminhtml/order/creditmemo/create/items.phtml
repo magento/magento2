@@ -25,10 +25,12 @@
  */
 ?>
 <?php $_items = $this->getCreditmemo()->getAllItems() ?>
+
 <div class="fieldset-wrapper">
     <div class="fieldset-wrapper-title">
         <span class="title"><?php echo __('Items to Refund') ?></span>
     </div>
+
     <?php if (count($_items)) : ?>
     <div class="grid">
         <table cellspacing="0" class="data order-tables">
@@ -67,16 +69,21 @@
             <?php endforeach; ?>
         </table>
     </div>
-
     <?php else : ?>
     <div class="no-items">
         <?php echo __('No Items To Refund') ?>
     </div>
-<?php endif; ?>
+    <?php endif; ?>
 </div>
+
+<?php $orderTotalBar = $this->getChildHtml('order_totalbar'); ?>
+
+<?php if (!empty($orderTotalBar)): ?>
 <div class="fieldset-wrapper">
-    <?php echo $this->getChildHtml('order_totalbar') ?>
+    <?php echo $orderTotalBar; ?>
 </div>
+<?php endif; ?>
+
 <div class="clearfix">
     <input type="hidden" name="creditmemo[do_offline]" id="creditmemo_do_offline" value="0" />
     <div class="order-comments-history">

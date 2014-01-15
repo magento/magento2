@@ -9273,7 +9273,7 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
   padding: 0;
 }
 .overlay {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 5px;
   position: absolute;
   top: 0;
@@ -9285,10 +9285,11 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
   color: #111;
   font-weight: bold;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -25px 0 0 -100px;
-  width: 200px;
+  top: 56px;
+  left: 0;
+  margin: 0 8px;
+  padding: 10px;
+  background: #ffffff;
 }
 /*
     Order view
@@ -10583,17 +10584,17 @@ ul.messages li.success-msg li:before {
   margin-top: 6px;
 }
 .accordion .config .value.with-tooltip .tooltip-content {
-  padding: 15px;
+  padding: 18px;
+  margin: 0 -17px 10px 0;
   right: 0;
-  margin-left: 0;
-  margin-right: -19px;
-  margin-bottom: 10px;
-  left: auto;
-  top: auto;
   bottom: 100%;
-  width: 400px;
-  max-width: 400px;
-  line-height: 1.333;
+  width: 239px;
+  max-width: 239px;
+  font-size: 13px;
+  line-height: 1.4;
+  background: #31302b;
+  background: rgba(49, 48, 43, 0.8);
+  border-radius: 5px;
 }
 .accordion .config .value.with-tooltip .tooltip-content:before {
   content: '';
@@ -10606,7 +10607,7 @@ ul.messages li.success-msg li:before {
   right: 20px;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid #000;
+  border-top: 5px solid #31302b;
   border-bottom: 0;
   opacity: .8;
 }

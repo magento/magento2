@@ -165,13 +165,13 @@ class Observer
      */
     public function checkSynchronizationOperations(\Magento\Event\Observer $observer)
     {
-        $flag = $this->_flag->loadSelf();
-        if ($flag->isExpired()) {
+        $this->_flag->loadSelf();
+        if ($this->_flag->isExpired()) {
             $this->_inboxFactory->create()->addMajor(
                 __('Google Shopping operation has expired.'),
                 __('One or more google shopping synchronization operations failed because of timeout.')
             );
-            $flag->unlock();
+            $this->_flag->unlock();
         }
         return $this;
     }

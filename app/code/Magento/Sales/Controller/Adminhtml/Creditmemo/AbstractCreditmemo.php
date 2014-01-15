@@ -124,11 +124,16 @@ class AbstractCreditmemo extends \Magento\Backend\App\Action
                 $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')->getPdf($invoices);
             } else {
                 $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')->getPdf($invoices);
-                $pdf->pages = array_merge ($pdf->pages, $pages->pages);
+                $pdf->pages = array_merge($pdf->pages, $pages->pages);
             }
             $date = $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s');
 
-            return $this->_fileFactory->create('creditmemo' . $date . '.pdf', $pdf->render(), 'application/pdf');
+            return $this->_fileFactory->create(
+                'creditmemo' . $date . '.pdf',
+                $pdf->render(),
+                \Magento\Filesystem::VAR_DIR,
+                'application/pdf'
+            );
         }
         $this->_redirect('sales/*/');
     }
@@ -143,7 +148,12 @@ class AbstractCreditmemo extends \Magento\Backend\App\Action
                 $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')
                     ->getPdf(array($creditmemo));
                 $date = $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s');
-                return $this->_fileFactory->create('creditmemo' . $date . '.pdf', $pdf->render(), 'application/pdf');
+                return $this->_fileFactory->create(
+                    'creditmemo' . $date . '.pdf',
+                    $pdf->render(),
+                    \Magento\Filesystem::VAR_DIR,
+                    'application/pdf'
+                );
             }
         } else {
             $this->_forward('noroute');

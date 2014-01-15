@@ -79,6 +79,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->_customerFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->_customer));

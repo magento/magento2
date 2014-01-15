@@ -1,5 +1,5 @@
-// /**
-//  * Magento
+/**
+  * Magento
  *
  * NOTICE OF LICENSE
  *
@@ -16,10 +16,14 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-//  */
+  *
+  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+  */
+
+@import "vars.less";
+@import "base.less";
+@import "../lib/buttons.less";
 
 .dont-use-this-class-big-size {
     font-size: 18px;
@@ -131,81 +135,6 @@
 }
 .attribute-popup .messages {
     margin: 0 15px;
-}
-
-.eq-ie8 .customer-current-activity .action-refresh,
-.eq-ie8 .pager .action-next,
-.eq-ie8 .pager .action-previous,
-.eq-ie8 .pager .action-next:hover,
-.eq-ie8 .pager .action-previous:hover,
-.eq-ie8 .pager .action-next.disabled:focus,
-.eq-ie8 .pager .action-previous.disabled:focus,
-.eq-ie8 .pager .action-next.disabled:active,
-.eq-ie8 .pager .action-previous.disabled:active,
-.eq-ie8 .data-table .action-.delete,
-.eq-ie8 .data-table .action-.delete:hover,
-.eq-ie8 .data-table .action-.delete:active,
-.eq-ie8 .data-table .action-.delete.active,
-.eq-ie8 .data-table .action-delete,
-.eq-ie8 .data-table .action-delete:hover,
-.eq-ie8 .data-table .action-delete:active,
-.eq-ie8 .data-table .action-delete.active,
-.eq-ie8 .data-table .action-locked,
-.eq-ie8 .data-table .action-locked:hover,
-.eq-ie8 .data-table .action-locked:active,
-.eq-ie8 .data-table .action-locked.active,
-.eq-ie8 #product-variations-matrix .action-choose,
-.eq-ie8 #product-variations-matrix .action-choose:hover,
-.eq-ie8 #product-variations-matrix .action-choose:active,
-.eq-ie8 #product-variations-matrix .action-choose.active,
-.eq-ie8 .image-panel .action-close,
-.eq-ie8 .eq-ie8 .image-panel .action-close:hover,
-.eq-ie8 .image-panel .action-close:active,
-.eq-ie8 .image-panel .action-close.active,
-.eq-ie8 .image-panel-controls .action-remove,
-.eq-ie8 .image-panel-controls .action-remove:hover,
-.eq-ie8 .image-panel-controls .action-remove:active,
-.eq-ie8 .image-panel-controls .action-remove.active,
-.eq-ie8 .suggest-expandable .action-show-all,
-.eq-ie8 .suggest-expandable .action-show-all:hover,
-.eq-ie8 .suggest-expandable .action-show-all:active,
-.eq-ie8 .suggest-expandable .action-show-all.active,
-.eq-ie8 .vde-tools-header .action-close,
-.eq-ie8 .vde-tools-header .action-close:hover,
-.eq-ie8 .vde-tools-header .action-close:active,
-.eq-ie8 .vde-tools-header .action-close.active,
-.eq-ie8 .image .action-delete,
-.eq-ie8 .image .action-delete:hover,
-.eq-ie8 .image .action-delete:active,
-.eq-ie8 .image .action-delete.active,
-.eq-ie8 .fieldset-wrapper-title .actions .action-delete,
-.eq-ie8 .fieldset-wrapper-title .actions .action-delete:hover,
-.eq-ie8 .fieldset-wrapper-title .actions .action-delete:active,
-.eq-ie8 .fieldset-wrapper-title .actions .action-delete.active,
-.eq-ie8 .address-list-item-actions .action-delete,
-.eq-ie8 .address-list-item-actions .action-delete:hover,
-.eq-ie8 .address-list-item-actions .action-delete:active,
-.eq-ie8 .address-list-item-actions .action-delete.active,
-.eq-ie8 .notification .action-close,
-.eq-ie8 .notification .action-close:hover,
-.eq-ie8 .notification .action-close:active,
-.eq-ie8 .notification .action-close.active,
-.eq-ie8 .page-login .action-forgotpassword,
-.eq-ie8 .page-login .action-forgotpassword:hover,
-.eq-ie8 .page-login .action-forgotpassword:active,
-.eq-ie8 .page-login .action-forgotpassword.active,
-.eq-ie8 .page-login .action-back,
-.eq-ie8 .page-login .action-back:hover,
-.eq-ie8 .page-login .action-back:active,
-.eq-ie8 .page-login .action-back.active {
-    border: none;
-    border-radius: 0;
-    background: none;
-    margin: 0;
-    padding: 0;
-    box-shadow: none;
-    text-shadow: none;
-    filter: none;
 }
 
 .data-table .action-.delete[disabled],
@@ -779,10 +708,6 @@
     height: 31px;
 }
 
-.eq-ie8 .actions-image-uploader .action-upload {
-    filter: none;
-}
-
 .actions-image-uploader .action-toggle,
 .actions-image-uploader .action-toggle:hover,
 .actions-image-uploader .action-toggle:active,
@@ -1033,10 +958,6 @@ select[disabled].multiselect > option[selected] {
     background: #6d6d6d;
 }
 
-.eq-ie8 select[disabled="disabled"][multiple="multiple"] option[selected="selected"] {
-    background-color: #ddd;
-}
-
 textarea:-moz-placeholder,
 input:-moz-placeholder {
     color: #999 !important;
@@ -1208,10 +1129,6 @@ input.mage-error ~ .addafter {
     position: relative;
 }
 
-.eq-ie8 .fieldset {
-    border-width: 0 0 1px;
-}
-
 .fieldset-wrapper > .fieldset-wrapper-title,
 .fieldset > .legend {
     position: static;
@@ -1304,11 +1221,6 @@ input.mage-error ~ .addafter {
     border-radius: 5px;
 }
 
-.eq-ie8 .fieldset .fieldset-wrapper .fieldset-wrapper-title,
-.eq-ie8 .fieldset-wrapper .fieldset-wrapper .fieldset-wrapper-title {
-    background: #f4f2ef;
-}
-
 .fieldset .fieldset-wrapper.opened .fieldset-wrapper-title,
 .fieldset-wrapper .fieldset-wrapper.opened .fieldset-wrapper-title {
     border-radius: 5px 5px 0 0;
@@ -1394,16 +1306,6 @@ input.mage-error ~ .addafter {
     border: none;
     border-radius: 0;
     margin: 0 0 29px;
-}
-
-.eq-ie8 .fieldset-alt,
-.eq-ie8 .fieldset-alt > .fieldset {
-    display: block;
-    width: 100%;
-}
-
-.eq-ie8 .fieldset-alt > .field {
-    display: inline-block;
 }
 
 .fieldset .comment {
@@ -1712,13 +1614,6 @@ input.mage-error ~ .addafter {
     border-radius: 0 4px 4px 0;
 }
 
-.eq-ie8 .field.type-price .addon .addafter,
-.eq-ie8 .field-price .addon .addafter,
-.eq-ie8 .field-special_price .addon .addafter,
-.eq-ie8 .field-msrp .addon .addafter {
-    border-width: 1px 1px 1px 0;
-}
-
 .field.type-price input,
 .field-price input,
 .field-special_price input,
@@ -1747,10 +1642,6 @@ input.mage-error ~ .addafter {
 .field-msrp input ~ label.addafter strong {
     margin-left: 2px;
     margin-right: -2px;
-}
-
-.eq-ie8 .field-apply_to .multiselect {
-    height: 120px;
 }
 
 /*
@@ -2153,10 +2044,6 @@ table tbody tr:nth-child(odd):hover th {
     z-index: 2;
 }
 
-.eq-ie8 .popup-loading {
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-}
-
 /* Loading mask */
 .loading-old,
 .loading-mask {
@@ -2201,18 +2088,6 @@ table tbody tr:nth-child(odd):hover th {
     margin-top: 118px;
 }
 
-.eq-ie8 .loading-old,
-.eq-ie8 .loading-mask {
-    background: #fff;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-}
-
-/* Backup popup */
-/* TODO: remove after backups page js refactoring */
-.backup-dialog {
-    margin-top: inherit !important;
-}
-
 /* Backup popup */
 /* TODO: remove after backups page js refactoring */
 .backup-dialog {
@@ -2237,14 +2112,6 @@ table tbody tr:nth-child(odd):hover th {
     padding: 0 20px;
 }
 
-.navigation:hover .level-0 > a {
-    /*background: red !important;*/
-}
-
-.eq-ie8 .navigation {
-    background: #726c62;
-}
-
 .navigation:before {
     position: absolute;
     left: 0;
@@ -2254,10 +2121,6 @@ table tbody tr:nth-child(odd):hover th {
     box-shadow: 0 2px 4px #46433d inset;
     content: '';
     z-index: 991;
-}
-
-.eq-ie8 .navigation:before {
-    border-top: 1px solid #46433d;
 }
 
 .navigation:after {
@@ -2351,12 +2214,7 @@ table tbody tr:nth-child(odd):hover th {
     background: linear-gradient(to bottom, #625d54 1%, #565249 100%);
 }
 
-.eq-ie8 .navigation .level-0.active > a {
-    background: #625d54;
-}
-
-/*.navigation .level-0:hover > a,
-.eq-ie8 .navigation .level-0:hover > a,*/
+//.navigation .level-0:hover > a,
 .navigation .level-0.hover.recent > a {
     background: #fff;
     .style15I();
@@ -2381,13 +2239,6 @@ table tbody tr:nth-child(odd):hover th {
 .no-js .navigation .level-0.hover > .submenu,
 .no-js .navigation .level-0 > a:focus + .submenu {
     display: block;
-}
-
-.eq-ie8 .navigation .level-0.active > a,
-.eq-ie8 .navigation .level-0:hover > a,
-.eq-ie8 .navigation .level-0.hover > a {
-    border-top: 1px solid #46433d;
-    padding-top: 36px;
 }
 
 .navigation .level-0 > a:before {
@@ -2481,10 +2332,6 @@ table tbody tr:nth-child(odd):hover th {
     vertical-align: top;
 }
 
-.eq-ie8 .navigation .level-0 > .submenu .column {
-    float: left;
-}
-
 .navigation .level-0 .submenu .level-1 {
     white-space: normal;
 }
@@ -2543,16 +2390,6 @@ table tbody tr:nth-child(odd):hover th {
     padding: 0;
 }
 
-.eq-ie8 .navigation .level-0.item-system > a,
-.eq-ie8 .navigation .level-0.item-system:hover > a,
-.eq-ie8 .navigation .level-0.item-system.hover > a,
-.eq-ie8 .navigation .level-0.item-stores > a,
-.eq-ie8 .navigation .level-0.item-stores:hover > a,
-.eq-ie8 .navigation .level-0.item-stores.hover > a {
-    border-top: 0;
-    padding-top: 0;
-}
-
 .navigation .level-0.item-system:hover > a,
 .navigation .level-0.item-system.hover > a,
 .navigation .level-0.item-stores:hover > a,
@@ -2608,11 +2445,7 @@ table tbody tr:nth-child(odd):hover th {
 }
 
 .no-js .navigation .level-0.last:hover > a:before,
-.navigation .level-0.last.hover > a:before,
-.eq-ie8 .navigation .level-0.item-system > a:before,
-.eq-ie8 .navigation .level-0.item-system > a:after,
-.eq-ie8 .navigation .level-0.item-stores > a:before,
-.eq-ie8 .navigation .level-0.item-stores > a:after {
+.navigation .level-0.last.hover > a:before {
     display: none;
 }
 
@@ -2805,12 +2638,6 @@ table tbody tr:nth-child(odd):hover th {
     display: none;
 }
 
-.eq-ie8 .page-login .field-username label,
-.eq-ie8 .page-login .field-password label,
-.eq-ie8 .page-login .field-confirmation label {
-    display: block;
-}
-
 .page-login .form-inline .label + .control {
     width: auto;
     float: none;
@@ -2832,55 +2659,56 @@ table tbody tr:nth-child(odd):hover th {
     background: url(Magento_Backend::images/logo-magento.png) no-repeat;
 }
 
-/*
-.page-login .logo {
-    display: block;
-    width: 100px;
-    height: 65px;
-    margin: 0;
-    text-indent: -999em;
-    position: relative;
-    z-index: 1;
-}
-
-.page-login .logo:before,
-.page-login .logo:after {
-    font-family: 'admin-icons';
-    font-size: 65px;
-    content: '\e00d';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    text-indent: 0;
-    line-height: 1;
-    font-weight: normal;
-}
-
-.page-login .logo:before {
-    content: '\e00d';
-    color: #f37b20;
-}
-
-.page-login .logo:after {
-    content: '\e00e';
-    color: #fab57f;
-}
-
-.page-login .logo span:before {
-    font-family: 'admin-icons';
-    content: '\e00f';
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 70px;
-    font-size: 154px;
-    margin-top: -42px;
-    text-indent: 0;
-    line-height: 1;
-    font-weight: normal;
-    color: #000;
-}*/
+///*
+//.page-login .logo {
+//    display: block;
+//    width: 100px;
+//    height: 65px;
+//    margin: 0;
+//    text-indent: -999em;
+//    position: relative;
+//    z-index: 1;
+//}
+//
+//.page-login .logo:before,
+//.page-login .logo:after {
+//    font-family: 'admin-icons';
+//    font-size: 65px;
+//    content: '\e00d';
+//    position: absolute;
+//    bottom: 0;
+//    left: 0;
+//    text-indent: 0;
+//    line-height: 1;
+//    font-weight: normal;
+//}
+//
+//.page-login .logo:before {
+//    content: '\e00d';
+//    color: #f37b20;
+//}
+//
+//.page-login .logo:after {
+//    content: '\e00e';
+//    color: #fab57f;
+//}
+//
+//.page-login .logo span:before {
+//    font-family: 'admin-icons';
+//    content: '\e00f';
+//    display: block;
+//    position: absolute;
+//    top: 0;
+//    bottom: 0;
+//    left: 70px;
+//    font-size: 154px;
+//    margin-top: -42px;
+//    text-indent: 0;
+//    line-height: 1;
+//    font-weight: normal;
+//    color: #000;
+//}
+//*/
 
 .page-login .form-actions {
     padding: 0;
@@ -3068,10 +2896,6 @@ table tbody tr:nth-child(odd):hover th {
     z-index: 994;
 }
 
-.eq-ie8 .message-noscript {
-    border-bottom: 1px solid #46433d;
-}
-
 .message-noscript .message-content {
     margin: 0 auto;
     max-width: 1300px;
@@ -3111,10 +2935,6 @@ table tbody tr:nth-child(odd):hover th {
     padding: 5px 0;
     box-shadow: 0 1px 2px #46433d;
     z-index: 993;
-}
-
-.eq-ie8 .message-demo-mode {
-    border-bottom: 1px solid #46433d;
 }
 
 .message-demo-mode:before {
@@ -3232,14 +3052,9 @@ table tbody tr:nth-child(odd):hover th {
     vertical-align: text-top;
 }
 
-.eq-ie8 .store-switcher-alt .store-selected:after {
-    vertical-align: middle;
-}
-
 .store-switcher-alt .store-switcher-website,
 .store-switcher-alt .store-switcher-store {
     padding: 0;
-
 }
 
 .store-switcher-alt .store-switcher-website:hover,
@@ -3272,15 +3087,6 @@ table tbody tr:nth-child(odd):hover th {
 }
 
 .store-switcher-store-view:first-child {
-    border-top: 1px solid #e5e5e5;
-}
-
-.eq-ie8 .store-switcher-website {
-    border-bottom: 0;
-}
-
-.eq-ie8 .store-switcher-store-view {
-    border-bottom: 0;
     border-top: 1px solid #e5e5e5;
 }
 
@@ -3492,7 +3298,7 @@ table tbody tr:nth-child(odd):hover th {
 /*
     Universal Sidebar Tabs
 -------------------------------------- */
-/* TODO: for "Product" page only while refactoring */
+// TODO: for "Product" page only while refactoring */
 
 .side-col .ui-tabs .ui-accordion-header {
     position: relative;
@@ -3821,22 +3627,6 @@ table tbody tr:nth-child(odd):hover th {
     content: attr(data-text-on);
 }
 
-.eq-ie8 .switcher-label:after {
-    content: 'off';
-    overflow: hidden;
-    white-space: nowrap;
-    text-indent: 100%;
-}
-
-.eq-ie8 .switcher.checked .switcher-label:after {
-    background-position: -34px 0;
-    content: 'on';
-}
-
-.eq-ie8 .switcher.checked .switcher-label:before {
-    content: attr(data-text-on);
-}
-
 /*
     Content actions panel (with buttons, switchers...)
 -------------------------------------- */
@@ -4004,16 +3794,7 @@ table tbody tr:nth-child(odd):hover th {
     text-align: center;
     padding: 15px;
 }
-
-.eq-ie8 .grid table td.empty-text {
-    border-width: 0 1px 1px;
-}
-
 .grid table tr:last-child td.empty-text {
-    border-width: 0 1px 1px;
-}
-
-.eq-ie8 .grid table tr td.empty-text {
     border-width: 0 1px 1px;
 }
 
@@ -4381,10 +4162,6 @@ table tbody tr:nth-child(odd):hover th {
     opacity: 0;
 }
 
-.eq-ie8 .grid .filter .date img {
-    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
-}
-
 .grid .filter .date:before {
     position: absolute;
     left: 80%;
@@ -4416,10 +4193,6 @@ table tbody tr:nth-child(odd):hover th {
     background: #666158;
     box-shadow: 0 1px 2px 0 #504d46 inset, 0 -1px 2px 0 #504d46 inset;
     overflow: hidden;
-}
-
-.eq-ie8 .massaction {
-    border-bottom: 2px solid #504d46;
 }
 
 .massaction ul {
@@ -4468,14 +4241,6 @@ table tbody tr:nth-child(odd):hover th {
 .massaction .entry-edit .field-row {
     display: inline-block;
     vertical-align: middle;
-}
-
-.eq-ie8 .massaction .entry-edit .field-row:first-child {
-    margin-right: 1px;
-}
-
-.eq-ie8 .massaction .entry-edit .field-row {
-    display: inline;
 }
 
 .massaction .entry-edit .outer-span .entry-edit {
@@ -4610,48 +4375,48 @@ tr.dynamic-grid input.input-text {
     white-space: normal;
 }
 
-/* will be deleted after checking entire back-end
-table .col-draggable {
-    width: 1%;
-}
-
-table .col-default,
-table .col-select,
-table .col-qty,
-table .col-actions,
-table .col-action,
-table .col-id,
-table .col-uqty.qty-box {
-    width: 5%;
-}
-
-table .col-visibility,
-table .col-status,
-table .col-websites,
-table .col-position {
-    width: 7%;
-}
-
-table .col-type,
-table .col-price,
-table .col-attr-name {
-    width: 8%;
-}
-
-table .col-name,
-table .col-sku {
-    width: 15%;
-}
-
-table .col-attribute_code,
-table .col-frontend_label {
-    width: 25%;
-}
-
-.ui-dialog .selection-search table .col-select {
-    width: 25%;
-}
-*/
+///* will be deleted after checking entire back-end
+//table .col-draggable {
+//    width: 1%;
+//}
+//
+//table .col-default,
+//table .col-select,
+//table .col-qty,
+//table .col-actions,
+//table .col-action,
+//table .col-id,
+//table .col-uqty.qty-box {
+//    width: 5%;
+//}
+//
+//table .col-visibility,
+//table .col-status,
+//table .col-websites,
+//table .col-position {
+//    width: 7%;
+//}
+//
+//table .col-type,
+//table .col-price,
+//table .col-attr-name {
+//    width: 8%;
+//}
+//
+//table .col-name,
+//table .col-sku {
+//    width: 15%;
+//}
+//
+//table .col-attribute_code,
+//table .col-frontend_label {
+//    width: 25%;
+//}
+//
+//.ui-dialog .selection-search table .col-select {
+//    width: 25%;
+//}
+//*/
 
 table .col-draggable .draggable-handle {
     position: relative;
@@ -4697,15 +4462,6 @@ table .col-draggable .draggable-handle {
     border-width: 0 0 1px;
 }
 
-.eq-ie8 .data-table td,
-.eq-ie8 .data-table tbody tr td {
-    border-width: 0 0 1px;
-}
-
-.eq-ie8 .data-table td > .field {
-    margin-bottom: 0;
-}
-
 .data-table tbody tr.selected td,
 .data-table tbody tr.selected th,
 .data-table tbody tr:hover td,
@@ -4727,10 +4483,6 @@ table .col-draggable .draggable-handle {
 .data-table tfoot tr:last-child th,
 .accordion .config .data-table tfoot tr:last-child td {
     border: 0;
-}
-
-.eq-ie8 .data-table tfoot tr td {
-    border: none;
 }
 
 .data-table input[type="text"] {
@@ -4864,23 +4616,6 @@ table .col-draggable .draggable-handle {
 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr:nth-child(2n+1) th,
 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr:nth-child(2n+1) td {
     background-color: #fbfaf6;
-}
-
-.eq-ie8 .customer-information .data-table tbody tr td,
-.eq-ie8 .customer-information .data-table tbody tr th,
-.eq-ie8 .order-information .data-table tbody tr td,
-.eq-ie8 .order-information .data-table tbody tr th,
-.eq-ie8 .order-account-information .data-table tbody tr td,
-.eq-ie8 .order-account-information .data-table tbody tr th,
-.eq-ie8 [class^=" adminhtml-rma-"] .data-table tbody tr td,
-.eq-ie8 [class^=" adminhtml-rma-"] .data-table tbody tr th,
-.eq-ie8 [class^=" sales-transactions-"] .data-table tbody tr th,
-.eq-ie8 [class^=" sales-transactions-"] .data-table tbody tr td,
-.eq-ie8 [class^=" sales-"] .order-payment-method .data-table tbody tr th,
-.eq-ie8 [class^=" sales-"] .order-payment-method .data-table tbody tr td,
-.eq-ie8 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr th,
-.eq-ie8 [class^=" sales-billing-agreement-"] .log-details .data-table tbody tr td {
-    border-bottom: 1px solid #ededed;
 }
 
 /*
@@ -5201,10 +4936,6 @@ table .col-draggable .draggable-handle {
 
 .widget-layout-updates .data-table {
     table-layout: fixed;
-}
-
-.eq-ie8 .widget-layout-updates .data-table {
-    table-layout: auto;
 }
 
 .widget-layout-updates .data-table,

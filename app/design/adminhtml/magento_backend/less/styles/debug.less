@@ -21,28 +21,28 @@
 //  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-/*
-    This file was created to debug old classes in order to indicate where we must replase it with new ones
-    The types of messages are generated in file: \app\code\core\Mage\Core\Block\Messages.php like $html .= '<' . $this->_messagesSecondLevelTagName . ' class="' . $type . '-msg">';
--------------------------------------- */
+///*
+//    This file was created to debug old classes in order to indicate where we must replase it with new ones
+//    The types of messages are generated in file: \app\code\core\Mage\Core\Block\Messages.php like $html .= '<' . $this->_messagesSecondLevelTagName . ' class="' . $type . '-msg">';
+//-------------------------------------- */
 
-/*
-    All messages to identify and refactor:
-
-label.mage-error,
-.notice,
-.messages ul,
-.messages li,
-.messages ul li,
-.error-msg,
-.success-msg,
-.notice-msg,
-.warning-msg
-
-Done:
-.notification-global
-.notification-global-notice
--------------------------------------- */
+///*
+//    All messages to identify and refactor:
+//
+//label.mage-error,
+//.notice,
+//.messages ul,
+//.messages li,
+//.messages ul li,
+//.error-msg,
+//.success-msg,
+//.notice-msg,
+//.warning-msg
+//
+//Done:
+//.notification-global
+//.notification-global-notice
+//-------------------------------------- */
 .debug {
     border: 1px solid red !important;
 }
@@ -413,17 +413,6 @@ ul.messages li.success-msg li:before {
     display: none;
 }
 
-.eq-ie8 .accordion .config legend {
-    position: absolute;
-    left: -999em;
-    display: block;
-    width: 0;
-    height: 0;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-}
-
 .accordion .config table {
     width: 100%;
 }
@@ -502,17 +491,17 @@ ul.messages li.success-msg li:before {
     margin-top:6px;
 }
 .accordion .config .value.with-tooltip .tooltip-content {
-    padding:15px;
-    right:0;
-    margin-left:0;
-    margin-right:-19px;
-    margin-bottom:10px;
-    left:auto;
-    top:auto;
-    bottom:100%;
-    width: 400px;
-    max-width: 400px;
-    line-height: 1.333;
+    padding: 18px;
+    margin: 0 -17px 10px 0;
+    right: 0;
+    bottom: 100%;
+    width: 239px;
+    max-width: 239px;
+    font-size: 13px;
+    line-height: 1.4;
+    background: #31302b;
+    background: rgba(49, 48, 43, .8);
+    border-radius: 5px;
 }
 .accordion .config .value.with-tooltip .tooltip-content:before {
     content: '';
@@ -525,7 +514,7 @@ ul.messages li.success-msg li:before {
     right: 20px;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid #000;
+    border-top: 5px solid #31302b;
     border-bottom:0;
     opacity: .8;
 }

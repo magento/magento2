@@ -53,16 +53,24 @@ class Onepage extends \Magento\Checkout\Controller\Action
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Core\App\Action\FormKeyValidator
+     */
+    protected $_formKeyValidator;
+
+    /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->_formKeyValidator = $formKeyValidator;
         parent::__construct($context, $customerSession);
     }
 
@@ -534,6 +542,11 @@ class Onepage extends \Magento\Checkout\Controller\Action
      */
     public function saveOrderAction()
     {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            $this->_redirect('*/*/');
+            return;
+        }
+
         if ($this->_expireAjax()) {
             return;
         }

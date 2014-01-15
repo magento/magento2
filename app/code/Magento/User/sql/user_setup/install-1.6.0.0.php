@@ -171,7 +171,8 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('admin_user
             ), 'User Password')
         ->addColumn('created', \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, null, array(
             'nullable'  => false,
-            ), 'User Created Time')
+            'default'   => \Magento\DB\Ddl\Table::TIMESTAMP_INIT,
+        ), 'User Created Time')
         ->addColumn('modified', \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, null, array(
             ), 'User Modified Time')
         ->addColumn('logdate', \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, null, array(

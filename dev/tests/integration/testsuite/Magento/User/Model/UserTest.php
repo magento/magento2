@@ -71,6 +71,19 @@ class UserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/User/_files/dummy_user.php
+     */
+    public function testCreatedOnUpdate()
+    {
+        $this->_model->loadByUsername('user_created_date');
+        $this->assertEquals('2010-01-06 00:00:00', $this->_model->getCreated());
+        //reload to update lognum record
+        $this->_model->getResource()->recordLogin($this->_model);
+        $this->_model->reload();
+        $this->assertEquals('2010-01-06 00:00:00', $this->_model->getCreated());
+    }
+
+    /**
      * Ensure that an exception is not thrown, if the user does not exist
      */
     public function testLoadByUsername()

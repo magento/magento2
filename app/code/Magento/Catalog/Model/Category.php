@@ -291,7 +291,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel
      * Move category
      *
      * @param   int $parentId new parent category id
-     * @param   int $afterCategoryId category id after which we have put current category
+     * @param   null|int $afterCategoryId category id after which we have put current category
      * @return  \Magento\Catalog\Model\Category
      * @throws \Magento\Core\Exception|\Exception
      */

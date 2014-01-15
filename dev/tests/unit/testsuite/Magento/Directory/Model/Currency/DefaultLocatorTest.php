@@ -55,9 +55,8 @@ class DefaultLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultCurrencyReturnDefaultStoreDefaultCurrencyIfNoStoreIsSpecified()
     {
-        $storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
-        $storeMock->expects($this->once())->method('getBaseCurrencyCode')->will($this->returnValue('storeCurrency'));
-        $this->_appMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
+        $this->_appMock->expects($this->once())->method('getBaseCurrencyCode')
+            ->will($this->returnValue('storeCurrency'));
         $this->assertEquals('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
 
