@@ -18,38 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Shopping cart item render block
- *
- * @category    Magento
- * @package     Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Checkout\Block\Cart\Item\Renderer;
 
+use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
+
+/**
+ * Shopping cart item render block for configurable products.
+ */
 class Configurable extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
-    const CONFIGURABLE_PRODUCT_IMAGE= 'checkout/cart/configurable_product_image';
-    const USE_PARENT_IMAGE          = 'parent';
-
     /**
-     * Get item configurable product
-     *
-     * @return \Magento\Catalog\Model\Product
+     * Path in config to the setting which defines if parent or child product should be used to generate a thumbnail.
      */
-    public function getConfigurableProduct()
-    {
-        if ($option = $this->getItem()->getOptionByCode('product_type')) {
-            return $option->getProduct();
-        }
-        return $this->getProduct();
-    }
+    const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/configurable_product_image';
 
     /**
      * Get item configurable child product
@@ -65,22 +50,6 @@ class Configurable extends \Magento\Checkout\Block\Cart\Item\Renderer
     }
 
     /**
-     * Get product thumbnail image
-     *
-     * @return \Magento\Catalog\Model\Product\Image
-     */
-    public function getProductThumbnail()
-    {
-        $product = $this->getChildProduct();
-        if (!$product || !$product->getData('thumbnail')
-            || ($product->getData('thumbnail') == 'no_selection')
-            || ($this->_storeConfig->getConfig(self::CONFIGURABLE_PRODUCT_IMAGE) == self::USE_PARENT_IMAGE)) {
-            $product = $this->getProduct();
-        }
-        return $this->_imageHelper->init($product, 'thumbnail');
-    }
-
-    /**
      * Get item product name
      *
      * @return string
@@ -91,18 +60,6 @@ class Configurable extends \Magento\Checkout\Block\Cart\Item\Renderer
     }
 
     /**
-     * Get selected for configurable product attributes
-     *
-     * @return array
-     */
-    public function getProductAttributes()
-    {
-        $attributes = $this->getProduct()->getTypeInstance()
-            ->getSelectedAttributesInfo($this->getProduct());
-        return $attributes;
-    }
-
-    /**
      * Get list of all otions for product
      *
      * @return array
@@ -110,5 +67,24 @@ class Configurable extends \Magento\Checkout\Block\Cart\Item\Renderer
     public function getOptionList()
     {
         return $this->_productConfig->getConfigurableOptions($this->getItem());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductForThumbnail()
+    {
+        /**
+         * Show parent product thumbnail if it must be always shown according to the related setting in system config
+         * or if child thumbnail is not available
+         */
+        if ($this->_storeConfig->getConfig(self::CONFIG_THUMBNAIL_SOURCE) == ThumbnailSource::OPTION_USE_PARENT_IMAGE
+            || !($this->getChildProduct()->getThumbnail() && $this->getChildProduct()->getThumbnail() != 'no_selection')
+        ) {
+            $product = $this->getProduct();
+        } else {
+            $product = $this->getChildProduct();
+        }
+        return $product;
     }
 }

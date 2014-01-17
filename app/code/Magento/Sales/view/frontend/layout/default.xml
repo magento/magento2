@@ -25,10 +25,10 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="right">
-        <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml"/>
+        <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml" cacheable="false"/>
     </referenceContainer>
     <referenceBlock name="footer_links">
-        <block class="Magento\Sales\Block\Guest\Link" name="sales-guest-form-link">
+        <block class="Magento\Sales\Block\Guest\Link" name="sales-guest-form-link" cacheable="false">
             <arguments>
                 <argument name="label" xsi:type="string">Orders and Returns</argument>
                 <argument name="path" xsi:type="string">sales/guest/form</argument>

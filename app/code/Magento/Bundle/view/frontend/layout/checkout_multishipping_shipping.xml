@@ -25,9 +25,9 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="checkout_shipping">
-        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::multishipping/item/default.phtml"/>
+        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::multishipping/item/default.phtml" cacheable="false"/>
     </referenceBlock>
     <referenceBlock name="checkout_billing_items">
-        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::multishipping/item/default.phtml"/>
+        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::multishipping/item/default.phtml" cacheable="false"/>
     </referenceBlock>
 </layout>

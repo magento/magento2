@@ -30,6 +30,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Order\View" name="sales.order.view"/>
+        <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false"/>
     </referenceContainer>
 </layout>

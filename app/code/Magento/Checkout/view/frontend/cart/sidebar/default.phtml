@@ -22,6 +22,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this \Magento\Checkout\Block\Cart\Item\Renderer */
 ?>
 <?php $_item = $this->getItem() ?>
 <?php $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_item->getProduct(), \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type::TYPE_BEFORE_ORDER_CONFIRM); ?>
@@ -30,11 +32,11 @@
 <div class="product">
     <?php if ($this->hasProductUrl()): ?>
         <a href="<?php echo $this->getProductUrl()?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product photo">
-            <?php echo $imageBlock->init($_item->getProduct(), 'mini_cart_product_thumbnail')->toHtml() ?>
+            <?php echo $imageBlock->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail')->toHtml() ?>
         </a>
     <?php else: ?>
         <span class="product photo">
-            <?php echo $imageBlock->init($_item->getProduct(), 'mini_cart_product_thumbnail')->toHtml() ?>
+            <?php echo $imageBlock->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail')->toHtml() ?>
         </span>
     <?php endif; ?>
 

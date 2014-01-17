@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="header">
+    <referenceBlock name="header-wrapper">
         <block class="Magento\View\Element\Template" name="top.search" as="topSearch" template="Magento_CatalogSearch::form.mini.phtml"/>
     </referenceBlock>
     <referenceBlock name="footer_links">

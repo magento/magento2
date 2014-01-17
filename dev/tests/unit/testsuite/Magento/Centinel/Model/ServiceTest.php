@@ -38,7 +38,10 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $url = $this->getMock('Magento\Core\Model\Url', ['getUrl'], [], '', false);
         $url->expects($this->once())
             ->method('getUrl')
-            ->with($this->equalTo('url_prefix/authenticationstart'))
+            ->with(
+                $this->equalTo('url_prefix/authenticationstart'),
+                $this->equalTo(array('_secure' => true, '_current' => false, 'isIframe' => true))
+            )
             ->will($this->returnValue('some value'));
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);

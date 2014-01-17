@@ -39,6 +39,6 @@
         </action>
     </referenceBlock>
     <referenceBlock name="minicart">
-        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::cart/sidebar/default.phtml"/>
+        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::cart/sidebar/default.phtml" cacheable="false"/>
     </referenceBlock>
 </layout>

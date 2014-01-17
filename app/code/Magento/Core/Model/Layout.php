@@ -1658,4 +1658,14 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         }
         return $messageGroups;
     }
+
+    /**
+     * Check is exists non-cacheable layout elements
+     *
+     * @return bool
+     */
+    public function  isCacheable()
+    {
+        return !(boolean)count($this->_xml->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
+    }
 }

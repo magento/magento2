@@ -326,8 +326,10 @@ class Index extends \Magento\Backend\App\Action
                 ->generateResetPasswordLinkToken();
             $customer->changeResetPasswordLinkToken($newPasswordToken);
             $resetUrl = $this->_objectManager->create('Magento\Core\Model\Url')
-                ->getUrl('customer/account/createPassword',
-                    array('_query' => array('id' => $customer->getId(), 'token' => $newPasswordToken))
+                ->getUrl('customer/account/createPassword', array(
+                        '_query' => array('id' => $customer->getId(), 'token' => $newPasswordToken),
+                        '_store' => $customer->getStoreId()
+                    )
                 );
             $customer->setResetPasswordUrl($resetUrl);
             $customer->sendPasswordReminderEmail();

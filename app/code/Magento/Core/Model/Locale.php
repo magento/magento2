@@ -359,16 +359,20 @@ class Locale implements \Magento\Core\Model\LocaleInterface
     /**
      * Retrieve days of week option list
      *
+     * @param bool $preserveCodes
+     * @param bool $ucFirstCode
+     *
      * @return array
      */
-    public function getOptionWeekdays()
+    public function getOptionWeekdays($preserveCodes = false, $ucFirstCode = false)
     {
         $options= array();
         $days = $this->getTranslationList('days');
-        foreach (array_values($days['format']['wide']) as $code => $name) {
+        $days = $preserveCodes ? $days['format']['wide']  : array_values($days['format']['wide']);
+        foreach ($days as $code => $name) {
             $options[] = array(
                'label' => $name,
-               'value' => $code,
+               'value' => $ucFirstCode ? ucfirst($code) : $code,
             );
         }
         return $options;

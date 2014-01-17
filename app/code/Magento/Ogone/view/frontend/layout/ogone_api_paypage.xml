@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <remove name="catalog.topnav"/>
-    <referenceBlock name="header">
+    <referenceBlock name="header-wrapper">
         <remove name="top.links"/>
         <remove name="top.search"/>
         <remove name="store_language"/>

@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Rss\Block\Wishlist" name="rss.wishlist" output="1">
+    <block class="Magento\Rss\Block\Wishlist" name="rss.wishlist" output="1" cacheable="false">
         <action method="addPriceBlockType">
             <argument name="type" xsi:type="string">msrp_rss</argument>
             <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>

@@ -57,6 +57,16 @@ class Additional extends \Magento\View\Element\Html\Link
         parent::__construct($context, $data);
     }
 
+    /*
+     * Retrieve unset cookie link
+     *
+     * @return string
+     */
+    public function getHref()
+    {
+        return $this->getUrl('persistent/index/unsetCookie');
+    }
+
     /**
      * Render additional header html
      *
@@ -66,9 +76,6 @@ class Additional extends \Magento\View\Element\Html\Link
     {
         $text = __('(Not %1?)', $this->escapeHtml($this->_persistentSession->getCustomer()->getName()));
 
-        $this->setAnchorText($text);
-        $this->setHref($this->getUrl('persistent/index/unsetCookie'));
-
-        return parent::_toHtml();
+        return '<span><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml($text) . '</a></span>';
     }
 }

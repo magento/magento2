@@ -26,6 +26,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
     <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Billing\Agreement\View" name="customer.account.billing.agreement" template="billing/agreement/view.phtml"/>
+        <block class="Magento\Sales\Block\Billing\Agreement\View" name="customer.account.billing.agreement" template="billing/agreement/view.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

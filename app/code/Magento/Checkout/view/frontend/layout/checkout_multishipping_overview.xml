@@ -31,12 +31,12 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Checkout\Block\Multishipping\Overview" name="checkout_overview" template="multishipping/overview.phtml">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="multishipping/item/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="multishipping/item/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="multishipping/item/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="row-grouped" template="multishipping/overview/item.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="row-configurable" template="multishipping/overview/item.phtml"/>
+        <block class="Magento\Checkout\Block\Multishipping\Overview" name="checkout_overview" template="multishipping/overview.phtml" cacheable="false">
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="multishipping/item/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="multishipping/item/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="multishipping/item/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="row-grouped" template="multishipping/overview/item.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="row-configurable" template="multishipping/overview/item.phtml" cacheable="false"/>
             <block class="Magento\Checkout\Block\Multishipping\Payment\Info" name="payment_info">
                 <action method="setInfoTemplate">
                     <argument name="method" xsi:type="string"/>
@@ -44,7 +44,7 @@
                 </action>
             </block>
             <block class="Magento\Checkout\Block\Agreements" name="checkout.multishipping.agreements" as="agreements" template="agreements.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Totals" name="totals"/>
+            <block class="Magento\Checkout\Block\Cart\Totals" name="totals" cacheable="false"/>
             <container name="checkout.multishipping.overview.items.after" as="items_after" label="Overview Items After"/>
         </block>
     </referenceContainer>

@@ -45,6 +45,6 @@
         </block>
     </referenceBlock>
     <referenceContainer name="left">
-        <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml"/>
+        <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

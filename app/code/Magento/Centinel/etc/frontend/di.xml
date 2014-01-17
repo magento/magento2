@@ -44,4 +44,9 @@
             </value>
         </param>
     </type>
+    <type name="Magento\Centinel\Model\Service">
+        <param name="centinelSession">
+            <instance type="Magento\Centinel\Model\Session" />
+        </param>
+    </type>
 </config>

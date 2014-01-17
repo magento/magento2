@@ -51,4 +51,28 @@ class ElementTest extends \PHPUnit_Framework_TestCase
             array('<block />', ''),
         );
     }
+
+    public function cacheableDataProvider()
+    {
+        return array(
+            array('<containter name="name" />', true),
+            array('<block name="name" cacheable="false" />', false),
+            array('<block name ="bl1"><block name="bl2" /></block>', true),
+            array('<block name ="bl1"><block name="bl2" cacheable="false"/></block>', false),
+            array('<block name="name" />', true),
+            array('<renderer cacheable="false" />', true),
+            array('<renderer name="name" />', true),
+            array('<widget cacheable="false" />', true),
+            array('<widget name="name" />', true)
+        );
+    }
+
+    /**
+     * @dataProvider cacheableDataProvider
+     */
+    public function testIsCacheable($xml, $expected)
+    {
+        $model = new \Magento\View\Layout\Element($xml);
+        $this->assertEquals($expected, $model->isCacheable());
+    }
 }

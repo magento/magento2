@@ -138,9 +138,11 @@ interface LocaleInterface
     /**
      * Retrieve days of week option list
      *
+     * @param bool $preserveCodes
+     * @param bool $ucFirstCode
      * @return array
      */
-    public function getOptionWeekdays();
+    public function getOptionWeekdays($preserveCodes = false, $ucFirstCode = false);
 
     /**
      * Retrieve country option list

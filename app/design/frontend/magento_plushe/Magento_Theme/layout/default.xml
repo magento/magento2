@@ -30,13 +30,21 @@
         </arguments>
     </referenceBlock>
 
-    <referenceContainer name="header">
+    <referenceContainer name="header-wrapper">
         <block class="Magento\View\Element\Html\Links" name="header.links" after="minicart">
             <arguments>
                 <argument name="css_class" xsi:type="string">links</argument>
             </arguments>
         </block>
     </referenceContainer>
+
+    <referenceBlock name="header.links">
+        <block class="Magento\Theme\Block\Html\Header" name="header" as="header" before="-">
+            <arguments>
+                <argument name="show_part" xsi:type="string">welcome</argument>
+            </arguments>
+        </block>
+    </referenceBlock>
 
     <referenceBlock name="top.links">
         <arguments>

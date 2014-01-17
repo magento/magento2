@@ -25,5 +25,5 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <block class="Magento\Paypal\Block\Payflow\Link\Iframe" name="payflow.link.iframe" output="1"
-           template="payflowlink/redirect.phtml"/>
+           template="payflowlink/redirect.phtml" cacheable="false"/>
 </layout>

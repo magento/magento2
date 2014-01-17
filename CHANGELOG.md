@@ -1,3 +1,18 @@
+2.0.0.0-dev61
+=============
+* Introduced a new layout block attribute - cacheable
+* Fixed bugs:
+  * Fixed an issue with displaying configurable product images in shopping cart
+  * Fixed an issue with Tax Summary not being displayed properly on the Order Review page
+  * Optimized the Plushe theme CSS
+  * Fixed attribute types for configurable product variations
+  * Fixed an issue with incorrect link in the Reset Password email for customers registered on the non-default website
+  * Fixed an issue with creating orders using DHL on holiday dates
+  * Fixed product export
+  * Fixed 3D secure validation
+  * Fixed an issue with session being lost when a logged in user goes from store pages using secure URL to the store pages which do not use secure URL
+  * Fixed an issue with price ranges in the Advanced search
+
 2.0.0.0-dev60
 =============
 * Fixed bugs:
@@ -132,10 +147,6 @@
   * Fixed date resetting to 1 Jan 1970 after saving a design change in the admin panel in case date format is DD/MM/YY
   * Fixed CAPTCHA on multi-address checkout flow
   * Fixed view files population tool
-  * Fixed DHL functionality of generation shipping labels
-  * Fixed target rule if it is applied for specific customer segment
-  * Fixed product importing that cleared price and weight
-  * Fixed fatal error when a file reference is added to HTML head
 * GitHub requests:
   * [#122](https://github.com/magento/magento2/pull/122) -- Added support of federal units of Brazil with 27 states
   * [#184](https://github.com/magento/magento2/issues/184) -- Removed unused blocks and methods in Magento_Wishlist module

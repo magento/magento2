@@ -24,5 +24,5 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Available" name="shipping_method" output="1" template="onepage/shipping_method/available.phtml"/>
+    <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Available" name="shipping_method" output="1" template="onepage/shipping_method/available.phtml" cacheable="false"/>
 </layout>

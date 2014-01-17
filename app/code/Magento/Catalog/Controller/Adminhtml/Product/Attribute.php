@@ -82,9 +82,16 @@ class Attribute extends \Magento\Backend\App\Action
         $this->_title->add(__('Product Attributes'));
 
         if ($this->getRequest()->getParam('popup')) {
-            $this->_view->loadLayout(
-                array('popup', $this->_view->getDefaultLayoutHandle() . '_popup')
-            );
+            if ($this->getRequest()->getParam('product_tab') == 'variations') {
+                $this->_view->loadLayout(
+                    array('popup', 'catalog_product_attribute_edit_product_tab_variations_popup')
+                );
+            } else {
+                $this->_view->loadLayout(
+                    array('popup', 'catalog_product_attribute_edit_popup')
+                );
+            }
+
             $this->_view->getLayout()->getBlock('root')->addBodyClass('attribute-popup');
         } else {
             $this->_view->loadLayout();

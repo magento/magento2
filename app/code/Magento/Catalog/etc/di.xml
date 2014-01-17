@@ -130,9 +130,19 @@
             <value>catalog</value>
         </param>
     </virtualType>
+    <virtualType name="Magento\Catalog\Model\System\Config\Source\InputtypeFactory" type="Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory">
+        <param name="instanceName">
+            <value>Magento\Catalog\Model\System\Config\Source\Inputtype</value>
+        </param>
+    </virtualType>
     <type name="Magento\Catalog\Model\Session">
         <param name="storage">
             <instance type="Magento\Catalog\Model\Session\Storage" />
+        </param>
+    </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations\Main">
+        <param name="inputTypeFactory">
+            <instance type="Magento\Catalog\Model\System\Config\Source\InputtypeFactory" />
         </param>
     </type>
 </config>

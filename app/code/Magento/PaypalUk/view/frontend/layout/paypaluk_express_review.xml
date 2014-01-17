@@ -38,13 +38,13 @@
             <block class="Magento\Paypal\Block\Express\Review\Details" name="paypal.express.review.details" as="details"
                    template="express/review/details.phtml">
                 <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default"
-                       template="onepage/review/item.phtml"/>
+                       template="onepage/review/item.phtml" cacheable="false"/>
                 <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped"
-                       template="onepage/review/item.phtml"/>
+                       template="onepage/review/item.phtml" cacheable="false"/>
                 <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable"
-                       template="onepage/review/item.phtml"/>
+                       template="onepage/review/item.phtml" cacheable="false"/>
                 <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals"
-                       as="totals" template="onepage/review/totals.phtml"/>
+                       as="totals" template="onepage/review/totals.phtml" cacheable="false"/>
             </block>
             <block class="Magento\Checkout\Block\Agreements" name="paypal.express.review.details.agreements"
                    as="agreements" template="onepage/agreements.phtml"/>

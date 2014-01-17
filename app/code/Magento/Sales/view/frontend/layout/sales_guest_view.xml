@@ -31,9 +31,9 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
-            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons"/>
+            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
         </block>
-        <block class="Magento\Sales\Block\Order\View" name="sales.order.view" after="sales.order.info">
+        <block class="Magento\Sales\Block\Order\View" name="sales.order.view" after="sales.order.info" cacheable="false">
             <block class="Magento\Sales\Block\Order\Items" name="order_items" template="order/items.phtml">
                 <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/items/renderer/default.phtml"/>
                 <block class="Magento\Sales\Block\Order\Item\Renderer\Grouped" as="grouped" template="order/items/renderer/default.phtml"/>

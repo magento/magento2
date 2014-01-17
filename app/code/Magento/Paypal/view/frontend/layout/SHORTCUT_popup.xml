@@ -28,7 +28,7 @@
         <container name="product.info.addtocart.paypal.wrapper" label="PayPal Express Checkout Shortcut Wrapper"
                    htmlTag="div">
             <block class="Magento\Paypal\Block\Express\Shortcut" name="product.info.addtocart.paypal"
-                   template="express/shortcut.phtml">
+                   template="express/shortcut.phtml" cacheable="false">
                 <action method="setIsInCatalogProduct">
                     <argument name="value" xsi:type="string">1</argument>
                 </action>

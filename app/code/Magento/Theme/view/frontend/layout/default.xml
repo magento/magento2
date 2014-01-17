@@ -33,7 +33,7 @@
             <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel">
                 <block class="Magento\Core\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
             </container>
-            <container name="header" label="Page Header" as="header" htmlTag="div" htmlClass="content">
+            <container name="header-wrapper" label="Page Header" as="header-wrapper" htmlTag="div" htmlClass="content">
                 <block class="Magento\Theme\Block\Html\Header" name="logo">
                     <arguments>
                         <argument name="show_part" xsi:type="string">logo</argument>

@@ -35,11 +35,14 @@ namespace Magento\Catalog\Model\Config\Source\Product;
 
 class Thumbnail implements \Magento\Core\Model\Option\ArrayInterface
 {
+    const OPTION_USE_PARENT_IMAGE = 'parent';
+    const OPTION_USE_OWN_IMAGE = 'itself';
+
     public function toOptionArray()
     {
         return array(
-            array('value'=>'itself', 'label'=>__('Product Thumbnail Itself')),
-            array('value'=>'parent', 'label'=>__('Parent Product Thumbnail')),
+            array('value' => self::OPTION_USE_OWN_IMAGE, 'label' => __('Product Thumbnail Itself')),
+            array('value' => self::OPTION_USE_PARENT_IMAGE, 'label' => __('Parent Product Thumbnail')),
         );
     }
 }

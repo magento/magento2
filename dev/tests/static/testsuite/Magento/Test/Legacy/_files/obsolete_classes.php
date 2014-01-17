@@ -1777,4 +1777,5 @@ return array(
     array('Magento\Catalog\Model\Resource\Convert'),
     array('Magento\Reminder\Model\Resource\HelperFactory'),
     array('Magento\Reminder\Model\Resource\Helper'),
+    array('Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser'),
 );
