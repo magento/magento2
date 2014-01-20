@@ -439,6 +439,73 @@ hr {
   position: static;
   width: auto;
 }
+/*
+    Responsive
+-------------------------------------- */
+.mobileAction {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto 15px;
+  padding: 10px;
+  width: 100%;
+  max-width: 100%;
+  line-height: 1;
+  float: none;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: none;
+}
+.mobileAction span {
+  font-size: 18px;
+}
+.mobilePrimaryAction {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto 15px;
+  padding: 10px;
+  width: 100%;
+  max-width: 100%;
+  line-height: 1;
+  float: none;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: none;
+  background-color: #da370a;
+  color: #ffffff;
+}
+.mobilePrimaryAction span {
+  font-size: 18px;
+}
+.mobileSecondaryAction {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto 15px;
+  padding: 10px;
+  width: 100%;
+  max-width: 100%;
+  line-height: 1;
+  float: none;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: none;
+  background-color: #c2c2c2;
+  color: #ffffff;
+}
+.mobileSecondaryAction span {
+  font-size: 18px;
+}
 .primary.action,
 .action.myPrimary,
 input[type="submit"],
@@ -1103,8 +1170,6 @@ input[type="reset"],
   border: 1px solid #c2c2c2;
   border-radius: 3px;
   font: 400 14px "sourcesanspro";
-  /* Prevent background color leak outs */
-
   background-clip: padding-box;
   outline: none;
   height: 32px;
@@ -1224,8 +1289,6 @@ input[type="number"] {
   border: 1px solid #c2c2c2;
   border-radius: 3px;
   font: 400 14px "sourcesanspro";
-  /* Prevent background color leak outs */
-
   background-clip: padding-box;
   outline: none;
   height: 32px;
@@ -1306,8 +1369,6 @@ select {
   border: 1px solid #c2c2c2;
   border-radius: 3px;
   font: 400 14px "sourcesanspro";
-  /* Prevent background color leak outs */
-
   background-clip: padding-box;
   outline: none;
   padding: 5px 10px 4px;
@@ -1333,8 +1394,6 @@ textarea {
   border: 1px solid #c2c2c2;
   border-radius: 3px;
   font: 400 14px "sourcesanspro";
-  /* Prevent background color leak outs */
-
   background-clip: padding-box;
   outline: none;
   height: auto;
@@ -5106,8 +5165,6 @@ body {
   border: 1px solid #c2c2c2;
   border-radius: 3px;
   font: 400 14px "sourcesanspro";
-  /* Prevent background color leak outs */
-
   background-clip: padding-box;
   outline: none;
   height: 32px;
@@ -5160,7 +5217,7 @@ body {
   margin-bottom: 0;
 }
 .block.add.review .fieldset > .field:not(.ratings) .nested {
-  padding: 0 0 0;
+  padding: 0;
 }
 .block.add.review .fieldset > .field:not(.ratings) .nested .field {
   margin: 5px 0;
@@ -5399,7 +5456,7 @@ body {
   margin-bottom: 0;
 }
 .opc.wrapper .form:not(.login) .field .nested {
-  padding: 0 0 0;
+  padding: 0;
 }
 .opc.wrapper .form:not(.login) .field .nested .field {
   margin: 5px 0;
@@ -5551,7 +5608,7 @@ body {
   margin-bottom: 0;
 }
 .fieldset.ccard .field .nested {
-  padding: 0 0 0;
+  padding: 0;
 }
 .fieldset.ccard .field .nested .field {
   margin: 5px 0;
@@ -5684,7 +5741,7 @@ body {
   margin-bottom: 0;
 }
 .fieldset.guest > .field .nested {
-  padding: 0 0 0;
+  padding: 0;
 }
 .fieldset.guest > .field .nested .field {
   margin: 5px 0;
@@ -5730,6 +5787,39 @@ body {
 .order.data.items tr.grand.total .amount {
   font-size: 24px;
   color: #da370a;
+}
+.order.data.items tr.tax.totals.details {
+  display: none;
+}
+.order.data.items tr.tax.totals.details.shown {
+  display: table-row;
+}
+.order.data.items tr.tax.totals.summary .detailed {
+  cursor: pointer;
+}
+.order.data.items tr.tax.totals.summary .detailed:before {
+  font-family: "icons";
+  font-size: 18px;
+  line-height: 18px;
+  height: 18px;
+  margin: 0;
+  overflow: hidden;
+  content: "\e00d";
+  font-style: normal;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.order.data.items tr.tax.totals.summary .detailed:before {
+  vertical-align: top;
+  font-size: 12px;
+  margin-right: 5px;
+}
+.order.data.items tr.tax.totals.summary.expanded .detailed:before {
+  content: "\e011";
 }
 .order.data.items tfoot .amount {
   text-align: right;
@@ -8732,8 +8822,6 @@ span.widget.link {
   border: 1px solid #c2c2c2;
   border-radius: 3px;
   font: 400 14px "sourcesanspro";
-  /* Prevent background color leak outs */
-
   background-clip: padding-box;
   outline: none;
   height: 32px;
@@ -8848,7 +8936,7 @@ span.widget.link {
   margin-bottom: 0;
 }
 .product.main.info .product.options.wrapper .field .nested {
-  padding: 0 0 0;
+  padding: 0;
 }
 .product.main.info .product.options.wrapper .field .nested .field {
   margin: 5px 0;
@@ -8904,8 +8992,6 @@ span.widget.link {
   border: 1px solid #c2c2c2;
   border-radius: 3px;
   font: 400 14px "sourcesanspro";
-  /* Prevent background color leak outs */
-
   background-clip: padding-box;
   outline: none;
   height: 32px;
@@ -9692,7 +9778,8 @@ img[align="right"] {
 .customer.welcome + li {
   display: none;
 }
-.customer.welcome + li {
+.customer.welcome + li,
+.customer.welcome + .greet.welcome + li {
   display: none !important;
 }
 .login.container {
@@ -9824,7 +9911,7 @@ img[align="right"] {
   margin-bottom: 0;
 }
 .form.login .fieldset.login .field .nested {
-  padding: 0 0 0;
+  padding: 0;
 }
 .form.login .fieldset.login .field .nested .field {
   margin: 5px 0;
@@ -10295,8 +10382,6 @@ img[align="right"] {
   border: 1px solid #c2c2c2;
   border-radius: 3px;
   font: 400 14px "sourcesanspro";
-  /* Prevent background color leak outs */
-
   background-clip: padding-box;
   outline: none;
   height: 32px;
@@ -10525,7 +10610,7 @@ img[align="right"] {
 .form.password.reset .fieldset > .field .nested,
 .form.paypal.review .fieldset > .field .nested,
 .form.send.confirmation .fieldset > .field .nested {
-  padding: 0 0 0;
+  padding: 0;
 }
 .form.send.friend .fieldset > .field .nested .field,
 .form.address.edit .fieldset > .field .nested .field,
@@ -11900,70 +11985,6 @@ img[align="right"] {
   position: relative;
   z-index: 1;
 }
-.mobileAction {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-  display: block;
-  margin: 0 auto 15px;
-  padding: 10px;
-  width: 100%;
-  max-width: 100%;
-  line-height: 1;
-  float: none;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  border: none;
-}
-.mobileAction span {
-  font-size: 18px;
-}
-.mobilePrimaryAction {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-  display: block;
-  margin: 0 auto 15px;
-  padding: 10px;
-  width: 100%;
-  max-width: 100%;
-  line-height: 1;
-  float: none;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  border: none;
-  background-color: #da370a;
-  color: #ffffff;
-}
-.mobilePrimaryAction span {
-  font-size: 18px;
-}
-.mobileSecondaryAction {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-  display: block;
-  margin: 0 auto 15px;
-  padding: 10px;
-  width: 100%;
-  max-width: 100%;
-  line-height: 1;
-  float: none;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  border: none;
-  background-color: #c2c2c2;
-  color: #ffffff;
-}
-.mobileSecondaryAction span {
-  font-size: 18px;
-}
 /* Smartphones (portrait) ----------- */
 @media only screen and (max-width: 640px) {
   .scrollTable .wrapper.table,
@@ -13065,13 +13086,6 @@ img[align="right"] {
   .opc.wrapper .order-review .actions.back span:before {
     display: none;
   }
-  .opc.wrapper .load.indicator {
-    /*            left: 0;
-              position: absolute;
-              top: 10px;
-              width: 100%;*/
-  
-  }
   .block.progress.onepage {
     background: #f8f8f8;
     border-top: 1px solid #e5e5e5;
@@ -13183,9 +13197,8 @@ img[align="right"] {
     font-size: 18px;
   }
   /*
-  Magento_Checkout
-  Multishipping
-  -------------------------------------- */
+          Magento_Checkout - Multishipping
+      -------------------------------------- */
   .multicheckout.progress {
     width: 100%;
     float: none;
@@ -13368,7 +13381,9 @@ img[align="right"] {
   .form.login .fieldset.login .field .control {
     width: 100%;
   }
-  /* Registration */
+  /*
+          Forms
+      -------------------------------------- */
   .form.send.friend .fieldset,
   .form.address.edit .fieldset,
   .form.edit.account .fieldset,
@@ -13631,9 +13646,7 @@ img[align="right"] {
     float: none;
   }
   /*
-      *    Mage_Customer
-      *
-      *    Account
+          Mage_Customer - Account
       ----------------------------------------------------------------------------- */
   .col2-left-layout.account .column.main {
     display: block;
@@ -13795,7 +13808,9 @@ img[align="right"] {
   .data.table.orders .col.shipping {
     display: none;
   }
-  /* Address book */
+  /*
+          Address book
+      -------------------------------------- */
   .block.addresses:not(.dashboard) {
     margin-bottom: 20px;
   }
@@ -13837,7 +13852,7 @@ img[align="right"] {
     font-size: 18px;
   }
   /*
-      My Account -> Billing agreements
+          My Account -> Billing agreements
       -------------------------------------- */
   .billing.agreements .form.new.agreement > .field {
     display: inline-block;
@@ -13857,7 +13872,7 @@ img[align="right"] {
     padding-bottom: 6px;
   }
   /*
-      My Account -> Wishlist
+          My Account -> Wishlist
       -------------------------------------- */
   .account .form.wishlist.items .data.table.wishlist {
     margin-bottom: 0;
@@ -13869,9 +13884,8 @@ img[align="right"] {
     width: 15em;
   }
   /*
-     *    My Account -> My orders
-     *
-    ----------------------------------------------------------------------------- */
+          My Account -> My orders
+      ----------------------------------------------------------------------------- */
   .order.details .order.toolbar {
     clear: both;
     float: none;
@@ -14619,7 +14633,7 @@ img[align="right"] {
   }
   /*
       Magento_Catalog Compare
-  -------------------------------------- */
+      -------------------------------------- */
   .catalog-product-compare-index .action.print {
     margin: -20px 0 20px;
   }

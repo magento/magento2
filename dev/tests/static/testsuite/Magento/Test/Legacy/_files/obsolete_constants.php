@@ -471,6 +471,26 @@ return array(
         'Magento\View\Asset\MinifyService',
         'Magento\Core\Model\Asset\Config::XML_PATH_MINIFICATION_ADAPTER'
     ),
+    array(
+        'USE_PARENT_IMAGE',
+        'Magento\Checkout\Block\Cart\Item\Renderer\Configurable',
+        'Magento\Catalog\Model\Config\Source\Product\Thumbnail::OPTION_USE_PARENT_IMAGE'
+    ),
+    array(
+        'USE_PARENT_IMAGE',
+        'Magento\Checkout\Block\Cart\Item\Renderer\Grouped',
+        'Magento\Catalog\Model\Config\Source\Product\Thumbnail::OPTION_USE_PARENT_IMAGE'
+    ),
+    array(
+        'CONFIGURABLE_PRODUCT_IMAGE',
+        'Magento\Checkout\Block\Cart\Item\Renderer\Configurable',
+        'Magento\Checkout\Block\Cart\Item\Renderer\Configurable::CONFIG_THUMBNAIL_SOURCE'
+    ),
+    array(
+        'GROUPED_PRODUCT_IMAGE',
+        'Magento\Checkout\Block\Cart\Item\Renderer\Grouped',
+        'Magento\Checkout\Block\Cart\Item\Renderer\Grouped::CONFIG_THUMBNAIL_SOURCE'
+    ),
     array('TYPE_BLOCK', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('TYPE_CONTAINER', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('TYPE_ACTION', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),

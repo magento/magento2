@@ -25,9 +25,9 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <block class="Magento\Paypal\Block\Express\Review\Details" output="1" name="root" template="express/review/details.phtml">
-        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml"/>
-        <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="onepage/review/item.phtml"/>
-        <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="onepage/review/item.phtml"/>
-        <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml" cacheable="false"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="onepage/review/item.phtml" cacheable="false"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="onepage/review/item.phtml" cacheable="false"/>
+        <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml" cacheable="false"/>
     </block>
 </layout>

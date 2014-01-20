@@ -27,12 +27,12 @@
     <referenceBlock name="head.components">
         <block class="Magento\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Checkout::js/components.phtml"/>
     </referenceBlock>
-    <referenceContainer name="header">
-        <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="cart/minicart.phtml">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="simple" template="cart/sidebar/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="cart/sidebar/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="cart/sidebar/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="virtual" template="cart/sidebar/default.phtml"/>
+    <referenceContainer name="header-wrapper">
+        <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="cart/minicart.phtml" cacheable="false">
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="simple" template="cart/sidebar/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="cart/sidebar/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="cart/sidebar/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="virtual" template="cart/sidebar/default.phtml" cacheable="false"/>
             <container name="minicart.extra.info" as="minicart_info" label="My Cart Extra info"/>
             <container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions"/>
         </block>

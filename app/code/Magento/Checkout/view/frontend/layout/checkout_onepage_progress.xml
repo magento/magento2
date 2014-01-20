@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <block class="Magento\Checkout\Block\Onepage\Progress" name="progress" output="1" template="onepage/progress.phtml">
-        <block class="Magento\Checkout\Block\Onepage\Payment\Info" name="payment_info">
+        <block class="Magento\Checkout\Block\Onepage\Payment\Info" name="payment_info" cacheable="false">
             <action method="setInfoTemplate">
                 <argument name="method" xsi:type="string"/>
                 <argument name="template" xsi:type="string"/>

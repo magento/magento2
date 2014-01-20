@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="checkout.onepage.review.info.items.before">
-        <block class="Magento\Centinel\Block\Authentication" name="centinel.frame" template="authentication.phtml">
+        <block class="Magento\Centinel\Block\Authentication" name="centinel.frame" template="authentication.phtml" cacheable="false">
             <action method="setAuthenticationStartMode">
                 <argument name="mode" xsi:type="string">instant</argument>
             </action>

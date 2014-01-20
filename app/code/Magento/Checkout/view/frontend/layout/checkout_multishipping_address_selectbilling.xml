@@ -31,6 +31,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Checkout\Block\Multishipping\Address\Select" name="checkout_address_select" template="multishipping/address/select.phtml"/>
+        <block class="Magento\Checkout\Block\Multishipping\Address\Select" name="checkout_address_select" template="multishipping/address/select.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

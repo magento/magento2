@@ -24,7 +24,7 @@
  */
  -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="payment_method" output="1" template="onepage/payment/methods.phtml">
+    <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="payment_method" output="1" template="onepage/payment/methods.phtml" cacheable="false">
         <action method="setMethodFormTemplate">
             <argument name="method" xsi:type="string">purchaseorder</argument>
             <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>

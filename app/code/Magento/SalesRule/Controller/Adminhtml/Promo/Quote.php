@@ -438,8 +438,11 @@ class Quote extends \Magento\Backend\App\Action
     public function chooserAction()
     {
         $uniqId = $this->getRequest()->getParam('uniq_id');
-        $chooserBlock = $this->_view->getLayout()
-            ->createBlock('Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser', '', array('data' => array('id' => $uniqId)));
+        $chooserBlock = $this->_view->getLayout()->createBlock(
+            'Magento\SalesRule\Block\Adminhtml\Promo\Widget\Chooser',
+            '',
+            array('data' => array('id' => $uniqId))
+        );
         $this->getResponse()->setBody($chooserBlock->toHtml());
     }
 

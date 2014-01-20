@@ -26,36 +26,36 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
     <referenceContainer name="content">
-        <block class="Magento\Wishlist\Block\Customer\Wishlist" name="customer.wishlist" template="view.phtml">
-            <block class="Magento\Wishlist\Block\Customer\Wishlist\Items" name="customer.wishlist.items" as="items" template="item/list.phtml">
-                <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image" name="customer.wishlist.item.image" before="-" template="item/column/image.phtml">
+        <block class="Magento\Wishlist\Block\Customer\Wishlist" name="customer.wishlist" template="view.phtml" cacheable="false">
+            <block class="Magento\Wishlist\Block\Customer\Wishlist\Items" name="customer.wishlist.items" as="items" template="item/list.phtml" cacheable="false">
+                <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image" name="customer.wishlist.item.image" before="-" template="item/column/image.phtml" cacheable="false">
                     <arguments>
                         <argument name="col_class" xsi:type="string">photo</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Comment" name="customer.wishlist.item.info" template="item/column/info.phtml">
+                <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Comment" name="customer.wishlist.item.info" template="item/column/info.phtml" cacheable="false">
                     <arguments>
                         <argument name="col_class" xsi:type="string">item</argument>
                         <argument name="title" translate="true" xsi:type="string">Product Details and Comment</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart" name="customer.wishlist.item.cart" template="item/column/cart.phtml">
+                <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart" name="customer.wishlist.item.cart" template="item/column/cart.phtml" cacheable="false">
                     <arguments>
                         <argument name="col_class" xsi:type="string">actions</argument>
                         <argument name="title" translate="true" xsi:type="string">Add to Cart</argument>
                     </arguments>
-                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Options" name="customer.wishlist.item.options"/>
+                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Options" name="customer.wishlist.item.options" cacheable="false"/>
                 </block>
-                <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove" name="customer.wishlist.item.remove" template="item/column/remove.phtml">
+                <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove" name="customer.wishlist.item.remove" template="item/column/remove.phtml" cacheable="false">
                     <arguments>
                         <argument name="col_class" xsi:type="string">remove</argument>
                     </arguments>
                 </block>
             </block>
             <container name="customer.wishlist.buttons" as="control_buttons" label="Wishlist Control Buttons">
-                <block class="Magento\Wishlist\Block\Customer\Wishlist\Button" name="customer.wishlist.button.share" template="button/share.phtml"/>
-                <block class="Magento\Wishlist\Block\Customer\Wishlist\Button" name="customer.wishlist.button.toCart" template="button/tocart.phtml"/>
-                <block class="Magento\Wishlist\Block\Customer\Wishlist\Button" name="customer.wishlist.button.update" template="button/update.phtml"/>
+                <block class="Magento\Wishlist\Block\Customer\Wishlist\Button" name="customer.wishlist.button.share" template="button/share.phtml" cacheable="false"/>
+                <block class="Magento\Wishlist\Block\Customer\Wishlist\Button" name="customer.wishlist.button.toCart" template="button/tocart.phtml" cacheable="false"/>
+                <block class="Magento\Wishlist\Block\Customer\Wishlist\Button" name="customer.wishlist.button.update" template="button/update.phtml" cacheable="false"/>
             </container>
         </block>
     </referenceContainer>

@@ -24,5 +24,5 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Rss\Block\Catalog\Special" output="1" name="rss.catalog.special"/>
+    <block class="Magento\Rss\Block\Catalog\Special" output="1" name="rss.catalog.special" cacheable="false"/>
 </layout>

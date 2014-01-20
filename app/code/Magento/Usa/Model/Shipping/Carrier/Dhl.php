@@ -30,7 +30,7 @@ namespace Magento\Usa\Model\Shipping\Carrier;
  * DHL shipping implementation
  */
 class Dhl
-    extends \Magento\Usa\Model\Shipping\Carrier\AbstractCarrier
+    extends \Magento\Usa\Model\Shipping\Carrier\Dhl\AbstractDhl
     implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
 
@@ -97,18 +97,74 @@ class Dhl
      */
     protected $_customizableContainerTypes = array('P');
 
+    /**
+     * Success code
+     *
+     * @var int
+     */
     const SUCCESS_CODE = 203;
+
+    /**
+     * Success label code
+     *
+     * @var int
+     */
     const SUCCESS_LABEL_CODE = 100;
 
+    /**
+     * Code for required additional protection
+     *
+     * @var string
+     */
     const ADDITIONAL_PROTECTION_ASSET = 'AP';
+
+    /**
+     * Code for not required additional protection
+     *
+     * @var string
+     */
     const ADDITIONAL_PROTECTION_NOT_REQUIRED = 'NR';
 
+    /**
+     * Config code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_VALUE_CONFIG = 0;
+
+    /**
+     * Subtotal code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_VALUE_SUBTOTAL = 1;
+
+    /**
+     * Subtotal with discount code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_VALUE_SUBTOTAL_WITH_DISCOUNT = 2;
 
+    /**
+     * Round to floor(lowest) code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_ROUNDING_FLOOR = 0;
+
+    /**
+     * Round to ceil(highest) code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_ROUNDING_CEIL = 1;
+
+    /**
+     * Round to precision code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_ROUNDING_ROUND = 2;
 
     /**
@@ -126,6 +182,11 @@ class Dhl
     protected $string;
 
     /**
+     * @var \Zend_Http_ClientFactory
+     */
+    protected $_httpClientFactory;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
@@ -141,6 +202,7 @@ class Dhl
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Usa\Helper\Data $usaData
      * @param \Magento\Stdlib\String $string
+     * @param \Zend_Http_ClientFactory $httpClientFactory
      * @param array $data
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -161,10 +223,12 @@ class Dhl
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Usa\Helper\Data $usaData,
         \Magento\Stdlib\String $string,
+        \Zend_Http_ClientFactory $httpClientFactory,
         array $data = array()
     ) {
         $this->string = $string;
         $this->_usaData = $usaData;
+        $this->_httpClientFactory = $httpClientFactory;
         parent::__construct(
             $coreStoreConfig,
             $rateErrorFactory,
@@ -496,34 +560,6 @@ class Dhl
     }
 
     /**
-     * Get shipping date
-     *
-     * @param bool $domestic
-     * @return string
-     */
-    protected function _getShipDate($domestic = true)
-    {
-        if ($domestic) {
-            $days = explode(',', $this->getConfigData('shipment_days'));
-        } else {
-            $days = explode(',', $this->getConfigData('intl_shipment_days'));
-        }
-
-        if (!$days) {
-            return date('Y-m-d');
-        }
-
-        $i = 0;
-        $weekday = date('w');
-        while (!in_array($weekday, $days) && $i < 10) {
-            $i++;
-            $weekday = date('w', strtotime("+$i day"));
-        }
-
-        return date('Y-m-d', strtotime("+$i day"));
-    }
-
-    /**
      * Get xml quotes
      *
      * @return \Magento\Core\Model\AbstractModel|\Magento\Object
@@ -612,6 +648,7 @@ class Dhl
                     $shippingDuty->addChild('CustomsValue', $customsValue);
                     $shippingDuty->addChild('IsSEDReqd', 'N');
                 }
+
                 if ($shipment !== false) {
                     $hasShipCode = true;
                     $this->_createShipmentXml($shipment, $shipKey);
@@ -621,7 +658,7 @@ class Dhl
 
         if (!$hasShipCode) {
             $this->_errors[] = __('We don\'t have a way to ship to the selected shipping address. Please choose another address or edit the current address.');
-            return;
+            return null;
         }
 
         $request = $xml->asXML();
@@ -634,14 +671,21 @@ class Dhl
                 if (!$url) {
                     $url = $this->_defaultGatewayUrl;
                 }
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-                $responseBody = curl_exec($ch);
-                curl_close($ch);
+                $config = array(
+                    'adapter' => 'Zend_Http_Client_Adapter_Curl',
+                    'curloptions' => array(
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_URL => $url,
+                        CURLOPT_SSL_VERIFYPEER => true,
+                        CURLOPT_SSL_VERIFYHOST => false,
+                        CURLOPT_POSTFIELDS => $request
+                    )
+                );
+                $client = $this->_httpClientFactory->create(
+                    array('data' => $config)
+                );
+                $response = $client->request();
+                $responseBody = $response->getBody();
 
                 $debugData['result'] = $responseBody;
                 $this->_setCachedQuotes($request, $responseBody);
@@ -1099,8 +1143,7 @@ class Dhl
     /**
      * Send request for tracking
      *
-     * @param array $tracking
-     * @return null
+     * @param array $trackings
      */
     protected function _getXMLTracking($trackings)
     {
@@ -1132,15 +1175,24 @@ class Dhl
             if (!$url) {
                 $url = $this->_defaultGatewayUrl;
             }
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-            $responseBody = curl_exec($ch);
+
+            $config = array(
+                'adapter' => 'Zend_Http_Client_Adapter_Curl',
+                'curloptions' => array(
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_URL => $url,
+                    CURLOPT_SSL_VERIFYPEER => true,
+                    CURLOPT_SSL_VERIFYHOST => false,
+                    CURLOPT_POSTFIELDS => $request
+                )
+            );
+            $client = $this->_httpClientFactory->create(
+                array('data' => $config)
+            );
+            $response = $client->request();
+            $responseBody = $response->getBody();
+
             $debugData['result'] = $responseBody;
-            curl_close($ch);
         } catch (\Exception $e) {
             $debugData['result'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
             $responseBody = '';
@@ -1152,9 +1204,8 @@ class Dhl
     /**
      * Parse xml tracking response
      *
-     * @param array $trackingvalue
+     * @param array $trackings value
      * @param string $response
-     * @return null
      */
     protected function _parseXmlTrackingResponse($trackings, $response)
     {

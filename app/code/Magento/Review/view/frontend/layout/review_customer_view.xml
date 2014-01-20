@@ -26,6 +26,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
     <referenceContainer name="content">
-        <block class="Magento\Review\Block\Customer\View" name="customers_review"/>
+        <block class="Magento\Review\Block\Customer\View" name="customers_review" cacheable="false"/>
     </referenceContainer>
 </layout>

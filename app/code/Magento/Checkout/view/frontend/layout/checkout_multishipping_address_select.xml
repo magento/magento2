@@ -26,6 +26,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Multishipping Checkout Shipping Address Selection" design_abstraction="custom">
     <update handle="checkout_multishipping"/>
     <referenceContainer name="content">
-        <block class="Magento\Checkout\Block\Multishipping\Address\Select" name="checkout_address_select" template="multishipping/address/select.phtml"/>
+        <block class="Magento\Checkout\Block\Multishipping\Address\Select" name="checkout_address_select" template="multishipping/address/select.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

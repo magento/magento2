@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="checkout.onepage.review.info.items.after">
-        <block class="Magento\Paypal\Block\Iframe" name="paypal.iframe"/>
+        <block class="Magento\Paypal\Block\Iframe" name="paypal.iframe" cacheable="false"/>
     </referenceContainer>
     <referenceBlock name="checkout.onepage.review.button">
         <action method="setTemplate">

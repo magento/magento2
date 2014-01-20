@@ -26,6 +26,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="page_one_column"/>
     <referenceContainer name="content">
-        <block class="Magento\Ogone\Block\Placeform" name="ogone_placeform" template="placeform.phtml"/>
+        <block class="Magento\Ogone\Block\Placeform" name="ogone_placeform" template="placeform.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

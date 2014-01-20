@@ -254,6 +254,7 @@ return array(
     array('_appState', 'Magento\View\Asset\MinifyService', 'appState'),
     array('_properties', 'Magento\View\Asset\PropertyGroup', 'properties'),
     array('_viewUrl', 'Magento\View\Asset\PublicFile', 'viewUrl'),
+    array('_productThumbnail', 'Magento\Checkout\Block\Cart\Item\Renderer'),
     array('_file', 'Magento\View\Asset\PublicFile', 'file'),
     array('_contentType', 'Magento\View\Asset\PublicFile', 'contentType'),
     array('_url', 'Magento\View\Asset\Remote', 'url'),

@@ -64,14 +64,14 @@
 <?php
     $attributes = 'class="totals tax"';
     if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $_value!=0) {
-        $attributes = 'class="totals tax summary"';
+        $attributes = 'class="totals tax summary" data-mage-init=\'{toggleAdvanced: {selectorsToggleClass: "shown", baseToggleClass: "expanded", toggleContainers: ".totals.tax.details"}}\'';
     }
 ?>
 
 <tr <?php echo $attributes; ?>>
     <td style="<?php echo $_style ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <div class="detailed"><?php echo $this->getTotal()->getTitle() ?></div>
+            <span class="detailed"><?php echo $this->getTotal()->getTitle() ?></span>
         <?php else: ?>
             <?php echo $this->getTotal()->getTitle() ?>
         <?php endif;?>

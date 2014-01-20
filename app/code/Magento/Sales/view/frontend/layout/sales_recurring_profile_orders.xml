@@ -32,7 +32,7 @@
         </action>
     </referenceBlock>
     <referenceBlock name="sales.recurring.profile.view">
-        <block class="Magento\Sales\Block\Recurring\Profile\Related\Orders\Grid" name="sales.recurring.profile.view.orders" as="table" template="recurring/grid.phtml">
+        <block class="Magento\Sales\Block\Recurring\Profile\Related\Orders\Grid" name="sales.recurring.profile.view.orders" as="table" template="recurring/grid.phtml" cacheable="false">
             <action method="setViewLabel">
                 <argument translate="true" name="value" xsi:type="string">Orders Based on This Profile</argument>
             </action>

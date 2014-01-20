@@ -31,14 +31,14 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Checkout\Block\Multishipping\Shipping" name="checkout_shipping" template="multishipping/shipping.phtml">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="multishipping/item/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="multishipping/item/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="multishipping/item/default.phtml"/>
-            <block class="Magento\Checkout\Block\Multishipping\Billing\Items" name="checkout_billing_items" template="multishipping/billing/items.phtml">
-                <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="multishipping/item/default.phtml"/>
-                <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="multishipping/item/default.phtml"/>
-                <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="multishipping/item/default.phtml"/>
+        <block class="Magento\Checkout\Block\Multishipping\Shipping" name="checkout_shipping" template="multishipping/shipping.phtml" cacheable="false">
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="multishipping/item/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="multishipping/item/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="multishipping/item/default.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Multishipping\Billing\Items" name="checkout_billing_items" template="multishipping/billing/items.phtml" cacheable="false">
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="multishipping/item/default.phtml" cacheable="false"/>
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="multishipping/item/default.phtml" cacheable="false"/>
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="multishipping/item/default.phtml" cacheable="false"/>
             </block>
         </block>
     </referenceContainer>

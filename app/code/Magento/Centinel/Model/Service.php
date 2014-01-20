@@ -102,17 +102,11 @@ class Service extends \Magento\Object
     protected $_urlPrefix;
 
     /**
-     * @var \Magento\Data\Form\FormKey
-     */
-    protected $formKey;
-    
-    /**
      * @param \Magento\Centinel\Model\Config $config
      * @param \Magento\Centinel\Model\ApiFactory $apiFactory
      * @param \Magento\UrlInterface $url
      * @param \Magento\Session\SessionManagerInterface $centinelSession
      * @param \Magento\Centinel\Model\StateFactory $stateFactory
-     * @param \Magento\Data\Form\FormKey $formKey
      * @param string $urlPrefix
      * @param array $data
      */
@@ -122,7 +116,6 @@ class Service extends \Magento\Object
         \Magento\UrlInterface $url,
         \Magento\Session\SessionManagerInterface $centinelSession,
         \Magento\Centinel\Model\StateFactory $stateFactory,
-        \Magento\Data\Form\FormKey $formKey,
         $urlPrefix = 'centinel/index/',
         array $data = array()
     ) {
@@ -131,7 +124,6 @@ class Service extends \Magento\Object
         $this->_url = $url;
         $this->_centinelSession = $centinelSession;
         $this->_stateFactory = $stateFactory;
-        $this->formKey = $formKey;
         $this->_urlPrefix = $urlPrefix;
         parent::__construct($data);
     }
@@ -175,7 +167,6 @@ class Service extends \Magento\Object
         $params = array(
             '_secure'  => true,
             '_current' => $current,
-            'form_key' => $this->formKey->getFormKey(),
             'isIframe' => true
         );
         return $this->_url->getUrl($this->_urlPrefix . $suffix, $params);

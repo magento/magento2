@@ -34,7 +34,7 @@
  */
 namespace Magento\Usa\Model\Simplexml;
 
-class Element extends \SimpleXMLElement
+class Element extends \Magento\Simplexml\Element
 {
     /**
      * Adds an attribute to the SimpleXML element
@@ -49,7 +49,7 @@ class Element extends \SimpleXMLElement
         if (!is_null($value)) {
             $value = $this->xmlentities($value);
         }
-        return parent::addAttribute($name, $value, $namespace);
+        parent::addAttribute($name, $value, $namespace);
     }
 
     /**
@@ -74,7 +74,7 @@ class Element extends \SimpleXMLElement
      * @param string
      * @return string
      */
-    public function xmlentities($value)
+    public function xmlentities($value = null)
     {
         $value = str_replace('&amp;', '&', $value);
         $value = str_replace('&', '&amp;', $value);

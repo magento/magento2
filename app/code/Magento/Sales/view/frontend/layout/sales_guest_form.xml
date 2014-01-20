@@ -30,6 +30,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Widget\Guest\Form" name="guest.form" template="guest/form.phtml"/>
+        <block class="Magento\Sales\Block\Widget\Guest\Form" name="guest.form" template="guest/form.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

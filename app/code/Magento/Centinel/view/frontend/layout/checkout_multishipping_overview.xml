@@ -32,7 +32,7 @@
         </block>
     </referenceBlock>
     <referenceContainer name="checkout.multishipping.overview.items.after">
-        <block class="Magento\Centinel\Block\Authentication" name="centinel.frame" template="authentication.phtml">
+        <block class="Magento\Centinel\Block\Authentication" name="centinel.frame" template="authentication.phtml" cacheable="false">
             <action method="setAuthenticationStartMode">
                 <argument name="mode" xsi:type="string">window</argument>
             </action>

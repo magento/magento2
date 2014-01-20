@@ -26,6 +26,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
     <referenceContainer name="content">
-        <block class="Magento\Review\Block\Customer\ListCustomer" name="review_customer_list" template="customer/list.phtml"/>
+        <block class="Magento\Review\Block\Customer\ListCustomer" name="review_customer_list" template="customer/list.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

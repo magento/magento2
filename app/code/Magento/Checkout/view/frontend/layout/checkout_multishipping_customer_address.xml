@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Multishipping Checkout Customer Address Edit Form" design_abstraction="custom">
     <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="address/edit.phtml"/>
+        <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="address/edit.phtml" cacheable="false"/>
     </referenceContainer>
     <update handle="customer_form_template_handle"/>
 </layout>

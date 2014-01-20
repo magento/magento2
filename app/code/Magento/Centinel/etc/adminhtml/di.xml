@@ -42,7 +42,7 @@
             <instance type="Magento\Backend\Model\Url" />
         </param>
         <param name="centinelSession">
-            <instance type="Magento\Core\Model\Session" />
+            <instance type="Magento\Centinel\Model\Session" />
         </param>
         <param name="urlPrefix">
             <value>adminhtml/centinel_index/</value>

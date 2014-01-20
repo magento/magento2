@@ -117,9 +117,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             if (\Magento\TestFramework\Utility\Classes::isVirtual($instanceName)) {
                 $instanceName = \Magento\TestFramework\Utility\Classes::resolveVirtualType($instanceName);
             }
-            $parameters = $parameters['parameters'];
-            if (!class_exists($instanceName)) {
-                $this->fail('Detected configuration of non existed class: ' . $instanceName);
+
+
+            if (!$this->_classExistsAsReal($instanceName)) {
+                continue;
             }
 
             $reflectionClass = new \ReflectionClass($instanceName);
@@ -129,6 +130,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 $this->fail('Class ' . $instanceName . ' does not have __constructor');
             }
 
+            $parameters = $parameters['parameters'];
             $classParameters = $constructor->getParameters();
             foreach ($classParameters as $classParameter) {
                 $parameterName = $classParameter->getName();
@@ -140,6 +142,24 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 . ' contains data for non-existed parameters: ' . implode(', ', array_keys($parameters));
             $this->assertEmpty($parameters, $message);
         }
+    }
+
+    /**
+     * Checks if class is a real one or generated Factory
+     * @param $instanceName class name
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @return bool
+     */
+    protected function _classExistsAsReal($instanceName)
+    {
+        if (class_exists($instanceName)) {
+            return true;
+        }
+        // check for generated factory
+        if (substr($instanceName, -7) == 'Factory' && class_exists(substr($instanceName, 0, -7))) {
+            return false;
+        }
+        $this->fail('Detected configuration of non existed class: ' . $instanceName);
     }
 
     /**

@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <module name="Magento_Usa" version="1.6.0.1" active="true">
+    <module name="Magento_Usa" version="1.6.0.3" active="true">
         <sequence>
             <module name="Magento_Sales"/>
             <module name="Magento_Shipping"/>

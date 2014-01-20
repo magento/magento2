@@ -26,6 +26,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="customer_account"/>
     <referenceContainer name="content">
-        <block class="Magento\Wishlist\Block\Customer\Sharing" name="wishlist.sharing" template="sharing.phtml"/>
+        <block class="Magento\Wishlist\Block\Customer\Sharing" name="wishlist.sharing" template="sharing.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

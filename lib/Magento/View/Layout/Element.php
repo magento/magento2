@@ -190,4 +190,14 @@ class Element extends \Magento\Simplexml\Element
     {
         return $this;
     }
+
+    /**
+     * Returns information is this element allows caching
+     *
+     * @return bool
+     */
+    public function isCacheable()
+    {
+        return !(boolean)count($this->xpath('//' . self::TYPE_BLOCK . '[@cacheable="false"]'));
+    }
 }

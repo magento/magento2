@@ -25,6 +25,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="order_review">
-        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::onepage/review/item.phtml"/>
+        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::onepage/review/item.phtml" cacheable="false"/>
     </referenceBlock>
 </layout>
