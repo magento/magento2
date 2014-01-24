@@ -67,6 +67,7 @@ class Form extends \Magento\Paypal\Block\Standard\Form
         $this->_paypalData = $paypalData;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $paypalConfigFactory, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

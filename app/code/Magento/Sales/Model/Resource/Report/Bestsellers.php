@@ -155,7 +155,7 @@ class Bestsellers extends \Magento\Sales\Model\Resource\Report\AbstractReport
                 ->where('source_table.state != ?', \Magento\Sales\Model\Order::STATE_CANCELED);
 
             $productTypes = array(
-                \Magento\Catalog\Model\Product\Type::TYPE_GROUPED,
+                \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE,
                 \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE,
                 \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,
             );

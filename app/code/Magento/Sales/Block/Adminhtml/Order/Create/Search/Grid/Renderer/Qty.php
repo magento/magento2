@@ -44,7 +44,7 @@ class Qty
      */
     protected function _isInactive($row)
     {
-        return $row->getTypeId() == \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE;
+        return $row->getTypeId() == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE;
     }
 
     /**

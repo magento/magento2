@@ -105,6 +105,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->_taxConfig = $taxConfig;
         $this->_checkoutCart = $checkoutCart;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

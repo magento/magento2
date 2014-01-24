@@ -90,11 +90,11 @@ class DhlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($rateResult));
 
         // rate method factory
-        $rateMethodFactory = $this->getMockBuilder('\Magento\Shipping\Model\Rate\Result\MethodFactory')
+        $rateMethodFactory = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address\RateResult\MethodFactory')
             ->disableOriginalConstructor()
             ->setMethods(array('create'))
             ->getMock();
-        $rateMethod = $this->getMockBuilder('Magento\Shipping\Model\Rate\Result\Method')
+        $rateMethod = $this->getMockBuilder('Magento\Sales\Model\Quote\Address\RateResult\Method')
             ->disableOriginalConstructor()
             ->setMethods(array('setPrice'))
             ->getMock();
@@ -172,7 +172,7 @@ class DhlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/success_dhl_response_rates.xml')));
         // for setRequest
         $request_params = include __DIR__ . '/_files/rates_request_data_dhl.php';
-        $request = $this->_helper->getObject('Magento\Shipping\Model\Rate\Request', $request_params);
+        $request = $this->_helper->getObject('Magento\Sales\Model\Quote\Address\RateRequest', $request_params);
 
         $this->assertNotEmpty($this->_model->collectRates($request)->getAllRates());
     }

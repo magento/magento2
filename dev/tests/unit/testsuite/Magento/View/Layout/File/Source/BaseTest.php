@@ -24,8 +24,7 @@
 
 namespace Magento\View\Layout\File\Source;
 
-use Magento\Filesystem,
-    Magento\Filesystem\Directory\Read,
+use Magento\Filesystem\Directory\Read,
     Magento\View\Layout\File\Factory;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
@@ -55,7 +54,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             false
         );
         $filesystem = $this->getMock(
-            'Magento\Filesystem',
+            'Magento\App\Filesystem',
             array('getDirectoryRead', '__wakeup'),
             array(),
             '',
@@ -63,7 +62,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         );
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::MODULES)
+            ->with(\Magento\App\Filesystem::MODULES_DIR)
             ->will($this->returnValue($this->directory));
 
         $this->fileFactory = $this->getMock('Magento\View\Layout\File\Factory', array(), array(), '', false);

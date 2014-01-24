@@ -46,18 +46,18 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = $objectManager->get('Magento\Filesystem');
-        self::$_themePublicDir = $filesystem->getDirectoryWrite(\Magento\Filesystem::STATIC_VIEW);
-        self::$_viewPublicMergedDir = $filesystem->getDirectoryWrite(\Magento\Filesystem::PUB_VIEW_CACHE);
+        /** @var \Magento\App\Filesystem $filesystem */
+        $filesystem = $objectManager->get('Magento\App\Filesystem');
+        self::$_themePublicDir = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::STATIC_VIEW_DIR);
+        self::$_viewPublicMergedDir = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR);
     }
 
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => dirname(dirname(__DIR__)) . '/_files/design'),
-                \Magento\Filesystem::PUB => array('path' => BP),
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(dirname(__DIR__)) . '/_files/design'),
+                \Magento\App\Filesystem::PUB_DIR => array('path' => BP),
             )
         ));
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');

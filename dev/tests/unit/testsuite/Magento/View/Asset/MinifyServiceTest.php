@@ -51,7 +51,7 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
         $this->_config = $this->getMock('Magento\View\Asset\ConfigInterface', array(), array(), '', false);
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
         $this->_appState = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $directory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $filesystem->expects($this->any())
             ->method('getDirectoryRead')

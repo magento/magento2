@@ -117,6 +117,16 @@ return array(
     array('Mage_Adminhtml_Block_Report_Refresh_Statistics_Grid'),
     array('Mage_Adminhtml_Block_Report_Search_Grid'),
     array('Mage_Adminhtml_Block_Sales'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Create\Form', 'Magento\Shipping\Block\Adminhtml\Create\Form'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Create\Items', 'Magento\Shipping\Block\Adminhtml\Create\Items'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\View\Comments', 'Magento\Shipping\Block\Adminhtml\View\Comments'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\View\Form', 'Magento\Shipping\Block\Adminhtml\View\Form'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\View\Items', 'Magento\Shipping\Block\Adminhtml\View\Items'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Create', 'Magento\Shipping\Block\Adminhtml\Create'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\View', 'Magento\Shipping\Block\Adminhtml\View'),
+    array('Magento\Sales\Block\Order\Shipment\Items', 'Magento\Shipping\Block\Items'),
+    array('Magento\Sales\Controller\Adminhtml\Order\Shipment', 'Magento\Shipping\Controller\Adminhtml\Order\Shipment'),
+    array('Magento\Sales\Block\Order\Shipment', 'Magento\Shipping\Block\Order\Shipment'),
     array('Mage_Adminhtml_Block_Sales_Order_Create_Customer_Grid'),
     array('Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid_Renderer_Giftmessage'),
     array('Mage_Adminhtml_Block_Sales_Order_Status_Grid'),
@@ -616,7 +626,7 @@ return array(
     array('Mage_Core_Controller_Magento_Router_Admin', 'Magento\Backend\App\Router\DefaultRouter'),
     array('Mage_Core_Model_Convert'),
     array('Mage_Core_Model_Config_Fieldset', 'Magento\Core\Model\Fieldset\Config'),
-    array('Mage_Core_Model_Config_Options', 'Magento\Filesystem'),
+    array('Mage_Core_Model_Config_Options', 'Magento\App\Filesystem'),
     array('Magento\App\Dir', 'Magento\Filesystem'),
     array('Magento\Filesystem\Adapter\Local', 'Magento\Filesystem\Driver\File'),
     array('Magento\Filesystem\Adapter\Zlib', 'Magento\Filesystem\Driver\Zlib'),
@@ -699,6 +709,18 @@ return array(
     array('Mage_Reports_Model_Test'),
     array('Mage_Rss_Model_Observer'),
     array('Mage_Rss_Model_Session', 'Magento_Backend_Model_Auth and \Magento\Backend\Model\Auth\Session'),
+    array('Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Tracking',
+        '\Magento\Shipping\Block\Adminhtml\Order\Tracking'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Create\Tracking',
+        'Magento\Shipping\Block\Adminhtml\Order\Tracking'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Packaging',
+        '\Magento\Shipping\Block\Adminhtml\Order\Packaging'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Packaging\Grid',
+        '\Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Tracking\Info',
+        '\Magento\Shipping\Block\Adminhtml\Order\Tracking'),
+    array('Magento\Sales\Block\Adminhtml\Order\Shipment\View\Tracking',
+        'Magento\Shipping\Block\Adminhtml\Order\Tracking\View'),
     array('Mage_Sales_Block_Order_Details'),
     array('Mage_Sales_Block_Order_Tax'),
     array('Mage_Sales_Block_Guest_Links'),
@@ -1040,6 +1062,9 @@ return array(
     array('Magento\ImportExport\Model\Resource\Helper\Mysql4', 'Magento\ImportExport\Model\Resource\Helper'),
     array('Magento\Reports\Model\Resource\Helper\Mysql4', 'Magento\Reports\Model\Resource\Helper'),
     array('Magento\Backup\Model\Resource\Helper\Mysql4', 'Magento\Backup\Model\Resource\Helper'),
+    array('Magento\Sales\Model\CarrierFactory', 'Magento\Shipping\Model\CarrierFactory'),
+    array('Magento\Sales\Model\Order\Pdf\Shipment\Packaging', 'Magento\Shipping\Model\Order\Pdf\Packaging'),
+    array('Magento\Sales\Model\ResourceFactory'),
     array('Magento\Sales\Model\Resource\Helper\Mysql4', 'Magento\Sales\Model\Resource\Helper'),
     array('Magento\Core\Model\Resource\Helper\Mysql4', 'Magento\Core\Model\Resource\Helper'),
     array('Magento\Catalog\Model\Resource\Helper\Mysql4', 'Magento\Catalog\Model\Resource\Helper'),
@@ -1702,7 +1727,7 @@ return array(
     ),
     array(
         'Magento\App\Dir\Verification',
-        'Magento\Filesystem\DirectoryList\Verification'
+        'Magento\App\Filesystem\DirectoryList\Verification'
     ),
     array('Magento\Core\Model\Cookie', 'Magento\Stdlib\Cookie'),
     array('Magento\Core\Model\Logger', 'Magento\Logger'),
@@ -1778,4 +1803,59 @@ return array(
     array('Magento\Reminder\Model\Resource\HelperFactory'),
     array('Magento\Reminder\Model\Resource\Helper'),
     array('Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser'),
+    array(
+        'Magento\Catalog\Model\Product\Type\Grouped\Backend',
+        'Magento\GroupedProduct\Model\Product\Type\Grouped\Backend'
+    ),
+    array(
+        'Magento\Catalog\Model\Product\Type\Grouped\Price',
+        'Magento\GroupedProduct\Model\Product\Type\Grouped\Price'
+    ),
+    array(
+        'Magento\Catalog\Model\Resource\Product\Indexer\Price\Grouped',
+        'Magento\GroupedProduct\Model\Resource\Product\Indexer\Price\Grouped'
+    ),
+    array(
+        'Magento\Catalog\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection',
+        'Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection'
+    ),
+    array(
+        'Magento\Catalog\Model\Product\Type\Grouped',
+        'Magento\GroupedProduct\Model\Product\Type\Grouped'
+    ),
+    array(
+        'Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Grouped',
+        'Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped'
+    ),
+    array(
+        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs\Grouped',
+    ),
+    array(
+        'Magento\Catalog\Block\Product\Grouped\AssociatedProducts',
+        'Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts',
+    ),
+    array(
+        'Magento\Catalog\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts',
+        'Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts'
+    ),
+    array(
+        'Magento\Catalog\Block\Product\View\Type\Grouped',
+        'Magento\GroupedProduct\Block\Product\View\Type\Grouped'
+    ),
+    ['CollFactory', 'CollectionFactory'], // no need to shorten anymore
+    ['Magento\Shipping\Model\Rate\Result\AbstractResult', 'Magento\Sales\Model\Quote\Address\RateResult\AbstractResult'],
+    ['Magento\Shipping\Model\Rate\Result\Error', 'Magento\Sales\Model\Quote\Address\RateResult\Error'],
+    ['Magento\Shipping\Model\Rate\Result\Method', 'Magento\Sales\Model\Quote\Address\RateResult\Method'],
+    [
+        'Magento\Shipping\Model\Rate\AbstractRate',
+        'Magento\Sales\Model\Quote\Address\Rate + Magento\Shipping\Model\CarrierFactory'
+    ],
+    ['Magento\Shipping\Model\Rate\Request', 'Magento\Sales\Model\Quote\Address\RateRequest'],
+    array('Magento\PageCache\Block\Adminhtml\Cache\Additional'),
+    array('Magento\PageCache\Controller\Adminhtml\PageCache'),
+    array('Magento\PageCache\Model\Control\ControlInterface'),
+    array('Magento\PageCache\Model\Control\Zend'),
+    array('Magento\PageCache\Model\System\Config\Source\Controls'),
+    array('Magento\PageCache\Model\CacheControlFactory'),
+    array('Magento\PageCache\Model\Observer'),
 );

@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getMockBuilder('Magento\App\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $fileSystemMock = $this->getMockBuilder('Magento\Filesystem')->disableOriginalConstructor()->getMock();
+        $fileSystemMock = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
         $this->_configMock = $this->getMockBuilder('Magento\Webapi\Model\Config')
             ->disableOriginalConstructor()->getMock();
         $this->_soapConfig = new \Magento\Webapi\Model\Soap\Config(

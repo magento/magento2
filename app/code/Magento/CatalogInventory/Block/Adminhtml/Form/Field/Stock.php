@@ -158,11 +158,14 @@ class Stock extends \Magento\Data\Form\Element\Select
      */
     protected function _disableFields()
     {
+        if ($this->getDisabled() || $this->_isProductComposite()) {
+            $this->_qty->setDisabled('disabled');
+        }
         if (!$this->_isProductComposite() && $this->_qty->getValue() === null) {
             $this->setDisabled('disabled');
         }
-        if ($this->_isProductComposite()) {
-            $this->_qty->setDisabled('disabled');
+        if ($this->isLocked()) {
+            $this->_qty->lock();
         }
         return $this;
     }

@@ -32,6 +32,23 @@ namespace Magento\Authorizenet\Helper;
 class Backend extends Data
 {
     /**
+     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Backend\Model\Url $backendUrl
+     */
+    public function __construct(
+        \Magento\App\Helper\Context $context,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Backend\Model\Url $backendUrl
+    ) {
+        parent::__construct($context, $storeManager, $orderFactory);
+        $this->_urlBuilder = $backendUrl;
+    }
+
+
+    /**
      * Return URL for admin area
      *
      * @param string $route
@@ -50,7 +67,7 @@ class Backend extends Data
      */
     public function getPlaceOrderAdminUrl()
     {
-        return $this->_getUrl('*/authorizenet_directpost_payment/place', array());
+        return $this->_getUrl('adminhtml/authorizenet_directpost_payment/place', array());
     }
 
     /**
@@ -77,5 +94,17 @@ class Backend extends Data
     public function getRedirectIframeUrl($params)
     {
         return $this->_getUrl('adminhtml/authorizenet_directpost_payment/redirect', $params);
+    }
+
+    /**
+     * Get direct post rely url
+     *
+     * @param null|int|string $storeId
+     * @return string
+     */
+    public function getRelyUrl($storeId = null)
+    {
+        return $this->_storeManager->getDefaultStoreView()->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_LINK)
+            . 'authorizenet/directpost_payment/backendResponse';
     }
 }

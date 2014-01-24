@@ -134,7 +134,8 @@ class Import extends \Magento\Backend\App\Action
                 $import = $this->_objectManager->create('Magento\ImportExport\Model\Import')->setData($data);
                 $source = \Magento\ImportExport\Model\Import\Adapter::findAdapterFor(
                     $import->uploadSource(),
-                    $this->_objectManager->create('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::ROOT)
+                    $this->_objectManager->create('Magento\App\Filesystem')
+                        ->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)
                 );
                 $validationResult = $import->validateSource($source);
 

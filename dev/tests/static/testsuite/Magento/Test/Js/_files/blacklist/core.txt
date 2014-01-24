@@ -10,7 +10,7 @@ app/code/Magento/Rule/view/adminhtml/rules.js
 app/code/Magento/Sales/view/adminhtml/order/create/giftmessage.js
 app/code/Magento/Sales/view/adminhtml/order/create/scripts.js
 app/code/Magento/Sales/view/adminhtml/order/giftoptions_tooltip.js
-app/code/Magento/Sales/view/adminhtml/order/shipment/packaging.js
+app/code/Magento/Shipping/view/adminhtml/order/packaging.js
 app/code/Magento/Theme/view/frontend/menu.js
 pub/lib/mage/adminhtml
 pub/lib/mage/backend/editablemultiselect.js

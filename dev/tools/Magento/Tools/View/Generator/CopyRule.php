@@ -32,7 +32,7 @@ namespace Magento\Tools\View\Generator;
 class CopyRule
 {
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     private $_filesystem;
 
@@ -56,12 +56,12 @@ class CopyRule
     /**
      * Constructor
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Theme\Collection $themes
      * @param \Magento\View\Design\Fallback\Rule\RuleInterface $fallbackRule
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Theme\Collection $themes,
         \Magento\View\Design\Fallback\Rule\RuleInterface $fallbackRule
     ) {
@@ -145,7 +145,7 @@ class CopyRule
     private function _getMatchingDirs($dirPattern)
     {
         $dirPattern = preg_replace($this->_placeholderPcre, '*', $dirPattern, -1, $placeholderCount);
-        $directoryHandler = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $directoryHandler = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         if ($placeholderCount) {
             // autodetect pattern base directory because the filesystem interface requires it
             $firstPlaceholderPos = strpos($dirPattern, '*');

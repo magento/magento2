@@ -28,7 +28,7 @@ namespace Magento;
 interface AppInterface
 {
     /**
-     * @return int
+     * @return \Magento\App\ResponseInterface
      */
     public function execute();
 } 

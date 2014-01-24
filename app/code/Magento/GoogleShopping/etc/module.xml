@@ -37,6 +37,8 @@
             <module name="Magento_Eav"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_GoogleCheckout"/>
+            <module name="Magento_GroupedProduct"/>
         </depends>
     </module>
 </config>

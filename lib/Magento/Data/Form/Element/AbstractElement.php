@@ -56,6 +56,13 @@ abstract class AbstractElement extends \Magento\Data\Form\AbstractForm
     protected $_escaper;
 
     /**
+     * Lock html attribute
+     *
+     * @var string
+     */
+    private $lockHtmlAttribute = 'data-locked';
+
+    /**
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Escaper $escaper
@@ -317,6 +324,9 @@ abstract class AbstractElement extends \Magento\Data\Form\AbstractForm
 
     public function serialize($attributes = array(), $valueSeparator='=', $fieldSeparator=' ', $quote='"')
     {
+        if ($this->isLocked() && !empty($attributes)) {
+            $attributes[] = $this->lockHtmlAttribute;
+        }
         if (in_array('disabled', $attributes) && !empty($this->_data['disabled'])) {
             $this->_data['disabled'] = 'disabled';
         } else {
@@ -377,5 +387,23 @@ abstract class AbstractElement extends \Magento\Data\Form\AbstractForm
         $this->setValues($values);
 
         return $this;
+    }
+
+    /**
+     * Lock element
+     */
+    public function lock()
+    {
+        $this->setData($this->lockHtmlAttribute, 1);
+    }
+
+    /**
+     * Is element locked
+     *
+     * @return bool
+     */
+    public function isLocked()
+    {
+        return $this->getData($this->lockHtmlAttribute) == 1;
     }
 }

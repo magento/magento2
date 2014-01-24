@@ -104,7 +104,6 @@ class Layout
             'structure'          => $objectManager->create('Magento\Data\Structure', array()),
             'argumentProcessor'  => $objectManager->create('Magento\Core\Model\Layout\Argument\Processor', array()),
             'scheduledStructure' => $objectManager->create('Magento\Core\Model\Layout\ScheduledStructure', array()),
-            'dataServiceGraph'   => $objectManager->create('Magento\Core\Model\DataService\Graph', array()),
             'coreStoreConfig'    => $objectManager->create('Magento\Core\Model\Store\Config'),
             'appState'           => $objectManager->get('Magento\App\State'),
             'messageManager'     => $objectManager->get('Magento\Message\ManagerInterface'),

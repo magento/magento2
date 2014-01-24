@@ -112,6 +112,11 @@ class Shortcut extends \Magento\View\Element\Template
     protected $mathRandom;
 
     /**
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     */
+    protected $productTypeConfig;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Paypal\Helper\Data $paypalData
      * @param \Magento\Payment\Helper\Data $paymentData
@@ -121,6 +126,7 @@ class Shortcut extends \Magento\View\Element\Template
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param array $data
      */
     public function __construct(
@@ -133,6 +139,7 @@ class Shortcut extends \Magento\View\Element\Template
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
         \Magento\Math\Random $mathRandom,
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         array $data = array()
     ) {
         $this->_registry = $registry;
@@ -143,7 +150,9 @@ class Shortcut extends \Magento\View\Element\Template
         $this->_checkoutSession = $checkoutSession;
         $this->_checkoutFactory = $checkoutFactory;
         $this->mathRandom = $mathRandom;
+        $this->productTypeConfig = $productTypeConfig;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -170,7 +179,7 @@ class Shortcut extends \Magento\View\Element\Template
             $currentProduct = $this->_registry->registry('current_product');
             if (!is_null($currentProduct)) {
                 $productPrice = (float)$currentProduct->getFinalPrice();
-                if (empty($productPrice) && !$currentProduct->isGrouped()) {
+                if (empty($productPrice) && !$this->productTypeConfig->isProductSet($currentProduct->getTypeId())) {
                     $this->_shouldRender = false;
                     return $result;
                 }

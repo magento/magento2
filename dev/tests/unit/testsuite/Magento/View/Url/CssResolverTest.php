@@ -33,10 +33,10 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filesystem = $this->getMock('Magento\Filesystem', array('getPath', '__wakeup'), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array('getPath', '__wakeup'), array(), '', false);
         $filesystem->expects($this->any())
             ->method('getPath')
-            ->with(\Magento\Filesystem::ROOT)
+            ->with(\Magento\App\Filesystem::ROOT_DIR)
             ->will($this->returnValue('/base_dir/'));
         $viewFilesystem = $this->getMock('Magento\View\Filesystem', array('normalizePath'), array(), '', false);
         $viewFilesystem->expects($this->any())

@@ -120,7 +120,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -152,7 +152,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
         $this->_themeResourceFactory = $context->getThemeResourceFactory();
         $this->_moduleConfig = $context->getModuleList()->getModule($moduleName);
         $this->filesystem = $context->getFilesystem();
-        $this->modulesDir = $this->filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $this->modulesDir = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         $this->_connectionName = $connectionName ?: $this->_connectionName;
     }
 
@@ -835,7 +835,7 @@ class Setup implements \Magento\Module\Updater\SetupInterface
     }
 
     /**
-     * @return \Magento\Filesystem
+     * @return \Magento\App\Filesystem
      */
     public function getFilesystem()
     {

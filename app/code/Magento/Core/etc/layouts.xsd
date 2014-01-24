@@ -135,7 +135,6 @@
     <xs:element name="update" type="updateType"/>
     <xs:element name="remove" type="removeType"/>
     <xs:element name="move" type="moveType"/>
-    <xs:element name="data" type="dataType"/>
 
     <xs:simpleType name="handlePageType">
         <xs:restriction base="xs:string">
@@ -222,7 +221,6 @@
             <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="data" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute type="elementNameType" name="name" use="optional"/>
         <xs:attribute type="blockClassType" name="class" use="optional"/>
@@ -235,16 +233,6 @@
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
         <xs:attribute type="xs:string" name="group" use="optional" />
         <xs:attribute name="cacheable" type="xs:boolean" default="true" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="dataType">
-        <xs:annotation>
-            <xs:documentation>
-                Use data from Service Layer in View Layer.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:attribute type="xs:string" name="alias" use="required"/>
-        <xs:attribute type="xs:string" name="serviceCall" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="actionType">

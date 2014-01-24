@@ -81,11 +81,12 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
         $rateFactory->expects($this->any())->method('create')->will($this->returnValue($rateResult));
 
         // rate method factory
-        $rateMethodFactory = $this->getMockBuilder('\Magento\Shipping\Model\Rate\Result\MethodFactory')
+        $rateMethodFactory = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address\RateResult\MethodFactory')
             ->disableOriginalConstructor()
             ->setMethods(array('create'))
             ->getMock();
-        $rateMethod = $this->getMockBuilder('Magento\Shipping\Model\Rate\Result\Method')->disableOriginalConstructor()
+        $rateMethod = $this->getMockBuilder('Magento\Sales\Model\Quote\Address\RateResult\Method')
+            ->disableOriginalConstructor()
             ->setMethods(array('setPrice'))
             ->getMock();
         $rateMethod->expects($this->any())->method('setPrice')->will($this->returnSelf());
@@ -111,7 +112,7 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $modulesDirectory->expects($this->any())->method('readFile')
             ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/countries.xml')));
-        $filesystem = $this->getMockBuilder('\Magento\Filesystem')->disableOriginalConstructor()
+        $filesystem = $this->getMockBuilder('\Magento\App\Filesystem')->disableOriginalConstructor()
             ->setMethods(array('getDirectoryRead'))
             ->getMock();
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirectory));
@@ -124,7 +125,7 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
         $website->expects($this->any())->method('getBaseCurrencyCode')->will($this->returnValue('USD'));
         $storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($website));
 
-        $arguments = array(
+        $this->_model = $this->_helper->getObject('Magento\Usa\Model\Shipping\Carrier\Dhl\International', array(
             'coreStoreConfig' => $coreStoreConfig,
             'xmlElFactory' => $xmlElFactory,
             'rateFactory' => $rateFactory,
@@ -133,8 +134,7 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
             'filesystem' => $filesystem,
             'storeManager' => $storeManager,
             'data' => array('id' => 'dhlint', 'store' => '1')
-        );
-        $this->_model = $this->_helper->getObject('Magento\Usa\Model\Shipping\Carrier\Dhl\International', $arguments);
+        ));
     }
 
     /**
@@ -219,7 +219,7 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/success_dhlintl_response_rates.xml')));
         // for setRequest
         $request_params = include __DIR__ . '/_files/rates_request_data_dhlintl.php';
-        $request = $this->_helper->getObject('Magento\Shipping\Model\Rate\Request', $request_params);
+        $request = $this->_helper->getObject('Magento\Sales\Model\Quote\Address\RateRequest', $request_params);
         $this->assertNotEmpty($this->_model->collectRates($request)->getAllRates());
     }
 }

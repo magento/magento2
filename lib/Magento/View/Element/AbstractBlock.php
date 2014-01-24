@@ -146,6 +146,14 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
     protected $_locale;
 
     /**
+     * The property is used to define content-scope of block. Can be private or public.
+     * If it isn't defined then application considers it as false.
+     *
+     * @var bool
+     */
+    protected $_isScopePrivate;
+
+    /**
      * @param \Magento\View\Element\Context $context
      * @param array $data
      */
@@ -170,6 +178,7 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
         $this->_escaper         = $context->getEscaper();
         $this->filterManager    = $context->getFilterManager();
         $this->_locale          = $context->getLocale();
+        $this->_isScopePrivate  = false;
         parent::__construct($data);
         $this->_construct();
     }
@@ -973,5 +982,16 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
     {
         $module = $module ?: $this->getModuleName();
         return $this->_viewConfig->getViewConfig()->getVarValue($module, $name);
+    }
+
+    /**
+     * Determine if the block scope is private or public.
+     * Returns true if scope is private, false otherwise
+     *
+     * @return bool
+     */
+    public function isScopePrivate()
+    {
+        return $this->_isScopePrivate;
     }
 }

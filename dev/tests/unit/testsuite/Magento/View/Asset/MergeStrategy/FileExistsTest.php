@@ -59,7 +59,7 @@ class FileExistsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_filesystem = $this->getMock(
-            'Magento\Filesystem',
+            'Magento\App\Filesystem',
             array('getDirectoryWrite', 'getDirectoryRead'),
             array(),
             '',

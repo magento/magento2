@@ -48,6 +48,7 @@ class Link extends \Magento\View\Element\Html\Link\Current
     ) {
         parent::__construct($context, $defaultPath, $data);
         $this->_customerSession = $customerSession;
+        $this->_isScopePrivate = true;
     }
 
     /**

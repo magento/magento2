@@ -44,6 +44,29 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_allowFixedOnly   = false;
 
     /**
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Logger $logger
+     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
+     * @param mixed $connection
+     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     */
+    public function __construct(
+        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Logger $logger,
+        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
+        $connection = null,
+        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+    ) {
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        $this->_carrierFactory = $carrierFactory;
+    }
+
+
+    /**
      * Resource initialization
      *
      */
@@ -89,7 +112,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function addItem(\Magento\Object $rate)
     {
-        if ($this->_allowFixedOnly && (!$rate->getCarrierInstance() || !$rate->getCarrierInstance()->isFixed())) {
+        $carrier = $this->_carrierFactory->get($rate->getCarrier());
+        if ($this->_allowFixedOnly && (!$carrier || !$carrier->isFixed())) {
             return $this;
         }
         return parent::addItem($rate);

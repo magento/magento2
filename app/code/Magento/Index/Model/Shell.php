@@ -48,12 +48,12 @@ class Shell extends \Magento\Core\Model\AbstractShell
     protected $_indexer;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $entryPoint
      * @param Indexer $indexer
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $entryPoint,
         \Magento\Index\Model\Indexer $indexer
     ) {

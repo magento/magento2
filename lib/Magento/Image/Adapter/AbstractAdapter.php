@@ -80,7 +80,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -141,12 +141,12 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initialize default values
      *
-     * @param \Magento\Filesystem $filesystem,
+     * @param \Magento\App\Filesystem $filesystem,
      * @param array $data
      */
-    public function __construct(\Magento\Filesystem $filesystem, array $data = array()) {
+    public function __construct(\Magento\App\Filesystem $filesystem, array $data = array()) {
         $this->_filesystem      = $filesystem;
-        $this->directoryWrite   = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $this->directoryWrite   = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
     }
 
     /**

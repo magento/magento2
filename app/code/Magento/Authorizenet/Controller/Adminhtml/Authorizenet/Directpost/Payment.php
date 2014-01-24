@@ -130,18 +130,18 @@ class Payment
                     $session->addCheckoutOrderIncrementId($order->getIncrementId());
                     $session->setLastOrderIncrementId($order->getIncrementId());
 
-                    $requestToPaygate = $payment->getMethodInstance()->generateRequestFromOrder($order);
-                    $requestToPaygate->setControllerActionName($controller);
-                    $requestToPaygate->setOrderSendConfirmation($sendConfirmationFlag);
-                    $requestToPaygate->setStoreId($this->_getOrderCreateModel()->getQuote()->getStoreId());
+                    $requestToAuthorizenet = $payment->getMethodInstance()->generateRequestFromOrder($order);
+                    $requestToAuthorizenet->setControllerActionName($controller);
+                    $requestToAuthorizenet->setOrderSendConfirmation($sendConfirmationFlag);
+                    $requestToAuthorizenet->setStoreId($this->_getOrderCreateModel()->getQuote()->getStoreId());
 
                     $adminUrl = $this->_objectManager->get('Magento\Backend\Model\Url');
                     if ($adminUrl->useSecretKey()) {
-                        $requestToPaygate->setKey(
+                        $requestToAuthorizenet->setKey(
                             $adminUrl->getSecretKey('adminhtml', 'authorizenet_directpost_payment', 'redirect')
                         );
                     }
-                    $result['directpost'] = array('fields' => $requestToPaygate->getData());
+                    $result['directpost'] = array('fields' => $requestToAuthorizenet->getData());
                 }
 
                 $result['success'] = 1;

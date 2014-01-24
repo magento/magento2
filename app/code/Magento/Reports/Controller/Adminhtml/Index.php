@@ -79,7 +79,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.report.search.grid', 'grid.export');
-        return $this->_fileFactory->create('search.csv', $content->getCsvFile(), \Magento\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('search.csv', $content->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -89,7 +89,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.report.search.grid', 'grid.export');
-        return $this->_fileFactory->create('search.xml', $content->getExcelFile(), \Magento\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('search.xml', $content->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     protected function _isAllowed()

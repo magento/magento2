@@ -75,7 +75,8 @@ class Grouped
                 array())
             ->joinLeft(
                 array('l' => $this->getTable('catalog_product_link')),
-                'e.entity_id = l.product_id AND l.link_type_id=' . \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED,
+                'e.entity_id = l.product_id AND l.link_type_id='
+                    . \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED,
                 array())
             ->joinLeft(
                 array('le' => $this->getTable('catalog_product_entity')),

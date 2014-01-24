@@ -1109,11 +1109,11 @@
 }
 .order-billing-address,
 .order-billing-method,
-[class^=" sales-order-"] .order-history,
-[class^=" sales-order-"] .order-comments-history,
-[class^=" sales-order-"] .order-information,
-[class^=" sales-order-"] .order-billing-address,
-[class^=" sales-order-"] .order-payment-method,
+[class*="-order-"] .order-history,
+[class*="-order-"] .order-comments-history,
+[class*="-order-"] .order-information,
+[class*="-order-"] .order-billing-address,
+[class*="-order-"] .order-payment-method,
 [class^=" adminhtml-rma-"] .order-comments-history,
 [class^=" adminhtml-rma-"] .order-shipping-address,
 [class^=" adminhtml-rma-"] .rma-request-details {
@@ -1122,11 +1122,11 @@
 }
 .order-shipping-address,
 .order-shipping-method,
-[class^=" sales-order-"] .order-totals,
-[class^=" sales-order-"] .order-account-information,
-[class^=" sales-order-"] .order-shipping-address,
-[class^=" sales-order-"] .order-payment-method-virtual,
-[class^=" sales-order-"] .order-shipping-method,
+[class*="-order-"] .order-totals,
+[class*="-order-"] .order-account-information,
+[class*="-order-"] .order-shipping-address,
+[class*="-order-"] .order-payment-method-virtual,
+[class*="-order-"] .order-shipping-method,
 [class^=" adminhtml-rma-"] .rma-confirmation,
 [class^=" adminhtml-rma-"] .order-shipping-method,
 [class^=" adminhtml-rma-"] .order-return-address {
@@ -1239,12 +1239,12 @@
   float: none;
   width: 100%;
 }
-[class^=" sales-order-"] .order-billing-address .actions,
-[class^=" sales-order-"] .order-shipping-address .actions {
+[class*="-order-"] .order-billing-address .actions,
+[class*="-order-"] .order-shipping-address .actions {
   margin: 17px 0;
 }
-[class^=" sales-order-"] .order-billing-address .control + label,
-[class^=" sales-order-"] .order-shipping-address .control + label {
+[class*="-order-"] .order-billing-address .control + label,
+[class*="-order-"] .order-shipping-address .control + label {
   margin: 17px 0 0;
 }
 .sales-order-create-index .page-actions-inner .cancel,
@@ -1509,15 +1509,15 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
 /*
     Order view
 -------------------------------------- */
-[class^=" sales-order-"] .fieldset-wrapper-title .actions {
+[class*="-order-"] .fieldset-wrapper-title .actions {
   float: right;
   font-size: 12px;
   margin: 8px 20px 0 0;
 }
-[class^=" sales-order-"] .fieldset-wrapper-title .actions a:link,
-[class^=" sales-order-"] .fieldset-wrapper-title .actions a:visited,
-[class^=" sales-order-"] .fieldset-wrapper-title .actions a:hover,
-[class^=" sales-order-"] .fieldset-wrapper-title .actions a:active {
+[class*="-order-"] .fieldset-wrapper-title .actions a:link,
+[class*="-order-"] .fieldset-wrapper-title .actions a:visited,
+[class*="-order-"] .fieldset-wrapper-title .actions a:hover,
+[class*="-order-"] .fieldset-wrapper-title .actions a:active {
   color: #a29c94;
 }
 .order-comments-history fieldset {
@@ -1541,7 +1541,7 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
 .order-comments-history .actions {
   float: right;
 }
-[class^=" sales-order-"] .fieldset-wrapper address {
+[class*="-order-"] .fieldset-wrapper address {
   overflow: auto;
 }
 /*
@@ -1593,19 +1593,19 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
 [class^=" sales-transactions-"] .col-id {
   width: 35px;
 }
-[class^=" sales-order-shipment-"] .col-ship,
+[class^=" adminhtml-order-shipment-"] .col-ship,
 [class^=" sales-"] .col-return-to-stock,
 .adminhtml-rma-new .col-select {
   text-align: center;
   width: 35px;
 }
-[class^=" sales-order-"] .col-price-original,
-[class^=" sales-order-"] .col-tax-amount,
-[class^=" sales-order-"] .col-tax-percent,
-[class^=" sales-order-"] .col-discont,
-[class^=" sales-order-"] .col-total,
-[class^=" sales-order-"] .col-discount,
-[class^=" sales-order-"] .col-tax,
+[class*="-order-"] .col-price-original,
+[class*="-order-"] .col-tax-amount,
+[class*="-order-"] .col-tax-percent,
+[class*="-order-"] .col-discont,
+[class*="-order-"] .col-total,
+[class*="-order-"] .col-discount,
+[class*="-order-"] .col-tax,
 [class^=" sales-"] .col-refunded,
 [class^=" adminhtml-rma-"] .col-order,
 [class^=" adminhtml-rma-"] .col-required,
@@ -1617,8 +1617,8 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
   white-space: nowrap;
   width: 50px;
 }
-[class^=" sales-order-"] .col-subtotal,
-[class^=" sales-order-"] .col-price,
+[class*="-order-"] .col-subtotal,
+[class*="-order-"] .col-price,
 [class^=" adminhtml-rma-"] .col-price {
   text-align: right;
   width: 50px;
@@ -1637,8 +1637,8 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
   width: 60px;
 }
 [class^=" sales-"] .col-qty,
-[class^=" sales-order-"] .col-qty-invoice,
-[class^=" sales-order-"] .col-ordered-qty,
+[class*="-order-"] .col-qty-invoice,
+[class*="-order-"] .col-ordered-qty,
 [class^=" adminhtml-rma-"] .col-qty,
 [class^=" adminhtml-rma-"] .col-condition {
   width: 70px;
@@ -1687,14 +1687,14 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
 [class^=" sales-"] tr.headings .col-transaction-type > span,
 [class^=" sales-"] tr.headings .col-gtbase > span,
 [class^=" sales-"] tr.headings .col-gtpurchased > span,
-[class^=" sales-order-"] tr.headings .col-discont > span {
+[class*="-order-"] tr.headings .col-discont > span {
   white-space: normal;
 }
 [class^=" sales-"] .col-period,
 [class^=" adminhtml-rma-"] .col-period {
   width: 150px;
 }
-[class^=" sales-order-shipment-"] .col-carrier {
+[class^=" adminhtml-order-shipment-"] .col-carrier {
   width: 190px;
 }
 .checkout-agreement-index .col-store-view {
@@ -1718,48 +1718,48 @@ tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-d
   padding-bottom: 4px;
   width: 100%;
 }
-[class^=" sales-order-"] .order-totals .actions,
+[class*="-order-"] .order-totals .actions,
 [class^=" adminhtml-rma-"] .col-qty,
 [class^=" adminhtml-rma-"] .col-qty_ordered,
 .sales-order-view .col-refunded {
   text-align: right;
 }
-[class^=" sales-order-"] .col-price .label,
-[class^=" sales-order-"] .col-subtotal .label {
+[class*="-order-"] .col-price .label,
+[class*="-order-"] .col-subtotal .label {
   display: inline-block;
   min-width: 60px;
   white-space: nowrap;
 }
-[class^=" sales-order-"] .col-price .price-excl-tax .price,
-[class^=" sales-order-"] .col-price .price-incl-tax .price,
-[class^=" sales-order-"] .col-subtotal .price-excl-tax .price,
-[class^=" sales-order-"] .col-subtotal .price-incl-tax .price {
+[class*="-order-"] .col-price .price-excl-tax .price,
+[class*="-order-"] .col-price .price-incl-tax .price,
+[class*="-order-"] .col-subtotal .price-excl-tax .price,
+[class*="-order-"] .col-subtotal .price-incl-tax .price {
   font-weight: bold;
 }
-[class^=" sales-order-"] .grid .col-qty table,
-[class^=" sales-order-"] .grid .col-qty tbody,
-[class^=" sales-order-"] .grid .col-qty tr,
-[class^=" sales-order-"] .grid .col-qty td,
-[class^=" sales-order-"] .grid .col-ordered-qty table,
-[class^=" sales-order-"] .grid .col-ordered-qty tbody,
-[class^=" sales-order-"] .grid .col-ordered-qty tr,
-[class^=" sales-order-"] .grid .col-ordered-qty td {
+[class*="-order-"] .grid .col-qty table,
+[class*="-order-"] .grid .col-qty tbody,
+[class*="-order-"] .grid .col-qty tr,
+[class*="-order-"] .grid .col-qty td,
+[class*="-order-"] .grid .col-ordered-qty table,
+[class*="-order-"] .grid .col-ordered-qty tbody,
+[class*="-order-"] .grid .col-ordered-qty tr,
+[class*="-order-"] .grid .col-ordered-qty td {
   background: none;
   border: 0;
 }
-[class^=" sales-order-"] .col-ordered-qty td {
+[class*="-order-"] .col-ordered-qty td {
   padding: 0 5px 3px;
 }
-[class^=" sales-order-"] .grid .product-title {
+[class*="-order-"] .grid .product-title {
   font-weight: bold;
 }
-[class^=" sales-order-"] .item-options {
+[class*="-order-"] .item-options {
   margin: 5px 0 5px 10px;
 }
-[class^=" sales-order-"] .item-options dt {
+[class*="-order-"] .item-options dt {
   font-weight: bold;
 }
-[class^=" sales-order-"] .item-options dd {
+[class*="-order-"] .item-options dd {
   margin: 0 0 0 10px;
 }
 .adminhtml-rma-item-attribute-edit .col-position input {
@@ -1779,7 +1779,7 @@ table.items-to-invoice tbody tr:hover td {
   border: 0;
   text-align: center;
 }
-[class^=" sales-order-creditmemo-"] .no-items {
+[class~=" -order-creditmemo-"] .no-items {
   padding-top: 13px;
   text-align: center;
 }
@@ -1787,17 +1787,17 @@ table.items-to-invoice tbody tr:hover td {
   color: #19a3d1;
   font-weight: bold;
 }
-.sales-order-shipment-new .order-totals .fieldset-wrapper {
+.adminhtml-order-shipment-new .order-totals .fieldset-wrapper {
   padding-top: 18px;
 }
-.sales-order-shipment-new .actions {
+.adminhtml-order-shipment-new .actions {
   float: right;
 }
 .creditmemo-totals .data-table input[type="text"] {
   text-align: right;
   width: 60px;
 }
-[class^=" sales-order-"] .order-subtotal .label {
+[class*="-order-"] .order-subtotal .label {
   width: 80%;
 }
 .adminhtml-rma-new .rma-confirmation .actions {
@@ -1819,7 +1819,7 @@ table.items-to-invoice tbody tr:hover td {
 .adminhtml-rma-edit .data-table .col-number {
   width: 25%;
 }
-[class^=" sales-order-"] .order-shipping-address .price,
+[class*="-order-"] .order-shipping-address .price,
 .order-shipping-address .shipping-description-title {
   font-weight: bold;
 }
@@ -2147,8 +2147,8 @@ table.items-to-invoice tbody tr:hover td {
   list-style: none;
   padding: 0;
 }
-[class^=" sales-order-"] .order-billing-address .packaging-window .actions,
-[class^=" sales-order-"] .order-shipping-address .packaging-window .actions {
+[class*="-order-"] .order-billing-address .packaging-window .actions,
+[class*="-order-"] .order-shipping-address .packaging-window .actions {
   margin: 0;
 }
 /*

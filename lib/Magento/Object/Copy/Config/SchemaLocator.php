@@ -42,14 +42,14 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     protected $_perFileSchema;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $schema
      * @param string $perFileSchema
      */
-    public function __construct(\Magento\Filesystem $filesystem, $schema, $perFileSchema)
+    public function __construct(\Magento\App\Filesystem $filesystem, $schema, $perFileSchema)
     {
-        $this->_schema = $filesystem->getPath(\Magento\Filesystem::ROOT) . '/' . $schema;
-        $this->_perFileSchemaschema = $filesystem->getPath(\Magento\Filesystem::ROOT) . '/' . $perFileSchema;
+        $this->_schema = $filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/' . $schema;
+        $this->_perFileSchemaschema = $filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/' . $perFileSchema;
     }
 
     /**

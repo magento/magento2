@@ -43,6 +43,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'country_of_man
     'comparable'        => false,
     'visible_on_front'  => false,
     'unique'            => false,
-    'apply_to'          => 'simple,configurable,bundle,grouped',
+    'apply_to'          => 'simple,configurable,bundle',
     'is_configurable'   => false,
 ));

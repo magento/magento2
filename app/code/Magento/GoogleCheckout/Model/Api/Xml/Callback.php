@@ -59,6 +59,11 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     protected $_eventManager = null;
 
     /**
+     * @var \Magento\Shipping\Model\CarrierFactory
+     */
+    protected $_carrierFactory;
+
+    /**
      * @var \Magento\Stdlib\String
      */
     protected $string;
@@ -72,6 +77,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
      * @param \Magento\GoogleCheckout\Helper\Data $googleCheckoutData
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Stdlib\String $string
+     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
      */
     public function __construct(
@@ -83,6 +89,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
         \Magento\GoogleCheckout\Helper\Data $googleCheckoutData,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Stdlib\String $string,
+        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -90,6 +97,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
         $this->_googleCheckoutData = $googleCheckoutData;
         $this->_taxData = $taxData;
         $this->string = $string;
+        $this->_carrierFactory = $carrierFactory;
         parent::__construct($objectManager, $translator, $coreStoreConfig, $data);
     }
 
@@ -282,7 +290,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
                 $address->setCollectShippingRates(true)
                     ->collectShippingRates();
                 foreach ($address->getAllShippingRates() as $rate) {
-                    if ($rate instanceof \Magento\Shipping\Model\Rate\Result\Error) {
+                    if ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
                         continue;
                     }
                     $methodName = sprintf('%s - %s', $rate->getCarrierTitle(), $rate->getMethodTitle());
@@ -643,13 +651,11 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     {
         $cacheKey = ($storeId === null) ? 'nofilter' : $storeId;
         if (!isset($this->_cachedShippingInfo[$cacheKey])) {
-            /* @var $shipping \Magento\Shipping\Model\Shipping */
-            $shipping = $this->objectManager->create('Magento\Shipping\Model\Shipping');
             $carriers = $this->_coreStoreConfig->getConfig('carriers', $storeId);
             $infos = array();
 
             foreach (array_keys($carriers) as $carrierCode) {
-                $carrier = $shipping->getCarrierByCode($carrierCode);
+                $carrier = $this->_carrierFactory->getIfActive($carrierCode);
                 if (!$carrier) {
                     continue;
                 }

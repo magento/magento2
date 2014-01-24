@@ -80,6 +80,7 @@ class Agreements extends \Magento\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->_agreementCollection = $agreementCollection;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

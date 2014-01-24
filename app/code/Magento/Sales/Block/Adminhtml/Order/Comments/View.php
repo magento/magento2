@@ -85,7 +85,7 @@ class View extends \Magento\Backend\Block\Template
 
     public function getSubmitUrl()
     {
-        return $this->getUrl('sales/*/addComment', array('id' => $this->getEntity()->getId()));
+        return $this->getUrl('*/*/addComment', array('id' => $this->getEntity()->getId()));
     }
 
     public function canSendCommentEmail()

@@ -41,12 +41,12 @@ class FileResolver implements \Magento\Config\FileResolverInterface
 
     /**
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
         \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Config\FileIteratorFactory $iteratorFactory
     ) {
         $this->iteratorFactory = $iteratorFactory;
@@ -61,7 +61,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     {
         switch ($scope) {
             case 'primary':
-                $directory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
+                $directory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::CONFIG_DIR);
                 $iterator = $this->iteratorFactory->create(
                     $directory,
                     $directory->search('{' . $filename . ',*/' . $filename . '}')

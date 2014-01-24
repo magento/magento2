@@ -328,6 +328,53 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test writeFile
+     *
+     * @dataProvider writeFileProvider
+     * @param string $path
+     * @param string $content
+     * @param string $extraContent
+     */
+    public function testWriteFile($path, $content, $extraContent)
+    {
+        $directory = $this->getDirectoryInstance('writeFileDir', 0777);
+        $directory->writeFile($path, $content);
+        $this->assertEquals($content, $directory->readFile($path));
+        $directory->writeFile($path, $extraContent);
+        $this->assertEquals($extraContent, $directory->readFile($path));
+    }
+
+    /**
+     * Test writeFile for append mode
+     *
+     * @dataProvider writeFileProvider
+     * @param string $path
+     * @param string $content
+     * @param string $extraContent
+     */
+    public function testWriteFileAppend($path, $content, $extraContent)
+    {
+        $directory = $this->getDirectoryInstance('writeFileDir', 0777);
+        $directory->writeFile($path, $content, 'a+');
+        $this->assertEquals($content, $directory->readFile($path));
+        $directory->writeFile($path, $extraContent, 'a+');
+        $this->assertEquals($content . $extraContent, $directory->readFile($path));
+    }
+
+    /**
+     * Data provider for testWriteFile and testWriteFileAppend
+     *
+     * @return array
+     */
+    public function writeFileProvider()
+    {
+        return array(
+            array('file1', '123', '456'),
+            array('folder1/file1', '123', '456'),
+        );
+    }
+
+    /**
      * Tear down
      */
     public function tearDown()
@@ -359,7 +406,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
         $directoryFactory = $objectManager->create('Magento\Filesystem\Directory\WriteFactory');
         $directory = $directoryFactory->create($config,
-            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\Filesystem\DirectoryList')));
+            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\App\Filesystem\DirectoryList')));
         $this->testDirectories[] = $directory;
         return $directory;
     }

@@ -109,7 +109,7 @@ class Grouped
      */
     public function saveData()
     {
-        $groupedLinkId = \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED;
+        $groupedLinkId = \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED;
         $connection    = $this->_resource->getConnection('write');
         $resource      = $this->_productLinkFactory->create();
         $mainTable     = $resource->getMainTable();

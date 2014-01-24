@@ -37,7 +37,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Filesystem mock
      *
-     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
@@ -58,7 +58,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->appState = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->handler = new \Magento\App\Error\Handler($this->logger, $this->filesystem, $this->appState);
     }
@@ -93,7 +93,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\App\State::MODE_DEFAULT));
         $this->filesystem->expects($this->atLeastOnce())
             ->method('getPath')
-            ->with(\Magento\Filesystem::PUB)
+            ->with(\Magento\App\Filesystem::PUB_DIR)
             ->will($this->returnValue(dirname(__DIR__) . '/../_files'));
 
         $exception = new \Exception('TestMessage');

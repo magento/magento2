@@ -66,6 +66,7 @@ class Newsletter extends \Magento\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->_subscriberFactory = $subscriberFactory;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     public function getSubscriptionObject()

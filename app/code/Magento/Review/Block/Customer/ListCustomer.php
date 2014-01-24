@@ -64,6 +64,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     ) {
         $this->_collectionFactory = $collectionFactory;
         parent::__construct($context, $customerSession, $subscriberFactory, $data);
+        $this->_isScopePrivate = true;
     }
 
     protected function _initCollection()

@@ -72,6 +72,7 @@ abstract class AbstractBlock extends \Magento\View\Element\Template
         $this->_installer = $installer;
         $this->_installWizard = $installWizard;
         $this->_session = $session;
+        $this->_isScopePrivate = true;
     }
 
 

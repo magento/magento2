@@ -58,7 +58,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'url'                     => $objectManager->get('Magento\Core\Model\Url'),
             'request'                 => $objectManager->get('Magento\App\RequestInterface'),
             'configDataResource'      => $objectManager->get('Magento\Core\Model\Resource\Config\Data'),
-            'filesystem'              => $objectManager->get('Magento\Filesystem'),
+            'filesystem'              => $objectManager->get('Magento\App\Filesystem'),
             'coreStoreConfig'         => $objectManager->get('Magento\Core\Model\Store\Config'),
             'coreConfig'              => $objectManager->get('Magento\Core\Model\Config'),
             'resource'                => $objectManager->get('Magento\Core\Model\Resource\Store'),
@@ -199,7 +199,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrlInPub()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-                \Magento\Filesystem::PARAM_APP_DIRS => array(\Magento\Filesystem::PUB => array('uri' => ''))
+                \Magento\App\Filesystem::PARAM_APP_DIRS => array(\Magento\App\Filesystem::PUB_DIR => array('uri' => ''))
         ));
         $this->_model = $this->_getStoreModel();
         $this->_model->load('default');

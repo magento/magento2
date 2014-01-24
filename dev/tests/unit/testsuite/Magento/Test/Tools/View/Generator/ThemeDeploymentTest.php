@@ -42,7 +42,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
     protected $_tmpDir;
 
     /**
-     * @var \Magento\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
@@ -54,10 +54,10 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $methods = array('getDirectoryWrite', 'getPath', '__wakeup');
-        $this->filesystem = $this->getMock('Magento\Filesystem', $methods, array(), '', false);
+        $this->filesystem = $this->getMock('Magento\App\Filesystem', $methods, array(), '', false);
         $this->filesystem->expects($this->any())
             ->method('getPath')
-            ->with(\Magento\Filesystem::ROOT)
+            ->with(\Magento\App\Filesystem::ROOT_DIR)
             ->will($this->returnValue(str_replace('\\', '/', BP)));
 
         $viewFilesystem = $this->getMock('Magento\View\Filesystem', array('normalizePath'), array(), '', false);

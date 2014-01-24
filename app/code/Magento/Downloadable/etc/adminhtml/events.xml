@@ -24,12 +24,6 @@
  */
 -->
 <config>
-    <event name="catalog_product_prepare_save">
-        <observer name="downloadable_observer" instance="Magento\Downloadable\Model\Observer" method="prepareProductSave" />
-    </event>
-    <event name="catalog_model_product_duplicate">
-        <observer name="downloadable_observer" instance="Magento\Downloadable\Model\Observer" method="duplicateProduct" />
-    </event>
     <event name="sales_order_item_save_commit_after">
         <observer name="downloadable_observer" instance="Magento\Downloadable\Model\Observer" method="saveDownloadableOrderItem" />
     </event>

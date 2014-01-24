@@ -24,7 +24,6 @@
  */
 -->
 <config>
-    <preference for="Magento\Catalog\Model\Product\Type\Grouped" type="Magento\Catalog\Model\Product\Type\Grouped\Backend" />
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute">
         <param name="attributeLabelCache">
             <instance type="Magento\App\Cache\Type\Translate" />
@@ -60,6 +59,23 @@
     <type name="Magento\Catalog\Helper\Flat\AbstractFlat">
         <param name="isAvailable">
             <value type="bool">false</value>
+        </param>
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
+        <plugin name="configurable" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable" sortOrder="50" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
+        <param name="constructors">
+            <value>
+                <crossSell>Magento\Catalog\Model\Product\CopyConstructor\CrossSell</crossSell>
+                <upSell>Magento\Catalog\Model\Product\CopyConstructor\UpSell</upSell>
+                <related>Magento\Catalog\Model\Product\CopyConstructor\Related</related>
+            </value>
+        </param>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Copier">
+        <param name="copyConstructor">
+            <instance type="Magento\Catalog\Model\Product\CopyConstructor\Composite" />
         </param>
     </type>
 </config>

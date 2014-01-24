@@ -53,6 +53,7 @@ class AbstractWidget extends \Magento\View\Element\Template
         $this->_addressHelper = $addressHelper;
         $this->_eavConfig = $eavConfig;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     public function getConfig($key)

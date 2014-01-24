@@ -159,7 +159,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
                 '_front_fieldset',
             ),
             'disabled_types' => array(
-                \Magento\Catalog\Model\Product\Type::TYPE_GROUPED,
+                \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE,
             )
         );
 
@@ -184,7 +184,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
             if (!$object->getApplyTo()) {
                 $applyTo = array();
                 foreach ($this->_productType->getOptions() as $option) {
-                    if ($option['value'] == \Magento\Catalog\Model\Product\Type::TYPE_GROUPED) {
+                    if ($option['value'] == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
                         continue;
                     }
                     $applyTo[] = $option['value'];

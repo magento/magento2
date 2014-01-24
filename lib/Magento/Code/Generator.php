@@ -60,13 +60,13 @@ class Generator
      * @param Generator\EntityAbstract $generator
      * @param \Magento\Autoload\IncludePath $autoloader
      * @param Generator\Io $ioObject
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Code\Generator\EntityAbstract $generator = null,
         \Magento\Autoload\IncludePath $autoloader = null,
         \Magento\Code\Generator\Io $ioObject = null,
-        \Magento\Filesystem $filesystem = null
+        \Magento\App\Filesystem $filesystem = null
     ) {
         //todo: remove $filesystem from constructor
         $this->_generator   = $generator;

@@ -82,7 +82,11 @@ class Subscriber extends \Magento\Backend\App\Action
         $fileName = 'subscribers.csv';
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
 
-        return $this->_fileFactory->create($fileName, $content->getCsvFile($fileName), \Magento\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create(
+            $fileName,
+            $content->getCsvFile($fileName),
+            \Magento\App\Filesystem::VAR_DIR
+        );
     }
 
     /**
@@ -93,7 +97,11 @@ class Subscriber extends \Magento\Backend\App\Action
         $this->_view->loadLayout();
         $fileName = 'subscribers.xml';
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
-        return $this->_fileFactory->create($fileName, $content->getExcelFile($fileName), \Magento\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create(
+            $fileName,
+            $content->getExcelFile($fileName),
+            \Magento\App\Filesystem::VAR_DIR
+        );
     }
 
     public function massUnsubscribeAction()

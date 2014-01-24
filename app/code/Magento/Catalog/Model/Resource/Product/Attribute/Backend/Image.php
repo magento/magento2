@@ -40,7 +40,7 @@ class Image
     /**
      * Filesystem facade
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -53,12 +53,12 @@ class Image
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_filesystem = $filesystem;
@@ -92,7 +92,7 @@ class Image
         } catch (\Exception $e){
             return $this;
         }
-        $path = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA)->getAbsolutePath('catalog/product/');
+        $path = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR)->getAbsolutePath('catalog/product/');
         $uploader->save($path);
 
         $fileName = $uploader->getUploadedFileName();

@@ -75,16 +75,16 @@ class Registration
      *
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
      * @param Collection $filesystemCollection
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Model\Resource\Theme\CollectionFactory    $collectionFactory,
         \Magento\Core\Model\Theme\Collection                    $filesystemCollection,
-        \Magento\Filesystem                                     $filesystem
+        \Magento\App\Filesystem                                     $filesystem
     ) {
         $this->_collectionFactory   = $collectionFactory;
         $this->_themeCollection     = $filesystemCollection;
-        $this->directoryRead        = $filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        $this->directoryRead        = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
     }
 
     /**

@@ -120,20 +120,6 @@ return array
         . '<group id="group2"><label>Label_One</label></group></section></system></config>',
         array("Element 'section', attribute 'advanced': 'string' is not a valid value of the atomic type "
         . "'xs:boolean'.")),
-    'source_service_without_all_required_attribute' => array(
-        '<?xml version="1.0"?><config><system><section id="section1" advanced="false">'
-        . '<group id="group1"><label>Label</label><field id="field_id"><source_service service_call="name" '
-        . 'idField="field" labelField="label" includeEmptyValueOption="false"/><source_service labelField="label"/>'
-        . '</field></group><group id="group2"><label>Label_One</label></group></section></system></config>',
-        array("Element 'source_service': The attribute 'service_call' is required but missing.")),
-    'includeEmptyValueOption_attribute_with_invalid_value' => array(
-        '<?xml version="1.0"?><config><system><section id="section1" advanced="false">'
-        . '<group id="group1"><label>Label</label><field id="field_id"><source_service service_call="name" '
-        . 'includeEmptyValueOption="string"/><source_service service_call="label" includeEmptyValueOption="10"/>'
-        . '</field></group><group id="group2"><label>Label_One</label></group></section></system></config>',
-        array("Element 'source_service', attribute 'includeEmptyValueOption': 'string' is not a valid value of the "
-        . "atomic type 'xs:boolean'.", "Element 'source_service', attribute 'includeEmptyValueOption': '10' is not a "
-        . "valid value of the atomic type 'xs:boolean'.")),
     'options_node_without_any_options' => array(
         '<?xml version="1.0"?><config><system><section id="section1" advanced="false">'
         . '<group id="group1"><label>Label</label><field id="field_id"><options />'

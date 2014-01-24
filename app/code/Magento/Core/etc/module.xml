@@ -44,6 +44,8 @@
             <module name="Magento_PaypalUk"/>
             <module name="Magento_ProductAlert"/>
             <module name="Magento_SalesRule"/>
+            <module name="Magento_Eav"/>
+            <module name="Magento_Install"/>
             <extension name="spl"/>
             <extension name="dom"/>
             <extension name="simplexml"/>

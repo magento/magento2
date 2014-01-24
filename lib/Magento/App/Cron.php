@@ -25,8 +25,8 @@
  */
 namespace Magento\App;
 
-use \Magento\Config\ScopeInterface,
-    \Magento\App\ObjectManager\ConfigLoader,
+use Magento\App\Console\Response;
+use \Magento\App\ObjectManager\ConfigLoader,
     \Magento\Event\ManagerInterface;
 
 class Cron implements \Magento\AppInterface
@@ -42,26 +42,35 @@ class Cron implements \Magento\AppInterface
     protected $_state;
 
     /**
+     * @var Console\Response
+     */
+    protected $_response;
+
+    /**
      * @param ManagerInterface $eventManager
      * @param State $state
+     * @param Response $response
      */
     public function __construct(
         ManagerInterface $eventManager,
-        State $state
+        State $state,
+        Response $response
     ) {
         $this->_eventManager = $eventManager;
         $this->_state = $state;
+        $this->_response = $response;
     }
 
     /**
-     * Execute application
+     * Run application
      *
-     * @return int
+     * @return ResponseInterface
      */
     public function execute()
     {
         $this->_state->setAreaCode('crontab');
         $this->_eventManager->dispatch('default');
-        return 0;
+        $this->_response->setCode(0);
+        return $this->_response;
     }
 }

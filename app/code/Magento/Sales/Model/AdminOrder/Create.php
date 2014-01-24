@@ -831,7 +831,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL
         );
         if (is_string($item)) {
-            if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE) {
+            if ($product->getTypeId() != \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
                 $item = $this->getQuote()->addProductAdvanced(
                     $product,
                     $config,

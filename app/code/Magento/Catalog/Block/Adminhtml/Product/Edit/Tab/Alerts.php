@@ -35,7 +35,7 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-class Alerts extends \Magento\Backend\Block\Template
+class Alerts extends \Magento\Backend\Block\Widget\Tab
 {
     protected $_template = 'catalog/product/tab/alert.phtml';
 
@@ -74,5 +74,17 @@ class Alerts extends \Magento\Backend\Block\Template
     public function getAccordionHtml()
     {
         return $this->getChildHtml('accordion');
+    }
+
+    /**
+     * Tab is hidden
+     *
+     * @return boolean
+     */
+    public function canShowTab()
+    {
+        $alertPriceAllow = $this->_storeConfig->getConfig('catalog/productalert/allow_price');
+        $alertStockAllow = $this->_storeConfig->getConfig('catalog/productalert/allow_stock');
+        return ($alertPriceAllow || $alertStockAllow) && parent::canShowTab();
     }
 }

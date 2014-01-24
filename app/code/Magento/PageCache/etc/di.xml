@@ -24,14 +24,8 @@
  */
 -->
 <config>
-    <type name="Magento\PageCache\Model\CacheControlFactory">
-        <param name="cacheControls">
-            <value>
-                <zendPageCache>
-                    <instance>Magento\PageCache\Model\Control\Zend</instance>
-                    <label>Zend Full Page Cache</label>
-                </zendPageCache>
-            </value>
-        </param>
+    <type name="Magento\App\FrontControllerInterface">
+        <plugin name="front-controller-head"
+            type="Magento\PageCache\Model\App\FrontController\HeaderPlugin" disabled="true"/>
     </type>
 </config>

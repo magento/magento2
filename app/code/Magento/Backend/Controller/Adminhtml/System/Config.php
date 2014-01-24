@@ -132,6 +132,6 @@ class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
         }
         $gridBlock->setWebsiteId($website->getId())->setConditionName($conditionName);
         $content = $gridBlock->getCsvFile();
-        return $this->_fileFactory->create($fileName, $content, \Magento\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 }

@@ -25,14 +25,6 @@
 -->
 <config>
     <type name="simple" label="Simple Product" modelInstance="Magento\Catalog\Model\Product\Type\Simple" indexPriority="10" />
-    <type name="grouped" label="Grouped Product" modelInstance="Magento\Catalog\Model\Product\Type\Grouped" composite='true' indexPriority="50">
-        <priceModel instance="Magento\Catalog\Model\Product\Type\Grouped\Price" />
-        <indexerModel instance="Magento\Catalog\Model\Resource\Product\Indexer\Price\Grouped" />
-        <allowProductTypes>
-            <type name="simple" />
-            <type name="virtual" />
-        </allowProductTypes>
-    </type>
     <type name="configurable" label="Configurable Product" modelInstance="Magento\Catalog\Model\Product\Type\Configurable" composite='true' indexPriority="30">
         <priceModel instance="Magento\Catalog\Model\Product\Type\Configurable\Price" />
         <indexerModel instance="Magento\Catalog\Model\Resource\Product\Indexer\Price\Configurable" />

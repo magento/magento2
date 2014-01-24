@@ -38,8 +38,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $expected = 'http://example.com/public_dir/a/t/m/file.js';
 
         // 1. Get fileSystem model
-        /** @var $filesystem \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        /** @var $filesystem \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->never())
             ->method('isFile');
         $filesystem->expects($this->never())

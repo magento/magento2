@@ -68,7 +68,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected $_ioObjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Filesystem
      */
     protected $_filesystemMock;
 
@@ -84,7 +84,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_ioObjectMock = $this->getMockBuilder('\Magento\Code\Generator\Io')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_filesystemMock = $this->getMockBuilder('\Magento\Filesystem')
+        $this->_filesystemMock = $this->getMockBuilder('\Magento\App\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
     }

@@ -52,8 +52,8 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
      */
@@ -63,8 +63,8 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Tax\Helper\Data $taxData,
         array $data = array()
     ) {
@@ -75,10 +75,11 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $configCacheType,
             $customerSession,
             $resourceSession,
-            $countryCollFactory,
-            $regionCollFactory,
+            $countryCollectionFactory,
+            $regionCollectionFactory,
             $data
         );
+        $this->_isScopePrivate = true;
     }
 
     public function getShippingRates()

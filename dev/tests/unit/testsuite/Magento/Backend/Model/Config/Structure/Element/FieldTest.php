@@ -66,11 +66,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dsGraphMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_depMapperMock;
 
     /**
@@ -96,9 +91,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->_blockFactoryMock = $this->getMock(
             'Magento\View\Element\BlockFactory', array(), array(), '', false
         );
-        $this->_dsGraphMock = $this->getMock(
-            'Magento\Core\Model\DataService\Graph', array(), array(), '', false
-        );
         $this->_depMapperMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper', array(), array(), '', false
         );
@@ -109,7 +101,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             $this->_sourceFactoryMock,
             $this->_commentFactoryMock,
             $this->_blockFactoryMock,
-            $this->_dsGraphMock,
             $this->_depMapperMock
         );
     }
@@ -399,53 +390,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             array('label' => 'val1', 'value' => 'var1'),
             array('subvar1' => 'subval1')
         );
-        $this->assertEquals($expected, $this->_model->getOptions());
-    }
-
-    public function testGetOptionsWithServiceOptions()
-    {
-        $option = array(
-            array('customLabel' => 'test', 'customId' => 0),
-            array('customLabel' => 'test2', 'customId' => 1)
-        );
-        $this->_dsGraphMock->expects($this->once())
-            ->method('get')
-            ->with('serviceCallName')
-            ->will($this->returnValue($option));
-
-        $expected = array(
-            array('label' => __('test'), 'value' => 0),
-            array('label' => __('test2'), 'value' => 1)
-        );
-        $options = array(
-            'service_call'      => 'serviceCallName',
-            'idField'           => 'customId',
-            'labelField'        => 'customLabel',
-            'includeSelectLine' => 'false',
-        );
-        $this->_model->setData(array('source_service' => $options), 'scope');
-        $this->assertEquals($expected, $this->_model->getOptions());
-    }
-
-    public function testGetOptionsWithServiceOptionsButNoFieldNamesSpecified()
-    {
-        $option = array(
-            array('name' => 'test', 'id' => 0),
-            array('name' => 'test2', 'id' => 1)
-        );
-        $this->_dsGraphMock->expects($this->once())
-            ->method('get')
-            ->with('serviceCallName')
-            ->will($this->returnValue($option));
-
-        $expected = array(
-            array('label' => __('test'), 'value' => 0),
-            array('label' => __('test2'), 'value' => 1)
-        );
-        $options = array(
-            'service_call' => 'serviceCallName',
-        );
-        $this->_model->setData(array('source_service' => $options), 'scope');
         $this->assertEquals($expected, $this->_model->getOptions());
     }
 

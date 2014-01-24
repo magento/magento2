@@ -32,7 +32,7 @@ namespace Magento\Core\Model\Resource\File\Storage;
 class File
 {
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -42,11 +42,11 @@ class File
     protected $_logger;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Logger $log
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Logger $log
     ) {
         $this->_logger = $log;
@@ -63,7 +63,7 @@ class File
     {
         $files          = array();
         $directories    = array();
-        $directoryInstance = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        $directoryInstance = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
         if ($directoryInstance->isDirectory($dir)) {
             foreach ($directoryInstance->readRecursively($dir) as $path) {
                 $itemName = basename($path);
@@ -92,7 +92,7 @@ class File
      */
     public function clear($dir = '')
     {
-        $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         if ($directoryInstance->isDirectory($dir)) {
             foreach ($directoryInstance->read($dir) as $path) {
                 $directoryInstance->delete($path);
@@ -120,11 +120,11 @@ class File
             : $dir['name'];
 
         try {
-            $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA)->create($path);
+            $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR)->create($path);
         } catch (\Exception $e) {
             $this->_logger->log($e->getMessage());
             throw new \Magento\Core\Exception(
-                __('Unable to create directory: %1', \Magento\Filesystem::MEDIA . '/' . $path)
+                __('Unable to create directory: %1', \Magento\App\Filesystem::MEDIA_DIR . '/' . $path)
             );
         }
 
@@ -143,7 +143,7 @@ class File
     public function saveFile($filePath, $content, $overwrite = false)
     {
         try {
-            $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+            $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
             if (!$directoryInstance->isFile($filePath) || ($overwrite && $directoryInstance->delete($filePath))) {
                 $directoryInstance->writeFile($filePath, $content);
                 return true;

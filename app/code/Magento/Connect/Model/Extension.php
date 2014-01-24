@@ -46,7 +46,7 @@ class Extension extends \Magento\Object
     protected $_package;
 
     /**
-     * @var \Magento\Filesystem $filesystem
+     * @var \Magento\App\Filesystem $filesystem
      */
     protected $filesystem;
 
@@ -76,14 +76,14 @@ class Extension extends \Magento\Object
      * Constructor
      *
      * @param \Magento\Convert\ConvertArray $convertArray
-     * @param \Magento\Filesystem           $filesystem
+     * @param \Magento\App\Filesystem           $filesystem
      * @param Session                       $session
      * @param \Magento\Logger               $logger
      * @param array                         $data
      */
     public function __construct(
         \Magento\Convert\ConvertArray   $convertArray,
-        \Magento\Filesystem             $filesystem,
+        \Magento\App\Filesystem             $filesystem,
         \Magento\Connect\Model\Session  $session,
         \Magento\Logger                 $logger,
         array $data = array()
@@ -91,7 +91,7 @@ class Extension extends \Magento\Object
         $this->_convertArray    = $convertArray;
         $this->_session         = $session;
         $this->filesystem       = $filesystem;
-        $this->writeDirectory   = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->writeDirectory   = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $this->logger           = $logger;
         parent::__construct($data);
 

@@ -43,12 +43,12 @@ class Options extends \Magento\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
-    public function __construct(\Magento\App\Helper\Context $context, \Magento\Filesystem $filesystem)
+    public function __construct(\Magento\App\Helper\Context $context, \Magento\App\Filesystem $filesystem)
     {
         parent::__construct($context);
-        $this->directory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
     }
 
     /**

@@ -30,19 +30,19 @@ class Agreements extends \Magento\View\Element\Template
     /**
      * @var \Magento\Checkout\Model\Resource\Agreement\CollectionFactory
      */
-    protected $_agreementCollFactory;
+    protected $_agreementCollectionFactory;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory
+     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory,
+        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
         array $data = array()
     ) {
-        $this->_agreementCollFactory = $agreementCollFactory;
+        $this->_agreementCollectionFactory = $agreementCollectionFactory;
         parent::__construct($context, $data);
     }
 
@@ -56,7 +56,7 @@ class Agreements extends \Magento\View\Element\Template
                 $agreements = array();
             } else {
                 /** @var \Magento\Checkout\Model\Resource\Agreement\Collection $agreements */
-                $agreements = $this->_agreementCollFactory->create()
+                $agreements = $this->_agreementCollectionFactory->create()
                     ->addStoreFilter($this->_storeManager->getStore()->getId())
                     ->addFieldToFilter('is_active', 1);
             }

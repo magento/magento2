@@ -39,18 +39,18 @@ class MerchantCountry implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
      */
-    protected $_countryCollFactory;
+    protected $_countryCollectionFactory;
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
     ) {
         $this->_configFactory = $configFactory;
-        $this->_countryCollFactory = $countryCollFactory;
+        $this->_countryCollectionFactory = $countryCollectionFactory;
     }
 
     /**
@@ -60,7 +60,7 @@ class MerchantCountry implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray($isMultiselect = false)
     {
         $supported = $this->_configFactory->create()->getSupportedMerchantCountryCodes();
-        $options = $this->_countryCollFactory->create()->addCountryCodeFilter($supported, 'iso2')
+        $options = $this->_countryCollectionFactory->create()->addCountryCodeFilter($supported, 'iso2')
             ->loadData()
             ->toOptionArray($isMultiselect ? false : __('--Please Select--'));
 

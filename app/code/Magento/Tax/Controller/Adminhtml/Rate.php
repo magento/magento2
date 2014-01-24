@@ -300,7 +300,7 @@ class Rate extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.tax.rate.grid', 'grid.export');
-        return $this->_fileFactory->create('rates.csv', $content->getCsvFile(), \Magento\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('rates.csv', $content->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -310,7 +310,7 @@ class Rate extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.tax.rate.grid', 'grid.export');
-        return $this->_fileFactory->create('rates.xml', $content->getExcelFile(), \Magento\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('rates.xml', $content->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -431,7 +431,7 @@ class Rate extends \Magento\Backend\App\Action
             $content .= $rate->toString($template) . "\n";
         }
         $this->_view->loadLayout();
-        return $this->_fileFactory->create('tax_rates.csv', $content, \Magento\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('tax_rates.csv', $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     protected function _isAllowed()

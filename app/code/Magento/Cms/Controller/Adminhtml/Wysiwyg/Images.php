@@ -151,9 +151,9 @@ class Images extends \Magento\Backend\App\Action
             $path = $this->getStorage()->getSession()->getCurrentPath();
             foreach ($files as $file) {
                 $file = $helper->idDecode($file);
-                /** @var \Magento\Filesystem $filesystem */
-                $filesystem = $this->_objectManager->get('Magento\Filesystem');
-                $dir = $filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+                /** @var \Magento\App\Filesystem $filesystem */
+                $filesystem = $this->_objectManager->get('Magento\App\Filesystem');
+                $dir = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
                 $filePath = $path . '/' . $file;
                 if ($dir->isFile($dir->getRelativePath($filePath))) {
                     $this->getStorage()->deleteFile($filePath);

@@ -278,7 +278,7 @@ return array(
     'oscommerce/oscommerce_type' => 'oscommerce_import_type',
     'paybox/api_debug' => 'paybox_api_debug',
     'paybox/question_number' => 'paybox_question_number',
-    'paygate/authorizenet_debug' => 'paygate_authorizenet_debug',
+    'paygate/authorizenet_debug' => 'authorizenet_debug',
     'paypal/api_debug' => 'paypal_api_debug',
     'paypal/cert' => 'paypal_cert',
     'paypal/payment_transaction' => 'paypal_payment_transaction',

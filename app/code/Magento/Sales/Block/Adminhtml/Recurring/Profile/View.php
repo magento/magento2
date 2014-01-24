@@ -61,7 +61,7 @@ class View extends \Magento\Backend\Block\Widget\Container
     {
         $this->_addButton('back', array(
             'label'     => __('Back'),
-            'onclick'   => "setLocation('{$this->getUrl('adminhtml/*/')}')",
+            'onclick'   => "setLocation('{$this->getUrl('*/*/')}')",
             'class'     => 'back',
         ));
 
@@ -70,7 +70,7 @@ class View extends \Magento\Backend\Block\Widget\Container
 
         // cancel
         if ($profile->canCancel()) {
-            $url = $this->getUrl('adminhtml/*/updateState', array('profile' => $profile->getId(), 'action' => 'cancel'));
+            $url = $this->getUrl('*/*/updateState', array('profile' => $profile->getId(), 'action' => 'cancel'));
             $this->_addButton('cancel', array(
                 'label'     => __('Cancel'),
                 'onclick'   => "confirmSetLocation('{$confirmationMessage}', '{$url}')",
@@ -80,7 +80,7 @@ class View extends \Magento\Backend\Block\Widget\Container
 
         // suspend
         if ($profile->canSuspend()) {
-            $url = $this->getUrl('adminhtml/*/updateState', array('profile' => $profile->getId(), 'action' => 'suspend'));
+            $url = $this->getUrl('*/*/updateState', array('profile' => $profile->getId(), 'action' => 'suspend'));
             $this->_addButton('suspend', array(
                 'label'     => __('Suspend'),
                 'onclick'   => "confirmSetLocation('{$confirmationMessage}', '{$url}')",
@@ -90,7 +90,7 @@ class View extends \Magento\Backend\Block\Widget\Container
 
         // activate
         if ($profile->canActivate()) {
-            $url = $this->getUrl('adminhtml/*/updateState', array('profile' => $profile->getId(), 'action' => 'activate'));
+            $url = $this->getUrl('*/*/updateState', array('profile' => $profile->getId(), 'action' => 'activate'));
             $this->_addButton('activate', array(
                 'label'     => __('Activate'),
                 'onclick'   => "confirmSetLocation('{$confirmationMessage}', '{$url}')",
@@ -100,7 +100,7 @@ class View extends \Magento\Backend\Block\Widget\Container
 
         // get update
         if ($profile->canFetchUpdate()) {
-            $url = $this->getUrl('adminhtml/*/updateProfile', array('profile' => $profile->getId(),));
+            $url = $this->getUrl('*/*/updateProfile', array('profile' => $profile->getId(),));
             $this->_addButton('update', array(
                 'label'     => __('Get Update'),
                 'onclick'   => "confirmSetLocation('{$confirmationMessage}', '{$url}')",

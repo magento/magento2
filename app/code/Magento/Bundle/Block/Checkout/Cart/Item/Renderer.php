@@ -68,6 +68,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         parent::__construct(
             $context, $productConfig, $checkoutSession, $imageHelper, $urlHelper, $messageManager, $data
         );
+        $this->_isScopePrivate = true;
     }
 
     protected function _construct()

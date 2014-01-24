@@ -30,7 +30,7 @@ namespace Magento\Backup\Helper;
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -55,14 +55,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Construct
      *
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Index\Model\Resource\Process\CollectionFactory $processFactory
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\AuthorizationInterface $authorization,
         \Magento\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Index\Model\Resource\Process\CollectionFactory $processFactory
@@ -121,7 +121,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getBackupsDir()
     {
-        return $this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/backups';
+        return $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/backups';
     }
 
     /**
@@ -185,12 +185,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
             '.git',
             '.svn',
             'maintenance.flag',
-            $this->_filesystem->getPath(\Magento\Filesystem::SESSION),
-            $this->_filesystem->getPath(\Magento\Filesystem::CACHE),
-            $this->_filesystem->getPath(\Magento\Filesystem::LOG),
-            $this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/full_page_cache',
-            $this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/locks',
-            $this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/report',
+            $this->_filesystem->getPath(\Magento\App\Filesystem::SESSION_DIR),
+            $this->_filesystem->getPath(\Magento\App\Filesystem::CACHE_DIR),
+            $this->_filesystem->getPath(\Magento\App\Filesystem::LOG_DIR),
+            $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/full_page_cache',
+            $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/locks',
+            $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/report',
         );
     }
 
@@ -205,12 +205,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
             '.svn',
             '.git',
             'maintenance.flag',
-            $this->_filesystem->getPath(\Magento\Filesystem::SESSION),
-            $this->_filesystem->getPath(\Magento\Filesystem::LOG),
-            $this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/locks',
-            $this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/report',
-            $this->_filesystem->getPath(\Magento\Filesystem::ROOT) . '/errors',
-            $this->_filesystem->getPath(\Magento\Filesystem::ROOT) . '/index.php',
+            $this->_filesystem->getPath(\Magento\App\Filesystem::SESSION_DIR),
+            $this->_filesystem->getPath(\Magento\App\Filesystem::LOG_DIR),
+            $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/locks',
+            $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/report',
+            $this->_filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/errors',
+            $this->_filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/index.php',
         );
     }
 
@@ -223,7 +223,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         $maintenanceFlagFile = $this->getMaintenanceFlagFilePath();
         $result = $this->_filesystem
-            ->getDirectoryWrite(\Magento\Filesystem::ROOT)
+            ->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)
             ->writeFile($maintenanceFlagFile, 'maintenance');
 
         return $result !== false;
@@ -235,7 +235,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function turnOffMaintenanceMode()
     {
         $maintenanceFlagFile = $this->getMaintenanceFlagFilePath();
-        $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT)->delete($maintenanceFlagFile);
+        $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)->delete($maintenanceFlagFile);
     }
 
     /**

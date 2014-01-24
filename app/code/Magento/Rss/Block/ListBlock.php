@@ -60,6 +60,7 @@ class ListBlock extends \Magento\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->_categoryFactory = $categoryFactory;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

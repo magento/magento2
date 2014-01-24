@@ -46,7 +46,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($orderMock));
 
-        $messageCollFactory = $this->getMockBuilder('Magento\Message\CollectionFactory')
+        $messageCollectionFactory = $this->getMockBuilder('Magento\Message\CollectionFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $quoteFactory = $this->getMockBuilder('Magento\Sales\Model\QuoteFactory')
@@ -65,7 +65,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             array(
                 'request' => $this->getMock('Magento\App\RequestInterface', array(), array(), '', false),
                 'orderFactory' => $orderFactory,
-                'messageCollFactory' => $messageCollFactory,
+                'messageCollectionFactory' => $messageCollectionFactory,
                 'quoteFactory' => $quoteFactory,
                 'storage' => new \Magento\Session\Storage
             )

@@ -34,6 +34,7 @@
             <module name="Magento_Directory"/>
             <module name="Magento_User"/>
             <module name="Magento_Backend"/>
+            <module name="Magento_Theme"/>
         </depends>
     </module>
 </config>

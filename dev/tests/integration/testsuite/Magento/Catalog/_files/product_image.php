@@ -26,7 +26,7 @@
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$mediaPath = $objectManager->get('Magento\Filesystem')->getPath(\Magento\Filesystem::MEDIA);
+$mediaPath = $objectManager->get('Magento\App\Filesystem')->getPath(\Magento\App\Filesystem::MEDIA_DIR);
 $additionalPath = $objectManager->get('Magento\Catalog\Model\Product\Media\Config')->getBaseMediaPath();
 $dir = $mediaPath . '/' . $additionalPath . '/m/a';
 if (!is_dir($dir)) {

@@ -74,7 +74,7 @@ class Observer
     /**
      * @var \Magento\CatalogRule\Model\Resource\Rule\CollectionFactory
      */
-    protected $_ruleCollFactory;
+    protected $_ruleCollectionFactory;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -104,7 +104,7 @@ class Observer
     /**
      * @param Resource\RuleFactory $resourceRuleFactory
      * @param Resource\Rule $resourceRule
-     * @param Resource\Rule\CollectionFactory $ruleCollFactory
+     * @param Resource\Rule\CollectionFactory $ruleCollectionFactory
      * @param Rule\Product\Price $productPrice
      * @param RuleFactory $ruleFactory
      * @param FlagFactory $flagFactory
@@ -121,7 +121,7 @@ class Observer
     public function __construct(
         Resource\RuleFactory $resourceRuleFactory,
         Resource\Rule $resourceRule,
-        Resource\Rule\CollectionFactory $ruleCollFactory,
+        Resource\Rule\CollectionFactory $ruleCollectionFactory,
         Rule\Product\Price $productPrice,
         RuleFactory $ruleFactory,
         FlagFactory $flagFactory,
@@ -135,7 +135,7 @@ class Observer
     ) {
         $this->_resourceRuleFactory = $resourceRuleFactory;
         $this->_resourceRule = $resourceRule;
-        $this->_ruleCollFactory = $ruleCollFactory;
+        $this->_ruleCollectionFactory = $ruleCollectionFactory;
         $this->_productPrice = $productPrice;
         $this->_ruleFactory = $ruleFactory;
         $this->_flagFactory = $flagFactory;
@@ -163,7 +163,7 @@ class Observer
 
         $productWebsiteIds = $product->getWebsiteIds();
 
-        $rules = $this->_ruleCollFactory->create()
+        $rules = $this->_ruleCollectionFactory->create()
             ->addFieldToFilter('is_active', 1);
 
         foreach ($rules as $rule) {
@@ -385,7 +385,7 @@ class Observer
     protected function _checkCatalogRulesAvailability($attributeCode)
     {
         /* @var $collection \Magento\CatalogRule\Model\Resource\Rule\Collection */
-        $collection = $this->_ruleCollFactory->create()
+        $collection = $this->_ruleCollectionFactory->create()
             ->addAttributeInConditionFilter($attributeCode);
 
         $disabledRulesCount = 0;
@@ -525,7 +525,7 @@ class Observer
             return;
         }
 
-        $rules = $this->_ruleCollFactory->create()
+        $rules = $this->_ruleCollectionFactory->create()
             ->addFieldToFilter('is_active', 1);
 
         foreach ($rules as $rule) {

@@ -90,8 +90,8 @@ directPost.prototype = {
                         }
                     }.bind(this));
                     break;
-                case 'sales_order_create':
-                case 'sales_order_edit':
+                case 'order_create':
+                case 'order_edit':
                     // Temporary solution will be removed after refactoring Authorize.Net (sales) functionality
                     jQuery('.scalable.save:not(disabled)').removeAttr('onclick');
                     jQuery(document).on(
@@ -117,8 +117,8 @@ directPost.prototype = {
                         this.returnQuote();
                     }
                     break;
-                case 'sales_order_edit':
-                case 'sales_order_create':
+                case 'order_edit':
+                case 'order_create':
                     if (!this.orderRequestSent) {
                         this.paymentRequestSent = false;
                         if (!this.hasError) {
@@ -172,8 +172,8 @@ directPost.prototype = {
                     case 'onepage':
                         this.resetLoadWaiting();
                         break;
-                    case 'sales_order_edit':
-                    case 'sales_order_create':
+                    case 'order_edit':
+                    case 'order_create':
                         this.changeInputOptions('disabled', false);
                         $('loading-mask').hide();
                         enableElements('save');

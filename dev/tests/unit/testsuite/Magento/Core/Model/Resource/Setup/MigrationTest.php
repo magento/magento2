@@ -157,7 +157,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array()));
 
         $contextMock = $this->getMock('Magento\Core\Model\Resource\Setup\Context', array(), array(), '', false);
-        $filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $contextMock->expects($this->any())
             ->method('getFilesystem')
             ->will($this->returnValue($filesystemMock));
@@ -188,7 +188,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $contextMock,
             'core_setup',
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->getMock('Magento\Filesystem', array(), array(), '', false),
+            $this->getMock('Magento\App\Filesystem', array(), array(), '', false),
             ''
         );
 
@@ -241,7 +241,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
 
         $setupModel = new \Magento\Core\Model\Resource\Setup\Migration(
             $this->getMock('Magento\App\Resource', array(), array(), '', false, false),
-            $this->getMock('Magento\Filesystem', array(), array(), '', false),
+            $this->getMock('Magento\App\Filesystem', array(), array(), '', false),
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
             $this->getMock('Magento\Logger', array(), array(), '', false),
             $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
@@ -310,11 +310,11 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Filesystem
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Filesystem
      */
     protected function _getFilesystemMock()
     {
-        $mock = $this->getMockBuilder('Magento\Filesystem')
+        $mock = $this->getMockBuilder('Magento\App\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
         return $mock;

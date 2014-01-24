@@ -46,8 +46,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\Collection::addMessage
-     * @cover \Magento\Message\Collection::getItemsByType
+     * @covers \Magento\Message\Collection::addMessage
+     * @covers \Magento\Message\Collection::getItemsByType
      */
     public function testAddMessage()
     {
@@ -68,9 +68,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\Collection::addMessage
-     * @cover \Magento\Message\Collection::getItems
-     * @cover \Magento\Message\Collection::getLastAddedMessage
+     * @covers \Magento\Message\Collection::addMessage
+     * @covers \Magento\Message\Collection::getItems
+     * @covers \Magento\Message\Collection::getLastAddedMessage
      */
     public function testGetItems()
     {
@@ -92,10 +92,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\Collection::addMessage
-     * @cover \Magento\Message\Collection::getItemsByType
-     * @cover \Magento\Message\Collection::getCount
-     * @cover \Magento\Message\Collection::getCountByType
+     * @covers \Magento\Message\Collection::addMessage
+     * @covers \Magento\Message\Collection::getItemsByType
+     * @covers \Magento\Message\Collection::getCount
+     * @covers \Magento\Message\Collection::getCountByType
      */
     public function testGetItemsByType()
     {
@@ -135,8 +135,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\Collection::addMessage
-     * @cover \Magento\Message\Collection::getErrors
+     * @covers \Magento\Message\Collection::addMessage
+     * @covers \Magento\Message\Collection::getErrors
      */
     public function testGetErrors()
     {
@@ -158,8 +158,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\Collection::getMessageByIdentifier
-     * @cover \Magento\Message\Collection::deleteMessageByIdentifier
+     * @covers \Magento\Message\Collection::getMessageByIdentifier
+     * @covers \Magento\Message\Collection::deleteMessageByIdentifier
      */
     public function testGetMessageByIdentifier()
     {
@@ -185,7 +185,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\Collection::clear
+     * @covers \Magento\Message\Collection::clear
      */
     public function testClear()
     {
@@ -206,7 +206,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\Collection::clear
+     * @covers \Magento\Message\Collection::clear
      */
     public function testClearWithSticky()
     {

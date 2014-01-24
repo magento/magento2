@@ -68,6 +68,15 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $this->write = null;
     }
 
+    public function testGetDriver()
+    {
+        $this->assertInstanceOf(
+            'Magento\Filesystem\DriverInterface',
+            $this->write->getDriver(),
+            'getDriver method expected to return instance of Magento\Filesystem\DriverInterface'
+        );
+    }
+
     public function testCreate()
     {
         $this->driver->expects($this->once())

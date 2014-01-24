@@ -34,6 +34,7 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Backend"/>
+            <module name="Magento_Email"/>
         </depends>
     </module>
 </config>

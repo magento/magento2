@@ -33,17 +33,17 @@ class FileFactory
     protected $_response;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\ResponseInterface $response,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_response = $response;
         $this->_filesystem = $filesystem;
@@ -69,7 +69,7 @@ class FileFactory
     public function create(
         $fileName,
         $content,
-        $baseDir = \Magento\Filesystem::ROOT,
+        $baseDir = \Magento\App\Filesystem::ROOT_DIR,
         $contentType = 'application/octet-stream',
         $contentLength = null
     ) {

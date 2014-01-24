@@ -56,17 +56,17 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     protected $iteratorFactory;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Config\FileIteratorFactory $iteratorFactory
     ) {
         $this->iteratorFactory      = $iteratorFactory;
-        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
-        $this->configDirectory  = $filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
-        $this->rootDirectory     = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
+        $this->configDirectory  = $filesystem->getDirectoryRead(\Magento\App\Filesystem::CONFIG_DIR);
+        $this->rootDirectory     = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
     }
 
     /**

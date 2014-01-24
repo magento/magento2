@@ -25,7 +25,7 @@
  */
 namespace Magento\Module;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 
 class Dir
 {
@@ -42,12 +42,12 @@ class Dir
     protected $_string;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Stdlib\String $string
      */
     public function __construct(Filesystem $filesystem, \Magento\Stdlib\String $string)
     {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES);
+        $this->_modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES_DIR);
         $this->_string = $string;
     }
 

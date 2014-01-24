@@ -29,9 +29,9 @@ namespace Magento\DesignEditor\Block\Adminhtml;
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @cover \Magento\DesignEditor\Block\Adminhtml\Theme::addButton
-     * @cover \Magento\DesignEditor\Block\Adminhtml\Theme::clearButtons
-     * @cover \Magento\DesignEditor\Block\Adminhtml\Theme::getButtonsHtml
+     * @covers \Magento\DesignEditor\Block\Adminhtml\Theme::addButton
+     * @covers \Magento\DesignEditor\Block\Adminhtml\Theme::clearButtons
+     * @covers \Magento\DesignEditor\Block\Adminhtml\Theme::getButtonsHtml
      */
     public function testButtons()
     {

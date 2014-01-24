@@ -158,51 +158,6 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieves configuration options for grouped product
-     *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-     * @return array
-     * @throws \Magento\Core\Exception
-     */
-    public function getGroupedOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
-    {
-        $product = $item->getProduct();
-        $typeId = $product->getTypeId();
-        if ($typeId != \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE) {
-             throw new \Magento\Core\Exception(__('The product type to extract configurable options is incorrect.'));
-        }
-
-        $options = array();
-        /**
-         * @var \Magento\Catalog\Model\Product\Type\Grouped
-         */
-        $typeInstance = $product->getTypeInstance();
-        $associatedProducts = $typeInstance->getAssociatedProducts($product);
-
-        if ($associatedProducts) {
-            foreach ($associatedProducts as $associatedProduct) {
-                $qty = $item->getOptionByCode('associated_product_' . $associatedProduct->getId());
-                $option = array(
-                    'label' => $associatedProduct->getName(),
-                    'value' => ($qty && $qty->getValue()) ? $qty->getValue() : 0
-                );
-
-                $options[] = $option;
-            }
-        }
-
-        $options = array_merge($options, $this->getCustomOptions($item));
-        $isUnConfigured = true;
-        foreach ($options as &$option) {
-            if ($option['value']) {
-                $isUnConfigured = false;
-                break;
-            }
-        }
-        return $isUnConfigured ? array() : $options;
-    }
-
-    /**
      * Retrieves product options list
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
@@ -211,13 +166,8 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     public function getOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
         $typeId = $item->getProduct()->getTypeId();
-        switch ($typeId) {
-            case \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE:
-                return $this->getConfigurableOptions($item);
-            case \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE:
-                return $this->getGroupedOptions($item);
-            default:
-                break;
+        if ($typeId == \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE) {
+            return $this->getConfigurableOptions($item);
         }
         return $this->getCustomOptions($item);
     }

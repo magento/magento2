@@ -38,11 +38,6 @@ use Magento\Backend\App\Action;
 class Product extends \Magento\Backend\App\Action
 {
     /**
-     * The greatest value which could be stored in CatalogInventory Qty field
-     */
-    const MAX_QTY_VALUE = 99999999.9999;
-
-    /**
      * Array of actions which can be processed without secret key validation
      *
      * @var array
@@ -54,7 +49,7 @@ class Product extends \Magento\Backend\App\Action
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry = null;
+    protected $registry = null;
 
     /**
      * @var \Magento\Core\Filter\Date
@@ -62,17 +57,41 @@ class Product extends \Magento\Backend\App\Action
     protected $_dateFilter;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @var Product\Initialization\Helper
+     */
+    protected $initializationHelper;
+
+    /**
+     * @var Product\Initialization\StockDataFilter
+     */
+    protected $stockFilter;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Copier
+     */
+    protected $productCopier;
+
+    /**
+     * @param Action\Context $context
+     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Filter\Date $dateFilter
+     * @param Product\Initialization\Helper $initializationHelper
+     * @param Product\Initialization\StockDataFilter $stockFilter
+     * @param \Magento\Catalog\Model\Product\Copier $productCopier
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Core\Filter\Date $dateFilter
+        \Magento\Core\Model\Registry $registry,
+        \Magento\Core\Filter\Date $dateFilter,
+        \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
+        \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter $stockFilter,
+        \Magento\Catalog\Model\Product\Copier $productCopier
     ) {
-        $this->_coreRegistry = $coreRegistry;
+        $this->stockFilter = $stockFilter;
+        $this->initializationHelper = $initializationHelper;
+        $this->registry = $registry;
         $this->_dateFilter = $dateFilter;
+        $this->productCopier = $productCopier;
         parent::__construct($context);
     }
 
@@ -160,8 +179,8 @@ class Product extends \Magento\Backend\App\Action
                 ->setWebsiteIds($configProduct->getWebsiteIds());
         }
 
-        $this->_coreRegistry->register('product', $product);
-        $this->_coreRegistry->register('current_product', $product);
+        $this->registry->register('product', $product);
+        $this->registry->register('current_product', $product);
         $this->_objectManager->get('Magento\Cms\Model\Wysiwyg\Config')->setStoreId(
             $this->getRequest()->getParam('store')
         );
@@ -181,7 +200,8 @@ class Product extends \Magento\Backend\App\Action
         \Magento\Backend\Block\Widget\Grid $gridBlock,
         $productsArray
     ) {
-        return $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer')
+        return $this->_view->getLayout()
+            ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer')
             ->setGridBlock($gridBlock)
             ->setProducts($productsArray)
             ->setInputElementName($inputName);
@@ -225,7 +245,8 @@ class Product extends \Magento\Backend\App\Action
 
         $productData = $this->getRequest()->getPost('product');
         if ($productData) {
-            $this->_filterStockData($productData['stock_data']);
+            $stockData = isset($productData['stock_data']) ? $productData['stock_data'] : array();
+            $productData['stock_data'] = $this->stockFilter->filter($stockData);
             $product->addData($productData);
         }
 
@@ -378,7 +399,7 @@ class Product extends \Magento\Backend\App\Action
     public function generateVariationsAction()
     {
         $this->_saveAttributeOptions();
-        $this->_initProductSave($this->_initProduct());
+        $this->initializationHelper->initialize($this->_initProduct());
         $this->_view->loadLayout();
         $this->_view->renderLayout();
     }
@@ -527,26 +548,6 @@ class Product extends \Magento\Backend\App\Action
     }
 
     /**
-     * Get associated grouped products grid
-     */
-    public function superGroupAction()
-    {
-        $this->_initProduct();
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Get associated grouped products grid popup
-     */
-    public function superGroupPopupAction()
-    {
-        $this->_initProduct();
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
-    }
-
-    /**
      * Get product reviews grid
      *
      */
@@ -555,7 +556,7 @@ class Product extends \Magento\Backend\App\Action
         $this->_initProduct();
         $this->_view->loadLayout();
         $this->_view->getLayout()->getBlock('admin.product.reviews')
-            ->setProductId($this->_coreRegistry->registry('product')->getId())
+            ->setProductId($this->registry->registry('product')->getId())
             ->setUseAjax(true);
         $this->_view->renderLayout();
     }
@@ -701,155 +702,6 @@ class Product extends \Magento\Backend\App\Action
     }
 
     /**
-     * Initialize product before saving
-     *
-     * @param $product \Magento\Catalog\Model\Product
-     * @return \Magento\Catalog\Model\Product
-     */
-    protected function _initProductSave($product)
-    {
-        $productData = $this->getRequest()->getPost('product');
-        if ($productData) {
-            $this->_filterStockData($productData['stock_data']);
-        }
-
-        foreach (array('category_ids', 'website_ids') as $field) {
-            if (!isset($productData[$field])) {
-                $productData[$field] = array();
-            }
-        }
-
-        $wasLockedMedia = false;
-        if ($product->isLockedAttribute('media')) {
-            $product->unlockAttribute('media');
-            $wasLockedMedia = true;
-        }
-
-        $product->addData($productData);
-
-        if ($wasLockedMedia) {
-            $product->lockAttribute('media');
-        }
-
-        if ($this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->hasSingleStore()) {
-            $product->setWebsiteIds(
-                array(
-                    $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')
-                        ->getStore(true)->getWebsite()->getId()
-                )
-            );
-        }
-
-        /**
-         * Create Permanent Redirect for old URL key
-         */
-        // && $product->getOrigData('url_key') != $product->getData('url_key')
-        if ($product->getId() && isset($productData['url_key_create_redirect'])) {
-            $product->setData('save_rewrites_history', (bool)$productData['url_key_create_redirect']);
-        }
-
-        /**
-         * Check "Use Default Value" checkboxes values
-         */
-        $useDefaults = $this->getRequest()->getPost('use_default');
-        if ($useDefaults) {
-            foreach ($useDefaults as $attributeCode) {
-                $product->setData($attributeCode, false);
-            }
-        }
-
-        /**
-         * Init product links data (related, upsell, crosssel)
-         */
-        $links = $this->getRequest()->getPost('links');
-        if (isset($links['related']) && !$product->getRelatedReadonly()) {
-            $product->setRelatedLinkData(
-                $this->_objectManager->get('Magento\Backend\Helper\Js')->decodeGridSerializedInput($links['related'])
-            );
-        }
-        if (isset($links['upsell']) && !$product->getUpsellReadonly()) {
-            $product->setUpSellLinkData(
-                $this->_objectManager->get('Magento\Backend\Helper\Js')->decodeGridSerializedInput($links['upsell'])
-            );
-        }
-        if (isset($links['crosssell']) && !$product->getCrosssellReadonly()) {
-            $product->setCrossSellLinkData($this->_objectManager->get('Magento\Backend\Helper\Js')
-                ->decodeGridSerializedInput($links['crosssell']));
-        }
-
-        if (isset($links['grouped']) && !$product->getGroupedReadonly()) {
-            $product->setGroupedLinkData((array)$links['grouped']);
-        }
-
-        /**
-         * Initialize data for configurable product
-         */
-
-        $attributes = $this->getRequest()->getParam('attributes');
-        if (!empty($attributes)) {
-            $this->_objectManager->get('Magento\Catalog\Model\Product\Type\Configurable')
-                ->setUsedProductAttributeIds($attributes, $product);
-
-            $product->setNewVariationsAttributeSetId($this->getRequest()->getPost('new-variations-attribute-set-id'));
-            $associatedProductIds = $this->getRequest()->getPost('associated_product_ids', array());
-            if ($this->getRequest()->getActionName() != 'generateVariations') {
-                $generatedProductIds = $this->_objectManager->get('Magento\Catalog\Model\Product\Type\Configurable')
-                    ->generateSimpleProducts($product, $this->getRequest()->getPost('variations-matrix', array()));
-                $associatedProductIds = array_merge($associatedProductIds, $generatedProductIds);
-            }
-            $product->setAssociatedProductIds(array_filter($associatedProductIds));
-
-            $product->setCanSaveConfigurableAttributes(
-                (bool)$this->getRequest()->getPost('affect_configurable_product_attributes')
-            );
-        }
-
-        /**
-         * Initialize product options
-         */
-        if (isset($productData['options']) && !$product->getOptionsReadonly()) {
-            $product->setProductOptions($productData['options']);
-        }
-
-        $product->setCanSaveCustomOptions(
-            (bool)$this->getRequest()->getPost('affect_product_custom_options')
-            && !$product->getOptionsReadonly()
-        );
-
-        $this->_eventManager->dispatch(
-            'catalog_product_prepare_save',
-            array('product' => $product, 'request' => $this->getRequest())
-        );
-
-        return $product;
-    }
-
-    /**
-     * Filter product stock data
-     *
-     * @param array $stockData
-     */
-    protected function _filterStockData(&$stockData)
-    {
-        if (!isset($stockData['use_config_manage_stock'])) {
-            $stockData['use_config_manage_stock'] = 0;
-        }
-        if ($stockData['use_config_manage_stock'] == 1 && !isset($stockData['manage_stock'])) {
-            $stockData['manage_stock'] = $this->_objectManager->get('Magento\Core\Model\StoreManager')->getStore()
-                ->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK);
-        }
-        if (isset($stockData['qty']) && (float)$stockData['qty'] > self::MAX_QTY_VALUE) {
-            $stockData['qty'] = self::MAX_QTY_VALUE;
-        }
-        if (isset($stockData['min_qty']) && (int)$stockData['min_qty'] < 0) {
-            $stockData['min_qty'] = 0;
-        }
-        if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
-            $stockData['is_decimal_divided'] = 0;
-        }
-    }
-
-    /**
      * Save product action
      */
     public function saveAction()
@@ -861,9 +713,7 @@ class Product extends \Magento\Backend\App\Action
 
         $data = $this->getRequest()->getPost();
         if ($data) {
-            $this->_filterStockData($data['product']['stock_data']);
-
-            $product = $this->_initProductSave($this->_initProduct());
+            $product = $this->initializationHelper->initialize($this->_initProduct());
             $this->_eventManager->dispatch(
                 'catalog_product_transition_product_type',
                 array('product' => $product, 'request' => $this->getRequest())
@@ -907,7 +757,7 @@ class Product extends \Magento\Backend\App\Action
                 );
 
                 if ($redirectBack === 'duplicate') {
-                    $newProduct = $product->duplicate();
+                    $newProduct = $this->productCopier->copy($product);
                     $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
 
@@ -959,7 +809,7 @@ class Product extends \Magento\Backend\App\Action
     {
         $product = $this->_initProduct();
         try {
-            $newProduct = $product->duplicate();
+            $newProduct = $this->productCopier->copy($product);
             $this->messageManager->addSuccess(__('You duplicated the product.'));
             $this->_redirect('catalog/*/edit', array('_current'=>true, 'id'=>$newProduct->getId()));
         } catch (\Exception $e) {
@@ -1121,7 +971,7 @@ class Product extends \Magento\Backend\App\Action
      */
     public function customOptionsAction()
     {
-        $this->_coreRegistry->register('import_option_products', $this->getRequest()->getPost('products'));
+        $this->registry->register('import_option_products', $this->getRequest()->getPost('products'));
         $this->_view->loadLayout();
         $this->_view->renderLayout();
     }

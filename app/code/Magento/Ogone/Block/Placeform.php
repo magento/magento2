@@ -61,6 +61,7 @@ class Placeform extends \Magento\View\Element\Template
         $this->_ogoneApi = $ogoneApi;
         $this->_salesOrderFactory = $salesOrderFactory;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

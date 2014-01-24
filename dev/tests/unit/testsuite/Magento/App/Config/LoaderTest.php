@@ -33,13 +33,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_dirs;
 
     public function setUp()
     {
-        $this->_dirs = $this->getMock('\Magento\Filesystem\DirectoryList', array('getDir'), array(), '', false);
+        $this->_dirs = $this->getMock('\Magento\App\Filesystem\DirectoryList', array('getDir'), array(), '', false);
     }
 
     public function testWithOneXmlFile()

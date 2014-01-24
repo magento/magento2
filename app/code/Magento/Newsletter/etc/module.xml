@@ -36,6 +36,9 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Widget"/>
             <module name="Magento_Backend"/>
+            <module name="Magento_Cms"/>
+            <module name="Magento_Email"/>
+            <module name="Magento_Theme"/>
         </depends>
     </module>
 </config>

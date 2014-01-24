@@ -64,6 +64,18 @@ class Service extends \Magento\Object
     protected $_logAdapterFactory;
 
     /**
+     * Service
+     * @var \Magento\Gdata\Gshopping\Content
+     */
+    protected $_service;
+
+    /**
+     * Content factory
+     * @var \Magento\Gdata\Gshopping\ContentFactory
+     */
+    protected $_contentFactory;
+
+    /**
      * Constructor
      *
      * By default is looking for first argument as array and assigns it as object
@@ -72,17 +84,20 @@ class Service extends \Magento\Object
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\GoogleShopping\Model\Config $config
+     * @param \Magento\Gdata\Gshopping\ContentFactory $contentFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\GoogleShopping\Model\Config $config,
+        \Magento\Gdata\Gshopping\ContentFactory $contentFactory,
         array $data = array()
     ) {
         $this->_logAdapterFactory = $logAdapterFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->_config = $config;
+        $this->_contentFactory = $contentFactory;
         parent::__construct($data);
     }
 
@@ -92,6 +107,7 @@ class Service extends \Magento\Object
      * @param int $storeId
      * @param string $loginToken
      * @param string $loginCaptcha
+     * @throws \Magento\Core\Exception on http connection failure
      * @return \Zend_Http_Client
      */
     public function getClient($storeId = null, $loginToken = null, $loginCaptcha = null)
@@ -188,7 +204,12 @@ class Service extends \Magento\Object
     {
         $accountId = $this->getConfig()->getAccountId($storeId);
         $client = $this->getClient($storeId);
-        $service = new \Magento\Gdata\Gshopping\Content($client, $accountId);
+        $service = $this->_contentFactory->create(
+            array(
+                'client' => $client,
+                'accountId' => $accountId
+            )
+        );
         return $service;
     }
 }

@@ -60,9 +60,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Filesystem');
-        $publicDir = $filesystem->getDirectoryWrite(\Magento\Filesystem::STATIC_VIEW);
+        /** @var \Magento\App\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
+        $publicDir = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::STATIC_VIEW_DIR);
         $publicDir->delete('adminhtml');
         $publicDir->delete('frontend');
         $this->_model = null;
@@ -73,9 +73,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPublicDir()
     {
-        /** @var $filesystem \Magento\Filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
-        $expectedPublicDir = $filesystem->getPath(\Magento\Filesystem::STATIC_VIEW);
+        /** @var $filesystem \Magento\App\Filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
+        $expectedPublicDir = $filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR);
         $this->assertEquals($expectedPublicDir, $this->_viewService->getPublicDir());
     }
 
@@ -440,8 +440,8 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     {
         $appInstallDir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir();
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => "$appInstallDir/media_for_change"),
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => "$appInstallDir/media_for_change"),
             )
         ));
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
@@ -531,8 +531,8 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     {
         $appInstallDir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir();
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => "$appInstallDir/media_for_change"),
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => "$appInstallDir/media_for_change"),
             )
         ));
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
@@ -579,8 +579,8 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     protected function _initTestTheme($allowDuplication = null)
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/Core/Model/_files/design/')
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/Core/Model/_files/design/')
             )
         ));
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
@@ -616,8 +616,8 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function testCssWithBase64Data()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/Core/Model/_files/design/')
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/Core/Model/_files/design/')
             )
         ));
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadAreaPart(
@@ -674,8 +674,8 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function testGetViewFilePublicPathExistingFile()
     {
         $filePath = 'mage/mage.js';
-        $expectedFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')
-                ->getPath(\Magento\Filesystem::PUB_LIB) . '/' . $filePath;
+        $expectedFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem')
+                ->getPath(\Magento\App\Filesystem::PUB_LIB_DIR) . '/' . $filePath;
         $this->assertFileExists($expectedFile, 'Please verify existence of public library file');
 
         $actualFile = $this->_viewUrl->getViewFilePublicPath($filePath);

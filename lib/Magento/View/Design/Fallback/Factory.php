@@ -24,7 +24,7 @@
 
 namespace Magento\View\Design\Fallback;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\View\Design\Fallback\Rule\Composite;
 use Magento\View\Design\Fallback\Rule\ModularSwitch;
 use Magento\View\Design\Fallback\Rule\RuleInterface;
@@ -60,7 +60,7 @@ class Factory
      */
     public function createLocaleFileRule()
     {
-        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES_DIR);
         return new Theme(
             new Simple("$themesDir/<area>/<theme_path>/i18n/<locale>")
         );
@@ -73,8 +73,8 @@ class Factory
      */
     public function createFileRule()
     {
-        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
-        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES_DIR);
+        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES_DIR);
         return new ModularSwitch(
             new Theme(
                 new Simple(
@@ -103,9 +103,9 @@ class Factory
      */
     public function createViewFileRule()
     {
-        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
-        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES);
-        $pubLibDir = $this->filesystem->getPath(Filesystem::PUB_LIB);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES_DIR);
+        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES_DIR);
+        $pubLibDir = $this->filesystem->getPath(Filesystem::PUB_LIB_DIR);
         return new ModularSwitch(
             new Composite(
                 array(

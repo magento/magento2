@@ -53,9 +53,9 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_fixtureInitParams = array(
-        \Magento\Filesystem::PARAM_APP_DIRS => array(
-            \Magento\Filesystem::CONFIG     => array('path' => __DIR__),
-            \Magento\Filesystem::VAR_DIR    => array('path' => __DIR__)
+        \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+            \Magento\App\Filesystem::CONFIG_DIR     => array('path' => __DIR__),
+            \Magento\App\Filesystem::VAR_DIR    => array('path' => __DIR__)
         )
     );
 

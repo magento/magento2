@@ -122,17 +122,17 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
      */
-    protected $_countryCollFactory;
+    protected $_countryCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
      */
-    protected $_regionCollFactory;
+    protected $_regionCollectionFactory;
 
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -142,9 +142,9 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Shipping\Model\Carrier\Tablerate $carrierTablerate
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\Resource $resource,
@@ -152,17 +152,17 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Shipping\Model\Carrier\Tablerate $carrierTablerate,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
-        \Magento\Filesystem $filesystem
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\App\Filesystem $filesystem
     ) {
         parent::__construct($resource);
         $this->_coreConfig = $coreConfig;
         $this->_logger = $logger;
         $this->_storeManager = $storeManager;
         $this->_carrierTablerate = $carrierTablerate;
-        $this->_countryCollFactory = $countryCollFactory;
-        $this->_regionCollFactory = $regionCollFactory;
+        $this->_countryCollectionFactory = $countryCollectionFactory;
+        $this->_regionCollectionFactory = $regionCollectionFactory;
         $this->_filesystem = $filesystem;
     }
 
@@ -179,10 +179,10 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Return table rate array or false by rate request
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return array|bool
      */
-    public function getRate(\Magento\Shipping\Model\Rate\Request $request)
+    public function getRate(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         $adapter = $this->_getReadAdapter();
         $bind = array(
@@ -269,7 +269,7 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
         $this->_importErrors        = array();
         $this->_importedRows        = 0;
 
-        $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::SYS_TMP);
+        $tmpDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::SYS_TMP_DIR);
         $path = $tmpDirectory->getRelativePath($csvFile);
         $stream = $tmpDirectory->openFile($path);
 
@@ -359,7 +359,7 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
         $this->_importIso3Countries = array();
 
         /** @var $collection \Magento\Directory\Model\Resource\Country\Collection */
-        $collection = $this->_countryCollFactory->create();
+        $collection = $this->_countryCollectionFactory->create();
         foreach ($collection->getData() as $row) {
             $this->_importIso2Countries[$row['iso2_code']] = $row['country_id'];
             $this->_importIso3Countries[$row['iso3_code']] = $row['country_id'];
@@ -382,7 +382,7 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
         $this->_importRegions = array();
 
         /** @var $collection \Magento\Directory\Model\Resource\Region\Collection */
-        $collection = $this->_regionCollFactory->create();
+        $collection = $this->_regionCollectionFactory->create();
         foreach ($collection->getData() as $row) {
             $this->_importRegions[$row['country_id']][$row['code']] = (int)$row['region_id'];
         }

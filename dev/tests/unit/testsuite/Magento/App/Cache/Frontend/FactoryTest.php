@@ -174,11 +174,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback($processFrontendFunc));
 
         $map = array(
-            array(\Magento\Filesystem::CACHE, 'CACHE_DIR'),
-            array(\Magento\Filesystem::CONFIG, 'CONFIG_DIR'),
+            array(\Magento\App\Filesystem::CACHE_DIR, 'CACHE_DIR'),
+            array(\Magento\App\Filesystem::CONFIG_DIR, 'CONFIG_DIR'),
         );
 
-        $filesystem = $this->getMock('Magento\Filesystem', array('getPath'), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array('getPath'), array(), '', false);
 
         $filesystem->expects($this->any())
             ->method('getPath')

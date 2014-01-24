@@ -74,7 +74,7 @@ class Price
     public function getCatalogPrice(\Magento\Catalog\Model\Product $product, $store = null, $inclTax = null)
     {
         switch ($product->getTypeId()) {
-            case \Magento\Catalog\Model\Product\Type::TYPE_GROUPED:
+            case \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE:
                 // Workaround to avoid loading stock status by admin's website
                 if ($store instanceof \Magento\Core\Model\Store) {
                     $oldStore = $this->_storeManager->getStore();
@@ -136,7 +136,7 @@ class Price
     public function getCatalogRegularPrice(\Magento\Catalog\Model\Product $product, $store = null)
     {
         switch ($product->getTypeId()) {
-            case \Magento\Catalog\Model\Product\Type::TYPE_GROUPED:
+            case \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE:
             case \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE:
             case 'giftcard':
                 return null;

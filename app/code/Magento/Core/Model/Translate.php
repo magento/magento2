@@ -197,7 +197,7 @@ class Translate implements TranslateInterface
     protected $_appState;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -220,7 +220,7 @@ class Translate implements TranslateInterface
      * @param \Magento\Core\Model\Resource\Translate $translate
      * @param \Magento\Core\Model\App $app
      * @param \Magento\App\State $appState
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -238,7 +238,7 @@ class Translate implements TranslateInterface
         \Magento\Core\Model\Resource\Translate $translate,
         \Magento\Core\Model\App $app,
         \Magento\App\State $appState,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_viewDesign = $viewDesign;
         $this->_localeHierarchy = $config->getHierarchy();
@@ -254,7 +254,7 @@ class Translate implements TranslateInterface
         $this->_app = $app;
         $this->_appState = $appState;
         $this->filesystem = $filesystem;
-        $this->directory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
     }
 
     /**
@@ -499,7 +499,7 @@ class Translate implements TranslateInterface
      */
     protected function _getModuleTranslationFile($moduleName, $locale)
     {
-        $file = $this->_modulesReader->getModuleDir(\Magento\Filesystem::LOCALE, $moduleName);
+        $file = $this->_modulesReader->getModuleDir(\Magento\App\Filesystem::LOCALE_DIR, $moduleName);
         $file .= '/' . $locale . '.csv';
         return $file;
     }
@@ -514,7 +514,7 @@ class Translate implements TranslateInterface
     {
         $area = isset($area) ? $area : $this->_appState->getAreaCode();
         return $this->_viewFileSystem
-            ->getFilename(\Magento\Filesystem::LOCALE . '/' . $locale . '.csv', array('area' => $area));
+            ->getFilename(\Magento\App\Filesystem::LOCALE_DIR . '/' . $locale . '.csv', array('area' => $area));
     }
 
     /**

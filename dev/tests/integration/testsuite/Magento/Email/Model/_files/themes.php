@@ -22,8 +22,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-    \Magento\Filesystem::PARAM_APP_DIRS => array(
-        \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/_files/design')
+    \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+        \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
     )
 ));
 $objectManger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

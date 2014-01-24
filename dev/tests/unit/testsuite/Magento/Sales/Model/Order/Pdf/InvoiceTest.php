@@ -52,7 +52,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                     }
                 )
             );
-        $filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false, false);
+        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false, false);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnValue($directoryMock));
@@ -60,8 +60,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->will($this->returnValue($directoryMock));
 
-        $shippingConfigMock = $this->getMock('Magento\Shipping\Model\Config', array(), array(), '', false,
-            false);
         $this->_pdfConfigMock =
             $this->getMock('Magento\Sales\Model\Order\Pdf\Config', array(), array(), '', false, false);
         $totalFactoryMock = $this->getMock('Magento\Sales\Model\Order\Pdf\Total\Factory', array(), array(), '', false,
@@ -79,7 +77,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             $storeConfigMock,
             $translateMock,
             $filesystemMock,
-            $shippingConfigMock,
             $this->_pdfConfigMock,
             $totalFactoryMock,
             $pdfItemsFactoryMock,

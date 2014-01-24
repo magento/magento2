@@ -26,7 +26,6 @@
 <config>
     <module name="Magento_Paypal" version="1.6.0.3" active="true">
         <sequence>
-            <module name="Magento_Paygate"/>
             <module name="Magento_Checkout"/>
             <module name="Magento_Sales"/>
         </sequence>
@@ -41,6 +40,7 @@
             <module name="Magento_Directory"/>
             <module name="Magento_Theme"/>
             <module name="Magento_Centinel"/>
+            <module name="Magento_Catalog"/>
         </depends>
     </module>
 </config>

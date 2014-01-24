@@ -58,17 +58,17 @@ class Service
      * @param \Magento\App\State $appState
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\State $appState,
         \Magento\View\DesignInterface $design,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_appState = $appState;
         $this->_design = $design;
-        $this->_pubDirectory = $filesystem->getPath(\Magento\Filesystem::STATIC_VIEW);
+        $this->_pubDirectory = $filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR);
         $this->themeFactory = $themeFactory;
     }
 

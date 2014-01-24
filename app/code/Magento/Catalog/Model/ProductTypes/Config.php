@@ -23,9 +23,7 @@
  */
 namespace Magento\Catalog\Model\ProductTypes;
 
-class Config
-    extends \Magento\Config\Data
-    implements \Magento\Catalog\Model\ProductTypes\ConfigInterface
+class Config extends \Magento\Config\Data implements \Magento\Catalog\Model\ProductTypes\ConfigInterface
 {
     /**
      * @param \Magento\Catalog\Model\ProductTypes\Config\Reader $reader
@@ -59,5 +57,16 @@ class Config
     public function getAll()
     {
         return $this->get();
+    }
+
+    /**
+     * Check whether product type is set of products
+     *
+     * @param string $typeId
+     * @return bool
+     */
+    public function isProductSet($typeId)
+    {
+        return $this->get($typeId . '/is_product_set', false);
     }
 }

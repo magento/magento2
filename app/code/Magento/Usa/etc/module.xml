@@ -36,6 +36,7 @@
             <module name="Magento_Core"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Paypal"/>
+            <module name="Magento_Sales"/>
         </depends>
     </module>
 </config>

@@ -34,6 +34,7 @@
             <module name="Magento_Core"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_Sales"/>
         </depends>
     </module>
 </config>

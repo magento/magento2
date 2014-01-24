@@ -134,12 +134,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * @var \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory
      */
-    protected $_optionCollFactory;
+    protected $_optionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
      */
-    protected $_productCollFactory;
+    protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Resource\ConfigFactory
@@ -168,8 +168,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\App\Resource $coreResource
-     * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
+     * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
@@ -190,8 +190,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\App\Resource $coreResource,
-        \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
+        \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory,
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\Resource\Item $resource,
@@ -205,8 +205,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $this->_wishlistConfig = $wishlistConfig;
         $this->_productVisibility = $productVisibility;
         $this->_coreResource = $coreResource;
-        $this->_optionCollFactory = $optionCollFactory;
-        $this->_productCollFactory = $productCollFactory;
+        $this->_optionCollectionFactory = $optionCollectionFactory;
+        $this->_productCollectionFactory = $productCollectionFactory;
         $this->_catalogConfFactory = $catalogConfFactory;
         $this->_catalogAttrFactory = $catalogAttrFactory;
         $this->_appState = $appState;
@@ -254,7 +254,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     {
         $itemIds = array_keys($this->_items);
         /* @var $optionCollection \Magento\Wishlist\Model\Resource\Item\Option\Collection */
-        $optionCollection = $this->_optionCollFactory->create();
+        $optionCollection = $this->_optionCollectionFactory->create();
         $optionCollection->addItemFilter($itemIds);
 
         /* @var $item \Magento\Wishlist\Model\Item */
@@ -293,7 +293,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $this->_productIds = array_merge($this->_productIds, array_keys($productIds));
         $attributes = $this->_wishlistConfig->getProductAttributes();
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
-        $productCollection = $this->_productCollFactory->create();
+        $productCollection = $this->_productCollectionFactory->create();
         foreach ($storeIds as $id) {
             $productCollection->addStoreFilter($id);
         }

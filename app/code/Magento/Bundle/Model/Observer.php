@@ -86,42 +86,6 @@ class Observer
     }
 
     /**
-     * Setting Bundle Items Data to product for father processing
-     *
-     * @param \Magento\Object $observer
-     * @return \Magento\Bundle\Model\Observer
-     */
-    public function prepareProductSave($observer)
-    {
-        $request = $observer->getEvent()->getRequest();
-        $product = $observer->getEvent()->getProduct();
-
-        if (($items = $request->getPost('bundle_options')) && !$product->getCompositeReadonly()) {
-            $product->setBundleOptionsData($items);
-        }
-
-        if (($selections = $request->getPost('bundle_selections')) && !$product->getCompositeReadonly()) {
-            $product->setBundleSelectionsData($selections);
-        }
-
-        if ($product->getPriceType() == '0' && !$product->getOptionsReadonly()) {
-            $product->setCanSaveCustomOptions(true);
-            if ($customOptions = $product->getProductOptions()) {
-                foreach (array_keys($customOptions) as $key) {
-                    $customOptions[$key]['is_delete'] = 1;
-                }
-                $product->setProductOptions($customOptions);
-            }
-        }
-
-        $product->setCanSaveBundleSelections(
-            (bool)$request->getPost('affect_bundle_product_selections') && !$product->getCompositeReadonly()
-        );
-
-        return $this;
-    }
-
-    /**
      * Append bundles in upsell list for current product
      *
      * @param \Magento\Object $observer
@@ -210,63 +174,6 @@ class Observer
         /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
         $collection->addPriceData();
 
-        return $this;
-    }
-
-    /**
-     * duplicating bundle options and selections
-     *
-     * @param \Magento\Object $observer
-     * @return \Magento\Bundle\Model\Observer
-     */
-    public function duplicateProduct($observer)
-    {
-        $product = $observer->getEvent()->getCurrentProduct();
-
-        if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            //do nothing if not bundle
-            return $this;
-        }
-
-        $newProduct = $observer->getEvent()->getNewProduct();
-
-        $product->getTypeInstance()->setStoreFilter($product->getStoreId(), $product);
-        $optionCollection = $product->getTypeInstance()->getOptionsCollection($product);
-        $selectionCollection = $product->getTypeInstance()->getSelectionsCollection(
-            $product->getTypeInstance()->getOptionsIds($product),
-            $product
-        );
-        $optionCollection->appendSelections($selectionCollection);
-
-        $optionRawData = array();
-        $selectionRawData = array();
-
-        $i = 0;
-        foreach ($optionCollection as $option) {
-            $optionRawData[$i] = array(
-                    'required' => $option->getData('required'),
-                    'position' => $option->getData('position'),
-                    'type' => $option->getData('type'),
-                    'title' => $option->getData('title')?$option->getData('title'):$option->getData('default_title'),
-                    'delete' => ''
-                );
-            foreach ($option->getSelections() as $selection) {
-                $selectionRawData[$i][] = array(
-                    'product_id' => $selection->getProductId(),
-                    'position' => $selection->getPosition(),
-                    'is_default' => $selection->getIsDefault(),
-                    'selection_price_type' => $selection->getSelectionPriceType(),
-                    'selection_price_value' => $selection->getSelectionPriceValue(),
-                    'selection_qty' => $selection->getSelectionQty(),
-                    'selection_can_change_qty' => $selection->getSelectionCanChangeQty(),
-                    'delete' => ''
-                );
-            }
-            $i++;
-        }
-
-        $newProduct->setBundleOptionsData($optionRawData);
-        $newProduct->setBundleSelectionsData($selectionRawData);
         return $this;
     }
 

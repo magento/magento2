@@ -527,7 +527,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
                 \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
                 \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED
+                \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED,
             ))
             ->where('cpl.product_id IN (?)', $productIds);
 
@@ -825,7 +825,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED   => '_links_related_',
                 \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL    => '_links_upsell_',
                 \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL => '_links_crosssell_',
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED   => '_associated_'
+                \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED   => '_associated_'
             );
             $configurableProductsCollection = $this->_entityCollection;
             $configurableProductsCollection->addAttributeToFilter(

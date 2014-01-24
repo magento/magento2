@@ -117,7 +117,6 @@ $map = array(
     'admin/newsletter/subscriber' => 'Magento_Newsletter::subscriber',
     'admin/newsletter/template' => 'Magento_Newsletter::template',
     'admin/system/config/oauth' => 'Magento_Oauth::oauth',
-    'admin/page_cache' => 'Magento_PageCache::page_cache',
     'admin/system/config/payment' => 'Magento_Payment::payment',
     'admin/system/config/payment_services' => 'Magento_Payment::payment_services',
     'admin/report/salesroot/paypal_settlement_reports/fetch' => 'Magento_Paypal::fetch',

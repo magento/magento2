@@ -73,7 +73,7 @@ return array(
     array('_moduleReader', 'Magento\Backend\Model\Menu\Config'),
     array('_option', 'Magento\Captcha\Helper\Data', '_dirs'),
     array('_options', 'Magento\Core\Model\Config', 'Magento\Filesystem'),
-    array('_optionsMapping', null, '\Magento\Filesystem::getPath($nodeKey)'),
+    array('_optionsMapping', null, '\Magento\App\Filesystem::getPath($nodeKey)'),
     array('_order', 'Magento\Checkout\Block\Onepage\Success'),
     array('_order_id'),
     array('_parent', 'Magento\Core\Block\AbstractBlock'),

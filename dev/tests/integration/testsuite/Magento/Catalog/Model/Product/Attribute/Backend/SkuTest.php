@@ -68,7 +68,10 @@ class SkuTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateUniqueLongSku($product)
     {
-        $product->duplicate();
+        /** @var \Magento\Catalog\Model\Product\Copier $copier */
+        $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Catalog\Model\Product\Copier');
+        $copier->copy($product);
         $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
         $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $product->getSku());

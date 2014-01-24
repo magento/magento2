@@ -24,7 +24,7 @@
 
 namespace Magento\View\Element;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 
 /**
  * Base html block
@@ -110,6 +110,11 @@ class Template extends AbstractBlock
     private $mediaDirectory;
 
     /**
+     * @var \Magento\View\Element\BlockInterface
+     */
+    protected $templateContext;
+
+    /**
      * @param Template\Context $context
      * @param array $data
      */
@@ -122,7 +127,18 @@ class Template extends AbstractBlock
         $this->templateEnginePool = $context->getEnginePool();
         $this->_storeManager = $context->getStoreManager();
         $this->_appState = $context->getAppState();
+        $this->templateContext = $this;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Set template context. Sets the object that should represent $this in template
+     *
+     * @param $templateContext
+     */
+    public function setTemplateContext($templateContext)
+    {
+        $this->templateContext = $templateContext;
     }
 
     /**
@@ -226,7 +242,7 @@ class Template extends AbstractBlock
         if ($this->isTemplateFileValid($fileName)) {
             $extension = pathinfo($fileName, PATHINFO_EXTENSION);
             $templateEngine = $this->templateEnginePool->get($extension);
-            $html = $templateEngine->render($this, $fileName, $this->_viewVars);
+            $html = $templateEngine->render($this->templateContext, $fileName, $this->_viewVars);
         } else {
             $html = '';
             $this->_logger->log("Invalid template file: '{$fileName}'", \Zend_Log::CRIT);
@@ -310,7 +326,7 @@ class Template extends AbstractBlock
     protected function getRootDirectory()
     {
         if (null === $this->directory) {
-            $this->directory = $this->_filesystem->getDirectoryRead(Filesystem::ROOT);
+            $this->directory = $this->_filesystem->getDirectoryRead(Filesystem::ROOT_DIR);
         }
 
         return $this->directory;
@@ -324,7 +340,7 @@ class Template extends AbstractBlock
     protected function getMediaDirectory()
     {
         if (!$this->mediaDirectory) {
-            $this->mediaDirectory = $this->_filesystem->getDirectoryRead(Filesystem::MEDIA);
+            $this->mediaDirectory = $this->_filesystem->getDirectoryRead(Filesystem::MEDIA_DIR);
         }
         return $this->mediaDirectory;
     }
@@ -344,8 +360,8 @@ class Template extends AbstractBlock
     {
         $fileName = str_replace('\\', '/', $fileName);
 
-        $themesDir = str_replace('\\', '/', $this->_filesystem->getPath(Filesystem::THEMES));
-        $appDir = str_replace('\\', '/', $this->_filesystem->getPath(Filesystem::APP));
+        $themesDir = str_replace('\\', '/', $this->_filesystem->getPath(Filesystem::THEMES_DIR));
+        $appDir = str_replace('\\', '/', $this->_filesystem->getPath(Filesystem::APP_DIR));
         return (
             $this->isPathInDirectory($fileName, $appDir)
             || $this->isPathInDirectory($fileName, $themesDir)

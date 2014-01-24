@@ -219,4 +219,25 @@ class ObjectManager
         }
         return $constructArguments;
     }
+
+    /**
+     * Get collection mock
+     *
+     * @param string $className
+     * @param array $data
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @throws \InvalidArgumentException
+     */
+    public function getCollectionMock($className, array $data)
+    {
+        if (!is_subclass_of($className, '\Magento\Data\Collection')) {
+            throw new \InvalidArgumentException($className . ' does not instance of \Magento\Data\Collection');
+        }
+        $mock = $this->_testObject->getMock($className, array(), array(), '', false, false);
+        $iterator = new \ArrayIterator($data);
+        $mock->expects($this->_testObject->any())
+            ->method('getIterator')
+            ->will($this->_testObject->returnValue($iterator));
+        return $mock;
+    }
 }

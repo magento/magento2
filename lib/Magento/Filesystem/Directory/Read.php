@@ -260,17 +260,4 @@ class Read implements ReadInterface
     {
         return $this->driver->isDirectory($this->driver->getAbsolutePath($this->path, $path));
     }
-
-    /**
-     * Checks is directory contains path
-     * Utility method.
-     *
-     * @param string $path
-     * @param string $directory
-     * @return bool
-     */
-    public function isPathInDirectory($path, $directory)
-    {
-        return $this->driver->isPathInDirectory($path, $directory);
-    }
 }

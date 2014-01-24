@@ -31,8 +31,8 @@ $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
 
 /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
 $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Filesystem')
-    ->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+    ->get('Magento\App\Filesystem')
+    ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
 
 $mediaDirectory->delete($config->getBaseMediaPath());
 $mediaDirectory->delete($config->getBaseTmpMediaPath());

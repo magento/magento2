@@ -30,6 +30,12 @@ namespace Magento\Cms\Model\Wysiwyg\Images;
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Directory paths samples
+     */
+    const STORAGE_ROOT_DIR            = '/storage/root/dir';
+    const INVALID_DIRECTORY_OVER_ROOT = '/storage/some/another/dir';
+
+    /**
      * @var \Magento\Cms\Model\Wysiwyg\Images\Storage
      */
     protected $_model = null;
@@ -94,14 +100,49 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     protected $_backendUrlMock;
 
+    /**
+     * @var \Magento\Filesystem\Directory\Write|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_directoryMock;
+
+    /**
+     * @var \Magento\Filesystem\DriverInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_driverMock;
+
     protected function setUp()
     {
-        $this->_filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->_driverMock = $this->getMockForAbstractClass(
+            'Magento\Filesystem\DriverInterface', array(), '', false, false, true, array('getRealPath')
+        );
+        $this->_driverMock->expects($this->any())->method('getRealPath')
+           ->will($this->returnArgument(0));
+
+        $this->_directoryMock = $this->getMock(
+            'Magento\Filesystem\Directory\Write', array('delete', 'getDriver'), array(), '', false
+        );
+        $this->_directoryMock->expects($this->any())->method('getDriver')
+            ->will($this->returnValue($this->_driverMock));
+
+        $this->_filesystemMock = $this->getMock(
+            'Magento\App\Filesystem', array('getDirectoryWrite'), array(), '', false
+        );
+        $this->_filesystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\App\Filesystem::MEDIA_DIR)
+            ->will($this->returnValue($this->_directoryMock));
+
         $this->_adapterFactoryMock = $this->getMock(
             'Magento\Image\AdapterFactory', array(), array(), '', false
         );
         $this->_viewUrlMock = $this->getMock('Magento\View\Url', array(), array(), '', false);
-        $this->_imageHelperMock = $this->getMock('Magento\Cms\Helper\Wysiwyg\Images', array(), array(), '', false);
+        $this->_imageHelperMock = $this->getMock(
+            'Magento\Cms\Helper\Wysiwyg\Images', array('getStorageRoot'), array(), '', false
+        );
+        $this->_imageHelperMock->expects($this->any())->method('getStorageRoot')
+            ->will($this->returnValue(self::STORAGE_ROOT_DIR));
+
         $this->_resizeParameters = array('width' => 100, 'height' => 50);
 
         $this->_storageCollectionFactoryMock = $this->getMock(
@@ -147,5 +188,29 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     public function testGetResizeHeight()
     {
         $this->assertEquals(50, $this->_model->getResizeHeight());
+    }
+
+    /**
+     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
+     */
+    public function testDeleteDirectoryOverRoot()
+    {
+        $this->setExpectedException(
+            '\Magento\Core\Exception',
+            sprintf('Directory %s is not under storage root path.', self::INVALID_DIRECTORY_OVER_ROOT)
+        );
+        $this->_model->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
+    }
+
+    /**
+     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
+     */
+    public function testDeleteRootDirectory()
+    {
+        $this->setExpectedException(
+            '\Magento\Core\Exception',
+            sprintf('We cannot delete root directory %s.', self::STORAGE_ROOT_DIR)
+        );
+        $this->_model->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
 }

@@ -204,7 +204,15 @@ class Index
 
         $session = $this->_objectManager->get('Magento\Customer\Model\Session');
 
-        $productId = (int) $this->getRequest()->getParam('product');
+        $requestParams = $this->getRequest()->getParams();
+
+        if ($session->getBeforeWishlistRequest()) {
+            $requestParams = $session->getBeforeWishlistRequest();
+            $session->unsBeforeWishlistRequest();
+        }
+
+        $productId = isset($requestParams['product']) ? (int) $requestParams['product'] : null;
+
         if (!$productId) {
             $this->_redirect('*/');
             return;
@@ -218,11 +226,6 @@ class Index
         }
 
         try {
-            $requestParams = $this->getRequest()->getParams();
-            if ($session->getBeforeWishlistRequest()) {
-                $requestParams = $session->getBeforeWishlistRequest();
-                $session->unsBeforeWishlistRequest();
-            }
             $buyRequest = new \Magento\Object($requestParams);
 
             $result = $wishlist->addNewItem($product, $buyRequest);
@@ -798,7 +801,7 @@ class Index
 
         try {
             $info      = unserialize($option->getValue());
-            $filePath  = $this->_objectManager->get('Magento\Filesystem')->getPath(\Magento\Filesystem::ROOT)
+            $filePath  = $this->_objectManager->get('Magento\App\Filesystem')->getPath(\Magento\App\Filesystem::ROOT_DIR)
                 . $info['quote_path'];
             $secretKey = $this->getRequest()->getParam('key');
 
@@ -809,7 +812,7 @@ class Index
                         'value' => $filePath,
                         'type'  => 'filename'
                     ),
-                    \Magento\Filesystem::ROOT
+                    \Magento\App\Filesystem::ROOT_DIR
                 );
             }
 

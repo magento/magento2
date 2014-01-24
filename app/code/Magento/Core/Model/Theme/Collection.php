@@ -57,16 +57,16 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Config\FileIteratorFactory $fileIteratorFactory
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Config\FileIteratorFactory $fileIteratorFactory
     ) {
         parent::__construct($entityFactory);
-        $this->_directory = $filesystem->getDirectoryRead(\Magento\Filesystem::THEMES);
+        $this->_directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
         $this->fileIteratorFactory = $fileIteratorFactory;
     }
 

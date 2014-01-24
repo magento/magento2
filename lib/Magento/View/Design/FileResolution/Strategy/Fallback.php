@@ -24,7 +24,7 @@
 
 namespace Magento\View\Design\FileResolution\Strategy;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\View\Design\Fallback\Factory;
 use Magento\View\Design\Fallback\Rule\RuleInterface;
 use Magento\View\Design\ThemeInterface;
@@ -70,7 +70,7 @@ class Fallback implements FileInterface, LocaleInterface, ViewInterface
      */
     public function __construct(Filesystem $filesystem, Factory $fallbackFactory)
     {
-        $this->rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT_DIR);
         $this->fallbackFactory = $fallbackFactory;
     }
 

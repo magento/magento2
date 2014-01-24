@@ -92,6 +92,96 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test readAll
+     *
+     * @dataProvider readAllProvider
+     * @param string $path
+     * @param string $content
+     */
+    public function testReadAll($path, $content)
+    {
+        $file = $this->getFileInstance($path);
+        $this->assertEquals($content, $file->readAll($path));
+    }
+
+    /**
+     * Data provider for testReadFile
+     *
+     * @return array
+     */
+    public function readAllProvider()
+    {
+        return array(
+            array('popup.csv', 'var myData = 5;'),
+            array('data.csv', '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL)
+        );
+    }
+
+    /**
+     * Test readLine
+     *
+     * @dataProvider readLineProvider
+     * @param string $path
+     * @param array $lines
+     * @param int $length
+     */
+    public function testReadLine($path, $lines, $length)
+    {
+        $file = $this->getFileInstance($path);
+        foreach ($lines as $line) {
+            $this->assertEquals($line, $file->readLine($length, PHP_EOL));
+        }
+    }
+
+    /**
+     * Data provider for testReadLine
+     *
+     * @return array
+     */
+    public function readLineProvider()
+    {
+        return array(
+            array('popup.csv', array('var myData = 5;'), 999),
+            array('data.csv', array('"field1", "field2"', '"field3", "field4"'), 999),
+            array('popup.csv', array('var'), 3),
+            array('data.csv', array('"f', 'ie', 'ld', '1"'), 2)
+        );
+    }
+
+    /**
+     * Test for stat method
+     *
+     * @dataProvider statProvider
+     * @param string $path
+     */
+    public function testStat($path)
+    {
+        $file = $this->getFileInstance($path);
+        $expectedInfo =  array(
+            'dev', 'ino', 'mode', 'nlink', 'uid',
+            'gid', 'rdev', 'size', 'atime',
+            'mtime', 'ctime', 'blksize', 'blocks'
+        );
+        $result = $file->stat();
+        foreach ($expectedInfo as $key) {
+            $this->assertTrue(array_key_exists($key, $result));
+        }
+    }
+
+    /**
+     * Data provider for testStat
+     *
+     * @return array
+     */
+    public function statProvider()
+    {
+        return array(
+            array('popup.csv'),
+            array('foo/file_three.txt')
+        );
+    }
+
+    /**
      * Test for readCsv method
      *
      * @dataProvider providerCsv

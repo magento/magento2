@@ -45,13 +45,20 @@ class CronTest extends \PHPUnit_Framework_TestCase
      */
     protected $_stateMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_responseMock;
+
     protected function setUp()
     {
         $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface');
         $this->_stateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_responseMock = $this->getMock('Magento\App\Console\Response', array(), array(), '', false);
         $this->_model = new Cron(
             $this->_eventManagerMock,
-            $this->_stateMock
+            $this->_stateMock,
+            $this->_responseMock
         );
     }
 
@@ -59,6 +66,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $this->_stateMock->expects($this->once())->method('setAreaCode')->with('crontab');
         $this->_eventManagerMock->expects($this->once())->method('dispatch')->with('default');
-        $this->assertEquals(0, $this->_model->execute());
+        $this->_responseMock->expects($this->once())->method('setCode')->with(0);
+        $this->assertEquals($this->_responseMock, $this->_model->execute());
     }
 }

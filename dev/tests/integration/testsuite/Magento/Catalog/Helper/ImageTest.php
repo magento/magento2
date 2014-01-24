@@ -49,7 +49,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = $objectManager->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
 
         // image fixtures
         $fixtureMediaDir = $mediaDirectory->getAbsolutePath($config->getBaseMediaPath());
@@ -94,7 +95,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = $objectManager->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
 
         $mediaDirectory->delete($config->getBaseMediaPath());
         $mediaDirectory->delete($config->getBaseTmpMediaPath());

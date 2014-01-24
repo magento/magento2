@@ -129,7 +129,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * @var \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory
      */
-    protected $_wishlOptCollFactory;
+    protected $_wishlOptionCollectionFactory;
 
     /**
      * @param \Magento\Core\Model\Context $context
@@ -139,7 +139,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Wishlist\Model\Item\OptionFactory $wishlistOptFactory
-     * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $wishlOptCollFactory
+     * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $wishlOptionCollectionFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -152,7 +152,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Wishlist\Model\Item\OptionFactory $wishlistOptFactory,
-        \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $wishlOptCollFactory,
+        \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $wishlOptionCollectionFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -162,7 +162,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         $this->_productFactory = $productFactory;
         $this->_catalogUrl = $catalogUrl;
         $this->_wishlistOptFactory = $wishlistOptFactory;
-        $this->_wishlOptCollFactory = $wishlOptCollFactory;
+        $this->_wishlOptionCollectionFactory = $wishlOptionCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -724,7 +724,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     public function canHaveQty()
     {
         $product = $this->getProduct();
-        return $product->getTypeId() != \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE;
+        return $product->getTypeId() != \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE;
     }
 
     /**
@@ -775,7 +775,7 @@ class Item extends \Magento\Core\Model\AbstractModel
             return $this;
         }
 
-        $options = $this->_wishlOptCollFactory->create()->addItemFilter($this);
+        $options = $this->_wishlOptionCollectionFactory->create()->addItemFilter($this);
         if ($optionsFilter) {
             $options->addFieldToFilter('code', $optionsFilter);
         }

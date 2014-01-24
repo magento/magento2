@@ -66,13 +66,13 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             'calculatorFactory' => $this->getMock(
                 'Magento\Core\Model\CalculatorFactory', array(), array(), '', false
             ),
-            'invoiceItemCollFactory' => $this->getMock(
+            'invoiceItemCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory', array(), array(), '', false
             ),
             'invoiceCommentFactory' => $this->getMock(
                 'Magento\Sales\Model\Order\Invoice\CommentFactory', array(), array(), '', false
             ),
-            'commentCollFactory' => $this->getMock(
+            'commentCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory', array(), array(), '', false
             ),
             'templateMailerFactory' => $this->getMock(

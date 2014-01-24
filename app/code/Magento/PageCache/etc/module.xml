@@ -24,13 +24,12 @@
  */
 -->
 <config>
-    <module name="Magento_PageCache" version="1.6.0.0" active="true">
+    <module name="Magento_PageCache" version="1.6.0.0" active="false">
         <sequence>
             <module name="Magento_Core"/>
         </sequence>
         <depends>
             <module name="Magento_Core"/>
-            <module name="Magento_Backend"/>
         </depends>
     </module>
 </config>

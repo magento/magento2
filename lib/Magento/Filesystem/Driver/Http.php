@@ -103,7 +103,7 @@ class Http extends File
     {
         clearstatcache();
         $result = @file_get_contents($this->getScheme() . $path, $flags, $context);
-        if (!$result) {
+        if (false === $result) {
             throw new FilesystemException(
                 sprintf(
                     'Cannot read contents from file "%s" %s',

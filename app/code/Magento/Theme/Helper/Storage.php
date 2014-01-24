@@ -83,7 +83,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * Magento filesystem
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -104,13 +104,13 @@ class Storage extends \Magento\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory
     ) {
@@ -118,7 +118,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
         $this->filesystem = $filesystem;
         $this->_session = $session;
         $this->_themeFactory = $themeFactory;
-        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $this->mediaDirectoryWrite->create($this->getStorageRoot());
     }
 

@@ -70,6 +70,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_appEmulation;
 
     /**
+     * @var \Magento\Core\Model\Config\Initial
+     */
+    protected $_initialConfig;
+
+    /**
      * Construct
      *
      * @param \Magento\App\Helper\Context $context
@@ -79,6 +84,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Core\Model\Config $config
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Payment\Model\Config $paymentConfig
+     * @param \Magento\Core\Model\Config\Initial $initialConfig
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
@@ -87,7 +93,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
         \Magento\Core\Model\Config $config,
         \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Payment\Model\Config $paymentConfig
+        \Magento\Payment\Model\Config $paymentConfig,
+        \Magento\Core\Model\Config\Initial $initialConfig
     ) {
         parent::__construct($context);
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -96,6 +103,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $this->_config = $config;
         $this->_appEmulation = $appEmulation;
         $this->_paymentConfig = $paymentConfig;
+        $this->_initialConfig = $initialConfig;
     }
 
     /**
@@ -124,7 +132,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getStoreMethods($store = null, $quote = null)
     {
         $res = array();
-        $methods = $this->getPaymentMethods($store);
+        $methods = $this->getPaymentMethods();
         uasort($methods, array($this, '_sortMethods'));
         foreach ($methods as $code => $methodConfig) {
             $prefix = self::XML_PATH_PAYMENT_METHODS . '/' . $code . '/';
@@ -243,7 +251,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getRecurringProfileMethods($store = null)
     {
         $result = array();
-        foreach ($this->getPaymentMethods($store) as $code => $data) {
+        foreach ($this->getPaymentMethods() as $code => $data) {
             $method = $this->getMethodInstance($code);
             if ($method && $method->canManageRecurringProfiles()) {
                 $result[] = $method;
@@ -255,12 +263,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve all payment methods
      *
-     * @param mixed $store
      * @return array
      */
-    public function getPaymentMethods($store = null)
+    public function getPaymentMethods()
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_PAYMENT_METHODS, $store);
+        return $this->_initialConfig->getDefault()[self::XML_PATH_PAYMENT_METHODS];
     }
 
     /**
@@ -290,7 +297,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $groups = array();
         $groupRelations = array();
 
-        foreach ($this->getPaymentMethods($store) as $code => $data) {
+        foreach ($this->getPaymentMethods() as $code => $data) {
             if ((isset($data['title']))) {
                 $methods[$code] = $data['title'];
             } else {

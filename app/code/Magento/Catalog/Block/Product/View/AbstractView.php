@@ -54,6 +54,7 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -70,7 +71,8 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->arrayUtils = $arrayUtils;
         parent::__construct(
@@ -85,10 +87,10 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
-
 
     /**
      * Retrieve product

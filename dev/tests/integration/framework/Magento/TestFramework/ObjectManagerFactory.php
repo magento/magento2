@@ -66,16 +66,17 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
      */
     public function restore(ObjectManager $objectManager, $rootDir, array $arguments)
     {
-        $directories = isset($arguments[\Magento\Filesystem::PARAM_APP_DIRS])
-            ? $arguments[\Magento\Filesystem::PARAM_APP_DIRS]
+        $directories = isset($arguments[\Magento\App\Filesystem::PARAM_APP_DIRS])
+            ? $arguments[\Magento\App\Filesystem::PARAM_APP_DIRS]
             : array();
-        $directoryList = new \Magento\Filesystem\DirectoryList($rootDir, $directories);
+        $directoryList = new \Magento\TestFramework\App\Filesystem\DirectoryList($rootDir, $directories);
 
         \Magento\TestFramework\ObjectManager::setInstance($objectManager);
 
         $this->_pluginList->reset();
 
         $objectManager->configure($this->_primaryConfigData);
+        $objectManager->addSharedInstance($directoryList, 'Magento\App\Filesystem\DirectoryList');
         $objectManager->addSharedInstance($directoryList, 'Magento\Filesystem\DirectoryList');
         $objectManager->configure(array(
             'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
@@ -87,7 +88,9 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
             'preferences' => array(
                 'Magento\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
                 'Magento\App\RequestInterface' => 'Magento\TestFramework\Request',
+                'Magento\App\Request\Http' => 'Magento\TestFramework\Request',
                 'Magento\App\ResponseInterface' => 'Magento\TestFramework\Response',
+                'Magento\App\Response\Http' => 'Magento\TestFramework\Response',
             ),
         ));
 
@@ -147,4 +150,12 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
         return $this->_pluginList;
     }
 
+    /**
+     * Override method in while running integration tests to prevent getting Exception
+     *
+     * @param \Magento\ObjectManager $objectManager
+     */
+    protected function configureDirectories(\Magento\ObjectManager $objectManager)
+    {
+    }
 }

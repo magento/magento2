@@ -53,17 +53,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         }
         $cacheState->persist();
 
-        /** @var \Magento\Filesystem $filesystem */
+        /** @var \Magento\App\Filesystem $filesystem */
         $filesystem = $this->_objectManager->create(
-            'Magento\Filesystem',
+            'Magento\App\Filesystem',
             array(
                 'directoryList' => $this->_objectManager->create(
-                        'Magento\Filesystem\DirectoryList',
+                        'Magento\App\Filesystem\DirectoryList',
                         array(
                             'root' => BP,
                             'directories' => array(
-                                \Magento\Filesystem::MODULES => array('path' => __DIR__ . '/_files'),
-                                \Magento\Filesystem::CONFIG => array('path' => __DIR__ . '/_files'),
+                                \Magento\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files'),
+                                \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files'),
                             )
                         )
                 )

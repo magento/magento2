@@ -59,12 +59,12 @@ class Loader
     protected $_idAttributes = array('/config/resource' => 'name', '/config/connection' => 'name');
 
     /**
-     * @param \Magento\Filesystem\DirectoryList $dirList
+     * @param \Magento\App\Filesystem\DirectoryList $dirList
      * @param string $customFile
      */
-    public function __construct(\Magento\Filesystem\DirectoryList $dirList, $customFile = null)
+    public function __construct(\Magento\App\Filesystem\DirectoryList $dirList, $customFile = null)
     {
-        $this->_dir = $dirList->getDir(\Magento\Filesystem::CONFIG);
+        $this->_dir = $dirList->getDir(\Magento\App\Filesystem::CONFIG_DIR);
         $this->_customFile = $customFile;
     }
 

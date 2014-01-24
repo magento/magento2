@@ -388,9 +388,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $filesystem = $objectManager->create('Magento\Filesystem');
+        $filesystem = $objectManager->create('Magento\App\Filesystem');
 
-        $directoryWrite = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $directoryWrite = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
 
         $result = $this->_entityAdapter
             ->setSource(\Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite))
@@ -479,8 +479,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $filesystem = $objectManager->create('Magento\Filesystem');
-        $directoryWrite = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $filesystem = $objectManager->create('Magento\App\Filesystem');
+        $directoryWrite = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
         $result = $this->_entityAdapter
             ->setSource(\Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite))
             ->isDataValid();

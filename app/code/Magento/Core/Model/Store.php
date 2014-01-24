@@ -276,7 +276,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -312,7 +312,7 @@ class Store extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Url $url
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Config $coreConfig
      * @param \Magento\Core\Model\Resource\Store $resource
@@ -331,7 +331,7 @@ class Store extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Url $url,
         \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Config $coreConfig,
         \Magento\Core\Model\Resource\Store $resource,
@@ -568,7 +568,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->filesystem->getUri(\Magento\Filesystem::PUB_LIB);
+                            . $this->filesystem->getUri(\Magento\App\Filesystem::PUB_LIB_DIR);
                     }
                     break;
 
@@ -577,7 +577,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->filesystem->getUri(\Magento\Filesystem::STATIC_VIEW);
+                            . $this->filesystem->getUri(\Magento\App\Filesystem::STATIC_VIEW_DIR);
                     }
                     break;
 
@@ -586,7 +586,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                     $url = $this->getConfig($path);
                     if (!$url) {
                         $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->filesystem->getUri(\Magento\Filesystem::PUB_VIEW_CACHE);
+                            . $this->filesystem->getUri(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR);
                     }
                     break;
 
@@ -597,7 +597,7 @@ class Store extends \Magento\Core\Model\AbstractModel
                         $url = $this->getConfig($path);
                         if (!$url) {
                             $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                                . $this->filesystem->getUri(\Magento\Filesystem::MEDIA);
+                                . $this->filesystem->getUri(\Magento\App\Filesystem::MEDIA_DIR);
                         }
                     }
                     break;
@@ -655,16 +655,16 @@ class Store extends \Magento\Core\Model\AbstractModel
      * If we use Database file storage and server doesn't support rewrites (.htaccess in media folder)
      * we have to put name of fetching media script exactly into URL
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param bool $secure
      * @return string|bool
      */
-    protected function _getMediaScriptUrl(\Magento\Filesystem $filesystem, $secure)
+    protected function _getMediaScriptUrl(\Magento\App\Filesystem $filesystem, $secure)
     {
         if (!$this->getConfig(self::XML_PATH_USE_REWRITES)
             && $this->_coreFileStorageDatabase->checkDbUsage()
         ) {
-            return $this->getBaseUrl(self::URL_TYPE_WEB, $secure) . $filesystem->getUri(\Magento\Filesystem::PUB)
+            return $this->getBaseUrl(self::URL_TYPE_WEB, $secure) . $filesystem->getUri(\Magento\App\Filesystem::PUB_DIR)
             . '/' . self::MEDIA_REWRITE_SCRIPT;
         }
         return false;

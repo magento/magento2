@@ -59,6 +59,19 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetRelativePath()
+    {
+        $dir = $this->getDirectoryInstance('foo');
+        $this->assertEquals(
+            '',
+            $dir->getRelativePath()
+        );
+        $this->assertEquals(
+            'bar',
+            $dir->getRelativePath(__DIR__ . '/../_files/foo/bar')
+        );
+    }
+
     /**
      * Test for read method
      *
@@ -271,6 +284,32 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test readFile
+     *
+     * @dataProvider readFileProvider
+     * @param string $path
+     * @param string $content
+     */
+    public function testReadFile($path, $content)
+    {
+        $directory = $this->getDirectoryInstance('');
+        $this->assertEquals($content, $directory->readFile($path));
+    }
+
+    /**
+     * Data provider for testReadFile
+     *
+     * @return array
+     */
+    public function readFileProvider()
+    {
+        return array(
+            array('popup.csv', 'var myData = 5;'),
+            array('data.csv', '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL)
+        );
+    }
+
+    /**
      * Get readable file instance
      * Get full path for files located in _files directory
      *
@@ -286,7 +325,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
         $directoryFactory = $objectManager->create('Magento\Filesystem\Directory\ReadFactory');
         return $directoryFactory->create($config,
-            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\Filesystem\DirectoryList')));
+            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\App\Filesystem\DirectoryList')));
     }
 
     /**
@@ -295,12 +334,14 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testReadRecursively()
     {
         $expected = array(
-            'directory/read.txt',
-            'directory',
-            'directory.txt'
+            'bar/baz/file_one.txt',
+            'bar',
+            'bar/baz',
+            'bar/file_two.txt',
+            'file_three.txt'
         );
 
-        $dir = $this->getDirectoryInstance('recursively');
+        $dir = $this->getDirectoryInstance('foo');
         $actual = $dir->readRecursively('');
         $this->assertNotEquals($expected, $actual);
         sort($expected);

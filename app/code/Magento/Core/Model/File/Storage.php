@@ -26,7 +26,7 @@
 
 namespace Magento\Core\Model\File;
 
-use \Magento\Filesystem;
+use \Magento\App\Filesystem;
 
 /**
  * Class Storage
@@ -96,7 +96,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -109,7 +109,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\File\Storage\Flag $fileFlag
      * @param \Magento\Core\Model\File\Storage\FileFactory $fileFactory
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $databaseFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -123,7 +123,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\File\Storage\Flag $fileFlag,
         \Magento\Core\Model\File\Storage\FileFactory $fileFactory,
         \Magento\Core\Model\File\Storage\DatabaseFactory $databaseFactory,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -298,7 +298,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
     public function getScriptConfig()
     {
         $config = array();
-        $config['media_directory'] = $this->filesystem->getPath(Filesystem::MEDIA);
+        $config['media_directory'] = $this->filesystem->getPath(Filesystem::MEDIA_DIR);
 
         $allowedResources = $this->_coreConfig->getValue(self::XML_PATH_MEDIA_RESOURCE_WHITELIST, 'default');
         foreach ($allowedResources as $allowedResource) {

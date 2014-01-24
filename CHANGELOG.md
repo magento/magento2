@@ -1,3 +1,26 @@
+2.0.0.0-dev62
+=============
+* Modularity improvements:
+  * Moved all Grouped Product functionality to newly created module GroupedProduct
+  * Moved Multishipping functionality to newly created module Multishipping
+  * Extracted Product duplication behavior from Product model to Product\Copier model
+  * Replaced event "catalog_model_product_duplicate" with composite Product\Copier model
+  * Replaced event "catalog_product_prepare_save" with controller product initialization helper that can be customozed via plugins
+  * Consolidated Authorize.Net functionality in single module Authorizenet
+  * Eliminated dependency of Sales module on Shipping and Usa modules
+  * Eliminated dependency of Shipping module on Customer module
+  * Improved accuracy and quality of Module Dependency Test
+* Fixed bugs:
+  * Fixed an issue when order was sent to PayPal in USD regardless of currency used during order creation
+  * Fixed an issue with 404 error when clicking any button on a Recurring Billing Profile in the backend
+  * Fixed an issue with synchronization with Google Shopping on product update caused by missed service property
+  * Fixed ability to submit order in the backend when Authorize.Net Direct Post is used
+  * Fixed an issue with notice that _attribute_set column is missing during Import/Export
+* Removed the deprecated service-calls and data source functionality
+* Request\Response workflow improvements:
+  * Added Console\Response
+  * Changed behavior of AppInterface to return ResponseInterface instead of sending it
+
 2.0.0.0-dev61
 =============
 * Introduced a new layout block attribute - cacheable
@@ -147,6 +170,10 @@
   * Fixed date resetting to 1 Jan 1970 after saving a design change in the admin panel in case date format is DD/MM/YY
   * Fixed CAPTCHA on multi-address checkout flow
   * Fixed view files population tool
+  * Fixed DHL functionality of generation shipping labels
+  * Fixed target rule if it is applied for specific customer segment
+  * Fixed product importing that cleared price and weight
+  * Fixed fatal error when a file reference is added to HTML head
 * GitHub requests:
   * [#122](https://github.com/magento/magento2/pull/122) -- Added support of federal units of Brazil with 27 states
   * [#184](https://github.com/magento/magento2/issues/184) -- Removed unused blocks and methods in Magento_Wishlist module

@@ -29,6 +29,8 @@
             <module name="Magento_Core"/>
             <!--TODO: Dependency on Magento_User is temporary and should be eliminated when ACL is made global-->
             <module name="Magento_User"/>
+            <module name="Magento_Backend"/>
+            <module name="Magento_Service"/>
         </depends>
     </module>
 </config>

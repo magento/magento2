@@ -46,7 +46,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory
      */
-    protected $_attrOptCollFactory;
+    protected $_attrOptionCollectionFactory;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
@@ -55,16 +55,16 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory,
+        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
     ) {
         $this->_coreData = $coreData;
-        $this->_attrOptCollFactory = $attrOptCollFactory;
+        $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;
     }
 
@@ -85,7 +85,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $this->_optionsDefault = array();
         }
         if (!isset($this->_options[$storeId])) {
-            $collection = $this->_attrOptCollFactory->create()
+            $collection = $this->_attrOptionCollectionFactory->create()
                 ->setPositionOrder('asc')
                 ->setAttributeFilter($this->getAttribute()->getId())
                 ->setStoreFilter($this->getAttribute()->getStoreId())

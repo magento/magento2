@@ -206,7 +206,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->getMassactionBlock()->addItem('print_shipping_label', array(
             'label' => __('Print Shipping Labels'),
-            'url' => $this->getUrl('sales/order_shipment/massPrintShippingLabel'),
+            'url' => $this->getUrl('adminhtml/order_shipment/massPrintShippingLabel'),
         ));
 
         return $this;

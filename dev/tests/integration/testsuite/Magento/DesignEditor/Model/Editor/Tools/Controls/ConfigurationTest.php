@@ -65,13 +65,14 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testLoadConfigurations($type, $controlName, $controlData)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Filesystem $filesystem */
-        $relativePath = $objectManager->get('Magento\Filesystem')->getDirectoryRead(\Magento\Filesystem::ROOT)
+        /** @var \Magento\App\Filesystem $filesystem */
+        $relativePath = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR)
             ->getRelativePath(__DIR__ . '/../../../_files/design');
-        /** @var \Magento\Filesystem\DirectoryList $directoryList */
-        $directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
-        $directoryList->addDirectory(\Magento\Filesystem::ROOT, array('path' => $relativePath));
-        $directoryList->addDirectory(\Magento\Filesystem::THEMES, array('path' => $relativePath));
+        /** @var \Magento\App\Filesystem\DirectoryList $directoryList */
+        $directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
+        $directoryList->addDirectory(\Magento\App\Filesystem::ROOT_DIR, array('path' => $relativePath));
+        $directoryList->addDirectory(\Magento\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
         $designTheme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\View\DesignInterface')
             ->getDesignTheme();

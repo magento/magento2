@@ -49,7 +49,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_configData = array();
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -78,14 +78,14 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
         \Magento\App\RequestInterface $request,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Message\ManagerInterface $messageManager
     ) {
@@ -93,8 +93,8 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_request = $request;
         $this->_storeManager = $storeManager;
         $this->_filesystem = $filesystem;
-        $this->_pubDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::PUB_LIB);
-        $this->_configDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::CONFIG);
+        $this->_pubDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::PUB_LIB_DIR);
+        $this->_configDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::CONFIG_DIR);
         $this->messageManager = $messageManager;
     }
 
@@ -119,9 +119,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $data = $this->getConfigData();
 
         $defaults = array(
-            'root_dir' => $this->_filesystem->getPath(\Magento\Filesystem::ROOT),
-            'app_dir'  => $this->_filesystem->getPath(\Magento\Filesystem::APP),
-            'var_dir'  => $this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR),
+            'root_dir' => $this->_filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR),
+            'app_dir'  => $this->_filesystem->getPath(\Magento\App\Filesystem::APP_DIR),
+            'var_dir'  => $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR),
             'base_url' => $this->_request->getDistroBaseUrl(),
         );
         foreach ($defaults as $index => $value) {
@@ -205,7 +205,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     {
         try {
             $staticFile = $this->_findFirstFileRelativePath('', '/.+\.(html?|js|css|gif|jpe?g|png)$/');
-            $staticUrl = $baseUrl . $this->_filesystem->getUri(\Magento\Filesystem::PUB_LIB) . '/' . $staticFile;
+            $staticUrl = $baseUrl . $this->_filesystem->getUri(\Magento\App\Filesystem::PUB_LIB_DIR) . '/' . $staticFile;
             $client = new \Magento\HTTP\ZendClient($staticUrl);
             $response = $client->request('GET');
         } catch (\Exception $e){

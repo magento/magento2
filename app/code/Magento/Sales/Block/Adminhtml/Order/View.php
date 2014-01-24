@@ -296,7 +296,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
     public function getShipUrl()
     {
-        return $this->getUrl('sales/order_shipment/start');
+        return $this->getUrl('adminhtml/order_shipment/start');
     }
 
     public function getCommentUrl()

@@ -43,7 +43,7 @@ class Path
     protected $filename;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -60,17 +60,17 @@ class Path
     /**
      * Constructor
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param $filename
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $filename = \Magento\View\ConfigInterface::CONFIG_FILE_NAME
     ) {
         $this->filesystem           = $filesystem;
         $this->filename             = $filename;
-        $this->mediaDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
-        $this->themeDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\Filesystem::THEMES);
+        $this->mediaDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->themeDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
     }
 
     /**

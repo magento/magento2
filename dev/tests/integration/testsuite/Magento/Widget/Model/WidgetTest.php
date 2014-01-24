@@ -69,8 +69,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\Core\Model\App')
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('magento_backend');
-        $expectedPubFile = $objectManager->get('Magento\Filesystem')
-                ->getPath(\Magento\Filesystem::STATIC_VIEW) . "/adminhtml/magento_backend/en_US/{$expectedFile}";
+        $expectedFilePath = "/adminhtml/magento_backend/en_US/{$expectedFile}";
+        $expectedPubFile = $objectManager->get('Magento\App\Filesystem')
+                ->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR) . $expectedFilePath;
+
         if (file_exists($expectedPubFile)) {
             unlink($expectedPubFile);
         }
@@ -107,8 +109,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function testGetPlaceholderImageUrlAtTheme()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/_files/design')
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
             )
         ));
         $actualFile = $this->testGetPlaceholderImageUrl(

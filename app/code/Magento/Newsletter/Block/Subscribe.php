@@ -55,6 +55,7 @@ class Subscribe extends \Magento\View\Element\Template
     ) {
         parent::__construct($context, $data);
         $this->_newsletterSession = $newsletterSession;
+        $this->_isScopePrivate = true;
     }
 
     public function getSuccessMessage()

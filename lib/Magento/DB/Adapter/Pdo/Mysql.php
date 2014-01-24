@@ -143,7 +143,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Filesystem class
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -228,13 +228,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     protected $dateTime;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param array $config
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Stdlib\String $string,
         \Magento\Stdlib\DateTime $dateTime,
         array $config = array()
@@ -1419,7 +1419,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     {
         $str = '## ' . date('Y-m-d H:i:s') . "\r\n" . $str;
 
-        $stream = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT)->openFile($this->_debugFile, 'a');
+        $stream = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)->openFile($this->_debugFile, 'a');
         $stream->lock();
         $stream->write($str);
         $stream->unlock();

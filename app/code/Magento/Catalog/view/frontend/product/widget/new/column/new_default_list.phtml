@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php if (($items$_products = $this->getProductCollection()) && $_products->getSize()): ?>
+<?php if (($_products = $this->getProductCollection()) && $_products->getSize()): ?>
     <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');?>
     <div class="block widget new minilist">
         <div class="title">
@@ -51,7 +51,22 @@
                             <div class="product actions">
                                 <div class="primary">
                                     <?php if($_product->isSaleable()): ?>
-                                        <a href="<?php echo $this->getAddToCartUrl($_product) ?>" class="action tocart">
+                                        <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
+                                            <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart"
+                                                    data-mage-init="{redirectUrl: {url: '<?php echo $this->getAddToCartUrl($_product) ?>'}}">
+                                                <span><?php echo __('Add to Cart') ?></span>
+                                            </button>
+                                        <?php else: ?>
+                                            <?php
+                                                $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                                $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
+                                        ?>
+                                        <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart"
+                                                data-post='<?php echo $postData; ?>'>
+                                            <span><?php echo __('Add to Cart') ?></span>
+                                        </button>
+                                    <?php endif; ?>
+                                    <a href="<?php echo $this->getAddToCartUrl($_product) ?>" class="action tocart">
                                             <span><?php echo __('Add to Cart') ?></span>
                                         </a>
                                     <?php else: ?>

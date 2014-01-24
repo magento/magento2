@@ -92,15 +92,15 @@ class Result
     /**
      * Add a rate to the result
      *
-     * @param \Magento\Shipping\Model\Rate\Result\AbstractResult|\Magento\Shipping\Model\Rate\Result $result
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\AbstractResult|\Magento\Shipping\Model\Rate\Result $result
      * @return \Magento\Shipping\Model\Rate\Result
      */
     public function append($result)
     {
-        if ($result instanceof \Magento\Shipping\Model\Rate\Result\Error) {
+        if ($result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
             $this->setError(true);
         }
-        if ($result instanceof \Magento\Shipping\Model\Rate\Result\AbstractResult) {
+        if ($result instanceof \Magento\Sales\Model\Quote\Address\RateResult\AbstractResult) {
             $this->_rates[] = $result;
         }
         elseif ($result instanceof \Magento\Shipping\Model\Rate\Result) {
@@ -126,7 +126,7 @@ class Result
      * Return rate by id in array
      *
      * @param int $id
-     * @return \Magento\Shipping\Model\Rate\Result\Method|null
+     * @return \Magento\Sales\Model\Quote\Address\RateResult\Method|null
      */
     public function getRateById($id)
     {
@@ -174,7 +174,7 @@ class Result
     /**
      * Get cheapest rate
      *
-     * @return null|\Magento\Shipping\Model\Rate\Result\Method
+     * @return null|\Magento\Sales\Model\Quote\Address\RateResult\Method
      */
     public function getCheapestRate()
     {
@@ -199,7 +199,7 @@ class Result
         if (!is_array($this->_rates) || !count($this->_rates)) {
             return $this;
         }
-        /* @var $rate \Magento\Shipping\Model\Rate\Result\Method */
+        /* @var $rate \Magento\Sales\Model\Quote\Address\RateResult\Method */
         foreach ($this->_rates as $i => $rate) {
             $tmp[$i] = $rate->getPrice();
         }

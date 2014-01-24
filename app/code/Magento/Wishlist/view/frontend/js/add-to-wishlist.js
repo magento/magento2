@@ -31,19 +31,23 @@
             customOptionsInfo: '.product-custom-option'
         },
         _create: function () {
-            this.addToWishlist();
+            this._bind();
         },
-        addToWishlist: function () {
-            this._on({
-                'click [data-action="add-to-wishlist"]': function (event) {
-                    var url = $(event.target).closest('a').attr('href'),
-                        productInfo = this.options[this.options.productType + 'Info'],
-                        additionalData = $(this.options.customOptionsInfo).serialize();
-                    if (productInfo !== undefined) {
-                        additionalData += $(productInfo).serialize();
-                    }
-                    $(event.target).closest('a').attr('href', url + (url.indexOf('?') == -1 ? '?' : '&') + additionalData);
-                }
+        _bind: function() {
+            var changeCustomOption = 'change ' + this.options.customOptionsInfo,
+                changeProductInfo = 'change ' + this.options[this.options.productType + 'Info'],
+                events = {};
+            events[changeCustomOption] = '_updateWishlistData';
+            events[changeProductInfo] = '_updateWishlistData';
+            this._on(events);
+        },
+        _updateWishlistData: function(event) {
+            var dataToAdd = {};
+            dataToAdd[$(event.currentTarget).attr('name')] = $(event.currentTarget).val();
+            $('[data-action="add-to-wishlist"]').each(function(index, element) {
+                var params = $(element).data('post');
+                params.data = $.extend({}, params.data, dataToAdd);
+                $(element).data('post', params);
             });
         }
     });

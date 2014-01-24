@@ -23,36 +23,47 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
-class Response
+use Magento\App\Response\Http;
+
+class Response extends Http
 {
     /**
-     * Application object manager
-     *
-     * @var \Magento\ObjectManager
+     * @var \Magento\File\Transfer\Adapter\Http
      */
-    protected $_objectManager;
+    protected $_transferAdapter;
 
-    public function __construct(\Magento\ObjectManager $objectManager = null)
+    /**
+     * Full path to file
+     *
+     * @var string
+     */
+    protected $_filePath;
+
+    /**
+     * @param \Magento\File\Transfer\Adapter\Http $transferAdapter
+     */
+    public function __construct(\Magento\File\Transfer\Adapter\Http $transferAdapter)
     {
-        $this->_objectManager = $objectManager;
+        $this->_transferAdapter = $transferAdapter;
     }
 
     /**
-     * Send the file to client
-     *
-     * @param string|array $filePath
+     * Send response
      */
-    public function sendFile($filePath)
+    public function sendResponse()
     {
-        $transfer = $this->_objectManager->create('Magento\File\Transfer\Adapter\Http');
-        $transfer->send($filePath);
+        if ($this->_filePath && $this->getHttpResponseCode() == 200) {
+            $this->_transferAdapter->send($this->_filePath);
+        } else {
+            parent::sendResponse();
+        }
     }
 
     /**
-     * Return page header
+     * @param string $path
      */
-    public function sendNotFound()
+    public function setFilePath($path)
     {
-        header('HTTP/1.0 404 Not Found');
+        $this->_filePath = $path;
     }
 }

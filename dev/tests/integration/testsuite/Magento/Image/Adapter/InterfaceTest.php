@@ -586,19 +586,21 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider createPngFromStringDataProvider
      *
-     * @param array $pixe1
+     * @param array $pixel1
      * @param array $expectedColor1
-     * @param array $pixe2
+     * @param array $pixel2
      * @param array $expectedColor2
      * @param string $adapterType
      */
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
+        $path = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem')
+                ->getPath(\Magento\App\Filesystem::ROOT_DIR) .
+            '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf';
         $adapter->createPngFromString(
             'T',
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')->getPath()
-                . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf'
+            $path
         );
         $adapter->refreshImageDimensions();
 

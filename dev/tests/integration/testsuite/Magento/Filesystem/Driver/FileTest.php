@@ -63,12 +63,15 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadDirectoryRecursively()
     {
-        $expected = array(
-            $this->getTestPath('recursively/directory'),
-            $this->getTestPath('recursively/directory.txt'),
-            $this->getTestPath('recursively/directory/read.txt')
+        $paths = array(
+            'foo/bar',
+            'foo/bar/baz',
+            'foo/bar/baz/file_one.txt',
+            'foo/bar/file_two.txt',
+            'foo/file_three.txt'
         );
-        $actual = $this->driver->readDirectoryRecursively($this->getTestPath('recursively'));
+        $expected = array_map(array('self', 'getTestPath'), $paths);
+        $actual = $this->driver->readDirectoryRecursively($this->getTestPath('foo'));
         sort($actual);
         $this->assertEquals($expected, $actual);
     }

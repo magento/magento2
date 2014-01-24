@@ -60,6 +60,7 @@ class Link extends \Magento\View\Element\Template
         $this->paymentFactory = $paymentFactory;
         $this->checkoutSession = $checkoutSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     public function getImageStyle()

@@ -60,7 +60,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_appState;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -83,7 +83,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getHttpHost')->will($this->returnValue('init.host'));
         $this->_appState = $this->getMock('\Magento\App\State', array('isInstalled'), array(), '', false, false);
         $this->_appState->expects($this->atLeastOnce())->method('isInstalled')->will($this->returnValue(true));
-        $this->_filesystem = $this->getMock('\Magento\Filesystem', array(), array(), '', false, false);
+        $this->_filesystem = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false, false);
 
         $this->config = new \Magento\Core\Model\Session\Config(
             $this->_configMock,

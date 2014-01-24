@@ -80,6 +80,7 @@ class AbstractCart extends \Magento\View\Element\Template
         $this->_checkoutSession = $checkoutSession;
         $this->_catalogData = $catalogData;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

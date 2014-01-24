@@ -62,6 +62,7 @@ class Login extends \Magento\View\Element\Template
         $this->_customerHelper = $customerHelper;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     protected function _prepareLayout()

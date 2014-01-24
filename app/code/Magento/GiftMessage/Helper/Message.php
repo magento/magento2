@@ -120,9 +120,7 @@ class Message extends \Magento\Core\Helper\Data
      */
     public function getInline($type, \Magento\Object $entity, $dontDisplayContainer = false)
     {
-        if (!in_array($type, array('onepage_checkout', 'multishipping_address'))
-            && !$this->isMessagesAvailable($type, $entity)
-        ) {
+        if (!$this->isMessagesAvailable($type, $entity)) {
             return '';
         }
         return $this->_layoutFactory->create()->createBlock('Magento\GiftMessage\Block\Message\Inline')

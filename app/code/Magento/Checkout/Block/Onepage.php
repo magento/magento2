@@ -36,6 +36,38 @@ namespace Magento\Checkout\Block;
 class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $resourceSession
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $resourceSession,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
+        array $data = array()
+    ) {
+        parent::__construct(
+            $context,
+            $coreData,
+            $configCacheType,
+            $customerSession,
+            $resourceSession,
+            $countryCollFactory,
+            $regionCollFactory,
+            $data
+        );
+        $this->_isScopePrivate = true;
+    }
+    /**
      * Get 'one step checkout' step data
      *
      * @return array

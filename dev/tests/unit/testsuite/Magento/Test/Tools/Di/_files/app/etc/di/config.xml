@@ -30,7 +30,6 @@
     <type name="Magento\App\Action\Context">
         <param name="layoutFactory"><instance type="customLayoutFactory" /></param>
         <plugin name="first" type="Magento\Core\Model\Action\Plugin" />
-        <plugin name="second" type="Custom_PageCache_Model_Action_Plugin" />
     </type>
     <virtualType name="customStoreManagerProxy" type="Magento\Core\Model\StoreManager\Proxy" />
     <virtualType name="customLayoutFactory" type="Magento\Core\Model\Layout\Factory" />

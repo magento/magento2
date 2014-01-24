@@ -321,7 +321,7 @@ class Quote extends \Magento\Backend\App\Action
     /**
      * Export coupon codes as excel xml file
      *
-     * @return void
+     * @return \Magento\App\ResponseInterface|null
      */
     public function exportCouponsXmlAction()
     {
@@ -332,7 +332,7 @@ class Quote extends \Magento\Backend\App\Action
             $content = $this->_view->getLayout()
                 ->createBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid')
                 ->getExcelFile($fileName);
-            return $this->_fileFactory->create($fileName, $content, \Magento\Filesystem::VAR_DIR);
+            return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
             return;
@@ -342,7 +342,7 @@ class Quote extends \Magento\Backend\App\Action
     /**
      * Export coupon codes as CSV file
      *
-     * @return void
+     * @return \Magento\App\ResponseInterface|null
      */
     public function exportCouponsCsvAction()
     {
@@ -353,7 +353,7 @@ class Quote extends \Magento\Backend\App\Action
             $content = $this->_view->getLayout()
                 ->createBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid')
                 ->getCsvFile();
-            return $this->_fileFactory->create($fileName, $content, \Magento\Filesystem::VAR_DIR);
+            return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
             return;

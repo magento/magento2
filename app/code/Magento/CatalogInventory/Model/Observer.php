@@ -240,40 +240,6 @@ class Observer
     }
 
     /**
-     * Copy product inventory data (used for product duplicate functionality)
-     *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
-     */
-    public function copyInventoryData($observer)
-    {
-        /** @var \Magento\Catalog\Model\Product $currentProduct */
-        $currentProduct = $observer->getEvent()->getCurrentProduct();
-        /** @var \Magento\Catalog\Model\Product $newProduct */
-        $newProduct = $observer->getEvent()->getNewProduct();
-
-        $newProduct->unsStockItem();
-        $stockData = array(
-            'use_config_min_qty'        => 1,
-            'use_config_min_sale_qty'   => 1,
-            'use_config_max_sale_qty'   => 1,
-            'use_config_backorders'     => 1,
-            'use_config_notify_stock_qty'=> 1
-        );
-        if ($currentStockItem = $currentProduct->getStockItem()) {
-            $stockData += array(
-                'use_config_enable_qty_inc'  => $currentStockItem->getData('use_config_enable_qty_inc'),
-                'enable_qty_increments'             => $currentStockItem->getData('enable_qty_increments'),
-                'use_config_qty_increments'         => $currentStockItem->getData('use_config_qty_increments'),
-                'qty_increments'                    => $currentStockItem->getData('qty_increments'),
-            );
-        }
-        $newProduct->setStockData($stockData);
-
-        return $this;
-    }
-
-    /**
      * Prepare stock item data for save
      *
      * @param \Magento\CatalogInventory\Model\Stock\Item $item
@@ -561,7 +527,7 @@ class Observer
             $productTypeCustomOption = $quoteItem->getProduct()->getCustomOption('product_type');
             if (!is_null($productTypeCustomOption)) {
                 // Check if product related to current item is a part of grouped product
-                if ($productTypeCustomOption->getValue() == \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE) {
+                if ($productTypeCustomOption->getValue() == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
                     $stockItem->setProductName($quoteItem->getProduct()->getName());
                     $stockItem->setIsChildItem(true);
                 }
