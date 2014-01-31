@@ -70,7 +70,7 @@ function recalculateTax()
 
         var spanValue = '';
         if (rate != 0) {
-            spanValue = ' ' + formatCurrency(input.value/(100+rate)*rate, priceFormat);
+            spanValue = ' ' + formatCurrency((input.value/100)*rate, priceFormat);
         }
         span.innerHTML = spanValue;
     }
