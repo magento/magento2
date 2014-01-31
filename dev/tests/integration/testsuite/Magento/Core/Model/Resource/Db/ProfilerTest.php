@@ -61,7 +61,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected function _getConnectionRead()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $localConfig = $objectManager->get('Magento\App\Config');
+        $localConfig = $objectManager->get('Magento\App\Arguments');
         $connectionConfig = $localConfig->getConnection('default');
         $connectionConfig['profiler'] = array(
             'class' => 'Magento\Core\Model\Resource\Db\Profiler',

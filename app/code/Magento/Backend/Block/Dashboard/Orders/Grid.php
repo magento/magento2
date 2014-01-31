@@ -48,7 +48,6 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
@@ -56,7 +55,6 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Module\Manager $moduleManager,
         \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
@@ -64,7 +62,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     ) {
         $this->_moduleManager = $moduleManager;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     protected function _construct()

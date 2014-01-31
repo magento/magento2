@@ -41,9 +41,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <user_setup>Magento\User\Model\Resource\Setup</user_setup>
-            </value>
+            <array>
+                <item key="user_setup"><value>Magento\User\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Acl\Builder">

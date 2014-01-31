@@ -90,7 +90,7 @@ class Data implements \Magento\Config\DataInterface
      * Get config value by key
      *
      * @param string $path
-     * @param null $default
+     * @param mixed $default
      * @return mixed
      */
     public function get($path = null, $default = null)

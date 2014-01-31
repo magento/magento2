@@ -65,20 +65,35 @@ class Config
      */
     protected $_soapOperations;
 
+    /** @var \Magento\Webapi\Helper\Data */
+    protected $_helper;
+
+    /** @var \Magento\Webapi\Model\Config\ClassReflector */
+    protected $_classReflector;
+
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Webapi\Model\Config $config
+     * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
+     * @param \Magento\Webapi\Helper\Data $helper
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\App\Filesystem $filesystem,
-        \Magento\Webapi\Model\Config $config
+        \Magento\Webapi\Model\Config $config,
+        \Magento\Webapi\Model\Config\ClassReflector $classReflector,
+        \Magento\Webapi\Helper\Data $helper
     ) {
         // TODO: Check if Service specific XSD is already cached
         $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         $this->_config = $config;
         $this->_objectManager = $objectManager;
+        $this->_helper = $helper;
+        $this->_classReflector = $classReflector;
+        $this->_initServicesMetadata();
     }
 
     /**
@@ -118,29 +133,37 @@ class Config
 
     /**
      * Collect the list of services with their operations available in SOAP.
-     * The list of services is taken from webapi.xml configuration files.
-     * The list of methods in contrast to REST is taken from PHP Interface using reflection.
      *
      * @return array
      */
-    protected function _getSoapServices()
+    protected function _initServicesMetadata()
     {
         // TODO: Implement caching if this approach is approved
         if (is_null($this->_soapServices)) {
             $this->_soapServices = array();
             foreach ($this->_config->getServices() as $serviceData) {
                 $serviceClass = $serviceData[Converter::KEY_SERVICE_CLASS];
+                $serviceName = $this->_helper->getServiceName($serviceClass);
                 foreach ($serviceData[Converter::KEY_SERVICE_METHODS] as $methodMetadata) {
                     // TODO: Simplify the structure in SOAP. Currently it is unified in SOAP and REST
                     $methodName = $methodMetadata[Converter::KEY_SERVICE_METHOD];
-                    $this->_soapServices[$serviceClass]['methods'][$methodName] = array(
+                    $this->_soapServices[$serviceName]['methods'][$methodName] = array(
                         self::KEY_METHOD => $methodName,
                         self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_IS_SECURE],
                         self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_IS_SECURE],
                         self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES]
                     );
-                    $this->_soapServices[$serviceClass][self::KEY_CLASS] = $serviceClass;
+                    $this->_soapServices[$serviceName][self::KEY_CLASS] = $serviceClass;
                 };
+                $reflectedMethodsMetadata = $this->_classReflector->reflectClassMethods(
+                    $serviceClass,
+                    $this->_soapServices[$serviceName]['methods']
+                );
+                // TODO: Consider service documentation extraction via reflection
+                $this->_soapServices[$serviceName]['methods'] = array_merge_recursive(
+                    $this->_soapServices[$serviceName]['methods'],
+                    $reflectedMethodsMetadata
+                );
             };
         }
         return $this->_soapServices;
@@ -182,47 +205,11 @@ class Config
     {
         $services = array();
         foreach ($requestedServices as $serviceName) {
-            foreach ($this->_getSoapServices() as $serviceData) {
-                $serviceWithVersion = $this->getServiceName($serviceData[self::KEY_CLASS]);
-                if ($serviceWithVersion === $serviceName) {
-                    $services[] = $serviceData;
-                }
+            if (isset($this->_soapServices[$serviceName])) {
+                $services[] = $this->_soapServices[$serviceName];
             }
         }
         return $services;
-    }
-
-    /**
-     * Load and return Service XSD for the provided Service Class
-     *
-     * @param $serviceClass
-     * @return \DOMDocument
-     */
-    public function getServiceSchemaDOM($serviceClass)
-    {
-        // TODO: Change pattern to match interface instead of class. Think about sub-services.
-        if (!preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $serviceClass, $matches)) {
-            // TODO: Generate exception when error handling strategy is defined
-        }
-
-        $vendorName = $matches[1];
-        $moduleName = $matches[2];
-        /** Convert "_Catalog_Attribute" into "Catalog/Attribute" */
-        $servicePath = str_replace('_', '/', ltrim($matches[3], '_'));
-        $version = $matches[4];
-        $schemaPath = "{$vendorName}/{$moduleName}/etc/schema/{$servicePath}{$version}.xsd";
-
-        if ($this->modulesDirectory->isFile($schemaPath)) {
-            $schema = $this->modulesDirectory->readFile($schemaPath);
-        } else {
-            $schema = '';
-        }
-
-        // TODO: Should happen only once the cache is in place
-        $serviceSchema = $this->_objectManager->create('DOMDocument');
-        $serviceSchema->loadXML($schema);
-
-        return $serviceSchema;
     }
 
     /**
@@ -234,63 +221,23 @@ class Config
      */
     public function getSoapOperation($interfaceName, $methodName)
     {
-        $serviceName = $this->getServiceName($interfaceName);
+        $serviceName = $this->_helper->getServiceName($interfaceName);
         $operationName = $serviceName . ucfirst($methodName);
         return $operationName;
     }
 
     /**
-     * Translate service interface name into service name.
-     * Example:
-     * <pre>
-     * - \Magento\Customer\Service\CustomerV1Interface         => customer          // $preserveVersion == false
-     * - \Magento\Customer\Service\Customer\AddressV1Interface => customerAddressV1 // $preserveVersion == true
-     * - \Magento\Catalog\Service\ProductV2Interface           => catalogProductV2  // $preserveVersion == true
-     * </pre>
+     * Retrieve specific service interface data.
      *
-     * @param string $interfaceName
-     * @param bool $preserveVersion Should version be preserved during interface name conversion into service name
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    public function getServiceName($interfaceName, $preserveVersion = true)
-    {
-        $serviceNameParts = $this->getServiceNameParts($interfaceName, $preserveVersion);
-        return lcfirst(implode('', $serviceNameParts));
-    }
-
-    /**
-     * Identify the list of service name parts including sub-services using class name.
-     *
-     * Examples of input/output pairs: <br/>
-     * - 'Magento\Customer\Service\Customer\AddressV1Interface' => array('Customer', 'Address', 'V1') <br/>
-     * - 'Vendor\Customer\Service\Customer\AddressV1Interface' => array('VendorCustomer', 'Address', 'V1) <br/>
-     * - 'Magento\Catalog\Service\ProductV2Interface' => array('CatalogProduct', 'V2')
-     *
-     * @param string $className
-     * @param bool $preserveVersion Should version be preserved during class name conversion into service name
+     * @param string $serviceName
      * @return array
-     * @throws \InvalidArgumentException When class is not valid API service.
+     * @throws \RuntimeException
      */
-    public function getServiceNameParts($className, $preserveVersion = false)
+    public function getServiceMetadata($serviceName)
     {
-        if (preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $className, $matches)) {
-            $moduleNamespace = $matches[1];
-            $moduleName = $matches[2];
-            $moduleNamespace = ($moduleNamespace == 'Magento') ? '' : $moduleNamespace;
-            $serviceNameParts = explode('\\', trim($matches[3], '\\'));
-            if ($moduleName == $serviceNameParts[0]) {
-                /** Avoid duplication of words in service name */
-                $moduleName = '';
-            }
-            $parentServiceName = $moduleNamespace . $moduleName . array_shift($serviceNameParts);
-            array_unshift($serviceNameParts, $parentServiceName);
-            if ($preserveVersion) {
-                $serviceVersion = $matches[4];
-                $serviceNameParts[] = $serviceVersion;
-            }
-            return $serviceNameParts;
+        if (!isset($this->_soapServices[$serviceName]) || !is_array($this->_soapServices[$serviceName])) {
+            throw new \RuntimeException(__('Requested service is not available: "%1"', $serviceName));
         }
-        throw new \InvalidArgumentException(sprintf('The service interface name "%s" is invalid.', $className));
+        return $this->_soapServices[$serviceName];
     }
 }

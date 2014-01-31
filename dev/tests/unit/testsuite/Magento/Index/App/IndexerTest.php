@@ -78,7 +78,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      * @param bool $value
      * @dataProvider executeDataProvider
      */
-    public function testExecute($value)
+    public function testLaunch($value)
     {
         $process = $this->getMock(
             'Magento\Index\Model\Process',
@@ -101,7 +101,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $indexerInterface->expects($this->once())->method('isVisible')->will($this->returnValue(false));
             $process->expects($this->never())->method('reindexEverything');
         }
-        $this->assertEquals($this->_responseMock, $this->_entryPoint->execute());
+        $this->assertEquals($this->_responseMock, $this->_entryPoint->launch());
     }
 
     /**

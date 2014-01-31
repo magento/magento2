@@ -72,7 +72,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Core\Model\App
      */
-    protected $_app;
+    protected $_storeManager;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Factory
@@ -95,7 +95,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_resourceHelper = $this->getMock(
             'Magento\ImportExport\Model\Resource\Helper', array(), array(), '', false
         );
-        $this->_app = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->_collectionFactory = $this->getMock(
             'Magento\ImportExport\Model\Export\Factory', array(), array(), '', false);
         $this->_eavConfig = $this->getMock(
@@ -109,7 +109,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
             $this->_importFactory,
             $this->_resourceHelper,
             $this->_resource,
-            $this->_app,
+            $this->_storeManager,
             $this->_collectionFactory,
             $this->_eavConfig,
             $this->_getModelDependencies()

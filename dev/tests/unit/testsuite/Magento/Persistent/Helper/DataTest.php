@@ -27,7 +27,7 @@ namespace Magento\Persistent\Helper;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var  \Magento\Core\Model\Config|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_modulesReader;
 

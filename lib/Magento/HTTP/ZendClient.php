@@ -42,6 +42,10 @@ class ZendClient extends \Zend_Http_Client
      */
     protected $_urlEncodeBody = true;
 
+    /**
+     * @param null|\Zend_Uri_Http|string $uri
+     * @param null|array $config
+     */
     public function __construct($uri = null, $config = null)
     {
         $this->config['useragent'] = 'Magento\HTTP\ZendClient';
@@ -49,6 +53,9 @@ class ZendClient extends \Zend_Http_Client
         parent::__construct($uri, $config);
     }
 
+    /**
+     * @return $this
+     */
     protected function _trySetCurlAdapter()
     {
         if (extension_loaded('curl')) {
@@ -57,6 +64,10 @@ class ZendClient extends \Zend_Http_Client
         return $this;
     }
 
+    /**
+     * @param null|string $method
+     * @return \Zend_Http_Response
+     */
     public function request($method = null)
     {
         $this->_trySetCurlAdapter();

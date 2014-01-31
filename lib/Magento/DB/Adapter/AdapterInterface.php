@@ -1023,4 +1023,21 @@ interface AdapterInterface
      * @return int
      */
     public function getTransactionLevel();
+
+    /**
+     * Create trigger
+     *
+     * @param \Magento\DB\Ddl\Trigger $trigger
+     * @return \Zend_Db_Statement_Pdo
+     */
+    public function createTrigger(\Magento\DB\Ddl\Trigger $trigger);
+
+    /**
+     * Drop trigger from database
+     *
+     * @param $triggerName
+     * @param null $schemaName
+     * @return mixed
+     */
+    public function dropTrigger($triggerName, $schemaName = null);
 }

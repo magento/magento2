@@ -51,7 +51,6 @@ app/code/Magento/Core/Model/AbstractShell.php
 app/code/Magento/Core/Model/Theme
 app/code/Magento/Core/Model/Theme.php
 app/code/Magento/Core/Model/Url/SecurityInfo.php
-app/code/Magento/Core/Model/Url/SecurityInfoInterface.php
 app/code/Magento/Core/sql/core_setup/upgrade-1.6.0.3-1.6.0.4.php
 app/code/Magento/Cron/Model/Config/Converter
 app/code/Magento/Cron/Model/Config/Reader
@@ -139,4 +138,5 @@ lib/Magento/Stdlib/DateTime.php
 lib/Magento/Object.php
 lib/Magento/App
 lib/Magento/ObjectManager
+lib/Magento/Url/SecurityInfoInterface.php
 lib/Magento/View

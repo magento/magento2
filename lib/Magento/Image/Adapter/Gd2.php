@@ -60,6 +60,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Open image for processing
      *
      * @param string $filename
+     * @return void
      * @throws \OverflowException
      */
     public function open($filename)
@@ -135,9 +136,10 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Save image to specific path.
      * If some folders of path does not exist they will be created
      *
+     * @param null|string $destination
+     * @param null|string $newName
+     * @return void
      * @throws \Exception  if destination path is not writable
-     * @param string $destination
-     * @param string $newName
      */
     public function save($destination = null, $newName = null)
     {
@@ -202,7 +204,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Obtain function name, basing on image type and callback type
      *
      * @param string $callbackType
-     * @param int $fileType
+     * @param null|int $fileType
+     * @param string $unsupportedText
      * @return string
      * @throws \Exception
      */
@@ -331,8 +334,9 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Change the image size
      *
-     * @param int $frameWidth
-     * @param int $frameHeight
+     * @param null|int $frameWidth
+     * @param null|int $frameHeight
+     * @return void
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -371,6 +375,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Rotate image on specific angle
      *
      * @param int $angle
+     * @return void
      */
     public function rotate($angle)
     {
@@ -386,6 +391,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * @param int $positionY
      * @param int $opacity
      * @param bool $tile
+     * @return void
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
@@ -566,6 +572,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Checks required dependencies
      *
+     * @return void
      * @throws \Exception if some of dependencies are missing
      */
     public function checkDependencies()

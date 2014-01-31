@@ -26,14 +26,14 @@
 <config>
     <type name="Magento\AdminNotification\Model\System\MessageList">
         <param name="messages">
-            <value>
-                <baseurl>Magento\AdminNotification\Model\System\Message\Baseurl</baseurl>
-                <security>Magento\AdminNotification\Model\System\Message\Security</security>
-                <cacheOutdated>Magento\AdminNotification\Model\System\Message\CacheOutdated</cacheOutdated>
-                <survey>Magento\AdminNotification\Model\System\Message\Survey</survey>
-                <media_synchronization_error>Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error</media_synchronization_error>
-                <media_synchronization_success>Magento\AdminNotification\Model\System\Message\Media\Synchronization\Success</media_synchronization_success>
-            </value>
+            <array>
+                <item key="baseurl"><value>Magento\AdminNotification\Model\System\Message\Baseurl</value></item>
+                <item key="security"><value>Magento\AdminNotification\Model\System\Message\Security</value></item>
+                <item key="cacheOutdated"><value>Magento\AdminNotification\Model\System\Message\CacheOutdated</value></item>
+                <item key="survey"><value>Magento\AdminNotification\Model\System\Message\Survey</value></item>
+                <item key="media_synchronization_error"><value>Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error</value></item>
+                <item key="media_synchronization_success"><value>Magento\AdminNotification\Model\System\Message\Media\Synchronization\Success</value></item>
+            </array>
         </param>
     </type>
 </config>

@@ -50,17 +50,17 @@ class Config
     /**
      * Direct Payments (Payflow Edition)
      */
-    const METHOD_WPP_PE_DIRECT  = 'paypaluk_direct';
+    const METHOD_WPP_PE_DIRECT  = 'payflow_direct';
 
     /**
      * Express Checkout (Payflow Edition)
      */
-    const METHOD_WPP_PE_EXPRESS  = 'paypaluk_express';
+    const METHOD_WPP_PE_EXPRESS  = 'payflow_express';
 
     /**
      * Payflow Pro Gateway
      */
-    const METHOD_PAYFLOWPRO         = 'verisign';
+    const METHOD_PAYFLOWPRO         = 'payflowpro';
 
     const METHOD_PAYFLOWLINK        = 'payflow_link';
     const METHOD_PAYFLOWADVANCED    = 'payflow_advanced';
@@ -177,8 +177,8 @@ class Config
         'paypal_standard'  => 'WPS',
         'paypal_express'   => 'EC',
         'paypal_direct'    => 'DP',
-        'paypaluk_express' => 'EC',
-        'paypaluk_direct'  => 'DP',
+        'payflow_express' => 'EC',
+        'payflow_direct'  => 'DP',
     );
 
     /**
@@ -1350,7 +1350,6 @@ class Config
     protected function _mapWpukFieldset($fieldName)
     {
         $pathPrefix = 'paypal/wpuk';
-        // Use PUMP credentials from Verisign for EC when Direct Payments are unavailable
         if ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS
             && $this->isMethodAvailable(self::METHOD_PAYFLOWLINK)
         ) {
@@ -1362,7 +1361,7 @@ class Config
         } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS
             && !$this->isMethodAvailable(self::METHOD_WPP_PE_DIRECT)
         ) {
-            $pathPrefix = 'payment/verisign';
+            $pathPrefix = 'payment/payflowpro';
         } elseif ($this->_methodCode == self::METHOD_PAYFLOWADVANCED
             || $this->_methodCode == self::METHOD_PAYFLOWLINK
         ) {

@@ -48,16 +48,9 @@ abstract class AbstractEntity
     /**#@-*/
 
     /**
-     * Website manager (currently \Magento\Core\Model\App works as website manager)
+     * Store manager
      *
-     * @var \Magento\Core\Model\App
-     */
-    protected $_websiteManager;
-
-    /**
-     * Store manager (currently \Magento\Core\Model\App works as store manager)
-     *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -182,21 +175,20 @@ abstract class AbstractEntity
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_websiteManager = isset($data['website_manager']) ? $data['website_manager'] : $app;
-        $this->_storeManager   = isset($data['store_manager']) ? $data['store_manager'] : $app;
+        $this->_storeManager   = $storeManager;
         $this->_attributeCollection = isset($data['attribute_collection']) ? $data['attribute_collection']
             : $collectionFactory->create(static::ATTRIBUTE_COLLECTION_NAME);
         $this->_pageSize = isset($data['page_size']) ? $data['page_size']
@@ -230,7 +222,7 @@ abstract class AbstractEntity
     protected function _initWebsites($withDefault = false)
     {
         /** @var $website \Magento\Core\Model\Website */
-        foreach ($this->_websiteManager->getWebsites($withDefault) as $website) {
+        foreach ($this->_storeManager->getWebsites($withDefault) as $website) {
             $this->_websiteIdToCode[$website->getId()] = $website->getCode();
         }
         return $this;

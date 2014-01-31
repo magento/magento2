@@ -36,6 +36,12 @@ namespace Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer;
 
 class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * Renderer for "Action" column in Newsletter templates grid
+     *
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
         $str = '';

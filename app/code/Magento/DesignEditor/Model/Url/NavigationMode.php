@@ -29,7 +29,7 @@
  */
 namespace Magento\DesignEditor\Model\Url;
 
-class NavigationMode extends \Magento\Core\Model\Url
+class NavigationMode extends \Magento\Url
 {
     /**
      * VDE helper
@@ -55,29 +55,25 @@ class NavigationMode extends \Magento\Core\Model\Url
     /**
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Url\ScopeResolverInterface $scopeResolver
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Url\RouteParamsResolverFactory $routeParamsResolver
+     * @param \Magento\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\DesignEditor\Helper\Data $helper
-     * @param string $areaCode
      * @param array $data
-     * 
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\App\Route\ConfigInterface $routeConfig,
         \Magento\App\RequestInterface $request,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Url\ScopeResolverInterface $scopeResolver,
         \Magento\Core\Model\Session $session,
         \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Url\RouteParamsResolverFactory $routeParamsResolver,
+        \Magento\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\DesignEditor\Helper\Data $helper,
-        $areaCode,
         array $data = array()
     ) {
         $this->_helper = $helper;
@@ -92,12 +88,11 @@ class NavigationMode extends \Magento\Core\Model\Url
             $routeConfig,
             $request,
             $urlSecurityInfo,
-            $coreStoreConfig,
-            $app,
-            $storeManager,
+            $scopeResolver,
             $session,
             $sidResolver,
-            $areaCode,
+            $routeParamsResolver,
+            $queryParamsResolver,
             $data
         );
     }
@@ -133,11 +128,11 @@ class NavigationMode extends \Magento\Core\Model\Url
     protected function _hasThemeAndMode()
     {
         if (!$this->_mode) {
-            $this->_mode = $this->getRequest()->getAlias('editorMode');
+            $this->_mode = $this->_getRequest()->getAlias('editorMode');
         }
 
         if (!$this->_themeId) {
-            $this->_themeId = $this->getRequest()->getAlias('themeId');
+            $this->_themeId = $this->_getRequest()->getAlias('themeId');
         }
         return $this;
     }

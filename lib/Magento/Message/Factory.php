@@ -24,6 +24,8 @@
 
 namespace Magento\Message;
 
+use Magento\ObjectManager;
+
 /**
  * Message model factory
  */
@@ -32,7 +34,7 @@ class Factory
     /**
      * Allowed message types
      *
-     * @var array
+     * @var string[]
      */
     protected $types = array(
         MessageInterface::TYPE_ERROR,
@@ -44,16 +46,16 @@ class Factory
     /**
      * Object Manager instance
      *
-     * @var \Magento\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
      * Factory constructor
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }

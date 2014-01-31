@@ -26,14 +26,16 @@
 <config>
     <type name="Magento\SalesRule\Helper\Coupon">
         <param name="couponParameters">
-            <value>
-                <separator>-</separator>
-                <charset>
-                    <alphanum>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</alphanum>
-                    <alpha>ABCDEFGHIJKLMNOPQRSTUVWXYZ</alpha>
-                    <num>0123456789</num>
-                </charset>
-            </value>
+            <array>
+                <item key="separator"><value>-</value></item>
+                <item key="charset">
+                    <array>
+                        <item key="alphanum"><value>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</value></item>
+                        <item key="alpha"><value>ABCDEFGHIJKLMNOPQRSTUVWXYZ</value></item>
+                        <item key="num"><value>0123456789</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
 </config>

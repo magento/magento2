@@ -123,7 +123,7 @@ class Object implements \ArrayAccess
      * Id field name setter
      *
      * @param  string $name
-     * @return \Magento\Object
+     * @return $this
      */
     public function setIdFieldName($name)
     {
@@ -154,8 +154,8 @@ class Object implements \ArrayAccess
     /**
      * Identifier setter
      *
-     * @param   mixed $value
-     * @return  \Magento\Object
+     * @param mixed $value
+     * @return $this
      */
     public function setId($value)
     {
@@ -169,7 +169,7 @@ class Object implements \ArrayAccess
      * Retains previous data in the object.
      *
      * @param array $arr
-     * @return \Magento\Object
+     * @return $this
      */
     public function addData(array $arr)
     {
@@ -189,7 +189,7 @@ class Object implements \ArrayAccess
      *
      * @param string|array  $key
      * @param mixed         $value
-     * @return \Magento\Object
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -211,7 +211,7 @@ class Object implements \ArrayAccess
      * Unset data from the object.
      *
      * @param null|string|array $key
-     * @return \Magento\Object
+     * @return $this
      */
     public function unsetData($key = null)
     {
@@ -325,7 +325,7 @@ class Object implements \ArrayAccess
      *
      * @param string $key
      * @param mixed $args
-     * @return \Magento\Object
+     * @return $this
      */
     public function setDataUsingMethod($key, $args = array())
     {
@@ -510,6 +510,7 @@ class Object implements \ArrayAccess
      * @param   string $method
      * @param   array $args
      * @return  mixed
+     * @throws \Magento\Exception
      */
     public function __call($method, $args)
     {
@@ -600,7 +601,7 @@ class Object implements \ArrayAccess
      *
      * @param string $key
      * @param mixed $data
-     * @return \Magento\Object
+     * @return $this
      */
     public function setOrigData($key = null, $data = null)
     {
@@ -643,7 +644,7 @@ class Object implements \ArrayAccess
      * Clears data changes status
      *
      * @param boolean $value
-     * @return \Magento\Object
+     * @return $this
      */
     public function setDataChanges($value)
     {
@@ -687,6 +688,7 @@ class Object implements \ArrayAccess
      * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      * @param string $offset
      * @param mixed $value
+     * @return void
      */
     public function offsetSet($offset, $value)
     {
@@ -710,6 +712,7 @@ class Object implements \ArrayAccess
      *
      * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      * @param string $offset
+     * @return void
      */
     public function offsetUnset($offset)
     {

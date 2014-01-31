@@ -37,16 +37,16 @@ class Section
     protected $_authorization;
 
     /**
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
      * @param \Magento\AuthorizationInterface $authorization
      */
     public function __construct(
-        \Magento\Core\Model\App $application,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator,
         \Magento\AuthorizationInterface $authorization
     ) {
-        parent::__construct($application, $childrenIterator);
+        parent::__construct($storeManager, $childrenIterator);
         $this->_authorization = $authorization;
     }
 

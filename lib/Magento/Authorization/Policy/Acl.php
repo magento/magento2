@@ -26,7 +26,10 @@
  */
 namespace Magento\Authorization\Policy;
 
-class Acl implements \Magento\Authorization\Policy
+use Magento\Acl\Builder;
+use Magento\Authorization\Policy;
+
+class Acl implements Policy
 {
     /**
      * @var \Magento\Acl\Builder
@@ -34,9 +37,9 @@ class Acl implements \Magento\Authorization\Policy
     protected $_aclBuilder;
 
     /**
-     * @param \Magento\Acl\Builder $aclBuilder
+     * @param Builder $aclBuilder
      */
-    public function __construct(\Magento\Acl\Builder $aclBuilder)
+    public function __construct(Builder $aclBuilder)
     {
         $this->_aclBuilder = $aclBuilder;
     }
@@ -46,7 +49,7 @@ class Acl implements \Magento\Authorization\Policy
      *
      * @param string $roleId
      * @param string $resourceId
-     * @param mixed $privilege
+     * @param string $privilege
      * @return bool
      */
     public function isAllowed($roleId, $resourceId, $privilege = null)

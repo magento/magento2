@@ -32,7 +32,7 @@ class RemoveTags implements \Zend_Filter_Interface
     /**
      * Convert html entities
      *
-     * @param array $matches
+     * @param string[] $matches
      * @return string
      */
     protected function _convertEntities($matches)

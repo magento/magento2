@@ -40,7 +40,7 @@ class Http extends File
     protected $scheme = 'http';
 
     /**
-     * @param $path
+     * @param string $path
      * @return bool
      * @throws FilesystemException
      */
@@ -64,7 +64,6 @@ class Http extends File
      *
      * @param string $path
      * @return array
-     * @throws \Magento\Filesystem\FilesystemException
      */
     public function stat($path)
     {
@@ -120,7 +119,7 @@ class Http extends File
      * @param string $path
      * @param string $content
      * @param string|null $mode
-     * @param string|null $context
+     * @param resource|null $context
      * @return int The number of bytes that were written
      * @throws FilesystemException
      */

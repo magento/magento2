@@ -40,7 +40,7 @@
             <instance type="Magento\Webapi\Controller\ErrorProcessor\Proxy"/>
         </param>
     </type>
-    <type name="Magento\Webapi\Controller\Soap\Handler">
+    <type name="Magento\Webapi\Controller\Soap\Request\Handler">
         <param name="authorizationService">
             <instance type="Magento\Authz\Service\AuthorizationV1Interface\Proxy" />
         </param>

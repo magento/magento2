@@ -141,26 +141,56 @@ class Image
         $this->_adapter->resize($width, $height);
     }
 
+    /**
+     * Get/set keepAspectRatio
+     *
+     * @param bool $value
+     * @return bool
+     */
     public function keepAspectRatio($value)
     {
         return $this->_adapter->keepAspectRatio($value);
     }
 
+    /**
+     * Get/set keepFrame
+     *
+     * @param bool $value
+     * @return bool
+     */
     public function keepFrame($value)
     {
         return $this->_adapter->keepFrame($value);
     }
 
+    /**
+     * Get/set keepTransparency
+     *
+     * @param bool $value
+     * @return bool
+     */
     public function keepTransparency($value)
     {
         return $this->_adapter->keepTransparency($value);
     }
 
+    /**
+     * Get/set constrainOnly
+     *
+     * @param bool $value
+     * @return bool
+     */
     public function constrainOnly($value)
     {
         return $this->_adapter->constrainOnly($value);
     }
 
+    /**
+     * Get/set backgroundColor
+     *
+     * @param null|array $value
+     * @return array|null
+     */
     public function backgroundColor($value)
     {
         return $this->_adapter->backgroundColor($value);

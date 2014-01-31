@@ -72,7 +72,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel
     /**
      * URL Model instance
      *
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -247,7 +247,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel
     /**
      * Retrieve URL instance
      *
-     * @return \Magento\Core\Model\Url
+     * @return \Magento\UrlInterface
      */
     public function getUrlInstance()
     {
@@ -583,7 +583,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel
         $url = false;
         $image = $this->getImage();
         if ($image) {
-            $url = $this->_storeManager->getStore()->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA)
+            $url = $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA)
                 . 'catalog/category/' . $image;
         }
         return $url;

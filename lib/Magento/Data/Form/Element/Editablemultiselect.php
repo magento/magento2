@@ -79,7 +79,7 @@ class Editablemultiselect extends \Magento\Data\Form\Element\Multiselect
      * Retrieve HTML markup of given select option
      *
      * @param array $option
-     * @param array $selected
+     * @param string[] $selected
      * @return string
      */
     protected function _optionToHtml($option, $selected)

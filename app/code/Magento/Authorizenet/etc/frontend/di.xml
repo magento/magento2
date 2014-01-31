@@ -37,9 +37,9 @@
     </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <authorizenet>/authorizenet/payment</authorizenet>
-            </value>
+            <array>
+                <item key="authorizenet"><value>/authorizenet/payment</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Authorizenet\Model\Authorizenet">

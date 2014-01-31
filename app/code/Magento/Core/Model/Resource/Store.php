@@ -101,7 +101,7 @@ class Store extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _afterDelete(\Magento\Core\Model\AbstractModel $model)
     {
         $where = array(
-            'scope = ?'    => \Magento\Core\Model\Config::SCOPE_STORES,
+            'scope = ?'    => \Magento\Core\Model\ScopeInterface::SCOPE_STORES,
             'scope_id = ?' => $model->getStoreId()
         );
 

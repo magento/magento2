@@ -25,6 +25,11 @@
  */
 namespace Magento\Module\FrontController\Plugin;
 
+use Magento\Cache\FrontendInterface;
+use Magento\Module\UpdaterInterface;
+use Magento\App\State;
+use Magento\Code\Plugin\InvocationChain;
+
 class Install
 {
     /**
@@ -33,24 +38,24 @@ class Install
     protected $_appState;
 
     /**
-     * @var \Magento\Cache\FrontendInterface
+     * @var FrontendInterface
      */
     protected $_cache;
 
     /**
-     * @var \Magento\Module\UpdaterInterface
+     * @var UpdaterInterface
      */
     protected $_updater;
 
     /**
-     * @param \Magento\App\State $appState
-     * @param \Magento\Cache\FrontendInterface $cache
-     * @param \Magento\Module\UpdaterInterface $dbUpdater
+     * @param State $appState
+     * @param FrontendInterface $cache
+     * @param UpdaterInterface $dbUpdater
      */
     public function __construct(
-        \Magento\App\State $appState,
-        \Magento\Cache\FrontendInterface $cache,
-        \Magento\Module\UpdaterInterface $dbUpdater
+        State $appState,
+        FrontendInterface $cache,
+        UpdaterInterface $dbUpdater
     ) {
         $this->_appState = $appState;
         $this->_cache = $cache;
@@ -59,10 +64,10 @@ class Install
 
     /**
      * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param InvocationChain $invocationChain
      * @return mixed
      */
-    public function aroundDispatch($arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
+    public function aroundDispatch($arguments, InvocationChain $invocationChain)
     {
         if ($this->_appState->isInstalled() && !$this->_cache->load('data_upgrade')) {
             $this->_dbUpdater->updateScheme();

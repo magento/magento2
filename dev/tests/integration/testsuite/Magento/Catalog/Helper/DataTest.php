@@ -118,21 +118,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGetAttributeDisabledTypes()
-    {
-        $this->assertEquals(array(), $this->_helper->getAttributeDisabledTypes());
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('attribute_type_disabled_types', 'test');
-        try {
-            $this->assertEquals('test', $this->_helper->getAttributeDisabledTypes());
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('attribute_type_disabled_types');
-        } catch (\Exception $e) {
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('attribute_type_disabled_types');
-            throw $e;
-        }
-    }
-
     public function testGetPriceScopeDefault()
     {
         // $this->assertEquals(\Magento\Core\Model\Store::PRICE_SCOPE_GLOBAL, $this->_helper->getPriceScope());

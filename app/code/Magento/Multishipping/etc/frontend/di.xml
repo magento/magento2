@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <multishipping_checkout>/multishipping/checkout</multishipping_checkout>
-            </value>
+            <array>
+                <item key="multishipping_checkout"><value>/multishipping/checkout</value></item>
+            </array>
         </param>
     </type>
 </config>

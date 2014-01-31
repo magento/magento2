@@ -29,11 +29,11 @@ namespace Magento\Core\Helper;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
-    const ROOT = '/zzz';
-    const APP = '/zzz/qqq';
-    const MODULES = '/zzz/qqq/code00';
-    const THEMES = '/zzz/qqq/design00';
-    const PUB_LIB = '/zzz/qqq/js00';
+    const ROOT_DIR = '/zzz';
+    const APP_DIR = '/zzz/qqq';
+    const MODULES_DIR = '/zzz/qqq/code00';
+    const THEMES_DIR = '/zzz/qqq/design00';
+    const PUB_LIB_DIR = '/zzz/qqq/js00';
 
     /**
      * @dataProvider getCssFilesDataProvider
@@ -492,11 +492,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $filesystem->expects($this->any())
             ->method('getPath')
             ->will($this->returnValueMap(array(
-                array(\Magento\App\Filesystem::ROOT_DIR, self::ROOT),
-                array(\Magento\App\Filesystem::APP_DIR, self::APP),
-                array(\Magento\App\Filesystem::MODULES_DIR, self::MODULES),
-                array(\Magento\App\Filesystem::THEMES_DIR, self::THEMES),
-                array(\Magento\App\Filesystem::PUB_LIB_DIR, self::PUB_LIB),
+                array(\Magento\App\Filesystem::ROOT_DIR, self::ROOT_DIR),
+                array(\Magento\App\Filesystem::APP_DIR, self::APP_DIR),
+                array(\Magento\App\Filesystem::MODULES_DIR, self::MODULES_DIR),
+                array(\Magento\App\Filesystem::THEMES_DIR, self::THEMES_DIR),
+                array(\Magento\App\Filesystem::PUB_LIB_DIR, self::PUB_LIB_DIR),
             )));
 
         return $filesystem;

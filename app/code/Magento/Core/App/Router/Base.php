@@ -56,7 +56,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Url security information.
      *
-     * @var \Magento\Core\Model\Url\SecurityInfoInterface
+     * @var \Magento\Url\SecurityInfoInterface
      */
     protected $_urlSecurityInfo;
 
@@ -66,13 +66,6 @@ class Base extends \Magento\App\Router\AbstractRouter
      * @var \Magento\Core\Model\Store\Config
      */
     protected $_storeConfig;
-
-    /**
-     * Core config
-     *
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_config = null;
 
     /**
      * @var \Magento\UrlInterface
@@ -108,7 +101,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      * @param \Magento\Core\Model\Url|\Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface|\Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param $routerId
      * @throws \InvalidArgumentException
      */
@@ -121,7 +114,7 @@ class Base extends \Magento\App\Router\AbstractRouter
         \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId
     ) {
         parent::__construct($actionFactory);
@@ -188,7 +181,7 @@ class Base extends \Magento\App\Router\AbstractRouter
             $moduleFrontName = $param;
         } else {
             $moduleFrontName = $this->_defaultPath->getPart('module');
-            $request->setAlias(\Magento\Core\Model\Url\Rewrite::REWRITE_REQUEST_PATH_ALIAS, '');
+            $request->setAlias(\Magento\Url::REWRITE_REQUEST_PATH_ALIAS, '');
         }
         if (!$moduleFrontName) {
             return null;
@@ -212,7 +205,7 @@ class Base extends \Magento\App\Router\AbstractRouter
         } else {
             $controller = $this->_defaultPath->getPart('controller');
             $request->setAlias(
-                \Magento\Core\Model\Url\Rewrite::REWRITE_REQUEST_PATH_ALIAS,
+                \Magento\Url::REWRITE_REQUEST_PATH_ALIAS,
                 ltrim($request->getOriginalPathInfo(), '/')
             );
         }
@@ -412,7 +405,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      */
     protected function _getCurrentSecureUrl($request)
     {
-        $alias = $request->getAlias(\Magento\Core\Model\Url\Rewrite::REWRITE_REQUEST_PATH_ALIAS);
+        $alias = $request->getAlias(\Magento\Url::REWRITE_REQUEST_PATH_ALIAS);
         if ($alias) {
             return $this->_storeManager->getStore()->getBaseUrl('link', true) . ltrim($alias, '/');
         }

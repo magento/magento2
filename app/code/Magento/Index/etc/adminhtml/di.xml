@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\AdminNotification\Model\System\MessageList">
         <param name="messages">
-            <value>
-                <indexer>Magento\Index\Model\System\Message\IndexOutdated</indexer>
-            </value>
+            <array>
+                <item key="indexer"><value>Magento\Index\Model\System\Message\IndexOutdated</value></item>
+            </array>
         </param>
     </type>
 </config>

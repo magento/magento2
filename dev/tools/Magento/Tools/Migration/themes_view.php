@@ -28,9 +28,9 @@ $rootDir = realpath(__DIR__ . '/../../../../..');
 try {
     $entryPoint = new \Magento\App\EntryPoint\EntryPoint($rootDir, array());
 
-    $objectManager = new \Magento\App\ObjectManager($config);
-    /** @var $configModel \Magento\Core\Model\Config */
-    $configModel = $objectManager->get('Magento\Core\Model\Config');
+    $objectManager = new \Magento\App\ObjectManager();
+    /** @var $configModel \Magento\App\ReinitableConfigInterface */
+    $configModel = $objectManager->get('Magento\App\ReinitableConfigInterface');
     $configModel->reinit();
     $config = array();
 

@@ -341,11 +341,11 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
     protected function _serializeRenders()
     {
         $result = array();
-        foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $block) {
+        foreach ($this->getLayout()->getChildBlocks($this->_getRendererList()->getNameInLayout()) as $alias => $block) {
             /** @var $block \Magento\View\Element\Template */
             $result[] = implode('|', array(
                 // skip $this->getNameInLayout() and '.'
-                substr($block->getNameInLayout(), strlen($this->getNameInLayout()) + 1),
+                $alias,
                 get_class($block),
                 $block->getTemplate()
             ));
@@ -364,21 +364,21 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
         if (!is_string($renders)) {
             return $this;
         }
+        $rendererList = $this->addChild('renderer.list', 'Magento\View\Element\RendererList');
 
         $renders = explode('|', $renders);
         while (!empty($renders)) {
             $template = array_pop($renders);
             $block = array_pop($renders);
-            $type = array_pop($renders);
-            if (!$template || !$block || !$type) {
+            $alias = array_pop($renders);
+            if (!$template || !$block || !$alias) {
                 continue;
             }
-            if (!$this->getChildBlock($type)) {
-                $this->addChild($type, $block, array('template' => $template));
+
+            if (!$rendererList->getChildBlock($alias)) {
+                $rendererList->addChild($alias, $block, array('template' => $template));
             }
-
         }
-
         return $this;
     }
 }

@@ -40,7 +40,17 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $layout = $this->getMock('Magento\Core\Model\Layout', array(
             'createBlock', 'getChildName', 'setChild'
         ), array(), '', false);
-        $layout->expects($this->once())
+
+        $rendererList = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\Sidebar', array(
+            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
+                    'layout' => $layout,
+                ))
+        ));;
+        $layout->expects($this->at(0))
+            ->method('createBlock')
+            ->with('Magento\View\Element\RendererList')
+            ->will($this->returnValue($rendererList));
+        $layout->expects($this->at(4))
             ->method('createBlock')
             ->with(
                 'some-block',
@@ -48,11 +58,11 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
                 array('data' => array('template' => 'some-type'))
             )
             ->will($this->returnValue($childBlock));
-        $layout->expects($this->any())
+        $layout->expects($this->at(5))
             ->method('getChildName')
             ->with(null, 'some-template')
             ->will($this->returnValue(false));
-        $layout->expects($this->once())
+        $layout->expects($this->at(6))
             ->method('setChild')
             ->with(null, null, 'some-template');
 

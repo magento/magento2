@@ -61,4 +61,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->_theme, $this->_model->getTheme());
     }
+
+    public function testGetFileIdentifier()
+    {
+        $this->_theme->expects($this->once())->method('getFullPath')->will($this->returnValue('theme_name'));
+        $this->assertSame(
+            'theme:theme_name|module:Fixture_TestModule|file:FileTest.php',
+            $this->_model->getFileIdentifier()
+        );
+    }
 }

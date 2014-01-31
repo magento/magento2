@@ -27,13 +27,16 @@
 namespace Magento\Module;
 
 use Magento\App\State;
+use Magento\Module\Updater\SetupFactory;
+use Magento\Module\ModuleListInterface;
+use Magento\Module\ResourceResolverInterface;
 
 class Updater implements \Magento\Module\UpdaterInterface
 {
     /**
      * Setup model factory
      *
-     * @var \Magento\Module\Updater\SetupFactory
+     * @var SetupFactory
      */
     protected $_factory;
 
@@ -66,12 +69,12 @@ class Updater implements \Magento\Module\UpdaterInterface
     protected $_resourceList;
 
     /**
-     * @var \Magento\Module\ModuleListInterface
+     * @var ModuleListInterface
      */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Module\ResourceResolverInterface
+     * @var ResourceResolverInterface
      */
     protected $_resourceResolver;
 
@@ -83,15 +86,15 @@ class Updater implements \Magento\Module\UpdaterInterface
     /**
      * @param Updater\SetupFactory $setupFactory
      * @param State $appState
-     * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Module\ResourceResolverInterface $resourceResolver
+     * @param ModuleListInterface $moduleList
+     * @param ResourceResolverInterface $resourceResolver
      * @param bool $skipModuleUpdate
      */
     public function __construct(
-        \Magento\Module\Updater\SetupFactory $setupFactory,
-        \Magento\App\State $appState,
-        \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Module\ResourceResolverInterface $resourceResolver,
+        Updater\SetupFactory $setupFactory,
+        State $appState,
+        ModuleListInterface $moduleList,
+        ResourceResolverInterface $resourceResolver,
         $skipModuleUpdate = false
     ) {
         $this->_appState = $appState;
@@ -117,6 +120,8 @@ class Updater implements \Magento\Module\UpdaterInterface
 
     /**
      * Apply database scheme updates whenever needed
+     *
+     * @return void
      */
     public function updateScheme()
     {
@@ -151,6 +156,8 @@ class Updater implements \Magento\Module\UpdaterInterface
 
     /**
      * Apply database data updates whenever needed
+     *
+     * @return void
      */
     public function updateData()
     {

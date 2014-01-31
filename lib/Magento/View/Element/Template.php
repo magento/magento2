@@ -214,11 +214,11 @@ class Template extends AbstractBlock
      * @param   mixed $value
      * @return  \Magento\View\Element\Template
      */
-    public function assign($key, $value=null)
+    public function assign($key, $value = null)
     {
         if (is_array($key)) {
-            foreach ($key as $k=>$v) {
-                $this->assign($k, $v);
+            foreach ($key as $subKey => $subValue) {
+                $this->assign($subKey, $subValue);
             }
         } else {
             $this->_viewVars[$key] = $value;
@@ -236,7 +236,8 @@ class Template extends AbstractBlock
     {
         $relativeFilePath = $this->getRootDirectory()->getRelativePath($fileName);
         \Magento\Profiler::start(
-            'TEMPLATE:' . $fileName, array('group' => 'TEMPLATE', 'file_name' => $relativeFilePath)
+            'TEMPLATE:' . $fileName,
+            array('group' => 'TEMPLATE', 'file_name' => $relativeFilePath)
         );
 
         if ($this->isTemplateFileValid($fileName)) {

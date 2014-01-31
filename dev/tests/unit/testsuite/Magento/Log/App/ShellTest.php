@@ -61,6 +61,6 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             ->with(array('entryPoint' => 'shell.php'))
             ->will($this->returnValue($shellMock));
         $shellMock->expects($this->once())->method('run');
-        $this->assertEquals($this->_responseMock, $this->_model->execute());
+        $this->assertEquals($this->_responseMock, $this->_model->launch());
     }
 }

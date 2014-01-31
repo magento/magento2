@@ -29,9 +29,9 @@
     </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <param name="constructors">
-            <value>
-                <downloadable>Magento\Downloadable\Model\Product\CopyConstructor\Downloadable</downloadable>
-            </value>
+            <array>
+                <item key="downloadable"><value>Magento\Downloadable\Model\Product\CopyConstructor\Downloadable</value></item>
+            </array>
         </param>
     </type>
 </config>

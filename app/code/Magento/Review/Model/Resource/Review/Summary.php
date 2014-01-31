@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Model\Resource\Review;
 
+use Magento\Core\Model\AbstractModel;
 
 /**
  * Review summary resource model
@@ -32,8 +34,6 @@
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Model\Resource\Review;
-
 class Summary extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -50,8 +50,8 @@ class Summary extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return unknown
+     * @param AbstractModel $object
+     * @return \Zend_Db_Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {

@@ -321,7 +321,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setPageLayout',
             'setPageTitle',
             'setParentType',
-            'setPaypalActionPrefix',
+            'setControllerPath',
             'setPosition',
             'setPositioned',
             'setRewardMessage',

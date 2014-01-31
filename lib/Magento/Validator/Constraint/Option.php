@@ -28,14 +28,14 @@ namespace Magento\Validator\Constraint;
 class Option implements  \Magento\Validator\Constraint\OptionInterface
 {
     /**
-     * @var mixed
+     * @var int|string|array
      */
     protected $_value;
 
     /**
      * Set value
      *
-     * @param mixed $value
+     * @param int|string|array $value
      */
     public function __construct($value)
     {
@@ -45,7 +45,7 @@ class Option implements  \Magento\Validator\Constraint\OptionInterface
     /**
      * Get value
      *
-     * @return mixed
+     * @return int|string|array
      */
     public function getValue()
     {

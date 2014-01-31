@@ -31,91 +31,77 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\ObjectManager|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\Cache\Frontend\Pool|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Arguments|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_arguments;
+
+    /**
+     * @var \Magento\App\Cache\Frontend\Pool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_cachePool;
 
     protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
+        $this->_arguments = $this->getMock('Magento\App\Arguments', array(), array(), '', false);
         $this->_cachePool = $this->getMock('Magento\App\Cache\Frontend\Pool', array(), array(), '', false);
-        $this->_model = new \Magento\App\Cache\Type\FrontendPool($this->_objectManager, $this->_cachePool);
+        $this->_model = new FrontendPool($this->_objectManager, $this->_arguments, $this->_cachePool, array(
+            'fixture_cache_type' => 'fixture_frontend_id',
+        ));
     }
 
-    public function testGet()
+    /**
+     * @param string|null $fixtureFrontendId
+     * @param string $inputCacheType
+     * @param string $expectedFrontendId
+     *
+     * @dataProvider getDataProvider
+     */
+    public function testGet($fixtureFrontendId, $inputCacheType, $expectedFrontendId)
     {
-        $instanceMock = $this->getMock('Magento\Cache\FrontendInterface');
+        $this->_arguments
+            ->expects($this->once())
+            ->method('getCacheTypeFrontendId')
+            ->with($inputCacheType)
+            ->will($this->returnValue($fixtureFrontendId));
+
+        $cacheFrontend = $this->getMock('Magento\Cache\FrontendInterface');
         $this->_cachePool->expects($this->once())
             ->method('get')
-            ->with('cache_type')
-            ->will($this->returnValue($instanceMock));
+            ->with($expectedFrontendId)
+            ->will($this->returnValue($cacheFrontend));
 
-        $accessMock = $this->getMock('Magento\App\Cache\Type\AccessProxy', array(), array(), '', false);
+        $accessProxy = $this->getMock('Magento\App\Cache\Type\AccessProxy', array(), array(), '', false);
         $this->_objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\App\Cache\Type\AccessProxy',
-                array('frontend' => $instanceMock, 'identifier' => 'cache_type'))
-            ->will($this->returnValue($accessMock));
+            ->with(
+                'Magento\App\Cache\Type\AccessProxy',
+                $this->identicalTo(array('frontend' => $cacheFrontend, 'identifier' => $inputCacheType))
+            )
+            ->will($this->returnValue($accessProxy));
 
-        $instance = $this->_model->get('cache_type');
-        $this->assertSame($accessMock, $instance);
-
-        // And must be cached
-        $instance = $this->_model->get('cache_type');
-        $this->assertSame($accessMock, $instance);
+        $this->assertSame($accessProxy, $this->_model->get($inputCacheType));
+        // Result has to be cached in memory
+        $this->assertSame($accessProxy, $this->_model->get($inputCacheType));
     }
 
-    public function testGetFallbackToDefaultId()
+    public function getDataProvider()
     {
-        /**
-         * Setup cache pool to have knowledge only about default cache instance. Also check appropriate sequence
-         * of calls.
-         */
-        $defaultInstance = $this->getMock('Magento\Cache\FrontendInterface');
-        $this->_cachePool->expects($this->at(0))
-            ->method('get')
-            ->with('cache_type')
-            ->will($this->returnValue(null));
-        $this->_cachePool->expects($this->at(1))
-            ->method('get')
-            ->with(\Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID)
-            ->will($this->returnValue($defaultInstance));
-
-        $this->_cachePool->expects($this->at(2))
-            ->method('get')
-            ->with('another_cache_type')
-            ->will($this->returnValue(null));
-        $this->_cachePool->expects($this->at(3))
-            ->method('get')
-            ->with(\Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID)
-            ->will($this->returnValue($defaultInstance));
-
-        /**
-         * Setup object manager to create new access proxies. We expect two calls.
-         */
-        $this->_objectManager->expects($this->at(0))
-            ->method('create')
-            ->with('Magento\App\Cache\Type\AccessProxy',
-                array('frontend' => $defaultInstance, 'identifier' => 'cache_type'))
-            ->will($this->returnValue(
-                $this->getMock('Magento\App\Cache\Type\AccessProxy', array(), array(), '', false)
-        ));
-        $this->_objectManager->expects($this->at(1))
-            ->method('create')
-            ->with('Magento\App\Cache\Type\AccessProxy',
-                array('frontend' => $defaultInstance, 'identifier' => 'another_cache_type'))
-            ->will($this->returnValue(
-                $this->getMock('Magento\App\Cache\Type\AccessProxy', array(), array(), '', false)
-        ));
-
-        $cacheInstance = $this->_model->get('cache_type');
-        $anotherInstance = $this->_model->get('another_cache_type');
-        $this->assertNotSame($cacheInstance, $anotherInstance,
-            'Different cache instances must be returned for different identifiers');
+        return array(
+            'retrieval from config' => array(
+                'configured_frontend_id', 'fixture_cache_type', 'configured_frontend_id',
+            ),
+            'retrieval from map' => array(
+                null, 'fixture_cache_type', 'fixture_frontend_id',
+            ),
+            'fallback to default id' => array(
+                null, 'unknown_cache_type', \Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID,
+            ),
+        );
     }
 }

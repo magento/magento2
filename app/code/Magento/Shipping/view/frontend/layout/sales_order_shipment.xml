@@ -24,15 +24,16 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <update handle="sales_order_shipment_renderers" />
     <referenceContainer name="content">
         <block class="Magento\Shipping\Block\Order\Shipment" name="sales.order.shipment" after="sales.order.info" cacheable="false">
             <block class="Magento\Shipping\Block\Items" name="shipment_items" template="items.phtml">
+                <block class="Magento\View\Element\RendererList" name="sales.order.shipment.renderers" as="renderer.list" />
                 <block class="Magento\Shipping\Block\Tracking\Link" name="track-all-link" template="tracking/link.phtml">
                     <arguments>
                         <argument name="label" xsi:type="string">Track All Shipments</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/shipment/items/renderer/default.phtml"/>
                 <block class="Magento\Sales\Block\Order\Comments" name="shipment_comments" template="order/comments.phtml"/>
             </block>
         </block>

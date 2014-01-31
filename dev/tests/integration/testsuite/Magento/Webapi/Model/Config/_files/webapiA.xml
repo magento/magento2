@@ -24,11 +24,11 @@
  */
 -->
 <config>
-    <service class="\Magento\TestModule1\Service\AllSoapAndRestV1Interface" baseUrl="/V1/testmodule1">
+    <service class="\Magento\TestModule1\Service\V1\AllSoapAndRestInterface" baseUrl="/V1/testmodule1">
         <rest-route httpMethod="GET" method="item" resources="Magento_TestModule1::resource1">/:id</rest-route>
     </service>
 
-    <service class="\Magento\TestModule1\Service\AllSoapAndRestV2Interface" baseUrl="/V2/testmodule1">
+    <service class="\Magento\TestModule1\Service\V2\AllSoapAndRestInterface" baseUrl="/V2/testmodule1">
         <rest-route httpMethod="GET" method="item" resources="Magento_TestModule1::resource1">/:id</rest-route>
         <rest-route httpMethod="POST" method="create" resources="Magento_TestModule1::resource1, Magento_TestModule1::resource2"></rest-route>
         <rest-route httpMethod="DELETE" method="delete" isSecure="true" resources="Magento_TestModule1::resource2">/:id</rest-route>

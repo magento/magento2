@@ -66,7 +66,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Set title of page
      *
-     * @return \Magento\Newsletter\Controller\Adminhtml\Template
+     * @return $this
      */
     protected function _setTitle()
     {
@@ -76,6 +76,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * View Templates list
      *
+     * @return void
      */
     public function indexAction()
     {
@@ -95,6 +96,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * JSON Grid Action
      *
+     * @return void
      */
     public function gridAction()
     {
@@ -107,6 +109,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Create new Newsletter Template
      *
+     * @return void
      */
     public function newAction()
     {
@@ -116,6 +119,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Edit Newsletter Template
      *
+     * @return void
      */
     public function editAction()
     {
@@ -161,6 +165,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Drop Newsletter Template
      *
+     * @return void
      */
     public function dropAction()
     {
@@ -171,6 +176,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Save Newsletter Template
      *
+     * @return void
      */
     public function saveAction()
     {
@@ -230,6 +236,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Delete newsletter Template
      *
+     * @return void
      */
     public function deleteAction()
     {
@@ -254,6 +261,7 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Preview Newsletter template
      *
+     * @return void|$this
      */
     public function previewAction()
     {

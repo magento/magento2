@@ -40,5 +40,5 @@ interface ConfigInterface
      * @param string $path Fully-qualified config path
      * @return boolean
      */
-    public function getFlag($path);
+    public function isSetFlag($path);
 }

@@ -31,6 +31,8 @@ namespace Magento\Json;
 interface EncoderInterface
 {
     /**
+     * Encode the mixed $data into the JSON format.
+     *
      * @param mixed $data
      * @return string
      */

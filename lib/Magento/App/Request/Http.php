@@ -35,20 +35,42 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      * @var string
      */
     protected $_originalPathInfo= '';
+
+    /**
+     * @var string
+     */
     protected $_requestString   = '';
 
     /**
      * Path info array used before applying rewrite from config
      *
-     * @var null || array
+     * @var null|array
      */
     protected $_rewritedPathInfo= null;
+
+    /**
+     * @var string
+     */
     protected $_requestedRouteName = null;
+
+    /**
+     * @var array
+     */
     protected $_routingInfo = array();
 
+    /**
+     * @var string
+     */
     protected $_route;
 
+    /**
+     * @var array
+     */
     protected $_directFrontNames;
+
+    /**
+     * @var string
+     */
     protected $_controllerModule = null;
 
     /**
@@ -114,7 +136,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      * Set the ORIGINAL_PATH_INFO string
      *
      * @param string|null $pathInfo
-     * @return \Zend_Controller_Request_Http
+     * @return $this
      */
     public function setPathInfo($pathInfo = null)
     {
@@ -153,8 +175,8 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      * Specify new path info
      * It happen when occur rewrite based on configuration
      *
-     * @param   string $pathInfo
-     * @return  \Magento\App\RequestInterface
+     * @param string $pathInfo
+     * @return $this
      */
     public function rewritePathInfo($pathInfo)
     {
@@ -242,6 +264,11 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
         return reset($pathParts);
     }
 
+    /**
+     * Retrieve route name
+     *
+     * @return string|null
+     */
     public function getRouteName()
     {
         return $this->_route;
@@ -273,7 +300,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      * @param string|array $key
      * @param mixed $value
      *
-     * @return \Magento\App\RequestInterface
+     * @return $this
      */
     public function setPost($key, $value = null)
     {
@@ -288,8 +315,8 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
     /**
      * Specify module name where was found currently used controller
      *
-     * @param   string $module
-     * @return  \Magento\App\RequestInterface
+     * @param string $module
+     * @return $this
      */
     public function setControllerModule($module)
     {
@@ -357,7 +384,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
     /**
      * Retrieve the list of all aliases
      *
-     * @return array
+     * @return array|string
      */
     public function getAliases()
     {
@@ -425,7 +452,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      * Set routing info data
      *
      * @param array $data
-     * @return \Magento\App\RequestInterface
+     * @return $this
      */
     public function setRoutingInfo($data)
     {
@@ -439,7 +466,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      * Collect properties changed by _forward in protected storage
      * before _forward was called first time.
      *
-     * @return \Magento\App\ActionInterface
+     * @return $this
      */
     public function initForward()
     {
@@ -511,8 +538,8 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      * If no $key is passed, returns the entire $_FILES array.
      *
      * @param string $key
-     * @param mixed $default Default value to use if key not found
-     * @return mixed
+     * @param array $default Default value to use if key not found
+     * @return array
      */
     public function getFiles($key = null, $default = null)
     {
@@ -553,7 +580,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      * Retrieve full action name
      *
      * @param string $delimiter
-     * @return mixed|string
+     * @return string
      */
     public function getFullActionName($delimiter = '_')
     {

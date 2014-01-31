@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Model\Resource;
 
+use Magento\Core\Model\AbstractModel;
 
 /**
  * Review resource model
@@ -32,8 +34,6 @@
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Model\Resource;
-
 class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -147,7 +147,7 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param unknown_type $object
+     * @param AbstractModel $object
      * @return \Zend_Db_Select
      */
     protected function _getLoadSelect($field, $value, $object)
@@ -163,10 +163,10 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return $this|\Magento\Core\Model\Resource\Db\AbstractDb
+     * @param AbstractModel $object
+     * @return $this
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         if (!$object->getId()) {
             $object->setCreatedAt($this->_date->gmtDate());
@@ -184,10 +184,10 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Review\Model\Resource\Review
+     * @param AbstractModel $object
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $adapter = $this->_getWriteAdapter();
         /**
@@ -249,10 +249,10 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Review\Model\Resource\Review
+     * @param AbstractModel $object
+     * @return $this
      */
-    protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object)
     {
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select()
@@ -270,10 +270,10 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Action before delete
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Review\Model\Resource\Review
+     * @param AbstractModel $object
+     * @return $this
      */
-    protected function _beforeDelete(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeDelete(AbstractModel $object)
     {
         // prepare rating ids, that depend on review
         $this->_deleteCache = array(
@@ -286,10 +286,10 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object delete
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Review\Model\Resource\Review
+     * @param AbstractModel $object
+     * @return $this
      */
-    public function afterDeleteCommit(\Magento\Core\Model\AbstractModel $object)
+    public function afterDeleteCommit(AbstractModel $object)
     {
         $this->aggregate($object);
 
@@ -337,7 +337,8 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Aggregate
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param AbstractModel $object
+     * @return void
      */
     public function aggregate($object)
     {
@@ -420,9 +421,9 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Aggregate this review's ratings.
      * Useful, when changing the review.
      *
-     * @param array $ratingIds
+     * @param int[] $ratingIds
      * @param int $entityPkValue
-     * @return \Magento\Review\Model\Resource\Review
+     * @return $this
      */
     protected function _aggregateRatings($ratingIds, $entityPkValue)
     {
@@ -442,6 +443,7 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int $reviewId
      * @param int $entityPkValue
+     * @return void
      */
     public function reAggregateReview($reviewId, $entityPkValue)
     {

@@ -262,11 +262,10 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     /**
      * Get allowed product types for configurable product
      *
-     * @return \SimpleXMLElement
+     * @return array
      */
     public function getConfigurableAllowedTypes()
     {
-        $configData = $this->_config->getType('configurable');
-        return isset($configData['allow_product_types']) ? $configData['allow_product_types'] : array();
+        return $this->_config->getComposableTypes();
     }
 }

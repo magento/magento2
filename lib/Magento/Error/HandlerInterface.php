@@ -44,7 +44,7 @@ interface HandlerInterface
      * Process exception
      *
      * @param \Exception $exception
-     * @param array $params
+     * @param string[] $params
      */
     public function processException(\Exception $exception, array $params = array());
 }

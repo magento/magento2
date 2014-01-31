@@ -133,7 +133,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         try {
             if (!($store instanceof \Magento\Core\Model\Store)) {
-                $store = $this->_app->getStore($store);
+                $store = $this->_storeManager->getStore($store);
             }
 
             $value = $store->convertPrice($value, $format, $includeContainer);

@@ -205,8 +205,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 array('status', '"status"'),
             )));
 
-        $application = $this->getMock('Magento\Core\Model\App', array('getStores'), array(), '', false);
-        $application->expects($this->any())
+        $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array('getStores'), array(), '', false);
+        $storeManager->expects($this->any())
             ->method('getStores')
             ->with(true)
             ->will($this->returnValue(array(
@@ -228,12 +228,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $eavEntityType = $this->getMock('Magento\Eav\Model\Resource\Entity\Type', array(), array(), '', false, false);
         $arguments = array(
             'resource' => $resource,
-            'app' => $this->getMock('Magento\Core\Model\App', array(), array(), '', false, false),
+            'storeManager' => $storeManager,
             'eavEntityType' => $eavEntityType,
-            'arguments' => array(
-                'application' => $application,
-                'helper' => $this->getMock('Magento\Eav\Helper\Data', array(), array(), '', false, false),
-            )
         );
         $resourceModel = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute',

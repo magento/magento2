@@ -25,19 +25,21 @@
  */
 namespace Magento\Acl;
 
+use Magento\ObjectManager;
+
 class ResourceFactory
 {
     const RESOURCE_CLASS_NAME = 'Magento\Acl\Resource';
 
     /**
-     * @var \Magento\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -46,7 +48,7 @@ class ResourceFactory
      * Return new ACL resource model
      *
      * @param array $arguments
-     * @return \Magento\Acl\Resource
+     * @return Resource
      */
     public function createResource(array $arguments = array())
     {

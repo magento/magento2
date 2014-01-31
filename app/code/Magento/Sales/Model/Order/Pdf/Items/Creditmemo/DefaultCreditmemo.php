@@ -24,15 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Sales Order Creditmemo Pdf default items renderer
- *
- * @category   Magento
- * @package    Magento_Sales
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Sales\Model\Order\Pdf\Items\Creditmemo;
 
+/**
+ * Sales Order Creditmemo Pdf default items renderer
+ */
 class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 {
     /**
@@ -47,6 +43,7 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -57,13 +54,23 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\App\Filesystem $filesystem,
+        \Magento\Filter\FilterManager $filterManager,
         \Magento\Stdlib\String $string,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->string = $string;
-        parent::__construct($context, $registry, $taxData, $filesystem, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $taxData,
+            $filesystem,
+            $filterManager,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -138,15 +145,17 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
             foreach ($options as $option) {
                 // draw options label
                 $lines[][] = array(
-                    'text' => $this->string->split(strip_tags($option['label']), 40, true, true),
+                    'text' => $this->string->split($this->filterManager->stripTags($option['label']), 40, true, true),
                     'font' => 'italic',
                     'feed' => 35
                 );
 
                 // draw options value
-                $_printValue = isset($option['print_value']) ? $option['print_value'] : strip_tags($option['value']);
+                $printValue = isset($option['print_value'])
+                    ? $option['print_value']
+                    : $this->filterManager->stripTags($option['value']);
                 $lines[][] = array(
-                    'text' => $this->string->split($_printValue, 30, true, true),
+                    'text' => $this->string->split($printValue, 30, true, true),
                     'feed' => 40
                 );
             }

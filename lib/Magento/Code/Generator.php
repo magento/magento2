@@ -48,7 +48,7 @@ class Generator
     protected $_ioObject;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $_generatedEntities = array(
         \Magento\Code\Generator\Factory::ENTITY_TYPE,
@@ -76,7 +76,9 @@ class Generator
     }
 
     /**
-     * @return array
+     * Get generated entities
+     *
+     * @return string[]
      */
     public function getGeneratedEntities()
     {

@@ -29,22 +29,23 @@
         <indexerModel instance="Instance_Type_Two" />
         <false/>
         <stockIndexerModel instance="Instance_Type_Three" />
-        <allowProductTypes>
-            <type name="type_one" />
-        </allowProductTypes>
     </type>
     <type name="type_two" modelInstance="Instance_Type">
         <allowedSelectionTypes>
             <type name="type_two" />
         </allowedSelectionTypes>
+        <customAttributes>
+            <attribute name="some_name" value="some_value" />
+        </customAttributes>
     </type>
     <type name="type_three" label="Label Three" modelInstance="Instance_Type" composite="false" indexPriority="20" canUseQtyDecimals="false" isQty="false">
         <priceModel instance="Instance_Type_Three" />
         <indexerModel instance="Instance_Type_Three" />
         <false/>
         <stockIndexerModel instance="Instance_Type_Three" />
-        <allowProductTypes>
-            <type name="type_three" />
-        </allowProductTypes>
     </type>
+    <composableTypes>
+        <type name="type_one" />
+        <type name="type_three" />        
+    </composableTypes>
 </config>

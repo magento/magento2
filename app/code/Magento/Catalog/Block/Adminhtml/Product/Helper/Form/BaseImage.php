@@ -38,7 +38,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Model Url instance
      *
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 

@@ -26,10 +26,10 @@
 <config>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <downloadable>/downloadable/customer/</downloadable>
-                <downloadable_download>/downloadable/download/</downloadable_download>
-            </value>
+            <array>
+                <item key="downloadable"><value>/downloadable/customer/</value></item>
+                <item key="downloadable_download"><value>/downloadable/download/</value></item>
+            </array>
         </param>
     </type>
 </config>

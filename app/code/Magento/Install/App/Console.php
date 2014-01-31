@@ -27,7 +27,7 @@ namespace Magento\Install\App;
 
 use Magento\App\Console\Response;
 
-class Console implements \Magento\AppInterface
+class Console implements \Magento\LauncherInterface
 {
     /**
      * @var  \Magento\Install\Model\Installer\ConsoleFactory
@@ -155,7 +155,7 @@ class Console implements \Magento\AppInterface
      *
      * @return \Magento\App\ResponseInterface
      */
-    public function execute()
+    public function launch()
     {
         $areaCode = 'install';
         $this->_state->setAreaCode($areaCode);

@@ -27,7 +27,6 @@
     <module name="Magento_Downloadable" version="1.6.0.0.3" active="true">
         <sequence>
             <module name="Magento_Catalog"/>
-            <module name="Magento_GroupedProduct" />
         </sequence>
         <depends>
             <module name="Magento_Catalog"/>

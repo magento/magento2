@@ -25,9 +25,6 @@
 -->
 <config>
     <type label="some_label" name="some_name" modelInstance="model_name">
-        <allowProductTypes>
-            <type name="type_name"/>
-        </allowProductTypes>
         <allowedSelectionTypes>
             <type name="some_name" />
         </allowedSelectionTypes>
@@ -36,9 +33,6 @@
         <stockIndexerModel instance="instance_name"/>
     </type>
     <type label="some_label" name="some_name2" modelInstance="model_name">
-        <allowProductTypes>
-            <type name="type_name"/>
-        </allowProductTypes>
         <allowedSelectionTypes>
             <type name="some_name" />
         </allowedSelectionTypes>
@@ -46,4 +40,8 @@
         <indexerModel instance="instance_name" />
         <stockIndexerModel instance="instance_name"/>
     </type>
+    <composableTypes>
+        <type name="some_name"/>
+        <type name="some_name2"/>
+    </composableTypes>
 </config>

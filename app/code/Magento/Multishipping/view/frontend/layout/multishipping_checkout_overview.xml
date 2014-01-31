@@ -25,6 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="multishipping_checkout"/>
+    <update handle="checkout_cart_item_renderers" />
     <referenceBlock name="page.main.title">
         <action method="setPageTitle">
             <argument translate="true" name="label" xsi:type="string">Review Order</argument>
@@ -32,11 +33,11 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Multishipping\Block\Checkout\Overview" name="checkout_overview" template="checkout/overview.phtml" cacheable="false">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="Magento_Multishipping::checkout/item/default.phtml" cacheable="false"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="Magento_Multishipping::checkout/item/default.phtml" cacheable="false"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="Magento_Multishipping::checkout/item/default.phtml" cacheable="false"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="row-grouped" template="Magento_Multishipping::checkout/overview/item.phtml" cacheable="false"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="row-configurable" template="Magento_Multishipping::checkout/overview/item.phtml" cacheable="false"/>
+            <arguments>
+                <argument name="renderer_template" xsi:type="string">Magento_Multishipping::checkout/item/default.phtml</argument>
+                <argument name="row_renderer_template" xsi:type="string">Magento_Multishipping::checkout/overview/item.phtml</argument>
+            </arguments>
+            <block class="Magento\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list" />
             <block class="Magento\Multishipping\Block\Checkout\Payment\Info" name="payment_info">
                 <action method="setInfoTemplate">
                     <argument name="method" xsi:type="string"/>

@@ -30,10 +30,7 @@ namespace Magento\Archive\Helper\File;
 class Bz extends \Magento\Archive\Helper\File
 {
     /**
-     * Open bz archive file
-     *
-     * @throws \Magento\Exception
-     * @param string $mode
+     * {@inheritdoc}
      */
     protected function _open($mode)
     {
@@ -45,10 +42,7 @@ class Bz extends \Magento\Archive\Helper\File
     }
 
     /**
-     * Write data to bz archive
-     * 
-     * @throws \Magento\Exception
-     * @param $data
+     * {@inheritdoc}
      */
     protected function _write($data)
     {
@@ -60,11 +54,7 @@ class Bz extends \Magento\Archive\Helper\File
     }
 
     /**
-     * Read data from bz archive
-     *
-     * @throws \Magento\Exception
-     * @param int $length
-     * @return string
+     * {@inheritdoc}
      */
     protected function _read($length)
     {
@@ -78,7 +68,7 @@ class Bz extends \Magento\Archive\Helper\File
     }
 
     /**
-     * Close bz archive
+     * {@inheritdoc}
      */
     protected function _close()
     {

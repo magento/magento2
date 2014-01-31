@@ -29,9 +29,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <reports_setup>Magento\Reports\Model\Resource\Setup</reports_setup>
-            </value>
+            <array>
+                <item key="reports_setup"><value>Magento\Reports\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
     <virtualType name="Magento\Reports\Model\Session\Storage" type="Magento\Session\Storage">

@@ -31,17 +31,17 @@
     </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <customer>/customer/</customer>
-            </value>
+            <array>
+                <item key="customer"><value>/customer/</value></item>
+            </array>
         </param>
     </type>
     <virtualType name="customerAccountInitSession" type="Magento\Core\App\Action\Plugin\Session">
         <param name="cookieCheckActions">
-            <value>
-                <customerLogin>loginPost</customerLogin>
-                <customerCreate>createpost</customerCreate>
-            </value>
+            <array>
+                <item key="customerLogin"><value>loginPost</value></item>
+                <item key="customerCreate"><value>createpost</value></item>
+            </array>
         </param>
     </virtualType>
     <type name="Magento\Customer\Controller\Account">

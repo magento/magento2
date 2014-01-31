@@ -62,6 +62,11 @@ class Preview extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * Get html code
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         /* @var $template \Magento\Newsletter\Model\Template */

@@ -48,16 +48,30 @@ abstract class AbstractDto
      */
     protected function _get($key)
     {
-        return isset($this->_data[$key]) ? $this->_data[$key]: null;
+        return isset($this->_data[$key]) ? $this->_data[$key] : null;
     }
 
     /**
      * Return DTO data in array format.
      *
-     * @return \ArrayAccess
+     * This only handles use cases of nested DTOs and array of DTOs
+     *
+     * @return array
      */
     public function __toArray()
     {
-        return $this->_data;
+        $data = $this->_data;
+        foreach ($data as $key => $value) {
+            if (method_exists($value, '__toArray')) {
+                $data[$key] = $value->__toArray();
+            } else if (is_array($value)) {
+                foreach ($value as $nestedArrayKey => $nestedArrayValue) {
+                    if (method_exists($nestedArrayValue, '__toArray')) {
+                        $data[$nestedArrayKey] = $nestedArrayValue->__toArray();
+                    }
+                }
+            }
+        }
+        return $data;
     }
 }

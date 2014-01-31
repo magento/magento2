@@ -34,7 +34,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\Core\Model\Layout';
 
     /**
-     * Url model classes that will be used instead of \Magento\Core\Model\Url in different vde modes
+     * Url model classes that will be used instead of \Magento\UrlInterface in different vde modes
      */
     const URL_MODEL_NAVIGATION_MODE_CLASS_NAME = 'Magento\DesignEditor\Model\Url\NavigationMode';
 
@@ -148,11 +148,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnSelf());
 
-        $this->_application->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($storeManager));
-
-        $configMock = $this->getMock('Magento\Core\Model\Config', array('setNode'), array(), '', false);
+        $configMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $configMock->expects($this->any())
             ->method('setNode')
             ->with(
@@ -184,7 +180,8 @@ class StateTest extends \PHPUnit_Framework_TestCase
             $this->_dataHelper,
             $this->_objectManager,
             $this->_application,
-            $this->_themeContext
+            $this->_themeContext,
+            $storeManager
         );
     }
 

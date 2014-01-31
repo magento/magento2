@@ -134,8 +134,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter collection by specified website(s)
      *
-     * @param int|array $websiteIds
-     * @return \Magento\Log\Model\Resource\Visitor\Online\Collection
+     * @param int|int[] $websiteIds
+     * @return $this
      */
     public function addWebsiteFilter($websiteIds)
     {

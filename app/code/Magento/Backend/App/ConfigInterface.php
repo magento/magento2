@@ -57,5 +57,5 @@ interface ConfigInterface
      * @param string $path
      * @return bool
      */
-    public function getFlag($path);
+    public function isSetFlag($path);
 }

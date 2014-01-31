@@ -31,7 +31,14 @@ namespace Magento\System;
 
 class Args
 {
+    /**
+     * @var array
+     */
     public $flags;
+
+    /**
+     * @var array
+     */
     public $filtered;
 
     /**
@@ -54,8 +61,9 @@ class Args
 
     /**
      * Constructor
-     * @param array $argv, if false $GLOBALS['argv'] is taken
-     * @return void
+     * Note: the array $argv, if false $GLOBALS['argv'] is taken
+     *
+     * @param bool $source
      */
     public function __construct($source = false)
     {

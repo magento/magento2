@@ -285,7 +285,7 @@ class Application
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\App\Http $app */
         $app = $objectManager->get('Magento\App\Http');
-        $response = $app->execute();
+        $response = $app->launch();
         $response->sendResponse();
     }
 

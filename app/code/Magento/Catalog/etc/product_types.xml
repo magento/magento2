@@ -24,14 +24,26 @@
  */
 -->
 <config>
-    <type name="simple" label="Simple Product" modelInstance="Magento\Catalog\Model\Product\Type\Simple" indexPriority="10" />
+    <type name="simple" label="Simple Product" modelInstance="Magento\Catalog\Model\Product\Type\Simple" indexPriority="10">
+        <customAttributes>
+            <attribute name="refundable" value="true"/>
+        </customAttributes>
+    </type>
     <type name="configurable" label="Configurable Product" modelInstance="Magento\Catalog\Model\Product\Type\Configurable" composite='true' indexPriority="30">
         <priceModel instance="Magento\Catalog\Model\Product\Type\Configurable\Price" />
         <indexerModel instance="Magento\Catalog\Model\Resource\Product\Indexer\Price\Configurable" />
-        <allowProductTypes>
-            <type name="simple" />
-            <type name="virtual" />
-        </allowProductTypes>
+        <customAttributes>
+            <attribute name="refundable" value="true"/>
+        </customAttributes>
     </type>
-    <type name="virtual" label="Virtual Product" modelInstance="Magento\Catalog\Model\Product\Type\Virtual" indexPriority="20" />
+    <type name="virtual" label="Virtual Product" modelInstance="Magento\Catalog\Model\Product\Type\Virtual" indexPriority="20">
+        <customAttributes>
+            <attribute name="is_real_product" value="false"/>
+        </customAttributes>
+    </type>
+
+    <composableTypes>
+        <type name="simple" />
+        <type name="virtual" />
+    </composableTypes>
 </config>

@@ -50,6 +50,7 @@ class ActionFlag
      * @param   string $action
      * @param   string $flag
      * @param   string $value
+     * @return void
      */
     public function set($action, $flag, $value)
     {

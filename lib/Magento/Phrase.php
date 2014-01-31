@@ -25,12 +25,14 @@
  */
 namespace Magento;
 
+use \Magento\Phrase\RendererInterface;
+
 class Phrase
 {
     /**
      * Default phrase renderer. Allows stacking renderers that "don't know about each other"
      *
-     * @var \Magento\Phrase\RendererInterface
+     * @var RendererInterface
      */
     private static $_renderer;
 
@@ -51,9 +53,10 @@ class Phrase
     /**
      * Set default Phrase renderer
      *
-     * @param \Magento\Phrase\RendererInterface $renderer
+     * @param RendererInterface $renderer
+     * @return void
      */
-    public static function setRenderer(\Magento\Phrase\RendererInterface $renderer)
+    public static function setRenderer(RendererInterface $renderer)
     {
         self::$_renderer = $renderer;
     }

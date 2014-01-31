@@ -55,7 +55,7 @@ class Cookie
      * @param string $domain
      * @param bool|int|string $secure
      * @param bool|string $httponly
-     * @return \Magento\Stdlib\Cookie
+     * @return $this
      */
     public function set($name, $value, $period = null, $path = null, $domain = null, $secure = null, $httponly = null)
     {
@@ -90,7 +90,7 @@ class Cookie
      * @param string $domain
      * @param bool|int|string $secure
      * @param string|bool $httponly
-     * @return \Magento\Stdlib\Cookie
+     * @return $this
      */
     public function renew($name, $period = null, $path = null, $domain = null, $secure = null, $httponly = null)
     {

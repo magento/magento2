@@ -23,16 +23,26 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block\Adminhtml\Rating;
+
+use Magento\Rating\Model\Rating;
+use Magento\Rating\Model\Rating\Option;
+use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
+use Magento\Rating\Model\Resource\Rating\Option\Vote\Collection as VoteCollection;
 
 /**
  * Adminhtml detailed rating stars
  */
-namespace Magento\Review\Block\Adminhtml\Rating;
-
 class Detailed extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var VoteCollection
+     */
     protected $_voteCollection = false;
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Rating::rating/detailed.phtml';
 
     /**
@@ -81,6 +91,9 @@ class Detailed extends \Magento\Backend\Block\Template
         }
     }
 
+    /**
+     * @return RatingCollection
+     */
     public function getRating()
     {
         if (!$this->getRatingCollection()) {
@@ -131,12 +144,20 @@ class Detailed extends \Magento\Backend\Block\Template
         return $this->getRatingCollection();
     }
 
+    /**
+     * @return $this
+     */
     public function setIndependentMode()
     {
         $this->setIsIndependentMode(true);
         return $this;
     }
 
+    /**
+     * @param Option $option
+     * @param Rating $rating
+     * @return bool
+     */
     public function isSelected($option, $rating)
     {
         if ($this->getIsIndependentMode()) {

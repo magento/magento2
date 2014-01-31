@@ -48,6 +48,11 @@ class Subscriber extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * Newsletter subscribers page
+     *
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Newsletter Subscribers'));
@@ -67,6 +72,11 @@ class Subscriber extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Managing newsletter grid
+     *
+     * @return void
+     */
     public function gridAction()
     {
         $this->_view->loadLayout(false);
@@ -75,6 +85,8 @@ class Subscriber extends \Magento\Backend\App\Action
 
     /**
      * Export subscribers grid to CSV format
+     *
+     * @return void
      */
     public function exportCsvAction()
     {
@@ -91,6 +103,8 @@ class Subscriber extends \Magento\Backend\App\Action
 
     /**
      * Export subscribers grid to XML format
+     *
+     * @return void
      */
     public function exportXmlAction()
     {
@@ -104,6 +118,11 @@ class Subscriber extends \Magento\Backend\App\Action
         );
     }
 
+    /**
+     * Unsubscribe one or more subscribers action
+     *
+     * @return void
+     */
     public function massUnsubscribeAction()
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
@@ -127,6 +146,11 @@ class Subscriber extends \Magento\Backend\App\Action
         $this->_redirect('*/*/index');
     }
 
+    /**
+     * Delete one or more subscribers action
+     *
+     * @return void
+     */
     public function massDeleteAction()
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
@@ -148,6 +172,11 @@ class Subscriber extends \Magento\Backend\App\Action
         $this->_redirect('*/*/index');
     }
 
+    /**
+     * Check if user has enough privileges
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Newsletter::subscriber');

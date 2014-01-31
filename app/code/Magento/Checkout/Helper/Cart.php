@@ -119,8 +119,8 @@ class Cart extends \Magento\Core\Helper\Url
         }
 
         if ($product->hasUrlDataObject()) {
-            $routeParams['_store'] = $product->getUrlDataObject()->getStoreId();
-            $routeParams['_store_to_url'] = true;
+            $routeParams['_scope'] = $product->getUrlDataObject()->getStoreId();
+            $routeParams['_scope_to_url'] = true;
         }
 
         if ($this->_getRequest()->getRouteName() == 'checkout'

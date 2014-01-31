@@ -76,7 +76,7 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->urlBuilder = $this->getMockBuilder('Magento\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder('Magento\Url')
             ->setMethods(array('isOwnOriginUrl'))
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -155,5 +155,19 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
             $this->model->getSessionIdQueryParam($this->session)
         );
         $this->session->setName($oldSessionName);
+    }
+
+    public function testSetGetUseSessionVar()
+    {
+        $this->assertFalse($this->model->getUseSessionVar());
+        $this->model->setUseSessionVar(true);
+        $this->assertTrue($this->model->getUseSessionVar());
+    }
+
+    public function testSetGetUseSessionInUrl()
+    {
+        $this->assertTrue($this->model->getUseSessionInUrl());
+        $this->model->setUseSessionInUrl(false);
+        $this->assertFalse($this->model->getUseSessionInUrl());
     }
 }

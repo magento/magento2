@@ -32,5 +32,8 @@
             <type name="simple" />
             <type name="virtual" />
         </allowedSelectionTypes>
+        <customAttributes>
+            <attribute name="refundable" value="true"/>
+        </customAttributes>
     </type>
 </config>

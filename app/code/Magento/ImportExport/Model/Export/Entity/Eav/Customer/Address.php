@@ -123,7 +123,7 @@ class Address
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -135,7 +135,7 @@ class Address
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -145,8 +145,15 @@ class Address
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory,
         array $data = array()
     ) {
-        parent::__construct($coreStoreConfig, $app, $collectionFactory, $resourceColFactory, $locale, $eavConfig,
-            $data);
+        parent::__construct(
+            $coreStoreConfig,
+            $storeManager,
+            $collectionFactory,
+            $resourceColFactory,
+            $locale,
+            $eavConfig,
+            $data
+        );
 
         $this->_customerCollection = isset($data['customer_collection']) ? $data['customer_collection']
             : $customerColFactory->create();

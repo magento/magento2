@@ -97,7 +97,7 @@ class Address
     /**
      * Return billing address object
      *
-     * @return \Magento\Customer\Model\Address
+     * @return \Magento\Sales\Model\Quote\Address
      */
     public function getAddress()
     {

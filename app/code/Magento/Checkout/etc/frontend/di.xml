@@ -31,16 +31,16 @@
     </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <checkout_onepage>/checkout/onepage</checkout_onepage>
-            </value>
+            <array>
+                <item key="checkout_onepage"><value>/checkout/onepage</value></item>
+            </array>
         </param>
     </type>
     <virtualType name="checkoutCartInitSession" type="Magento\Core\App\Action\Plugin\Session">
         <param name="cookieCheckActions">
-            <value>
-                <checkoutCartAdd>add</checkoutCartAdd>
-            </value>
+            <array>
+                <item key="checkoutCartAdd"><value>add</value></item>
+            </array>
         </param>
     </virtualType>
     <type name="Magento\Checkout\Controller\Cart">

@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <paypal_setup>Magento\Sales\Model\Resource\Setup</paypal_setup>
-            </value>
+            <array>
+                <item key="paypal_setup"><value>Magento\Sales\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

@@ -94,12 +94,12 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
             ),
         ));
 
-        $options = new \Magento\App\Config(
+        $options = new \Magento\App\Arguments(
             $arguments,
-            new \Magento\App\Config\Loader($directoryList)
+            new \Magento\App\Arguments\Loader($directoryList)
         );
 
-        $objectManager->addSharedInstance($options, 'Magento\App\Config');
+        $objectManager->addSharedInstance($options, 'Magento\App\Arguments');
         $objectManager->getFactory()->setArguments($options->get());
         $objectManager->configure(
             $objectManager->get('Magento\App\ObjectManager\ConfigLoader')->load('global')

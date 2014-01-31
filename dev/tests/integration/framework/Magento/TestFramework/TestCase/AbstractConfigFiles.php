@@ -54,7 +54,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
         $xmlFiles = $this->getXmlConfigFiles();
         if (!empty($xmlFiles)) {
 
-            $this->_fileResolverMock = $this->getMockBuilder('Magento\App\Config\FileResolver\Primary')
+            $this->_fileResolverMock = $this->getMockBuilder('Magento\App\Arguments\FileResolver\Primary')
                 ->disableOriginalConstructor()->getMock();
 
             /* Enable Validation regardles of MAGE_MODE */

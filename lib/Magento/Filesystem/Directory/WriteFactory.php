@@ -33,7 +33,7 @@ class WriteFactory
      *
      * @param array $config
      * @param \Magento\Filesystem\DriverFactory $driverFactory
-     * @return \Magento\Filesystem\File\ReadInterface
+     * @return \Magento\Filesystem\File\WriteInterface
      */
     public function create(array $config, \Magento\Filesystem\DriverFactory $driverFactory)
     {

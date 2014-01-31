@@ -132,14 +132,20 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_wishlOptionCollectionFactory;
 
     /**
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     */
+    protected $productTypeConfig;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Date $date
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Wishlist\Model\Item\OptionFactory $wishlistOptFactory
-     * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $wishlOptionCollectionFactory
+     * @param Item\OptionFactory $wishlistOptFactory
+     * @param Resource\Item\Option\CollectionFactory $wishlOptionCollectionFactory
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -153,10 +159,12 @@ class Item extends \Magento\Core\Model\AbstractModel
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Wishlist\Model\Item\OptionFactory $wishlistOptFactory,
         \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $wishlOptionCollectionFactory,
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
+        $this->productTypeConfig = $productTypeConfig;
         $this->_storeManager = $storeManager;
         $this->_date = $date;
         $this->_productFactory = $productFactory;
@@ -474,7 +482,6 @@ class Item extends \Magento\Core\Model\AbstractModel
         $option = $this->getOptionByCode('info_buyRequest');
         $initialData = $option ? unserialize($option->getValue()) : null;
 
-        // There can be wrong data due to bug in Grouped products - it formed 'info_buyRequest' as \Magento\Object
         if ($initialData instanceof \Magento\Object) {
             $initialData = $initialData->getData();
         }
@@ -724,7 +731,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     public function canHaveQty()
     {
         $product = $this->getProduct();
-        return $product->getTypeId() != \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE;
+        return !$this->productTypeConfig->isProductSet($product->getTypeId());
     }
 
     /**

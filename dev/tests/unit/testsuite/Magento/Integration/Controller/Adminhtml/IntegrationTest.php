@@ -51,7 +51,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Core\Model\Layout\Filter\Acl|\PHPUnit_Framework_MockObject_MockObject */
     protected $_layoutFilterMock;
 
-    /** @var \Magento\Core\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_configMock;
 
     /** @var \Magento\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -122,7 +122,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getConfig'))
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_configMock = $this->getMockBuilder('Magento\Core\Model\Config')->disableOriginalConstructor()
+        $this->_configMock = $this->getMockBuilder('Magento\App\ConfigInterface')->disableOriginalConstructor()
             ->getMock();
         $this->_appMock->expects($this->any())->method('getConfig')->will($this->returnValue($this->_configMock));
         $this->_eventManagerMock = $this->getMockBuilder('Magento\Event\ManagerInterface')
@@ -647,7 +647,7 @@ HANDLE;
     protected function _verifyLoadAndRenderLayout()
     {
         $map = array(
-            array('Magento\Core\Model\Config', $this->_configMock),
+            array('Magento\App\ConfigInterface', $this->_configMock),
             array('Magento\Core\Model\Layout\Filter\Acl', $this->_layoutFilterMock),
             array('Magento\Backend\Model\Session', $this->_backendSessionMock),
             array('Magento\Core\Model\Translate', $this->_translateModelMock),

@@ -96,6 +96,7 @@ class Subscriber extends \Magento\App\Action\Action
      * New subscription action
      *
      * @throws \Magento\Core\Exception
+     * @return void
      */
     public function newAction()
     {
@@ -141,6 +142,7 @@ class Subscriber extends \Magento\App\Action\Action
 
     /**
      * Subscription confirm action
+     * @return void
      */
     public function confirmAction()
     {
@@ -167,6 +169,7 @@ class Subscriber extends \Magento\App\Action\Action
 
     /**
      * Unsubscribe newsletter
+     * @return void
      */
     public function unsubscribeAction()
     {

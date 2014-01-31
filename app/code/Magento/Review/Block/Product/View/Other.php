@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Review\Block\Product\View;
+
 /**
  * Product view other block
  */
-namespace Magento\Review\Block\Product\View;
-
 class Other extends \Magento\View\Element\Template
 {
     /**

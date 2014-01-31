@@ -41,7 +41,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testBackendLoginActionWithInvalidCaptchaReturnsError()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\UrlInterface')
             ->turnOffSecretKey();
 
         $post = array(
@@ -114,7 +114,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCheckUnsuccessfulMessageWhenCaptchaFailed()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\UrlInterface')
             ->turnOffSecretKey();
         $this->getRequest()->setPost(array('email'   => 'dummy@dummy.com', 'captcha' => '1234'));
         $this->dispatch('backend/admin/auth/forgotpassword');

@@ -65,7 +65,7 @@ class Data extends \Magento\App\Helper\AbstractHelper implements HelperInterface
      */
     protected function _getUrl($route, $params = array())
     {
-        $params['_type'] = \Magento\Core\Model\Store::URL_TYPE_LINK;
+        $params['_type'] = \Magento\UrlInterface::URL_TYPE_LINK;
         if (isset($params['is_secure'])) {
             $params['_secure'] = (bool)$params['is_secure'];
         } elseif ($this->_storeManager->getStore()->isCurrentlySecure()) {

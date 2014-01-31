@@ -48,11 +48,11 @@ class Review extends \Magento\View\Element\Template
     protected $_currentShippingRate = null;
 
     /**
-     * Paypal action prefix
+     * Paypal controller path
      *
      * @var string
      */
-    protected $_paypalActionPrefix = 'paypal';
+    protected $_controllerPath = 'paypal/express';
 
     /**
      * @var \Magento\Tax\Helper\Data
@@ -187,11 +187,11 @@ class Review extends \Magento\View\Element\Template
     }
 
     /**
-     * Set paypal actions prefix
+     * Set controller path
      */
-    public function setPaypalActionPrefix($prefix)
+    public function setControllerPath($prefix)
     {
-        $this->_paypalActionPrefix = $prefix;
+        $this->_controllerPath = $prefix;
     }
 
     /**
@@ -233,8 +233,8 @@ class Review extends \Magento\View\Element\Template
     {
         $methodInstance = $this->_quote->getPayment()->getMethodInstance();
         $this->setPaymentMethodTitle($methodInstance->getTitle());
-        $this->setUpdateOrderSubmitUrl($this->getUrl("{$this->_paypalActionPrefix}/express/updateOrder"));
-        $this->setUpdateShippingMethodsUrl($this->getUrl("{$this->_paypalActionPrefix}/express/updateShippingMethods"));
+        $this->setUpdateOrderSubmitUrl($this->getUrl("{$this->_controllerPath}/updateOrder"));
+        $this->setUpdateShippingMethodsUrl($this->getUrl("{$this->_controllerPath}/updateShippingMethods"));
 
         $this->setShippingRateRequired(true);
         if ($this->_quote->getIsVirtual()) {
@@ -257,14 +257,14 @@ class Review extends \Magento\View\Element\Template
             }
 
             // misc shipping parameters
-            $this->setShippingMethodSubmitUrl($this->getUrl("{$this->_paypalActionPrefix}/express/saveShippingMethod"))
+            $this->setShippingMethodSubmitUrl($this->getUrl("{$this->_controllerPath}/saveShippingMethod"))
                 ->setCanEditShippingAddress($this->_quote->getMayEditShippingAddress())
                 ->setCanEditShippingMethod($this->_quote->getMayEditShippingMethod())
             ;
         }
 
-        $this->setEditUrl($this->getUrl("{$this->_paypalActionPrefix}/express/edit"))
-            ->setPlaceOrderUrl($this->getUrl("{$this->_paypalActionPrefix}/express/placeOrder"));
+        $this->setEditUrl($this->getUrl("{$this->_controllerPath}/edit"))
+            ->setPlaceOrderUrl($this->getUrl("{$this->_controllerPath}/placeOrder"));
 
         return parent::_beforeToHtml();
     }

@@ -33,13 +33,14 @@ class Dom extends \Magento\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = array(
-        '/config/preference'         => 'for',
-        '/config/type'               => 'name',
-        '/config/type/param'         => 'name',
-        '/config/type/plugin'        => 'name',
-        '/config/virtualType'        => 'name',
-        '/config/virtualType/param'  => 'name',
-        '/config/virtualType/plugin' => 'name',
+        '/config/preference'                             => 'for',
+        '/config/type'                                   => 'name',
+        '/config/type/param'                             => 'name',
+        '/config/type/plugin'                            => 'name',
+        '/config/virtualType'                            => 'name',
+        '/config/virtualType/param'                      => 'name',
+        '/config/virtualType/plugin'                     => 'name',
+        '/config/(type|virtualType)/param(/array/item)+' => 'key',
     );
 
     /**

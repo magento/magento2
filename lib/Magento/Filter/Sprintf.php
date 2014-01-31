@@ -31,22 +31,22 @@ class Sprintf implements \Zend_Filter_Interface
     /**
      * @var string
      */
-    protected $_format;
+    protected $format;
 
     /**
      * @var int
      */
-    protected $_decimals;
+    protected $decimals;
 
     /**
      * @var string
      */
-    protected $_decPoint;
+    protected $decPoint;
 
     /**
      * @var string
      */
-    protected $_thousandsSep;
+    protected $thousandsSep;
 
     /**
      * @param string $format
@@ -54,24 +54,24 @@ class Sprintf implements \Zend_Filter_Interface
      * @param string $decPoint
      * @param string $thousandsSep
      */
-    public function __construct($format, $decimals = 0, $decPoint = '.', $thousandsSep = ',')
+    public function __construct($format, $decimals = null, $decPoint = '.', $thousandsSep = ',')
     {
-        $this->_format = $format;
-        $this->_decimals = $decimals;
-        $this->_decPoint = $decPoint;
-        $this->_thousandsSep = $thousandsSep;
+        $this->format = $format;
+        $this->decimals = $decimals;
+        $this->decPoint = $decPoint;
+        $this->thousandsSep = $thousandsSep;
     }
 
     /**
      * @param string $value
-     * @return mixed|string
+     * @return string
      */
     public function filter($value)
     {
-        if (!is_null($this->_decimals)) {
-            $value = number_format($value, $this->_decimals, $this->_decPoint, $this->_thousandsSep);
+        if (null !== $this->decimals) {
+            $value = number_format($value, $this->decimals, $this->decPoint, $this->thousandsSep);
         }
-        $value = sprintf($this->_format, $value);
+        $value = sprintf($this->format, $value);
         return $value;
     }
 }

@@ -112,7 +112,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_customerData = $this->getMock('Magento\Customer\Helper\Data', array(), array(), '', false);
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', array(), array(), '', false);
-        $this->_urlManager = $this->getMock('Magento\Core\Model\Url', array(), array(), '', false);
+        $this->_urlManager = $this->getMock('Magento\Url', array(), array(), '', false);
         $this->_actionFlag = $this->getMock('Magento\App\ActionFlag', array(), array(), '', false);
         $this->_messageManager = $this->getMock('\Magento\Message\ManagerInterface', array(), array(), '', false);
         $this->redirect = $this->getMock('\Magento\App\Response\RedirectInterface', array(), array(), '', false);

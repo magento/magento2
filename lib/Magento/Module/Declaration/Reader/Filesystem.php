@@ -25,6 +25,11 @@
  */
 namespace Magento\Module\Declaration\Reader;
 
+use Magento\Module\Declaration\FileResolver;
+use Magento\Module\Declaration\Converter\Dom;
+use Magento\Module\Declaration\SchemaLocator;
+use Magento\Config\ValidationStateInterface;
+
 class Filesystem extends \Magento\Config\Reader\Filesystem
 {
     /**
@@ -45,10 +50,10 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
     );
 
     /**
-     * @param \Magento\Module\Declaration\FileResolver $fileResolver
-     * @param \Magento\Module\Declaration\Converter\Dom $converter
-     * @param \Magento\Module\Declaration\SchemaLocator $schemaLocator
-     * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param FileResolver $fileResolver
+     * @param Dom $converter
+     * @param SchemaLocator $schemaLocator
+     * @param ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
@@ -56,10 +61,10 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
      * @param array $allowedModules
      */
     public function __construct(
-        \Magento\Module\Declaration\FileResolver $fileResolver,
-        \Magento\Module\Declaration\Converter\Dom $converter,
-        \Magento\Module\Declaration\SchemaLocator $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState,
+        FileResolver $fileResolver,
+        Dom $converter,
+        SchemaLocator $schemaLocator,
+        ValidationStateInterface $validationState,
         $fileName = 'module.xml',
         $idAttributes = array(),
         $domDocumentClass = 'Magento\Config\Dom',
@@ -115,6 +120,7 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
      *
      * @param array $moduleConfig
      * @param array $activeModules
+     * @return void
      * @throws \Exception
      */
     protected function _checkModuleDependencies(array $moduleConfig, array $activeModules)
@@ -147,6 +153,7 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
      *
      * @param string $moduleName
      * @param array $altExtensions
+     * @return void
      * @throws \Exception
      */
     protected function _checkAlternativeExtensions($moduleName, array $altExtensions)

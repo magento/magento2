@@ -65,8 +65,8 @@ class Object extends \Zend_Filter
     }
 
     /**
-     * @param mixed $object
-     * @return mixed
+     * @param \Magento\Object $object
+     * @return \Magento\Object
      * @throws \Exception
      */
     public function filter($object)

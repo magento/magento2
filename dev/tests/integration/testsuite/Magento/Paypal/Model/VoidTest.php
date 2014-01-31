@@ -31,7 +31,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoDataFixture Magento/Paypal/_files/order_payflowpro.php
-     * @magentoConfigFixture current_store payment/verisign/active 1
+     * @magentoConfigFixture current_store payment/payflowpro/active 1
      */
     public function testPayflowProVoid()
     {

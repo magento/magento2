@@ -27,23 +27,31 @@
  */
 namespace Magento\PubSub;
 
-class Event implements \Magento\PubSub\EventInterface
+class Event implements EventInterface
 {
-    /** @var int */
-    protected $_status = \Magento\PubSub\EventInterface::STATUS_READY_TO_SEND;
+    /**
+     * @var int
+     */
+    protected $_status = EventInterface::STATUS_READY_TO_SEND;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $_bodyData;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $_headers = array();
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_topic;
 
     /**
-     * @param $topic
-     * @param $bodyData
+     * @param string $topic
+     * @param array $bodyData
      */
     public function __construct($topic, $bodyData)
     {
@@ -95,22 +103,22 @@ class Event implements \Magento\PubSub\EventInterface
     /**
      * Mark event as processed
      *
-     * @return \Magento\PubSub\Event
+     * @return $this
      */
     public function complete()
     {
-        $this->_status = \Magento\PubSub\EventInterface::STATUS_PROCESSED;
+        $this->_status = EventInterface::STATUS_PROCESSED;
         return $this;
     }
 
     /**
      * Mark event as processed
      *
-     * @return \Magento\PubSub\Event
+     * @return $this
      */
     public function markAsInProgress()
     {
-        $this->_status = \Magento\PubSub\EventInterface::STATUS_IN_PROGRESS;
+        $this->_status = EventInterface::STATUS_IN_PROGRESS;
         return $this;
     }
 }

@@ -65,7 +65,7 @@ class Collection extends \Magento\Log\Model\Resource\Visitor\Online\Collection
     }
 
     /**
-     * @return \Magento\Log\Model\Resource\Visitor\Online\Grid\Collection
+     * @return $this
      */
     protected function _initSelect()
     {

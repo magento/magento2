@@ -41,7 +41,7 @@ class Stock extends \Magento\Data\Form\Element\Select
     protected $_qty;
 
     /**
-     * Is product composite (grouped or configurable)
+     * Is product composite
      *
      * @var bool
      */
@@ -55,10 +55,19 @@ class Stock extends \Magento\Data\Form\Element\Select
     protected $_factoryText;
 
     /**
+     * List of product types that treated as complex and
+     * has no quantity option if taken without their children
+     *
+     * @var array
+     */
+    protected $complexProductTypes;
+
+    /**
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Escaper $escaper
      * @param \Magento\Data\Form\Element\TextFactory $factoryText
+     * @param array $complexProductTypes
      * @param array $data
      */
     public function __construct(
@@ -66,10 +75,12 @@ class Stock extends \Magento\Data\Form\Element\Select
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Escaper $escaper,
         \Magento\Data\Form\Element\TextFactory $factoryText,
+        array $complexProductTypes = array(),
         array $data = array()
     ) {
         $this->_factoryText = $factoryText;
         $this->_qty = isset($data['qty']) ? $data['qty'] : $this->_createQtyElement();
+        $this->complexProductTypes = $complexProductTypes;
         unset($data['qty']);
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setName($data['name']);
@@ -139,7 +150,7 @@ class Stock extends \Magento\Data\Form\Element\Select
     }
 
     /**
-     * Get whether product is configurable or grouped
+     * Get whether product is composite
      *
      * @return bool
      */
@@ -190,10 +201,10 @@ class Stock extends \Magento\Data\Form\Element\Select
                         useConfigManageStockField = $('#inventory_use_config_manage_stock');
 
                     var disabler = function(event) {
+                        var complexProductTypes = " . json_encode(array_values($this->complexProductTypes)) . ";
                         var hasVariation = $('[data-panel=product-variations]').is('.opened');
                         if ((productType == 'configurable' && hasVariation)
-                            || productType == 'grouped'
-                            || productType == 'bundle'//@TODO move this check to Magento_Bundle after refactoring as widget
+                            || $.inArray(productType, complexProductTypes) >= 0
                             || hasVariation
                         ) {
                             return;

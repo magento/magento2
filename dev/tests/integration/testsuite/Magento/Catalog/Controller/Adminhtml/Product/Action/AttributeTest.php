@@ -49,7 +49,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
 
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        /** @var \Magento\Backend\Model\Url $urlBuilder */
+        /** @var \Magento\Backend\Model\UrlInterface $urlBuilder */
         $urlBuilder = $objectManager->get('Magento\UrlInterface');
 
         /** @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper */

@@ -95,10 +95,11 @@ class CodeSniffer
      * @param array $whiteList Files/directories to be inspected
      * @param array $blackList Files/directories to be excluded from the inspection
      * @param array $extensions Array of alphanumeric strings, for example: 'php', 'xml', 'phtml', 'css'...
+     * @param int $warningSeverity Severity level of warnings, default is 0
      *
      * @return int
      */
-    public function run(array $whiteList, array $blackList = array(), array $extensions = array())
+    public function run(array $whiteList, array $blackList = array(), array $extensions = array(), $warningSeverity = 0)
     {
         $whiteList = array_map(function ($item) {
             return $item;
@@ -115,7 +116,7 @@ class CodeSniffer
         $settings['ignored'] = $blackList;
         $settings['extensions'] = $extensions;
         $settings['reportFile'] = $this->_reportFile;
-        $settings['warningSeverity'] = 0;
+        $settings['warningSeverity'] = $warningSeverity;
         $settings['reports']['checkstyle'] = null;
         $this->_wrapper->setValues($settings);
 

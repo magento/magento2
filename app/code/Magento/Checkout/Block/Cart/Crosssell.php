@@ -63,6 +63,11 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_productLinkFactory;
 
     /**
+     * @var \Magento\Sales\Model\Quote\Item\RelatedProducts
+     */
+    protected $_itemRelationsList;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
@@ -78,9 +83,10 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\CatalogInventory\Model\Stock $stock
      * @param \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory
+     * @param \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList
      * @param array $data
      * @param array $priceBlockTypes
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,6 +105,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\CatalogInventory\Model\Stock $stock,
         \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory,
+        \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {
@@ -106,6 +113,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_productVisibility = $productVisibility;
         $this->_stock = $stock;
         $this->_productLinkFactory = $productLinkFactory;
+        $this->_itemRelationsList = $itemRelationsList;
         parent::__construct(
             $context,
             $catalogConfig,
@@ -152,7 +160,10 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
                 }
 
                 if (count($items) < $this->_maxItemCount) {
-                    $filterProductIds = array_merge($this->_getCartProductIds(), $this->_getCartProductIdsRel());
+                    $filterProductIds = array_merge(
+                        $this->_getCartProductIds(),
+                        $this->_itemRelationsList->getRelatedProductIds($this->getQuote()->getAllItems())
+                    );
                     $collection = $this->_getCollection()
                         ->addProductFilter($filterProductIds)
                         ->addExcludeProductFilter($ninProductIds)
@@ -164,7 +175,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
                         $items[] = $item;
                     }
                 }
-
             }
 
             $this->setData('items', $items);
@@ -201,28 +211,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
             $this->setData('_cart_product_ids', $ids);
         }
         return $ids;
-    }
-
-    /**
-     * Retrieve Array of product ids which have special relation with products in Cart
-     * For example simple product as part of Grouped product
-     *
-     * @return array
-     */
-    protected function _getCartProductIdsRel()
-    {
-        $productIds = array();
-        foreach ($this->getQuote()->getAllItems() as $quoteItem) {
-            $productTypeOpt = $quoteItem->getOptionByCode('product_type');
-            if ($productTypeOpt instanceof \Magento\Sales\Model\Quote\Item\Option
-                && $productTypeOpt->getValue() == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
-                && $productTypeOpt->getProductId()
-            ) {
-                $productIds[] = $productTypeOpt->getProductId();
-            }
-        }
-
-        return $productIds;
     }
 
     /**

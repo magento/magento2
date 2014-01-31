@@ -494,7 +494,7 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
         if ($this->_subst === null) {
             $placeholders = array(
                 'baseUrl'       => $this->_store->getBaseUrl(),
-                'baseSecureUrl' => $this->_store->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_LINK, true),
+                'baseSecureUrl' => $this->_store->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true),
             );
             $this->_subst = array();
             foreach ($placeholders as $key => $value) {

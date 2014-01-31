@@ -43,9 +43,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <catalogrule_setup>Magento\Core\Model\Resource\Setup\Generic</catalogrule_setup>
-            </value>
+            <array>
+                <item key="catalogrule_setup"><value>Magento\Core\Model\Resource\Setup\Generic</value></item>
+            </array>
         </param>
     </type>
 </config>

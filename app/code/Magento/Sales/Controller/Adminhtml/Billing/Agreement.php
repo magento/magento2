@@ -192,14 +192,10 @@ class Agreement extends \Magento\Backend\App\Action
      */
     protected function _initCustomer()
     {
-        $customerId = (int) $this->getRequest()->getParam('id');
-        $customer = $this->_objectManager->create('Magento\Customer\Model\Customer');
-
+        $customerId = (int)$this->getRequest()->getParam('id');
         if ($customerId) {
-            $customer->load($customerId);
+            $this->_coreRegistry->register('current_customer_id', $customerId);
         }
-
-        $this->_coreRegistry->register('current_customer', $customer);
         return $this;
     }
 

@@ -27,7 +27,7 @@
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Backend\Model\Locale" />
     <preference for="Magento\App\Action\Context" type="Magento\Backend\App\Action\Context" />
-    <preference for="Magento\UrlInterface" type="Magento\Backend\Model\Url" />
+    <preference for="Magento\UrlInterface" type="Magento\Backend\Model\UrlInterface" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
     <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
     <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
@@ -41,7 +41,7 @@
     <preference for="Magento\App\View" type="Magento\Backend\Model\View" />
     <type name="Magento\Backend\Model\Translate\Inline">
         <param name="url">
-            <instance type="Magento\Backend\Model\Url" />
+            <instance type="Magento\Backend\Model\UrlInterface" />
         </param>
     </type>
     <type name="Magento\Backend\App\Action\Context">
@@ -51,7 +51,7 @@
     </type>
     <type name="Magento\Backend\Model\Auth\Session">
         <param name="backendUrl">
-            <instance type="Magento\Backend\Model\Url\Proxy" />
+            <instance type="Magento\Backend\Model\UrlInterface\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Model\Session">
@@ -100,18 +100,22 @@
     </type>
     <type name="Magento\App\RouterList">
         <param name="routerList">
-            <value>
-                <admin>
-                    <instance>Magento\Backend\App\Router\DefaultRouter</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>10</sortOrder>
-                </admin>
-                <default>
-                    <instance>Magento\App\Router\DefaultRouter</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>100</sortOrder>
-                </default>
-            </value>
+            <array>
+                <item key="admin">
+                    <array>
+                        <item key="instance"><value>Magento\Backend\App\Router\DefaultRouter</value></item>
+                        <item key="disable"><value type="bool">false</value></item>
+                        <item key="sortOrder"><value>10</value></item>
+                    </array>
+                </item>
+                <item key="default">
+                    <array>
+                        <item key="instance"><value>Magento\App\Router\DefaultRouter</value></item>
+                        <item key="disable"><value type="bool">false</value></item>
+                        <item key="sortOrder"><value>100</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Core\App\Action\Plugin\Session">

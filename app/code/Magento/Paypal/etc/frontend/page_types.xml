@@ -32,4 +32,5 @@
     <type id="paypal_payflowadvanced_cancelpayment" label="Paypal Payflow Advanced Cancel Payment"/>
     <type id="paypal_payflowadvanced_form" label="Paypal Payflow Advanced Form"/>
     <type id="paypal_payflowadvanced_returnurl" label="Paypal Payflow Advanced Return URL"/>
+    <type id="paypal_payflowexpress_review" label="PayPal Express Order Review Form"/>
 </page_types>

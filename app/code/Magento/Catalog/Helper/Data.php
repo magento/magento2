@@ -338,20 +338,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve attribute disabled types
-     *
-     * @return array
-     */
-    public function getAttributeDisabledTypes()
-    {
-        if ($this->_coreRegistry->registry('attribute_type_disabled_types')) {
-            return $this->_coreRegistry->registry('attribute_type_disabled_types');
-        } else {
-            return array();
-        }
-    }
-
-    /**
      * Retrieve Catalog Price Scope
      *
      * @return int

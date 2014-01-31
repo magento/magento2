@@ -84,37 +84,35 @@ class AbstractCart extends \Magento\View\Element\Template
     }
 
     /**
-     * Initialize default item renderer
+     * Retrieve renderer list
+     *
+     * @return \Magento\View\Element\RendererList
      */
-    protected function _prepareLayout()
+    protected function _getRendererList()
     {
-        if (!$this->getChildBlock(self::DEFAULT_TYPE)) {
-            $this->addChild(
-                self::DEFAULT_TYPE,
-                'Magento\Checkout\Block\Cart\Item\Renderer',
-                array('template' => 'cart/item/default.phtml')
-            );
-        }
-        return parent::_prepareLayout();
+        return $this->getRendererListName()
+            ? $this->getLayout()->getBlock($this->getRendererListName())
+            : $this->getChildBlock('renderer.list');
     }
 
     /**
-     * Get renderer block instance by product type code
+     * Retrieve item renderer block
      *
-     * @param  string $type
+     * @param string $type
+     *
+     * @return \Magento\View\Element\Template
      * @throws \RuntimeException
-     * @return \Magento\View\Element\AbstractBlock
      */
     public function getItemRenderer($type)
     {
-        $renderer = $this->getChildBlock($type) ?: $this->getChildBlock(self::DEFAULT_TYPE);
-        if (!$renderer instanceof \Magento\View\Element\BlockInterface) {
-            throw new \RuntimeException('Renderer for type "' . $type . '" does not exist.');
+        $rendererList = $this->_getRendererList();
+        if (!$rendererList) {
+            throw new \RuntimeException('Renderer list for block "' . $this->getNameInLayout() . '" is not defined');
         }
-        $renderer->setRenderedBlock($this);
-        return $renderer;
+        $overriddenTemplates = $this->getOverriddenTemplates() ?: array();
+        $template = isset($overriddenTemplates[$type]) ? $overriddenTemplates[$type] : $this->getRendererTemplate();
+        return $rendererList->getRenderer($type, self::DEFAULT_TYPE, $template);
     }
-
 
     /**
      * Get logged in customer

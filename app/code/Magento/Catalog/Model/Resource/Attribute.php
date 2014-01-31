@@ -44,33 +44,21 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     protected $_eavConfig;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * Class constructor
      *
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param array $arguments
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\App $app,
-        \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        array $arguments = array()
+        \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
-        $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
-        parent::__construct($resource, $app, $eavEntityType, $arguments);
+        parent::__construct($resource, $storeManager, $eavEntityType);
     }
 
     /**

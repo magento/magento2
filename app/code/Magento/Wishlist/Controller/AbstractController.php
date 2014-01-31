@@ -151,7 +151,7 @@ abstract class AbstractController extends \Magento\App\Action\Action
         if ($isOwner) {
             $indexUrl = $this->_objectManager->get('Magento\Wishlist\Helper\Data')->getListUrl($wishlist->getId());
         } else {
-            $indexUrl = $this->_objectManager->create('Magento\Core\Model\Url')
+            $indexUrl = $this->_objectManager->create('Magento\UrlInterface')
                 ->getUrl('wishlist/shared', array('code' => $wishlist->getSharingCode()));
         }
         if ($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getShouldRedirectToCart()) {

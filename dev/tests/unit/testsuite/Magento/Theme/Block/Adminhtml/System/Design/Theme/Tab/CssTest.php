@@ -102,12 +102,12 @@ class CssTest extends \PHPUnit_Framework_TestCase
     {
         $method = self::getMethod('_getAdditionalElementTypes');
 
-        /** @var $configModel \Magento\Core\Model\Config */
-        $configModel = $this->getMock('Magento\Core\Model\Config', null, array(), '', false);
+        /** @var $configModel \Magento\App\ConfigInterface */
+        $configModel = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
 
         $this->_objectManager->expects($this->any())
             ->method('get')
-            ->with('Magento\Core\Model\Config')
+            ->with('Magento\App\ConfigInterface')
             ->will($this->returnValue($configModel));
 
         $result = $method->invokeArgs($this->_model, array());

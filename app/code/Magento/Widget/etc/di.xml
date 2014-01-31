@@ -53,9 +53,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <widget_setup>Magento\Core\Model\Resource\Setup\Generic</widget_setup>
-            </value>
+            <array>
+                <item key="widget_setup"><value>Magento\Core\Model\Resource\Setup\Generic</value></item>
+            </array>
         </param>
     </type>
 </config>

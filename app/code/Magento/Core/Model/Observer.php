@@ -49,7 +49,7 @@ class Observer
     private $_pageAssets;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ReinitableConfigInterface
      */
     protected $_config;
 
@@ -72,7 +72,7 @@ class Observer
      * @param \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Asset\GroupedCollection $assets
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\App\ReinitableConfigInterface $config
      * @param \Magento\View\Asset\PublicFileFactory $assetFileFactory
      * @param \Magento\Core\Model\Theme\Registration $registration
      * @param \Magento\Logger $logger
@@ -81,7 +81,7 @@ class Observer
         \Magento\App\Cache\Frontend\Pool $cacheFrontendPool,
         \Magento\View\DesignInterface $design,
         \Magento\View\Asset\GroupedCollection $assets,
-        \Magento\Core\Model\ConfigInterface $config,
+        \Magento\App\ReinitableConfigInterface $config,
         \Magento\View\Asset\PublicFileFactory $assetFileFactory,
         \Magento\Core\Model\Theme\Registration $registration,
         \Magento\Logger $logger

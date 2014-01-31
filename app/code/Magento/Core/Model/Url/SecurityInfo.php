@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Model\Url;
 
-class SecurityInfo implements \Magento\Core\Model\Url\SecurityInfoInterface
+class SecurityInfo implements \Magento\Url\SecurityInfoInterface
 {
     /**
      * Store manager

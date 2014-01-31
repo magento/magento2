@@ -92,7 +92,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'coreHelper' => $this->_coreHelper,
             'storeManager' => $storeManager,
             'currencyFactory' => $currencyFactory,
-            'config' => $this->getMock('Magento\Core\Model\Config', array(), array(), '', false),
+            'config' => $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false),
         );
         $this->_object = $objectManager->getObject('Magento\Directory\Helper\Data', $arguments);
     }

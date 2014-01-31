@@ -29,14 +29,14 @@ class Config implements \Magento\Image\Adapter\ConfigInterface
     const XML_PATH_IMAGE_ADAPTERS = 'dev/image/adapters';
 
     /**
-     * @var \Magento\Core\Model\ConfigInterface
+     * @var \Magento\App\ConfigInterface
      */
     protected $config;
 
     /**
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\App\ConfigInterface $config
      */
-    public function __construct(\Magento\Core\Model\ConfigInterface $config)
+    public function __construct(\Magento\App\ConfigInterface $config)
     {
         $this->config = $config;
     }

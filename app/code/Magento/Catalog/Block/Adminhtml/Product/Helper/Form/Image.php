@@ -39,7 +39,8 @@ class Image extends \Magento\Data\Form\Element\Image
     {
         $url = false;
         if ($this->getValue()) {
-            $url = $this->_urlBuilder->getBaseUrl('media') . 'catalog/product/' . $this->getValue();
+            $url = $this->_urlBuilder
+                ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . $this->getValue();
         }
         return $url;
     }

@@ -40,7 +40,7 @@ class LastUrl
     protected $_session;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -53,9 +53,9 @@ class LastUrl
 
     /**
      * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\UrlInterface $url
      */
-    public function __construct(\Magento\Core\Model\Session $session, \Magento\Core\Model\Url $url)
+    public function __construct(\Magento\Core\Model\Session $session, \Magento\UrlInterface $url)
     {
         $this->_session = $session;
         $this->_url = $url;

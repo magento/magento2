@@ -87,7 +87,6 @@ class Dom
      * @param array $idAttributes
      * @param string $schemaFile
      * @param string $errorFormat
-     * @throws \Magento\Config\Dom\ValidationException
      */
     public function __construct(
         $xml, array $idAttributes = array(), $schemaFile = null, $errorFormat = self::ERROR_FORMAT_DEFAULT
@@ -104,7 +103,6 @@ class Dom
      *
      * @param string $xml
      * @return void
-     * @throws \Magento\Config\Dom\ValidationException
      */
     public function merge($xml)
     {
@@ -209,7 +207,12 @@ class Dom
     {
         $path = preg_replace('/\[@[^\]]+?\]/', '', $xPath);
         $path = preg_replace('/\/[^:]+?\:/', '/', $path);
-        return isset($this->_idAttributes[$path]) ? $this->_idAttributes[$path] : false;
+        foreach ($this->_idAttributes as $pathPattern => $id) {
+            if (preg_match("#^$pathPattern$#", $path)) {
+                return $id;
+            }
+        }
+        return false;
     }
 
     /**

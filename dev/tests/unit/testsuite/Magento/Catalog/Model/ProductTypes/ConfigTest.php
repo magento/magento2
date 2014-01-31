@@ -64,15 +64,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function getTypeDataProvider()
     {
         return array(
-            'global_key_exist' => array(array('global' => 'value'), 'value'),
-            'return_default_value' => array(array('some_key' => 'value'), array())
+            'global_key_exist' => array(array('types' => array('global' => 'value')), 'value'),
+            'return_default_value' => array(array('types' => array('some_key' => 'value')), array())
         );
     }
 
     public function testGetAll()
     {
         $expected = array('Expected Data');
-        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(serialize($expected)));
+        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(
+            serialize(array('types' => $expected)))
+        );
         $this->model = new \Magento\Catalog\Model\ProductTypes\Config(
             $this->readerMock,
             $this->cacheMock,

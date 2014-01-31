@@ -101,6 +101,7 @@ class Authentication
      * Set "auth failed" headers to the specified response object
      *
      * @param string $realm
+     * @return void
      */
     public function setAuthenticationFailed($realm)
     {

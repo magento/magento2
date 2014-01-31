@@ -32,9 +32,14 @@ use Magento\ObjectManager;
 class Factory
 {
     /**
+     * Default file list collator
+     */
+    const FILE_LIST_COLLATOR = 'Magento\View\Layout\File\FileList\Collator';
+
+    /**
      * @var ObjectManager
      */
-    private $objectManager;
+    protected $objectManager;
 
     /**
      * @param ObjectManager $objectManager
@@ -47,10 +52,14 @@ class Factory
     /**
      * Return newly created instance of a layout file list
      *
+     * @param string $collator
      * @return \Magento\View\Layout\File\FileList
      */
-    public function create()
+    public function create($collator = self::FILE_LIST_COLLATOR)
     {
-        return $this->objectManager->create('Magento\View\Layout\File\FileList');
+        return $this->objectManager->create(
+            'Magento\View\Layout\File\FileList',
+            array('collator' => $this->objectManager->get($collator))
+        );
     }
 }

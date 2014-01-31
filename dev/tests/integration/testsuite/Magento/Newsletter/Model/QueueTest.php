@@ -82,7 +82,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\View\Url'),
                 $objectManager->get('Magento\View\FileSystem'),
                 $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
-                $objectManager->get('Magento\Core\Model\ConfigInterface'),
+                $objectManager->get('Magento\App\ConfigInterface'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
             )
@@ -128,7 +128,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\View\Url'),
                 $objectManager->get('Magento\View\FileSystem'),
                 $objectManager->get('Magento\Core\Model\Store\ConfigInterface'),
-                $objectManager->get('Magento\Core\Model\ConfigInterface'),
+                $objectManager->get('Magento\App\ConfigInterface'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
             )

@@ -40,14 +40,24 @@ class HeaderPluginTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
-     * @var \Magento\Core\Model\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
-
+    
     /**
      * @var \Magento\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $responseMock;
+
+    /**
+     * @var \Magento\PageCache\Model\Version|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $versionMock;
+
+    /**
+     * @var \Magento\PageCache\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $helperMock;
 
     /**
      * SetUp
@@ -55,48 +65,96 @@ class HeaderPluginTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
-        $this->configMock = $this->getMock('Magento\Core\Model\ConfigInterface', array(), array(), '', false);
+        $this->configMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $this->responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
-        $this->plugin = new HeaderPlugin($this->layoutMock, $this->configMock);
+        $this->helperMock = $this->getMock('Magento\PageCache\Helper\Data', array(), array(), '', false);
+        $this->versionMock = $this->getMockBuilder('Magento\PageCache\Model\Version')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->plugin = new HeaderPlugin($this->layoutMock, $this->configMock, $this->helperMock, $this->versionMock);
     }
 
     /**
-     * data providers for response headers
+     * Test if layout is not cacheable
      */
-    public function headersCachableDataProvider()
+    public function testAfterDispatchNotCacheable()
     {
-        return array(
-            array(false, false, '10', 'no-store, no-cache, must-revalidate, max-age=0', 'no-cache'),
-            array(true, false, '20', 'public, max-age=20', 'cache'),
-            array(true, true, '30', 'private, max-age=30', 'cache'),
-        );
-    }
+        $pragma = 'no-cache';
+        $cacheControl = 'no-store, no-cache, must-revalidate, max-age=0';
 
-    /**
-     * test response headers after dispatch, without cache
-     *
-     * @dataProvider headersCachableDataProvider
-     */
-    public function testAfterDispatchCacheable($isCacheable, $isPrivate, $maxAge, $cacheControl, $pragma)
-    {
         $this->layoutMock->expects($this->once())
             ->method('isCacheable')
-            ->will($this->returnValue($isCacheable));
-        $this->layoutMock->expects($this->any())
-            ->method('isPrivate')
-            ->will($this->returnValue($isPrivate));
-        $this->configMock->expects($this->any())
-            ->method('getValue')
-            ->with('system/headers/max-age')
-            ->will($this->returnValue($maxAge));
+            ->will($this->returnValue(false));
 
         $this->responseMock->expects($this->at(0))
             ->method('setHeader')
-            ->with('pragma', $pragma);
-
+            ->with($this->equalTo('pragma'), $this->equalTo($pragma), $this->equalTo(true));
         $this->responseMock->expects($this->at(1))
             ->method('setHeader')
-            ->with('cache-control', $cacheControl);
+            ->with($this->equalTo('cache-control'), $this->equalTo($cacheControl), $this->equalTo(true));
+        $this->responseMock->expects($this->at(2))
+            ->method('setHeader')
+            ->with($this->equalTo('expires'));
+
+        $this->versionMock->expects($this->once())->method('process');
+
+        $this->plugin->afterDispatch($this->responseMock);
+    }
+
+    /**
+     * Testing that `cache-control` already exists
+     */
+    public function testAfterDispatchPrivateCache()
+    {
+        $pragma = 'cache';
+
+        $this->layoutMock->expects($this->once())
+            ->method('isCacheable')
+            ->will($this->returnValue(true));
+
+        $this->responseMock->expects($this->at(0))
+            ->method('setHeader')
+            ->with($this->equalTo('pragma'), $this->equalTo($pragma), $this->equalTo(true));
+        $this->responseMock->expects($this->at(1))
+            ->method('getHeader')
+            ->with($this->equalTo('cache-control'))
+            ->will($this->returnValue(true));
+
+        $this->versionMock->expects($this->once())->method('process');
+
+        $this->plugin->afterDispatch($this->responseMock);
+    }
+
+    /**
+     * Test setting public headers
+     */
+    public function testAfterDispatchPublicCache()
+    {
+        $maxAge = 0;
+        $pragma = 'cache';
+        $cacheControl = 'public, max-age=' . $maxAge;
+
+        $this->layoutMock->expects($this->once())
+            ->method('isCacheable')
+            ->will($this->returnValue(true));
+
+        $this->helperMock->expects($this->once())->method('getPublicMaxAgeCache')->will($this->returnValue(0));
+
+        $this->responseMock->expects($this->at(0))
+            ->method('setHeader')
+            ->with($this->equalTo('pragma'), $this->equalTo($pragma), $this->equalTo(true));
+        $this->responseMock->expects($this->at(1))
+            ->method('getHeader')
+            ->with($this->equalTo('cache-control'))
+            ->will($this->returnValue(false));
+        $this->responseMock->expects($this->at(2))
+            ->method('setHeader')
+            ->with($this->equalTo('cache-control'), $this->equalTo($cacheControl), $this->equalTo(true));
+        $this->responseMock->expects($this->at(3))
+            ->method('setHeader')
+            ->with($this->equalTo('expires'));
+
+        $this->versionMock->expects($this->once())->method('process');
 
         $this->plugin->afterDispatch($this->responseMock);
     }

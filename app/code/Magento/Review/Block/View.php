@@ -36,6 +36,9 @@ namespace Magento\Review\Block;
 
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
+    /**
+     * @var string
+     */
     protected $_template = 'view.phtml';
 
     /**

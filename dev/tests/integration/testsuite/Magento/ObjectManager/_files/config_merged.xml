@@ -26,22 +26,22 @@
 <config>
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\UpdaterOne" />
     <preference for="Magento\Module\UpdaterInterfaceTwo" type="Magento\Module\UpdaterTwo"/>
-    <type name="Magento\App\Config\Loader" shared="false">
+    <type name="Magento\App\Arguments\Loader" shared="false">
         <param name="customFile">
-            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
+            <value type="argument">Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE</value>
         </param>
         <param name="customConfig">
-            <instance shared="false" type="Magento\Core\Model\Config\Storage_Modules" />
+            <instance shared="false" type="Magento\Core\Model\Config\Storage\Modules" />
         </param>
         <param name="customValue">
             <value>someCustomValue</value>
         </param>
         <param name="customComplexValue">
-            <value transalte="three" module="Some_Module">
-                <one>one</one>
-                <two>two</two>
-                <three>three</three>
-            </value>
+            <array>
+                <item key="one"><value>one</value></item>
+                <item key="two"><value>two</value></item>
+                <item key="three"><value>three</value></item>
+            </array>
         </param>
         <plugin name="one" type="somePluginOne" sortOrder="800"/>
         <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
@@ -50,21 +50,21 @@
         </param>
         <plugin name="three" type="somePluginThree"/>
     </type>
-    <virtualType name="Magento\App\Config\LoaderVirtual" type="Magento\App\Config\Loader\Local" shared="true">
+    <virtualType name="Magento\App\Arguments\LoaderVirtual" type="Magento\App\Arguments\Loader\Local" shared="true">
         <param name="customFile">
-            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
+            <value type="argument">Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE</value>
         </param>
         <param name="customConfig">
-            <instance type="Magento\Core\Model\Config\Storage_Modules" />
+            <instance type="Magento\Core\Model\Config\Storage\Modules" />
         </param>
         <param name="customValue">
             <value>someValue</value>
         </param>
         <param name="customComplexValue">
-            <value transalte="one,two" module="Some_Module">
-                <one>one</one>
-                <two>one</two>
-            </value>
+            <array>
+                <item key="one"><value>one</value></item>
+                <item key="two"><value>one</value></item>
+            </array>
         </param>
         <plugin name="one" type="somePluginOne" sortOrder="800" />
         <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
@@ -74,16 +74,17 @@
         <param name="cacheIdPrefix"><value><![CDATA[collection_]]></value></param>
         <param name="cacheLifetime"><value>86400</value></param>
         <param name="cacheTags">
-            <value>
-                <const type='const'>Magento\Core\Model\Website::CACHE_TAG</const>
-                <boolFalse type='bool'>1</boolFalse>
-                <boolTrue type='int'>10</boolTrue>
-                <boolOne type='string' pattern="[0-9]*">1</boolOne>
-                <boolZero type='bool'>0</boolZero>
-                <intValue type='int'>100500</intValue>
-                <nullValue type='null' />
-                <stringPattern type='string' pattern="[a-zA-Z\-]*">Az-Value</stringPattern>
-            </value>
+            <array>
+                <item key="const"><value type="const">Magento\Core\Model\Website::CACHE_TAG</value></item>
+                <item key="boolFalse"><value type="bool">1</value></item>
+                <item key="boolTrue"><value type="int">10</value></item>
+                <item key="boolOne"><value type="string" pattern="[0-9]*">1</value></item>
+                <item key="boolZero"><value type="bool">0</value></item>
+                <item key="intValue"><value type="int">100500</value></item>
+                <item key="nullValue"><value type="null"/>
+                </item>
+                <item key="stringPattern"><value type="string" pattern="[a-zA-Z\-]*">Az-Value</value></item>
+            </array>
         </param>
         <param name="constParam">
             <value type='const'>Magento\Core\Model\Website::CACHE_TAG</value>

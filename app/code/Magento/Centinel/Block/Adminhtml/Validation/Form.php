@@ -38,6 +38,8 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
      * Prepare validation and template parameters
+     *
+     * @return string
      */
     protected function _toHtml()
     {

@@ -45,7 +45,7 @@ class Collection
      * Adding new message to collection
      *
      * @param MessageInterface $message
-     * @return Collection
+     * @return $this
      */
     public function addMessage(MessageInterface $message)
     {
@@ -60,7 +60,7 @@ class Collection
     /**
      * Clear all messages except sticky
      *
-     * @return Collection
+     * @return $this
      */
     public function clear()
     {
@@ -113,6 +113,7 @@ class Collection
      * Delete message by id
      *
      * @param string $identifier
+     * @return void
      */
     public function deleteMessageByIdentifier($identifier)
     {

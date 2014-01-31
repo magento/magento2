@@ -51,9 +51,9 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_application;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
-    protected $_app;
+    protected $_storeManager;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Type
@@ -64,21 +64,15 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Class constructor
      *
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
-     * @param array $arguments
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\App $app,
-        \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
-        array $arguments = array()
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
     ) {
-        if (isset($arguments['application']) && $arguments['application'] instanceof \Magento\Core\Model\App) {
-            $this->_application = $arguments['application'];
-            unset($arguments['application']);
-        }
-        $this->_app = $app;
+        $this->_storeManager = $storeManager;
         $this->_eavEntityType = $eavEntityType;
         parent::__construct($resource);
     }
@@ -90,16 +84,6 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('eav_attribute', 'attribute_id');
-    }
-
-    /**
-     * Retrieve application instance
-     *
-     * @return \Magento\Core\Model\App
-     */
-    protected function _getApplication()
-    {
-        return $this->_application ?: $this->_app;
     }
 
     /**
@@ -493,7 +477,7 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         $adapter->delete($table, array('option_id = ?' => $optionId));
 
-        $stores = $this->_getApplication()->getStores(true);
+        $stores = $this->_storeManager->getStores(true);
         foreach ($stores as $store) {
             $storeId = $store->getId();
             if (!empty($values[$storeId]) || isset($values[$storeId]) && $values[$storeId] == '0') {

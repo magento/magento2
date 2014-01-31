@@ -56,7 +56,7 @@ class Installer extends \Magento\Object
     /**
      * Application config model
      *
-     * @var \Magento\Core\Model\ConfigInterface
+     * @var \Magento\App\ReinitableConfigInterface
      */
     protected $_config;
 
@@ -159,13 +159,20 @@ class Installer extends \Magento\Object
     protected $mathRandom;
 
     /**
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * Configuration arguments
+     *
+     * @var \Magento\App\Arguments
+     */
+    protected $_arguments;
+
+    /**
+     * @param \Magento\App\ReinitableConfigInterface $config
      * @param \Magento\Module\UpdaterInterface $dbUpdater
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\Module\Updater\SetupFactory $setupFactory
-     * @param \Magento\App\Config $localConfig
+     * @param \Magento\App\Arguments $arguments
      * @param \Magento\Core\Model\App $app
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -181,13 +188,13 @@ class Installer extends \Magento\Object
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\ConfigInterface $config,
+        \Magento\App\ReinitableConfigInterface $config,
         \Magento\Module\UpdaterInterface $dbUpdater,
         \Magento\App\CacheInterface $cache,
         \Magento\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\App\Cache\StateInterface $cacheState,
         \Magento\Module\Updater\SetupFactory $setupFactory,
-        \Magento\App\Config $localConfig,
+        \Magento\App\Arguments $arguments,
         \Magento\Core\Model\App $app,
         \Magento\App\State $appState,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -211,7 +218,7 @@ class Installer extends \Magento\Object
         $this->_encryptor = $encryptor;
         $this->mathRandom = $mathRandom;
         parent::__construct($data);
-        $this->_localConfig = $localConfig;
+        $this->_arguments = $arguments;
         $this->_app = $app;
         $this->_appState = $appState;
         $this->_storeManager = $storeManager;
@@ -323,7 +330,7 @@ class Installer extends \Magento\Object
             ->setConfigData($data)
             ->install();
 
-        $this->_localConfig->reload();
+        $this->_arguments->reload();
         $this->_resource->setTablePrefix($data['db_prefix']);
 
         $this->_config->reinit();

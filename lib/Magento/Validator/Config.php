@@ -25,6 +25,10 @@
  */
 namespace Magento\Validator;
 
+use Magento\Validator\Constraint\Option;
+use Magento\Validator\Constraint\OptionInterface;
+use Magento\Validator\Constraint\Option\Callback;
+
 class Config extends \Magento\Config\AbstractXml
 {
     /**#@+
@@ -296,7 +300,7 @@ class Config extends \Magento\Config\AbstractXml
      * Get arguments.
      *
      * @param array $children
-     * @return array|null
+     * @return OptionInterface[]|null
      */
     protected function _readArguments($children)
     {
@@ -313,7 +317,7 @@ class Config extends \Magento\Config\AbstractXml
                     $arguments[] = $options;
                 } else {
                     $argument = $node->textContent;
-                    $arguments[] = new \Magento\Validator\Constraint\Option(trim($argument));
+                    $arguments[] = new Option(trim($argument));
                 }
 
             }
@@ -326,7 +330,7 @@ class Config extends \Magento\Config\AbstractXml
      * Get callback rules.
      *
      * @param array $children
-     * @return array|null
+     * @return Callback[]|null
      */
     protected function _readCallback($children)
     {
@@ -334,7 +338,7 @@ class Config extends \Magento\Config\AbstractXml
             $callbacks = array();
             /** @var $callbackData \DOMElement */
             foreach ($children['callback'] as $callbackData) {
-                $callbacks[] = new \Magento\Validator\Constraint\Option\Callback(array(
+                $callbacks[] = new Callback(array(
                     trim($callbackData->getAttribute('class')),
                     trim($callbackData->getAttribute('method'))
                 ), null, true);
@@ -348,7 +352,7 @@ class Config extends \Magento\Config\AbstractXml
      * Get options array.
      *
      * @param array $children
-     * @return array|null
+     * @return Option|null
      */
     protected function _readOptions($children)
     {
@@ -363,7 +367,7 @@ class Config extends \Magento\Config\AbstractXml
                     $data[] = $value;
                 }
             }
-            return new \Magento\Validator\Constraint\Option($data);
+            return new Option($data);
         }
         return null;
     }

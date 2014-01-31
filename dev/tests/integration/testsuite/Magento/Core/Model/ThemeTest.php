@@ -70,14 +70,33 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     public function testChildRelation()
     {
         /** @var $theme \Magento\View\Design\ThemeInterface */
-        /** @var $currentTheme \Magento\View\Design\ThemeInterface */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\Design\ThemeInterface');
         $collection = $theme->getCollection()->addTypeFilter(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL);
+        /** @var $currentTheme \Magento\View\Design\ThemeInterface */
         foreach ($collection as $currentTheme) {
             $parentTheme = $currentTheme->getParentTheme();
             if (!empty($parentTheme)) {
                 $this->assertTrue($parentTheme->hasChildThemes());
             }
         }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Core/Model/_files/design/themes.php
+     * @magentoAppIsolation enabled
+     * @magentoAppArea frontend
+     */
+    public function testGetInheritedThemes()
+    {
+        /** @var \Magento\View\Design\Theme\FlyweightFactory $themeFactory */
+        $themeFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\View\Design\Theme\FlyweightFactory');
+        $theme = $themeFactory->create('vendor_custom_theme');
+        $this->assertCount(2, $theme->getInheritedThemes());
+        $expected = array();
+        foreach ($theme->getInheritedThemes() as $someTheme) {
+            $expected[] = $someTheme->getFullPath();
+        }
+        $this->assertEquals(array('frontend/vendor_default', 'frontend/vendor_custom_theme'), $expected);
     }
 }

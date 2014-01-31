@@ -65,6 +65,7 @@ class Generate implements \Magento\Code\Minifier\StrategyInterface
      *
      * @param string $originalFile path to original file relative to pub/view_cache
      * @param string $targetFile path relative to pub/view_cache
+     * @return void
      */
     public function minifyFile($originalFile, $targetFile)
     {

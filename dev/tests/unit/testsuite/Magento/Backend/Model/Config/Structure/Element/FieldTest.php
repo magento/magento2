@@ -41,7 +41,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_applicationMock;
+    protected $_storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -78,7 +78,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->_iteratorMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Iterator', array(), array(), '', false
         );
-        $this->_applicationMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->_backendFactoryMock = $this->getMock(
             'Magento\Backend\Model\Config\BackendFactory', array(), array(), '', false
         );
@@ -96,7 +96,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Field(
-            $this->_applicationMock,
+            $this->_storeManagerMock,
             $this->_backendFactoryMock,
             $this->_sourceFactoryMock,
             $this->_commentFactoryMock,
@@ -108,7 +108,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_iteratorMock);
-        unset($this->_applicationMock);
+        unset($this->_storeManagerMock);
         unset($this->_backendFactoryMock);
         unset($this->_sourceFactoryMock);
         unset($this->_commentFactoryMock);

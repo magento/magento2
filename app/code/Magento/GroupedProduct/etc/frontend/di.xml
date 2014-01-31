@@ -26,22 +26,26 @@
 <config>
     <type name="Magento\Catalog\Block\Product\AbstractProduct">
         <param name="priceBlockTypes">
-            <value>
-                <grouped>
-                    <block>Magento\Catalog\Block\Product\Price</block>
-                    <template>Magento_GroupedProduct::product/price.phtml</template>
-                </grouped>
-            </value>
+            <array>
+                <item key="grouped">
+                    <array>
+                        <item key="block"><value>Magento\Catalog\Block\Product\Price</value></item>
+                        <item key="template"><value>Magento_GroupedProduct::product/price.phtml</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Catalog\Block\Product\Price\Template">
         <param name="priceBlockTypes">
-            <value>
-                <grouped>
-                    <block>Magento\Catalog\Block\Product\Price</block>
-                    <template>Magento_GroupedProduct::product/price.phtml</template>
-                </grouped>
-            </value>
+            <array>
+                <item key="grouped">
+                    <array>
+                        <item key="block"><value>Magento\Catalog\Block\Product\Price</value></item>
+                        <item key="template"><value>Magento_GroupedProduct::product/price.phtml</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
 </config>

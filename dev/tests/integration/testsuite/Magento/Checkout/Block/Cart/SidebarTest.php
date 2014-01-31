@@ -36,6 +36,13 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->setAreaCode('frontend');
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Checkout\Block\Cart\Sidebar');
+        $this->_block->addChild('renderer.list', '\Magento\View\Element\RendererList');
+        $this->_block->getChildBlock('renderer.list')
+            ->addChild(
+                'default',
+                '\Magento\Checkout\Block\Cart\Item\Renderer',
+                array('template' => 'cart/item/default.phtml')
+            );
     }
 
     public function testGetCacheKeyInfo()

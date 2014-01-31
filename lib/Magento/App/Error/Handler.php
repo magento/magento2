@@ -64,6 +64,7 @@ class Handler extends \Magento\Error\Handler
      *
      * @param \Exception $exception
      * @param array $params
+     * @return void
      */
     public function processException(\Exception $exception, array $params = array())
     {
@@ -87,7 +88,9 @@ class Handler extends \Magento\Error\Handler
     /**
      * Show error as exception or log it
      *
+     * @param string $errorMessage
      * @throws \Exception
+     * @return void
      */
     protected function _processError($errorMessage)
     {

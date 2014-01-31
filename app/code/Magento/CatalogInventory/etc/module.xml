@@ -30,10 +30,8 @@
         </sequence>
         <depends>
             <module name="Magento_Catalog"/>
-            <module name="Magento_GroupedProduct" />
             <module name="Magento_Core"/>
             <module name="Magento_Customer"/>
-            <module name="Magento_Bundle"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Index"/>
             <module name="Magento_Sales"/>

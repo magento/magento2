@@ -35,6 +35,7 @@ namespace Magento\Review\Controller;
 
 use Magento\App\Action\NotFoundException;
 use Magento\App\RequestInterface;
+use Magento\Review\Model\Review;
 
 class Product extends \Magento\App\Action\Action
 {
@@ -241,8 +242,8 @@ class Product extends \Magento\App\Action\Action
      * Load review model with data by passed id.
      * Return false if review was not loaded or review is not approved.
      *
-     * @param $reviewId
-     * @return bool|\Magento\Review\Model\Review
+     * @param int $reviewId
+     * @return bool|Review
      */
     protected function _loadReview($reviewId)
     {
@@ -251,7 +252,7 @@ class Product extends \Magento\App\Action\Action
         }
 
         $review = $this->_reviewFactory->create()->load($reviewId);
-        /* @var $review \Magento\Review\Model\Review */
+        /* @var $review Review */
         if (!$review->getId()
             || !$review->isApproved()
             || !$review->isAvailableOnStore($this->_storeManager->getStore())
@@ -266,6 +267,8 @@ class Product extends \Magento\App\Action\Action
 
     /**
      * Submit new review action
+     *
+     * @return void
      */
     public function postAction()
     {
@@ -289,14 +292,14 @@ class Product extends \Magento\App\Action\Action
             $session    = $this->_session;
             /* @var $session \Magento\Core\Model\Session */
             $review     = $this->_reviewFactory->create()->setData($data);
-            /* @var $review \Magento\Review\Model\Review */
+            /* @var $review Review */
 
             $validate = $review->validate();
             if ($validate === true) {
                 try {
-                    $review->setEntityId($review->getEntityIdByCode(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE))
+                    $review->setEntityId($review->getEntityIdByCode(Review::ENTITY_PRODUCT_CODE))
                         ->setEntityPkValue($product->getId())
-                        ->setStatusId(\Magento\Review\Model\Review::STATUS_PENDING)
+                        ->setStatusId(Review::STATUS_PENDING)
                         ->setCustomerId($this->_customerSession->getCustomerId())
                         ->setStoreId($this->_storeManager->getStore()->getId())
                         ->setStores(array($this->_storeManager->getStore()->getId()))
@@ -339,6 +342,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Show list of product's reviews
      *
+     * @return void
      */
     public function listAction()
     {
@@ -373,6 +377,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Show details of one review
      *
+     * @return void
      */
     public function viewAction()
     {
@@ -396,6 +401,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Load specific layout handles by product type id
      *
+     * @return void
      */
     protected function _initProductLayout($product)
     {

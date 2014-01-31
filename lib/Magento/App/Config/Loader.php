@@ -1,6 +1,6 @@
 <?php
 /**
- * Local Application configuration loader (app/etc/local.xml)
+ * Loader
  *
  * Magento
  *
@@ -23,75 +23,40 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\App\Config;
 
-class Loader
+class Loader implements \Magento\App\Config\LoaderInterface
 {
     /**
-     * Local configuration file
+     * @var \Magento\App\Config\Scope\Resolver
      */
-    const PARAM_CUSTOM_FILE = 'custom.options.file';
+    protected $_scopeResolver;
 
     /**
-     * Local configuration file
+     * @var \Magento\App\Config\ScopePool
      */
-    const LOCAL_CONFIG_FILE = 'local.xml';
+    protected $_scopePool;
 
     /**
-     * Directory registry
-     *
-     * @var string
+     * @param \Magento\App\Config\Scope\Resolver $scopeResolver
+     * @param \Magento\App\Config\ScopePool $scopePool
      */
-    protected $_dir;
-
-    /**
-     * Custom config file
-     *
-     * @var string
-     */
-    protected $_customFile;
-
-    /**
-     * Configuration identifier attributes
-     *
-     * @var array
-     */
-    protected $_idAttributes = array('/config/resource' => 'name', '/config/connection' => 'name');
-
-    /**
-     * @param \Magento\App\Filesystem\DirectoryList $dirList
-     * @param string $customFile
-     */
-    public function __construct(\Magento\App\Filesystem\DirectoryList $dirList, $customFile = null)
-    {
-        $this->_dir = $dirList->getDir(\Magento\App\Filesystem::CONFIG_DIR);
-        $this->_customFile = $customFile;
+    public function __construct(
+        \Magento\App\Config\Scope\Resolver $scopeResolver,
+        \Magento\App\Config\ScopePool $scopePool
+    ) {
+        $this->_scopeResolver = $scopeResolver;
+        $this->_scopePool = $scopePool;
     }
 
     /**
-     * Load configuration
+     * Process of config loading
      *
-     * @return array
+     * @return \Magento\App\Config\DataInterface
      */
     public function load()
     {
-        $localConfig = new \Magento\Config\Dom('<config/>', $this->_idAttributes);
-
-        $localConfigFile = $this->_dir . '/' . self::LOCAL_CONFIG_FILE;
-        if (file_exists($localConfigFile)) {
-            // 1. app/etc/local.xml
-            $localConfig->merge(file_get_contents($localConfigFile));
-
-            // 2. app/etc/<dir>/<file>.xml
-            if (preg_match('/^[a-z\d_-]+(\/|\\\)+[a-z\d_-]+\.xml$/', $this->_customFile)) {
-                $localConfigExtraFile = $this->_dir . '/' . $this->_customFile;
-                $localConfig->merge(file_get_contents($localConfigExtraFile));
-            }
-        }
-
-        $converter = new \Magento\Config\Converter\Dom\Flat($this->_idAttributes);
-
-        $result = $converter->convert($localConfig->getDom());
-        return !empty($result['config']) ? $result['config'] : array();
+        return $this->_scopePool->getScope($this->_scopeResolver->getScope());
     }
 }

@@ -584,7 +584,7 @@ class Image extends \Magento\Core\Model\AbstractModel
                 "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
             );
         } else {
-            $url = $this->_storeManager->getStore()->getBaseUrl(Store::URL_TYPE_MEDIA) . $this->_newFile;
+            $url = $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . $this->_newFile;
         }
 
         return $url;

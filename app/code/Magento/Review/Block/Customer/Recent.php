@@ -26,6 +26,8 @@
 
 namespace Magento\Review\Block\Customer;
 
+use Magento\Review\Model\Resource\Review\Product\Collection;
+
 /**
  * Recent Customer Reviews Block
  */
@@ -39,7 +41,7 @@ class Recent extends \Magento\View\Element\Template
     /**
      * Product reviews collection
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\Collection
+     * @var Collection
      */
     protected $_collection;
 
@@ -91,6 +93,9 @@ class Recent extends \Magento\View\Element\Template
         ));
     }
 
+    /**
+     * @return $this
+     */
     protected function _initCollection()
     {
         $this->_collection = $this->_collectionFactory->create();
@@ -104,11 +109,17 @@ class Recent extends \Magento\View\Element\Template
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return $this->_getCollection()->getSize();
     }
 
+    /**
+     * @return Collection
+     */
     protected function _getCollection()
     {
         if (!$this->_collection) {
@@ -117,31 +128,49 @@ class Recent extends \Magento\View\Element\Template
         return $this->_collection;
     }
 
+    /**
+     * @return Collection
+     */
     public function getCollection()
     {
         return $this->_getCollection();
     }
 
+    /**
+     * @return string
+     */
     public function getReviewLink()
     {
         return $this->getUrl('review/customer/view/');
     }
 
+    /**
+     * @return string
+     */
     public function getProductLink()
     {
         return $this->getUrl('catalog/product/view/');
     }
 
+    /**
+     * @return string
+     */
     public function dateFormat($date)
     {
         return $this->formatDate($date, \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
     }
 
+    /**
+     * @return string
+     */
     public function getAllReviewsUrl()
     {
         return $this->getUrl('review/customer');
     }
 
+    /**
+     * @return string
+     */
     public function getReviewUrl($id)
     {
         return $this->getUrl('review/customer/view', array('id' => $id));

@@ -62,11 +62,11 @@ class CronTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecuteDispatchesCronEvent()
+    public function testLaunchDispatchesCronEvent()
     {
         $this->_stateMock->expects($this->once())->method('setAreaCode')->with('crontab');
         $this->_eventManagerMock->expects($this->once())->method('dispatch')->with('default');
         $this->_responseMock->expects($this->once())->method('setCode')->with(0);
-        $this->assertEquals($this->_responseMock, $this->_model->execute());
+        $this->assertEquals($this->_responseMock, $this->_model->launch());
     }
 }

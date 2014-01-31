@@ -34,8 +34,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping;
 
-class Address
-    extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
+class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
     /**
      * Return header text
@@ -127,7 +126,7 @@ class Address
     /**
      * Return address object
      *
-     * @return \Magento\Customer\Model\Address
+     * @return \Magento\Sales\Model\Quote\Address
      */
     public function getAddress()
     {

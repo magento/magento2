@@ -58,7 +58,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
     protected $_canUseSessionIdInParam;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -68,7 +68,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
      * @param \Magento\Encryption\UrlCoder $urlCoder
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Core\Model\Url $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param bool $canUseSessionIdInParam
      */
     public function __construct(
@@ -77,7 +77,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
         \Magento\Encryption\UrlCoder $urlCoder,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Core\Model\Url $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         $canUseSessionIdInParam = true
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;
@@ -209,7 +209,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
             $unsecure = (strpos($url, $this->_storeManager->getStore()->getBaseUrl()) === 0);
             $secure = strpos(
                     $url,
-                    $this->_storeManager->getStore()->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_LINK, true)
+                    $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)
                 ) === 0;
             return $unsecure || $secure;
         }

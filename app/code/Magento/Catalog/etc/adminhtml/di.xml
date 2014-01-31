@@ -36,24 +36,32 @@
     </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark">
         <param name="imageTypes">
-            <value>
-                <small>
-                    <title>Small</title>
-                    <attribute>small_image</attribute>
-                </small>
-                <main>
-                    <title>Main</title>
-                    <attribute>image</attribute>
-                </main>
-                <cart>
-                    <title>Thumbnail</title>
-                    <attribute>thumbnail</attribute>
-                </cart>
-                <custom>
-                    <title>Custom image</title>
-                    <attribute>custom_image</attribute>
-                </custom>
-            </value>
+            <array>
+                <item key="small">
+                    <array>
+                        <item key="title"><value>Small</value></item>
+                        <item key="attribute"><value>small_image</value></item>
+                    </array>
+                </item>
+                <item key="main">
+                    <array>
+                        <item key="title"><value>Main</value></item>
+                        <item key="attribute"><value>image</value></item>
+                    </array>
+                </item>
+                <item key="cart">
+                    <array>
+                        <item key="title"><value>Thumbnail</value></item>
+                        <item key="attribute"><value>thumbnail</value></item>
+                    </array>
+                </item>
+                <item key="custom">
+                    <array>
+                        <item key="title"><value>Custom image</value></item>
+                        <item key="attribute"><value>custom_image</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Catalog\Helper\Flat\AbstractFlat">
@@ -66,11 +74,11 @@
     </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <param name="constructors">
-            <value>
-                <crossSell>Magento\Catalog\Model\Product\CopyConstructor\CrossSell</crossSell>
-                <upSell>Magento\Catalog\Model\Product\CopyConstructor\UpSell</upSell>
-                <related>Magento\Catalog\Model\Product\CopyConstructor\Related</related>
-            </value>
+            <array>
+                <item key="crossSell"><value>Magento\Catalog\Model\Product\CopyConstructor\CrossSell</value></item>
+                <item key="upSell"><value>Magento\Catalog\Model\Product\CopyConstructor\UpSell</value></item>
+                <item key="related"><value>Magento\Catalog\Model\Product\CopyConstructor\Related</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Catalog\Model\Product\Copier">

@@ -49,6 +49,7 @@ class Status implements \Magento\Log\Model\Shell\CommandInterface
      * Add output data
      *
      * @param string $output
+     * @return void
      */
     protected function _addOutput($output)
     {
@@ -105,6 +106,8 @@ class Status implements \Magento\Log\Model\Shell\CommandInterface
 
     /**
      * Add row delimiter
+     *
+     * @return void
      */
     protected function _addRowDelimiter()
     {

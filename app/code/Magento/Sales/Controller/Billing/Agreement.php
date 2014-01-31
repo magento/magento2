@@ -122,9 +122,9 @@ class Agreement extends \Magento\App\Action\Action
                 $agreement
                     ->setStoreId($this->_objectManager->get('Magento\Core\Model\StoreManager')->getStore()->getId())
                     ->setMethodCode($paymentCode)
-                    ->setReturnUrl($this->_objectManager->create('Magento\Core\Model\Url')
+                    ->setReturnUrl($this->_objectManager->create('Magento\UrlInterface')
                         ->getUrl('*/*/returnWizard', array('payment_method' => $paymentCode)))
-                    ->setCancelUrl($this->_objectManager->create('Magento\Core\Model\Url')
+                    ->setCancelUrl($this->_objectManager->create('Magento\UrlInterface')
                         ->getUrl('*/*/cancelWizard', array('payment_method' => $paymentCode)));
 
                 return $this->getResponse()->setRedirect($agreement->initToken());

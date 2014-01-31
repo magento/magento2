@@ -136,7 +136,7 @@ class Config implements \Magento\App\Route\ConfigInterface
     /**
      * @param string $frontName
      * @param string $scope
-     * @return array
+     * @return string[]
      */
     public function getModulesByFrontName($frontName, $scope = null)
     {

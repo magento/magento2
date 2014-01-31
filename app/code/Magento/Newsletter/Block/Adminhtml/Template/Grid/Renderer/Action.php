@@ -39,7 +39,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
     /**
      * Renderer for "Action" column in Newsletter templates grid
      *
-     * @var \Magento\Newsletter\Model\Template $row
+     * @param \Magento\Object $row
      * @return string
      */
     public function render(\Magento\Object $row)

@@ -58,11 +58,21 @@ class Subscribe extends \Magento\View\Element\Template
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * Get success message
+     *
+     * @return string
+     */
     public function getSuccessMessage()
     {
         return $this->_newsletterSession->getSuccess();
     }
 
+    /**
+     * Get error message
+     *
+     * @return string
+     */
     public function getErrorMessage()
     {
         return $this->_newsletterSession->getError();

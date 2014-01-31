@@ -34,13 +34,16 @@
  */
 namespace Magento\Data;
 
+use Magento\Data\Tree\Node;
+use Magento\Data\Tree\Node\Collection as NodeCollection;
+
 class Tree
 {
 
     /**
      * Nodes collection
      *
-     * @var \Magento\Data\Tree\Node\Collection
+     * @var NodeCollection
      */
     protected $_nodes;
 
@@ -50,7 +53,7 @@ class Tree
      */
     public function __construct()
     {
-        $this->_nodes = new \Magento\Data\Tree\Node\Collection($this);
+        $this->_nodes = new NodeCollection($this);
     }
 
     /**
@@ -66,7 +69,8 @@ class Tree
     /**
      * Enter description here...
      *
-     * @param \Magento\Data\Tree\Node $parentNode
+     * @param Node $parentNode
+     * @return void
      */
     public function load($parentNode=null)
     {
@@ -76,76 +80,79 @@ class Tree
      * Enter description here...
      *
      * @param unknown_type $nodeId
+     * @return void
      */
     public function loadNode($nodeId)
     {
     }
 
     /**
-     * Enter description here...
+     * Append child
      *
-     * @param array|\Magento\Data\Tree\Node $data
-     * @param \Magento\Data\Tree\Node $parentNode
-     * @param \Magento\Data\Tree\Node $prevNode
-     * @return \Magento\Data\Tree\Node
+     * @param array|Node $data
+     * @param Node $parentNode
+     * @param Node $prevNode
+     * @return Node
      */
     public function appendChild($data, $parentNode, $prevNode=null)
     {
         if (is_array($data)) {
             $node = $this->addNode(
-                new \Magento\Data\Tree\Node($data, $parentNode->getIdField(), $this),
+                new Node($data, $parentNode->getIdField(), $this),
                 $parentNode
             );
-        } elseif ($data instanceof \Magento\Data\Tree\Node) {
+        } elseif ($data instanceof Node) {
             $node = $this->addNode($data, $parentNode);
         }
         return $node;
     }
 
     /**
-     * Enter description here...
+     * Add node
      *
-     * @param \Magento\Data\Tree\Node $node
-     * @param \Magento\Data\Tree\Node $parent
-     * @return \Magento\Data\Tree\Node
+     * @param Node $node
+     * @param Node $parent
+     * @return Node
      */
     public function addNode($node, $parent=null)
     {
         $this->_nodes->add($node);
         $node->setParent($parent);
-        if (!is_null($parent) && ($parent instanceof \Magento\Data\Tree\Node) ) {
+        if (!is_null($parent) && ($parent instanceof Node) ) {
             $parent->addChild($node);
         }
         return $node;
     }
 
     /**
-     * Enter description here...
+     * Move node
      *
-     * @param \Magento\Data\Tree\Node $node
-     * @param \Magento\Data\Tree\Node $parentNode
-     * @param \Magento\Data\Tree\Node $prevNode
+     * @param Node $node
+     * @param Node $parentNode
+     * @param Node $prevNode
+     * @return void
      */
     public function moveNodeTo($node, $parentNode, $prevNode=null)
     {
     }
 
     /**
-     * Enter description here...
+     * Copy node
      *
-     * @param \Magento\Data\Tree\Node $node
-     * @param \Magento\Data\Tree\Node $parentNode
-     * @param \Magento\Data\Tree\Node $prevNode
+     * @param Node $node
+     * @param Node $parentNode
+     * @param Node $prevNode
+     * @return void
      */
     public function copyNodeTo($node, $parentNode, $prevNode=null)
     {
     }
 
     /**
-     * Enter description here...
+     * Remove node
      *
-     * @param \Magento\Data\Tree\Node $node
-     * @return \Magento\Data\Tree
+     * @param Node $node
+     * @return $this
      */
     public function removeNode($node)
     {
@@ -158,28 +165,31 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Create node
      *
-     * @param \Magento\Data\Tree\Node $parentNode
-     * @param \Magento\Data\Tree\Node $prevNode
+     * @param Node $parentNode
+     * @param Node $prevNode
+     * @return void
      */
     public function createNode($parentNode, $prevNode=null)
     {
     }
 
     /**
-     * Enter description here...
+     * Get child
      *
-     * @param \Magento\Data\Tree\Node $node
+     * @param Node $node
+     * @return void
      */
     public function getChild($node)
     {
     }
 
     /**
-     * Enter description here...
+     * Get children
      *
-     * @param \Magento\Data\Tree\Node $node
+     * @param Node $node
+     * @return void
      */
     public function getChildren($node)
     {
@@ -188,7 +198,7 @@ class Tree
     /**
      * Enter description here...
      *
-     * @return \Magento\Data\Tree\Node\Collection
+     * @return NodeCollection
      */
     public function getNodes()
     {
@@ -199,7 +209,7 @@ class Tree
      * Enter description here...
      *
      * @param unknown_type $nodeId
-     * @return \Magento\Data\Tree\Node
+     * @return Node
      */
     public function getNodeById($nodeId)
     {
@@ -207,16 +217,16 @@ class Tree
     }
 
     /**
-     * Enter description here...
+     * Get path
      *
-     * @param \Magento\Data\Tree\Node $node
+     * @param Node $node
      * @return array
      */
     public function getPath($node)
     {
-        if ($node instanceof \Magento\Data\Tree\Node ) {
+        if ($node instanceof Node ) {
 
-        } elseif (is_numeric($node)){
+        } elseif (is_numeric($node)) {
             if ($_node = $this->getNodeById($node)) {
                 return $_node->getPath();
             }

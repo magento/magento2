@@ -64,6 +64,7 @@ class ConfigCache implements \Magento\ObjectManager\ConfigCache
      *
      * @param array $config
      * @param string $key
+     * @return void
      */
     public function save(array $config, $key)
     {

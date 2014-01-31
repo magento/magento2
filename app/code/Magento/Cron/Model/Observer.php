@@ -75,13 +75,13 @@ class Observer
      * Initialize parameters
      *
      * @param \Magento\ObjectManager              $objectManager
-     * @param \Magento\Core\Model\AppInterface    $app
+     * @param \Magento\AppInterface    $app
      * @param \Magento\Cron\Model\ConfigInterface $config
      * @param \Magento\Core\Model\Store\Config    $coreStoreConfig
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\AppInterface $app,
+        \Magento\AppInterface $app,
         \Magento\Cron\Model\ConfigInterface $config,
         \Magento\Core\Model\Store\Config $coreStoreConfig
     ) {

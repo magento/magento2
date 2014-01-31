@@ -31,7 +31,7 @@ use Magento\App\ObjectManager\ConfigLoader,
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Http implements \Magento\AppInterface
+class Http implements \Magento\LauncherInterface
 {
     /**
      * @var \Magento\ObjectManager
@@ -108,7 +108,7 @@ class Http implements \Magento\AppInterface
      *
      * @return ResponseInterface
      */
-    public function execute()
+    public function launch()
     {
         try {
             $areaCode = $this->_areaList->getCodeByFrontName($this->_request->getFrontName());

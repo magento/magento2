@@ -80,6 +80,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $review = $this->_coreRegistry->registry('review_data');

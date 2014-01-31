@@ -55,7 +55,7 @@ abstract class AbstractCache extends \Magento\Object
      * Add configuration component to stats
      *
      * @param string $component Filename of the configuration component file
-     * @return \Magento\Simplexml\Config\Cache\AbstractCache
+     * @return $this
      */
     public function addComponent($component)
     {
@@ -88,6 +88,9 @@ abstract class AbstractCache extends \Magento\Object
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getComponentsHash()
     {
         $sum = '';

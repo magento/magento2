@@ -34,6 +34,8 @@
  */
 namespace Magento\DB\Ddl;
 
+use \Magento\DB\Adapter\AdapterInterface;
+
 class Table
 {
     /**
@@ -182,7 +184,7 @@ class Table
      * Set table name
      *
      * @param string $name
-     * @return \Magento\DB\Ddl\Table
+     * @return $this
      */
     public function setName($name)
     {
@@ -197,7 +199,7 @@ class Table
      * Set schema name
      *
      * @param string $name
-     * @return \Magento\DB\Ddl\Table
+     * @return $this
      */
     public function setSchema($name)
     {
@@ -209,7 +211,7 @@ class Table
      * Set comment for table
      *
      * @param string $comment
-     * @return \Magento\DB\Ddl\Table
+     * @return $this
      */
     public function setComment($comment)
     {
@@ -220,8 +222,8 @@ class Table
     /**
      * Retrieve name of table
      *
-     * @throws \Zend_Db_Exception
      * @return string
+     * @throws \Zend_Db_Exception
      */
     public function getName()
     {
@@ -269,8 +271,8 @@ class Table
      * @param string|int|array $size the column length
      * @param array $options array of additional options
      * @param string $comment column description
+     * @return $this
      * @throws \Zend_Db_Exception
-     * @return \Magento\DB\Ddl\Table
      */
     public function addColumn($name, $type, $size = null, $options = array(), $comment = null)
     {
@@ -404,8 +406,8 @@ class Table
      * @param string $refColumn     the reference table column name
      * @param string $onDelete      the action on delete row
      * @param string $onUpdate      the action on update
+     * @return $this
      * @throws \Zend_Db_Exception
-     * @return \Magento\DB\Ddl\Table
      */
     public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null, $onUpdate = null)
     {
@@ -451,14 +453,15 @@ class Table
     /**
      * Add index to table
      *
-     * @param string $indexName     the index name
-     * @param array|string $columns array of columns or column string
-     * @param array $options        array of additional options
-     * @return \Magento\DB\Ddl\Table
+     * @param string $indexName the index name
+     * @param array|string $fields array of columns or column string
+     * @param array $options array of additional options
+     * @return $this
+     * @throws \Zend_Db_Exception
      */
     public function addIndex($indexName, $fields, $options = array())
     {
-        $idxType    = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX;
+        $idxType    = AdapterInterface::INDEX_TYPE_INDEX;
         $position   = 0;
         $columns    = array();
         if (!is_array($fields)) {
@@ -532,7 +535,7 @@ class Table
      *
      * @param array $column
      * @see $this->_columns
-     * @return \Magento\DB\Ddl\Table
+     * @return $this
      */
     public function setColumn($column)
     {
@@ -568,7 +571,7 @@ class Table
      *
      * @param string $key
      * @param string $value
-     * @return \Magento\DB\Ddl\Table
+     * @return $this
      */
     public function setOption($key, $value)
     {
@@ -581,7 +584,7 @@ class Table
      * Return null if option does not exits
      *
      * @param string $key
-     * @return mixed
+     * @return null|string
      */
     public function getOption($key)
     {

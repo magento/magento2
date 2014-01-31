@@ -44,7 +44,7 @@ class RemoveAccents implements \Zend_Filter_Interface
 
     /**
      * @param string $string
-     * @return mixed|string
+     * @return string
      */
     public function filter($string)
     {

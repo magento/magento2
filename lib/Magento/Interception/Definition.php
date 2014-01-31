@@ -31,7 +31,7 @@ interface Definition
      * Retrieve list of methods
      *
      * @param string $type
-     * @return array
+     * @return string[]
      */
     public function getMethodList($type);
 }

@@ -51,13 +51,13 @@ class Config implements \Magento\Module\Output\ConfigInterface
      */
     public function isEnabled($moduleName)
     {
-        return $this->getFlag(sprintf(self::XML_PATH_MODULE_OUTPUT_STATUS, $moduleName));
+        return $this->isSetFlag(sprintf(self::XML_PATH_MODULE_OUTPUT_STATUS, $moduleName));
     }
 
     /**
      * @inheritdoc
      */
-    public function getFlag($path)
+    public function isSetFlag($path)
     {
         return $this->_storeConfig->getConfigFlag($path);
     }

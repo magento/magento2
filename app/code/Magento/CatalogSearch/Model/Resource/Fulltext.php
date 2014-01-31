@@ -750,14 +750,12 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             if (isset($productData[$attributeCode])) {
                 $value = $this->_getAttributeValue($attribute->getId(), $productData[$attributeCode], $storeId);
                 if ($value) {
-                    //For grouped products
                     if (isset($index[$attributeCode])) {
                         if (!is_array($index[$attributeCode])) {
                             $index[$attributeCode] = array($index[$attributeCode]);
                         }
                         $index[$attributeCode][] = $value;
                     } else {
-                        //For other types of products
                         $index[$attributeCode] = $value;
                     }
                 }

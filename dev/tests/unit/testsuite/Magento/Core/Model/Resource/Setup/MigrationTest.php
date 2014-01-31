@@ -245,7 +245,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
             $this->getMock('Magento\Logger', array(), array(), '', false),
             $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Config', array(), array(), '', false, false),
+            $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false, false),
             $this->getMock('Magento\Module\ModuleListInterface'),
             $this->getMock('Magento\Module\Dir\Reader', array(), array(), '', false, false),
             $this->getMock('Magento\Core\Model\Resource\Resource', array(), array(), '', false),

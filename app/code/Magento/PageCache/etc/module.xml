@@ -30,6 +30,7 @@
         </sequence>
         <depends>
             <module name="Magento_Core"/>
+            <module name="Magento_Theme"/>
         </depends>
     </module>
 </config>

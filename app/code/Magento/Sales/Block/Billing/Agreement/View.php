@@ -116,14 +116,16 @@ class View extends \Magento\View\Element\Template
     public function getRelatedOrders()
     {
         if (is_null($this->_relatedOrders)) {
+            $billingAgreement = $this->_getBillingAgreementInstance();
+            $billingAgreementId = $billingAgreement ? $billingAgreement->getAgreementId() : 0;
             $this->_relatedOrders = $this->_orderCollectionFactory->create()
                 ->addFieldToSelect('*')
-                ->addFieldToFilter('customer_id', $this->_customerSession->getCustomer()->getId())
+                ->addFieldToFilter('customer_id', (int)$this->_customerSession->getCustomerId())
                 ->addFieldToFilter(
                     'state',
                     array('in' => $this->_orderConfig->getVisibleOnFrontStates())
                 )
-                ->addBillingAgreementsFilter($this->_billingAgreementInstance->getAgreementId())
+                ->addBillingAgreementsFilter($billingAgreementId)
                 ->setOrder('created_at', 'desc');
         }
         return $this->_relatedOrders;
@@ -174,9 +176,6 @@ class View extends \Magento\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        if (is_null($this->_billingAgreementInstance)) {
-            $this->_billingAgreementInstance = $this->_coreRegistry->registry('current_billing_agreement');
-        }
         parent::_prepareLayout();
 
         $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager')
@@ -185,6 +184,19 @@ class View extends \Magento\View\Element\Template
         $this->getRelatedOrders()->load();
 
         return $this;
+    }
+
+    /**
+     * Return current billing agreement.
+     *
+     * @return \Magento\Sales\Model\Billing\Agreement|null
+     */
+    protected function _getBillingAgreementInstance()
+    {
+        if (is_null($this->_billingAgreementInstance)) {
+            $this->_billingAgreementInstance = $this->_coreRegistry->registry('current_billing_agreement');
+        }
+        return $this->_billingAgreementInstance;
     }
 
     /**
@@ -211,21 +223,22 @@ class View extends \Magento\View\Element\Template
     {
         $this->_loadPaymentMethods();
         $this->setBackUrl($this->getUrl('*/billing_agreement/'));
-        if ($this->_billingAgreementInstance) {
-            $this->setReferenceId($this->_billingAgreementInstance->getReferenceId());
+        $billingAgreement = $this->_getBillingAgreementInstance();
+        if ($billingAgreement) {
+            $this->setReferenceId($billingAgreement->getReferenceId());
 
-            $this->setCanCancel($this->_billingAgreementInstance->canCancel());
+            $this->setCanCancel($billingAgreement->canCancel());
             $this->setCancelUrl(
                 $this->getUrl('*/billing_agreement/cancel', array(
                     '_current' => true,
-                    'payment_method' => $this->_billingAgreementInstance->getMethodCode()))
+                    'payment_method' => $billingAgreement->getMethodCode()))
             );
 
-            $paymentMethodTitle = $this->_billingAgreementInstance->getAgreementLabel();
+            $paymentMethodTitle = $billingAgreement->getAgreementLabel();
             $this->setPaymentMethodTitle($paymentMethodTitle);
 
-            $createdAt = $this->_billingAgreementInstance->getCreatedAt();
-            $updatedAt = $this->_billingAgreementInstance->getUpdatedAt();
+            $createdAt = $billingAgreement->getCreatedAt();
+            $updatedAt = $billingAgreement->getUpdatedAt();
             $this->setAgreementCreatedAt(
                 ($createdAt)
                     ? $this->formatDate($createdAt, 'short', true)
@@ -236,7 +249,7 @@ class View extends \Magento\View\Element\Template
                     $this->formatDate($updatedAt, 'short', true)
                 );
             }
-            $this->setAgreementStatus($this->_billingAgreementInstance->getStatusLabel());
+            $this->setAgreementStatus($billingAgreement->getStatusLabel());
         }
 
         return parent::_toHtml();

@@ -26,9 +26,9 @@
 namespace Magento\Index\App;
 
 use Magento\App\Console\Response;
-use Magento\AppInterface;
+use Magento\LauncherInterface;
 
-class Indexer implements AppInterface
+class Indexer implements LauncherInterface
 {
     /**
      * Report directory
@@ -75,7 +75,7 @@ class Indexer implements AppInterface
      *
      * @return \Magento\App\ResponseInterface
      */
-    public function execute()
+    public function launch()
     {
         /* Clean reports */
         $directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);

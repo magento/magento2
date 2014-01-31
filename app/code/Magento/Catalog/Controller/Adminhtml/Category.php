@@ -214,7 +214,7 @@ class Category extends \Magento\Backend\App\Action
         $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
         $storeId = $this->getRequest()->getParam('store_id', 0);
         $storeMediaUrl = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore($storeId)
-            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA);
+            ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA);
 
         $content = $this->_view->getLayout()->createBlock(
             'Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg\Content',

@@ -26,6 +26,15 @@ namespace Magento\Acl\Resource\Config\Reader;
 class Filesystem extends \Magento\Config\Reader\Filesystem
 {
     /**
+     * List of id attributes for merge
+     *
+     * @var array
+     */
+    protected $_idAttributes = array(
+        '/config/acl/resources(/resource)+' => 'id',
+    );
+
+    /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
      * @param \Magento\Config\ConverterInterface $converter
      * @param \Magento\Acl\Resource\Config\SchemaLocator $schemaLocator
@@ -42,7 +51,7 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'acl.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Acl\Resource\Config\Dom',
+        $domDocumentClass = 'Magento\Config\Dom',
         $defaultScope = 'global'
     ) {
         parent::__construct(

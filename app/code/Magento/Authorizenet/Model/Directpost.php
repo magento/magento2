@@ -89,7 +89,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
      * @param \Magento\Authorizenet\Model\Directpost\Response $response
      * @param \Magento\Authorizenet\Helper\HelperInterface $helper
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -346,9 +346,9 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
                     }
                     $shouldCloseCaptureTransaction = $payment->getOrder()->canCreditmemo() ? 0 : 1;
                     $payment
-                         ->setIsTransactionClosed(1)
-                         ->setShouldCloseParentTransaction($shouldCloseCaptureTransaction)
-                         ->setTransactionAdditionalInfo($this->_realTransactionIdKey, $result->getTransactionId());
+                        ->setIsTransactionClosed(1)
+                        ->setShouldCloseParentTransaction($shouldCloseCaptureTransaction)
+                        ->setTransactionAdditionalInfo($this->_realTransactionIdKey, $result->getTransactionId());
                     return $this;
                 }
                 throw new \Magento\Core\Exception($this->_wrapGatewayError($result->getResponseReasonText()));
@@ -520,8 +520,8 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
         if ($isError) {
             throw new \Magento\Core\Exception(
                 ($responseText && !$response->isApproved()) ?
-                $responseText :
-                __('This payment didn\'t work out because we can\'t find this order.')
+                    $responseText :
+                    __('This payment didn\'t work out because we can\'t find this order.')
             );
         }
     }
@@ -588,7 +588,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
      */
     protected function _matchAmount($amount)
     {
-         return sprintf('%.2F', $amount) == sprintf('%.2F', $this->getResponse()->getXAmount());
+        return sprintf('%.2F', $amount) == sprintf('%.2F', $this->getResponse()->getXAmount());
     }
 
     /**
@@ -702,7 +702,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
                     $orderStatus = $this->getConfigData('order_status');
                     if (!$orderStatus || $order->getIsVirtual()) {
                         $orderStatus = $order->getConfig()
-                                ->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
+                            ->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
                     }
                     if ($orderStatus) {
                         $order->setStatus($orderStatus);

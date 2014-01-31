@@ -77,7 +77,7 @@ class ClassMap
      * Add classes files declaration to the map. New map will override existing values if such was defined before.
      *
      * @param array $map
-     * @return \Magento\Autoload\ClassMap
+     * @return $this
      */
     public function addMap(array $map)
     {
@@ -89,6 +89,7 @@ class ClassMap
      * Resolve a class file and include it
      *
      * @param string $class
+     * @return void
      */
     public function load($class)
     {

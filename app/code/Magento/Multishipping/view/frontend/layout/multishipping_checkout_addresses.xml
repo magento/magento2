@@ -25,6 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="multishipping_checkout"/>
+    <update handle="checkout_cart_item_renderers" />
     <referenceBlock name="page.main.title">
         <action method="setPageTitle">
             <argument translate="true" name="label" xsi:type="string">Ship to Multiple Addresses</argument>
@@ -32,9 +33,10 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Multishipping\Block\Checkout\Addresses" name="checkout_addresses" template="checkout/addresses.phtml" cacheable="false">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="Magento_Multishipping::checkout/item/default.phtml" cacheable="false"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="Magento_Multishipping::checkout/item/default.phtml" cacheable="false"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="Magento_Multishipping::checkout/item/default.phtml" cacheable="false"/>
+            <arguments>
+                <argument name="renderer_template" xsi:type="string">Magento_Multishipping::checkout/item/default.phtml</argument>
+            </arguments>
+            <block class="Magento\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list" />
         </block>
     </referenceContainer>
     <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>

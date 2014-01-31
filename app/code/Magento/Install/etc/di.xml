@@ -53,22 +53,26 @@
     </type>
     <type name="Magento\Install\Model\Installer\Db">
         <param name="dbConfig">
-            <value>
-                <mysql4>
-                    <type>pdo_mysql</type>
-                    <initStatements>SET NAMES utf8</initStatements>
-                    <min_version>4.1.20</min_version>
-                </mysql4>
-            </value>
+            <array>
+                <item key="mysql4">
+                    <array>
+                        <item key="type"><value>pdo_mysql</value></item>
+                        <item key="initStatements"><value>SET NAMES utf8</value></item>
+                        <item key="min_version"><value>4.1.20</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Install\Model\Installer\Db\AbstractDb">
         <param name="dbExtensions">
-            <value>
-                <mysql4>
-                    <pdo>pdo_mysql</pdo>
-                </mysql4>
-            </value>
+            <array>
+                <item key="mysql4">
+                    <array>
+                        <item key="pdo"><value>pdo_mysql</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Install\Model\Config\Reader">
@@ -137,15 +141,17 @@
     </type>
     <type name="Magento\App\AreaList">
         <param name="areas">
-            <value>
-                <install>
-                    <frontName>install</frontName>
-                    <router>install</router>
-                </install>
-            </value>
+            <array>
+                <item key="install">
+                    <array>
+                        <item key="frontName"><value>install</value></item>
+                        <item key="router"><value>install</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
-    <type name="Magento\Backend\Model\Url">
+    <type name="Magento\Backend\Model\Url\ScopeResolver" shared="false">
         <param name="areaCode">
             <value>adminhtml</value>
         </param>

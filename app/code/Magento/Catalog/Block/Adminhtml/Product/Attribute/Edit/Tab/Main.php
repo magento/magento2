@@ -92,12 +92,8 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
             if (isset($type['hide_fields'])) {
                 $_hiddenFields[$type['value']] = $type['hide_fields'];
             }
-            if (isset($type['disabled_types'])) {
-                $_disabledTypes[$type['value']] = $type['disabled_types'];
-            }
         }
         $this->_coreRegistry->register('attribute_type_hidden_fields', $_hiddenFields);
-        $this->_coreRegistry->register('attribute_type_disabled_types', $_disabledTypes);
 
         $frontendInputValues = array_merge($frontendInputElm->getValues(), $additionalTypes);
         $frontendInputElm->setValues($frontendInputValues);

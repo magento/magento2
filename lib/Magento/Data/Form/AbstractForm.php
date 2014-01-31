@@ -34,12 +34,19 @@
  */
 namespace Magento\Data\Form;
 
+use Magento\Data\Form\Element\AbstractElement;
+use Magento\Data\Form\Element\Collection;
+use Magento\Data\Form\Element\CollectionFactory;
+use Magento\Data\Form\Element\Column;
+use Magento\Data\Form\Element\Factory;
+use Magento\Data\Form\Element\Fieldset;
+
 class AbstractForm extends \Magento\Object
 {
     /**
      * Form level elements collection
      *
-     * @var \Magento\Data\Form\Element\Collection
+     * @var Collection
      */
     protected $_elements;
 
@@ -51,23 +58,23 @@ class AbstractForm extends \Magento\Object
     protected $_types = array();
 
     /**
-     * @var \Magento\Data\Form\Element\Factory
+     * @var Factory
      */
     protected $_factoryElement;
 
     /**
-     * @var \Magento\Data\Form\Element\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_factoryCollection;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
         $data = array()
     ) {
         $this->_factoryElement = $factoryElement;
@@ -91,7 +98,7 @@ class AbstractForm extends \Magento\Object
      *
      * @param string $type
      * @param string $className
-     * @return \Magento\Data\Form\AbstractForm
+     * @return $this
      */
     public function addType($type, $className)
     {
@@ -102,7 +109,7 @@ class AbstractForm extends \Magento\Object
     /**
      * Get elements collection
      *
-     * @return \Magento\Data\Form\Element\Collection
+     * @return Collection
      */
     public function getElements()
     {
@@ -117,7 +124,7 @@ class AbstractForm extends \Magento\Object
      *
      * @param boolean $readonly
      * @param boolean $useDisabled
-     * @return \Magento\Data\Form\AbstractForm
+     * @return $this
      */
     public function setReadonly($readonly, $useDisabled = false)
     {
@@ -137,12 +144,11 @@ class AbstractForm extends \Magento\Object
     /**
      * Add form element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @param bool|string|null $after
-     *
-     * @return \Magento\Data\Form
+     * @return $this
      */
-    public function addElement(\Magento\Data\Form\Element\AbstractElement $element, $after = null)
+    public function addElement(AbstractElement $element, $after = null)
     {
         $element->setForm($this);
         $this->getElements()->add($element, $after);
@@ -159,8 +165,8 @@ class AbstractForm extends \Magento\Object
      * @param   string $elementId
      * @param   string $type
      * @param   array  $config
-     * @param   mixed  $after
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @param   bool|string|null  $after
+     * @return AbstractElement
      */
     public function addField($elementId, $type, $config, $after = false)
     {
@@ -177,7 +183,7 @@ class AbstractForm extends \Magento\Object
      * Enter description here...
      *
      * @param string $elementId
-     * @return \Magento\Data\Form\AbstractForm
+     * @return $this
      */
     public function removeField($elementId)
     {
@@ -192,7 +198,7 @@ class AbstractForm extends \Magento\Object
      * @param array $config
      * @param bool|string|null $after
      * @param bool $isAdvanced
-     * @return \Magento\Data\Form\Element\Fieldset
+     * @return Fieldset
      */
     public function addFieldset($elementId, $config, $after = false, $isAdvanced = false)
     {
@@ -208,7 +214,7 @@ class AbstractForm extends \Magento\Object
      *
      * @param string $elementId
      * @param array $config
-     * @return \Magento\Data\Form\Element\Column
+     * @return Column
      */
     public function addColumn($elementId, $config)
     {

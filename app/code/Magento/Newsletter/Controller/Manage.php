@@ -83,6 +83,11 @@ class Manage extends \Magento\App\Action\Action
         return parent::dispatch($request);
     }
 
+    /**
+     * Managing newsletter subscription page
+     *
+     * @return void
+     */
     public function indexAction()
     {
         $this->_view->loadLayout();
@@ -95,6 +100,11 @@ class Manage extends \Magento\App\Action\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Save newsletter subscription preference action
+     *
+     * @return void
+     */
     public function saveAction()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {

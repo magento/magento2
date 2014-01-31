@@ -60,7 +60,7 @@ class Session
     protected $_aclBuilder;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -77,7 +77,7 @@ class Session
      * @param \Magento\Session\ValidatorInterface $validator
      * @param \Magento\Session\StorageInterface $storage
      * @param \Magento\Acl\Builder $aclBuilder
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\App\ConfigInterface $config
      */
     public function __construct(
@@ -88,7 +88,7 @@ class Session
         \Magento\Session\ValidatorInterface $validator,
         \Magento\Session\StorageInterface $storage,
         \Magento\Acl\Builder $aclBuilder,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\App\ConfigInterface $config
     ) {
         $this->_config = $config;

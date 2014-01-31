@@ -29,7 +29,7 @@ interface ReadInterface
      * Get absolute path
      *
      * @param string $path [optional]
-     * @return string mixed
+     * @return string
      */
     public function getAbsolutePath($path = null);
 

@@ -85,7 +85,7 @@ class ConfigFixture
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
             if (strpos($configPath, 'default/') === 0) {
                 $configPath = substr($configPath, 8);
-                $objectManager->get('Magento\Core\Model\Config')->setValue($configPath, $value);
+                $objectManager->get('Magento\App\ConfigInterface')->setValue($configPath, $value);
             }
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')

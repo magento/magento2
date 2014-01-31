@@ -1,0 +1,6 @@
+\Magento\Backend\Model\Url
+\Magento\Core\Model\Url\RouteParamsResolver
+\Magento\Core\Model\Url\SecurityInfo
+\Magento\Core\Model\Url\ScopeResolver
+\Magento\Url
+\Magento\Core\Model\Config

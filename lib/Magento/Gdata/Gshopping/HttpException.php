@@ -81,7 +81,7 @@ class HttpException extends \Zend_Gdata_App_HttpException
      * Error codes.
      * One exception may have several codes.
      *
-     * @var array codes
+     * @var string[] codes
      */
     protected $_codes = array();
 
@@ -89,10 +89,17 @@ class HttpException extends \Zend_Gdata_App_HttpException
      * Error messages.
      * One exception may have several codes with messages.
      *
-     * @var array messages
+     * @var string[] messages
      */
     protected $_messages = array();
 
+    /**
+     * Create object
+     *
+     * @param string|\Zend_Gdata_App_HttpException $message Optionally set a message
+     * @param \Zend_Http_Client_Exception $httpClientException Optionally in a Zend_Http_Client_Exception
+     * @param \Zend_Http_Response $response Optionally pass in a Zend_Http_Response
+     */
     public function __construct($message = null, $httpClientException = null, $response = null)
     {
         if ($message instanceof \Zend_Gdata_App_HttpException) {
@@ -107,6 +114,7 @@ class HttpException extends \Zend_Gdata_App_HttpException
      * Set the \Zend_Http_Response.
      *
      * @param \Zend_Http_Response $response
+     * @return $this
      */
     public function setResponse($response)
     {
@@ -117,7 +125,7 @@ class HttpException extends \Zend_Gdata_App_HttpException
     /**
      * Get array of error messages
      *
-     * @return array
+     * @return string[]
      */
     public function getMessages()
     {
@@ -127,7 +135,7 @@ class HttpException extends \Zend_Gdata_App_HttpException
     /**
      * Get array of error codes
      *
-     * @return array
+     * @return string[]
      */
     public function getCodes()
     {
@@ -138,7 +146,7 @@ class HttpException extends \Zend_Gdata_App_HttpException
      * Parse error response XML and fill arrays of codes and messages.
      *
      * @param \Zend_Http_Response $response
-     * @return \Magento\Gdata\Gshopping\HttpException
+     * @return $this
      */
     protected function _parseResponse($response)
     {

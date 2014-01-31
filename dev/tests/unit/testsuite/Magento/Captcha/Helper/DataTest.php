@@ -161,13 +161,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * Create Config Stub
      *
-     * @return \Magento\Core\Model\Config
+     * @return \Magento\App\ConfigInterface
      */
     protected function _getConfigStub()
     {
         $config = $this->getMock(
-            'Magento\Core\Model\Config',
-            array('getValue'),
+            'Magento\App\ConfigInterface',
+            array(),
             array(), '', false
         );
 

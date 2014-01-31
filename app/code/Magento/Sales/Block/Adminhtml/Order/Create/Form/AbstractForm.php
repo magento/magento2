@@ -160,7 +160,7 @@ abstract class AbstractForm
     /**
      * Add rendering EAV attributes to Form element
      *
-     * @param array|\Magento\Data\Collection $attributes
+     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[] $attributes
      * @param \Magento\Data\Form\AbstractForm $form
      * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
      */
@@ -174,16 +174,14 @@ abstract class AbstractForm
         $renderers = $this->_getAdditionalFormElementRenderers();
 
         foreach ($attributes as $attribute) {
-            /** @var $attribute \Magento\Customer\Model\Attribute */
-            $attribute->setStoreId($this->_sessionQuote->getStoreId());
-            $inputType = $attribute->getFrontend()->getInputType();
+            $inputType = $attribute->getFrontendInput();
 
             if ($inputType) {
                 $element = $form->addField($attribute->getAttributeCode(), $inputType, array(
                     'name'      => $attribute->getAttributeCode(),
                     'label'     => __($attribute->getStoreLabel()),
-                    'class'     => $attribute->getFrontend()->getClass(),
-                    'required'  => $attribute->getIsRequired(),
+                    'class'     => $attribute->getFrontendClass(),
+                    'required'  => $attribute->isRequired(),
                 ));
                 if ($inputType == 'multiline') {
                     $element->setLineCount($attribute->getMultilineCount());
@@ -196,7 +194,11 @@ abstract class AbstractForm
                 }
 
                 if ($inputType == 'select' || $inputType == 'multiselect') {
-                    $element->setValues($attribute->getFrontend()->getSelectOptions());
+                    $options = array();
+                    foreach ($attribute->getOptions() as $optionDto) {
+                        $options[] = $optionDto->__toArray();
+                    }
+                    $element->setValues($options);
                 } else if ($inputType == 'date') {
                     $format = $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
                     $element->setImage($this->getViewFileUrl('images/grid-cal.gif'));

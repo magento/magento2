@@ -63,6 +63,5 @@
         <available_product_type name="simple"/>
         <available_product_type name="virtual"/>
         <available_product_type name="configurable"/>
-        <available_product_type name="grouped"/>
     </order>
 </config>

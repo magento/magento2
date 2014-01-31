@@ -26,7 +26,7 @@
 
 namespace Magento\App;
 
-use Magento\App\Config,
+use Magento\App\Arguments,
     Magento\Profiler,
     Magento\App\Filesystem;
 
@@ -73,12 +73,12 @@ class ObjectManagerFactory
             array($directoryList->getDir(\Magento\App\Filesystem::GENERATION_DIR))
         );
 
-        $options = new Config(
+        $options = new \Magento\App\Arguments(
             $arguments,
-            new Config\Loader(
+            new \Magento\App\Arguments\Loader(
                 $directoryList,
-                isset($arguments[Config\Loader::PARAM_CUSTOM_FILE])
-                    ? $arguments[Config\Loader::PARAM_CUSTOM_FILE]
+                isset($arguments[\Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE])
+                    ? $arguments[\Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE]
                     : null
             )
         );
@@ -108,7 +108,7 @@ class ObjectManagerFactory
         $className = $this->_locatorClassName;
         /** @var \Magento\ObjectManager $objectManager */
         $objectManager = new $className($factory, $diConfig, array(
-            'Magento\App\Config' => $options,
+            'Magento\App\Arguments' => $options,
             'Magento\App\Filesystem\DirectoryList' => $directoryList,
             'Magento\Filesystem\DirectoryList' => $directoryList
         ));

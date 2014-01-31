@@ -128,7 +128,7 @@ class Uploader
     protected $_fileExists = false;
 
     /**
-     * @var null|array
+     * @var null|string[]
      */
     protected $_allowedExtensions = null;
 
@@ -191,7 +191,7 @@ class Uploader
      * After save logic
      *
      * @param  array $result
-     * @return \Magento\File\Uploader
+     * @return $this
      */
     protected function _afterSave($result)
     {
@@ -204,7 +204,7 @@ class Uploader
      *
      * @param string $destinationFolder
      * @param string $newFileName
-     * @return bool
+     * @return array
      * @throws \Exception
      */
     public function save($destinationFolder, $newFileName = null)
@@ -277,6 +277,7 @@ class Uploader
     /**
      * Validate file before save
      *
+     * @return void
      * @throws \Exception
      */
     protected function _validateFile()
@@ -388,7 +389,7 @@ class Uploader
     /**
      * Used to check if uploaded file mime type is valid or not
      *
-     * @param array $validTypes
+     * @param string[] $validTypes
      * @access public
      * @return bool
      */
@@ -416,9 +417,9 @@ class Uploader
     /**
      * Used to set {@link _allowCreateFolders} value
      *
-     * @param mixed $flag
+     * @param bool $flag
      * @access public
-     * @return \Magento\File\Uploader
+     * @return $this
      */
     public function setAllowCreateFolders($flag)
     {
@@ -429,9 +430,9 @@ class Uploader
     /**
      * Used to set {@link _allowRenameFiles} value
      *
-     * @param mixed $flag
+     * @param bool $flag
      * @access public
-     * @return \Magento\File\Uploader
+     * @return $this
      */
     public function setAllowRenameFiles($flag)
     {
@@ -442,9 +443,9 @@ class Uploader
     /**
      * Used to set {@link _enableFilesDispersion} value
      *
-     * @param mixed $flag
+     * @param bool $flag
      * @access public
-     * @return \Magento\File\Uploader
+     * @return $this
      */
     public function setFilesDispersion($flag)
     {
@@ -455,8 +456,8 @@ class Uploader
     /**
      * File names Case-sensitivity setter
      *
-     * @param mixed $flag
-     * @return \Magento\File\Uploader
+     * @param bool $flag
+     * @return $this
      */
     public function setFilenamesCaseSensitivity($flag)
     {
@@ -467,8 +468,8 @@ class Uploader
     /**
      * Set allowed extensions
      *
-     * @param array $extensions
-     * @return \Magento\File\Uploader
+     * @param string[] $extensions
+     * @return $this
      */
     public function setAllowedExtensions($extensions = array())
     {
@@ -493,6 +494,11 @@ class Uploader
         return in_array(strtolower($extension), $this->_allowedExtensions);
     }
 
+    /**
+     * Return file mime type
+     *
+     * @return string
+     */
     private function _getMimeType()
     {
         return $this->_file['type'];
@@ -502,6 +508,7 @@ class Uploader
      * Set upload field id
      *
      * @param string $fileId
+     * @return void
      * @throws \Exception
      */
     private function _setUploadFileId($fileId)

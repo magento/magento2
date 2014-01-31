@@ -31,9 +31,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <tax_setup>Magento\Tax\Model\Resource\Setup</tax_setup>
-            </value>
+            <array>
+                <item key="tax_setup"><value>Magento\Tax\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Tax\Model\Resource\Calculation">

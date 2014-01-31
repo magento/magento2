@@ -32,7 +32,7 @@ namespace Magento\Sales\Model\Resource;
 class Setup extends \Magento\Eav\Model\Entity\Setup
 {
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -46,7 +46,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * @param string $resourceName
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param string $moduleName
      * @param string $connectionName
      */
@@ -55,7 +55,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         $resourceName,
         \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         $moduleName = 'Magento_Sales',
         $connectionName = ''
     ) {
@@ -260,7 +260,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     /**
      * Get config model
      *
-     * @return \Magento\Core\Model\Config
+     * @return \Magento\App\ConfigInterface
      */
     public function getConfigModel()
     {

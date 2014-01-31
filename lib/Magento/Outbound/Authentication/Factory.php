@@ -26,9 +26,14 @@
  */
 namespace Magento\Outbound\Authentication;
 
+use Magento\ObjectManager;
+use Magento\Outbound\AuthenticationInterface;
+
 class Factory
 {
-    /** @var \Magento\App\ObjectManager  */
+    /**
+     * @var ObjectManager
+     */
     private $_objectManager;
 
     /**
@@ -38,11 +43,11 @@ class Factory
 
     /**
      * @param array $authenticationMap
-     * @param \Magento\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
     public function __construct(
         array $authenticationMap,
-        \Magento\ObjectManager $objectManager
+        ObjectManager $objectManager
     ) {
         $this->_authenticationMap = $authenticationMap;
         $this->_objectManager = $objectManager;
@@ -52,8 +57,8 @@ class Factory
      * Returns an Authentication that matches the type specified within Endpoint
      *
      * @param string $authenticationType
+     * @return AuthenticationInterface
      * @throws \LogicException
-     * @return \Magento\Outbound\AuthenticationInterface
      */
     public function getAuthentication($authenticationType)
     {
@@ -62,7 +67,7 @@ class Factory
         }
 
         $authentication =  $this->_objectManager->get($this->_authenticationMap[$authenticationType]);
-        if (!$authentication instanceof \Magento\Outbound\AuthenticationInterface) {
+        if (!$authentication instanceof AuthenticationInterface) {
             throw new \LogicException(
                 "Authentication class for {$authenticationType} does not implement authentication interface"
             );

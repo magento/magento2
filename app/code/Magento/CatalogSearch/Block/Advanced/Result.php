@@ -24,21 +24,17 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Advanced search result
- *
- * @category   Magento
- * @package    Magento_CatalogSearch
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogSearch\Block\Advanced;
 
+/**
+ * Advanced search result
+ */
 class Result extends \Magento\View\Element\Template
 {
     /**
      * Url factory
      *
-     * @var \Magento\Core\Model\UrlFactory
+     * @var \Magento\UrlFactory
      */
     protected $_urlFactory;
 
@@ -60,14 +56,14 @@ class Result extends \Magento\View\Element\Template
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
      * @param \Magento\Catalog\Model\Layer $catalogLayer
-     * @param \Magento\Core\Model\UrlFactory $urlFactory
+     * @param \Magento\UrlFactory $urlFactory
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
         \Magento\Catalog\Model\Layer $catalogLayer,
-        \Magento\Core\Model\UrlFactory $urlFactory,
+        \Magento\UrlFactory $urlFactory,
         array $data = array()
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
@@ -78,46 +74,52 @@ class Result extends \Magento\View\Element\Template
 
     protected function _prepareLayout()
     {
-        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+        $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
+        if ($breadcrumbs) {
             $breadcrumbs->addCrumb('home', array(
-                'label'=>__('Home'),
-                'title'=>__('Go to Home Page'),
-                'link' => $this->_storeManager->getStore()->getBaseUrl(),
+                'label' => __('Home'),
+                'title' => __('Go to Home Page'),
+                'link'  => $this->_storeManager->getStore()->getBaseUrl(),
             ))->addCrumb('search', array(
-                'label'=>__('Catalog Advanced Search'),
-                'link'=>$this->getUrl('*/*/')
+                'label' => __('Catalog Advanced Search'),
+                'link'  => $this->getUrl('*/*/')
             ))->addCrumb('search_result', array(
-                'label'=>__('Results')
+                'label' => __('Results')
             ));
         }
         return parent::_prepareLayout();
     }
 
-    public function setListOrders() {
-        $category = $this->_catalogLayer->getCurrentCategory();
+    /**
+     * Set order options
+     */
+    public function setListOrders()
+    {
         /* @var $category \Magento\Catalog\Model\Category */
+        $category = $this->_catalogLayer->getCurrentCategory();
 
         $availableOrders = $category->getAvailableSortByOptions();
         unset($availableOrders['position']);
 
-        $this->getChildBlock('search_result_list')
-            ->setAvailableOrders($availableOrders);
+        $this->getChildBlock('search_result_list')->setAvailableOrders($availableOrders);
     }
 
-    public function setListModes() {
-        $this->getChildBlock('search_result_list')
-            ->setModes(array(
-                'grid' => __('Grid'),
-                'list' => __('List'))
-            );
+    /**
+     * Set view mode options
+     */
+    public function setListModes()
+    {
+        $this->getChildBlock('search_result_list')->setModes(array('grid' => __('Grid'), 'list' => __('List')));
     }
 
-    public function setListCollection() {
+    public function setListCollection()
+    {
         $this->getChildBlock('search_result_list')
            ->setCollection($this->_getProductCollection());
     }
 
-    protected function _getProductCollection(){
+    protected function _getProductCollection()
+    {
         return $this->getSearchModel()->getProductCollection();
     }
 

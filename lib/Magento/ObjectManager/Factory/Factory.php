@@ -82,6 +82,7 @@ class Factory implements \Magento\ObjectManager\Factory
      * @param array $arguments
      * @return array
      * @throws \LogicException
+     * @throws \InvalidArgumentException
      * @throws \BadMethodCallException
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -145,6 +146,7 @@ class Factory implements \Magento\ObjectManager\Factory
      * Set object manager
      *
      * @param \Magento\ObjectManager $objectManager
+     * @return void
      */
     public function setObjectManager(\Magento\ObjectManager $objectManager)
     {

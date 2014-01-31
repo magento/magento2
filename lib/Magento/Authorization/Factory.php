@@ -25,6 +25,9 @@
  */
 namespace Magento\Authorization;
 
+use Magento\Authorization;
+use Magento\ObjectManager;
+
 class Factory
 {
     /**
@@ -35,16 +38,16 @@ class Factory
     /**
      * Object Manager instance
      *
-     * @var \Magento\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager = null;
 
     /**
      * Factory constructor
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -53,7 +56,7 @@ class Factory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Authorization
+     * @return Authorization
      */
     public function create(array $data = array())
     {

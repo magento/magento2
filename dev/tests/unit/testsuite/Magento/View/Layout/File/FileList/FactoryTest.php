@@ -44,7 +44,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $list = new \Magento\View\Layout\File\FileList();
+        $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $list = $helperObjectManager->getObject('Magento\View\Layout\File\FileList');
+
         $this->_objectManager
             ->expects($this->once())
             ->method('create')

@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <install>/install/wizard/checkSecureHost</install>
-            </value>
+            <array>
+                <item key="install"><value>/install/wizard/checkSecureHost</value></item>
+            </array>
         </param>
     </type>
     <virtualType name="Magento\Install\Model\Session\Storage" type="Magento\Session\Storage">

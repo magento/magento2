@@ -68,7 +68,7 @@ class Image
         $url = false;
         if ($image = $object->getData($this->getAttribute()->getAttributeCode())) {
             $url = $this->_storeManager->getStore()
-                ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . self::IMAGE_PATH_SEGMENT . $image;
+                ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . self::IMAGE_PATH_SEGMENT . $image;
         }
         return $url;
     }

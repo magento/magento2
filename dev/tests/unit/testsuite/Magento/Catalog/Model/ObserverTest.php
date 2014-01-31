@@ -67,7 +67,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_catalogCategoryFlat = $this->getMock(
             'Magento\Catalog\Helper\Category\Flat', array(), array(), '', false
         );
-        $coreConfig = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false);
+        $coreConfig = $this->getMock('Magento\App\ReinitableConfigInterface', array(), array(), '', false);
         $this->_model = $this->_objectHelper->getObject('Magento\Catalog\Model\Observer', array(
             'catalogCategory' => $this->_catalogCategory,
             'catalogData' => $this->_catalogData,

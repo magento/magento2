@@ -43,27 +43,23 @@ class Info extends \Magento\Backend\Block\Template
      */
     protected $_coreRegistry = null;
 
-    /**
-     * Core registry
-     *
-     * @var \Magento\Customer\Model\CustomerFactory
-     */
-    protected $_customerFactory;
+    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface */
+    protected $_customerService;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->_customerFactory = $customerFactory;
+        $this->_customerService = $customerService;
         parent::__construct($context, $data);
     }
 
@@ -126,11 +122,13 @@ class Info extends \Magento\Backend\Block\Template
     {
         $agreement = $this->_getBillingAgreement();
         $this->setReferenceId($agreement->getReferenceId());
-        $customer = $this->_customerFactory->create()->load($agreement->getCustomerId());
-        $this->setCustomerUrl(
-            $this->getUrl('customer/index/edit', array('id' => $customer->getId()))
-        );
+        $customerId = $agreement->getCustomerId();
+        $customer = $this->_customerService->getCustomer($customerId);
+
         $this->setCustomerEmail($customer->getEmail());
+        $this->setCustomerUrl(
+            $this->getUrl('customer/index/edit', array('id' => $customerId))
+        );
         $this->setStatus($agreement->getStatusLabel());
         $this->setCreatedAt(
             $this->formatDate($agreement->getCreatedAt(), 'short', true)

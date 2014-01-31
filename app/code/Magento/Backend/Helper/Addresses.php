@@ -45,7 +45,7 @@ class Addresses extends \Magento\App\Helper\AbstractHelper
      */
     public function processStreetAttribute(\Magento\Customer\Model\Attribute $attribute)
     {
-        if($attribute->getScopeMultilineCount() <= 0) {
+        if ($attribute->getScopeMultilineCount() <= 0) {
             $attribute->setScopeMultilineCount(self::DEFAULT_STREET_LINES_COUNT);
         }
         return $attribute;

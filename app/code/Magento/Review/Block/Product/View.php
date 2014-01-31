@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block\Product;
+
+use Magento\Review\Model\Resource\Review\Collection as ReviewCollection;
 
 /**
  * Product Reviews Page
@@ -31,12 +34,10 @@
  * @package    Magento_Review
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block\Product;
-
 class View extends \Magento\Catalog\Block\Product\View
 {
     /**
-     * @var \Magento\Review\Model\Resource\Review\Collection
+     * @var ReviewCollection
      */
     protected $_reviewsCollection;
 
@@ -155,6 +156,9 @@ class View extends \Magento\Catalog\Block\Product\View
             ;
     }
 
+    /**
+     * @return ReviewCollection
+     */
     public function getReviewsCollection()
     {
         if (null === $this->_reviewsCollection) {

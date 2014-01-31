@@ -63,8 +63,7 @@ class Read implements ReadInterface
      * @param \Magento\Filesystem\File\ReadFactory $fileFactory
      * @param \Magento\Filesystem\DriverInterface $driver
      */
-    public function __construct
-    (
+    public function __construct(
         array $config,
         \Magento\Filesystem\File\ReadFactory $fileFactory,
         \Magento\Filesystem\DriverInterface $driver
@@ -119,7 +118,7 @@ class Read implements ReadInterface
      * Retrieve list of all entities in given path
      *
      * @param string|null $path
-     * @return array
+     * @return string[]
      */
     public function read($path = null)
     {
@@ -135,7 +134,7 @@ class Read implements ReadInterface
      * Read recursively
      *
      * @param null $path
-     * @return array
+     * @return string[]
      */
     public function readRecursively($path = null)
     {
@@ -148,12 +147,13 @@ class Read implements ReadInterface
         sort($result);
         return $result;
     }
+
     /**
      * Search all entries for given regex pattern
      *
      * @param string $pattern
      * @param string $path [optional]
-     * @return array
+     * @return string[]
      */
     public function search($pattern, $path = null)
     {

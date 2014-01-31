@@ -34,7 +34,7 @@
  */
 namespace Magento\Io;
 
-abstract class AbstractIo implements \Magento\Io\IoInterface
+abstract class AbstractIo implements IoInterface
 {
     /**
      * If this variable is set to true, our library will be able to automaticaly
@@ -48,7 +48,7 @@ abstract class AbstractIo implements \Magento\Io\IoInterface
      * Allow automaticaly create non-existant directories
      *
      * @param bool $flag
-     * @return \Magento\Io\AbstractIo
+     * @return $this
      */
     public function setAllowCreateFolders($flag)
     {
@@ -59,19 +59,26 @@ abstract class AbstractIo implements \Magento\Io\IoInterface
     /**
      * Open a connection
      *
-     * @param array $config
-     * @return bool
+     * @param array $args
+     * @return false
      */
     public function open(array $args = array())
     {
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function dirsep()
     {
         return '/';
     }
 
+    /**
+     * @param string $path
+     * @return string
+     */
     public function getCleanPath($path)
     {
         if (empty($path)) {
@@ -113,6 +120,11 @@ abstract class AbstractIo implements \Magento\Io\IoInterface
         return $pathTokR . implode('/', $realPathParts);
     }
 
+    /**
+     * @param string $haystackPath
+     * @param string $needlePath
+     * @return bool
+     */
     public function allowedPath($haystackPath, $needlePath)
     {
         return strpos($this->getCleanPath($haystackPath), $this->getCleanPath($needlePath)) === 0;

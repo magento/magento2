@@ -29,7 +29,9 @@
  */
 namespace Magento\App\Cache;
 
-class Proxy implements \Magento\App\CacheInterface
+use Magento\App\CacheInterface;
+
+class Proxy implements CacheInterface
 {
     /**
      * @var \Magento\ObjectManager
@@ -37,7 +39,7 @@ class Proxy implements \Magento\App\CacheInterface
     protected  $_objectManager;
 
     /**
-     * @var \Magento\App\CacheInterface
+     * @var CacheInterface
      */
     protected  $_cache;
 
@@ -52,7 +54,7 @@ class Proxy implements \Magento\App\CacheInterface
     /**
      * Create cache model
      *
-     * @return \Magento\App\CacheInterface|mixed
+     * @return CacheInterface
      */
     protected function _getCache()
     {

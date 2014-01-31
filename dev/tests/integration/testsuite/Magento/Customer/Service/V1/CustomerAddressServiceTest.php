@@ -560,9 +560,9 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
         // Either both set or both unset
         $this->assertTrue(!(isset($expectedRegion) xor isset($actualRegion)));
         if (isset($expectedRegion) && isset($actualRegion)) {
-            $this->assertInstanceOf('Magento\Customer\Service\V1\Dto\Region', $expectedRegion);
-            $this->assertInstanceOf('Magento\Customer\Service\V1\Dto\Region', $actualRegion);
-            $this->assertEquals($expectedRegion->__toArray(), $actualRegion->__toArray());
+            $this->assertTrue(is_array($expectedRegion));
+            $this->assertTrue(is_array($actualRegion));
+            $this->assertEquals($expectedRegion, $actualRegion);
         }
     }
 }

@@ -36,7 +36,7 @@ class RequestPreprocessor
     protected $_responseFactory;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -53,14 +53,14 @@ class RequestPreprocessor
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\App\ResponseFactory $responseFactory
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\State $appState,
-        \Magento\Core\Model\Url $url,
+        \Magento\UrlInterface $url,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\App\ResponseFactory $responseFactory
     ) {
@@ -84,7 +84,7 @@ class RequestPreprocessor
         $request = $arguments[0];
         if ($this->_appState->isInstalled() && !$request->isPost() && $this->_isBaseUrlCheckEnabled()) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\Core\Model\Store::URL_TYPE_WEB,
+                \Magento\UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()
             );
             if ($baseUrl) {

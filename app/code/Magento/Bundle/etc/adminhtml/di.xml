@@ -32,9 +32,16 @@
     </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <param name="constructors">
-            <value>
-                <bundle>Magento\Bundle\Model\Product\CopyConstructor\Bundle</bundle>
-            </value>
+            <array>
+                <item key="bundle"><value>Magento\Bundle\Model\Product\CopyConstructor\Bundle</value></item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock">
+        <param name="complexProductTypes">
+            <array>
+                <item key="bundle"><value type="const">Magento\Catalog\Model\Product\Type::TYPE_BUNDLE</value></item>
+            </array>
         </param>
     </type>
 </config>

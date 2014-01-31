@@ -26,11 +26,11 @@
 <config>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <googlecheckout_redirect>/googlecheckout/redirect/</googlecheckout_redirect>
-                <googlecheckout_beacon>/googlecheckout/api/beacon/</googlecheckout_beacon>
-                <googlecheckout_api>/googlecheckout/api/</googlecheckout_api>
-            </value>
+            <array>
+                <item key="googlecheckout_redirect"><value>/googlecheckout/redirect/</value></item>
+                <item key="googlecheckout_beacon"><value>/googlecheckout/api/beacon/</value></item>
+                <item key="googlecheckout_api"><value>/googlecheckout/api/</value></item>
+            </array>
         </param>
     </type>
 </config>

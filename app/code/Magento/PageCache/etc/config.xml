@@ -29,7 +29,7 @@
     <default>
         <system>
             <headers>
-                <max-age>28800</max-age>
+                <public-max-age>0</public-max-age>
             </headers>
         </system>
     </default>

@@ -56,6 +56,7 @@ class Validator
      *
      * @param int|string $timestamp
      * @param int|string $toDate
+     * @return void
      * @throws ValidationException
      */
     public function validate($timestamp, $toDate)

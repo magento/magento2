@@ -26,6 +26,8 @@
 
 namespace Magento\Newsletter\Model;
 
+use Magento\Cron\Model\Schedule;
+
 /**
  * Newsletter module observer
  *
@@ -61,6 +63,12 @@ class Observer
         $this->_queueCollectionFactory = $queueCollectionFactory;
     }
 
+    /**
+     * Subscribe customer handler
+     *
+     * @param \Magento\Object $observer
+     * @return $this
+     */
     public function subscribeCustomer($observer)
     {
         $customer = $observer->getEvent()->getCustomer();
@@ -74,7 +82,7 @@ class Observer
      * Customer delete handler
      *
      * @param \Magento\Object $observer
-     * @return \Magento\Newsletter\Model\Observer
+     * @return $this
      */
     public function customerDeleted($observer)
     {
@@ -87,6 +95,12 @@ class Observer
         return $this;
     }
 
+    /**
+     * Customer delete handler
+     *
+     * @param Schedule $schedule
+     * @return void
+     */
     public function scheduledSend($schedule)
     {
         $countOfQueue  = 3;

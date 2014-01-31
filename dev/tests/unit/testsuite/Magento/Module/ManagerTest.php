@@ -73,7 +73,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_outputConfig
             ->expects($this->any())
-            ->method('getFlag')
+            ->method('isSetFlag')
             ->will($this->returnValue(true));
         $this->assertFalse($this->_model->isOutputEnabled('Nonexisting_Module'));
     }
@@ -118,7 +118,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
         $this->_outputConfig
             ->expects($this->at(0))
-            ->method('getFlag')
+            ->method('isSetFlag')
             ->with(self::XML_PATH_OUTPUT_ENABLED)
             ->will($this->returnValue($configValue))
         ;

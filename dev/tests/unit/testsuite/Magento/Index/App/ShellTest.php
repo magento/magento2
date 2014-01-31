@@ -80,7 +80,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($shell)
             );
 
-        $this->_entryPoint->execute();
+        $this->_entryPoint->launch();
     }
 
     /**

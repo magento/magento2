@@ -49,7 +49,17 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
+    protected $_mergedFileAbs = 'absolutePath/destination_file.js';
+
+    /**
+     * @var string
+     */
     protected $_mergedFile = 'destination_file.js';
+
+    /**
+     * @var string
+     */
+    protected $_mergedMetaFileAbs = 'absolutePath/destination_file.js.dat';
 
     /**
      * @var string
@@ -59,7 +69,7 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $_filesArray = array('file1.js', 'file2.js');
+    protected $_filesArray = array('absolutePath/file1.js', 'absolutePath/file2.js');
 
     protected function setUp()
     {
@@ -78,7 +88,14 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
             ));
         $this->_directory->expects($this->any())
             ->method('getRelativePath')
-            ->will($this->returnArgument(0));
+            ->will(
+                $this->returnCallback(
+                    function ($path) {
+                        $parts = explode('/', $path);
+                        return end($parts);
+                    }
+                )
+            );
 
         $this->_strategy = $this->getMock('Magento\View\Asset\MergeStrategyInterface');
 
@@ -110,7 +127,7 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('mergeFiles');
 
-        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFile, 'contentType');
+        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFileAbs, 'contentType');
     }
 
     /**
@@ -130,14 +147,14 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
         $this->_strategy
             ->expects($this->once())
             ->method('mergeFiles')
-            ->with($this->_filesArray, $this->_mergedFile, 'contentType');
+            ->with($this->_filesArray, $this->_mergedFileAbs, 'contentType');
 
         $this->_directory
             ->expects($this->once())
             ->method('writeFile')
             ->with($this->_mergedMetaFile, '123456');
 
-        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFile, 'contentType');
+        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFileAbs, 'contentType');
     }
 
     /**

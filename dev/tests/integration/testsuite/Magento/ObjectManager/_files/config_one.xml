@@ -25,40 +25,40 @@
 -->
 <config>
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updater" />
-    <type name="Magento\App\Config\Loader">
+    <type name="Magento\App\Arguments\Loader">
         <param name="customFile">
-            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
+            <value type="argument">Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE</value>
         </param>
         <param name="customConfig">
-            <instance shared="true" type="Magento\Core\Model\Config\Storage_Modules" />
+            <instance shared="true" type="Magento\Core\Model\Config\Storage\Modules" />
         </param>
         <param name="customValue">
             <value>someValue</value>
         </param>
         <param name="customComplexValue">
-            <value transalte="one,two" module="Some_Module">
-                <one>one</one>
-                <two>two</two>
-            </value>
+            <array>
+                <item key="one"><value>one</value></item>
+                <item key="two"><value>two</value></item>
+            </array>
         </param>
         <plugin name="one" type="somePluginOne"/>
         <plugin name="two" type="somePluginTwo" sortOrder="15"/>
     </type>
-    <virtualType name="Magento\App\Config\LoaderVirtual" type="Magento\App\Config\Loader\Local" shared="false">
+    <virtualType name="Magento\App\Arguments\LoaderVirtual" type="Magento\App\Arguments\Loader\Local" shared="false">
         <param name="customFile">
-            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
+            <value type="argument">Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE</value>
         </param>
         <param name="customConfig">
-            <instance type="Magento\Core\Model\Config\Storage_Modules" />
+            <instance type="Magento\Core\Model\Config\Storage\Modules" />
         </param>
         <param name="customValue">
             <value>someValue</value>
         </param>
         <param name="customComplexValue">
-            <value transalte="one,two" module="Some_Module">
-                <one>one</one>
-                <two>one</two>
-            </value>
+            <array>
+                <item key="one"><value>one</value></item>
+                <item key="two"><value>one</value></item>
+            </array>
         </param>
         <plugin name="one" type="somePluginOne" sortOrder="10" />
         <plugin name="two" type="somePluginTwo"/>
@@ -67,16 +67,17 @@
         <param name="cacheIdPrefix"><value><![CDATA[collection_]]></value></param>
         <param name="cacheLifetime"><value>86400</value></param>
         <param name="cacheTags">
-            <value>
-                <const type='const'>Magento\Core\Model\Website::CACHE_TAG</const>
-                <boolFalse type='bool'>false</boolFalse>
-                <boolTrue type='bool'>true</boolTrue>
-                <boolOne type='bool'>1</boolOne>
-                <boolZero type='bool'>0</boolZero>
-                <intValue type='int'>100500</intValue>
-                <nullValue type='null' />
-                <stringPattern type='string' pattern="[a-z\-]*">az-value</stringPattern>
-            </value>
+            <array>
+                <item key="const"><value type="const">Magento\Core\Model\Website::CACHE_TAG</value></item>
+                <item key="boolFalse"><value type="bool">false</value></item>
+                <item key="boolTrue"><value type="bool">true</value></item>
+                <item key="boolOne"><value type="bool">1</value></item>
+                <item key="boolZero"><value type="bool">0</value></item>
+                <item key="intValue"><value type="int">100500</value></item>
+                <item key="nullValue"><value type="null"/>
+                </item>
+                <item key="stringPattern"><value type="string" pattern="[a-z\-]*">az-value</value></item>
+            </array>
         </param>
         <param name="constParam">
             <value type='const'>Magento\Core\Model\Website::CACHE_TAG</value>

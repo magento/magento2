@@ -26,14 +26,18 @@
 <config>
     <type name="Magento\App\AreaList">
         <param name="areas">
-            <value>
-                <webapi_rest>
-                    <frontName>rest</frontName>
-                </webapi_rest>
-                <webapi_soap>
-                    <frontName>soap</frontName>
-                </webapi_soap>
-            </value>
+            <array>
+                <item key="webapi_rest">
+                    <array>
+                        <item key="frontName"><value>rest</value></item>
+                    </array>
+                </item>
+                <item key="webapi_soap">
+                    <array>
+                        <item key="frontName"><value>soap</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Xml\Generator" shared="false" />

@@ -32,16 +32,16 @@ namespace Magento\Backend\Model\Config\Source\Storage\Media;
 class Database implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
-     * @var \Magento\App\Config
+     * @var \Magento\App\Arguments
      */
-    protected $_config;
+    protected $_arguments;
 
     /**
-     * @param \Magento\App\Config
+     * @param \Magento\App\Arguments
      */
-    public function __construct(\Magento\App\Config $config)
+    public function __construct(\Magento\App\Arguments $arguments)
     {
-        $this->_config = $config;
+        $this->_arguments = $arguments;
     }
 
     /**
@@ -52,7 +52,7 @@ class Database implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray()
     {
         $resourceOptions = array();
-        foreach (array_keys($this->_config->getResources()) as $resourceName) {
+        foreach (array_keys($this->_arguments->getResources()) as $resourceName) {
             $resourceOptions[] = array('value' => $resourceName, 'label' => $resourceName);
         }
         sort($resourceOptions);

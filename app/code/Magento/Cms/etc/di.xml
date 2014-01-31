@@ -26,55 +26,61 @@
 <config>
     <type name="Magento\Cms\Model\Wysiwyg\Config">
         <param name="windowSize">
-            <value>
-                <height type="int">600</height>
-                <width type="int">1000</width>
-            </value>
+            <array>
+                <item key="height"><value type="int">600</value></item>
+                <item key="width"><value type="int">1000</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
         <param name="resizeParameters">
-            <value>
-                <height type="int">75</height>
-                <width type="int">100</width>
-            </value>
+            <array>
+                <item key="height"><value type="int">75</value></item>
+                <item key="width"><value type="int">100</value></item>
+            </array>
         </param>
         <param name="extensions">
-            <value>
-                <allowed>
-                    <jpg type="int">1</jpg>
-                    <jpeg type="int">1</jpeg>
-                    <png type="int">1</png>
-                    <gif type="int">1</gif>
-                </allowed>
-                <image_allowed>
-                    <jpg type="int">1</jpg>
-                    <jpeg type="int">1</jpeg>
-                    <png type="int">1</png>
-                    <gif type="int">1</gif>
-                </image_allowed>
-                <media_allowed>
-                    <flv type="int">1</flv>
-                    <swf type="int">1</swf>
-                    <avi type="int">1</avi>
-                    <mov type="int">1</mov>
-                    <rm type="int">1</rm>
-                    <wmv type="int">1</wmv>
-                </media_allowed>
-            </value>
+            <array>
+                <item key="allowed">
+                    <array>
+                        <item key="jpg"><value type="int">1</value></item>
+                        <item key="jpeg"><value type="int">1</value></item>
+                        <item key="png"><value type="int">1</value></item>
+                        <item key="gif"><value type="int">1</value></item>
+                    </array>
+                </item>
+                <item key="image_allowed">
+                    <array>
+                        <item key="jpg"><value type="int">1</value></item>
+                        <item key="jpeg"><value type="int">1</value></item>
+                        <item key="png"><value type="int">1</value></item>
+                        <item key="gif"><value type="int">1</value></item>
+                    </array>
+                </item>
+                <item key="media_allowed">
+                    <array>
+                        <item key="flv"><value type="int">1</value></item>
+                        <item key="swf"><value type="int">1</value></item>
+                        <item key="avi"><value type="int">1</value></item>
+                        <item key="mov"><value type="int">1</value></item>
+                        <item key="rm"><value type="int">1</value></item>
+                        <item key="wmv"><value type="int">1</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
         <param name="dirs">
-            <value>
-                <exclude />
-                <include />
-            </value>
+            <array>
+                <item key="exclude"><value/></item>
+                <item key="include"><value/></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <cms_setup>Magento\Cms\Model\Resource\Setup</cms_setup>
-            </value>
+            <array>
+                <item key="cms_setup"><value>Magento\Cms\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

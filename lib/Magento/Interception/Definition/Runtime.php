@@ -26,13 +26,15 @@
  */
 namespace Magento\Interception\Definition;
 
-class Runtime implements \Magento\Interception\Definition
+use Magento\Interception\Definition;
+
+class Runtime implements Definition
 {
     /**
      * Retrieve list of methods
      *
      * @param string $type
-     * @return array
+     * @return string[]
      */
     public function getMethodList($type)
     {

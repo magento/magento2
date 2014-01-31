@@ -41,11 +41,17 @@ class FileListTest extends \PHPUnit_Framework_TestCase
      */
     private $_themeFile;
 
+    /**
+     * @var \Magento\View\Layout\File\FileList\Collator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $collator;
+
     protected function setUp()
     {
         $this->_baseFile = $this->_createLayoutFile('fixture.xml', 'Fixture_TestModule');
         $this->_themeFile = $this->_createLayoutFile('fixture.xml', 'Fixture_TestModule', 'area/theme/path');
-        $this->_model = new \Magento\View\Layout\File\FileList();
+        $this->collator = $this->getMock('Magento\View\Layout\File\FileList\Collator', array('collate'));
+        $this->_model = new \Magento\View\Layout\File\FileList($this->collator);
         $this->_model->add(array($this->_baseFile, $this->_themeFile));
     }
 
@@ -106,47 +112,21 @@ class FileListTest extends \PHPUnit_Framework_TestCase
         $this->_model->add(array($file));
     }
 
-    public function testReplaceBaseFile()
+    public function testReplace()
     {
-        $file = $this->_createLayoutFile('test/fixture.xml', 'Fixture_TestModule');
-        $this->_model->replace(array($file));
-        $this->assertSame(array($file, $this->_themeFile), $this->_model->getAll());
-    }
-
-    public function testReplaceThemeFile()
-    {
-        $file = $this->_createLayoutFile('test/fixture.xml', 'Fixture_TestModule', 'area/theme/path');
-        $this->_model->replace(array($file));
-        $this->assertSame(array($this->_baseFile, $file), $this->_model->getAll());
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Overriding layout file 'new.xml' does not match to any of the files
-     */
-    public function testReplaceBaseFileException()
-    {
-        $file = $this->_createLayoutFile('new.xml', 'Fixture_TestModule');
-        $this->_model->replace(array($file));
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Overriding layout file 'test/fixture.xml' does not match to any of the files
-     */
-    public function testReplaceBaseFileEmptyThemePathException()
-    {
-        $file = $this->_createLayoutFile('test/fixture.xml', 'Fixture_TestModule', '');
-        $this->_model->replace(array($file));
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Overriding layout file 'new.xml' does not match to any of the files
-     */
-    public function testReplaceThemeFileException()
-    {
-        $file = $this->_createLayoutFile('new.xml', 'Fixture_TestModule', 'area/theme/path');
-        $this->_model->replace(array($file));
+        $files = array('1');
+        $result = array('3');
+        $this->collator
+            ->expects($this->once())
+            ->method('collate')
+            ->with(
+                $this->equalTo($files),
+                $this->equalTo(array(
+                    $this->_baseFile->getFileIdentifier() => $this->_baseFile,
+                    $this->_themeFile->getFileIdentifier() => $this->_themeFile)
+                ))
+            ->will($this->returnValue($result));
+        $this->assertNull($this->_model->replace($files));
+        $this->assertSame($result, $this->_model->getAll());
     }
 }

@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <checkout_setup>Magento\Checkout\Model\Resource\Setup</checkout_setup>
-            </value>
+            <array>
+                <item key="checkout_setup"><value>Magento\Checkout\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
     <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Session\Storage">

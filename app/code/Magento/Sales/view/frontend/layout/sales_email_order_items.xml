@@ -24,9 +24,9 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" label="Email Order Items List" design_abstraction="custom">
+    <update handle="sales_email_order_renderers" />
     <block class="Magento\Sales\Block\Order\Email\Items" name="items" template="email/items.phtml">
-        <block class="Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder" as="default" template="email/items/order/default.phtml"/>
-        <block class="Magento\Sales\Block\Order\Email\Items\Order\Grouped" as="grouped" template="email/items/order/default.phtml"/>
+        <block class="Magento\View\Element\RendererList" name="sales.email.order.renderers" as="renderer.list" />
         <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="order/totals.phtml">
             <arguments>
                 <argument name="label_properties" xsi:type="string">colspan="3" align="right" style="padding:3px 9px"</argument>

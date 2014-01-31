@@ -26,6 +26,8 @@
 
 namespace Magento\Convert;
 
+use Magento\Filesystem\File\WriteInterface;
+
 /**
  * Convert the data to XML Excel
  */
@@ -163,6 +165,7 @@ class Excel
      * Set Data Header
      *
      * @param array $data
+     * @return void
      */
     public function setDataHeader($data)
     {
@@ -173,6 +176,7 @@ class Excel
      * Set Data Footer
      *
      * @param array $data
+     * @return void
      */
     public function setDataFooter($data)
     {
@@ -200,10 +204,11 @@ class Excel
     /**
      * Write Converted XML Data to Temporary File
      *
-     * @param \Magento\Filesystem\File\WriteInterface $stream
+     * @param WriteInterface $stream
      * @param string $sheetName
+     * @return void
      */
-    public function write(\Magento\Filesystem\File\WriteInterface $stream, $sheetName = '')
+    public function write(WriteInterface $stream, $sheetName = '')
     {
         $stream->write($this->_getXmlHeader($sheetName));
 

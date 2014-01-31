@@ -57,7 +57,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->create('Magento\View\Url'),
                 $objectManager->create('Magento\View\FileSystem'),
                 $objectManager->create('Magento\Core\Model\Store\Config'),
-                $objectManager->create('Magento\Core\Model\Config'),
+                $objectManager->create('Magento\App\ConfigInterface'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
             ))
@@ -239,6 +239,17 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->sendTransactional('wrong_id',
             array('name' => 'Sender Name', 'email' => 'sender@example.com'), 'recipient@example.com', 'Recipient Name'
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testGetDefaultEmailLogo()
+    {
+        $this->assertStringEndsWith(
+            'static/frontend/magento_plushe/en_US/Magento_Email/logo_email.gif',
+            $this->_model->getDefaultEmailLogo()
         );
     }
 }

@@ -43,7 +43,7 @@ class Data extends \Magento\Captcha\Helper\Data
     /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\StoreManager $storeManager
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
@@ -51,7 +51,7 @@ class Data extends \Magento\Captcha\Helper\Data
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\StoreManager $storeManager,
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\App\Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory,
         \Magento\Backend\App\ConfigInterface $backendConfig

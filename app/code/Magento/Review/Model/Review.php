@@ -23,6 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Model;
+
+use Magento\Review\Model\Resource\Review\Product\Collection as ProductCollection;
+use Magento\Review\Model\Resource\Review\Status\Collection as StatusCollection;
+use Magento\Catalog\Model\Product;
 
 /**
  * Review model
@@ -41,8 +46,6 @@
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Model;
-
 class Review extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -142,27 +145,47 @@ class Review extends \Magento\Core\Model\AbstractModel
         $this->_init('Magento\Review\Model\Resource\Review');
     }
 
+    /**
+     * @return ProductCollection
+     */
     public function getProductCollection()
     {
         return $this->_productFactory->create();
     }
 
+    /**
+     * @return StatusCollection
+     */
     public function getStatusCollection()
     {
         return $this->_statusFactory->create();
     }
 
+    /**
+     * @param int $entityPkValue
+     * @param bool approvedOnly
+     * @param int $storeId
+     * @return int
+     */
     public function getTotalReviews($entityPkValue, $approvedOnly=false, $storeId=0)
     {
         return $this->getResource()->getTotalReviews($entityPkValue, $approvedOnly, $storeId);
     }
 
+    /**
+     * @return $this
+     */
     public function aggregate()
     {
         $this->getResource()->aggregate($this);
         return $this;
     }
 
+    /**
+     * @param Product $product
+     * @param int $storeId
+     * @return void
+     */
     public function getEntitySummary($product, $storeId=0)
     {
         $summaryData = $this->_summaryModFactory->create()
@@ -173,16 +196,25 @@ class Review extends \Magento\Core\Model\AbstractModel
         $product->setRatingSummary($summary);
     }
 
+    /**
+     * @return int
+     */
     public function getPendingStatus()
     {
         return self::STATUS_PENDING;
     }
 
+    /**
+     * @return string
+     */
     public function getReviewUrl()
     {
         return $this->_urlModel->getUrl('review/product/view', array('id' => $this->getReviewId()));
     }
 
+    /**
+     * @return bool|string[]
+     */
     public function validate()
     {
         $errors = array();
@@ -219,8 +251,8 @@ class Review extends \Magento\Core\Model\AbstractModel
     /**
      * Append review summary to product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
-     * @return \Magento\Review\Model\Review
+     * @param ProductCollection $collection
+     * @return $this
      */
     public function appendSummary($collection)
     {
@@ -249,6 +281,9 @@ class Review extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _beforeDelete()
     {
         $this->_protectFromNonAdmin();

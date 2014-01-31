@@ -103,7 +103,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Set array of additional cURL options
      *
      * @param array $options
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function setOptions(array $options = array())
     {
@@ -116,7 +116,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      *
      * @param  int $option      the CURLOPT_* constants
      * @param  mixed $value
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function addOption($option, $value)
     {
@@ -128,7 +128,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Set the configuration array for the adapter
      *
      * @param array $config
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function setConfig($config = array())
     {
@@ -143,7 +143,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param string  $host
      * @param int     $port
      * @param boolean $secure
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function connect($host, $port = 80, $secure = false)
     {
@@ -215,7 +215,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Close the connection to the server
      *
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function close()
     {

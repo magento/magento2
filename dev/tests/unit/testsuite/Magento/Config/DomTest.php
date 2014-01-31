@@ -40,10 +40,9 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         $xml = file_get_contents(__DIR__ . "/_files/dom/{$xmlFile}");
         $newXml = file_get_contents(__DIR__ . "/_files/dom/{$newXmlFile}");
-        $expectedXml = file_get_contents(__DIR__ . "/_files/dom/{$expectedXmlFile}");
         $config = new \Magento\Config\Dom($xml, $ids);
         $config->merge($newXml);
-        $this->assertXmlStringEqualsXmlString($expectedXml, $config->getDom()->saveXML());
+        $this->assertXmlStringEqualsXmlFile(__DIR__ . "/_files/dom/{$expectedXmlFile}", $config->getDom()->saveXML());
     }
 
     /**
@@ -62,39 +61,35 @@ class DomTest extends \PHPUnit_Framework_TestCase
             ),
             array('no_ids.xml', 'no_ids_new.xml', array(), 'no_ids_merged.xml'),
             array('ambiguous_one.xml', 'ambiguous_new_two.xml', array(), 'ambiguous_merged.xml'),
-            array('namespaced.xml', 'namespaced_new.xml', array(
-                '/root/node'     => 'id',
-                ),
-                'namespaced_merged.xml'
-            ),
+            array('namespaced.xml', 'namespaced_new.xml', array('/root/node' => 'id'), 'namespaced_merged.xml'),
             array('override_node.xml', 'override_node_new.xml', array(), 'override_node_merged.xml'),
             array('override_node_new.xml', 'override_node.xml', array(), 'override_node_merged.xml'),
             array('text_node.xml', 'text_node_new.xml', array(), 'text_node_merged.xml'),
+            array(
+                'recursive.xml', 'recursive_new.xml', array(
+                    '/root/(node|another_node)(/param)?' => 'name',
+                    '/root/node/param(/complex/item)+' => 'key',
+                ),
+               'recursive_merged.xml',
+            ),
+            array(
+                'recursive_deep.xml', 'recursive_deep_new.xml',
+                array('/root(/node)+' => 'name'),
+                'recursive_deep_merged.xml',
+            ),
         );
     }
 
     /**
-     * @param string $xmlFile
-     * @param string $newXmlFile
-     * @dataProvider mergeExceptionDataProvider
      * @expectedException \Magento\Exception
+     * @expectedExceptionMessage More than one node matching the query: /root/node/subnode
      */
-    public function testMergeException($xmlFile, $newXmlFile)
+    public function testMergeException()
     {
-        $xml = file_get_contents(__DIR__ . "/_files/dom/{$xmlFile}");
-        $newXml = file_get_contents(__DIR__ . "/_files/dom/{$newXmlFile}");
-        $config = new \Magento\Config\Dom($xml, array());
+        $xml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_two.xml");
+        $newXml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_new_one.xml");
+        $config = new \Magento\Config\Dom($xml);
         $config->merge($newXml);
-    }
-
-    /**
-     * @return array
-     */
-    public function mergeExceptionDataProvider()
-    {
-        return array(
-            array('ambiguous_two.xml', 'ambiguous_new_one.xml')
-        );
     }
 
     /**

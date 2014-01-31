@@ -26,20 +26,20 @@
 <config>
     <!-- Comment within root node -->
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updaterter" />
-    <preference for="Magento\Core\Model\AppInterface" type="Magento\Core\Model\App\Proxy" />
+    <preference for="Magento\AppInterface" type="Magento\Core\Model\App\Proxy" />
     <type name="Magento\App\State">
         <param name="mode">
             <value type="argument">Magento\App\State::PARAM_MODE</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Config_Modules">
+    <type name="Magento\Core\Model\Config\Modules">
         <!-- Comment within type node -->
         <param name="storage">
             <!-- Comment within param node -->
-            <instance type="Magento\Core\Model\Config\Storage_Modules" shared="false" />
+            <instance type="Magento\Core\Model\Config\Storage\Modules" shared="false" />
         </param>
-        <plugin name="simple_modules_plugin" type="Magento\Core\Model\Config_Modules_Plugin" disabled="true" sortOrder="10" />
-        <plugin name="simple_modules_plugin_advanced" type="Magento\Core\Model\Config_Modules_PluginAdvanced" />
+        <plugin name="simple_modules_plugin" type="Magento\Core\Model\Config\Modules\Plugin" disabled="true" sortOrder="10" />
+        <plugin name="simple_modules_plugin_advanced" type="Magento\Core\Model\Config\Modules\PluginAdvanced" />
         <plugin name="overridden_plugin" sortOrder="30" disabled="true" />
     </type>
     <type name="Magento\Http\Handler\Composite" shared="false">
@@ -47,34 +47,39 @@
             <instance type="Magento\Http\HandlerFactory" />
         </param>
         <param name="handlers">
-            <value>
+            <array>
                 <!-- Comment within value node -->
-                <custom_handler>
-                    <sortOrder>25</sortOrder>
-                    <class>Custom_Cache_Model_Http_Handler</class>
-                </custom_handler>
-                <other_handler>
-                    <!-- Comment within child node of the value node that represents an assoc array -->
-                    <sortOrder>10</sortOrder>
-                    <class><![CDATA[Other_Cache_Model_Http_Handler]]></class>
-                </other_handler>
-            </value>
+                <item key="custom_handler">
+                    <array>
+                        <item key="sortOrder"><value>25</value></item>
+                        <item key="class"><value>Custom_Cache_Model_Http_Handler</value></item>
+                    </array>
+                </item>
+                <item key="other_handler">
+                    <array>
+                        <!-- Comment within child node of the value node that represents an assoc array -->
+                        <item key="sortOrder"><value>10</value></item>
+                        <item key="class"><value><![CDATA[Other_Cache_Model_Http_Handler]]></value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Data\Collection\Db\FetchStrategy\Cache">
         <param name="cacheIdPrefix"><value><![CDATA[collection_]]></value></param>
         <param name="cacheLifetime"><value>86400</value></param>
         <param name="cacheTags">
-            <value>
-                <const type='const'>Magento\Core\Model\Website::CACHE_TAG</const>
-                <boolFalse type='bool'>false</boolFalse>
-                <boolTrue type='bool'>true</boolTrue>
-                <boolOne type='bool'>1</boolOne>
-                <boolZero type='bool'>0</boolZero>
-                <intValue type='int'>100500</intValue>
-                <nullValue type='null' />
-                <stringPattern type='string' pattern="[a-z\-]*">az-value</stringPattern>
-            </value>
+            <array>
+                <item key="const"><value type="const">Magento\Core\Model\Website::CACHE_TAG</value></item>
+                <item key="boolFalse"><value type="bool">false</value></item>
+                <item key="boolTrue"><value type="bool">true</value></item>
+                <item key="boolOne"><value type="bool">1</value></item>
+                <item key="boolZero"><value type="bool">0</value></item>
+                <item key="intValue"><value type="int">100500</value></item>
+                <item key="nullValue"><value type="null"/>
+                </item>
+                <item key="stringPattern"><value type="string" pattern="[a-z\-]*">az-value</value></item>
+            </array>
         </param>
         <param name="constParam">
             <value type='const'>Magento\Core\Model\Website::CACHE_TAG</value>

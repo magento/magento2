@@ -18,18 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Adminhtml customer recurring profiles tab
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Sales\Block\Adminhtml\Customer\Edit\Tab\Recurring;
+
+use Magento\Customer\Controller\Adminhtml\Index as CustomerController;
 
 class Profile
     extends \Magento\Sales\Block\Adminhtml\Recurring\Profile\Grid
@@ -43,8 +41,12 @@ class Profile
     protected $_coreRegistry = null;
 
     /**
+     * @var int
+     */
+    protected $_currentCustomerId;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory $profileCollection
@@ -54,7 +56,6 @@ class Profile
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory $profileCollection,
@@ -63,9 +64,19 @@ class Profile
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
+
+        // @todo remove usage of REGISTRY_CURRENT_CUSTOMER in advantage of REGISTRY_CURRENT_CUSTOMER_ID
+        $currentCustomer = $this->_coreRegistry->registry(CustomerController::REGISTRY_CURRENT_CUSTOMER);
+        if ($currentCustomer) {
+            $this->_currentCustomerId = $currentCustomer->getId();
+        } else {
+            $this->_currentCustomerId = $this->_coreRegistry->registry(
+                CustomerController::REGISTRY_CURRENT_CUSTOMER_ID
+            );
+        }
+
         parent::__construct(
             $context,
-            $urlModel,
             $backendHelper,
             $paymentData,
             $profileCollection,
@@ -111,8 +122,7 @@ class Profile
      */
     public function canShowTab()
     {
-        $customer = $this->_coreRegistry->registry('current_customer');
-        return (bool)$customer->getId();
+        return (bool)$this->_currentCustomerId;
     }
 
     /**
@@ -132,12 +142,18 @@ class Profile
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_profileCollection->create()
-            ->addFieldToFilter('customer_id', $this->_coreRegistry->registry('current_customer')->getId());
+        if (!$this->_currentCustomerId) {
+            return $this;
+        }
+
+        $collection = $this->_profileCollection->create()->addFieldToFilter('customer_id', $this->_currentCustomerId);
+
         if (!$this->getParam($this->getVarNameSort())) {
             $collection->setOrder('profile_id', 'desc');
         }
+
         $this->setCollection($collection);
+
         return parent::_prepareCollection();
     }
 

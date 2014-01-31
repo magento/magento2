@@ -79,7 +79,7 @@ class EntryPoint implements EntryPointInterface
                 $this->_locator = $locatorFactory->create($this->_rootDir, $this->_parameters);
             }
             $application = $this->_locator->create($applicationName, $arguments);
-            $response = $application->execute();
+            $response = $application->launch();
             \Magento\Profiler::stop('magento');
             $response->sendResponse();
         } catch (\Exception $exception) {

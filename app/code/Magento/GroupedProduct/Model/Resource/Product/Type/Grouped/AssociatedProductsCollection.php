@@ -137,15 +137,12 @@ class AssociatedProductsCollection
     public function _initSelect()
     {
         parent::_initSelect();
-
-        $configData = $this->_config->getType('grouped');
-        $allowProductTypes = isset($configData['allow_product_types']) ? $configData['allow_product_types'] : array();
         $this->setProduct($this->_getProduct())
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('price')
             ->addAttributeToSelect('sku')
             ->addFilterByRequiredOptions()
-            ->addAttributeToFilter('type_id', $allowProductTypes);
+            ->addAttributeToFilter('type_id', $this->_config->getComposableTypes());
 
         return $this;
     }

@@ -31,7 +31,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_auth;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -59,7 +59,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\App\ActionFlag $flag
      * @param \Magento\Backend\Helper\Data $helper
@@ -68,7 +68,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
         \Magento\App\ResponseInterface $response,
         \Magento\App\Filesystem $filesystem,
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\Model\Session $session,
         \Magento\App\ActionFlag $flag,
         \Magento\Backend\Helper\Data $helper

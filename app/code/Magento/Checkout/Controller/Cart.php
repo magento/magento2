@@ -621,7 +621,7 @@ class Cart
         /** @var $store \Magento\Core\Model\Store */
         $store = $this->_storeManager->getStore();
         $unsecure = (strpos($url, $store->getBaseUrl()) === 0);
-        $secure = (strpos($url, $store->getBaseUrl($store::URL_TYPE_LINK, true)) === 0);
+        $secure = (strpos($url, $store->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)) === 0);
         return $unsecure || $secure;
     }
 }

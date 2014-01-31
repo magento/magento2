@@ -693,7 +693,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
             'googlebase'        => 'Magento_GoogleBase',
             'googlecheckout'    => 'Magento_GoogleCheckout',
             'importexport'      => 'Magento_ImportExport',
-            'paypaluk'          => 'Magento_PaypalUk',
             'productalert'      => 'Magento_ProductAlert',
             'salesrule'         => 'Magento_SalesRule',
         );

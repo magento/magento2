@@ -26,10 +26,11 @@
 
 namespace Magento\Core\Model;
 
+use Magento\View\Design\ThemeInterface;
+
 /**
  * Theme model class
  *
- * @method \Magento\View\Design\ThemeInterface save()
  * @method string getPackageCode()
  * @method string getParentThemePath()
  * @method string getParentId()
@@ -40,22 +41,20 @@ namespace Magento\Core\Model;
  * @method int getThemeId()
  * @method int getType()
  * @method array getAssignedStores()
- * @method \Magento\Core\Model\Resource\Theme\Collection getCollection()
- * @method \Magento\View\Design\ThemeInterface setAssignedStores(array $stores)
- * @method \Magento\View\Design\ThemeInterface addData(array $data)
- * @method \Magento\View\Design\ThemeInterface setParentId(int $id)
- * @method \Magento\View\Design\ThemeInterface setParentTheme($parentTheme)
- * @method \Magento\View\Design\ThemeInterface setPackageCode(string $packageCode)
- * @method \Magento\View\Design\ThemeInterface setThemeCode(string $themeCode)
- * @method \Magento\View\Design\ThemeInterface setThemePath(string $themePath)
- * @method \Magento\View\Design\ThemeInterface setThemeVersion(string $themeVersion)
- * @method \Magento\View\Design\ThemeInterface setThemeTitle(string $themeTitle)
- * @method \Magento\View\Design\ThemeInterface setType(int $type)
- * @method \Magento\View\Design\ThemeInterface setCode(string $code)
+ * @method ThemeInterface setAssignedStores(array $stores)
+ * @method ThemeInterface setParentId(int $id)
+ * @method ThemeInterface setParentTheme($parentTheme)
+ * @method ThemeInterface setPackageCode(string $packageCode)
+ * @method ThemeInterface setThemeCode(string $themeCode)
+ * @method ThemeInterface setThemePath(string $themePath)
+ * @method ThemeInterface setThemeVersion(string $themeVersion)
+ * @method ThemeInterface setThemeTitle(string $themeTitle)
+ * @method ThemeInterface setType(int $type)
+ * @method ThemeInterface setCode(string $code)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Theme extends \Magento\Core\Model\AbstractModel implements \Magento\View\Design\ThemeInterface
+class Theme extends \Magento\Core\Model\AbstractModel implements ThemeInterface
 {
     /**
      * Filename of view configuration
@@ -106,6 +105,10 @@ class Theme extends \Magento\Core\Model\AbstractModel implements \Magento\View\D
      */
     protected $_customFactory;
 
+    /**
+     * @var ThemeInterface[]
+     */
+    protected $inheritanceSequence;
 
     /**
      * Initialize dependencies
@@ -142,9 +145,7 @@ class Theme extends \Magento\Core\Model\AbstractModel implements \Magento\View\D
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
 
-        $this->addData(array(
-            'type' => self::TYPE_VIRTUAL
-        ));
+        $this->addData(array('type' => self::TYPE_VIRTUAL));
     }
 
     /**
@@ -374,5 +375,24 @@ class Theme extends \Magento\Core\Model\AbstractModel implements \Magento\View\D
         }
         $this->getCollection()->updateChildRelations($this);
         return parent::_afterDelete();
+    }
+
+    /**
+     * Return the full theme inheritance sequence, from the root theme till a specified one
+     *
+     * @return ThemeInterface[] Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
+     */
+    public function getInheritedThemes()
+    {
+        if (null === $this->inheritanceSequence) {
+            $theme = $this;
+            $result = array();
+            while ($theme) {
+                $result[] = $theme;
+                $theme = $theme->getParentTheme();
+            }
+            $this->inheritanceSequence = array_reverse($result);
+        }
+        return $this->inheritanceSequence;
     }
 }

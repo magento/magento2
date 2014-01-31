@@ -48,6 +48,7 @@ abstract class AbstractValidator implements \Magento\Validator\ValidatorInterfac
      * Set default translator instance
      *
      * @param \Magento\Translate\AdapterInterface|null $translator
+     * @return void
      */
     public static function setDefaultTranslator(\Magento\Translate\AdapterInterface $translator = null)
     {
@@ -111,6 +112,8 @@ abstract class AbstractValidator implements \Magento\Validator\ValidatorInterfac
 
     /**
      * Clear messages
+     *
+     * @return void
      */
     protected function _clearMessages()
     {
@@ -121,6 +124,7 @@ abstract class AbstractValidator implements \Magento\Validator\ValidatorInterfac
      * Add messages
      *
      * @param array $messages
+     * @return void
      */
     protected function _addMessages(array $messages)
     {

@@ -55,6 +55,21 @@ class SidResolver implements \Magento\Session\SidResolverInterface
     protected $sidNameMap;
 
     /**
+     * Use session var instead of SID for session in URL
+     *
+     * @var bool
+     */
+    protected $_useSessionVar = false;
+
+    /**
+     * Use session in URL flag
+     *
+     * @see \Magento\UrlInterface
+     * @var bool
+     */
+    protected $_useSessionInUrl = true;
+
+    /**
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\App\RequestInterface $request
@@ -101,5 +116,49 @@ class SidResolver implements \Magento\Session\SidResolverInterface
             return $this->sidNameMap[$sessionName];
         }
         return self::SESSION_ID_QUERY_PARAM;
+    }
+
+    /**
+     * Set use session var instead of SID for URL
+     *
+     * @param bool $var
+     * @return \Magento\Session\SidResolverInterface
+     */
+    public function setUseSessionVar($var)
+    {
+        $this->_useSessionVar = (bool)$var;
+        return $this;
+    }
+
+    /**
+     * Retrieve use flag session var instead of SID for URL
+     *
+     * @return bool
+     */
+    public function getUseSessionVar()
+    {
+        return $this->_useSessionVar;
+    }
+
+    /**
+     * Set Use session in URL flag
+     *
+     * @param bool $flag
+     * @return \Magento\Session\SidResolverInterface
+     */
+    public function setUseSessionInUrl($flag = true)
+    {
+        $this->_useSessionInUrl = (bool)$flag;
+        return $this;
+    }
+
+    /**
+     * Retrieve use session in URL flag
+     *
+     * @return bool
+     */
+    public function getUseSessionInUrl()
+    {
+        return $this->_useSessionInUrl;
     }
 }

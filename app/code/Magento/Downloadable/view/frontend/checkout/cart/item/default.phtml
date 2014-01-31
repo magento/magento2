@@ -64,17 +64,6 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
                         <?php endforeach; ?>
                     </dl>
                 <?php endif;?>
-                <?php /* downloadable */ ?>
-                <?php if ($links = $this->getLinks()): ?>
-                    <dl class="cart item options">
-                        <dt><?php echo $this->getLinksTitle() ?></dt>
-                        <?php foreach ($links as $link): ?>
-                            <dd><?php echo $this->escapeHtml($link->getTitle()) ?></dd>
-                        <?php endforeach; ?>
-                    </dl>
-                <?php endif; ?>
-                <?php echo $this->getChildHtml('item_extra'); ?>
-                <?php /* EOF downloadable */ ?>
                 <?php if ($messages = $this->getMessages()): ?>
                     <?php foreach ($messages as $message): ?>
                         <p class="cart item message <?php echo $message['type'] ?>">* <?php echo $this->escapeHtml($message['text']) ?></p>

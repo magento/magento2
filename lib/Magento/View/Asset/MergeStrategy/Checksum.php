@@ -57,13 +57,13 @@ class Checksum implements \Magento\View\Asset\MergeStrategyInterface
      */
     public function mergeFiles(array $publicFiles, $destinationFile, $contentType)
     {
-        $mergedMTimeFile = $destinationFile . '.dat';
+        $directory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_DIR);
+        $mergedMTimeFile = $directory->getRelativePath($destinationFile . '.dat');
 
         // Check whether we have already merged these files
         $filesMTimeData = '';
-        $directory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
         foreach ($publicFiles as $file) {
-            $filesMTimeData .= $directory->stat($file)['mtime'];
+            $filesMTimeData .= $directory->stat($directory->getRelativePath($file))['mtime'];
         }
         if (!($directory->isExist($destinationFile) && $directory->isExist($mergedMTimeFile)
             && (strcmp($filesMTimeData, $directory->readFile($mergedMTimeFile)) == 0))

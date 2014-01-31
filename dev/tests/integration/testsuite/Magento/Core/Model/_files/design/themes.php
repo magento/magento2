@@ -42,6 +42,4 @@
 /** @var $registration \Magento\Core\Model\Theme\Registration */
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Core\Model\Theme\Registration');
-$registration->register(
-    implode('/', array('*', '*', 'theme.xml'))
-);
+$registration->register(implode('/', array('*', '*', 'theme.xml')));

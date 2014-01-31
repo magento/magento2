@@ -33,6 +33,10 @@
  */
 namespace Magento;
 
+use Magento\Archive\Bz;
+use Magento\Archive\Gz;
+use Magento\Archive\Tar;
+
 class Archive
 {
 
@@ -77,7 +81,7 @@ class Archive
     * Create object of current archiver by $extension.
     *
     * @param string $extension
-    * @return \Magento\Archive\Tar|\Magento\Archive\Gz|\Magento\Archive\Bz
+    * @return Tar|Gz|Bz
     */
     protected function _getArchiver($extension)
     {
@@ -95,7 +99,7 @@ class Archive
     * Split current format to list of archivers.
     *
     * @param string $source
-    * @return array
+    * @return string[]|string
     */
     protected function _getArchivers($source)
     {
@@ -209,7 +213,7 @@ class Archive
     /**
     * Check file is TAR.
     *
-    * @param mixed $file
+    * @param string $file
     * @return boolean
     */
     public function isTar($file)

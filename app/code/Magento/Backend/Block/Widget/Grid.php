@@ -110,11 +110,6 @@ class Grid extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Backend::widget/grid.phtml';
 
     /**
-     * @var \Magento\Core\Model\Url
-     */
-    protected $_urlModel;
-
-    /**
      * @var \Magento\Backend\Model\Session
      */
     protected $_backendSession;
@@ -126,18 +121,15 @@ class Grid extends \Magento\Backend\Block\Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         array $data = array()
     ) {
         $this->_backendHelper = $backendHelper;
-        $this->_urlModel = $urlModel;
         $this->_backendSession = $context->getBackendSession();
         parent::__construct($context, $data);
     }

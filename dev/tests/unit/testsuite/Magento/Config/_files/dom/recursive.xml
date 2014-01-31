@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<root>
+    <node name="node1">
+        <param name="scalar1">
+            <value>scalar1</value>
+        </param>
+        <param name="complex">
+            <complex>
+                <item key="scalar2">
+                    <value>scalar2</value>
+                </item>
+                <item key="scalar3">
+                    <value>scalar3</value>
+                </item>
+            </complex>
+        </param>
+    </node>
+    <node name="node2">
+        <param name="recursive">
+            <complex>
+                <item key="recursive1">
+                    <complex>
+                        <item key="nested1">
+                            <value>scalar4</value>
+                        </item>
+                        <item key="nested2">
+                            <value>scalar5</value>
+                        </item>
+                    </complex>
+                </item>
+                <item key="recursive2">
+                    <complex>
+                        <item key="recursive1"><!-- intentionally same names as the above -->
+                            <value>scalar6</value>
+                        </item>
+                        <item key="recursive2">
+                            <value>scalar7</value>
+                        </item>
+                    </complex>
+                </item>
+                <item key="nested_l_1">
+                    <complex>
+                        <item key="nested_l_2">
+                            <complex>
+                                <item key="nested_l_3"/>
+                            </complex>
+                        </item>
+                    </complex>
+                </item>
+            </complex>
+        </param>
+    </node>
+    <another_node name="node3">
+        <param name="scalar4">
+            <value>scalar3</value>
+        </param>
+    </another_node>
+</root>

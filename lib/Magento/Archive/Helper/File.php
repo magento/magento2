@@ -62,7 +62,7 @@ class File
     /**
      * File handler
      *
-     * @var pointer
+     * @var resource
      */
     protected $_fileHandler;
 
@@ -82,6 +82,8 @@ class File
 
     /**
      * Close file if it's not closed before object destruction
+     *
+     * @return void
      */
     public function __destruct()
     {
@@ -95,6 +97,7 @@ class File
      *
      * @param string $mode
      * @param int $chmod
+     * @return void
      * @throws \Magento\Exception
      */
     public function open($mode = 'w+', $chmod = 0666)
@@ -128,6 +131,7 @@ class File
      * Write data to file
      *
      * @param string $data
+     * @return void
      */
     public function write($data)
     {
@@ -165,6 +169,8 @@ class File
 
     /**
      * Close file
+     *
+     * @return void
      */
     public function close()
     {
@@ -178,6 +184,7 @@ class File
      * Implementation of file opening
      *
      * @param string $mode
+     * @return void
      * @throws \Magento\Exception
      */
     protected function _open($mode)
@@ -193,6 +200,7 @@ class File
      * Implementation of writing data to file
      *
      * @param string $data
+     * @return void
      * @throws \Magento\Exception
      */
     protected function _write($data)
@@ -208,6 +216,7 @@ class File
      * Implementation of file reading
      *
      * @param int $length
+     * @return string
      * @throws \Magento\Exception
      */
     protected function _read($length)
@@ -233,6 +242,8 @@ class File
 
     /**
      * Implementation of file closing
+     *
+     * @return void
      */
     protected function _close()
     {
@@ -243,6 +254,7 @@ class File
      * Check whether requested mode is writable mode
      *
      * @param string $mode
+     * @return int
      */
     protected function _isWritableMode($mode)
     {
@@ -253,6 +265,7 @@ class File
     * Check whether requested mode is readable mode
     *
     * @param string $mode
+    * @return bool
     */
     protected function _isReadableMode($mode) {
         return !$this->_isWritableMode($mode);
@@ -261,6 +274,7 @@ class File
     /**
      * Check whether file is opened
      *
+     * @return void
      * @throws \Magento\Exception
      */
     protected function _checkFileOpened()

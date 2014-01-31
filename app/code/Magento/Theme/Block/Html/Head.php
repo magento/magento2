@@ -386,7 +386,8 @@ class Head extends \Magento\View\Element\Template
         $folderName = \Magento\Backend\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
         $storeConfig = $this->_storeConfig->getConfig('design/head/shortcut_icon');
         $path = $folderName . '/' . $storeConfig;
-        $faviconFile = $this->_storeManager->getStore()->getBaseUrl('media') . $path;
+        $faviconFile = $this->_storeManager->getStore()
+            ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . $path;
 
         if (!is_null($storeConfig) && $this->_isFile($path)) {
             $url = $faviconFile;
