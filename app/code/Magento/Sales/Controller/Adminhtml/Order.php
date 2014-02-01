@@ -134,7 +134,7 @@ class Order extends \Magento\Backend\App\Action
     }
 
     /**
-     * View order detale
+     * View order details
      */
     public function viewAction()
     {
@@ -506,7 +506,7 @@ class Order extends \Magento\Backend\App\Action
     /**
      * Print invoices for selected orders
      */
-    public function pdfinvoicesAction()
+    public function massPrintInvoicesAction()
     {
         $orderIds = $this->getRequest()->getPost('order_ids');
         $flag = false;
@@ -545,7 +545,7 @@ class Order extends \Magento\Backend\App\Action
     /**
      * Print shipments for selected orders
      */
-    public function pdfshipmentsAction()
+    public function massPrintShipmentsAction()
     {
         $orderIds = $this->getRequest()->getPost('order_ids');
         $flag = false;
@@ -584,7 +584,7 @@ class Order extends \Magento\Backend\App\Action
     /**
      * Print credit memos for selected orders
      */
-    public function pdfcreditmemosAction()
+    public function massPrintCreditMemosAction()
     {
         $orderIds = $this->getRequest()->getPost('order_ids');
         $flag = false;
@@ -623,7 +623,7 @@ class Order extends \Magento\Backend\App\Action
     /**
      * Print all documents for selected orders
      */
-    public function pdfdocsAction()
+    public function massPrintAllAction()
     {
         $orderIds = $this->getRequest()->getPost('order_ids');
         $flag = false;

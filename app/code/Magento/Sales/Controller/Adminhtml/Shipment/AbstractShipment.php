@@ -87,7 +87,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
         }
     }
 
-    public function pdfshipmentsAction()
+    public function massPrintShipmentsAction()
     {
         $shipmentIds = $this->getRequest()->getPost('shipment_ids');
         if (!empty($shipmentIds)) {

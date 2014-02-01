@@ -112,7 +112,7 @@ class AbstractCreditmemo extends \Magento\Backend\App\Action
         }
     }
 
-    public function pdfcreditmemosAction()
+    public function massPrintCreditMemosAction()
     {
         $creditmemosIds = $this->getRequest()->getPost('creditmemo_ids');
         if (!empty($creditmemosIds)) {

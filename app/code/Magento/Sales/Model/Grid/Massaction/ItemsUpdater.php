@@ -31,19 +31,26 @@
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Order\Grid\Massaction;
+namespace Magento\Sales\Model\Grid\Massaction;
 
-class ItemsUpdater extends \Magento\Sales\Model\Grid\Massaction\ItemsUpdater
+class ItemsUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterface
 {
+    /**
+     * @var \Magento\AuthorizationInterface
+     */
+    protected $_authorization;
+
     /**
      * Mass actions list in the form 'mass action name' => 'acl resource name'
      *
      * @var array
      */
-    protected $_orderSpecificItems = array(
-        'cancel_order' => 'Magento_Sales::cancel',
-        'hold_order'   => 'Magento_Sales::hold',
-        'unhold_order' => 'Magento_Sales::unhold',
+    protected $_items = array(
+        'print_invoices'        => 'Magento_Sales::print',
+        'print_shipments'       => 'Magento_Sales::print',
+        'print_credit_memos'    => 'Magento_Sales::print',
+        'print_shipping_labels' => 'Magento_Sales::print',
+        'print_all'             => 'Magento_Sales::print',
     );
 
     /**
@@ -51,8 +58,23 @@ class ItemsUpdater extends \Magento\Sales\Model\Grid\Massaction\ItemsUpdater
      */
     public function __construct(\Magento\AuthorizationInterface $authorization)
     {
-        parent::__construct($authorization);
+        $this->_authorization = $authorization;
+    }
 
-        $this->_items = array_merge($this->_items, $this->_orderSpecificItems);
+    /**
+     * Remove mass action items in case they aren't allowed for current user
+     *
+     * @param mixed $argument
+     * @return mixed
+     */
+    public function update($argument)
+    {
+        foreach ($this->_items as $itemName => $aclResourceName) {
+            if (false === $this->_authorization->isAllowed($aclResourceName)) {
+                unset($argument[$itemName]);
+            }
+        }
+
+        return $argument;
     }
 }

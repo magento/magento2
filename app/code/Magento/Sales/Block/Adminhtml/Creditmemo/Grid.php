@@ -170,7 +170,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->getMassactionBlock()->addItem('pdfcreditmemos_order', array(
              'label'=> __('PDF Credit Memos'),
-             'url'  => $this->getUrl('sales/creditmemo/pdfcreditmemos'),
+             'url'  => $this->getUrl('sales/creditmemo/massPrintCreditMemos'),
         ));
 
         return $this;

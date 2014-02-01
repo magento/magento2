@@ -48,6 +48,7 @@
                                 <resource id="Magento_Sales::ship" title="Ship" sortOrder="130" />
                                 <resource id="Magento_Sales::comment" title="Comment" sortOrder="140" />
                                 <resource id="Magento_Sales::emails" title="Send Sales Emails" sortOrder="150" />
+                                <resource id="Magento_Sales::print" title="Print Documents" sortOrder="160" />
                             </resource>
                         </resource>
                         <resource id="Magento_Sales::sales_invoice"   title="Invoices" sortOrder="20" />

@@ -199,7 +199,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->getMassactionBlock()->addItem('pdfshipments_order', array(
             'label' => __('PDF Packing Slips'),
-            'url' => $this->getUrl('sales/shipment/pdfshipments'),
+            'url' => $this->getUrl('sales/shipment/massPrintShipments'),
         ));
 
         $this->getMassactionBlock()->addItem('print_shipping_label', array(
