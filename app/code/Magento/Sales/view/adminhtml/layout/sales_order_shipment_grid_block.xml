@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="sales_order_shipment.grid.container">
+        <block class="Magento\Sales\Block\Adminhtml\Shipment\Grid" name="sales.order_shipment.grid" as="grid">
+            <arguments>
+                <argument name="id" xsi:type="string">sales_order_shipment_grid</argument>
+                <argument name="dataSource" xsi:type="object">
+                    <value>Magento\Sales\Model\Resource\Order\Shipment\Grid\Collection</value>
+                    <updater>Magento\Sales\Model\Order\ShipmentsUpdater</updater>
+                </argument>
+                <argument name="use_ajax" xsi:type="string">true</argument>
+                <argument name="default_sort" xsi:type="string">created_at</argument>
+                <argument name="default_dir" xsi:type="string">DESC</argument>
+                <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                <argument name="grid_url" xsi:type="url" path="sales/order/shipments">
+                    <param name="_current">1</param>
+                </argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="sales.order_shipment.grid.columnSet">
+                <arguments>
+                    <argument name="id" xsi:type="string">sales_order_shipment_grid</argument>
+                    <argument name="rowUrl" xsi:type="array">
+                        <item name="generatorClass" xsi:type="string">Magento\Sales\Model\Grid\Row\UrlGenerator</item>
+                        <item name="path" xsi:type="string">sales/order_shipment/view</item>
+                        <item name="extraParamsTemplate" xsi:type="array">
+                            <item name="shipment_id" xsi:type="string">getId</item>
+                        </item>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="real_shipment_id">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Shipment</argument>
+                        <argument name="type" xsi:type="string">text</argument>
+                        <argument name="index" xsi:type="string">increment_id</argument>
+                        <argument name="id" xsi:type="string">real_shipment_id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-shipment-number</argument>
+                        <argument name="column_css_class" xsi:type="string">col-shipment-number</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="shipping_name">
+                    <arguments>
+                        <argument name="id" xsi:type="string">shipping_name</argument>
+                        <argument name="header" xsi:type="string" translate="true">Ship-to Name</argument>
+                        <argument name="index" xsi:type="string">shipping_name</argument>
+                        <argument name="header_css_class" xsi:type="string">col-ship-to-name</argument>
+                        <argument name="column_css_class" xsi:type="string">col-ship-to-name</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="created_at">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Ship Date</argument>
+                        <argument name="type" xsi:type="string">datetime</argument>
+                        <argument name="index" xsi:type="string">created_at</argument>
+                        <argument name="id" xsi:type="string">created_at</argument>
+                        <argument name="header_css_class" xsi:type="string">col-period</argument>
+                        <argument name="column_css_class" xsi:type="string">col-period</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="total_qty">
+                    <arguments>
+                        <argument name="id" xsi:type="string">total_qty</argument>
+                        <argument name="header" xsi:type="string" translate="true">Total Quantity</argument>
+                        <argument name="type" xsi:type="string">number</argument>
+                        <argument name="index" xsi:type="string">total_qty</argument>
+                        <argument name="header_css_class" xsi:type="string">col-qty</argument>
+                        <argument name="column_css_class" xsi:type="string">col-qty</argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </referenceBlock>
+</layout>
