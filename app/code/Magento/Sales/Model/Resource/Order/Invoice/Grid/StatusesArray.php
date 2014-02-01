@@ -25,12 +25,32 @@
  */
 
 /**
- * Adminhtml sales orders grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Sales invoices statuses option array
  */
-namespace Magento\Sales\Block\Adminhtml\Invoice;
+namespace Magento\Sales\Model\Resource\Order\Invoice\Grid;
 
-class Grid extends \Magento\Backend\Block\Widget\Grid
+class StatusesArray implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @var \Magento\Sales\Model\Order\InvoiceFactory
+     */
+    protected $_invoiceFactory;
+
+    /**
+     * @param \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory
+     */
+    public function __construct(\Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory)
+    {
+        $this->_invoiceFactory = $invoiceFactory;
+    }
+
+    /**
+     * Return option array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return $this->_invoiceFactory->create()->getStates();
+    }
 }
