@@ -24,13 +24,33 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Magento\Sales\Block\Adminhtml\Creditmemo;
+namespace Magento\Sales\Model\Resource\Order\Creditmemo\Grid;
 
 /**
- * Adminhtml sales creditmemo grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Sales creditmemo statuses option array
  */
-class Grid extends \Magento\Backend\Block\Widget\Grid
+class StatusesArray implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     */
+    protected $_creditmemoFactory;
+
+    /**
+     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
+     */
+    public function __construct(\Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory)
+    {
+        $this->_creditmemoFactory = $creditmemoFactory;
+    }
+
+    /**
+     * Return option array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return $this->_creditmemoFactory->create()->getStates();
+    }
 }

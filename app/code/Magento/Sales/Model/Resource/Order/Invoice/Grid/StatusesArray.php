@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Model\Resource\Order\Invoice\Grid;
+
 /**
  * Sales invoices statuses option array
  */
-namespace Magento\Sales\Model\Resource\Order\Invoice\Grid;
-
 class StatusesArray implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**

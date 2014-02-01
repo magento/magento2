@@ -24,41 +24,40 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Controller\Adminhtml;
+
 /**
- * Adminhtml sales orders controller
+ * Adminhtml sales creditmemos controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml;
-
 class Creditmemo extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo
 {
     /**
-     * Export credit memo grid to CSV format
+     * Export creditmemo grid to CSV format
      */
     public function exportCsvAction()
     {
-        $fileName   = 'creditmemos.csv';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Creditmemo\Grid');
-        return $this->_fileFactory->create($fileName, $grid->getCsvFile());
+        $this->_view->loadLayout();
+        $fileName = 'creditmemos.csv';
+        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        $exportBlock = $this->_view->getLayout()->getChildBlock('sales.creditmemo.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
-     *  Export credit memo grid to Excel XML format
+     *  Export creditmemo grid to Excel XML format
      */
     public function exportExcelAction()
     {
-        $fileName   = 'creditmemos.xml';
-        $grid       = $this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Creditmemo\Grid');
-        return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
-    }
-
-    /**
-     *  Index page
-     */
-    public function indexAction()
-    {
-        $this->_title->add(__('Credit Memos'));
-        parent::indexAction();
+        $this->_view->loadLayout();
+        $fileName = 'creditmemos.xml';
+        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        $exportBlock = $this->_view->getLayout()->getChildBlock('sales.creditmemo.grid', 'grid.export');
+        return $this->_fileFactory->create(
+            $fileName,
+            $exportBlock->getExcelFile($fileName),
+            \Magento\App\Filesystem::VAR_DIR
+        );
     }
 }
