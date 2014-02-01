@@ -24,13 +24,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Block\Adminhtml\Invoice;
+
 /**
- * Adminhtml sales orders grid
+ * Adminhtml sales invoices grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Invoice;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
 }

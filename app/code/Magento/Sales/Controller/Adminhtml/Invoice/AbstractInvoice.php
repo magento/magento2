@@ -66,7 +66,7 @@ class AbstractInvoice
     }
 
     /**
-     * Order grid
+     * Invoices grid
      */
     public function gridAction()
     {

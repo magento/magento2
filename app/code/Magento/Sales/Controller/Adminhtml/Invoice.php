@@ -24,13 +24,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Controller\Adminhtml;
+
 /**
- * Adminhtml sales invoices controller
+ * Adminhtml sales invoice controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml;
-
 class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
 {
     /**
