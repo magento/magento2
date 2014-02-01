@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Model\Order;
+
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Invoice getResource()
@@ -110,8 +112,6 @@
  * @method float getBaseShippingInclTax()
  * @method \Magento\Sales\Model\Order\Invoice setBaseShippingInclTax(float $value)
  */
-namespace Magento\Sales\Model\Order;
-
 class Invoice extends \Magento\Sales\Model\AbstractModel
 {
     /**

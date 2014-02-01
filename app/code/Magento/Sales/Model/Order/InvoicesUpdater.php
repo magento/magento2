@@ -24,12 +24,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Magento\Sales\Model\Billing\Agreement;
+namespace Magento\Sales\Model\Order;
 
 /**
- * Order collection updater on orders tab of view billing agreement page
+ * Invoice collection updater on invoice tab of view order page
  */
-class OrdersUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterface
+class InvoicesUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterface
 {
     /**
      * @var \Magento\Core\Model\Registry
@@ -45,21 +45,21 @@ class OrdersUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterf
     }
 
     /**
-     * Add billing agreement filter
+     * Add order filter
      *
-     * @param \Magento\Sales\Model\Resource\Order\Collection $argument
+     * @param \Magento\Sales\Model\Resource\Order\Invoice\Grid\Collection $argument
      * @return mixed
      * @throws \DomainException
      */
     public function update($argument)
     {
-        $billingAgreement = $this->_registryManager->registry('current_billing_agreement');
+        $order = $this->_registryManager->registry('current_order');
 
-        if (!$billingAgreement) {
-            throw new \DomainException('Undefined billing agreement object');
+        if (!$order) {
+            throw new \DomainException('Undefined order object');
         }
 
-        $argument->addBillingAgreementsFilter($billingAgreement->getId());
+        $argument->setOrderFilter($order->getId());
         return $argument;
     }
 }
