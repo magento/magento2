@@ -44,9 +44,7 @@ class Orders extends \Magento\View\Element\Text\ListText
     }
 
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -54,9 +52,7 @@ class Orders extends \Magento\View\Element\Text\ListText
     }
 
     /**
-     * Return Tab title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -64,9 +60,7 @@ class Orders extends \Magento\View\Element\Text\ListText
     }
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -74,9 +68,7 @@ class Orders extends \Magento\View\Element\Text\ListText
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

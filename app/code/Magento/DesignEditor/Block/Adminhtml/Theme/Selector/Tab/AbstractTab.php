@@ -34,9 +34,7 @@ abstract class AbstractTab
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -44,9 +42,7 @@ abstract class AbstractTab
     }
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -54,9 +50,7 @@ abstract class AbstractTab
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

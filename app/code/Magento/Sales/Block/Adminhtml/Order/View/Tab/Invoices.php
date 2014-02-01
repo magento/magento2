@@ -47,9 +47,7 @@ class Invoices extends \Magento\View\Element\Text\ListText
     }
 
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -57,9 +55,7 @@ class Invoices extends \Magento\View\Element\Text\ListText
     }
 
     /**
-     * Return Tab title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -67,9 +63,7 @@ class Invoices extends \Magento\View\Element\Text\ListText
     }
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -77,9 +71,7 @@ class Invoices extends \Magento\View\Element\Text\ListText
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

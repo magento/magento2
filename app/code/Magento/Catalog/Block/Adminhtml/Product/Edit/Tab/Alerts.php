@@ -77,9 +77,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
