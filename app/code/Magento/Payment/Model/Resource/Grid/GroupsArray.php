@@ -24,14 +24,35 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Magento\Sales\Block\Adminhtml\Transactions;
+namespace Magento\Payment\Model\Resource\Grid;
 
 /**
- * Adminhtml sales transactions grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Sales transaction types option array
  */
-class Grid extends \Magento\Backend\Block\Widget\Grid
+class GroupsArray implements \Magento\Core\Model\Option\ArrayInterface
 {
-}
+    /**
+     * Payment data
+     *
+     * @var \Magento\Payment\Helper\Data
+     */
+    protected $_paymentData;
 
+    /**
+     * @param \Magento\Payment\Helper\Data $paymentData
+     */
+    public function __construct(\Magento\Payment\Helper\Data $paymentData)
+    {
+        $this->_paymentData = $paymentData;
+    }
+
+    /**
+     * Return option array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return $this->_paymentData->getPaymentMethodList(true, true, true);
+    }
+}

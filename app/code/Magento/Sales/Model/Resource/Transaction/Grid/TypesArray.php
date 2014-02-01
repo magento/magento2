@@ -24,14 +24,33 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Magento\Sales\Block\Adminhtml\Transactions;
+namespace Magento\Sales\Model\Resource\Transaction\Grid;
 
 /**
- * Adminhtml sales transactions grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Sales transaction types option array
  */
-class Grid extends \Magento\Backend\Block\Widget\Grid
+class TypesArray implements \Magento\Core\Model\Option\ArrayInterface
 {
-}
+    /**
+     * @var \Magento\Sales\Model\Order\Payment\TransactionFactory
+     */
+    protected $_transactionFactory;
 
+    /**
+     * @param \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory
+     */
+    public function __construct(\Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory)
+    {
+        $this->_transactionFactory = $transactionFactory;
+    }
+
+    /**
+     * Return option array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return $this->_transactionFactory->create()->getTransactionTypes();
+    }
+}

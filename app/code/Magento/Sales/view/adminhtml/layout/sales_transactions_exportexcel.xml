@@ -24,6 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <update handle="sales_order_transactions_grid_block"/>
-    <block class="\Magento\Sales\Block\Adminhtml\Order\View\Tab\Transactions" name="sales_order_transactions.grid.container" output="1"/>
+    <update handle="sales_transactions_grid_block"/>
+    <block class="Magento\Backend\Block\Widget\Grid\Container" name="sales_transactions.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
 </layout>

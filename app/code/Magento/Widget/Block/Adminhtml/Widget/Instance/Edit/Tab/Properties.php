@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
+
 /**
  * Widget Instance Properties tab block
  *
@@ -31,8 +33,6 @@
  * @package     Magento_Widget
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
-
 class Properties
     extends \Magento\Widget\Block\Adminhtml\Widget\Options
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -58,7 +58,7 @@ class Properties
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Returns status flag about this tab can be shown or not
      *
      * @return true
      */

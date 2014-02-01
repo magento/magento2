@@ -24,5 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Sales\Block\Adminhtml\Transactions\Grid" name="sales_transactions.grid" output="1"/>
+    <update handle="formkey"/>
+    <update handle="sales_transactions_grid_block"/>
+    <block class="Magento\Backend\Block\Widget\Grid\Container" name="sales_transactions.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml" output="1"/>
 </layout>

@@ -42,6 +42,7 @@
     <update handle="sales_order_invoice_grid_block"/>
     <update handle="sales_order_creditmemo_grid_block"/>
     <update handle="sales_order_shipment_grid_block"/>
+    <update handle="sales_order_transactions_grid_block"/>
     <referenceContainer name="left">
         <block class="Magento\Sales\Block\Adminhtml\Order\View\Tabs" name="sales_order_tabs">
             <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Info" name="order_tab_info" template="order/view/tab/info.phtml">
@@ -85,9 +86,10 @@
                 <argument name="name" xsi:type="string">order_history</argument>
                 <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Order\View\Tab\History</argument>
             </action>
+            <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Transactions" name="sales_order_transactions.grid.container"/>
             <action method="addTab">
                 <argument name="name" xsi:type="string">order_transactions</argument>
-                <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Order\View\Tab\Transactions</argument>
+                <argument name="block" xsi:type="string">sales_order_transactions.grid.container</argument>
             </action>
         </block>
     </referenceContainer>
