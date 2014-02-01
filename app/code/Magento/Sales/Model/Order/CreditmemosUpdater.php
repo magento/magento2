@@ -24,66 +24,42 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Order Credit Memos grid
- *
- * @category   Magento
- * @package    Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
+namespace Magento\Sales\Model\Order;
 
-class Creditmemos
-    extends \Magento\View\Element\Text\ListText
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+/**
+ * Credit memo collection updater on credit memos tab of view order page
+ */
+class CreditmemosUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterface
 {
     /**
-     * Initialize grid params
+     * @var \Magento\Core\Model\Registry
      */
-    protected function _construct()
+    protected $_registryManager;
+
+    /**
+     * @param \Magento\Core\Model\Registry $registryManager
+     */
+    public function __construct(\Magento\Core\Model\Registry $registryManager)
     {
-        parent::_construct();
-        $this->setId('order_creditmemos');
-        $this->setUseAjax(true);
+        $this->_registryManager = $registryManager;
     }
 
     /**
-     * Return Tab label
+     * Add order filter
      *
-     * @return string
+     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Grid\Collection $argument
+     * @return mixed
+     * @throws \DomainException
      */
-    public function getTabLabel()
+    public function update($argument)
     {
-        return __('Credit Memos');
-    }
+        $order = $this->_registryManager->registry('current_order');
 
-    /**
-     * Return Tab title
-     *
-     * @return string
-     */
-    public function getTabTitle()
-    {
-        return __('Order Credit Memos');
-    }
+        if (!$order) {
+            throw new \DomainException('Undefined order object');
+        }
 
-    /**
-     * Can show tab in tabs
-     *
-     * @return boolean
-     */
-    public function canShowTab()
-    {
-        return true;
-    }
-
-    /**
-     * Tab is hidden
-     *
-     * @return boolean
-     */
-    public function isHidden()
-    {
-        return false;
+        $argument->setOrderFilter($order->getId());
+        return $argument;
     }
 }

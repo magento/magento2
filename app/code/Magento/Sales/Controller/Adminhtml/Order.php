@@ -379,9 +379,8 @@ class Order extends \Magento\Backend\App\Action
     public function creditmemosAction()
     {
         $this->_initOrder();
-        $this->getResponse()->setBody(
-            $this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\Creditmemos')->toHtml()
-        );
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
     }
 
     /**

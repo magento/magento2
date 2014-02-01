@@ -40,6 +40,7 @@
         <block class="Magento\Sales\Block\Adminhtml\Order\View" name="sales_order_edit"/>
     </referenceContainer>
     <update handle="sales_order_invoice_grid_block"/>
+    <update handle="sales_order_creditmemo_grid_block"/>
     <update handle="sales_order_shipment_grid_block"/>
     <referenceContainer name="left">
         <block class="Magento\Sales\Block\Adminhtml\Order\View\Tabs" name="sales_order_tabs">
@@ -70,9 +71,10 @@
                 <argument name="name" xsi:type="string">order_invoices</argument>
                 <argument name="block" xsi:type="string">sales_order_invoice.grid.container</argument>
             </action>
+            <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Creditmemos" name="sales_order_creditmemo.grid.container"/>
             <action method="addTab">
                 <argument name="name" xsi:type="string">order_creditmemos</argument>
-                <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Order\View\Tab\Creditmemos</argument>
+                <argument name="block" xsi:type="string">sales_order_creditmemo.grid.container</argument>
             </action>
             <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Shipments" name="sales_order_shipment.grid.container"/>
             <action method="addTab">
