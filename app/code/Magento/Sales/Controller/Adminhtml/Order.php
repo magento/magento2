@@ -156,6 +156,8 @@ class Order extends \Magento\Backend\App\Action
             }
             $this->_title->add(sprintf("#%s", $order->getRealOrderId()));
             $this->_view->renderLayout();
+        } else {
+            $this->_forward('noroute');
         }
     }
 
@@ -181,8 +183,10 @@ class Order extends \Magento\Backend\App\Action
                 $this->messageManager->addError(__('We couldn\'t send the email order.'));
                 $this->_objectManager->get('Magento\Logger')->logException($e);
             }
+            $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
+        } else {
+            $this->_forward('noroute');
         }
-        $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
     }
 
     /**
@@ -205,6 +209,8 @@ class Order extends \Magento\Backend\App\Action
                 $this->_objectManager->get('Magento\Logger')->logException($e);
             }
             $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
+        } else {
+            $this->_forward('noroute');
         }
     }
 
@@ -227,6 +233,8 @@ class Order extends \Magento\Backend\App\Action
                 $this->messageManager->addError(__('You have not put the order on hold.'));
             }
             $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
+        } else {
+            $this->_forward('noroute');
         }
     }
 
@@ -249,6 +257,8 @@ class Order extends \Magento\Backend\App\Action
                 $this->messageManager->addError(__('The order was not on hold.'));
             }
             $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
+        } else {
+            $this->_forward('noroute');
         }
     }
 
@@ -259,38 +269,39 @@ class Order extends \Magento\Backend\App\Action
      */
     public function reviewPaymentAction()
     {
-        try {
-            $order = $this->_initOrder();
-            if (!$order) {
-                return;
+        $order = $this->_initOrder();
+        if ($order) {
+            try {
+                $action = $this->getRequest()->getParam('action', '');
+                switch ($action) {
+                    case 'accept':
+                        $order->getPayment()->accept();
+                        $message = __('The payment has been accepted.');
+                        break;
+                    case 'deny':
+                        $order->getPayment()->deny();
+                        $message = __('The payment has been denied.');
+                        break;
+                    case 'update':
+                        $order->getPayment()
+                            ->registerPaymentReviewAction(\Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE, true);
+                        $message = __('The payment update has been made.');
+                        break;
+                    default:
+                        throw new \Exception(sprintf('Action "%s" is not supported.', $action));
+                }
+                $order->save();
+                $this->messageManager->addSuccess($message);
+            } catch (\Magento\Core\Exception $e) {
+                $this->messageManager->addError($e->getMessage());
+            } catch (\Exception $e) {
+                $this->messageManager->addError(__('We couldn\'t update the payment.'));
+                $this->_objectManager->get('Magento\Logger')->logException($e);
             }
-            $action = $this->getRequest()->getParam('action', '');
-            switch ($action) {
-                case 'accept':
-                    $order->getPayment()->accept();
-                    $message = __('The payment has been accepted.');
-                    break;
-                case 'deny':
-                    $order->getPayment()->deny();
-                    $message = __('The payment has been denied.');
-                    break;
-                case 'update':
-                    $order->getPayment()
-                        ->registerPaymentReviewAction(\Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE, true);
-                    $message = __('The payment update has been made.');
-                    break;
-                default:
-                    throw new \Exception(sprintf('Action "%s" is not supported.', $action));
-            }
-            $order->save();
-            $this->messageManager->addSuccess($message);
-        } catch (\Magento\Core\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('We couldn\'t update the payment.'));
-            $this->_objectManager->get('Magento\Logger')->logException($e);
+            $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
+        } else {
+            $this->_forward('noroute');
         }
-        $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
     }
 
     /**
@@ -337,6 +348,8 @@ class Order extends \Magento\Backend\App\Action
                 $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
                 $this->getResponse()->setBody($response);
             }
+        } else {
+            $this->_forward('noroute');
         }
     }
 
@@ -485,22 +498,6 @@ class Order extends \Magento\Backend\App\Action
             );
         }
         $this->_redirect('sales/*/');
-    }
-
-    /**
-     * Change status for selected orders
-     */
-    public function massStatusAction()
-    {
-
-    }
-
-    /**
-     * Print documents for selected orders
-     */
-    public function massPrintAction()
-    {
-
     }
 
     /**
