@@ -660,7 +660,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $this->_redirect('sales/order/index');
         } else {
             $this->messageManager->addError(__('There are no shipping labels related to selected shipments.'));
-            $this->_redirect('adminhtml/order_shipment/index');
+            $this->_redirect('sales/shipment/index');
         }
     }
 
