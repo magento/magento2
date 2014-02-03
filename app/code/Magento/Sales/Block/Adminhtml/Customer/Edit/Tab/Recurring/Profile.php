@@ -96,9 +96,7 @@ class Profile
     }
 
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -106,9 +104,7 @@ class Profile
     }
 
     /**
-     * Return Tab title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -116,9 +112,7 @@ class Profile
     }
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -126,9 +120,7 @@ class Profile
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

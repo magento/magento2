@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Model;
+
 /**
  * Order model
  *
@@ -303,11 +305,10 @@
  * @method float getBaseShippingInclTax()
  * @method \Magento\Sales\Model\Order setBaseShippingInclTax(float $value)
  */
-namespace Magento\Sales\Model;
-
 class Order extends \Magento\Sales\Model\AbstractModel
 {
     const ENTITY                                = 'order';
+
     /**
      * XML configuration paths
      */
@@ -360,6 +361,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      */
     const REPORT_DATE_TYPE_CREATED = 'created';
     const REPORT_DATE_TYPE_UPDATED = 'updated';
+
     /*
      * Identifier for history item
      */

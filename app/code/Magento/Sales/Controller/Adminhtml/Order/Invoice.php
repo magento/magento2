@@ -25,7 +25,7 @@
  */
 
 /**
- * Adminhtml sales order edit controller
+ * Adminhtml sales order invoice edit controller
  *
  * @category   Magento
  * @package    Magento_Sales
@@ -78,10 +78,10 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
     /**
      * Initialize invoice model instance
      *
-     * @param bool $update
      * @return \Magento\Sales\Model\Order\Invoice
+     * @throws \Magento\Core\Exception
      */
-    protected function _initInvoice($update = false)
+    protected function _initInvoice()
     {
         $this->_title->add(__('Invoices'));
 
@@ -411,6 +411,9 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
         }
     }
 
+    /**
+     * Add comment to invoice action
+     */
     public function addCommentAction()
     {
         try {
@@ -432,14 +435,14 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             $response = $this->_view->getLayout()->getBlock('invoice_comments')->toHtml();
         } catch (\Magento\Core\Exception $e) {
             $response = array(
-                'error'     => true,
-                'message'   => $e->getMessage()
+                'error'   => true,
+                'message' => $e->getMessage()
             );
             $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         } catch (\Exception $e) {
             $response = array(
-                'error'     => true,
-                'message'   => __('Cannot add new comment.')
+                'error'   => true,
+                'message' => __('Cannot add new comment.')
             );
             $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         }

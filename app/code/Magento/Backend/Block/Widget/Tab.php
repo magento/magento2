@@ -29,9 +29,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 class Tab extends \Magento\Backend\Block\Template implements TabInterface
 {
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -39,9 +37,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * Return Tab title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -49,9 +45,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -59,9 +53,7 @@ class Tab extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

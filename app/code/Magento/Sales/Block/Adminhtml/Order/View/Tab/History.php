@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
+
 /**
  * Order history tab
  *
@@ -31,13 +33,13 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
-
 class History
     extends \Magento\Backend\Block\Template
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-
+    /**
+     * {@inheritdoc}
+     */
     protected $_template = 'order/view/tab/history.phtml';
 
     /**

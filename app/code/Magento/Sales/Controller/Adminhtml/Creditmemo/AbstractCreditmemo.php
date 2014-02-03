@@ -67,10 +67,20 @@ class AbstractCreditmemo extends \Magento\Backend\App\Action
     /**
      * Creditmemos grid
      */
+    public function gridAction()
+    {
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
+    }
+
+    /**
+     * Creditmemos grid
+     */
     public function indexAction()
     {
-        $this->_initAction()
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Creditmemo'));
+        $this->_title->add(__('Credit Memos'));
+
+        $this->_initAction();
         $this->_view->renderLayout();
     }
 
@@ -112,7 +122,7 @@ class AbstractCreditmemo extends \Magento\Backend\App\Action
         }
     }
 
-    public function pdfcreditmemosAction()
+    public function massPrintCreditMemosAction()
     {
         $creditmemosIds = $this->getRequest()->getPost('creditmemo_ids');
         if (!empty($creditmemosIds)) {

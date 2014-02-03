@@ -108,9 +108,7 @@ abstract class AbstractTab
     protected abstract function _getEntity();
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -118,9 +116,7 @@ abstract class AbstractTab
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

@@ -31,9 +31,7 @@ class Container extends \Magento\Backend\Block\Template
 {
 
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -41,9 +39,7 @@ class Container extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Return Tab title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -51,9 +47,7 @@ class Container extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -61,9 +55,7 @@ class Container extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

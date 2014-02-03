@@ -89,9 +89,7 @@ class Agreement
     }
 
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -99,9 +97,7 @@ class Agreement
     }
 
     /**
-     * Return Tab title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -109,9 +105,7 @@ class Agreement
     }
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -120,9 +114,7 @@ class Agreement
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

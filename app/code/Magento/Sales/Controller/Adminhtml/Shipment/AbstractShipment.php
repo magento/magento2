@@ -24,13 +24,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Controller\Adminhtml\Shipment;
+
 /**
  * Adminhtml sales orders controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml\Shipment;
-
 class AbstractShipment extends \Magento\Backend\App\Action
 {
     /**
@@ -49,6 +49,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
     }
+
     /**
      * Init layout, menu and breadcrumb
      *
@@ -66,12 +67,20 @@ class AbstractShipment extends \Magento\Backend\App\Action
     /**
      * Shipments grid
      */
+    public function gridAction()
+    {
+        $this->_view->loadLayout(false);
+        $this->_view->renderLayout();
+    }
+
+    /**
+     * Shipments grid
+     */
     public function indexAction()
     {
         $this->_title->add(__('Shipments'));
 
-        $this->_initAction()
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Shipment'));
+        $this->_initAction();
         $this->_view->renderLayout();
     }
 
@@ -87,7 +96,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
         }
     }
 
-    public function pdfshipmentsAction()
+    public function massPrintShipmentsAction()
     {
         $shipmentIds = $this->getRequest()->getPost('shipment_ids');
         if (!empty($shipmentIds)) {

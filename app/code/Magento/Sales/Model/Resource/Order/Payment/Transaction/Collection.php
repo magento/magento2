@@ -201,9 +201,9 @@ class Collection
      *
      * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
      */
-    protected function _beforeLoad()
+    protected function _renderFilters()
     {
-        parent::_beforeLoad();
+        parent::_renderFilters();
 
         if ($this->isLoaded()) {
             return $this;

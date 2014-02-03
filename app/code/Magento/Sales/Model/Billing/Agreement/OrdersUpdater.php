@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Sales orders grid massaction items updater
- */
 namespace Magento\Sales\Model\Billing\Agreement;
 
+/**
+ * Order collection updater on orders tab of view billing agreement page
+ */
 class OrdersUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterface
 {
     /**
@@ -37,24 +37,17 @@ class OrdersUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterf
     protected $_registryManager;
 
     /**
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param array $data
-     * @throws \InvalidArgumentException
+     * @param \Magento\Core\Model\Registry $registryManager
      */
-    public function __construct(\Magento\Core\Model\Registry $coreRegistry, array $data = array())
+    public function __construct(\Magento\Core\Model\Registry $registryManager)
     {
-        $this->_registryManager = isset($data['registry']) ? $data['registry'] : $coreRegistry;
-
-        if (false === ($this->_registryManager instanceof \Magento\Core\Model\Registry)) {
-            throw new \InvalidArgumentException('registry object has to be an instance of \Magento\Core\Model\Registry');
-        }
+        $this->_registryManager = $registryManager;
     }
 
     /**
      * Add billing agreement filter
      *
-     * @param mixed $argument
-     * @throws \DomainException
+     * @param \Magento\Sales\Model\Resource\Order\Collection $argument
      * @return mixed
      * @throws \DomainException
      */

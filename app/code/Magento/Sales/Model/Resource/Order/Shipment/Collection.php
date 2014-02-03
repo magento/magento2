@@ -25,15 +25,15 @@
  */
 
 
+namespace Magento\Sales\Model\Resource\Order\Shipment;
+
 /**
- * Flat sales order shipment collection
+ * Sales order shipment collection
  *
  * @category    Magento
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Shipment;
-
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
 {
     /**

@@ -24,15 +24,15 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Controller\Adminhtml;
+
+use Magento\Backend\App\Action;
+
 /**
  * Adminhtml sales transactions controller
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml;
-
-use Magento\Backend\App\Action;
-
 class Transactions extends \Magento\Backend\App\Action
 {
     /**
@@ -43,14 +43,22 @@ class Transactions extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\App\Response\Http\FileFactory
+     */
+    protected $_fileFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->_fileFactory  = $fileFactory;
         parent::__construct($context);
     }
 
@@ -155,5 +163,33 @@ class Transactions extends \Magento\Backend\App\Action
                 return $this->_authorization->isAllowed('Magento_Sales::transactions');
                 break;
         }
+    }
+
+    /**
+     * Export transaction grid to CSV format
+     */
+    public function exportCsvAction()
+    {
+        $this->_view->loadLayout();
+        $fileName = 'transactions.csv';
+        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        $exportBlock = $this->_view->getLayout()->getChildBlock('sales.transactions.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
+    }
+
+    /**
+     *  Export transaction grid to Excel XML format
+     */
+    public function exportExcelAction()
+    {
+        $this->_view->loadLayout();
+        $fileName = 'transactions.xml';
+        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        $exportBlock = $this->_view->getLayout()->getChildBlock('sales.transactions.grid', 'grid.export');
+        return $this->_fileFactory->create(
+            $fileName,
+            $exportBlock->getExcelFile($fileName),
+            \Magento\App\Filesystem::VAR_DIR
+        );
     }
 }

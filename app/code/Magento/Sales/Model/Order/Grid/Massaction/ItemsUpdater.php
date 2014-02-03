@@ -33,40 +33,26 @@
  */
 namespace Magento\Sales\Model\Order\Grid\Massaction;
 
-class ItemsUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterface
+class ItemsUpdater extends \Magento\Sales\Model\Grid\Massaction\ItemsUpdater
 {
     /**
-     * @var \Magento\AuthorizationInterface
+     * Mass actions list in the form 'mass action name' => 'acl resource name'
+     *
+     * @var array
      */
-    protected $_authorization;
+    protected $_orderSpecificItems = array(
+        'cancel_order' => 'Magento_Sales::cancel',
+        'hold_order'   => 'Magento_Sales::hold',
+        'unhold_order' => 'Magento_Sales::unhold',
+    );
 
     /**
      * @param \Magento\AuthorizationInterface $authorization
      */
     public function __construct(\Magento\AuthorizationInterface $authorization)
     {
-        $this->_authorization = $authorization;
-    }
+        parent::__construct($authorization);
 
-    /**
-     * Remove massaction items in case they disallowed for user
-     * @param mixed $argument
-     * @return mixed
-     */
-    public function update($argument)
-    {
-        if (false === $this->_authorization->isAllowed('Magento_Sales::cancel')) {
-            unset($argument['cancel_order']);
-        }
-
-        if (false === $this->_authorization->isAllowed('Magento_Sales::hold')) {
-            unset($argument['hold_order']);
-        }
-
-        if (false === $this->_authorization->isAllowed('Magento_Sales::unhold')) {
-            unset($argument['unhold_order']);
-        }
-
-        return $argument;
+        $this->_items = array_merge($this->_items, $this->_orderSpecificItems);
     }
 }

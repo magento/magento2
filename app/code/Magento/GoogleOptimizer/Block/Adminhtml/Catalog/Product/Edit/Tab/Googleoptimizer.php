@@ -44,9 +44,7 @@ class Googleoptimizer
     }
 
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -54,9 +52,7 @@ class Googleoptimizer
     }
 
     /**
-     * Return Tab title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {

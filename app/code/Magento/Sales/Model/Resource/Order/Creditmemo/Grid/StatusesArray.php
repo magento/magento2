@@ -24,43 +24,33 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Sales orders grid row url generator
- */
-namespace Magento\Sales\Model\Order\Grid\Row;
+namespace Magento\Sales\Model\Resource\Order\Creditmemo\Grid;
 
-class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
+/**
+ * Sales creditmemo statuses option array
+ */
+class StatusesArray implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Sales\Model\Order\CreditmemoFactory
      */
-    protected $_authorization;
+    protected $_creditmemoFactory;
 
     /**
-     * @param \Magento\Backend\Model\UrlInterface $backendUrl
-     * @param \Magento\AuthorizationInterface $authorization
-     * @param array $args
+     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
      */
-    public function __construct(
-        \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\AuthorizationInterface $authorization,
-        array $args = array()
-    ) {
-        $this->_authorization = $authorization;
-        parent::__construct($backendUrl, $args);
-
+    public function __construct(\Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory)
+    {
+        $this->_creditmemoFactory = $creditmemoFactory;
     }
 
     /**
-     * Generate row url
-     * @param \Magento\Object $item
-     * @return bool|string
+     * Return option array
+     *
+     * @return array
      */
-    public function getUrl($item)
+    public function toOptionArray()
     {
-        if ($this->_authorization->isAllowed('Magento_Sales::actions_view')) {
-            return parent::getUrl($item);
-        }
-        return false;
+        return $this->_creditmemoFactory->create()->getStates();
     }
 }

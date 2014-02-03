@@ -102,9 +102,7 @@ class Js
     }
 
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {

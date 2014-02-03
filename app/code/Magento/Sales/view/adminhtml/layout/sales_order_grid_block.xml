@@ -62,25 +62,25 @@
                             <item name="label" xsi:type="string" translate="true">Unhold</item>
                             <item name="url" xsi:type="string">sales/order/massUnhold</item>
                         </item>
-                        <item name="pdfinvoices_order" xsi:type="array">
+                        <item name="print_invoices" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Print Invoices</item>
-                            <item name="url" xsi:type="string">sales/order/pdfinvoices</item>
+                            <item name="url" xsi:type="string">sales/order/massPrintInvoices</item>
                         </item>
-                        <item name="pdfshipments_order" xsi:type="array">
+                        <item name="print_shipments" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Print Packing Slips</item>
-                            <item name="url" xsi:type="string">sales/order/pdfshipments</item>
+                            <item name="url" xsi:type="string">sales/order/massPrintShipments</item>
                         </item>
-                        <item name="pdfcreditmemos_order" xsi:type="array">
+                        <item name="print_credit_memos" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Print Credit Memos</item>
-                            <item name="url" xsi:type="string">sales/order/pdfcreditmemos</item>
+                            <item name="url" xsi:type="string">sales/order/massPrintCreditMemos</item>
                         </item>
-                        <item name="pdfdocs_order" xsi:type="array">
-                            <item name="label" xsi:type="string" translate="true">Print All</item>
-                            <item name="url" xsi:type="string">sales/order/pdfdocs</item>
-                        </item>
-                        <item name="print_shipping_label" xsi:type="array">
+                        <item name="print_shipping_labels" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Print Shipping Labels</item>
                             <item name="url" xsi:type="string">adminhtml/order_shipment/massPrintShippingLabel</item>
+                        </item>
+                        <item name="print_all" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Print All</item>
+                            <item name="url" xsi:type="string">sales/order/massPrintAll</item>
                         </item>
                     </argument>
                 </arguments>
@@ -89,11 +89,11 @@
                 <arguments>
                     <argument name="exportTypes" xsi:type="array">
                         <item name="csv" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">sales/*/exportCsv</item>
+                            <item name="urlPath" xsi:type="string">*/*/exportCsv</item>
                             <item name="label" xsi:type="string" translate="true">CSV</item>
                         </item>
                         <item name="excel" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">sales/*/exportExcel</item>
+                            <item name="urlPath" xsi:type="string">*/*/exportExcel</item>
                             <item name="label" xsi:type="string" translate="true">Excel XML</item>
                         </item>
                     </argument>
@@ -103,7 +103,7 @@
                 <arguments>
                     <argument name="id" xsi:type="string">sales_order_grid</argument>
                     <argument name="rowUrl" xsi:type="array">
-                        <item name="generatorClass" xsi:type="string">Magento\Sales\Model\Order\Grid\Row\UrlGenerator</item>
+                        <item name="generatorClass" xsi:type="string">Magento\Sales\Model\Grid\Row\UrlGenerator</item>
                         <item name="path" xsi:type="string">sales/order/view</item>
                         <item name="extraParamsTemplate" xsi:type="array">
                             <item name="order_id" xsi:type="string">getId</item>
@@ -188,7 +188,6 @@
                         <argument name="id" xsi:type="string">status</argument>
                         <argument name="header" xsi:type="string" translate="true">Status</argument>
                         <argument name="type" xsi:type="string">options</argument>
-                        <argument name="currency" xsi:type="string">order_currency_code</argument>
                         <argument name="index" xsi:type="string">status</argument>
                         <argument name="options" xsi:type="options" model="Magento\Sales\Model\Resource\Order\Grid\StatusesArray"/>
                         <argument name="header_css_class" xsi:type="string">col-status</argument>
@@ -203,7 +202,6 @@
                         <argument name="getter" xsi:type="string">getId</argument>
                         <argument name="filter" xsi:type="string">0</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
-                        <argument name="index" xsi:type="string">stores</argument>
                         <argument name="is_system" xsi:type="string">1</argument>
                         <argument name="actions" xsi:type="array">
                             <item name="view_action" xsi:type="array">
