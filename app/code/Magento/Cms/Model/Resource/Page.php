@@ -61,6 +61,13 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
+     * Static URL Format instance
+     *
+     * @var \Magento\Url\Helper\Format
+     */
+    protected $_urlFormat;
+
+    /**
      * Construct
      *
      * @param \Magento\App\Resource $resource
@@ -72,12 +79,14 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
         \Magento\App\Resource $resource,
         \Magento\Core\Model\Date $date,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Stdlib\DateTime $dateTime
+        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Url\Helper\Format $urlFormat
     ) {
         parent::__construct($resource);
         $this->_date = $date;
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;
+        $this->_urlFormat = $urlFormat;
     }
 
     /**
@@ -124,6 +133,10 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
         foreach (array('custom_theme_from', 'custom_theme_to') as $field) {
             $value = !$object->getData($field) ? null : $object->getData($field);
             $object->setData($field, $this->dateTime->formatDate($value));
+        }
+
+        if (!$object->getData('identifier')) {
+            $object->setData('identifier', $this->formatUrlKey($object->getData('title')));
         }
 
         if (!$this->getIsUniquePageToStores($object)) {
@@ -452,5 +465,16 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getStore()
     {
         return $this->_storeManager->getStore($this->_store);
+    }
+
+    /**
+     * Format Key for URL
+     *
+     * @param string $str
+     * @return string
+     */
+    public function formatUrlKey($str)
+    {
+        return $this->_urlFormat->formatUrlKey($str);
     }
 }
