@@ -56,3 +56,4 @@ Resources,资源
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告！\r\n该操作将移那些除已经分配角色的用户\r\n你确定吗？"
 "Web Api","Web Api"
 "Web Services Configuration",Web服务配置
+"Requested service is not available: ""%1""","请求的服务无效：""%1"""

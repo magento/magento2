@@ -493,3 +493,5 @@ Yes,是
 "There is already another PayPal solution enabled. Enable this solution instead?",已经允许了另一个PayPal方案，要替代允许该方案吗？
 "This customer did not include a confirmed address.",顾客没有包含确认地址。
 "Update Shipping Method",更新货运方法
+"Fetch transaction details method does not exists in Payflow","抓取事务详细方法不存在于Payflow中"
+"Payflow Link and Express Checkout","Payflow Link和Express Checkout"

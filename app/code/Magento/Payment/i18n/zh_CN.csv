@@ -128,3 +128,4 @@ Week,周
 Year,年
 "You can't use the payment type you selected to make payments to the billing country.",不能选择该支付类型来支付到账单目的地国家。
 "Zero Subtotal Checkout",无小计结账
+"<label class=""label""><span>Make Check payable to:</span></label> %1","<label class=""label""><span>支付支票到:</span></label> %1"

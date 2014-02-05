@@ -907,3 +907,4 @@ order-header,订单头
 "the order confirmation email was sent",订单确认电子邮件已发送
 "the shipment email is not sent",运送电子邮件未发送
 "the shipment email was sent",运送电子邮件已发送
+"Exception occurred during order load","在订单载入时发生错误。"

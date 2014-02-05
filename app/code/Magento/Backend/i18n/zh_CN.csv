@@ -453,3 +453,6 @@ YTD,YTD
 "see error log for details",打开错误日志看详细信息
 "store(%1) scope",店铺（%1）范围
 "website(%1) scope",站点（%1）范围
+"Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. https://example.com/magento/","任何字段允许URL全名用/（斜杠）结尾，例如：https://example.com/magento/"
+"Enter https protocol to use Secure URLs in Admin.",,"输入https协议让后台使用安全URLs。"
+"Enter https protocol to use Secure URLs in Frontend.","输入https协议让前端使用安全URLs。"
