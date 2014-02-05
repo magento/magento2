@@ -106,7 +106,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false, false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false, false);
         $directory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false, false);
         $directory->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
 

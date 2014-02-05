@@ -112,7 +112,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order_paid_with_verisign.php
+     * @magentoDataFixture Magento/Sales/_files/order_paid_with_payflowpro.php
      */
     public function testInitFromOrderCcInformationDeleted()
     {

@@ -65,6 +65,7 @@ class Grid extends \Magento\Sales\Block\Recurring\Profile\View
         parent::__construct($context, $registry, $data);
         $this->_orderCollection = $collection;
         $this->_config = $config;
+        $this->_isScopePrivate = true;
     }
     /**
      * Prepare related orders collection

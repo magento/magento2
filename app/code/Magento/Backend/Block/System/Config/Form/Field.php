@@ -163,7 +163,7 @@ class Field
     protected function _renderScopeLabel(\Magento\Data\Form\Element\AbstractElement $element)
     {
         $html = '<td class="scope-label">';
-        if ($element->getScope() && false == $this->_app->isSingleStoreMode()) {
+        if ($element->getScope() && false == $this->_storeManager->isSingleStoreMode()) {
             $html .= $element->getScopeLabel();
         }
         $html .= '</td>';

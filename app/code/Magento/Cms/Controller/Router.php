@@ -159,7 +159,7 @@ class Router extends \Magento\App\Router\AbstractRouter
             ->setActionName('view')
             ->setParam('page_id', $pageId);
         $request->setAlias(
-            \Magento\Core\Model\Url\Rewrite::REWRITE_REQUEST_PATH_ALIAS,
+            \Magento\Url::REWRITE_REQUEST_PATH_ALIAS,
             $identifier
         );
 

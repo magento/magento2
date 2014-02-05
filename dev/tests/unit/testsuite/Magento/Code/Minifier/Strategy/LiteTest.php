@@ -24,7 +24,7 @@
 
 namespace Magento\Code\Minifier\Strategy;
 
-use Magento\Filesystem,
+use Magento\App\Filesystem,
     Magento\Filesystem\Directory\Read,
     Magento\Filesystem\Directory\Write;
 
@@ -64,17 +64,17 @@ class LiteTest extends \PHPUnit_Framework_TestCase
             array(), array(), '', false
         );
         $this->filesystem = $this->getMock(
-            'Magento\Filesystem',
+            'Magento\App\Filesystem',
             array('getDirectoryWrite', 'getDirectoryRead', '__wakeup'),
             array(), '', false
         );
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::ROOT)
+            ->with(\Magento\App\Filesystem::ROOT_DIR)
             ->will($this->returnValue($this->rootDirectory));
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::PUB_VIEW_CACHE)
+            ->with(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
             ->will($this->returnValue($this->pubViewCacheDir));
         $this->adapter = $this->getMockForAbstractClass('Magento\Code\Minifier\AdapterInterface', array(), '', false);
     }

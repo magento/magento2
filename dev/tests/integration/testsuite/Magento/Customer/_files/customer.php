@@ -26,6 +26,7 @@
  */
 $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Customer\Model\Customer');
+/** @var Magento\Customer\Model\Customer $customer */
 $customer
     ->setWebsiteId(1)
     ->setId(1)

@@ -64,6 +64,7 @@ class IncludePath
      *
      * @param string|array $path
      * @param bool $prepend Whether to prepend paths or to append them
+     * @return void
      */
     public static function addIncludePath($path, $prepend = true)
     {
@@ -81,7 +82,8 @@ class IncludePath
     /**
      * Resolve a class file and include it
      *
-     * @param $class
+     * @param string $class
+     * @return void
      */
     public static function load($class)
     {

@@ -99,4 +99,11 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('one', $block->getVar('v1'));
         $this->assertEquals('two', $block->getVar('v2', $module));
     }
+
+    public function testIsScopePrivate()
+    {
+        $contextMock = $this->getMock('Magento\View\Element\Context', [], [], '', false);
+        $block = $this->getMockForAbstractClass('Magento\View\Element\AbstractBlock', ['context' => $contextMock]);
+        $this->assertEquals(false, $block->isScopePrivate());
+    }
 }

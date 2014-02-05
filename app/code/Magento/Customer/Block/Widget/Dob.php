@@ -41,6 +41,22 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     protected $_dateInputs = array();
 
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Customer\Helper\Address $addressHelper,
+        array $data = array()
+    ) {
+        parent::__construct($context, $eavConfig, $addressHelper, $data);
+        $this->_isScopePrivate = true;
+    }
+
     public function _construct()
     {
         parent::_construct();

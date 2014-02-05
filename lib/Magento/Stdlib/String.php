@@ -86,7 +86,7 @@ class String
      * @param bool $keepWords
      * @param bool $trim
      * @param string $wordSeparatorRegex
-     * @return array
+     * @return string[]
      */
     public function split($value, $length = 1, $keepWords = false, $trim = false, $wordSeparatorRegex = '\s')
     {

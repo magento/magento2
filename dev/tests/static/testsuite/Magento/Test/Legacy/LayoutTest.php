@@ -137,8 +137,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     $this->assertContains('::', $action->getAttribute('helper'));
                 }
 
-                if (false
-                    !== strpos($layoutFile, 'app/code/Magento/Sales/view/adminhtml/layout/sales_order')
+                if (false !== strpos($layoutFile, 'app/code/Magento/Sales/view/adminhtml/layout/sales_order')
+                    || false !== strpos($layoutFile, 'app/code/Magento/Shipping/view/adminhtml/layout/adminhtml_order')
                 ) {
                     $this->markTestIncomplete("The file {$layoutFile} has to use \\Magento\\Core\\Block\\Text\\List, \n"
                             . 'there is no solution to get rid of it right now.'
@@ -321,7 +321,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setPageLayout',
             'setPageTitle',
             'setParentType',
-            'setPaypalActionPrefix',
+            'setControllerPath',
             'setPosition',
             'setPositioned',
             'setRewardMessage',

@@ -128,13 +128,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($content, (new Http())->fileGetContents(''));
     }
 
-    /**
-     * @expectedException \Magento\Filesystem\FilesystemException
-     */
     public function testFileGetContentsNoContent()
     {
+        $content = '';
         self::$fileGetContents = '';
-        (new Http())->fileGetContents('');
+        $this->assertEquals($content, (new Http())->fileGetContents(''));
     }
 
     public function testFilePutContents()

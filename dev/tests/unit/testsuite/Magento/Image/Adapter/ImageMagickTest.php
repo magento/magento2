@@ -33,7 +33,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
      */
     public function testWatermark($imagePath, $expectedMessage)
     {
-        $filesystem = $this->getMockBuilder('Magento\Filesystem')->disableOriginalConstructor()->getMock();
+        $filesystem = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
         $this->setExpectedException('LogicException', $expectedMessage);
         $object = new \Magento\Image\Adapter\ImageMagick($filesystem);
         $object->watermark($imagePath);

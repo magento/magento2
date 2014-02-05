@@ -25,11 +25,8 @@
  */
 namespace Magento\Core\Model\Store\Storage;
 
-use Magento\Backend\Model\Url\Proxy;
 use Magento\Core\Exception;
 use Magento\App\State;
-use Magento\Core\Model\AppInterface;
-use Magento\Core\Model\Config;
 use Magento\Core\Model\Store;
 use Magento\Core\Model\Store\StorageInterface;
 use Magento\Core\Model\Store\Group;
@@ -107,7 +104,7 @@ class Db implements StorageInterface
     /**
      * Config model
      *
-     * @var Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -142,7 +139,7 @@ class Db implements StorageInterface
     /**
      * Cookie model
      *
-     * @var Cookie
+     * @var \Magento\Stdlib\Cookie
      */
     protected $_cookie;
 
@@ -154,7 +151,7 @@ class Db implements StorageInterface
     protected $_appState;
 
     /**
-     * @var \Magento\Backend\Model\Url\Proxy
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
@@ -162,10 +159,10 @@ class Db implements StorageInterface
      * @param StoreFactory $storeFactory
      * @param Website\Factory $websiteFactory
      * @param Group\Factory $groupFactory
-     * @param Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Stdlib\Cookie $cookie
      * @param State $appState
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Backend\Model\UrlInterface $url
      * @param $isSingleStoreAllowed
      * @param $scopeCode
      * @param $scopeType
@@ -175,10 +172,10 @@ class Db implements StorageInterface
         \Magento\Core\Model\StoreFactory $storeFactory,
         \Magento\Core\Model\Website\Factory $websiteFactory,
         \Magento\Core\Model\Store\Group\Factory $groupFactory,
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Stdlib\Cookie $cookie,
         \Magento\App\State $appState,
-        \Magento\Backend\Model\Url $url,
+        \Magento\Backend\Model\UrlInterface $url,
         $isSingleStoreAllowed,
         $scopeCode,
         $scopeType,
@@ -208,8 +205,8 @@ class Db implements StorageInterface
     {
         if (empty($this->_store)) {
             $this->_store = $this->_storeFactory->create()
-                ->setId(AppInterface::DISTRO_STORE_ID)
-                ->setCode(AppInterface::DISTRO_STORE_CODE);
+                ->setId(\Magento\Core\Model\Store::DISTRO_STORE_ID)
+                ->setCode(\Magento\Core\Model\Store::DEFAULT_CODE);
         }
         return $this->_store;
     }

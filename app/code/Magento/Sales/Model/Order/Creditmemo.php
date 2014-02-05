@@ -199,7 +199,7 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
     /**
      * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory
      */
-    protected $_cmItemCollFactory;
+    protected $_cmItemCollectionFactory;
 
     /**
      * @var \Magento\Core\Model\CalculatorFactory
@@ -219,7 +219,7 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
     /**
      * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory
      */
-    protected $_commentCollFactory;
+    protected $_commentCollectionFactory;
 
     /**
      * @var \Magento\Email\Model\Template\MailerFactory
@@ -241,11 +241,11 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Sales\Model\Order\Creditmemo\Config $creditmemoConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
      * @param \Magento\Core\Model\CalculatorFactory $calculatorFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory
-     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
      * @param \Magento\Email\Model\Template\MailerFactory $templateMailerFactory
      * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -262,11 +262,11 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Sales\Model\Order\Creditmemo\Config $creditmemoConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollFactory,
+        \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
         \Magento\Core\Model\CalculatorFactory $calculatorFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
-        \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollFactory,
+        \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         \Magento\Email\Model\Template\MailerFactory $templateMailerFactory,
         \Magento\Email\Model\InfoFactory $emailInfoFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
@@ -278,11 +278,11 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_creditmemoConfig = $creditmemoConfig;
         $this->_orderFactory = $orderFactory;
-        $this->_cmItemCollFactory = $cmItemCollFactory;
+        $this->_cmItemCollectionFactory = $cmItemCollectionFactory;
         $this->_calculatorFactory = $calculatorFactory;
         $this->_storeManager = $storeManager;
         $this->_commentFactory = $commentFactory;
-        $this->_commentCollFactory = $commentCollFactory;
+        $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->_templateMailerFactory = $templateMailerFactory;
         $this->_emailInfoFactory = $emailInfoFactory;
         parent::__construct($context, $registry, $coreLocale, $dateTime, $resource, $resourceCollection, $data);
@@ -366,7 +366,7 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
     public function getItemsCollection()
     {
         if (empty($this->_items)) {
-            $this->_items = $this->_cmItemCollFactory->create()->setCreditmemoFilter($this->getId());
+            $this->_items = $this->_cmItemCollectionFactory->create()->setCreditmemoFilter($this->getId());
 
             if ($this->getId()) {
                 foreach ($this->_items as $item) {
@@ -805,7 +805,7 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
     public function getCommentsCollection($reload = false)
     {
         if (is_null($this->_comments) || $reload) {
-            $this->_comments = $this->_commentCollFactory->create()
+            $this->_comments = $this->_commentCollectionFactory->create()
                 ->setCreditmemoFilter($this->getId())
                 ->setCreatedAtOrder();
             /**

@@ -216,11 +216,6 @@ class Edit extends \Magento\Backend\Block\Widget
         return $setId;
     }
 
-    public function getIsGrouped()
-    {
-        return $this->getProduct()->isGrouped();
-    }
-
     public function getDuplicateUrl()
     {
         return $this->getUrl('catalog/*/duplicate', array('_current'=>true));

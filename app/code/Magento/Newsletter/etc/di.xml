@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <newsletter_setup>Magento\Newsletter\Model\Resource\Setup</newsletter_setup>
-            </value>
+            <array>
+                <item key="newsletter_setup"><value>Magento\Newsletter\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
     <virtualType name="Magento\Newsletter\Model\Session\Storage" type="Magento\Session\Storage">

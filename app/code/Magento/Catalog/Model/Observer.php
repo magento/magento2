@@ -58,7 +58,7 @@ class Observer
     protected $_catalogCategory = null;
     
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ReinitableConfigInterface
      */
     protected $_coreConfig;
 
@@ -130,7 +130,7 @@ class Observer
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ReinitableConfigInterface $coreConfig
      * @param \Magento\Catalog\Model\Resource\Category\FlatFactory $flatResourceFactory
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
      */
@@ -144,7 +144,7 @@ class Observer
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ReinitableConfigInterface $coreConfig,
         \Magento\Catalog\Model\Resource\Category\FlatFactory $flatResourceFactory,
         \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
     ) {

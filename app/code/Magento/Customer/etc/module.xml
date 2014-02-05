@@ -41,6 +41,11 @@
             <module name="Magento_Index"/>
             <module name="Magento_Log"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_Backend"/>
+            <module name="Magento_Review"/>
+            <module name="Magento_Tax"/>
+            <module name="Magento_Email"/>
+            <module name="Magento_Service"/>
         </depends>
     </module>
 </config>

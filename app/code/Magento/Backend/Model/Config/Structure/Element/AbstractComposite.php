@@ -37,14 +37,14 @@ abstract class AbstractComposite
     protected $_childrenIterator;
 
     /**
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
      */
     public function __construct(
-        \Magento\Core\Model\App $application,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
     ) {
-        parent::__construct($application);
+        parent::__construct($storeManager);
         $this->_childrenIterator = $childrenIterator;
     }
 

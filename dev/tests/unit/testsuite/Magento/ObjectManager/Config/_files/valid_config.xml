@@ -26,13 +26,32 @@
 <config>
     <preference for="Some_For_Name" type="Some_Type_Name" />
     <virtualType name="" type="" shared="true">
-        <param name="sessionNamespace">
-            <value>
-                <backend>
-                    <instance>value</instance>
-                    <sortOrder>2</sortOrder>
-                </backend>
-            </value>
+        <param name="single_array">
+            <array>
+                <item key="key1 unique for single array"><value>value</value></item>
+                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
+            </array>
+        </param>
+        <param name="nested_array">
+            <array>
+                <item key="key1 unique for single array">
+                    <array>
+                        <item key="key1 unique for single array"><value>value</value></item>
+                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
+                    </array>
+                </item>
+                <item key="backend2">
+                    <array>
+                        <item key="key1 unique for single array"><value>value</value></item>
+                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?">
+                            <array>
+                                <item key="key1 unique for single array"><value>value</value></item>
+                                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
+                            </array>
+                        </item>
+                    </array>
+                </item>
+            </array>
         </param>
     </virtualType>
     <type name="Some_Type_name">
@@ -40,13 +59,32 @@
         <param name="text_value">
             <instance type="Instance_test_name" />
         </param>
-        <param name="test_param_name">
-            <value>
-                <backend>
-                    <instance>value</instance>
-                    <sortOrder>2</sortOrder>
-                </backend>
-            </value>
+        <param name="single_array">
+            <array>
+                <item key="key1 unique for single array"><value>value</value></item>
+                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
+            </array>
+        </param>
+        <param name="nested_array">
+            <array>
+                <item key="key1 unique for single array">
+                    <array>
+                        <item key="key1 unique for single array"><value>value</value></item>
+                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
+                    </array>
+                </item>
+                <item key="backend2">
+                    <array>
+                        <item key="key1 unique for single array"><value>value</value></item>
+                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?">
+                            <array>
+                                <item key="key1 unique for single array"><value>value</value></item>
+                                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
+                            </array>
+                        </item>
+                    </array>
+                </item>
+            </array>
         </param>
         <param name="baseController">
             <value>some_value</value>

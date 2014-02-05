@@ -82,7 +82,7 @@ class Config
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Config\DomFactory $domFactory,
@@ -90,14 +90,14 @@ class Config
         \Magento\View\LayoutInterface $layout,
         \Magento\App\State $appState,
         \Magento\Persistent\Model\Factory $persistentFactory,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_domFactory = $domFactory;
         $this->_moduleReader = $moduleReader;
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
     }
 
     /**

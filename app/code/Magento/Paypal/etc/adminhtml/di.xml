@@ -37,6 +37,19 @@
             <value>adminhtml</value>
         </param>
     </virtualType>
+    <virtualType name="Magento\Paypal\Model\PayflowSession\Storage" type="Magento\Session\Storage">
+        <param name="namespace">
+            <value>paypal_payflow</value>
+        </param>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Model\PayflowSession" type="Magento\Session\Generic">
+        <param name="storage">
+            <instance type="Magento\Paypal\Model\PayflowSession\Storage" />
+        </param>
+        <param name="sessionName">
+            <value>adminhtml</value>
+        </param>
+    </virtualType>
     <type name="Magento\Session\Generic">
         <param name="sessionName">
             <value>adminhtml</value>

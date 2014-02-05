@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Model\Resource\Review\Product;
 
+use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Review Product Collection
@@ -32,8 +34,6 @@
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Model\Resource\Review\Product;
-
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
@@ -53,10 +53,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add store data flag
      *
-     * @var boolean
+     * @var bool
      */
     protected $_addStoreDataFlag     = false;
-
 
     /**
      * Filter by stores for the collection
@@ -162,7 +161,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * init select
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -174,8 +173,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Adds store filter into array
      *
-     * @param mixed $storeId
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @param int|int[] $storeId
+     * @return $this
      */
     public function addStoreFilter($storeId = null)
     {
@@ -202,7 +201,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Adds specific store id into array
      *
      * @param array $storeId
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function setStoreFilter($storeId)
     {
@@ -227,7 +226,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Applies all store filters in one place to prevent multiple joins in select
      *
      * @param null|Zend_Db_Select $select
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     protected function _applyStoresFilterToSelect(\Zend_Db_Select $select = null)
     {
@@ -259,7 +258,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add stores data
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function addStoreData()
     {
@@ -271,7 +270,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Add customer filter
      *
      * @param int $customerId
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function addCustomerFilter($customerId)
     {
@@ -284,7 +283,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Add entity filter
      *
      * @param int $entityId
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function addEntityFilter($entityId)
     {
@@ -296,8 +295,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add status filter
      *
-     * @param mixed $status
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @param int $status
+     * @return $this
      */
     public function addStatusFilter($status)
     {
@@ -310,7 +309,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Set date order
      *
      * @param string $dir
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function setDateOrder($dir = 'DESC')
     {
@@ -321,7 +320,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add review summary
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function addReviewSummary()
     {
@@ -336,7 +335,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add rote votes
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function addRateVotes()
     {
@@ -352,9 +351,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     }
 
     /**
-     * join fields to entity
+     * Join fields to entity
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     protected function _joinFields()
     {
@@ -428,7 +427,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function setOrder($attribute, $dir = 'DESC')
     {
@@ -457,10 +456,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add attribute to filter
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|string $attribute
-     * @param array $condition
+     * @param AbstractAttribute|string $attribute
+     * @param array|null $condition
      * @param string $joinType
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
@@ -527,7 +526,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Action after load
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -541,6 +540,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add store data
      *
+     * @return void
      */
     protected function _addStoreData()
     {
@@ -577,7 +577,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Redeclare parent method for store filters applying
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     protected function _beforeLoad()
     {

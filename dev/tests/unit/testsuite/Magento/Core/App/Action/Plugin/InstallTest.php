@@ -54,7 +54,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     {
         $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->_response = $this->getMock('Magento\App\ResponseInterface', array('setRedirect', 'sendResponse'));
-        $this->_urlMock = $this->getMock('Magento\Core\Model\Url', array(), array(), '', false);
+        $this->_urlMock = $this->getMock('Magento\Url', array(), array(), '', false);
         $this->_invocationChainMock =
             $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
         $this->_plugin = new \Magento\Core\App\Action\Plugin\Install(

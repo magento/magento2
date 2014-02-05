@@ -44,7 +44,8 @@ class Shipping extends \Zend_Gdata_App_Extension_Element
 
     /**
      * Key-value pair of shipping info
-     * @var unknown_type
+     *
+     * @var array
      */
     protected $_shippingInfo;
 
@@ -52,7 +53,7 @@ class Shipping extends \Zend_Gdata_App_Extension_Element
      * Creates instance of class
      *
      * @param array $shippingInfo as described in product requirements
-     * @see http://code.google.com/intl/ru/apis/shopping/content/getting-started/requirements-products.html#tax
+     * @see http://code.google.com/intl/ru/apis/shopping/content/getting-started/requirements-products.html#shipping
      */
     public function __construct(array $shippingInfo = array())
     {
@@ -86,6 +87,7 @@ class Shipping extends \Zend_Gdata_App_Extension_Element
      * objects are created and stored in an array.
      *
      * @param \DOMNode $child The \DOMNode needed to be handled
+     * @return void
      */
     protected function takeChildFromDOM($child)
     {

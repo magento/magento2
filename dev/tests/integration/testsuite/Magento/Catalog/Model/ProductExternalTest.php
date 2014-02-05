@@ -226,13 +226,6 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->_model, $linkCollection->getProduct());
     }
 
-    public function testGetGroupedLinkCollection()
-    {
-        $linkCollection = $this->_model->getGroupedLinkCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Link\Collection', $linkCollection);
-        $this->assertSame($this->_model, $linkCollection->getProduct());
-    }
-
     /**
      * @covers \Magento\Catalog\Model\Product::getProductUrl
      * @covers \Magento\Catalog\Model\Product::getUrlInStore

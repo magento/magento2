@@ -78,6 +78,16 @@ class Configure extends \Magento\View\Element\Template
     }
 
     /**
+     * Get update params for http post
+     *
+     * @return bool|string
+     */
+    public function getUpdateParams()
+    {
+        return $this->_wishlistData->getUpdateParams($this->getWishlistItem());
+    }
+
+    /**
      * Returns wishlist item being configured
      *
      * @return \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item

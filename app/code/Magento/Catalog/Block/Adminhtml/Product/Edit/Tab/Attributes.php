@@ -187,6 +187,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
                     $element = $form->getElement($attribute);
                     if ($element) {
                         $element->setReadonly(true, true);
+                        $element->lock();
                     }
                 }
             }

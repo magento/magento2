@@ -26,13 +26,15 @@
 <config>
     <type name="Magento\App\RouterList">
         <param name="routerList">
-            <value>
-                <cms>
-                    <instance>Magento\Cms\Controller\Router</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>60</sortOrder>
-                </cms>
-            </value>
+            <array>
+                <item key="cms">
+                    <array>
+                        <item key="instance"><value>Magento\Cms\Controller\Router</value></item>
+                        <item key="disable"><value type="bool">false</value></item>
+                        <item key="sortOrder"><value>60</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
 </config>

@@ -44,6 +44,20 @@ class Template extends \Magento\View\Element\AbstractBlock
     protected $_priceBlockTypes = array();
 
     /**
+     * @param \Magento\View\Element\Context $context
+     * @param array $priceBlockTypes
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Context $context,
+        array $priceBlockTypes = array(),
+        array $data = array()
+    ) {
+        $this->_priceBlockTypes = $priceBlockTypes;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Retrieve array of Price Block Types
      *
      * Key is price block type name and value is array of

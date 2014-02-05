@@ -24,10 +24,7 @@
  */
 -->
 <config>
-    <event name="design_editor_activate">
-        <observer name="magento_pagecache" instance="Magento\PageCache\Model\Observer" method="setNoCacheCookie" />
-    </event>
-    <event name="design_editor_deactivate">
-        <observer name="magento_pagecache" instance="Magento\PageCache\Model\Observer" method="deleteNoCacheCookie" />
+    <event name="core_layout_render_element">
+        <observer name="pagecache" instance="Magento\PageCache\Model\Observer" method="processLayoutRenderElement" />
     </event>
 </config>

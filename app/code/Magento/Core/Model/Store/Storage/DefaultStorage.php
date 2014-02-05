@@ -60,8 +60,8 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
     ) {
 
         $this->_store = $storeFactory->create();
-        $this->_store->setId(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID);
-        $this->_store->setCode(\Magento\Core\Model\AppInterface::DISTRO_STORE_CODE);
+        $this->_store->setId(\Magento\Core\Model\Store::DISTRO_STORE_ID);
+        $this->_store->setCode(\Magento\Core\Model\Store::DEFAULT_CODE);
         $this->_website = $websiteFactory->create();
         $this->_group = $groupFactory->create();
     }

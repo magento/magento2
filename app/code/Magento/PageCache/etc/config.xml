@@ -28,11 +28,9 @@
 <config>
     <default>
         <system>
-            <external_page_cache>
-                <enabled>0</enabled>
-                <control>zend_page_cache</control>
-                <cookie_lifetime>3600</cookie_lifetime>
-            </external_page_cache>
+            <headers>
+                <public-max-age>0</public-max-age>
+            </headers>
         </system>
     </default>
 </config>

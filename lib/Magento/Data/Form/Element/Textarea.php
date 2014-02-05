@@ -33,18 +33,20 @@
  */
 namespace Magento\Data\Form\Element;
 
-class Textarea extends \Magento\Data\Form\Element\AbstractElement
+use Magento\Escaper;
+
+class Textarea extends AbstractElement
 {
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
         $data = array()
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
@@ -54,12 +56,22 @@ class Textarea extends \Magento\Data\Form\Element\AbstractElement
         $this->setCols(15);
     }
 
+    /**
+     * Return the HTML attributes
+     *
+     * @return string[]
+     */
     public function getHtmlAttributes()
     {
         return array('title', 'class', 'style', 'onclick', 'onchange', 'rows', 'cols', 'readonly', 'disabled',
                      'onkeyup', 'tabindex');
     }
 
+    /**
+     * Return the element as HTML
+     *
+     * @return string
+     */
     public function getElementHtml()
     {
         $this->addClass('textarea');

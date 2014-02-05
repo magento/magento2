@@ -124,29 +124,4 @@ class Data extends \Magento\App\Helper\AbstractHelper
         }
         return '';
     }
-
-    /**
-     * Retrieve tracking ajax url
-     *
-     * @return string
-     */
-    public function getTrackingAjaxUrl()
-    {
-        return $this->_getUrl('shipping/tracking/ajax');
-    }
-
-    /**
-     * @param string $method
-     * @param mixed $storeId
-     * @return bool
-     */
-    public function isFreeMethod($method, $storeId = null)
-    {
-        $arr = explode('_', $method, 2);
-        if (!isset($arr[1])) {
-            return false;
-        }
-        $freeMethod = $this->_coreStoreConfig->getConfig('carriers/' . $arr[0] . '/free_method', $storeId);
-        return $freeMethod == $arr[1];
-    }
 }

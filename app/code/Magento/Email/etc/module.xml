@@ -32,6 +32,8 @@
         <depends>
             <module name="Magento_Core"/>
             <module name="Magento_Cms" />
+            <module name="Magento_Backend" />
+            <module name="Magento_Theme" />
         </depends>
     </module>
 </config>

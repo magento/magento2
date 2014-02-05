@@ -35,5 +35,19 @@ namespace Magento\Customer\Block\Form;
 
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
-
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        array $data = array()
+    ) {
+        parent::__construct($context, $customerSession, $subscriberFactory, $data);
+        $this->_isScopePrivate = true;
+    }
 }

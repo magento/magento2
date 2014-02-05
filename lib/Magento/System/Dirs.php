@@ -29,7 +29,10 @@ namespace Magento\System;
 
 class Dirs
 {
-
+    /**
+     * @param string[]|string $dirname
+     * @return bool
+     */
     public static function rm($dirname)
     {
         if(is_array($dirname)) {
@@ -78,9 +81,17 @@ class Dirs
             @closedir($dh);
         }     
         return true;
-    }  
-    
-    
+    }
+
+    /**
+     * Attempts to create the directory
+     *
+     * @param string $path
+     * @param bool $recursive
+     * @param int $mode
+     * @return true
+     * @throws \Exception
+     */
     public static function mkdirStrict($path, $recursive = true, $mode = 0777)
     {
         $exists = file_exists($path);        
@@ -96,7 +107,13 @@ class Dirs
         }         
         return true;
     }
-    
+
+    /**
+     * @param string $source
+     * @param string $dest
+     * @return void
+     * @throws \Exception
+     */
     public static function copyFileStrict($source, $dest)
     {
         $exists = file_exists($source);

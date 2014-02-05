@@ -30,9 +30,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <salesrule_setup>Magento\SalesRule\Model\Resource\Setup</salesrule_setup>
-            </value>
+            <array>
+                <item key="salesrule_setup"><value>Magento\SalesRule\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

@@ -24,21 +24,19 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
 
 /**
  * Dashboard search query column renderer
  */
-namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
-
-class Searchquery
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * String helper
      *
      * @var \Magento\Stdlib\String
      */
-    protected $_stringHelper = null;
+    protected $stringHelper;
 
     /**
      * @param \Magento\Backend\Block\Context $context
@@ -50,16 +48,22 @@ class Searchquery
         \Magento\Stdlib\String $stringHelper,
         array $data = array()
     ) {
-        $this->_stringHelper = $stringHelper;
+        $this->stringHelper = $stringHelper;
         parent::__construct($context, $data);
     }
 
+    /**
+     * Renders a column
+     *
+     * @param   \Magento\Object $row
+     * @return  string
+     */
     public function render(\Magento\Object $row)
     {
         $value = $row->getData($this->getColumn()->getIndex());
-        if ($this->_stringHelper->strlen($value) > 30) {
-            $value = '<span title="'. $this->escapeHtml($value) .'">'
-                . $this->escapeHtml($this->_stringHelper->truncate($value, 30)) . '</span>';
+        if ($this->stringHelper->strlen($value) > 30) {
+            $value = '<span title="' . $this->escapeHtml($value) . '">'
+                . $this->escapeHtml($this->filterManager->truncate($value, array('length' => 30))) . '</span>';
         } else {
             $value = $this->escapeHtml($value);
         }

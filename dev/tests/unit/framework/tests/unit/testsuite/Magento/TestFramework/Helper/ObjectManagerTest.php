@@ -92,7 +92,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetModel()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var $model \Magento\Core\Model\Config\Value */
+        /** @var $model \Magento\App\Config\ValueInterface */
         $model = $objectManager->getObject('Magento\Core\Model\Config\Value');
         $this->assertInstanceOf('Magento\Core\Model\Config\Value', $model);
         foreach ($this->_modelDependencies as $propertyName => $propertyType) {

@@ -71,7 +71,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     protected $_filesystemStorage;
 
     /**
-     * @var \Magento\Core\Model\ConfigInterface
+     * @var \Magento\App\ConfigInterface
      */
     protected $config;
 
@@ -80,14 +80,14 @@ class Storage extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\File\Storage $storage
      * @param \Magento\Core\Model\File\Storage\File $filesystemStorage
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\App\ConfigInterface $config
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Model\File\Storage $storage,
         \Magento\Core\Model\File\Storage\File $filesystemStorage,
-        \Magento\Core\Model\ConfigInterface $config
+        \Magento\App\ConfigInterface $config
     ) {
         $this->_filesystemStorage = $filesystemStorage;
         $this->_coreFileStorageDb = $coreFileStorageDb;

@@ -54,40 +54,6 @@ class Url extends \Magento\Core\Helper\Url
     }
 
     /**
-     * Multi Shipping (MS) checkout urls
-     */
-
-    /**
-     * Retrieve multishipping checkout url
-     *
-     * @return string
-     */
-    public function getMSCheckoutUrl()
-    {
-        return $this->_getUrl('checkout/multishipping');
-    }
-
-    public function getMSLoginUrl()
-    {
-        return $this->_getUrl('checkout/multishipping/login', array('_secure'=>true, '_current'=>true));
-    }
-
-    public function getMSAddressesUrl()
-    {
-        return $this->_getUrl('checkout/multishipping/addresses');
-    }
-
-    public function getMSShippingAddressSavedUrl()
-    {
-        return $this->_getUrl('checkout/multishipping_address/shippingSaved');
-    }
-
-    public function getMSRegisterUrl()
-    {
-        return $this->_getUrl('checkout/multishipping/register');
-    }
-
-    /**
      * One Page (OP) checkout urls
      */
     public function getOPCheckoutUrl()

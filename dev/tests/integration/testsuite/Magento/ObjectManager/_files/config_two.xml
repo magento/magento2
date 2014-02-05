@@ -26,43 +26,43 @@
 <config>
     <preference for="Magento\Module\UpdaterInterfaceTwo" type="Magento\Module\UpdaterTwo" />
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\UpdaterOne" />
-    <type name="Magento\App\Config\Loader" shared="false">
+    <type name="Magento\App\Arguments\Loader" shared="false">
         <param name="customFile">
-            <value type="argument">Magento\App\Config\Loader::PARAM_CUSTOM_FILE</value>
+            <value type="argument">Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE</value>
         </param>
         <param name="newParam">
             <value>paramValue</value>
         </param>
         <param name="customConfig">
-            <instance shared="false" type="Magento\Core\Model\Config\Storage_Modules" />
+            <instance shared="false" type="Magento\Core\Model\Config\Storage\Modules" />
         </param>
         <param name="customValue">
             <value>someCustomValue</value>
         </param>
         <param name="customComplexValue">
-            <value transalte="three" module="Some_Module">
-                <three>three</three>
-            </value>
+            <array>
+                <item key="three"><value>three</value></item>
+            </array>
         </param>
         <plugin name="three" type="somePluginThree"/>
         <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
         <plugin name="one" sortOrder="800"/>
     </type>
-    <virtualType name="Magento\App\Config\LoaderVirtual" shared="true">
+    <virtualType name="Magento\App\Arguments\LoaderVirtual" shared="true">
         <plugin name="three" type="somePluginThree"/>
         <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
         <plugin name="one" sortOrder="800"/>
     </virtualType>
     <type name="Magento\Data\Collection\Db\FetchStrategy\Cache">
         <param name="cacheTags">
-            <value>
-                <const type='const'>Magento\Core\Model\Website::CACHE_TAG</const>
-                <boolFalse type='bool'>1</boolFalse>
-                <boolTrue type='int'>10</boolTrue>
-                <boolOne type='string' pattern="[0-9]*">1</boolOne>
-                <boolZero type='bool'>0</boolZero>
-                <stringPattern pattern="[a-zA-Z\-]*">Az-Value</stringPattern>
-            </value>
+            <array>
+                <item key="const"><value type="const">Magento\Core\Model\Website::CACHE_TAG</value></item>
+                <item key="boolFalse"><value type="bool">1</value></item>
+                <item key="boolTrue"><value type="int">10</value></item>
+                <item key="boolOne"><value type="string" pattern="[0-9]*">1</value></item>
+                <item key="boolZero"><value type="bool">0</value></item>
+                <item key="stringPattern"><value pattern="[a-zA-Z\-]*">Az-Value</value></item>
+            </array>
         </param>
         <param name="constParam">
             <value type='const'>Magento\Core\Model\Website::CACHE_TAG</value>

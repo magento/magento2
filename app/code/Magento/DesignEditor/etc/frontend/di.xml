@@ -26,13 +26,15 @@
 <config>
     <type name="Magento\App\RouterList">
         <param name="routerList">
-            <value>
-                <vde>
-                    <instance>Magento\DesignEditor\Controller\Varien\Router\Standard</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>40</sortOrder>
-                </vde>
-            </value>
+            <array>
+                <item key="vde">
+                    <array>
+                        <item key="instance"><value>Magento\DesignEditor\Controller\Varien\Router\Standard</value></item>
+                        <item key="disable"><value type="bool">false</value></item>
+                        <item key="sortOrder"><value>40</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
 </config>

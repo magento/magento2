@@ -84,6 +84,8 @@ class Process extends \Magento\Backend\App\Action
 
     /**
      * Display processes grid action
+     *
+     * @return void
      */
     public function listAction()
     {
@@ -97,6 +99,8 @@ class Process extends \Magento\Backend\App\Action
 
     /**
      * Process detail and edit action
+     *
+     * @return void
      */
     public function editAction()
     {
@@ -121,6 +125,8 @@ class Process extends \Magento\Backend\App\Action
 
     /**
      * Save process data
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -154,6 +160,8 @@ class Process extends \Magento\Backend\App\Action
 
     /**
      * Reindex all data what process is responsible
+     *
+     * @return void
      */
     public function reindexProcessAction()
     {
@@ -186,6 +194,8 @@ class Process extends \Magento\Backend\App\Action
 
     /**
      * Reindex pending events for index process
+     *
+     * @return void
      */
     public function reindexEventsAction()
     {
@@ -194,6 +204,8 @@ class Process extends \Magento\Backend\App\Action
 
     /**
      * Rebiuld all processes index
+     *
+     * @return void
      */
     public function reindexAllAction()
     {
@@ -203,6 +215,7 @@ class Process extends \Magento\Backend\App\Action
     /**
      * Mass rebuild selected processes index
      *
+     * @return void
      */
     public function massReindexAction()
     {
@@ -236,6 +249,7 @@ class Process extends \Magento\Backend\App\Action
     /**
      * Mass change index mode of selected processes index
      *
+     * @return void
      */
     public function massChangeModeAction()
     {

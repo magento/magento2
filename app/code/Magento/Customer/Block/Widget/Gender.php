@@ -64,6 +64,7 @@ class Gender extends \Magento\Customer\Block\Widget\AbstractWidget
         $this->_customerSession = $customerSession;
         $this->_customerResource = $customerResource;
         parent::__construct($context, $eavConfig, $addressHelper, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

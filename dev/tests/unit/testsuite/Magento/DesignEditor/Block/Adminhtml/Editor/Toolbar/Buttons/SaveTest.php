@@ -53,7 +53,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
 
         /** @var $urlBuilder \Magento\Core\Model\Url|\PHPUnit_Framework_MockObject_MockObject */
-        $urlBuilder = $this->getMock('Magento\Core\Model\Url', array('getUrl'), array(), '', false);
+        $urlBuilder = $this->getMock('Magento\Url', array('getUrl'), array(), '', false);
         $urlBuilder->expects($this->any())
             ->method('getUrl')
             ->will($this->returnValue($this->_url));

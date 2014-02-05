@@ -56,6 +56,7 @@ class RegisterLink extends \Magento\View\Element\Html\Link
         parent::__construct($context, $data);
         $this->_customerSession = $session;
         $this->_customerHelper = $customerHelper;
+        $this->_isScopePrivate = true;
     }
 
     /**

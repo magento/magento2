@@ -140,7 +140,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * init select
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -154,7 +154,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * @param int|string $customerId
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addCustomerFilter($customerId)
     {
@@ -167,8 +167,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add store filter
      *
-     * @param int|array $storeId
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @param int|int[] $storeId
+     * @return $this
      */
     public function addStoreFilter($storeId)
     {
@@ -183,7 +183,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add stores data
      *
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addStoreData()
     {
@@ -196,7 +196,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param int|string $entity
      * @param int $pkValue
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addEntityFilter($entity, $pkValue)
     {
@@ -225,7 +225,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add status filter
      *
      * @param int|string $status
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addStatusFilter($status)
     {
@@ -245,7 +245,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set date order
      *
      * @param string $dir
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function setDateOrder($dir = 'DESC')
     {
@@ -256,7 +256,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add rate votes
      *
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addRateVotes()
     {
@@ -276,7 +276,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add reviews total count
      *
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addReviewsTotalCount()
     {
@@ -295,7 +295,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param boolean $printQuery
      * @param boolean $logQuery
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -313,6 +313,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add store data
      *
+     * @return void
      */
     protected function _addStoreData()
     {

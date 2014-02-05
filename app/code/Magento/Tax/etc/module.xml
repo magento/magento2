@@ -41,6 +41,7 @@
             <module name="Magento_Eav"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Reports"/>
+            <module name="Magento_Theme"/>
         </depends>
     </module>
 </config>

@@ -153,7 +153,7 @@ class Files extends \Magento\Backend\App\Action
                     'type'  => 'filename',
                     'value' => $helper->getThumbnailPath($file)
                 ),
-                \Magento\Filesystem::MEDIA
+                \Magento\App\Filesystem::MEDIA_DIR
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);

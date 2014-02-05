@@ -25,7 +25,9 @@
  */
 namespace Magento\Install\App;
 
-class Console implements \Magento\AppInterface
+use Magento\App\Console\Response;
+
+class Console implements \Magento\LauncherInterface
 {
     /**
      * @var  \Magento\Install\Model\Installer\ConsoleFactory
@@ -59,12 +61,18 @@ class Console implements \Magento\AppInterface
     protected $rootDirectory;
 
     /**
+     * @var \Magento\App\Console\Response
+     */
+    protected $_response;
+
+    /**
      * @param \Magento\Install\Model\Installer\ConsoleFactory $installerFactory
      * @param Output $output
      * @param \Magento\App\State $state
      * @param \Magento\App\ObjectManager\ConfigLoader $loader
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Filesystem $filesystem
+     * @param Response $response
+     * @param \Magento\App\Filesystem $filesystem
      * @param array $arguments
      */
     public function __construct(
@@ -73,15 +81,17 @@ class Console implements \Magento\AppInterface
         \Magento\App\State $state,
         \Magento\App\ObjectManager\ConfigLoader $loader,
         \Magento\ObjectManager $objectManager,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
+        Response $response,
         array $arguments = array()
     ) {
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $this->_loader = $loader;
         $this->_state  = $state;
         $this->_installerFactory = $installerFactory;
         $this->_arguments = $this->_buildInitArguments($arguments);
         $this->_output = $output;
+        $this->_response = $response;
         $this->_objectManager = $objectManager;
     }
 
@@ -97,13 +107,13 @@ class Console implements \Magento\AppInterface
         if (!empty($args[\Magento\Install\Model\Installer\Console::OPTION_URIS])) {
             $uris = unserialize(base64_decode($args[\Magento\Install\Model\Installer\Console::OPTION_URIS]));
             foreach ($uris as $code => $uri) {
-                $args[\Magento\Filesystem::PARAM_APP_DIRS][$code]['uri'] = $uri;
+                $args[\Magento\App\Filesystem::PARAM_APP_DIRS][$code]['uri'] = $uri;
             }
         }
         if (!empty($args[\Magento\Install\Model\Installer\Console::OPTION_DIRS])) {
             $dirs = unserialize(base64_decode($args[\Magento\Install\Model\Installer\Console::OPTION_DIRS]));
             foreach ($dirs as $code => $dir) {
-                $args[\Magento\Filesystem::PARAM_APP_DIRS][$code]['path'] = $dir;
+                $args[\Magento\App\Filesystem::PARAM_APP_DIRS][$code]['path'] = $dir;
             }
         }
         return $args;
@@ -141,10 +151,11 @@ class Console implements \Magento\AppInterface
     }
 
     /**
-     * Execute application
-     * @return int
+     * Run application
+     *
+     * @return \Magento\App\ResponseInterface
      */
-    public function execute()
+    public function launch()
     {
         $areaCode = 'install';
         $this->_state->setAreaCode($areaCode);
@@ -162,6 +173,7 @@ class Console implements \Magento\AppInterface
         } else {
             $this->_handleInstall($installer);
         }
-        return 0;
+        $this->_response->setCode(0);
+        return $this->_response;
     }
 }

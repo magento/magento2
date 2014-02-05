@@ -73,6 +73,7 @@ class Send extends \Magento\View\Element\Template
         $this->_coreRegistry = $registry;
         $this->_sendfriendData = $sendfriendData;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

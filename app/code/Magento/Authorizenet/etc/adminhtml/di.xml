@@ -35,4 +35,9 @@
             <instance type="Magento\Backend\Model\Session\Quote" />
         </param>
     </type>
+    <type name="Magento\Authorizenet\Model\Authorizenet">
+        <param name="session">
+            <instance type="Magento\Backend\Model\Session\Quote" />
+        </param>
+    </type>
 </config>

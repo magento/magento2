@@ -58,13 +58,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $_catalogProduct = null;
 
     /**
-     * Tax calculation
-     *
-     * @var \Magento\Tax\Model\Calculation
-     */
-    protected $_taxCalculation;
-
-    /**
      * @var \Magento\Json\EncoderInterface
      */
     protected $_jsonEncoder;
@@ -73,6 +66,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @var \Magento\Catalog\Helper\Image
      */
     protected $_imageHelper;
+
+    /**
+     * @var \Magento\Catalog\Helper\Product\Price
+     */
+    protected $priceHelper;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
@@ -88,9 +86,10 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Catalog\Helper\Product $catalogProduct
+     * @param \Magento\Catalog\Helper\Product\Price $priceHelper
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -108,14 +107,15 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        array $data = array()
+        \Magento\Catalog\Helper\Product\Price $priceHelper,
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_imageHelper = $imageHelper;
-        $this->_taxCalculation = $taxCalculation;
         $this->_catalogProduct = $catalogProduct;
         $this->_jsonEncoder = $jsonEncoder;
+        $this->priceHelper = $priceHelper;
         parent::__construct(
             $context,
             $catalogConfig,
@@ -129,8 +129,10 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             $layoutHelper,
             $imageHelper,
             $arrayUtils,
-            $data
+            $data,
+            $priceBlockTypes
         );
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -217,10 +219,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $store      = $this->getCurrentStore();
         $taxHelper  = $this->_taxData;
         $currentProduct = $this->getProduct();
+        $preConfiguredValues = null;
 
-        $preconfiguredFlag = $currentProduct->hasPreconfiguredValues();
-        if ($preconfiguredFlag) {
-            $preconfiguredValues = $currentProduct->getPreconfiguredValues();
+        $preConfiguredFlag = $currentProduct->hasPreconfiguredValues();
+        if ($preConfiguredFlag) {
+            $preConfiguredValues = $currentProduct->getPreconfiguredValues();
             $defaultValues       = array();
         }
 
@@ -264,7 +267,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             $prices = $attribute->getPrices();
             if (is_array($prices)) {
                 foreach ($prices as $value) {
-                    if(!$this->_validateAttributeValue($attributeId, $value, $options)) {
+                    if (!$this->_validateAttributeValue($attributeId, $value, $options)) {
                         continue;
                     }
                     $currentProduct->setConfigurablePrice(
@@ -294,37 +297,37 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                 }
             }
             /**
-             * Prepare formated values for options choose
+             * Prepare formatted values for options choose
              */
             foreach ($optionPrices as $optionPrice) {
                 foreach ($optionPrices as $additional) {
                     $this->_preparePrice(abs($additional-$optionPrice));
                 }
             }
-            if($this->_validateAttributeInfo($info)) {
+            if ($this->_validateAttributeInfo($info)) {
                 $attributes[$attributeId] = $info;
             }
 
             // Add attribute default value (if set)
-            if ($preconfiguredFlag) {
-                $configValue = $preconfiguredValues->getData('super_attribute/' . $attributeId);
+            if ($preConfiguredFlag) {
+                $configValue = $preConfiguredValues->getData('super_attribute/' . $attributeId);
                 if ($configValue) {
                     $defaultValues[$attributeId] = $configValue;
                 }
             }
         }
 
-        if (!$this->_taxCalculation->getCustomer() && $this->_coreRegistry->registry('current_customer')) {
-            $this->_taxCalculation->setCustomer($this->_coreRegistry->registry('current_customer'));
+        if (!$this->priceHelper->getCustomer() && $this->_coreRegistry->registry('current_customer')) {
+            $this->priceHelper->setCustomer($this->_coreRegistry->registry('current_customer'));
         }
 
-        $_request = $this->_taxCalculation->getRateRequest(false, false, false);
+        $_request = $this->priceHelper->getRateRequest(false, false, false);
         $_request->setProductClassId($currentProduct->getTaxClassId());
-        $defaultTax = $this->_taxCalculation->getRate($_request);
+        $defaultTax = $this->priceHelper->getRate($_request);
 
-        $_request = $this->_taxCalculation->getRateRequest();
+        $_request = $this->priceHelper->getRateRequest();
         $_request->setProductClassId($currentProduct->getTaxClassId());
-        $currentTax = $this->_taxCalculation->getRate($_request);
+        $currentTax = $this->priceHelper->getRate($_request);
 
         $taxConfig = array(
             'includeTax'        => $taxHelper->priceIncludesTax(),
@@ -346,7 +349,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'images'            => $options['images'],
         );
 
-        if ($preconfiguredFlag && !empty($defaultValues)) {
+        if ($preConfiguredFlag && !empty($defaultValues)) {
             $config['defaultValues'] = $defaultValues;
         }
 
@@ -365,7 +368,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     protected function _validateAttributeValue($attributeId, &$value, &$options)
     {
-        if(isset($options[$attributeId][$value['value_index']])) {
+        if (isset($options[$attributeId][$value['value_index']])) {
             return true;
         }
 
@@ -380,7 +383,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     protected function _validateAttributeInfo(&$info)
     {
-        if(count($info['options']) > 0) {
+        if (count($info['options']) > 0) {
             return true;
         }
         return false;

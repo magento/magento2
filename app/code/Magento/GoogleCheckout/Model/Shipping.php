@@ -40,10 +40,10 @@ class Shipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier
     /**
      * Collects rates for user request
      *
-     * @param \Magento\Shipping\Model\Rate\Request $data
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $data
      * @return \Magento\Shipping\Model\Rate\Result
      */
-    public function collectRates(\Magento\Shipping\Model\Rate\Request $request)
+    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         // dummy placeholder
         return $this;

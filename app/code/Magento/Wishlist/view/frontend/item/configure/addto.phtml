@@ -24,11 +24,9 @@
  */
 ?>
 
-<?php $_wishlistItem = $this->getWishlistItem(); ?>
-<?php $_wishlistSubmitUrl = $this->helper('Magento\Wishlist\Helper\Data')->getUpdateUrl($_wishlistItem); ?>
 <div class="product addto links" data-role="add-to-links">
     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
-        <a href="<?php echo $_wishlistSubmitUrl ?>" class="action towishlist updated">
+        <a href="#" data-post='<?php echo $this->getUpdateParams(); ?>' class="action towishlist updated" data-action="add-to-wishlist">
             <span><?php echo __('Update Wish List') ?></span>
         </a>
     <?php endif; ?>
@@ -40,3 +38,10 @@
         </a>
     <?php endif; ?>
 </div>
+<script type="text/javascript">
+    head.js("<?php echo $this->getViewFileUrl('Magento_Wishlist::js/add-to-wishlist.js') ?>", function () {
+        jQuery('.product.info.main').addToWishlist(
+            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(array('productType' => $_product->getTypeId()))?>
+        );
+    });
+</script>

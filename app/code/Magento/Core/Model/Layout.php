@@ -155,14 +155,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     protected $_scheduledStructure;
 
     /**
-     * @var array
-     */
-    protected $_serviceCalls = array();
-
-    /** @var \Magento\Core\Model\DataService\Graph  */
-    protected $_dataServiceGraph;
-
-    /**
      * Renderers registered for particular name
      *
      * @var array
@@ -226,7 +218,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * @param \Magento\Data\Structure $structure
      * @param Layout\Argument\Processor $argumentProcessor
      * @param Layout\ScheduledStructure $scheduledStructure
-     * @param DataService\Graph $dataServiceGraph
      * @param Store\Config $coreStoreConfig
      * @param \Magento\App\State $appState
      * @param \Magento\Message\ManagerInterface $messageManager
@@ -243,7 +234,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         \Magento\Data\Structure $structure,
         \Magento\Core\Model\Layout\Argument\Processor $argumentProcessor,
         \Magento\Core\Model\Layout\ScheduledStructure $scheduledStructure,
-        \Magento\Core\Model\DataService\Graph $dataServiceGraph,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\State $appState,
         \Magento\Message\ManagerInterface $messageManager,
@@ -262,7 +252,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         $this->setXml(simplexml_load_string('<layout/>', $this->_elementClass));
         $this->_renderingOutput = new \Magento\Object;
         $this->_scheduledStructure = $scheduledStructure;
-        $this->_dataServiceGraph = $dataServiceGraph;
         $this->_processorFactory = $processorFactory;
         $this->themeFactory = $themeFactory;
         $this->_logger = $logger;
@@ -369,9 +358,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
 
         $this->_readStructure($this->getNode());
 
-        $this->_dataServiceGraph
-            ->init($this->getServiceCalls());
-
         while (false === $this->_scheduledStructure->isStructureEmpty()) {
             $this->_scheduleElement(key($this->_scheduledStructure->getStructure()));
         };
@@ -465,7 +451,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
                     break;
 
                 case Element::TYPE_BLOCK:
-                    $this->_initServiceCalls($node);
                     $this->_scheduleStructure($node, $parent);
                     $this->_readStructure($node);
                     break;
@@ -507,32 +492,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
                     break;
             }
         }
-    }
-
-    /**
-     * Grab information about data service from the node
-     *
-     * @param \Magento\View\Layout\Element $node
-     * @return \Magento\Core\Model\Layout
-     */
-    protected function _initServiceCalls($node)
-    {
-        if (!$dataServices = $node->xpath('data')) {
-            return $this;
-        }
-        $nodeName = $node->getAttribute('name');
-        foreach ($dataServices as $dataServiceNode) {
-            $dataServiceName = $dataServiceNode->getAttribute('service_call');
-            if (isset($this->_serviceCalls[$dataServiceName])) {
-                $this->_serviceCalls[$dataServiceName]['namespaces'][$nodeName] =
-                    $dataServiceNode->getAttribute('alias');
-            } else {
-                $this->_serviceCalls[$dataServiceName] = array(
-                    'namespaces' => array($nodeName => $dataServiceNode->getAttribute('alias'))
-                );
-            }
-        }
-        return $this;
     }
 
     /**
@@ -866,16 +825,12 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         $className = (string)$node['class'];
 
         $arguments = $this->_processArguments($args);
-        $dictionary = $this->_dataServiceGraph->getByNamespace((string)$node['name']);
 
         $block = $this->_createBlock($className, $elementName,
             array('data' => $arguments));
 
         if (!empty($node['template'])) {
             $templateFileName = (string)$node['template'];
-            if ($block instanceof \Magento\View\Element\Template) {
-                $block->assign($dictionary);
-            }
             $block->setTemplate($templateFileName);
         }
 
@@ -888,11 +843,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         }
 
         return $block;
-    }
-
-    public function getServiceCalls()
-    {
-        return $this->_serviceCalls;
     }
 
     /**
@@ -1562,12 +1512,11 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * @param $dynamicType
      * @param $type
      * @param $template
-     * @param string $dataServiceName
      * @param array $data
      * @return $this
      */
     public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template,
-        $dataServiceName = '', $data = array()
+        $data = array()
     ) {
         if (!isset($namespace)) {
             $this->_renderers[$namespace] = array();
@@ -1578,7 +1527,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         $this->_renderers[$namespace][$staticType][$dynamicType] = array(
             'type' => $type,
             'template' => $template,
-            'dataServiceName' => $dataServiceName,
             'data' => $data
         );
         return $this;
@@ -1614,9 +1562,6 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     {
         if ($options = $this->getRendererOptions($namespace, $staticType, $dynamicType)) {
             $dictionary = array();
-            if (!empty($options['dataServiceName'])) {
-                $dictionary = $this->_dataServiceGraph->get($options['dataServiceName']);
-            }
             /** @var $block \Magento\View\Element\Template */
             $block = $this->createBlock($options['type'], '')
                 ->setData($data)
@@ -1624,7 +1569,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
                 ->setTemplate($options['template'])
                 ->assign($data);
 
-            echo $block->toHtml();
+            echo $this->_renderBlock($block->getNameInLayout());
         }
     }
 

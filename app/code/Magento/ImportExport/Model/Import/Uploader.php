@@ -67,7 +67,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
         \Magento\Core\Helper\File\Storage $coreFileStorage,
         \Magento\Image\AdapterFactory $imageFactory,
         \Magento\Core\Model\File\Validator\NotProtectedExtension $validator,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $filePath = null
     ) {
         if (!is_null($filePath)) {
@@ -77,7 +77,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
     }
 
     /**

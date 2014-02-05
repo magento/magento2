@@ -29,6 +29,10 @@ class Placeholder implements \Magento\Phrase\RendererInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @param string $text
+     * @param array $arguments
+     * @return string
      */
     public function render($text, array $arguments)
     {

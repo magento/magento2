@@ -54,28 +54,36 @@ class Info extends \Magento\Object
     protected $_shipmentFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\TrackFactory
+     * @var \Magento\Shipping\Model\Order\TrackFactory
      */
     protected $_trackFactory;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory
+     */
+    protected $_trackCollectionFactory;
 
     /**
      * @param \Magento\Shipping\Helper\Data $shippingData
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
-     * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+     * @param \Magento\Shipping\Model\Order\TrackFactory $trackFactory
+     * @param \Magento\Shipping\Model\Resource\Order\Track\CollectionFactory $trackCollectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Shipping\Helper\Data $shippingData,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
-        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
+        \Magento\Shipping\Model\Order\TrackFactory $trackFactory,
+        \Magento\Shipping\Model\Resource\Order\Track\CollectionFactory $trackCollectionFactory,
         array $data = array()
     ) {
         $this->_shippingData = $shippingData;
         $this->_orderFactory = $orderFactory;
         $this->_shipmentFactory = $shipmentFactory;
         $this->_trackFactory = $trackFactory;
+        $this->_trackCollectionFactory = $trackCollectionFactory;
         parent::__construct($data);
     }
 
@@ -162,7 +170,7 @@ class Info extends \Magento\Object
             $shipments = $order->getShipmentsCollection();
             foreach ($shipments as $shipment){
                 $increment_id = $shipment->getIncrementId();
-                $tracks = $shipment->getTracksCollection();
+                $tracks = $this->_getTracksCollection($shipment);
 
                 $trackingInfos=array();
                 foreach ($tracks as $track){
@@ -186,7 +194,7 @@ class Info extends \Magento\Object
         $shipment = $this->_initShipment();
         if ($shipment) {
             $increment_id = $shipment->getIncrementId();
-            $tracks = $shipment->getTracksCollection();
+            $tracks = $this->_getTracksCollection($shipment);
 
             $trackingInfos=array();
             foreach ($tracks as $track){
@@ -206,11 +214,27 @@ class Info extends \Magento\Object
      */
     public function getTrackingInfoByTrackId()
     {
-        /** @var \Magento\Sales\Model\Order\Shipment\Track $track */
+        /** @var \Magento\Shipping\Model\Order\Track $track */
         $track = $this->_trackFactory->create()->load($this->getTrackId());
         if ($track->getId() && $this->getProtectCode() == $track->getProtectCode()) {
             $this->_trackingInfo = array(array($track->getNumberDetail()));
         }
         return $this->_trackingInfo;
+    }
+
+    /**
+     * @param $shipment \Magento\Sales\Model\Order\Shipment
+     * @return \Magento\Shipping\Model\Resource\Order\Track\Collection
+     */
+    protected function _getTracksCollection(\Magento\Sales\Model\Order\Shipment $shipment)
+    {
+        $tracks = $this->_trackCollectionFactory->create()->setShipmentFilter($shipment->getId());
+
+        if ($shipment->getId()) {
+            foreach ($tracks as $track) {
+                $track->setShipment($shipment);
+            }
+        }
+        return $tracks;
     }
 }

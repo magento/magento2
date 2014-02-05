@@ -68,11 +68,11 @@ class AbstractTest
             'data' => array(
                 'attribute_code' => 'date',
                 'backend_type' => 'datetime',
-                'frontend_input' => 'date',
+                'front_end_input' => 'date',
                 'frontend_label' => 'Date',
             )
         );
-        $dateAttribute = $objectManager->create('Magento\Customer\Model\Attribute', $arguments);
+        $dateAttribute = $objectManager->create('\Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', $arguments);
         $attributes = array('date' => $dateAttribute);
         $method->invoke($block, $attributes, $fieldset);
 

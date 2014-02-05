@@ -129,10 +129,11 @@ class Category extends \Magento\Data\Form\Element\Multiselect
         $button = $this->_layout
             ->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
-                'id'        => 'add_category_button',
-                'label'     => $newCategoryCaption,
-                'title'     => $newCategoryCaption,
-                'onclick'   => 'jQuery("#new-category").dialog("open")'
+                'id' => 'add_category_button',
+                'label' => $newCategoryCaption,
+                'title' => $newCategoryCaption,
+                'onclick' => 'jQuery("#new-category").dialog("open")',
+                'disabled' => $this->getDisabled(),
             ));
         $return = <<<HTML
     <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />

@@ -44,29 +44,7 @@ class DirectoryList
      *
      * @var array
      */
-    protected $directories = array(
-        Filesystem::ROOT           => array('path' => ''),
-        Filesystem::APP            => array('path' => 'app'),
-        Filesystem::MODULES        => array('path' => 'app/code'),
-        Filesystem::THEMES         => array('path' => 'app/design'),
-        Filesystem::CONFIG         => array('path' => 'app/etc'),
-        Filesystem::LIB            => array('path' => 'lib'),
-        Filesystem::VAR_DIR        => array('path' => 'var'),
-        Filesystem::TMP            => array('path' => 'var/tmp'),
-        Filesystem::CACHE          => array('path' => 'var/cache'),
-        Filesystem::LOG            => array('path' => 'var/log'),
-        Filesystem::SESSION        => array('path' => 'var/session'),
-        Filesystem::DI             => array('path' => 'var/di'),
-        Filesystem::GENERATION     => array('path' => 'var/generation'),
-        Filesystem::HTTP           => array('path' => null),
-        Filesystem::PUB            => array('path' => 'pub'),
-        Filesystem::PUB_LIB        => array('path' => 'pub/lib'),
-        Filesystem::MEDIA          => array('path' => 'pub/media'),
-        Filesystem::UPLOAD         => array('path' => 'pub/media/upload'),
-        Filesystem::STATIC_VIEW    => array('path' => 'pub/static'),
-        Filesystem::PUB_VIEW_CACHE => array('path' => 'pub/cache'),
-        Filesystem::LOCALE         => array('path' => '')
-    );
+    protected $directories = array();
 
     /**
      * @var array
@@ -81,48 +59,46 @@ class DirectoryList
     {
         $this->root = str_replace('\\', '/', $root);
 
-        foreach ($this->directories as $code => $configuration) {
-            if (!$this->isAbsolute($configuration['path'])) {
-                $this->directories[$code]['path'] = $this->makeAbsolute($configuration['path']);
+        foreach ($this->directories as $code => $directoryConfig) {
+            if (!$this->isAbsolute($directoryConfig['path'])) {
+                $this->directories[$code]['path'] = $this->makeAbsolute($directoryConfig['path']);
             }
         }
 
-        foreach ($directories as $code => $configuration) {
+        foreach ($directories as $code => $directoryConfig) {
             $baseConfiguration = isset($this->directories[$code]) ? $this->directories[$code] : array();
-            $this->directories[$code] = array_merge($baseConfiguration, $configuration);
+            $this->directories[$code] = array_merge($baseConfiguration, $directoryConfig);
 
-            if (isset($configuration['path'])) {
-                $this->setPath($code, $configuration['path']);
+            if (isset($directoryConfig['path'])) {
+                $this->setPath($code, $directoryConfig['path']);
             }
-            if (isset($configuration['uri'])) {
-                $this->setUri($code, $configuration['uri']);
+            if (isset($directoryConfig['uri'])) {
+                $this->setUri($code, $directoryConfig['uri']);
             }
         }
-
-        $this->directories[Filesystem::SYS_TMP] = array(
-            'path'              => sys_get_temp_dir(),
-            'read_only'         => false,
-            'allow_create_dirs' => true,
-            'permissions'       => 0777
-        );
     }
 
     /**
      * Add directory configuration
      *
      * @param string $code
-     * @param array $configuration
+     * @param array $directoryConfig
+     * @return void
+     * @throws \Magento\Filesystem\FilesystemException
      */
-    public function addDirectory($code, array $configuration)
+    public function addDirectory($code, array $directoryConfig)
     {
-        if (!isset($configuration['path'])) {
-            $configuration['path'] = null;
+        if (isset($this->directories[$code])) {
+            throw new \Magento\Filesystem\FilesystemException("Configuration for '{$code}' already defined");
         }
-        if (!$this->isAbsolute($configuration['path'])) {
-            $configuration['path'] = $this->makeAbsolute($configuration['path']);
+        if (!isset($directoryConfig['path'])) {
+            $directoryConfig['path'] = null;
+        }
+        if (!$this->isAbsolute($directoryConfig['path'])) {
+            $directoryConfig['path'] = $this->makeAbsolute($directoryConfig['path']);
         }
 
-        $this->directories[$code] = $configuration;
+        $this->directories[$code] = $directoryConfig;
     }
 
     /**
@@ -130,6 +106,7 @@ class DirectoryList
      *
      * @param string $wrapperCode
      * @param array $configuration
+     * @return void
      */
     public function addProtocol($wrapperCode, array $configuration)
     {
@@ -223,7 +200,7 @@ class DirectoryList
      * @param string $code One of self const
      * @return string|bool
      */
-    public function getDir($code = Filesystem::ROOT)
+    public function getDir($code)
     {
         return isset($this->directories[$code]['path']) ? $this->directories[$code]['path'] : false;
     }
@@ -236,8 +213,9 @@ class DirectoryList
      * Path must be usable as a fragment of a URL path.
      * For interoperability and security purposes, no uppercase or "upper directory" paths like "." or ".."
      *
-     * @param $code
-     * @param $uri
+     * @param string $code
+     * @param string $uri
+     * @return void
      * @throws \InvalidArgumentException
      */
     private function setUri($code, $uri)
@@ -255,6 +233,7 @@ class DirectoryList
      *
      * @param string $code
      * @param string $path
+     * @return void
      */
     private function setPath($code, $path)
     {

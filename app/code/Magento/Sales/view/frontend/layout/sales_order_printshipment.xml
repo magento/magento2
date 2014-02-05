@@ -24,9 +24,10 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <update handle="sales_order_print_shipment_renderers" />
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="sales.order.print.shipment" template="order/print/shipment.phtml">
-            <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/shipment/items/renderer/default.phtml"/>
+            <block class="Magento\View\Element\RendererList" name="sales.order.print.shipment.renderers" as="renderer.list"/>
         </block>
     </referenceContainer>
     <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>

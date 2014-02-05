@@ -35,6 +35,7 @@ class Validator implements ValidatorInterface
      * Add validator
      *
      * @param ValidatorInterface $validator
+     * @return void
      */
     public function add(ValidatorInterface $validator)
     {

@@ -26,8 +26,9 @@
 ?>
 <?php
 $count = $this->getItemCount();
+$wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
 ?>
-<?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+<?php if ($wishlistHelper->isAllow()) : ?>
     <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');?>
     <div class="block wishlist">
         <div class="title">
@@ -54,10 +55,18 @@ $count = $this->getItemCount();
                                 <?php echo $this->getPriceHtml($product, false, '-wishlist') ?>
                                 <div class="product actions">
                                     <?php if ($product->isSaleable() && $product->isVisibleInSiteVisibility()): ?>
-                                        <div class="primary"><a href="<?php echo $this->getItemAddToCartUrl($_item) ?>" class="action tocart"><span><?php echo __('Add to Cart') ?></span></a></div>
+                                        <?php if ($product->getTypeInstance()->hasRequiredOptions($product)): ?>
+                                            <div class="primary"><a href="<?php echo $this->getItemAddToCartUrl($product) ?>" class="action tocart"><span><?php echo __('Add to Cart') ?></span></a></div>
+                                        <?php else: ?>
+                                            <?php
+                                                $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                                $postData = $postDataHelper->getPostData($this->getItemAddToCartUrl($product), ['product' => $product->getEntityId()])
+                                            ?>
+                                            <div class="primary"><button type="button" class="action tocart" data-post='<?php echo $postData; ?>'><span><?php echo __('Add to Cart') ?></span></button></div>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                     <div class="secondary">
-                                        <a href="<?php echo $this->getItemRemoveUrl($_item) ?>" title="<?php echo __('Remove This Item') ?>" onclick="return confirm('<?php echo __('Are you sure you would like to remove this item from the wishlist?') ?>');" class="action delete">
+                                        <a href="#" data-post='<?php echo $this->getItemRemoveParams($_item) ?>' title="<?php echo __('Remove This Item') ?>" class="btn-remove action delete">
                                             <span><?php echo __('Remove This Item') ?></span>
                                         </a>
                                     </div>

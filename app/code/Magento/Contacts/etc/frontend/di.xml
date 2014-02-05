@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <contacts>/contacts/</contacts>
-            </value>
+            <array>
+                <item key="contacts"><value>/contacts/</value></item>
+            </array>
         </param>
     </type>
 </config>

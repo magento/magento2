@@ -50,16 +50,16 @@
     </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <review_customer>/review/customer/</review_customer>
-            </value>
+            <array>
+                <item key="review_customer"><value>/review/customer/</value></item>
+            </array>
         </param>
     </type>
     <virtualType name="reviewProductInitSession" type="Magento\Core\App\Action\Plugin\Session">
         <param name="cookieCheckActions">
-            <value>
-                <productReviewPost>post</productReviewPost>
-            </value>
+            <array>
+                <item key="productReviewPost"><value>post</value></item>
+            </array>
         </param>
     </virtualType>
 </config>

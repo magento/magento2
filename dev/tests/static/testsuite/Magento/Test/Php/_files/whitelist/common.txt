@@ -16,7 +16,6 @@ app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Category.php
 app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Weight.php
 app/code/Magento/Catalog/Block/Adminhtml/Product/Options/Ajax.php
 app/code/Magento/Catalog/Block/Product/Configurable
-app/code/Magento/Catalog/Block/Product/Grouped
 app/code/Magento/Catalog/Block/Product/TemplateSelector.php
 app/code/Magento/Catalog/Block/Product/View/BaseImage.php
 app/code/Magento/Catalog/Block/Product/View/Gallery.php
@@ -39,7 +38,6 @@ app/code/Magento/Cms/Controller/Router.php
 app/code/Magento/Cms/Model/Template/FilterProvider.php
 app/code/Magento/Core/data
 app/code/Magento/Core/Model/Config
-app/code/Magento/Core/Model/DataService
 app/code/Magento/Core/Model/Design.php
 app/code/Magento/Core/Model/Layout/Factory.php
 app/code/Magento/Core/Model/Layout/Update.php
@@ -53,7 +51,6 @@ app/code/Magento/Core/Model/AbstractShell.php
 app/code/Magento/Core/Model/Theme
 app/code/Magento/Core/Model/Theme.php
 app/code/Magento/Core/Model/Url/SecurityInfo.php
-app/code/Magento/Core/Model/Url/SecurityInfoInterface.php
 app/code/Magento/Core/sql/core_setup/upgrade-1.6.0.3-1.6.0.4.php
 app/code/Magento/Cron/Model/Config/Converter
 app/code/Magento/Cron/Model/Config/Reader
@@ -97,7 +94,6 @@ app/code/Magento/Log/Model/Resource/Shell.php
 app/code/Magento/Log/Model/Shell.php
 app/code/Magento/Log/Model/Shell
 app/code/Magento/Theme/Block/Html/Head
-app/code/Magento/PageCache/Model/CacheControlFactory.php
 app/code/Magento/ProductAlert/Block/Product/View
 app/code/Magento/Reports/Block/Adminhtml/Customer
 app/code/Magento/Reports/Block/Adminhtml/Product
@@ -116,9 +112,16 @@ app/code/Magento/Sales/Model/Order/Pdf/Config
 app/code/Magento/Sales/Model/Order/Pdf/Config.php
 app/code/Magento/Sales/Model/Order/Pdf/Total/Factory.php
 app/code/Magento/Sales/Model/Observer
+app/code/Magento/Sales/Model/Quote/Address/*Interface.php
 app/code/Magento/SalesRule/Model/Plugin
+app/code/Magento/Shipping/Block/Adminhtml/Order/Tracking/Invoice.php
+app/code/Magento/Shipping/Model/Observer.php
+app/code/Magento/Shipping/Model/Order/Track.php
+app/code/Magento/Shipping/Model/CarrierFactory.php
+app/code/Magento/Shipping/Model/Resource/Order
 app/code/Magento/Theme
 app/code/Magento/Webapi
+app/code/Magento/GroupedProduct
 app/code/Magento/Wishlist/Block/Link.php
 dev/shell
 dev/tests/integration
@@ -135,4 +138,5 @@ lib/Magento/Stdlib/DateTime.php
 lib/Magento/Object.php
 lib/Magento/App
 lib/Magento/ObjectManager
+lib/Magento/Url/SecurityInfoInterface.php
 lib/Magento/View

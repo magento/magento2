@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
+
 /**
  * Adminhtml review grid item renderer for item type
  *
@@ -31,11 +33,11 @@
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
-
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
 

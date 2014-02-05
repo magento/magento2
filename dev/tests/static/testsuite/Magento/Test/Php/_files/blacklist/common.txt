@@ -14,6 +14,7 @@ app/code/Magento/Integration/view
 app/code/Magento/Theme/view
 app/code/Magento/User/view
 app/code/Magento/Webapi/view
+app/code/Magento/GroupedProduct/view
 dev/tests/integration/framework/Magento/TestFramework/Db/Mysql.php
 dev/tests/integration/framework/Magento/TestFramework/Db/Adapter/Mysql.php
 dev/tests/integration/framework/Magento/TestFramework/Db/ConnectionAdapter.php

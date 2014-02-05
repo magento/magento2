@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Review\Block\Customer;
 
 /**
  * Customer Reviews list block
@@ -32,8 +32,6 @@
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block\Customer;
-
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
     /**
@@ -64,8 +62,12 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     ) {
         $this->_collectionFactory = $collectionFactory;
         parent::__construct($context, $customerSession, $subscriberFactory, $data);
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return $this
+     */
     protected function _initCollection()
     {
         $this->_collection = $this->_collectionFactory->create();
@@ -156,7 +158,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Format date in short format
      *
-     * @param $date
+     * @param string $date
      * @return string
      */
     public function dateFormat($date)

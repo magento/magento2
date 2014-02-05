@@ -84,6 +84,9 @@ class Weight extends \Magento\Data\Form\Element\Text
         if (!$this->getForm()->getDataObject()->getTypeInstance()->hasWeight()) {
             $this->_virtual->setChecked('checked');
         }
+        if ($this->getDisabled()) {
+            $this->_virtual->setDisabled($this->getDisabled());
+        }
         return '<div class="fields-group-2"><div class="field"><div class="addon"><div class="control">'
             . parent::getElementHtml()
             . '<label class="addafter" for="'

@@ -25,10 +25,12 @@
  */
 namespace Magento\Webapi\Controller;
 
-use Magento\Webapi\Exception as WebapiException;
 use Magento\Service\AuthorizationException;
+use Magento\Webapi\Exception as WebapiException;
 
 /**
+ * TODO: Consider warnings suppression removal
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Soap implements \Magento\App\FrontControllerInterface
@@ -73,7 +75,7 @@ class Soap implements \Magento\App\FrontControllerInterface
      * @param \Magento\Webapi\Model\Soap\Server $soapServer
      * @param \Magento\Webapi\Controller\ErrorProcessor $errorProcessor
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\AppInterface $application
+     * @param \Magento\AppInterface $application
      * @param \Magento\Oauth\OauthInterface $oauthService
      */
     public function __construct(
@@ -83,7 +85,7 @@ class Soap implements \Magento\App\FrontControllerInterface
         \Magento\Webapi\Model\Soap\Server $soapServer,
         \Magento\Webapi\Controller\ErrorProcessor $errorProcessor,
         \Magento\App\State $appState,
-        \Magento\Core\Model\AppInterface $application,
+        \Magento\AppInterface $application,
         \Magento\Oauth\OauthInterface $oauthService
     ) {
         $this->_request = $request;
@@ -94,16 +96,6 @@ class Soap implements \Magento\App\FrontControllerInterface
         $this->_appState = $appState;
         $this->_application = $application;
         $this->_oauthService = $oauthService;
-    }
-
-    /**
-     * Initialize front controller
-     *
-     * @return \Magento\Webapi\Controller\Soap
-     */
-    public function init()
-    {
-        return $this;
     }
 
     /**
@@ -125,13 +117,12 @@ class Soap implements \Magento\App\FrontControllerInterface
                     $this->_soapServer->generateUri()
                 );
                 $this->_setResponseContentType(self::CONTENT_TYPE_WSDL_REQUEST);
+                $this->_setResponseBody($responseBody);
             } else {
                 $consumerId = $this->_oauthService->validateAccessToken($this->_getAccessToken());
                 $this->_request->setConsumerId($consumerId);
-                $responseBody = $this->_soapServer->handle();
-                $this->_setResponseContentType(self::CONTENT_TYPE_SOAP_CALL);
+                $this->_soapServer->handle();
             }
-            $this->_setResponseBody($responseBody);
         } catch (\Exception $e) {
             $this->_prepareErrorResponse($e);
         }

@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\CatalogRule\Model\Rule">
         <param name="relatedCacheTypes">
-            <value>
-                <blockCache>block_html</blockCache>
-            </value>
+            <array>
+                <item key="blockCache"><value>block_html</value></item>
+            </array>
         </param>
     </type>
 </config>

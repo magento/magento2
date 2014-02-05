@@ -57,6 +57,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Process validate payment data action
      *
+     * @return void
      */
     public function validatePaymentDataAction()
     {
@@ -82,6 +83,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Process autentication start action
      *
+     * @return void
      */
     public function authenticationStartAction()
     {
@@ -95,6 +97,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Process autentication complete action
      *
+     * @return void
      */
     public function authenticationCompleteAction()
     {

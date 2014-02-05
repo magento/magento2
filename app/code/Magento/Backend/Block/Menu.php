@@ -49,7 +49,7 @@ class Menu extends \Magento\Backend\Block\Template
     /**
      * Backend URL instance
      *
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
@@ -77,7 +77,7 @@ class Menu extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
@@ -85,7 +85,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Url $url,
+        \Magento\Backend\Model\UrlInterface $url,
         \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\Model\Menu\Config $menuConfig,
@@ -238,7 +238,7 @@ class Menu extends \Magento\Backend\Block\Template
     protected function _afterToHtml($html)
     {
         $html = preg_replace_callback(
-            '#' . \Magento\Backend\Model\Url::SECRET_KEY_PARAM_NAME . '/\$([^\/].*)/([^\/].*)/([^\$].*)\$#U',
+            '#' . \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/\$([^\/].*)/([^\/].*)/([^\$].*)\$#U',
             array($this, '_callbackSecretKey'),
             $html
         );
@@ -254,7 +254,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _callbackSecretKey($match)
     {
-        return \Magento\Backend\Model\Url::SECRET_KEY_PARAM_NAME . '/'
+        return \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/'
             . $this->_url->getSecretKey($match[1], $match[2], $match[3]);
     }
 

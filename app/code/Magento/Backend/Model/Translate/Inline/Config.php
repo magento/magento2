@@ -52,6 +52,6 @@ class Config implements \Magento\Core\Model\Translate\Inline\ConfigInterface
      */
     public function isActive($store = null)
     {
-        return $this->_config->getFlag('dev/translate_inline/active_admin');
+        return $this->_config->isSetFlag('dev/translate_inline/active_admin');
     }
 }

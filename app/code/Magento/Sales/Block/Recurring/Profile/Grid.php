@@ -63,7 +63,7 @@ class Grid extends \Magento\Sales\Block\Recurring\Profiles
         $this->_recurringProfile = $profile;
         $this->_registry = $registry;
         parent::__construct($context, $data);
-
+        $this->_isScopePrivate = true;
     }
 
     /**

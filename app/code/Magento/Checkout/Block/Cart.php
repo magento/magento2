@@ -66,6 +66,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->_cartHelper = $cartHelper;
         $this->_catalogUrlBuilder = $catalogUrlBuilder;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

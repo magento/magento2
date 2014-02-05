@@ -234,7 +234,6 @@
         <xs:complexType>
             <xs:simpleContent>
                 <xs:extension base="xs:string">
-                    <xs:attribute name="service_call" type="xs:string" use="required" />
                     <xs:attribute name="idField" type="xs:string" use="optional" />
                     <xs:attribute name="labelField" type="xs:string" use="optional" />
                     <xs:attribute name="includeEmptyValueOption" type="xs:boolean" use="optional" />

@@ -24,7 +24,7 @@
 
 namespace Magento\Downloadable\Helper;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\Core\Exception as CoreException;
 
 /**
@@ -123,7 +123,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
     protected $_app;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -139,7 +139,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
@@ -147,7 +147,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_coreData = $coreData;
         $this->_downloadableFile = $downloadableFile;
@@ -175,7 +175,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
             if ($this->_linkType == self::LINK_TYPE_URL) {
                 $this->_handle = $this->_filesystem->getRemoteResource($this->_resourceFile);
             } elseif ($this->_linkType == self::LINK_TYPE_FILE) {
-                $this->_workingDirectory = $this->_filesystem->getDirectoryRead(Filesystem::MEDIA);
+                $this->_workingDirectory = $this->_filesystem->getDirectoryRead(Filesystem::MEDIA_DIR);
                 $fileExists = $this->_downloadableFile->ensureFileInFilesystem($this->_resourceFile);
                 if ($fileExists) {
                     $this->_handle = $this->_workingDirectory->openFile($this->_resourceFile);

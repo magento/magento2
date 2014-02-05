@@ -172,6 +172,7 @@ class Toolbar extends \Magento\View\Element\Template
         $this->_catalogSession = $catalogSession;
         $this->_catalogConfig = $catalogConfig;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

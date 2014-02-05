@@ -62,7 +62,7 @@ class Standard extends \Magento\Core\App\Router\Base
      * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
      * @param \Magento\App\RouterListInterface $routerList
      * @param \Magento\ObjectManager $objectManager
@@ -79,7 +79,7 @@ class Standard extends \Magento\Core\App\Router\Base
         \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
         \Magento\App\RouterListInterface $routerList,
         \Magento\ObjectManager $objectManager,

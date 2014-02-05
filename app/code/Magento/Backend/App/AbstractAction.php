@@ -78,7 +78,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
     protected $_auth;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -375,7 +375,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
             return true;
         }
 
-        $secretKey = $this->getRequest()->getParam(\Magento\Backend\Model\Url::SECRET_KEY_PARAM_NAME, null);
+        $secretKey = $this->getRequest()->getParam(\Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME, null);
         if (!$secretKey || $secretKey != $this->_backendUrl->getSecretKey()) {
             return false;
         }

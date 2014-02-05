@@ -135,11 +135,11 @@ class Observer
                     //if success, then set order to session and add new fields
                     $this->_session->addCheckoutOrderIncrementId($order->getIncrementId());
                     $this->_session->setLastOrderIncrementId($order->getIncrementId());
-                    $requestToPaygate = $payment->getMethodInstance()->generateRequestFromOrder($order);
-                    $requestToPaygate->setControllerActionName($request->getControllerName());
-                    $requestToPaygate->setIsSecure((string)$this->_storeManager->getStore()->isCurrentlySecure());
+                    $requestToAuthorizenet = $payment->getMethodInstance()->generateRequestFromOrder($order);
+                    $requestToAuthorizenet->setControllerActionName($request->getControllerName());
+                    $requestToAuthorizenet->setIsSecure((string)$this->_storeManager->getStore()->isCurrentlySecure());
 
-                    $result['directpost'] = array('fields' => $requestToPaygate->getData());
+                    $result['directpost'] = array('fields' => $requestToAuthorizenet->getData());
 
                     $response->clearHeader('Location');
                     $response->setBody($this->_coreData->jsonEncode($result));

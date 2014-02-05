@@ -42,19 +42,19 @@ abstract class AbstractFile
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\View\Design\Theme\Customization\Path $customizationPath
      * @param \Magento\View\Design\Theme\FileFactory $fileFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\View\Design\Theme\Customization\Path $customizationPath,
         \Magento\View\Design\Theme\FileFactory $fileFactory,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_customizationPath = $customizationPath;
         $this->_fileFactory = $fileFactory;
@@ -207,6 +207,6 @@ abstract class AbstractFile
      */
     protected function getDirectoryWrite()
     {
-        return $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        return $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
     }
 }

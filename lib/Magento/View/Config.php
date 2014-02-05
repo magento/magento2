@@ -24,13 +24,11 @@
 
 namespace Magento\View;
 
+use Magento\Filesystem\Directory\ReadInterface;
+
 /**
  * Handles theme view.xml files
  */
-namespace Magento\View;
-
-use Magento\Filesystem\Directory\ReadInterface;
-
 class Config implements \Magento\View\ConfigInterface
 {
     /**
@@ -76,7 +74,7 @@ class Config implements \Magento\View\ConfigInterface
 
     /**
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param Service $viewService
      * @param FileSystem $viewFileSystem
      * @param \Magento\Config\FileIteratorFactory $fileIteratorFactory
@@ -84,14 +82,14 @@ class Config implements \Magento\View\ConfigInterface
      */
     public function __construct(
         \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\View\Service $viewService,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\Config\FileIteratorFactory $fileIteratorFactory,
         $filename = self::CONFIG_FILE_NAME
     ) {
         $this->moduleReader = $moduleReader;
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $this->viewService = $viewService;
         $this->viewFileSystem = $viewFileSystem;
         $this->filename = $filename;

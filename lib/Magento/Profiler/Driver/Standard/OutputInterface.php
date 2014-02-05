@@ -30,7 +30,7 @@ interface OutputInterface
     /**
      * Display profiling results in appropriate format
      *
-     * @param \Magento\Profiler\Driver\Standard\Stat $stat
+     * @param Stat $stat
      */
-    public function display(\Magento\Profiler\Driver\Standard\Stat $stat);
+    public function display(Stat $stat);
 }

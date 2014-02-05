@@ -42,9 +42,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <weee_setup>Magento\Sales\Model\Resource\Setup</weee_setup>
-            </value>
+            <array>
+                <item key="weee_setup"><value>Magento\Sales\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

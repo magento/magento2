@@ -43,7 +43,7 @@ class DispatchExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock('\Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $this->_filesystemMock = $this->getMock('\Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
         $this->_model = new DispatchExceptionHandler(
             $this->_storeManagerMock,
             $this->_filesystemMock

@@ -48,7 +48,7 @@ class Controller extends \Magento\TestFramework\TestCase\AbstractController
     {
         parent::setUp();
 
-        $this->_objectManager->get('Magento\Backend\Model\Url')->turnOffSecretKey();
+        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
 
         $this->_auth = $this->_objectManager->get('Magento\Backend\Model\Auth');
         $this->_session = $this->_auth->getAuthStorage();
@@ -74,7 +74,7 @@ class Controller extends \Magento\TestFramework\TestCase\AbstractController
         $this->_auth->logout();
         $this->_auth = null;
         $this->_session = null;
-        $this->_objectManager->get('Magento\Backend\Model\Url')->turnOnSecretKey();
+        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOnSecretKey();
         parent::tearDown();
     }
 

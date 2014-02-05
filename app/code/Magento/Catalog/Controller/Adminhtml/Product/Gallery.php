@@ -46,7 +46,7 @@ class Gallery extends \Magento\Backend\App\Action
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             /** @var \Magento\Filesystem\Directory\Read $mediaDirectory */
-            $mediaDirectory = $this->_objectManager->get('Magento\Filesystem')->getDirectoryRead(\Magento\Filesystem::MEDIA);
+            $mediaDirectory = $this->_objectManager->get('Magento\App\Filesystem')->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
             $config = $this->_objectManager->get('Magento\Catalog\Model\Product\Media\Config');
             $result = $uploader->save($mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath()));
 

@@ -37,16 +37,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_frontResolverMock;
 
     protected function setUp()
     {
-        $this->_configMock = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false, false);
         $this->_frontResolverMock
             = $this->getMock('\Magento\Backend\App\Area\FrontNameResolver', array(), array(), '', false);
         $this->_helper = new \Magento\Backend\Helper\Data(

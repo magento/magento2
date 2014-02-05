@@ -42,6 +42,8 @@ class Config implements ConfigInterface
 
     /**
      * {inheritdoc}
+     *
+     * @return array
      */
     public function getTypes()
     {
@@ -50,6 +52,9 @@ class Config implements ConfigInterface
 
     /**
      * {inheritdoc}
+     *
+     * @param string $type
+     * @return array
      */
     public function getType($type)
     {

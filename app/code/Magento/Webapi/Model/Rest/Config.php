@@ -109,6 +109,8 @@ class Config
     }
 
     /**
+     * TODO: Refactor $this->_config->getServices() to return array with baseUrl as the key since its unique and
+     *       needs to be used directly instead of looping each key
      * Generate the list of available REST routes. Current HTTP method is taken into account.
      *
      * @param \Magento\Webapi\Controller\Rest\Request $request

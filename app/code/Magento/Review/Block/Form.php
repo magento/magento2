@@ -33,6 +33,9 @@
  */
 namespace Magento\Review\Block;
 
+use Magento\Catalog\Model\Product;
+use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
+
 class Form extends \Magento\View\Element\Template
 {
     /**
@@ -102,6 +105,7 @@ class Form extends \Magento\View\Element\Template
         $this->_ratingFactory = $ratingFactory;
         $this->messageManager = $messageManager;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     protected function _construct()
@@ -138,18 +142,27 @@ class Form extends \Magento\View\Element\Template
             ->assign('messages', $this->messageManager->getMessages(true));
     }
 
+    /**
+     * @return Product
+     */
     public function getProductInfo()
     {
         $product = $this->_productFactory->create();
         return $product->load($this->getRequest()->getParam('id'));
     }
 
+    /**
+     * @return string
+     */
     public function getAction()
     {
         $productId = $this->getRequest()->getParam('id', false);
         return $this->getUrl('review/product/post', array('id' => $productId));
     }
 
+    /**
+     * @return RatingCollection
+     */
     public function getRatings()
     {
         return $this->_ratingFactory->create()

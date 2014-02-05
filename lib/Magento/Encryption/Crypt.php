@@ -99,6 +99,8 @@ class Crypt
 
     /**
      * Destructor frees allocated resources
+     *
+     * @return void
      */
     public function __destruct()
     {

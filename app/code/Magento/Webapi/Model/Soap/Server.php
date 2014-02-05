@@ -61,6 +61,9 @@ class Server
     /** @var \Magento\Webapi\Model\Soap\Server\Factory */
     protected $_soapServerFactory;
 
+    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
+    protected $_typeProcessor;
+
     /**
      * Initialize dependencies, initialize WSDL cache.
      *
@@ -70,6 +73,7 @@ class Server
      * @param \Magento\DomDocument\Factory $domDocumentFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
+     * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
      * @throws \Magento\Webapi\Exception
      */
     public function __construct(
@@ -78,7 +82,8 @@ class Server
         \Magento\Webapi\Controller\Soap\Request $request,
         \Magento\DomDocument\Factory $domDocumentFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
+        \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory,
+        \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
     ) {
         if (!extension_loaded('soap')) {
             throw new \Magento\Webapi\Exception('SOAP extension is not loaded.', 0,
@@ -90,6 +95,7 @@ class Server
         $this->_domDocumentFactory = $domDocumentFactory;
         $this->_storeManager = $storeManager;
         $this->_soapServerFactory = $soapServerFactory;
+        $this->_typeProcessor = $typeProcessor;
         /** Enable or disable SOAP extension WSDL cache depending on Magento configuration. */
         $wsdlCacheEnabled = (bool)$storeManager->getStore()->getConfig(self::CONFIG_PATH_WSDL_CACHE_ENABLED);
         if ($wsdlCacheEnabled) {
@@ -100,9 +106,7 @@ class Server
     }
 
     /**
-     * Handle SOAP request.
-     *
-     * @return string
+     * Handle SOAP request. Response is sent by SOAP server.
      */
     public function handle()
     {
@@ -112,8 +116,8 @@ class Server
             'encoding' => $this->getApiCharset(),
             'soap_version' => SOAP_1_2
         );
-        $soap = $this->_soapServerFactory->create($this->generateUri(true), $options);
-        return $soap->handle($rawRequestBody);
+        $soapServer = $this->_soapServerFactory->create($this->generateUri(true), $options);
+        $soapServer->handle($rawRequestBody);
     }
 
     /**

@@ -76,10 +76,10 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
             ->method('openFile')
             ->with($filePath)
             ->will($this->returnValue($file));
-        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::PUB)
+            ->with(\Magento\App\Filesystem::PUB_DIR)
             ->will($this->returnValue($directory));
 
         $model = new Synchronization($storageFactoryMock, $filesystem);

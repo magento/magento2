@@ -155,7 +155,7 @@ class View implements ViewInterface
     /**
      * Add layout handle by full controller action name
      *
-     * @return \Magento\App\ActionInterface
+     * @return $this
      */
     public function addActionLayoutHandles()
     {
@@ -168,12 +168,13 @@ class View implements ViewInterface
     /**
      * Add layout updates handles associated with the action page
      *
-     * @param array $parameters page parameters
+     * @param array|null $parameters page parameters
+     * @param string|null $defaultHandle
      * @return bool
      */
-    public function addPageLayoutHandles(array $parameters = array())
+    public function addPageLayoutHandles(array $parameters = array(), $defaultHandle = null)
     {
-        $handle = $this->getDefaultLayoutHandle();
+        $handle = $defaultHandle ? $defaultHandle : $this->getDefaultLayoutHandle();
         $pageHandles = array($handle);
         foreach ($parameters as $key => $value) {
             $pageHandles[] = $handle . '_' . $key . '_' . $value;
@@ -185,7 +186,7 @@ class View implements ViewInterface
     /**
      * Load layout updates
      *
-     * @return \Magento\App\View
+     * @return $this
      */
     public function loadLayoutUpdates()
     {
@@ -209,7 +210,7 @@ class View implements ViewInterface
     /**
      * Generate layout xml
      *
-     * @return \Magento\App\View
+     * @return $this
      */
     public function generateLayoutXml()
     {
@@ -226,7 +227,7 @@ class View implements ViewInterface
     /**
      * Generate layout blocks
      *
-     * @return \Magento\App\View
+     * @return $this
      */
     public function generateLayoutBlocks()
     {
@@ -260,7 +261,7 @@ class View implements ViewInterface
      * Rendering layout
      *
      * @param   string $output
-     * @return  \Magento\App\View
+     * @return  $this
      */
     public function renderLayout($output = '')
     {
@@ -294,6 +295,7 @@ class View implements ViewInterface
      * Set isLayoutLoaded flag
      *
      * @param bool $value
+     * @return void
      */
     public function setIsLayoutLoaded($value)
     {

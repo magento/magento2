@@ -87,6 +87,10 @@ class Log extends \Magento\Core\Model\AbstractModel
         $this->_init('Magento\Log\Model\Resource\Log');
     }
 
+    /**
+     * Return log clean time in seconds
+     * @return null|string
+     */
     public function getLogCleanTime()
     {
         return $this->_coreStoreConfig->getConfig(self::XML_LOG_CLEAN_DAYS) * 60 * 60 * 24;

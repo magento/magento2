@@ -69,9 +69,10 @@ interface ViewInterface
      * Add layout updates handles associated with the action page
      *
      * @param array $parameters page parameters
+     * @param string $defaultHandle
      * @return bool
      */
-    public function addPageLayoutHandles(array $parameters = array());
+    public function addPageLayoutHandles(array $parameters = array(), $defaultHandle = null);
 
     /**
      * Generate layout blocks

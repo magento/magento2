@@ -45,7 +45,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected $_disallowedFilesMask = '/^package\.xml$/i';
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -58,13 +58,13 @@ class Collection extends \Magento\Data\Collection\Filesystem
      * Set base dir
      *
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Filesystem $filesystem)
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\App\Filesystem $filesystem)
     {
         parent::__construct($entityFactory);
         $this->filesystem = $filesystem;
-        $this->connectDirectory = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->connectDirectory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $this->connectDirectory->create('connect');
         $this->addTargetDir($this->connectDirectory->getAbsolutePath('connect'));
     }

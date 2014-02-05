@@ -40,7 +40,7 @@ class Http extends File
     protected $scheme = 'http';
 
     /**
-     * @param $path
+     * @param string $path
      * @return bool
      * @throws FilesystemException
      */
@@ -64,7 +64,6 @@ class Http extends File
      *
      * @param string $path
      * @return array
-     * @throws \Magento\Filesystem\FilesystemException
      */
     public function stat($path)
     {
@@ -103,7 +102,7 @@ class Http extends File
     {
         clearstatcache();
         $result = @file_get_contents($this->getScheme() . $path, $flags, $context);
-        if (!$result) {
+        if (false === $result) {
             throw new FilesystemException(
                 sprintf(
                     'Cannot read contents from file "%s" %s',
@@ -120,7 +119,7 @@ class Http extends File
      * @param string $path
      * @param string $content
      * @param string|null $mode
-     * @param string|null $context
+     * @param resource|null $context
      * @return int The number of bytes that were written
      * @throws FilesystemException
      */

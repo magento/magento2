@@ -147,10 +147,6 @@ $data = array(
         'code'          => 'relation'
     ),
     array(
-        'link_type_id'  => \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED,
-        'code'  => 'super'
-    ),
-    array(
         'link_type_id'  => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
         'code'  => 'up_sell'
     ),
@@ -172,16 +168,6 @@ $data = array(
         'link_type_id'                  => \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
         'product_link_attribute_code'   => 'position',
         'data_type'                     => 'int'
-    ),
-    array(
-        'link_type_id'                  => \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED,
-        'product_link_attribute_code'   => 'position',
-        'data_type'                     => 'int'
-    ),
-    array(
-        'link_type_id'                  => \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED,
-        'product_link_attribute_code'   => 'qty',
-        'data_type'                     => 'decimal'
     ),
     array(
         'link_type_id'                  => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,

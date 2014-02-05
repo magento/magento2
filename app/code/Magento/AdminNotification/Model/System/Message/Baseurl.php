@@ -32,7 +32,7 @@ class Baseurl
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -47,13 +47,13 @@ class Baseurl
     protected $_configValueFactory;
 
     /**
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Core\Model\Config\ValueFactory $configValueFactory
      */
     public function __construct(
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\UrlInterface $urlBuilder,
         \Magento\Core\Model\Config\ValueFactory $configValueFactory
@@ -91,7 +91,7 @@ class Baseurl
             $dataCollection = $this->_configValueFactory->create()->getCollection();
             $dataCollection->addValueFilter(\Magento\Core\Model\Store::BASE_URL_PLACEHOLDER);
 
-            /** @var $data \Magento\Core\Model\Config\Value */
+            /** @var $data \Magento\App\Config\ValueInterface */
             foreach ($dataCollection as $data) {
                 if ($data->getScope() == 'stores') {
                     $code = $this->_storeManager->getStore($data->getScopeId())->getCode();

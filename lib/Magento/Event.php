@@ -70,7 +70,7 @@ class Event extends \Magento\Object
      * Register an observer for the event
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Event
+     * @return $this
      */
     public function addObserver(\Magento\Event\Observer $observer)
     {
@@ -82,7 +82,7 @@ class Event extends \Magento\Object
      * Removes an observer by its name
      *
      * @param string $observerName
-     * @return \Magento\Event
+     * @return $this
      */
     public function removeObserverByName($observerName)
     {
@@ -93,7 +93,7 @@ class Event extends \Magento\Object
     /**
      * Dispatches the event to registered observers
      *
-     * @return \Magento\Event
+     * @return $this
      */
     public function dispatch()
     {
@@ -111,12 +111,19 @@ class Event extends \Magento\Object
         return isset($this->_data['name']) ? $this->_data['name'] : null;
     }
 
+    /**
+     * @param string $data
+     * @return $this
+     */
     public function setName($data)
     {
         $this->_data['name'] = $data;
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getBlock()
     {
         return $this->_getData('block');

@@ -26,7 +26,7 @@ namespace Magento\Directory\Model\Currency\Import\Source;
 class Service implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\Directory\Model\Currency\Import\Config
      */
     private $_importConfig;
 

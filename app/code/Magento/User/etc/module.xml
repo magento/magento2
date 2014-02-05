@@ -51,7 +51,6 @@
             <module name="Magento_ImportExport"/>
             <module name="Magento_Index"/>
             <module name="Magento_Integration"/>
-            <module name="Magento_PageCache"/>
             <module name="Magento_Payment"/>
             <module name="Magento_Paypal"/>
             <module name="Magento_Persistent"/>
@@ -65,6 +64,8 @@
             <module name="Magento_Tax"/>
             <module name="Magento_Widget"/>
             <module name="Magento_Wishlist"/>
+            <module name="Magento_Email"/>
+            <module name="Magento_Theme"/>
         </depends>
     </module>
 </config>

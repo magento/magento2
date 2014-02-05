@@ -61,8 +61,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         }
         $this->_testDir = realpath(__DIR__ . '/_files') . '/';
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
-        $this->_varDir = $filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/references/';
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
+        $this->_varDir = $filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/references/';
         mkdir($this->_varDir, 0777, true);
 
         $this->_formatter = new Formatter();

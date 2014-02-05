@@ -37,10 +37,10 @@
             <value>vde</value>
         </param>
         <param name="disabledCacheTypes">
-            <value>
-                <block_html>block_html</block_html>
-                <configType>config</configType>
-            </value>
+            <array>
+                <item key="block_html"><value>block_html</value></item>
+                <item key="configType"><value>config</value></item>
+            </array>
         </param>
     </type>
 </config>

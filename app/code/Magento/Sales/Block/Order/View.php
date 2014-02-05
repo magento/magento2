@@ -71,6 +71,7 @@ class View extends \Magento\View\Element\Template
         $this->_coreRegistry = $registry;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     protected function _prepareLayout()

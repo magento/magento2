@@ -36,7 +36,6 @@
             <Node2 type ="Magento\App\Action\Context">
                 <plugins>
                     <first><instance>Magento\Core\Model\Action\Plugin</instance></first>
-                    <second><instance>Custom_PageCache_Model_Action_Plugin</instance></second>
                 </plugins>
                 <parameters>
                     <layoutFactory>

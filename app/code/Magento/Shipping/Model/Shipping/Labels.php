@@ -27,6 +27,8 @@
 
 namespace Magento\Shipping\Model\Shipping;
 
+use \Magento\Sales\Model\Order\Shipment;
+
 /**
  * Shipping labels model
  */
@@ -46,18 +48,19 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Shipping\Model\Carrier\Factory $carrierFactory
+     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Math\Division $mathDivision
      * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Shipping\Model\Shipment\Request $request
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Shipping\Model\Carrier\Factory $carrierFactory,
+        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
@@ -82,37 +85,40 @@ class Labels extends \Magento\Shipping\Model\Shipping
     /**
      * Prepare and do request to shipment
      *
-     * @param \Magento\Sales\Model\Order\Shipment $orderShipment
+     * @param Shipment $orderShipment
      * @return \Magento\Object
      * @throws \Magento\Core\Exception
      */
-    public function requestToShipment(\Magento\Sales\Model\Order\Shipment $orderShipment)
+    public function requestToShipment(Shipment $orderShipment)
     {
         $admin = $this->_authSession->getUser();
         $order = $orderShipment->getOrder();
         $address = $order->getShippingAddress();
         $shippingMethod = $order->getShippingMethod(true);
         $shipmentStoreId = $orderShipment->getStoreId();
-        $shipmentCarrier = $order->getShippingCarrier();
+        $shipmentCarrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $baseCurrencyCode = $this->_storeManager->getStore($shipmentStoreId)->getBaseCurrencyCode();
         if (!$shipmentCarrier) {
             throw new \Magento\Core\Exception('Invalid carrier: ' . $shippingMethod->getCarrierCode());
         }
-        $shipperRegionCode = $this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_REGION_ID, $shipmentStoreId);
+        $shipperRegionCode = $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_REGION_ID, $shipmentStoreId);
         if (is_numeric($shipperRegionCode)) {
             $shipperRegionCode = $this->_regionFactory->create()->load($shipperRegionCode)->getCode();
         }
 
         $recipientRegionCode = $this->_regionFactory->create()->load($address->getRegionId())->getCode();
 
-        $originStreet1 = $this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_ADDRESS1, $shipmentStoreId);
-        $originStreet2 = $this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_ADDRESS2, $shipmentStoreId);
-        $storeInfo = new \Magento\Object((array)$this->_coreStoreConfig->getConfig('general/store_information', $shipmentStoreId));
+        $originStreet1 = $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_ADDRESS1, $shipmentStoreId);
+        $originStreet2 = $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_ADDRESS2, $shipmentStoreId);
+        $storeInfo = new \Magento\Object(
+            (array)$this->_coreStoreConfig->getConfig('general/store_information', $shipmentStoreId)
+        );
 
         if (!$admin->getFirstname() || !$admin->getLastname() || !$storeInfo->getName() || !$storeInfo->getPhone()
-            || !$originStreet1 || !$this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_CITY, $shipmentStoreId)
-            || !$shipperRegionCode || !$this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_ZIP, $shipmentStoreId)
-            || !$this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_COUNTRY_ID, $shipmentStoreId)
+            || !$originStreet1 || !$shipperRegionCode
+            || !$this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_CITY, $shipmentStoreId)
+            || !$this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_ZIP, $shipmentStoreId)
+            || !$this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_COUNTRY_ID, $shipmentStoreId)
         ) {
             throw new \Magento\Core\Exception(
                 __('We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.')
@@ -131,10 +137,16 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $request->setShipperAddressStreet(trim($originStreet1 . ' ' . $originStreet2));
         $request->setShipperAddressStreet1($originStreet1);
         $request->setShipperAddressStreet2($originStreet2);
-        $request->setShipperAddressCity($this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_CITY, $shipmentStoreId));
+        $request->setShipperAddressCity(
+            $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_CITY, $shipmentStoreId)
+        );
         $request->setShipperAddressStateOrProvinceCode($shipperRegionCode);
-        $request->setShipperAddressPostalCode($this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_ZIP, $shipmentStoreId));
-        $request->setShipperAddressCountryCode($this->_coreStoreConfig->getConfig(self::XML_PATH_STORE_COUNTRY_ID, $shipmentStoreId));
+        $request->setShipperAddressPostalCode(
+            $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_ZIP, $shipmentStoreId)
+        );
+        $request->setShipperAddressCountryCode(
+            $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_COUNTRY_ID, $shipmentStoreId)
+        );
         $request->setRecipientContactPersonName(trim($address->getFirstname() . ' ' . $address->getLastname()));
         $request->setRecipientContactPersonFirstName($address->getFirstname());
         $request->setRecipientContactPersonLastName($address->getLastname());

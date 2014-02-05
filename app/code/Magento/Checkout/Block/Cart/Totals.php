@@ -55,6 +55,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     ) {
         $this->_salesConfig = $salesConfig;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
+        $this->_isScopePrivate = true;
 
     }
 

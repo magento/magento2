@@ -59,7 +59,7 @@ class Oauth implements OauthInterface
     /**
      * Retrieve array of supported signature methods.
      *
-     * @return array - Supported HMAC-SHA1 and HMAC-SHA256 signature methods.
+     * @return string[] - Supported HMAC-SHA1 and HMAC-SHA256 signature methods.
      */
     public static function getSupportedSignatureMethods()
     {
@@ -196,7 +196,8 @@ class Oauth implements OauthInterface
      * @param string $httpMethod
      * @param string $requestUrl
      * @param string $tokenSecret
-     * @throws \Magento\Oauth\Exception
+     * @return void
+     * @throws Exception
      */
     protected function _validateSignature($params, $consumerSecret, $httpMethod, $requestUrl, $tokenSecret = null)
     {
@@ -228,7 +229,8 @@ class Oauth implements OauthInterface
      * Validate oauth version.
      *
      * @param string $version
-     * @throws \Magento\Oauth\Exception
+     * @return void
+     * @throws Exception
      */
     protected function _validateVersionParam($version)
     {
@@ -243,7 +245,8 @@ class Oauth implements OauthInterface
      *
      * @param array $protocolParams
      * @param array $requiredParams
-     * @throws \Magento\Oauth\Exception
+     * @return void
+     * @throws Exception
      */
     protected function _validateProtocolParams($protocolParams, $requiredParams)
     {
@@ -289,7 +292,8 @@ class Oauth implements OauthInterface
      *
      * @param array $protocolParams
      * @param array $requiredParams
-     * @throws \Magento\Oauth\Exception
+     * @return void
+     * @throws Exception
      */
     protected function _checkRequiredParams($protocolParams, $requiredParams)
     {

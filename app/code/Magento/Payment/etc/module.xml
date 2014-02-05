@@ -34,7 +34,7 @@
             <module name="Magento_Catalog"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Centinel"/>
-            <module name="Magento_Checkout" type="soft"/>
+            <module name="Magento_Checkout"/>
         </depends>
     </module>
 </config>

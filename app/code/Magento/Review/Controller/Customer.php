@@ -70,6 +70,9 @@ class Customer extends \Magento\App\Action\Action
         return parent::dispatch($request);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_view->loadLayout();
@@ -87,6 +90,9 @@ class Customer extends \Magento\App\Action\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function viewAction()
     {
         $this->_view->loadLayout();

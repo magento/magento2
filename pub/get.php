@@ -77,7 +77,7 @@ if ($mediaDirectory) {
 $params = $_SERVER;
 if (empty($mediaDirectory)) {
     $params[\Magento\Core\Model\App::PARAM_ALLOWED_MODULES] = array('Magento_Core');
-    $params[\Magento\Core\Model\App::PARAM_CACHE_OPTIONS]['frontend_options']['disable_save'] = true;
+    $params[\Magento\Core\Model\App::PARAM_CACHE_FORCED_OPTIONS]['frontend_options']['disable_save'] = true;
 }
 
 $entryPoint = new \Magento\App\EntryPoint\EntryPoint(dirname(__DIR__), $params);

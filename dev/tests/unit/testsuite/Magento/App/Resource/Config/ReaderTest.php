@@ -74,7 +74,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_configLocalMock = $this->getMock(
-            'Magento\App\Config', array(), array(), '', false
+            'Magento\App\Arguments', array(), array(), '', false
         );
 
         $this->_model = new \Magento\App\Resource\Config\Reader(

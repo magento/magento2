@@ -63,7 +63,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * @var \Magento\Checkout\Model\Resource\Agreement\CollectionFactory
      */
-    protected $_agreementCollFactory;
+    protected $_agreementCollectionFactory;
 
     /**
      * @var \Magento\Email\Model\TemplateFactory
@@ -76,7 +76,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory
+     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
      * @param \Magento\Email\Model\TemplateFactory $emailTemplFactory
      */
     public function __construct(
@@ -85,14 +85,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory,
+        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
         \Magento\Email\Model\TemplateFactory $emailTemplFactory
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_locale = $locale;
-        $this->_agreementCollFactory = $agreementCollFactory;
+        $this->_agreementCollectionFactory = $agreementCollectionFactory;
         $this->_emailTemplFactory = $emailTemplFactory;
         parent::__construct($context);
     }
@@ -133,7 +133,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
             if (!$this->_coreStoreConfig->getConfigFlag('checkout/options/enable_agreements')) {
                 $this->_agreements = array();
             } else {
-                $this->_agreements = $this->_agreementCollFactory->create()
+                $this->_agreements = $this->_agreementCollectionFactory->create()
                     ->addStoreFilter($this->_storeManager->getStore()->getId())
                     ->addFieldToFilter('is_active', 1)
                     ->getAllIds();

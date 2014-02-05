@@ -84,18 +84,11 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
             if (isset($type['hide_fields'])) {
                 $_hiddenFields[$type['value']] = $type['hide_fields'];
             }
-            if (isset($type['disabled_types'])) {
-                $_disabledTypes[$type['value']] = $type['disabled_types'];
-            }
         }
 
         if ($this->_coreRegistry->registry('attribute_type_hidden_fields') === null) {
             $this->_coreRegistry->register('attribute_type_hidden_fields', $_hiddenFields);
         }
-        if ($this->_coreRegistry->registry('attribute_type_disabled_types') === null) {
-            $this->_coreRegistry->register('attribute_type_disabled_types', $_disabledTypes);
-        }
-
         return array_merge(parent::toOptionArray(), $inputTypes);
     }
 }

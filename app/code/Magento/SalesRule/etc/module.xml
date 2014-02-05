@@ -43,6 +43,8 @@
             <module name="Magento_Shipping"/>
             <module name="Magento_Payment"/>
             <module name="Magento_Reports"/>
+            <module name="Magento_CatalogRule"/>
+            <module name="Magento_Widget"/>
         </depends>
     </module>
 </config>

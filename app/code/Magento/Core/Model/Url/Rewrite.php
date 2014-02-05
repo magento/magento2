@@ -59,7 +59,6 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     const TYPE_CATEGORY = 1;
     const TYPE_PRODUCT  = 2;
     const TYPE_CUSTOM   = 3;
-    const REWRITE_REQUEST_PATH_ALIAS = 'rewrite_request_path';
 
     /**
      * Cache tag for clear cache in after save and after delete
@@ -299,7 +298,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         }
 
 
-        $request->setAlias(self::REWRITE_REQUEST_PATH_ALIAS, $this->getRequestPath());
+        $request->setAlias(\Magento\Url::REWRITE_REQUEST_PATH_ALIAS, $this->getRequestPath());
         $external = substr($this->getTargetPath(), 0, 6);
         $isPermanentRedirectOption = $this->hasOption('RP');
         if ($external === 'http:/' || $external === 'https:') {

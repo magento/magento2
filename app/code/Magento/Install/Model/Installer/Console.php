@@ -75,7 +75,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     );
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -132,7 +132,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\App\Resource\Config $resourceConfig
      * @param \Magento\Module\UpdaterInterface $dbUpdater
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Install\Model\Installer\Data $installerData
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -142,7 +142,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         \Magento\Install\Model\Installer $installer,
         \Magento\App\Resource\Config $resourceConfig,
         \Magento\Module\UpdaterInterface $dbUpdater,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Install\Model\Installer\Data $installerData,
         \Magento\App\State $appState,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -361,7 +361,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
              * Change directories mode to be writable by apache user
              */
             $this->_filesystem
-                ->getDirectoryWrite(\Magento\Filesystem::VAR_DIR)
+                ->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR)
                 ->changePermissions('', 0777);
 
             return $encryptionKey;
@@ -402,13 +402,13 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_cleanUpDatabase();
 
         /* Remove temporary directories and local.xml */
-        $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         foreach ($varDirectory->read() as $path) {
             if ($varDirectory->isDirectory($path)) {
                 $varDirectory->delete($path);
             }
         }
-        $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::CONFIG)->delete('local.xml');
+        $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::CONFIG_DIR)->delete('local.xml');
         return true;
     }
 

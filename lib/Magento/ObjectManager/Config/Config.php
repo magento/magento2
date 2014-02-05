@@ -23,12 +23,16 @@
  */
 namespace Magento\ObjectManager\Config;
 
+use \Magento\ObjectManager\ConfigCache;
+use \Magento\ObjectManager\Definition;
+use \Magento\ObjectManager\Relations;
+
 class Config implements \Magento\ObjectManager\Config
 {
     /**
      * Config cache
      *
-     * @var \Magento\ObjectManager\ConfigCache
+     * @var ConfigCache
      */
     protected $_cache;
 
@@ -91,7 +95,7 @@ class Config implements \Magento\ObjectManager\Config
     /**
      * List of relations
      *
-     * @var \Magento\ObjectManager\Relations
+     * @var Relations
      */
     protected $_relations;
 
@@ -103,12 +107,12 @@ class Config implements \Magento\ObjectManager\Config
     protected $_mergedArguments;
 
     /**
-     * @param \Magento\ObjectManager\Relations $relations
-     * @param \Magento\ObjectManager\Definition $definitions
+     * @param Relations $relations
+     * @param Definition $definitions
      */
     public function __construct(
-        \Magento\ObjectManager\Relations $relations = null,
-        \Magento\ObjectManager\Definition $definitions = null
+        Relations $relations = null,
+        Definition $definitions = null
     ) {
         $this->_relations = $relations ?: new \Magento\ObjectManager\Relations\Runtime();
         $this->_definitions = $definitions ?: new \Magento\ObjectManager\Definition\Runtime();
@@ -117,9 +121,10 @@ class Config implements \Magento\ObjectManager\Config
     /**
      * Set class relations
      *
-     * @param \Magento\ObjectManager\Relations $relations
+     * @param Relations $relations
+     * @return void
      */
-    public function setRelations(\Magento\ObjectManager\Relations $relations)
+    public function setRelations(Relations $relations)
     {
         $this->_relations = $relations;
     }
@@ -127,9 +132,10 @@ class Config implements \Magento\ObjectManager\Config
     /**
      * Set cache instance
      *
-     * @param \Magento\ObjectManager\ConfigCache $cache
+     * @param ConfigCache $cache
+     * @return void
      */
-    public function setCache(\Magento\ObjectManager\ConfigCache $cache)
+    public function setCache(ConfigCache $cache)
     {
         $this->_cache = $cache;
     }

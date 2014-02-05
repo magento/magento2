@@ -89,7 +89,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
      */
-    protected $_regCollFactory;
+    protected $_regCollectionFactory;
 
     /**
      * @var \Magento\Core\Helper\Data
@@ -107,7 +107,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -115,26 +115,26 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollFactory,
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
         \Magento\Core\Helper\Data $coreHelper,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Model\Config $config
+        \Magento\App\ConfigInterface $config
     ) {
         parent::__construct($context);
         $this->_configCacheType = $configCacheType;
         $this->_countryCollection = $countryCollection;
-        $this->_regCollFactory = $regCollFactory;
+        $this->_regCollectionFactory = $regCollectionFactory;
         $this->_coreHelper = $coreHelper;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
@@ -149,7 +149,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getRegionCollection()
     {
         if (!$this->_regionCollection) {
-            $this->_regionCollection = $this->_regCollFactory->create();
+            $this->_regionCollection = $this->_regCollectionFactory->create();
             $this->_regionCollection->addCountryFilter($this->getAddress()->getCountryId())
                 ->load();
         }
@@ -185,7 +185,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
                 foreach ($this->getCountryCollection() as $country) {
                     $countryIds[] = $country->getCountryId();
                 }
-                $collection = $this->_regCollFactory->create();
+                $collection = $this->_regCollectionFactory->create();
                 $collection->addCountryFilter($countryIds)
                     ->load();
                 $regions = array(

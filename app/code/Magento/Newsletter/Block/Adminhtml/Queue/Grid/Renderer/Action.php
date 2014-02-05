@@ -36,6 +36,12 @@ namespace Magento\Newsletter\Block\Adminhtml\Queue\Grid\Renderer;
 
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
+    /**
+     * Renders column
+     *
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
         $actions = array();

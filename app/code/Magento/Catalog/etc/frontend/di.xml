@@ -39,9 +39,9 @@
     </type>
     <virtualType name="compareProductInitSession" type="Magento\Core\App\Action\Plugin\Session">
         <param name="cookieCheckActions">
-            <value>
-                <compareProductAdd>add</compareProductAdd>
-            </value>
+            <array>
+                <item key="compareProductAdd"><value>add</value></item>
+            </array>
         </param>
     </virtualType>
     <type name="Magento\Catalog\Controller\Product\Compare">

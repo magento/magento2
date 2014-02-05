@@ -76,6 +76,7 @@ class State implements \Magento\App\Cache\StateInterface
      * Load statuses (enabled/disabled) of cache types
      *
      * @param bool $forceDisableAll
+     * @return void
      */
     private function _loadTypeStatuses($forceDisableAll = false)
     {
@@ -111,6 +112,7 @@ class State implements \Magento\App\Cache\StateInterface
      *
      * @param string $cacheType
      * @param bool $isEnabled
+     * @return void
      */
     public function setEnabled($cacheType, $isEnabled)
     {
@@ -119,6 +121,8 @@ class State implements \Magento\App\Cache\StateInterface
 
     /**
      * Save the current statuses (enabled/disabled) of cache types to the persistent storage
+     *
+     * @return void
      */
     public function persist()
     {

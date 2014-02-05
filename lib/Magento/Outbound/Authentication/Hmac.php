@@ -27,7 +27,12 @@
  */
 namespace Magento\Outbound\Authentication;
 
-class Hmac implements \Magento\Outbound\AuthenticationInterface
+use Magento\Core\Model\StoreManagerInterface;
+use Magento\Outbound\AuthenticationInterface;
+use Magento\Outbound\UserInterface;
+use Magento\UrlInterface;
+
+class Hmac implements AuthenticationInterface
 {
     /**
      * The name of the header which stores the HMAC signature for client verification
@@ -44,13 +49,15 @@ class Hmac implements \Magento\Outbound\AuthenticationInterface
      */
     const SHA256_ALGORITHM = 'sha256';
 
-    /** @var \Magento\Core\Model\StoreManagerInterface  */
+    /**
+     * @var StoreManagerInterface
+     */
     private $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
+    public function __construct(StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -58,13 +65,12 @@ class Hmac implements \Magento\Outbound\AuthenticationInterface
     /**
      * Get authentication signature to add to the headers
      *
-     * @param string                         $body
-     * @param \Magento\Outbound\UserInterface $user
-     *
-     * @throws \LogicException
+     * @param string $body
+     * @param UserInterface $user
      * @return array Headers to add to message
+     * @throws \LogicException
      */
-    public function getSignatureHeaders($body, \Magento\Outbound\UserInterface $user)
+    public function getSignatureHeaders($body, UserInterface $user)
     {
         $secret = $user->getSharedSecret();
         if ('' === $secret || is_null($secret)) {
@@ -79,11 +85,11 @@ class Hmac implements \Magento\Outbound\AuthenticationInterface
     /**
      * An overridable method to get the domain name
      *
-     * @return mixed
+     * @return array|bool
      */
     protected function _getDomain()
     {
         return parse_url($this->_storeManager->getSafeStore()
-            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_WEB), PHP_URL_HOST);
+            ->getBaseUrl(UrlInterface::URL_TYPE_WEB), PHP_URL_HOST);
     }
 }

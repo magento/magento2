@@ -41,7 +41,7 @@ class Authentication extends \Magento\View\Element\Template
     /**
      * Strage for identifiers of related blocks
      *
-     * @var array
+     * @var string[]
      */
     protected $_relatedBlocks = array();
 
@@ -65,6 +65,7 @@ class Authentication extends \Magento\View\Element\Template
     ) {
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -82,7 +83,7 @@ class Authentication extends \Magento\View\Element\Template
     /**
      * Return identifiers of related blocks
      *
-     * @return array
+     * @return string[]
      */
     public function getRelatedBlocks()
     {

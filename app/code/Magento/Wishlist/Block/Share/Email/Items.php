@@ -47,7 +47,7 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function getProductUrl($product, $additional = array())
     {
-        $additional['_store_to_url'] = true;
+        $additional['_scope_to_url'] = true;
         return parent::getProductUrl($product, $additional);
     }
 
@@ -61,7 +61,7 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
     public function getAddToCartUrl($product, $additional = array())
     {
         $additional['nocookie'] = 1;
-        $additional['_store_to_url'] = true;
+        $additional['_scope_to_url'] = true;
         return parent::getAddToCartUrl($product, $additional);
     }
 

@@ -29,11 +29,11 @@ namespace Magento\Core\Helper;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
-    const ROOT = '/zzz';
-    const APP = '/zzz/qqq';
-    const MODULES = '/zzz/qqq/code00';
-    const THEMES = '/zzz/qqq/design00';
-    const PUB_LIB = '/zzz/qqq/js00';
+    const ROOT_DIR = '/zzz';
+    const APP_DIR = '/zzz/qqq';
+    const MODULES_DIR = '/zzz/qqq/code00';
+    const THEMES_DIR = '/zzz/qqq/design00';
+    const PUB_LIB_DIR = '/zzz/qqq/js00';
 
     /**
      * @dataProvider getCssFilesDataProvider
@@ -481,22 +481,22 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getFilesystem()
     {
-        /** @var $filesystem \Magento\Filesystem */
-        $filesystem = $this->getMock('Magento\Filesystem',
+        /** @var $filesystem \Magento\App\Filesystem */
+        $filesystem = $this->getMock('Magento\App\Filesystem',
             array('getPath', '__wakeup', 'getDirectoryRead'), array(), '', false
         );
         $filesystem->expects($this->any())
             ->method('getPath')
             ->will($this->returnValueMap(array(
-                array(\Magento\Filesystem::ROOT, self::ROOT),
-                array(\Magento\Filesystem::APP, self::APP),
-                array(\Magento\Filesystem::MODULES, self::MODULES),
-                array(\Magento\Filesystem::THEMES, self::THEMES),
-                array(\Magento\Filesystem::PUB_LIB, self::PUB_LIB),
+                array(\Magento\App\Filesystem::ROOT_DIR, self::ROOT_DIR),
+                array(\Magento\App\Filesystem::APP_DIR, self::APP_DIR),
+                array(\Magento\App\Filesystem::MODULES_DIR, self::MODULES_DIR),
+                array(\Magento\App\Filesystem::THEMES_DIR, self::THEMES_DIR),
+                array(\Magento\App\Filesystem::PUB_LIB_DIR, self::PUB_LIB_DIR),
             )));
 
         return $filesystem;

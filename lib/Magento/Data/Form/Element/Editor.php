@@ -33,18 +33,20 @@
  */
 namespace Magento\Data\Form\Element;
 
-class Editor extends \Magento\Data\Form\Element\Textarea
+use Magento\Escaper;
+
+class Editor extends Textarea
 {
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
         $data = array()
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
@@ -58,6 +60,9 @@ class Editor extends \Magento\Data\Form\Element\Textarea
         }
     }
 
+    /**
+     * @return string
+     */
     public function getElementHtml()
     {
         $js = '
@@ -153,6 +158,9 @@ class Editor extends \Magento\Data\Form\Element\Textarea
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function getTheme()
     {
         if(!$this->hasData('theme')) {
@@ -183,6 +191,7 @@ class Editor extends \Magento\Data\Form\Element\Textarea
     /**
      * Return HTML button to toggling WYSIWYG
      *
+     * @param bool $visible
      * @return string
      */
     protected function _getToggleButtonHtml($visible = true)

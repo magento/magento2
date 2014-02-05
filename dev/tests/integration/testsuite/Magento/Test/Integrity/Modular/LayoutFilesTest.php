@@ -104,7 +104,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
             // ignored objects
             || isset($argument['value']['object'])
                 && in_array($argument['value']['object'], array(
-                    'Magento\Catalog\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection',
+                    'Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection',
                     'Magento\Catalog\Model\Resource\Product\Collection\AssociatedProduct',
                     'Magento\Search\Model\Resource\Search\Grid\Collection',
                     'Magento\Wishlist\Model\Resource\Item\Collection\Grid',

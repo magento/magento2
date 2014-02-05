@@ -36,9 +36,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <googleshopping_setup>Magento\GoogleShopping\Model\Resource\Setup</googleshopping_setup>
-            </value>
+            <array>
+                <item key="googleshopping_setup"><value>Magento\GoogleShopping\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

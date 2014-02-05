@@ -26,10 +26,10 @@
 <config>
     <type name="Magento\Widget\Model\Widget\Instance">
         <param name="relatedCacheTypes">
-            <value>
-                <blockCache>block_html</blockCache>
-                <layoutCache>layout</layoutCache>
-            </value>
+            <array>
+                <item key="blockCache"><value>block_html</value></item>
+                <item key="layoutCache"><value>layout</value></item>
+            </array>
         </param>
     </type>
 </config>

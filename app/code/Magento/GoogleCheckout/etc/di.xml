@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <googlecheckout_setup>Magento\Catalog\Model\Resource\Setup</googlecheckout_setup>
-            </value>
+            <array>
+                <item key="googlecheckout_setup"><value>Magento\Catalog\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

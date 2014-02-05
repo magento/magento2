@@ -29,10 +29,15 @@
  */
 namespace Magento\Index\Model\Lock;
 
+use Magento\Index\Model\Process\File;
+use Magento\Index\Model\Process\FileFactory;
+use Magento\App\Filesystem;
+use Magento\Filesystem\Directory\WriteInterface;
+
 class Storage
 {
     /**
-     * @var \Magento\Index\Model\Process\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
@@ -46,27 +51,27 @@ class Storage
     /**
      * Directory instance
      *
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     protected $_varDirectory;
 
     /**
-     * @param \Magento\Index\Model\Process\FileFactory $fileFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param FileFactory $fileFactory
+     * @param Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Index\Model\Process\FileFactory $fileFactory,
-        \Magento\Filesystem $filesystem
+        FileFactory $fileFactory,
+        Filesystem $filesystem
     ) {
         $this->_fileFactory   = $fileFactory;
-        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->_varDirectory = $filesystem->getDirectoryWrite(Filesystem::VAR_DIR);
     }
 
     /**
      * Get file handler by process ID
      *
-     * @param $processId
-     * @return \Magento\Index\Model\Process\File
+     * @param string $processId
+     * @return File
      */
     public function getFile($processId)
     {

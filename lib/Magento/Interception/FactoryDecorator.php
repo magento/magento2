@@ -25,47 +25,52 @@
  */
 namespace Magento\Interception;
 
-class FactoryDecorator implements \Magento\ObjectManager\Factory
+use Magento\ObjectManager;
+use Magento\Interception\Config;
+use Magento\Interception\PluginList;
+use Magento\ObjectManager\Factory;
+
+class FactoryDecorator implements Factory
 {
     /**
      * Configurable factory
      *
-     * @var \Magento\ObjectManager\Factory
+     * @var Factory
      */
     protected $_factory;
 
     /**
      * Object manager
      *
-     * @var \Magento\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
      * Object manager config
      *
-     * @var \Magento\Interception\Config
+     * @var Config
      */
     protected $_config;
 
     /**
      * List of plugins configured for instance
      *
-     * @var \Magento\Interception\PluginList
+     * @var PluginList
      */
     protected $_pluginList;
 
     /**
-     * @param \Magento\ObjectManager\Factory $factory
-     * @param \Magento\Interception\Config $config
-     * @param \Magento\Interception\PluginList $pluginList
-     * @param \Magento\ObjectManager $objectManager
+     * @param Factory $factory
+     * @param Config $config
+     * @param PluginList $pluginList
+     * @param ObjectManager $objectManager
      */
     public function __construct(
-        \Magento\ObjectManager\Factory $factory,
-        \Magento\Interception\Config $config,
-        \Magento\Interception\PluginList $pluginList,
-        \Magento\ObjectManager $objectManager
+        Factory $factory,
+        Config $config,
+        PluginList $pluginList,
+        ObjectManager $objectManager
     ) {
         $this->_factory = $factory;
         $this->_pluginList = $pluginList;
@@ -76,9 +81,10 @@ class FactoryDecorator implements \Magento\ObjectManager\Factory
     /**
      * Set object manager
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
+     * @return void
      */
-    public function setObjectManager(\Magento\ObjectManager $objectManager)
+    public function setObjectManager(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
         $this->_factory->setObjectManager($objectManager);
@@ -88,6 +94,7 @@ class FactoryDecorator implements \Magento\ObjectManager\Factory
      * Set application arguments
      *
      * @param array $arguments
+     * @return void
      */
     public function setArguments($arguments)
     {
@@ -99,7 +106,7 @@ class FactoryDecorator implements \Magento\ObjectManager\Factory
      *
      * @param string $type
      * @param array $arguments
-     * @return mixed
+     * @return object
      */
     public function create($type, array $arguments = array())
     {

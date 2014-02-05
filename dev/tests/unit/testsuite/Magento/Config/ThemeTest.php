@@ -29,20 +29,9 @@ namespace Magento\Config;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testConstructException()
-    {
-        new \Magento\Config\Theme(array());
-    }
-
     public function testGetSchemaFile()
     {
-        $config = new \Magento\Config\Theme(array(
-            file_get_contents(sprintf('%s/_files/area/%s/theme.xml', __DIR__, 'default_default'))
-        ));
-
+        $config = new \Magento\Config\Theme(file_get_contents(__DIR__ . '/_files/area/default_default/theme.xml'));
         $this->assertFileExists($config->getSchemaFile());
     }
 
@@ -53,9 +42,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetThemeTitle($themePath, $expected)
     {
-        $config = new \Magento\Config\Theme(array(
-            file_get_contents(sprintf('%s/_files/area/%s/theme.xml', __DIR__, $themePath))
-        ));
+        $config = new \Magento\Config\Theme(file_get_contents(__DIR__ . "/_files/area/$themePath/theme.xml"));
         $this->assertSame($expected, $config->getThemeTitle());
     }
 
@@ -77,9 +64,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParentTheme($themePath, $expected)
     {
-        $config = new \Magento\Config\Theme(array(
-            file_get_contents(sprintf('%s/_files/area/%s/theme.xml', __DIR__, $themePath))
-        ));
+        $config = new \Magento\Config\Theme(file_get_contents(__DIR__ . "/_files/area/$themePath/theme.xml"));
         $this->assertSame($expected, $config->getParentTheme());
     }
 

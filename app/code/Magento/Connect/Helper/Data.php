@@ -31,7 +31,7 @@ namespace Magento\Connect\Helper;
 class Data extends \Magento\Core\Helper\Data
 {
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -51,7 +51,7 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Convert\Xml $xmlConverter
      * @param bool $dbCompatibleMode
      */
@@ -61,12 +61,12 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Convert\Xml $xmlConverter,
         $dbCompatibleMode = true
     ) {
         $this->filesystem = $filesystem;
-        $this->readDirectory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::VAR_DIR);
+        $this->readDirectory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::VAR_DIR);
         $this->_xmlConverter = $xmlConverter;
         parent::__construct(
             $context,

@@ -79,7 +79,9 @@ class AggregateTest extends \PHPUnit_Framework_TestCase
     {
         $parentTheme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $theme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getParentTheme')->will($this->returnValue($parentTheme));
+        $theme->expects($this->once())->method('getInheritedThemes')->will(
+            $this->returnValue(array($parentTheme, $parentTheme))
+        );
 
         $files = array(
             new \Magento\View\Layout\File('0.xml', 'Module_One'),

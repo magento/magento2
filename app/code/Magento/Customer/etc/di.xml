@@ -50,9 +50,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <customer_setup>Magento\Customer\Model\Resource\Setup</customer_setup>
-            </value>
+            <array>
+                <item key="customer_setup"><value>Magento\Customer\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Customer\Helper\Address">

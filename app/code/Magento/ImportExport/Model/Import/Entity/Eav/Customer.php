@@ -138,7 +138,7 @@ class Customer
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\ImportExport\Model\Resource\Customer\StorageFactory $storageFactory
@@ -153,7 +153,7 @@ class Customer
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\ImportExport\Model\Resource\Customer\StorageFactory $storageFactory,
@@ -173,7 +173,7 @@ class Customer
         }
 
         parent::__construct($coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource,
-            $app, $collectionFactory, $eavConfig, $storageFactory, $data);
+            $storeManager, $collectionFactory, $eavConfig, $storageFactory, $data);
 
         $this->_specialAttributes[] = self::COLUMN_WEBSITE;
         $this->_specialAttributes[] = self::COLUMN_STORE;

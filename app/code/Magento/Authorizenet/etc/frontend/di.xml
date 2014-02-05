@@ -35,4 +35,16 @@
             <instance type="Magento\Checkout\Model\Session" />
         </param>
     </type>
+    <type name="Magento\Core\Model\Url\SecurityInfo">
+        <param name="secureUrlList">
+            <array>
+                <item key="authorizenet"><value>/authorizenet/payment</value></item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\Authorizenet\Model\Authorizenet">
+        <param name="session">
+            <instance type="Magento\Checkout\Model\Session" />
+        </param>
+    </type>
 </config>

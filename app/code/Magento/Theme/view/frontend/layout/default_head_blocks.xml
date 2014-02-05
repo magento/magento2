@@ -108,6 +108,11 @@
                 <argument name="file" xsi:type="string">mage/loader.js</argument>
             </arguments>
         </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-dataPost-js">
+            <arguments>
+                <argument name="file" xsi:type="string">mage/dataPost.js</argument>
+            </arguments>
+        </block>
         <!-- Preload resources for widgets -->
         <block class="Magento\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml"/>
     </referenceBlock>

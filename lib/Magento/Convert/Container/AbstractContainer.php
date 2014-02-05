@@ -34,12 +34,30 @@
  */
 namespace Magento\Convert\Container;
 
+use Magento\Convert\ConvertException;
+
 abstract class AbstractContainer
 {
+    /**
+     * @var array
+     */
     protected $_vars;
+
+    /**
+     * @var array
+     */
     protected $_data;
+
+    /**
+     * @var int
+     */
     protected $_position;
 
+    /**
+     * @param string $key
+     * @param string|null $default
+     * @return array
+     */
     public function getVar($key, $default=null)
     {
         if (!isset($this->_vars[$key])) {
@@ -48,11 +66,19 @@ abstract class AbstractContainer
         return $this->_vars[$key];
     }
 
+    /**
+     * @return array
+     */
     public function getVars()
     {
         return $this->_vars;
     }
 
+    /**
+     * @param array|string $key
+     * @param string|null $value
+     * @return $this
+     */
     public function setVar($key, $value=null)
     {
         if (is_array($key) && is_null($value)) {
@@ -63,28 +89,43 @@ abstract class AbstractContainer
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         return $this->_data;
     }
 
+    /**
+     * @param array $data
+     * @return $this
+     */
     public function setData($data)
     {
         $this->_data = $data;
         return $this;
     }
 
+    /**
+     * @param string|null $data
+     * @return true
+     */
     public function validateDataString($data=null)
     {
         if (is_null($data)) {
             $data = $this->getData();
         }
         if (!is_string($data)) {
-            $this->addException("Invalid data type, expecting string.", \Magento\Convert\ConvertException::FATAL);
+            $this->addException("Invalid data type, expecting string.", ConvertException::FATAL);
         }
         return true;
     }
 
+    /**
+     * @param array|null $data
+     * @return true
+     */
     public function validateDataGrid($data=null)
     {
         if (is_null($data)) {
@@ -95,11 +136,15 @@ abstract class AbstractContainer
                 return true;
             }
             $this->addException(
-                "Invalid data type, expecting 2D grid array.", \Magento\Convert\ConvertException::FATAL);
+                "Invalid data type, expecting 2D grid array.", ConvertException::FATAL);
         }
         return true;
     }
 
+    /**
+     * @param array $grid
+     * @return array
+     */
     public function getGridFields($grid)
     {
         $fields = array();
@@ -113,21 +158,33 @@ abstract class AbstractContainer
         return $fields;
     }
 
+    /**
+     * @param string $error
+     * @param string|null $level
+     * @return ConvertException
+     */
     public function addException($error, $level=null)
     {
-        $exception = new \Magento\Convert\ConvertException($error);
-        $exception->setLevel(!is_null($level) ? $level : \Magento\Convert\ConvertException::NOTICE);
+        $exception = new ConvertException($error);
+        $exception->setLevel(!is_null($level) ? $level : ConvertException::NOTICE);
         $exception->setContainer($this);
         $exception->setPosition($this->getPosition());
 
         return $exception;
     }
 
+    /**
+     * @return int
+     */
     public function getPosition()
     {
         return $this->_position;
     }
 
+    /**
+     * @param int $position
+     * @return $this
+     */
     public function setPosition($position)
     {
         $this->_position = $position;

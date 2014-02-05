@@ -76,13 +76,13 @@
     <event name="controller_action_predispatch_paypal_express_start">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
-    <event name="controller_action_predispatch_paypaluk_express_start">
+    <event name="controller_action_predispatch_paypal_payflowexpress_start">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
     <event name="controller_action_predispatch_googlecheckout_redirect_checkout">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
-    <event name="controller_action_predispatch_checkout_multishipping_index">
+    <event name="controller_action_predispatch_multishipping_checkout_index">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
     <event name="render_block">

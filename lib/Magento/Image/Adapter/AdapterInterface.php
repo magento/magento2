@@ -54,6 +54,7 @@ interface AdapterInterface
      * @param int $positionY
      * @param int $opacity
      * @param bool $tile
+     * @return void
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false);
 
@@ -65,6 +66,7 @@ interface AdapterInterface
     /**
      * Checks required dependencies
      *
+     * @return void
      * @throws \Exception if some of dependencies are missing
      */
     public function checkDependencies();
@@ -81,15 +83,17 @@ interface AdapterInterface
     /**
      * Open image for processing
      *
-     * @param string $filename
+     * @param $filename
+     * @return void
      */
     public function open($filename);
 
     /**
      * Change the image size
      *
-     * @param int $frameWidth
-     * @param int $frameHeight
+     * @param null|int $frameWidth
+     * @param null|int $frameHeight
+     * @return void
      */
     public function resize($frameWidth = null, $frameHeight = null);
 
@@ -108,9 +112,10 @@ interface AdapterInterface
      * Save image to specific path.
      * If some folders of path does not exist they will be created
      *
+     * @param null|string $destination
+     * @param null|string $newName
+     * @return void
      * @throws \Exception  if destination path is not writable
-     * @param string $destination
-     * @param string $newName
      */
     public function save($destination = null, $newName = null);
 
@@ -118,6 +123,7 @@ interface AdapterInterface
      * Rotate image on specific angle
      *
      * @param int $angle
+     * @return void
      */
     public function rotate($angle);
 }

@@ -33,6 +33,16 @@
                 </action>
             </block>
         </container>
+        <container name="product.info.addtocart.payflow.wrapper"
+                   label="PayPal Express Checkout (Payflow Edition) Shortcut Wrapper" htmlTag="p"
+                   htmlClass="paypal-logo">
+            <block class="Magento\Paypal\Block\PayflowExpress\Shortcut" name="product.info.addtocart.payflow"
+                   template="express/shortcut.phtml">
+                <action method="setIsInCatalogProduct">
+                    <argument name="value" xsi:type="string">1</argument>
+                </action>
+            </block>
+        </container>
     </referenceBlock>
     <update handle="SHORTCUT_popup"/>
     <referenceContainer name="right">

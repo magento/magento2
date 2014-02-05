@@ -197,6 +197,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_typeFactory;
 
     /**
+     * Provider of product link types
+     *
+     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
+     */
+    protected $_linkTypeProvider;
+
+    /**
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\App\Resource $resource
@@ -211,6 +218,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
      * @param \Magento\ImportExport\Model\Export\Entity\Product\Type\Factory $_typeFactory
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      */
     public function __construct(
         \Magento\Core\Model\LocaleInterface $locale,
@@ -226,7 +234,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $itemFactory,
         \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory $optionColFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory,
-        \Magento\ImportExport\Model\Export\Entity\Product\Type\Factory $_typeFactory
+        \Magento\ImportExport\Model\Export\Entity\Product\Type\Factory $_typeFactory,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
     ) {
         $this->_entityCollection = $collection;
         $this->_exportConfig = $exportConfig;
@@ -239,6 +248,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->_optionColFactory = $optionColFactory;
         $this->_attributeColFactory = $attributeColFactory;
         $this->_typeFactory = $_typeFactory;
+        $this->_linkTypeProvider = $linkTypeProvider;
+
 
         parent::__construct($locale, $config, $resource, $storeManager);
 
@@ -523,12 +534,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 '(cplad.link_id = cpl.link_id AND cplad.product_link_attribute_id = cplaq.product_link_attribute_id)',
                 array()
             )
-            ->where('cpl.link_type_id IN (?)', array(
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL,
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED
-            ))
+            ->where('cpl.link_type_id IN (?)', array_values($this->_linkTypeProvider->getLinkTypes()))
             ->where('cpl.product_id IN (?)', $productIds);
 
         $stmt = $adapter->query($select);
@@ -821,12 +827,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
             // prepare links information
             $linksRows = $this->_prepareLinks($productIds);
-            $linkIdColPrefix = array(
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED   => '_links_related_',
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL    => '_links_upsell_',
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL => '_links_crosssell_',
-                \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED   => '_associated_'
-            );
+            $linkIdColPrefix = array();
+            foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkTypeId) {
+                $linkIdColPrefix[$linkTypeId] = '_' . $linkTypeName . '_';
+            }
+
             $configurableProductsCollection = $this->_entityCollection;
             $configurableProductsCollection->addAttributeToFilter(
                 'entity_id',

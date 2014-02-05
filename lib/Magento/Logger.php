@@ -42,15 +42,15 @@ class Logger
     protected $_loggers = array();
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $defaultFile
      */
-    public function __construct(\Magento\Filesystem $filesystem, $defaultFile = '')
+    public function __construct(\Magento\App\Filesystem $filesystem, $defaultFile = '')
     {
         $this->_filesystem = $filesystem;
         $this->addStreamLog(self::LOGGER_SYSTEM, $defaultFile)
@@ -72,7 +72,7 @@ class Logger
     {
         $file = $fileOrWrapper ?: "{$loggerKey}.log";
         if (!preg_match('#^[a-z][a-z0-9+.-]*\://#i', $file)) {
-            $logDir = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::LOG);
+            $logDir = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::LOG_DIR);
             $logDir->create();
             $file = $logDir->getAbsolutePath($file);
         }

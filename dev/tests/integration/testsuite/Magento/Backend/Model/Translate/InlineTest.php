@@ -52,7 +52,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     public function testAjaxUrl()
     {
         $body = '<html><body>some body</body></html>';
-        /** @var \Magento\Backend\Model\Url $url */
+        /** @var \Magento\Backend\Model\UrlInterface $url */
         $url = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\UrlInterface');
         $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate');

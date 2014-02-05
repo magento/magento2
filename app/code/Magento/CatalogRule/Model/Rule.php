@@ -143,7 +143,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @var \Magento\CatalogRule\Model\Rule\Action\CollectionFactory
      */
-    protected $_actionCollFactory;
+    protected $_actionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
@@ -158,7 +158,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
      */
-    protected $_productCollFactory;
+    protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Stdlib\DateTime
@@ -170,10 +170,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory
-     * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollFactory
+     * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Index\Model\Indexer $indexer
@@ -191,10 +191,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory,
-        \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollFactory,
+        \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\Resource\Iterator $resourceIterator,
         \Magento\Index\Model\Indexer $indexer,
@@ -207,10 +207,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         array $relatedCacheTypes = array(),
         array $data = array()
     ) {
-        $this->_productCollFactory = $productCollFactory;
+        $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
         $this->_combineFactory = $combineFactory;
-        $this->_actionCollFactory = $actionCollFactory;
+        $this->_actionCollectionFactory = $actionCollectionFactory;
         $this->_productFactory = $productFactory;
         $this->_resourceIterator = $resourceIterator;
         $this->_indexer = $indexer;
@@ -249,7 +249,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     public function getActionsInstance()
     {
-        return $this->_actionCollFactory->create();
+        return $this->_actionCollectionFactory->create();
     }
 
     /**
@@ -302,7 +302,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
             if ($this->getWebsiteIds()) {
                 /** @var $productCollection \Magento\Catalog\Model\Resource\Product\Collection */
-                $productCollection = $this->_productCollFactory->create();
+                $productCollection = $this->_productCollectionFactory->create();
                 $productCollection->addWebsiteFilter($this->getWebsiteIds());
                 if ($this->_productsFilter) {
                     $productCollection->addIdFilter($this->_productsFilter);

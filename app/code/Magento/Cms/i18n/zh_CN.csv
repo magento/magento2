@@ -113,3 +113,4 @@ Title,标题
 "We cannot upload the file.",不能更新该文件。
 "We found a directory with the same name. Please try another folder name.",发现目录同名，请换一个再试
 px.,像素
+"Directory %1 is not under storage root path.","目录%1不在存储根目录下。"

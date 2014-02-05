@@ -24,6 +24,9 @@
 
 namespace Magento\Message;
 
+use Magento\Logger;
+use Magento\Event\ManagerInterface as EventManagerInterface;
+
 /**
  * Message manager model
  */
@@ -45,12 +48,12 @@ class Manager implements ManagerInterface
     protected $messagesFactory;
 
     /**
-     * @var \Magento\Event\ManagerInterface
+     * @var EventManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Logger
+     * @var Logger
      */
     protected $logger;
 
@@ -63,16 +66,16 @@ class Manager implements ManagerInterface
      * @param Session $session
      * @param Factory $messageFactory
      * @param CollectionFactory $messagesFactory
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Logger $logger
+     * @param EventManagerInterface $eventManager
+     * @param Logger $logger
      * @param string $defaultGroup
      */
     public function __construct(
         Session $session,
         Factory $messageFactory,
         CollectionFactory $messagesFactory,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Logger $logger,
+        EventManagerInterface $eventManager,
+        Logger $logger,
         $defaultGroup = self::DEFAULT_GROUP
     ) {
         $this->session = $session;
@@ -144,7 +147,7 @@ class Manager implements ManagerInterface
     /**
      * Adding messages array to message collection
      *
-     * @param array $messages
+     * @param MessageInterface[] $messages
      * @param string|null $group
      * @return $this
      */
@@ -211,7 +214,7 @@ class Manager implements ManagerInterface
     /**
      * Adds messages array to message collection, but doesn't add duplicates to it
      *
-     * @param array|MessageInterface $messages
+     * @param MessageInterface[]|MessageInterface $messages
      * @param string|null $group
      * @return $this
      */
@@ -268,7 +271,7 @@ class Manager implements ManagerInterface
             $exception->getTraceAsString()
         );
 
-        $this->logger->logFile($message, \Zend_Log::DEBUG, \Magento\Logger::LOGGER_EXCEPTION);
+        $this->logger->logFile($message, \Zend_Log::DEBUG, Logger::LOGGER_EXCEPTION);
         $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
         return $this;
     }

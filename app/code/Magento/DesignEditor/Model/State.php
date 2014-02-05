@@ -37,7 +37,7 @@ class State
     const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\Core\Model\Layout';
 
     /**
-     * Url model classes that will be used instead of \Magento\Core\Model\Url in navigation vde modes
+     * Url model classes that will be used instead of \Magento\UrlInterface in navigation vde modes
      */
     const URL_MODEL_NAVIGATION_MODE_CLASS_NAME = 'Magento\DesignEditor\Model\Url\NavigationMode';
 
@@ -91,6 +91,13 @@ class State
     protected $_application;
 
     /**
+     * Store list manager
+     *
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Core\Model\Layout\Factory $layoutFactory
      * @param \Magento\DesignEditor\Model\Url\Factory $urlModelFactory
@@ -99,6 +106,7 @@ class State
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Core\Model\App $application
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\Model\Session $backendSession,
@@ -108,7 +116,8 @@ class State
         \Magento\DesignEditor\Helper\Data $dataHelper,
         \Magento\ObjectManager $objectManager,
         \Magento\Core\Model\App $application,
-        \Magento\DesignEditor\Model\Theme\Context $themeContext
+        \Magento\DesignEditor\Model\Theme\Context $themeContext,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_backendSession  = $backendSession;
         $this->_layoutFactory   = $layoutFactory;
@@ -118,6 +127,7 @@ class State
         $this->_objectManager   = $objectManager;
         $this->_application     = $application;
         $this->_themeContext    = $themeContext;
+        $this->_storeManager    = $storeManager;
     }
 
     /**
@@ -171,7 +181,7 @@ class State
     }
 
     /**
-     * Create url model instance that will be used instead of \Magento\Core\Model\Url in navigation mode
+     * Create url model instance that will be used instead of \Magento\UrlInterface in navigation mode
      */
     protected function _injectUrlModel($mode)
     {
@@ -190,7 +200,7 @@ class State
     {
         if ($this->_themeContext->getEditableTheme()) {
             $themeId = $this->_themeContext->getVisibleTheme()->getId();
-            $this->_application->getStore()->setConfig(
+            $this->_storeManager->getStore()->setConfig(
                 \Magento\View\DesignInterface::XML_PATH_THEME_ID,
                 $themeId
             );

@@ -36,7 +36,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeId')
             ->will($this->returnValue(2));
 
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
 
         $urlBuilder = $this->getMock('Magento\UrlInterface', array(), array(), '', false);
         $urlBuilder->expects($this->once())

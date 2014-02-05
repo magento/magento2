@@ -475,7 +475,8 @@ class Store extends \Magento\Backend\App\Action
                 ->setTime(time())
                 ->setType('db')
                 ->setPath(
-                    $this->_objectManager->get('Magento\Filesystem')->getPath(\Magento\Filesystem::VAR_DIR) . '/backups'
+                    $this->_objectManager->get('Magento\App\Filesystem')
+                        ->getPath(\Magento\App\Filesystem::VAR_DIR) . '/backups'
                 );
 
             $backupDb->createBackup($backup);

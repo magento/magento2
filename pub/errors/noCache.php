@@ -26,5 +26,6 @@
 
 require_once 'processor.php';
 
-$processor = new Error_Processor();
-$processor->processNoCache();
+$processor = new Error_Processor(new \Magento\App\Response\Http());
+$response = $processor->processNoCache();
+$response->sendResponse();

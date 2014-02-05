@@ -29,7 +29,7 @@ interface ReadInterface
      * Get absolute path
      *
      * @param string $path [optional]
-     * @return string mixed
+     * @return string
      */
     public function getAbsolutePath($path = null);
 
@@ -116,13 +116,4 @@ interface ReadInterface
      * @throws \Magento\Filesystem\FilesystemException
      */
     public function readFile($path, $flag = null, $context = null);
-
-    /**
-     * Checks is directory contains path
-     *
-     * @param string $path
-     * @param string $directory
-     * @return bool
-     */
-    public function isPathInDirectory($path, $directory);
 }

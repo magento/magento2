@@ -51,16 +51,16 @@
     </type>
     <type name="Magento\Catalog\Model\Resource\Product\Flat\Indexer">
         <param name="flatAttributeGroups">
-            <value>
-                <sales_quote_item>sales_quote_item</sales_quote_item>
-            </value>
+            <array>
+                <item key="sales_quote_item"><value>sales_quote_item</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <sales_setup>Magento\Sales\Model\Resource\Setup</sales_setup>
-            </value>
+            <array>
+                <item key="sales_setup"><value>Magento\Sales\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

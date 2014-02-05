@@ -52,9 +52,9 @@
             <value type="int">64</value>
         </param>
         <param name="flatAttributeGroups">
-            <value>
-                <catalog_product>catalog_product</catalog_product>
-            </value>
+            <array>
+                <item key="catalog_product"><value>catalog_product</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Catalog\Model\Resource\Product\Collection">
@@ -67,16 +67,20 @@
     </type>
     <type name="Magento\Catalog\Model\Entity\Product\Attribute\Design\Options\Container">
         <param name="options">
-            <value>
-                <option1>
-                    <value>container1</value>
-                    <label>Product Info Column</label>
-                </option1>
-                <option2>
-                    <value>container2</value>
-                    <label>Block after Info Column</label>
-                </option2>
-            </value>
+            <array>
+                <item key="option1">
+                    <array>
+                        <item key="value"><value>container1</value></item>
+                        <item key="label"><value>Product Info Column</value></item>
+                    </array>
+                </item>
+                <item key="option2">
+                    <array>
+                        <item key="value"><value>container2</value></item>
+                        <item key="label"><value>Block after Info Column</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Catalog\Helper\Product\Flat">
@@ -112,9 +116,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <catalog_setup>Magento\Catalog\Model\Resource\Setup</catalog_setup>
-            </value>
+            <array>
+                <item key="catalog_setup"><value>Magento\Catalog\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Catalog\Helper\Product\Compare">
@@ -143,6 +147,15 @@
     <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations\Main">
         <param name="inputTypeFactory">
             <instance type="Magento\Catalog\Model\System\Config\Source\InputtypeFactory" />
+        </param>
+    </type>
+    <type name="Magento\Catalog\Model\Product\LinkTypeProvider">
+        <param name="linkTypes">
+            <array>
+                <item key="links_related"><value type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED</value></item>
+                <item key="links_crosssell"><value type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL</value></item>
+                <item key="links_upsell"><value type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL</value></item>
+            </array>
         </param>
     </type>
 </config>

@@ -33,24 +33,29 @@
  */
 namespace Magento\Data\Form\Element;
 
-class Radios extends \Magento\Data\Form\Element\AbstractElement
+use Magento\Escaper;
+
+class Radios extends AbstractElement
 {
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
         $data = array()
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('radios');
     }
 
+    /**
+     * @return mixed
+     */
     public function getSeparator()
     {
         $separator = $this->getData('separator');
@@ -60,6 +65,9 @@ class Radios extends \Magento\Data\Form\Element\AbstractElement
         return $separator;
     }
 
+    /**
+     * @return string
+     */
     public function getElementHtml()
     {
         $html = '';
@@ -73,6 +81,11 @@ class Radios extends \Magento\Data\Form\Element\AbstractElement
         return $html;
     }
 
+    /**
+     * @param array $option
+     * @param array $selected
+     * @return string
+     */
     protected function _optionToHtml($option, $selected)
     {
         $html = '<input type="radio"'.$this->serialize(array('name', 'class', 'style'));

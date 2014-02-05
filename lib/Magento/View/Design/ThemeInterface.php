@@ -95,4 +95,11 @@ interface ThemeInterface
      * @return bool
      */
     public function isPhysical();
+
+    /**
+     * Return the full theme inheritance sequence, from the root theme till a specified one
+     *
+     * @return ThemeInterface[] Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
+     */
+    public function getInheritedThemes();
 }

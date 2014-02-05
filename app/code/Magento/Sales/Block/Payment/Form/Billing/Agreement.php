@@ -53,6 +53,7 @@ class Agreement extends \Magento\Payment\Block\Form
     ) {
         $this->_agreementFactory = $agreementFactory;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     protected function _construct()

@@ -61,7 +61,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\GoogleShopping\Helper\Data $gsData
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
-     * @param \Magento\GoogleShopping\Helper\Price $gsPrice
+     * @param \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
      * @param \Magento\GoogleCheckout\Helper\Data $checkoutDataHelper
      * @param \Magento\GoogleShopping\Model\Config $config
@@ -75,7 +75,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\GoogleShopping\Helper\Data $gsData,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
-        \Magento\GoogleShopping\Helper\Price $gsPrice,
+        \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
         \Magento\GoogleCheckout\Helper\Data $checkoutDataHelper,
         \Magento\GoogleShopping\Model\Config $config,
@@ -92,7 +92,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
             $productFactory,
             $gsData,
             $gsProduct,
-            $gsPrice,
+            $catalogPrice,
             $resource,
             $resourceCollection,
             $data

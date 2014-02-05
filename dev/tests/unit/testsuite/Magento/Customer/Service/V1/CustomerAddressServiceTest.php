@@ -258,11 +258,11 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             'default_billing' => true,
             'default_shipping' => false,
             'customer_id' => self::ID,
-            'region' => new Dto\Region([
+            'region' => [
                     'region_id' => self::REGION_ID,
                     'region_code' => '',
                     'region' => self::REGION
-                ]),
+                ],
             'country_id' => self::COUNTRY_ID,
             'street' => [self::STREET],
             'telephone' => self::TELEPHONE,
@@ -304,11 +304,11 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             'default_shipping' => true,
             'default_billing' => false,
             'customer_id' => self::ID,
-            'region' => new Dto\Region([
+            'region' => [
                     'region_id' => self::REGION_ID,
                     'region_code' => '',
                     'region' => self::REGION
-                ]),
+                ],
             'country_id' => self::COUNTRY_ID,
             'street' => [self::STREET],
             'telephone' => self::TELEPHONE,
@@ -351,11 +351,11 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             'default_shipping' => true,
             'default_billing' => false,
             'customer_id' => self::ID,
-            'region' => new Dto\Region([
+            'region' => [
                     'region_id' => self::REGION_ID,
                     'region_code' => '',
                     'region' => self::REGION
-                ]),
+                ],
             'country_id' => self::COUNTRY_ID,
             'street' => [self::STREET],
             'telephone' => self::TELEPHONE,
@@ -401,11 +401,11 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
                 'default_shipping' => true,
                 'default_billing' => false,
                 'customer_id' => self::ID,
-                'region' => new Dto\Region([
+                'region' => [
                         'region_id' => self::REGION_ID,
                         'region_code' => '',
                         'region' => self::REGION
-                    ]),
+                    ],
                 'country_id' => self::COUNTRY_ID,
                 'street' => [self::STREET],
                 'telephone' => self::TELEPHONE,
@@ -418,11 +418,11 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
                 'default_billing' => true,
                 'default_shipping' => false,
                 'customer_id' => self::ID,
-                'region' => new Dto\Region([
+                'region' => [
                         'region_id' => self::REGION_ID,
                         'region_code' => '',
                         'region' => self::REGION
-                    ]),
+                    ],
                 'country_id' => self::COUNTRY_ID,
                 'street' => [self::STREET],
                 'telephone' => self::TELEPHONE,

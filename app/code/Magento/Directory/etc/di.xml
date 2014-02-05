@@ -27,19 +27,21 @@
     <type name="Magento\Directory\Model\Resource\Country\Collection" shared="false" />
     <type name="Magento\Directory\Model\Currency\Import\Config">
         <param name="servicesConfig">
-            <value>
-                <webservicex>
-                    <label>Webservicex</label>
-                    <class>Magento\Directory\Model\Currency\Import\Webservicex</class>
-                </webservicex>
-            </value>
+            <array>
+                <item key="webservicex">
+                    <array>
+                        <item key="label"><value>Webservicex</value></item>
+                        <item key="class"><value>Magento\Directory\Model\Currency\Import\Webservicex</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <directory_setup>Magento\Directory\Model\Resource\Setup</directory_setup>
-            </value>
+            <array>
+                <item key="directory_setup"><value>Magento\Directory\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

@@ -54,7 +54,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     protected $_stream = null;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -92,7 +92,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
@@ -100,14 +100,14 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $data = array()
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($data);
 
         $this->_filesystem = $filesystem;
-        $this->varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $this->_helper = $helper;
         $this->_locale = $locale;
         $this->_backendAuthSession = $authSession;
@@ -306,11 +306,11 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
 
         try {
             /** @var \Magento\Filesystem\Directory\WriteInterface $varDirectory */
-            $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+            $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
             $this->_stream = $varDirectory->openFile(
                 $this->_getFilePath(),
                 $mode,
-                \Magento\Filesystem::WRAPPER_CONTENT_ZLIB
+                \Magento\App\Filesystem::WRAPPER_CONTENT_ZLIB
             );
         }
         catch (\Magento\Filesystem\FilesystemException $e) {
@@ -400,7 +400,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         }
 
         /** @var \Magento\Filesystem\Directory\ReadInterface $zlibDirectory */
-        $zlibDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ZLIB);
+        $zlibDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::WRAPPER_CONTENT_ZLIB);
         $zlibDirectory = $zlibDirectory->readFile($this->_getFilePath());
 
         echo $zlibDirectory;

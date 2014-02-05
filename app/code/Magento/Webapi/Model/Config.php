@@ -36,7 +36,7 @@ class Config
     /**
      * Pattern for Web API interface name.
      */
-    const SERVICE_CLASS_PATTERN = '/^(.+?)\\\\(.+?)\\\\Service(\\\\.+)+(V\d+)Interface$/';
+    const SERVICE_CLASS_PATTERN = '/^(.+?)\\\\(.+?)\\\\Service\\\\(V\d+)+(\\\\.+)Interface$/';
 
     /**
      * @var \Magento\App\Cache\Type\Config

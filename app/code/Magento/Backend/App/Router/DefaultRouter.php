@@ -39,7 +39,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected $_url;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_coreConfig;
 
@@ -52,9 +52,9 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -68,9 +68,9 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
         \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
         parent::__construct(
@@ -132,7 +132,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected function _shouldBeSecure($path)
     {
         return substr((string)$this->_coreConfig->getValue('web/unsecure/base_url', 'default'), 0, 5) === 'https'
-            || $this->_backendConfig->getFlag('web/secure/use_in_adminhtml')
+            || $this->_backendConfig->isSetFlag('web/secure/use_in_adminhtml')
             && substr((string)$this->_coreConfig->getValue('web/secure/base_url', 'default'), 0, 5) === 'https';
     }
 

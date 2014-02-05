@@ -27,8 +27,8 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetStorageRoot()
     {
-        $path = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')->getPath(
-            \Magento\Filesystem::MEDIA
+        $path = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem')->getPath(
+            \Magento\App\Filesystem::MEDIA_DIR
         );
         $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Cms\Helper\Wysiwyg\Images');

@@ -26,9 +26,9 @@
 <config>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <usa_setup>Magento\Usa\Model\Resource\Setup</usa_setup>
-            </value>
+            <array>
+                <item key="usa_setup"><value>Magento\Usa\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

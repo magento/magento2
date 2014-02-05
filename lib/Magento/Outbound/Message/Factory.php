@@ -27,34 +27,41 @@
  */
 namespace Magento\Outbound\Message;
 
-class Factory implements \Magento\Outbound\Message\FactoryInterface
+use Magento\ObjectManager;
+use Magento\Outbound\EndpointInterface;
+use Magento\Outbound\FormatterInterface;
+use Magento\Outbound\Message;
+use Magento\Outbound\Authentication\Factory as AuthenticationFactory;
+use Magento\Outbound\Formatter\Factory as FormatterFactory;
+
+class Factory implements FactoryInterface
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Outbound\Formatter\Factory
+     * @var FormatterFactory
      */
     private $_formatterFactory;
 
     /**
-     * @var \Magento\Outbound\Authentication\Factory
+     * @var AuthenticationFactory
      */
     private $_authFactory;
 
     /**
      * initialize the class
      *
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Outbound\Formatter\Factory $formatterFactory
-     * @param \Magento\Outbound\Authentication\Factory $authFactory
+     * @param ObjectManager $objectManager
+     * @param FormatterFactory $formatterFactory
+     * @param AuthenticationFactory $authFactory
      */
     public function __construct(
-        \Magento\ObjectManager $objectManager,
-        \Magento\Outbound\Formatter\Factory $formatterFactory,
-        \Magento\Outbound\Authentication\Factory $authFactory
+        ObjectManager $objectManager,
+        FormatterFactory $formatterFactory,
+        AuthenticationFactory $authFactory
     ) {
         $this->_objectManager = $objectManager;
         $this->_formatterFactory = $formatterFactory;
@@ -64,19 +71,18 @@ class Factory implements \Magento\Outbound\Message\FactoryInterface
     /**
      * Create a message for a given endpoint, topic and message data
      *
-     * @param \Magento\Outbound\EndpointInterface $endpoint
-     * @param string                             $topic topic of the message
-     * @param array                              $bodyData  body of the message
-     *
-     * @return \Magento\Outbound\Message
+     * @param EndpointInterface $endpoint
+     * @param string $topic topic of the message
+     * @param array $bodyData body of the message
+     * @return Message
      */
-    public function create(\Magento\Outbound\EndpointInterface $endpoint, $topic, array $bodyData)
+    public function create(EndpointInterface $endpoint, $topic, array $bodyData)
     {
         // Format first since that should turn the body from an array into a string
         $formatter = $this->_formatterFactory->getFormatter($endpoint->getFormat());
         $headers = array(
-            \Magento\Outbound\Message\FactoryInterface::TOPIC_HEADER => $topic,
-            \Magento\Outbound\FormatterInterface::CONTENT_TYPE_HEADER => $formatter->getContentType(),
+            FactoryInterface::TOPIC_HEADER => $topic,
+            FormatterInterface::CONTENT_TYPE_HEADER => $formatter->getContentType(),
         );
         $formattedBody = $formatter->format($bodyData);
 

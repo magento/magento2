@@ -29,6 +29,9 @@ use Magento\Customer\Service\V1\Dto\Region;
 
 class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityInterface
 {
+
+    const KEY_COUNTRY_ID = 'country_id';
+
     /**
      * @var array
      */
@@ -105,7 +108,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getCountryId()
     {
-        return $this->_get('country_id');
+        return $this->_get(self::KEY_COUNTRY_ID);
     }
 
     /**

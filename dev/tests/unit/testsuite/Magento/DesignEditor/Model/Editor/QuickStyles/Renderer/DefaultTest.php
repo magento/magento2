@@ -34,7 +34,7 @@ class DefaultTest
     extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @cover \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\DefaultRenderer::toCss
+     * @covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\DefaultRenderer::toCss
      * @dataProvider colorPickerData
      */
     public function testToCss($expectedResult, $data)

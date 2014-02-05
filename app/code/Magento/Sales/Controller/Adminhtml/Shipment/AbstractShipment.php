@@ -81,7 +81,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
     public function viewAction()
     {
         if ($shipmentId = $this->getRequest()->getParam('shipment_id')) {
-            $this->_forward('view', 'order_shipment', null, array('come_from'=>'shipment'));
+            $this->_forward('view', 'order_shipment', 'admin', array('come_from'=>'shipment'));
         } else {
             $this->_forward('noroute');
         }
@@ -105,7 +105,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
             return $this->_fileFactory->create(
                 'packingslip' . $date . '.pdf',
                 $pdf->render(),
-                \Magento\Filesystem::VAR_DIR,
+                \Magento\App\Filesystem::VAR_DIR,
                 'application/pdf'
             );
         }
@@ -114,9 +114,8 @@ class AbstractShipment extends \Magento\Backend\App\Action
 
     public function printAction()
     {
-        /** @see \Magento\Sales\Controller\Adminhtml\Order\Invoice */
-        $shipmentId = $this->getRequest()->getParam('invoice_id');
-        if ($shipmentId) { // invoice_id o_0
+        $shipmentId = $this->getRequest()->getParam('shipment_id');
+        if ($shipmentId) {
             $shipment = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment')->load($shipmentId);
             if ($shipment) {
                 $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Shipment')
@@ -125,7 +124,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
                 return $this->_fileFactory->create(
                     'packingslip' . $date . '.pdf',
                     $pdf->render(),
-                    \Magento\Filesystem::VAR_DIR,
+                    \Magento\App\Filesystem::VAR_DIR,
                     'application/pdf'
                 );
             }

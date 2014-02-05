@@ -25,13 +25,12 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <update handle="page_one_column"/>
+    <update handle="checkout_cart_item_renderers" />
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml" cacheable="false">
             <container name="checkout.cart.items" label="invisible" as="with-items">
                 <block class="Magento\Checkout\Block\Cart" name="checkout.cart.form" as="cart-items" template="cart/form.phtml" cacheable="false">
-                    <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="simple" template="cart/item/default.phtml" cacheable="false"/>
-                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="cart/item/default.phtml" cacheable="false"/>
-                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="cart/item/default.phtml" cacheable="false"/>
+                    <block class="Magento\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list" />
                     <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards"/>
                     <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After"/>
                 </block>
@@ -41,7 +40,6 @@
                 <block class="Magento\Checkout\Block\Cart" name="checkout.cart.methods.bottom" template="cart/methods.phtml" cacheable="false">
                     <container name="checkout.cart.methods" as="methods" label="Payment Methods After Checkout Button">
                         <block class="Magento\Checkout\Block\Onepage\Link" name="checkout.cart.methods.onepage.bottom" template="onepage/link.phtml" cacheable="false"/>
-                        <block class="Magento\Checkout\Block\Multishipping\Link" name="checkout.cart.methods.multishipping" template="multishipping/link.phtml" cacheable="false"/>
                     </container>
                 </block>
                 <block class="Magento\Checkout\Block\Cart\Crosssell" name="checkout.cart.crosssell" template="Magento_Catalog::product/list/items.phtml" after="-" cacheable="false">

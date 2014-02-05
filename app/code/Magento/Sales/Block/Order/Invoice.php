@@ -63,6 +63,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
         $this->_paymentHelper = $paymentHelper;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $registry, $data);
+        $this->_isScopePrivate = true;
     }
 
     protected function _prepareLayout()

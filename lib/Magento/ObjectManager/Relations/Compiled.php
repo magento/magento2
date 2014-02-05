@@ -49,6 +49,12 @@ class Compiled implements \Magento\ObjectManager\Relations
         $this->_relations = $relations;
     }
 
+    /**
+     * Check whether requested type is available for read
+     *
+     * @param string $type
+     * @return bool
+     */
     public function has($type)
     {
         return isset($this->_relations[$type]);

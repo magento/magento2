@@ -110,6 +110,7 @@ class Subscriber extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Set error messages scope
      *
      * @param string $scope
+     * @return void
      */
     public function setMessagesScope($scope)
     {
@@ -183,7 +184,7 @@ class Subscriber extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @param \Magento\Newsletter\Model\Queue $queue
-     * @return \Magento\Newsletter\Model\Resource\Subscriber
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function received(\Magento\Newsletter\Model\Subscriber $subscriber, \Magento\Newsletter\Model\Queue $queue)

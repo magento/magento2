@@ -71,7 +71,7 @@ class InlineVde implements \Magento\Core\Model\Translate\InlineInterface
     protected $_parser;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -92,13 +92,13 @@ class InlineVde implements \Magento\Core\Model\Translate\InlineInterface
      *
      * @param \Magento\Core\Model\Translate\InlineParser $parser
      * @param \Magento\DesignEditor\Helper\Data $helper
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\ObjectManager $objectManager
      */
     public function __construct(
         \Magento\Core\Model\Translate\InlineParser $parser,
         \Magento\DesignEditor\Helper\Data $helper,
-        \Magento\Core\Model\Url $url,
+        \Magento\UrlInterface $url,
         \Magento\ObjectManager $objectManager
     ) {
         $this->_parser = $parser;

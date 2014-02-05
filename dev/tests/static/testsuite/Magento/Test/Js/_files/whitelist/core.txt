@@ -9,8 +9,6 @@ app/code/Magento/Downloadable
 app/code/Magento/GiftMessage
 app/code/Magento/Install
 app/code/Magento/Newsletter
-app/code/Magento/PageCache
-app/code/Magento/Paygate
 app/code/Magento/Payment
 app/code/Magento/Paypal
 app/code/Magento/Persistent

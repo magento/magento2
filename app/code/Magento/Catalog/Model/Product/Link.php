@@ -46,7 +46,6 @@ namespace Magento\Catalog\Model\Product;
 class Link extends \Magento\Core\Model\AbstractModel
 {
     const LINK_TYPE_RELATED     = 1;
-    const LINK_TYPE_GROUPED     = 3;
     const LINK_TYPE_UPSELL      = 4;
     const LINK_TYPE_CROSSSELL   = 5;
 
@@ -100,12 +99,6 @@ class Link extends \Magento\Core\Model\AbstractModel
     public function useRelatedLinks()
     {
         $this->setLinkTypeId(self::LINK_TYPE_RELATED);
-        return $this;
-    }
-
-    public function useGroupedLinks()
-    {
-        $this->setLinkTypeId(self::LINK_TYPE_GROUPED);
         return $this;
     }
 
@@ -182,21 +175,6 @@ class Link extends \Magento\Core\Model\AbstractModel
         $data = $product->getCrossSellLinkData();
         if (!is_null($data)) {
             $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_CROSSSELL);
-        }
-        return $this;
-    }
-
-    /**
-     * Save grouped product relation links
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Link
-     */
-    public function saveGroupedLinks($product)
-    {
-        $data = $product->getGroupedLinkData();
-        if (!is_null($data)) {
-            $this->_getResource()->saveGroupedLinks($product, $data, self::LINK_TYPE_GROUPED);
         }
         return $this;
     }

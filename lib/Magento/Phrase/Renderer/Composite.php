@@ -30,7 +30,7 @@ class Composite implements \Magento\Phrase\RendererInterface
     /**
      * Renderer factory
      *
-     * @var \Magento\Phrase\Renderer\Factory
+     * @var Factory
      */
     protected $_rendererFactory;
 
@@ -44,11 +44,11 @@ class Composite implements \Magento\Phrase\RendererInterface
     /**
      * Renderer construct
      *
-     * @param \Magento\Phrase\Renderer\Factory $rendererFactory
+     * @param Factory $rendererFactory
      * @param array $renderers
      */
     public function __construct(
-        \Magento\Phrase\Renderer\Factory $rendererFactory,
+        Factory $rendererFactory,
         array $renderers = array()
     ) {
         $this->_rendererFactory = $rendererFactory;
@@ -62,6 +62,7 @@ class Composite implements \Magento\Phrase\RendererInterface
      * Add renderer to the end of the chain
      *
      * @param string $render
+     * @return void
      */
     protected function _append($render)
     {
@@ -69,7 +70,11 @@ class Composite implements \Magento\Phrase\RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Render result text
+     *
+     * @param string $text
+     * @param array $arguments
+     * @return string
      */
     public function render($text, array $arguments = array())
     {

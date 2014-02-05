@@ -24,6 +24,6 @@
  */
 ?>
 
-<a href="<?php echo $this->getItemRemoveUrl($this->getItem()); ?>" title="<?php echo __('Remove Item') ?>" class="action delete">
+<a href="#" data-post-remove='<?php echo $this->getItemRemoveParams($this->getItem()); ?>' title="<?php echo __('Remove Item') ?>" class="btn-remove action delete">
     <span><?php echo __('Remove item');?></span>
 </a>

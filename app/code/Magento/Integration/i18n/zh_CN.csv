@@ -77,3 +77,4 @@ OAuth,OAuth
 "Verifier is not the correct length",核验者长度不正确
 "View ""%1"" Integration","查看""%1""集成"
 "When using Oauth for token exchange, enter URL where Oauth credentials can be POST-ed. We strongly recommend you to use https://",当使用令牌交换的Oauth，输入Oauth证书能被发布的URL。我们强烈推荐你使用https：//
+"Basic Settings",基础设置

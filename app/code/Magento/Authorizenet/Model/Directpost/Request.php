@@ -84,7 +84,7 @@ class Request extends \Magento\Object
     }
 
     /**
-     * Set paygate data to request.
+     * Set authorizenet data to request.
      *
      * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
      * @return \Magento\Authorizenet\Model\Directpost\Request
@@ -99,7 +99,7 @@ class Request extends \Magento\Object
 
         $this->setXLogin($paymentMethod->getConfigData('login'))
             ->setXType('AUTH_ONLY')
-            ->setXMethod(\Magento\Paygate\Model\Authorizenet::REQUEST_METHOD_CC)
+            ->setXMethod(\Magento\Authorizenet\Model\Authorizenet::REQUEST_METHOD_CC)
             ->setXRelayUrl($paymentMethod->getRelayUrl());
 
         $this->_setTransactionKey($paymentMethod->getConfigData('trans_key'));

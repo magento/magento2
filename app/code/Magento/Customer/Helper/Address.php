@@ -193,6 +193,21 @@ class Address extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve renderer by code
+     *
+     * @param string $code
+     * @return \Magento\Customer\Block\Address\Renderer\RendererInterface
+     */
+    public function getFormatTypeRenderer($code)
+    {
+        $formatType = $this->_addressConfig->getFormatByCode($code);
+        if (!$formatType || !$formatType->getRenderer()) {
+            return null;
+        }
+        return $formatType->getRenderer();
+    }
+
+    /**
      * Determine if specified address config value can be shown
      *
      * @param string $key

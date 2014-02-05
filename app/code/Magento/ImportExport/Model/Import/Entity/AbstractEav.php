@@ -38,16 +38,9 @@ abstract class AbstractEav
     const ATTRIBUTE_COLLECTION_NAME = 'Magento\Data\Collection';
 
     /**
-     * Website manager (currently \Magento\Core\Model\App works as website manager)
+     * Store manager
      *
-     * @var \Magento\Core\Model\App
-     */
-    protected $_websiteManager;
-
-    /**
-     * Store manager (currently \Magento\Core\Model\App works as store manager)
-     *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -107,7 +100,7 @@ abstract class AbstractEav
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param array $data
@@ -119,7 +112,7 @@ abstract class AbstractEav
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         array $data = array()
@@ -128,8 +121,7 @@ abstract class AbstractEav
             $coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource, $data
         );
 
-        $this->_websiteManager = isset($data['website_manager']) ? $data['website_manager'] : $app;
-        $this->_storeManager   = isset($data['store_manager']) ? $data['store_manager'] : $app;
+        $this->_storeManager   = $storeManager;
         $this->_attributeCollection = isset($data['attribute_collection']) ? $data['attribute_collection']
             : $collectionFactory->create(static::ATTRIBUTE_COLLECTION_NAME);
 
@@ -164,7 +156,7 @@ abstract class AbstractEav
     protected function _initWebsites($withDefault = false)
     {
         /** @var $website \Magento\Core\Model\Website */
-        foreach ($this->_websiteManager->getWebsites($withDefault) as $website) {
+        foreach ($this->_storeManager->getWebsites($withDefault) as $website) {
             $this->_websiteCodeToId[$website->getCode()] = $website->getId();
         }
         return $this;

@@ -79,7 +79,7 @@ class ItemQuery extends \Zend_Gdata_Query
      * Set language code
      *
      * @param string $language code
-     * @return \Magento\Gdata\Gshopping\ItemQuery
+     * @return $this
      */
     public function setLanguage($language)
     {
@@ -101,7 +101,7 @@ class ItemQuery extends \Zend_Gdata_Query
      * Set target country code
      *
      * @param string $targetCountry code
-     * @return \Magento\Gdata\Gshopping\ItemQuery
+     * @return $this
      */
     public function setTargetCountry($targetCountry)
     {
@@ -123,7 +123,7 @@ class ItemQuery extends \Zend_Gdata_Query
      * Set default feed's URI
      *
      * @param string $uri URI
-     * @return \Magento\Gdata\Gshopping\ItemQuery
+     * @return $this
      */
     public function setFeedUri($uri)
     {

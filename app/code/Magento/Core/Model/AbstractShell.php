@@ -66,17 +66,17 @@ abstract class AbstractShell
     /**
      * Initializes application and parses input parameters
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $entryPoint
      * @throws \Exception
      */
-    public function __construct(\Magento\Filesystem $filesystem, $entryPoint)
+    public function __construct(\Magento\App\Filesystem $filesystem, $entryPoint)
     {
         if (isset($_SERVER['REQUEST_METHOD'])) {
             throw new \Exception('This script cannot be run from Browser. This is the shell script.');
         }
 
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $this->_entryPoint = $entryPoint;
         $this->_rawArgs = $_SERVER['argv'];
         $this->_applyPhpVariables();

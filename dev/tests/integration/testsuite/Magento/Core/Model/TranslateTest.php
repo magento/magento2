@@ -91,7 +91,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             array(
                 $objectManager->get('Magento\Core\Model\StoreManagerInterface'),
                 $objectManager->get('Magento\View\Design\Theme\FlyweightFactory'),
-                $objectManager->get('Magento\Core\Model\Config'),
+                $objectManager->get('Magento\App\ConfigInterface'),
                 $objectManager->get('Magento\Core\Model\Store\Config'),
                 $objectManager->get('Magento\Core\Model\ThemeFactory'),
                 $objectManager->get('Magento\Core\Model\App'),

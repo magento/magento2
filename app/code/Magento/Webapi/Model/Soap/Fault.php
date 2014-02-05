@@ -40,8 +40,12 @@ class Fault extends \RuntimeException
      */
     const NODE_DETAIL_CODE = 'Code';
     const NODE_DETAIL_PARAMETERS = 'Parameters';
+    /** Note that parameter node must be unique in scope of all complex types declared in WSDL */
+    const NODE_DETAIL_PARAMETER = 'GenericFaultParameter';
+    const NODE_DETAIL_PARAMETER_KEY = 'key';
+    const NODE_DETAIL_PARAMETER_VALUE = 'value';
     const NODE_DETAIL_TRACE = 'Trace';
-    const NODE_DETAIL_WRAPPER = 'DefaultFault';
+    const NODE_DETAIL_WRAPPER = 'GenericFault';
     /**#@-*/
 
     /** @var string */
@@ -280,12 +284,47 @@ FAULT_MESSAGE;
             if (is_numeric($detailNode)) {
                 continue;
             }
-            if (is_string($detailValue) || is_numeric($detailValue)) {
-                $detailsXml .= "<m:$detailNode>" . htmlspecialchars($detailValue) . "</m:$detailNode>";
-            } elseif (is_array($detailValue)) {
-                $detailsXml .= "<m:$detailNode>" . $this->_convertDetailsToXml($detailValue) . "</m:$detailNode>";
+            switch ($detailNode) {
+                case self::NODE_DETAIL_CODE:
+                    // break is intentionally omitted
+                case self::NODE_DETAIL_TRACE:
+                    if (is_string($detailValue) || is_numeric($detailValue)) {
+                        $detailsXml .= "<m:$detailNode>" . htmlspecialchars($detailValue) . "</m:$detailNode>";
+                    }
+                    break;
+                case self::NODE_DETAIL_PARAMETERS:
+                    $detailsXml .= $this->_getParametersXml($detailValue, $detailNode, $detailsXml);
+                    break;
             }
         }
         return $detailsXml;
+    }
+
+    /**
+     * Generate XML for parameters.
+     *
+     * @param array $parameters
+     * @return string
+     */
+    protected function _getParametersXml($parameters)
+    {
+        $result = '';
+        if (is_array($parameters)) {
+            $paramsXml = '';
+            foreach ($parameters as $parameterName => $parameterValue) {
+                if (is_string($parameterName) && (is_string($parameterValue) || is_numeric($parameterValue))) {
+                    $keyNode = self::NODE_DETAIL_PARAMETER_KEY;
+                    $valueNode = self::NODE_DETAIL_PARAMETER_VALUE;
+                    $parameterNode = self::NODE_DETAIL_PARAMETER;
+                    $paramsXml .= "<m:$parameterNode><m:$keyNode>$parameterName</m:$keyNode><m:$valueNode>"
+                        . htmlspecialchars($parameterValue) . "</m:$valueNode></m:$parameterNode>";
+                }
+            }
+            if (!empty($paramsXml)) {
+                $parametersNode = self::NODE_DETAIL_PARAMETERS;
+                $result = "<m:$parametersNode>" . $paramsXml . "</m:$parametersNode>";
+            }
+        }
+        return $result;
     }
 }

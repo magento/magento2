@@ -25,7 +25,10 @@
  */
 namespace Magento\Profiler\Driver\Standard\Output;
 
-class Csvfile extends \Magento\Profiler\Driver\Standard\AbstractOutput
+use Magento\Profiler\Driver\Standard\AbstractOutput;
+use Magento\Profiler\Driver\Standard\Stat;
+
+class Csvfile extends AbstractOutput
 {
     const DEFAULT_FILEPATH = '/var/log/profiler.csv';
 
@@ -76,10 +79,11 @@ class Csvfile extends \Magento\Profiler\Driver\Standard\AbstractOutput
     /**
      * Write profiling results to CSV-file
      *
-     * @param \Magento\Profiler\Driver\Standard\Stat $stat
+     * @param Stat $stat
+     * @return void
      * @throws \RuntimeException if output file cannot be opened
      */
-    public function display(\Magento\Profiler\Driver\Standard\Stat $stat)
+    public function display(Stat $stat)
     {
         $fileHandle = fopen($this->_filePath, 'w');
         if (!$fileHandle) {
@@ -102,9 +106,10 @@ class Csvfile extends \Magento\Profiler\Driver\Standard\AbstractOutput
      * Write content into an opened file handle
      *
      * @param resource $fileHandle
-     * @param \Magento\Profiler\Driver\Standard\Stat $stat
+     * @param Stat $stat
+     * @return void
      */
-    protected function _writeFileContent($fileHandle, \Magento\Profiler\Driver\Standard\Stat $stat)
+    protected function _writeFileContent($fileHandle, Stat $stat)
     {
         foreach ($this->_getTimerIds($stat) as $timerName) {
             $row = array();

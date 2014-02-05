@@ -36,8 +36,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        /** @var $configModel \Magento\Core\Model\Config */
-        $configModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config');
+        /** @var $configModel \Magento\App\ConfigInterface */
+        $configModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\ConfigInterface');
         // @todo re-implement this test
         $data = array(
             'from' => '™',

@@ -60,41 +60,6 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Stdlib\Cookie', $this->_model->getCookie());
     }
 
-    /**
-     * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store general/single_store_mode/enabled 1
-     */
-    public function testIsSingleStoreModeWhenEnabled()
-    {
-        $this->assertTrue($this->_mageModel->isSingleStoreMode());
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store general/single_store_mode/enabled 0
-     */
-    public function testIsSingleStoreModeWhenDisabled()
-    {
-        $this->assertFalse($this->_mageModel->isSingleStoreMode());;
-    }
-
-    public function testHasSingleStore()
-    {
-        $this->assertTrue($this->_model->hasSingleStore());
-        $this->assertTrue($this->_mageModel->hasSingleStore());
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testSetCurrentStore()
-    {
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Store');
-        $this->_model->setCurrentStore($store);
-        $this->assertSame($store, $this->_model->getStore());
-    }
-
     public function testSetErrorHandler()
     {
         $this->_model->setErrorHandler(array($this, 'errorHandler'));
@@ -122,68 +87,9 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($area, $this->_model->getArea('frontend'));
     }
 
-    /**
-     * @expectedException \Magento\Core\Model\Store\Exception
-     */
-    public function testGetNotExistingStore()
-    {
-        $this->_mageModel->getStore(100);
-    }
-
-    public function testGetSafeNotExistingStore()
-    {
-        $this->_mageModel->getSafeStore(100);
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Request\Http');
-        $this->assertEquals('noroute', $request->getActionName());
-    }
-
-    public function testGetStores()
-    {
-        $this->assertNotEmpty($this->_mageModel->getStores());
-        $this->assertNotContains(
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID,
-            array_keys($this->_mageModel->getStores())
-        );
-        $this->assertContains(
-            \Magento\Core\Model\Store::DEFAULT_STORE_ID,
-            array_keys($this->_mageModel->getStores(true))
-        );
-    }
-
-    public function testGetDefaultStoreView()
-    {
-        $store = $this->_mageModel->getDefaultStoreView();
-        $this->assertEquals('default', $store->getCode());
-    }
-
     public function testGetDistroLocaleCode()
     {
         $this->assertEquals(\Magento\Core\Model\App::DISTRO_LOCALE_CODE, $this->_model->getDistroLocaleCode());
-    }
-
-    /**
-     * @expectedException \Magento\Core\Exception
-     */
-    public function testGetWebsiteNonExisting()
-    {
-        $this->assertNotEmpty($this->_mageModel->getWebsite(true)->getId());
-        $this->_mageModel->getWebsite(100);
-    }
-
-    public function testGetWebsites()
-    {
-        $this->assertNotEmpty($this->_mageModel->getWebsites());
-        $this->assertNotContains(0, array_keys($this->_mageModel->getWebsites()));
-        $this->assertContains(0, array_keys($this->_mageModel->getWebsites(true)));
-    }
-
-    /**
-     * @expectedException \Magento\Core\Exception
-     */
-    public function testGetGroupNonExisting()
-    {
-        $this->assertNotEmpty($this->_mageModel->getGroup(true)->getId());
-        $this->_mageModel->getGroup(100);
     }
 
     public function testGetLocale()
@@ -262,39 +168,5 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->_model->setResponse($response);
         $this->assertSame($response, $this->_model->getResponse());
         $this->assertEmpty($this->_model->getResponse()->getHeaders());
-    }
-
-    /**
-     * @expectedException \Magento\Core\Model\Store\Exception
-     */
-    public function testThrowStoreException()
-    {
-        $this->_model->throwStoreException('test');
-    }
-
-    public function testSetGetUseSessionVar()
-    {
-        $this->assertFalse($this->_model->getUseSessionVar());
-        $this->_model->setUseSessionVar(true);
-        $this->assertTrue($this->_model->getUseSessionVar());
-    }
-
-    public function testGetAnyStoreView()
-    {
-        $this->assertInstanceOf('Magento\Core\Model\Store', $this->_mageModel->getAnyStoreView());
-    }
-
-    public function testSetGetUseSessionInUrl()
-    {
-        $this->assertTrue($this->_model->getUseSessionInUrl());
-        $this->_model->setUseSessionInUrl(false);
-        $this->assertFalse($this->_model->getUseSessionInUrl());
-    }
-
-    public function testGetGroups()
-    {
-        $groups = $this->_mageModel->getGroups();
-        $this->assertInternalType('array', $groups);
-        $this->assertGreaterThanOrEqual(1, count($groups));
     }
 }

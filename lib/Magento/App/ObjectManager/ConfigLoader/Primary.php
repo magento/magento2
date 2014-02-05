@@ -35,16 +35,16 @@ class Primary
     protected $_appMode;
 
     /**
-     * @var \Magento\Filesystem\DirectoryList
+     * @var \Magento\App\Filesystem\DirectoryList
      */
     protected $_directoryList;
 
     /**
-     * @param string $configDirectoryPath
+     * @param \Magento\App\Filesystem\DirectoryList $directoryList
      * @param string $appMode
      */
     public function __construct(
-        \Magento\Filesystem\DirectoryList $directoryList,
+        \Magento\App\Filesystem\DirectoryList $directoryList,
         $appMode = \Magento\App\State::MODE_DEFAULT
     ) {
         $this->_directoryList = $directoryList;
@@ -59,8 +59,8 @@ class Primary
     public function load()
     {
         $reader = new \Magento\ObjectManager\Config\Reader\Dom(
-            new \Magento\App\Config\FileResolver\Primary(
-                new \Magento\Filesystem(
+            new \Magento\App\Arguments\FileResolver\Primary(
+                new \Magento\App\Filesystem(
                     $this->_directoryList,
                     new \Magento\Filesystem\Directory\ReadFactory(),
                     new \Magento\Filesystem\Directory\WriteFactory()
@@ -69,7 +69,7 @@ class Primary
             ),
             new \Magento\ObjectManager\Config\Mapper\Dom(),
             new \Magento\ObjectManager\Config\SchemaLocator(),
-            new \Magento\App\Config\ValidationState($this->_appMode)
+            new \Magento\App\Arguments\ValidationState($this->_appMode)
         );
 
         return $reader->read('primary');

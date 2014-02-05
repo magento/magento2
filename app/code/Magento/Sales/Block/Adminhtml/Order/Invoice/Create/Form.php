@@ -65,13 +65,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         return $this->_coreRegistry->registry('current_invoice');
     }
 
-    protected function _prepareLayout()
-    {
-        $trackingBlock = $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Tracking');
-        $this->setChild('tracking', $trackingBlock);
-        return parent::_prepareLayout();
-    }
-
     public function getSaveUrl()
     {
         return $this->getUrl('sales/*/save', array('order_id' => $this->getInvoice()->getOrderId()));

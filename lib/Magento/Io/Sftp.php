@@ -36,7 +36,7 @@ namespace Magento\Io;
  * @link        http://www.php.net/manual/en/function.ssh2-connect.php
  */
 require_once('phpseclib/Net/SFTP.php');
-class Sftp extends \Magento\Io\AbstractIo implements \Magento\Io\IoInterface
+class Sftp extends AbstractIo implements IoInterface
 {
     const REMOTE_TIMEOUT = 10;
     const SSH2_PORT = 22;
@@ -77,6 +77,8 @@ class Sftp extends \Magento\Io\AbstractIo implements \Magento\Io\IoInterface
 
     /**
      * Close a connection
+     *
+     * @return void
      */
     public function close()
     {
@@ -115,6 +117,11 @@ class Sftp extends \Magento\Io\AbstractIo implements \Magento\Io\IoInterface
 
     /**
      * Delete a directory
+     *
+     * @param string $dir
+     * @param bool $recursive
+     * @return bool
+     * @throws \Exception
      */
     public function rmdir($dir, $recursive=false)
     {
@@ -149,6 +156,8 @@ class Sftp extends \Magento\Io\AbstractIo implements \Magento\Io\IoInterface
 
     /**
      * Get current working directory
+     *
+     * @return mixed
      */
     public function pwd()
     {
@@ -158,6 +167,8 @@ class Sftp extends \Magento\Io\AbstractIo implements \Magento\Io\IoInterface
     /**
      * Change current working directory
      *
+     * @param string $dir
+     * @return bool
      */
     public function cd($dir)
     {

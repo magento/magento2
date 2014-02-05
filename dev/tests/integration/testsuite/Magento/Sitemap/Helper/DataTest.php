@@ -51,7 +51,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             10,
-            $this->_helper->getMaximumLinesNumber(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID)
+            $this->_helper->getMaximumLinesNumber(\Magento\Core\Model\Store::DISTRO_STORE_ID)
         );
     }
 
@@ -65,7 +65,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             1024,
-            $this->_helper->getMaximumFileSize(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID)
+            $this->_helper->getMaximumFileSize(\Magento\Core\Model\Store::DISTRO_STORE_ID)
         );
     }
 
@@ -78,7 +78,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'daily', $this->_helper->getCategoryChangefreq(\Magento\Core\Model\Store::DEFAULT_STORE_ID)
         );
         $this->assertEquals(
-            'montly', $this->_helper->getCategoryChangefreq(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID)
+            'montly', $this->_helper->getCategoryChangefreq(\Magento\Core\Model\Store::DISTRO_STORE_ID)
         );
     }
 
@@ -91,7 +91,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'daily', $this->_helper->getProductChangefreq(\Magento\Core\Model\Store::DEFAULT_STORE_ID)
         );
         $this->assertEquals(
-            'montly', $this->_helper->getProductChangefreq(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID)
+            'montly', $this->_helper->getProductChangefreq(\Magento\Core\Model\Store::DISTRO_STORE_ID)
         );
     }
 
@@ -106,7 +106,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             'montly',
-            $this->_helper->getPageChangefreq(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID)
+            $this->_helper->getPageChangefreq(\Magento\Core\Model\Store::DISTRO_STORE_ID)
         );
     }
 
@@ -121,7 +121,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             100,
-            $this->_helper->getCategoryPriority(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID)
+            $this->_helper->getCategoryPriority(\Magento\Core\Model\Store::DISTRO_STORE_ID)
         );
     }
 
@@ -134,7 +134,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             1,
             $this->_helper->getProductPriority(\Magento\Core\Model\Store::DEFAULT_STORE_ID)
         );
-        $this->assertEquals(100, $this->_helper->getProductPriority(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID));
+        $this->assertEquals(100, $this->_helper->getProductPriority(\Magento\Core\Model\Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -146,7 +146,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             0.25,
             $this->_helper->getPagePriority(\Magento\Core\Model\Store::DEFAULT_STORE_ID)
         );
-        $this->assertEquals(100, $this->_helper->getPagePriority(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID));
+        $this->assertEquals(100, $this->_helper->getPagePriority(\Magento\Core\Model\Store::DISTRO_STORE_ID));
     }
 
     /**
@@ -159,7 +159,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->_helper->getEnableSubmissionRobots(\Magento\Core\Model\Store::DEFAULT_STORE_ID)
         );
         $this->assertEquals(
-            1, $this->_helper->getEnableSubmissionRobots(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID)
+            1, $this->_helper->getEnableSubmissionRobots(\Magento\Core\Model\Store::DISTRO_STORE_ID)
         );
     }
 
@@ -172,7 +172,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'all', $this->_helper->getProductImageIncludePolicy(\Magento\Core\Model\Store::DEFAULT_STORE_ID)
         );
         $this->assertEquals(
-            'base', $this->_helper->getProductImageIncludePolicy(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID)
+            'base', $this->_helper->getProductImageIncludePolicy(\Magento\Core\Model\Store::DISTRO_STORE_ID)
         );
     }
 }

@@ -28,4 +28,7 @@
     <type name="Magento\Sales\Model\Convert\Quote">
         <plugin name="gift_message_quote_item_conversion" type="Magento\GiftMessage\Model\Plugin\QuoteItem"/>
     </type>
+    <type name="Magento\Multishipping\Block\Checkout\Shipping">
+        <plugin name="getItemsBoxTextAfter" type="Magento\GiftMessage\Block\Message\Multishipping\Plugin\ItemsBox"/>
+    </type>
 </config>

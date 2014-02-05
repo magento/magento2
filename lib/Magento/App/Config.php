@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento application object manager. Configures and application application
+ * Application configuration object. Used to access configuration when application is initialized and installed.
  *
  * Magento
  *
@@ -23,128 +23,61 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\App;
 
-class Config
+class Config implements \Magento\App\ConfigInterface
 {
     /**
-     * Config data
-     *
-     * @var array
-     */
-    protected $_data;
-
-    /**
-     * Configuration loader
-     *
      * @var \Magento\App\Config\Loader
      */
     protected $_loader;
 
     /**
-     * Application options
-     *
-     * @var array
+     * @var \Magento\App\Config\Data
      */
-    protected $_parameters;
+    protected $_data;
 
     /**
-     * @param array $parameters
-     * @param Config\Loader $loader
+     * @param Arguments\Loader $loader
      */
-    public function __construct(array $parameters, Config\Loader $loader)
+    public function __construct(Arguments\Loader $loader)
     {
         $this->_loader = $loader;
-        $this->_parameters = $parameters;
-        $this->_data = array_replace_recursive($this->_parseParams($loader->load()), $parameters);
+        $this->_data = $loader->load();
     }
 
     /**
-     * @param array $input
-     * @return array
-     */
-    protected function _parseParams(array $input)
-    {
-        $stack = $input;
-        unset($stack['resource']);
-        unset($stack['connection']);
-        $separator = '.';
-        $output = array();
-
-        while ($stack) {
-            list($key, $value) = each($stack);
-            unset($stack[$key]);
-            if (is_array($value)) {
-                if (count($value)) {
-                    foreach ($value as $subKey => $node) {
-                        $build[$key . $separator . $subKey] = $node;
-                    }
-                } else {
-                    $build[$key] = null;
-                }
-                $stack = $build + $stack;
-                continue;
-            }
-            $output[$key] = $value;
-        }
-        $output['connection'] = isset($input['connection']) ? $input['connection'] : array();
-        $output['resource'] = isset($input['resource']) ? $input['resource'] : array();
-        return $output;
-    }
-
-    /**
-     * Retrieve connection configuration by connection name
+     * Retrieve config value by path
      *
-     * @param string $connectionName
-     * @return array
+     * @param string $path
+     * @return mixed
      */
-    public function getConnection($connectionName)
+    public function getValue($path = null)
     {
-        return isset($this->_data['connection'][$connectionName])
-            ? $this->_data['connection'][$connectionName]
-            : null;
+        return $this->_data->getValue($path);
     }
 
     /**
-     * Retrieve list of connections
+     * Set config value
      *
-     * @return array
+     * @param string $path
+     * @param mixed $value
+     * @return void
      */
-    public function getConnections()
+    public function setValue($path, $value)
     {
-        return isset($this->_data['connection']) ? $this->_data['connection'] : array();
+        $this->_data->setValue($path, $value);
     }
 
     /**
-     * Retrieve list of resources
+     * Retrieve config flag
      *
-     * @return array
+     * @param string $path
+     * @return bool
      */
-    public function getResources()
+    public function isSetFlag($path)
     {
-        return $this->_data['resource'];
-    }
-
-    /**
-     * Retrieve key
-     *
-     * @param string $key
-     * @param mixed $defaultValue
-     * @return array|null
-     */
-    public function get($key = null, $defaultValue = null)
-    {
-        if ($key === null) {
-            return $this->_data;
-        }
-        return isset($this->_data[$key]) ? $this->_data[$key] : $defaultValue;
-    }
-
-    /**
-     * Reload local.xml
-     */
-    public function reload()
-    {
-        $this->_data = array_replace_recursive($this->_parseParams($this->_loader->load()), $this->_parameters);
+        return (bool)$this->_data->getValue($path);
     }
 }

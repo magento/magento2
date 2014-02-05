@@ -61,7 +61,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
     {
         $this->_urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with($this->equalTo('*/authorizenet_directpost_payment/place'), $this->equalTo(array()))
+            ->with($this->equalTo('adminhtml/authorizenet_directpost_payment/place'), $this->equalTo(array()))
             ->will($this->returnValue('some value'));
         $this->assertEquals('some value', $this->_model->getPlaceOrderAdminUrl());
     }

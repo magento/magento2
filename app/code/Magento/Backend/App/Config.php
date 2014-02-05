@@ -67,8 +67,6 @@ class Config implements ConfigInterface
 
     /**
      * Reinitialize configuration
-     *
-     * @return \Magento\Core\Model\Config
      */
     public function reinit()
     {
@@ -81,7 +79,7 @@ class Config implements ConfigInterface
      * @param string $path
      * @return bool
      */
-    public function getFlag($path)
+    public function isSetFlag($path)
     {
         return !!$this->_sectionPool->getSection('default', null)->getValue($path);
     }

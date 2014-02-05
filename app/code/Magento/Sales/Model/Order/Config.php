@@ -56,20 +56,20 @@ class Config
     /**
      * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory
      */
-    protected $_orderStatusCollFactory;
+    protected $_orderStatusCollectionFactory;
 
     /**
      * Constructor
      *
      * @param \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory
-     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollectionFactory
      */
     public function __construct(
         \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory,
-        \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollFactory
+        \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollectionFactory
     ) {
         $this->_orderStatusFactory = $orderStatusFactory;
-        $this->_orderStatusCollFactory = $orderStatusCollFactory;
+        $this->_orderStatusCollectionFactory = $orderStatusCollectionFactory;
     }
 
     /**
@@ -78,7 +78,7 @@ class Config
     protected function _getCollection()
     {
         if ($this->_collection == null) {
-            $this->_collection = $this->_orderStatusCollFactory->create()->joinStates();
+            $this->_collection = $this->_orderStatusCollectionFactory->create()->joinStates();
         }
         return $this->_collection;
     }
@@ -149,7 +149,7 @@ class Config
      */
     public function getStatuses()
     {
-        $statuses = $this->_orderStatusCollFactory->create()->toOptionHash();
+        $statuses = $this->_orderStatusCollectionFactory->create()->toOptionHash();
         return $statuses;
     }
 
@@ -191,7 +191,7 @@ class Config
         foreach ($state as $_state) {
             $stateNode = $this->_getState($_state);
             if ($stateNode) {
-                $collection = $this->_orderStatusCollFactory->create()
+                $collection = $this->_orderStatusCollectionFactory->create()
                     ->addStateFilter($_state)
                     ->orderByLabel();
                 foreach ($collection as $item) {

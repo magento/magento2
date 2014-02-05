@@ -25,25 +25,28 @@
  */
 namespace Magento\Module\Dir;
 
+use Magento\Module\ModuleListInterface;
+use Magento\Module\Dir as ModuleDir;
+
 class ReverseResolver
 {
     /**
-     * @var \Magento\Module\ModuleListInterface
+     * @var ModuleListInterface
      */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Module\Dir
+     * @var ModuleDir
      */
     protected $_moduleDirs;
 
     /**
-     * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Module\Dir $moduleDirs
+     * @param ModuleListInterface $moduleList
+     * @param ModuleDir $moduleDirs
      */
     public function __construct(
-        \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Module\Dir $moduleDirs
+        ModuleListInterface $moduleList,
+        ModuleDir $moduleDirs
     ) {
         $this->_moduleList = $moduleList;
         $this->_moduleDirs = $moduleDirs;

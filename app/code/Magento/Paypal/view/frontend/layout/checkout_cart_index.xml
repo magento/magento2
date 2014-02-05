@@ -31,9 +31,21 @@
                 <argument name="value" xsi:type="string">1</argument>
             </action>
         </block>
+        <block class="Magento\Paypal\Block\PayflowExpress\Shortcut" name="checkout.cart.methods.payflow_express.top"
+               before="-" template="express/shortcut.phtml" cacheable="false">
+            <action method="setIsQuoteAllowed">
+                <argument name="value" xsi:type="string">1</argument>
+            </action>
+        </block>
     </referenceContainer>
     <referenceContainer name="checkout.cart.methods">
         <block class="Magento\Paypal\Block\Express\Shortcut" name="checkout.cart.methods.paypal_express.bottom"
+               before="-" template="express/shortcut.phtml" cacheable="false">
+            <action method="setIsQuoteAllowed">
+                <argument name="value" xsi:type="string">1</argument>
+            </action>
+        </block>
+        <block class="Magento\Paypal\Block\PayflowExpress\Shortcut" name="checkout.cart.methods.payflow_express.bottom"
                before="-" template="express/shortcut.phtml" cacheable="false">
             <action method="setIsQuoteAllowed">
                 <argument name="value" xsi:type="string">1</argument>

@@ -112,7 +112,7 @@ class Observer
         /** @var $store \Magento\Core\Model\Store */
         foreach ($storeCollection as $store) {
             if ($store->getId() == 0) {
-                $store->setUrlClassName('Magento\Backend\Model\Url');
+                $store->setUrlClassName('Magento\Backend\Model\UrlInterface');
                 break;
             }
         }

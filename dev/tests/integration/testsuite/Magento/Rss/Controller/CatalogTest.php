@@ -89,7 +89,7 @@ class CatalogTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAuthorizationFailed($action)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\UrlInterface')
             ->turnOffSecretKey();
         $this->dispatch("backend/rss/catalog/{$action}");
         $this->assertHeaderPcre('Http/1.1', '/^401 Unauthorized$/');
@@ -172,7 +172,7 @@ class CatalogTest extends \Magento\TestFramework\TestCase\AbstractController
             'PHP_AUTH_USER' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             'PHP_AUTH_PW' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         ));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\UrlInterface')
             ->turnOffSecretKey();
     }
 }

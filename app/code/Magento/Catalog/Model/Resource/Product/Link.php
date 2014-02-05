@@ -100,7 +100,7 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
         $links   = $adapter->fetchPairs($select, $bind);
 
         $deleteIds = array();
-        foreach($links as $linkedProductId => $linkId) {
+        foreach ($links as $linkedProductId => $linkId) {
             if (!isset($data[$linkedProductId])) {
                 $deleteIds[] = (int)$linkId;
             }
@@ -220,13 +220,6 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
             ->from(array('l' => $this->getMainTable()), array('linked_product_id'))
             ->where('product_id = :product_id')
             ->where('link_type_id = :link_type_id');
-        if ($typeId == \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED) {
-            $select->join(
-                array('e' => $this->getTable('catalog_product_entity')),
-                'e.entity_id = l.linked_product_id AND e.required_options = 0',
-                array()
-            );
-        }
 
         $childrenIds[$typeId] = array();
         $result = $adapter->fetchAll($select, $bind);
@@ -259,41 +252,5 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
 
         return $parentIds;
-    }
-
-    /**
-     * Save grouped product relations
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param array $data
-     * @param int $typeId
-     * @return \Magento\Catalog\Model\Resource\Product\Link
-     */
-    public function saveGroupedLinks($product, $data, $typeId)
-    {
-        $adapter = $this->_getWriteAdapter();
-        // check for change relations
-        $bind    = array(
-            'product_id'    => (int)$product->getId(),
-            'link_type_id'  => (int)$typeId
-        );
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array('linked_product_id'))
-            ->where('product_id = :product_id')
-            ->where('link_type_id = :link_type_id');
-        $old = $adapter->fetchCol($select, $bind);
-        $new = array_keys($data);
-
-        if (array_diff($old, $new) || array_diff($new, $old)) {
-            $product->setIsRelationsChanged(true);
-        }
-
-        // save product links attributes
-        $this->saveProductLinks($product, $data, $typeId);
-
-        // Grouped product relations should be added to relation table
-        $this->_catalogProductRelation->processRelations($product->getId(), $new);
-
-        return $this;
     }
 }

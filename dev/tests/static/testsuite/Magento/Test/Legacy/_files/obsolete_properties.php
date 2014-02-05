@@ -50,6 +50,9 @@ return array(
     array('_currency', 'Magento\GoogleCheckout\Model\Api\Xml\Checkout'),
     array('_currencyNameTable'),
     array('_customEtcDir', 'Magento\Core\Model\Config'),
+    array('_customerFactory ', '\Magento\Sales\Block\Adminhtml\Billing\Agreement\View\Tab\Info'),
+    array('_customerFactory ', '\Magento\Sales\Block\Adminhtml\Order\Create\Form\Account'),
+    array('_customerFormFactory', '\Magento\Sales\Block\Adminhtml\Order\Create\Form\Account'),
     array('_defaultTemplates', 'Magento\Email\Model\Template'),
     array('_designProductSettingsApplied'),
     array('_directOutput', 'Magento\Core\Model\Layout'),
@@ -73,7 +76,7 @@ return array(
     array('_moduleReader', 'Magento\Backend\Model\Menu\Config'),
     array('_option', 'Magento\Captcha\Helper\Data', '_dirs'),
     array('_options', 'Magento\Core\Model\Config', 'Magento\Filesystem'),
-    array('_optionsMapping', null, '\Magento\Filesystem::getPath($nodeKey)'),
+    array('_optionsMapping', null, '\Magento\App\Filesystem::getPath($nodeKey)'),
     array('_order', 'Magento\Checkout\Block\Onepage\Success'),
     array('_order_id'),
     array('_parent', 'Magento\Core\Block\AbstractBlock'),
@@ -105,6 +108,8 @@ return array(
     array('decoratedIsOdd', null, 'getDecoratedIsOdd'),
     array('decoratedIsLast', null, 'getDecoratedIsLast'),
     array('static', 'Magento\Email\Model\Template\Filter'),
+    array('_addressForm', 'Magento\Sales\Block\Adminhtml\Order\Create\Form\Address'),
+    array('_adminhtmlAddresses', 'Magento\Sales\Block\Adminhtml\Order\Create\Form\Address'),
     array('_useAnalyticFunction'),
     array('_defaultIndexer', 'Magento\CatalogInventory\Model\Resource\Indexer\Stock'),
     array('_engine', 'Magento\CatalogSearch\Model\Resource\Fulltext'),
@@ -267,4 +272,5 @@ return array(
     array('_messagesBlock', 'Magento\View\Element\AbstractBlock'),
     array('_messagesBlock', 'Magento\Connect\Helper\Data'),
     array('escapeMessageFlag', 'Magento\View\Block\Messages'),
+    array('fileIteratorFactory', 'Magento\Core\Model\Theme\Collection')
 );

@@ -26,8 +26,15 @@
 
 namespace Magento\Index\Block\Adminhtml\Process\Edit;
 
+use Magento\Backend\Block\Widget\Form as WidgetForm;
+
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    /**
+     * Prepare form
+     *
+     * @return WidgetForm
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
@@ -43,6 +50,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         return parent::_prepareForm();
     }
 
+    /**
+     * Get action url
+     *
+     * @return string
+     */
     public function getActionUrl()
     {
         return $this->getUrl('adminhtml/process/save');

@@ -32,9 +32,9 @@
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Authorization\RoleLocator\DefaultRoleLocator" />
     <preference for="Magento\Session\SessionManagerInterface" type="Magento\Core\Model\Session" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Core\Model\Locale" />
-    <preference for="Magento\View\Asset\MergeStrategyInterface" type="Magento\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\Core\Model\DataService\ConfigInterface" type="Magento\Core\Model\DataService\Config" />
-    <preference for="Magento\Core\Model\ConfigInterface" type="Magento\Core\Model\Config" />
+    <preference for="Magento\App\ConfigInterface" type="Magento\Core\Model\Config" />
+    <preference for="Magento\App\ReinitableConfigInterface" type="Magento\Core\Model\ReinitableConfig" />
     <preference for="Magento\Core\Model\Config\DataInterface" type="Magento\Core\Model\Config\Data" />
     <preference for="Magento\Core\Model\Config\Storage\WriterInterface" type="Magento\Core\Model\Config\Storage\Writer\Db" />
     <preference for="Magento\PubSub\Event\QueueWriterInterface" type="Magento\PubSub\Event\QueueWriter" />
@@ -59,23 +59,38 @@
     <preference for="Magento\Core\Model\Translate\InlineInterface" type="Magento\Core\Model\Translate\Inline" />
     <preference for="Magento\Session\ValidatorInterface" type="Magento\Core\Model\Session\Validator" />
     <preference for="Magento\Session\StorageInterface" type="Magento\Session\Storage" />
+    <preference for="Magento\Url\RouteParamsResolverInterface" type="Magento\Core\Model\Url\RouteParamsResolver" />
+    <preference for="Magento\Url\QueryParamsResolverInterface" type="Magento\Url\QueryParamsResolver" />
+    <preference for="Magento\Url\ScopeResolverInterface" type="Magento\Core\Model\Url\ScopeResolver" />
+    <preference for="Magento\Url\SecurityInfoInterface" type="Magento\Core\Model\Url\SecurityInfo" />
+    <preference for="Magento\Mview\ConfigInterface" type="Magento\Mview\Config" />
+    <preference for="Magento\Mview\ViewInterface" type="Magento\Mview\View" />
+    <preference for="Magento\Mview\ProcessorInterface" type="Magento\Mview\Processor" />
+    <preference for="Magento\Mview\View\StateInterface" type="Magento\Core\Model\Mview\View\State" />
+    <preference for="Magento\Mview\View\State\CollectionInterface" type="Magento\Core\Model\Resource\Mview\View\State\Collection" />
+    <preference for="Magento\Mview\View\CollectionInterface" type="Magento\Mview\View\Collection" />
+    <preference for="Magento\Mview\View\SubscriptionInterface" type="Magento\Mview\View\Subscription" />
+    <preference for="Magento\Mview\View\ChangelogInterface" type="Magento\Mview\View\Changelog" />
+    <preference for="Magento\Css\PreProcessor\AdapterInterface" type="Magento\Css\PreProcessor\Adapter\Oyejorge" />
     <type name="Magento\App\DefaultPath\DefaultPath">
         <param name="parts">
-            <value>
-                <module>core</module>
-                <controller>index</controller>
-                <action>index</action>
-            </value>
+            <array>
+                <item key="module"><value>core</value></item>
+                <item key="controller"><value>index</value></item>
+                <item key="action"><value>index</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\App\AreaList">
         <param name="areas">
-            <value>
-                <frontend>
-                    <frontName />
-                    <router>standard</router>
-                </frontend>
-            </value>
+            <array>
+                <item key="frontend">
+                    <array>
+                        <item key="frontName"><value/></item>
+                        <item key="router"><value>standard</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
         <param name="default">
             <value>frontend</value>
@@ -98,7 +113,7 @@
             <value type="argument">Magento\Core\Model\Store::CUSTOM_ENTRY_POINT_PARAM</value>
         </param>
         <param name="url">
-            <instance type="Magento\Core\Model\Url" shared="false"/>
+            <instance type="Magento\UrlInterface" shared="false"/>
         </param>
     </type>
     <type name="Magento\Core\Model\Acl\Cache">
@@ -114,9 +129,9 @@
             <value>app_</value>
         </param>
         <param name="cacheTags">
-            <value>
-                <storeTag type="const">Magento\Core\Model\Website::CACHE_TAG</storeTag>
-            </value>
+            <array>
+                <item key="storeTag"><value type="const">Magento\Core\Model\Website::CACHE_TAG</value></item>
+            </array>
         </param>
         <param name="cacheLifetime">
             <value type="bool">false</value>
@@ -130,9 +145,9 @@
             <value>app_</value>
         </param>
         <param name="cacheTags">
-            <value>
-                <storeTag type="const">Magento\Core\Model\Store\Group::CACHE_TAG</storeTag>
-            </value>
+            <array>
+                <item key="storeTag"><value type="const">Magento\Core\Model\Store\Group::CACHE_TAG</value></item>
+            </array>
         </param>
         <param name="cacheLifetime">
             <value type="bool">false</value>
@@ -146,9 +161,9 @@
             <value>app_</value>
         </param>
         <param name="cacheTags">
-            <value>
-                <storeTag type="const">Magento\Core\Model\Store::CACHE_TAG</storeTag>
-            </value>
+            <array>
+                <item key="storeTag"><value type="const">Magento\Core\Model\Store::CACHE_TAG</value></item>
+            </array>
         </param>
         <param name="cacheLifetime">
             <value type="bool">false</value>
@@ -171,11 +186,6 @@
     </type>
     <type name="Magento\View\Asset\Collection" shared="false" />
     <type name="Magento\Core\Model\Theme\Collection" shared="false" />
-    <type name="Magento\Core\Model\Observer">
-        <param name="config">
-            <instance type="Magento\Core\Model\Config" />
-        </param>
-    </type>
     <type name="Magento\Core\Model\Layout\Merge">
         <param name="fileSource">
             <instance type="Magento\View\Layout\File\Source\Aggregated" />
@@ -285,29 +295,31 @@
     </type>
     <type name="Magento\App\Router\NoRouteHandlerList">
         <param name="handlerClassesList">
-            <value>
-                <default>
-                    <instance>Magento\Core\App\Router\NoRouteHandler</instance>
-                    <sortOrder>100</sortOrder>
-                </default>
-            </value>
+            <array>
+                <item key="default">
+                    <array>
+                        <item key="instance"><value>Magento\Core\App\Router\NoRouteHandler</value></item>
+                        <item key="sortOrder"><value>100</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
     <type name="Magento\Core\Model\Session\Validator">
         <param name="skippedUserAgentList">
-            <value>
-                <flash>Shockwave Flash</flash>
-                <flash_mac><![CDATA[Adobe Flash Player\s{1,}\w{1,10}]]></flash_mac>
-            </value>
+            <array>
+                <item key="flash"><value>Shockwave Flash</value></item>
+                <item key="flash_mac"><value><![CDATA[Adobe Flash Player\s{1,}\w{1,10}]]></value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Core\Model\View\Design">
         <param name="themes">
-            <value>
-                <frontend>magento_plushe</frontend>
-                <adminhtml>magento_backend</adminhtml>
-                <install>magento_basic</install>
-            </value>
+            <array>
+                <item key="frontend"><value>magento_plushe</value></item>
+                <item key="adminhtml"><value>magento_backend</value></item>
+                <item key="install"><value>magento_basic</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\View\Publisher">
@@ -390,7 +402,7 @@
     </type>
     <type name="Magento\App\Helper\Context">
         <param name="urlBuilder">
-            <instance type="Magento\Core\Model\Url\Proxy" />
+            <instance type="Magento\UrlInterface\Proxy" />
         </param>
         <param name='httpRequest'>
             <instance type="Magento\App\Request\Http\Proxy" />
@@ -409,9 +421,9 @@
     <type name="Magento\View\TemplateEngineFactory">
         <plugin name="debug_hints" type="Magento\Core\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
         <param name="engines">
-            <value>
-                <phtml>Magento\View\TemplateEngine\Php</phtml>
-            </value>
+            <array>
+                <item key="phtml"><value>Magento\View\TemplateEngine\Php</value></item>
+            </array>
         </param>
     </type>
     <type name="\Magento\Image">
@@ -448,7 +460,7 @@
     </type>
     <type name="Magento\Core\Model\Store\Storage\Db">
         <param name="url">
-            <instance type="Magento\Backend\Model\Url\Proxy" />
+            <instance type="Magento\Backend\Model\UrlInterface\Proxy" />
         </param>
     </type>
     <type name="Magento\Core\Model\App">
@@ -502,5 +514,42 @@
     </type>
     <type name="Magento\View\Asset\MergeService">
         <plugin name="cleanMergedJsCss" type="Magento\Core\Model\Asset\Plugin\CleanMergedJsCss"/>
+    </type>
+    <type name="Magento\Core\Model\Url\ScopeResolver">
+        <param name="areaCode">
+            <value>frontend</value>
+        </param>
+    </type>
+    <type name="Magento\Less\PreProcessor\Instruction\MagentoImport">
+        <param name="fileSource">
+            <instance type="Magento\Less\File\Source\Aggregated" />
+        </param>
+    </type>
+    <type name="Magento\Less\File\Source\Aggregated">
+        <param name="libraryFiles">
+            <instance type="Magento\Less\File\Source\Library" />
+        </param>
+        <param name="baseFiles">
+            <instance type="Magento\Less\File\Source\Base" />
+        </param>
+        <param name="themeFiles">
+            <instance type="Magento\Less\File\Source\Theme" />
+        </param>
+    </type>
+    <type name="Magento\Less\PreProcessor">
+        <param name="preProcessors">
+            <array>
+                <item key="import">
+                    <array>
+                        <item key="class"><value>Magento\Less\PreProcessor\Instruction\Import</value></item>
+                    </array>
+                </item>
+                <item key="magento_import">
+                    <array>
+                        <item key="class"><value>Magento\Less\PreProcessor\Instruction\MagentoImport</value></item>
+                    </array>
+                </item>
+            </array>
+        </param>
     </type>
 </config>

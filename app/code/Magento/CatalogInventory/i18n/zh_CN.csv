@@ -48,3 +48,8 @@ Update,更新
 "We don't have as many ""%1"" as you requested.","我们没有你要的（""%1""）那么多数量。"
 "You can buy %1 only in increments of %2.",您能以%2的增量购买%1。
 "You can buy this product only in increments of %1.",您能以%1的增量购买该产品。
+"Enable Qty Increments",启用数量增量
+"Maximum Qty Allowed in Shopping Cart",购物车允许的最大数量
+"Minimum Qty Allowed in Shopping Cart",购物车允许的最小数量
+"Qty Increments",Qty增量
+"Qty for Item's Status to Become Out of Stock",条目状态变为缺货的数量

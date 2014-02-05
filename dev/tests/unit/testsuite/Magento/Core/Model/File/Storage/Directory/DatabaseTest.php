@@ -73,7 +73,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $directoryFactoryMock;
 
     /**
-     * @var \Magento\Core\Model\Config |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\ConfigInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -109,7 +109,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             array('setPath', 'setName', '__wakeup', 'save', 'getParentId'), array(), '', false);
         $this->directoryFactoryMock = $this->getMock('Magento\Core\Model\File\Storage\Directory\DatabaseFactory',
             array('create'), array(), '', false);
-        $this->configMock           = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false);
+        $this->configMock           = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $this->resourceDirectoryDatabaseMock =
             $this->getMock('Magento\Core\Model\Resource\File\Storage\Directory\Database', array(), array(), '', false);
         $this->loggerMock           = $this->getMock('Magento\Logger', array(), array(), '', false);

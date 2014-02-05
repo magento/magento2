@@ -48,12 +48,12 @@ class Shell extends \Magento\Core\Model\AbstractShell
     protected $_indexer;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $entryPoint
      * @param Indexer $indexer
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $entryPoint,
         \Magento\Index\Model\Indexer $indexer
     ) {
@@ -64,7 +64,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
     /**
      * Runs this model, assumed to be run by command-line
      *
-     * @return \Magento\Index\Model\Shell
+     * @return $this
      */
     public function run()
     {
@@ -89,7 +89,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
     /**
      * Shows information about indexes
      *
-     * @return \Magento\Index\Model\Shell
+     * @return $this
      */
     protected function _runShowInfo()
     {
@@ -105,7 +105,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
     /**
      * Shows information about statuses or modes
      *
-     * @return \Magento\Index\Model\Shell
+     * @return $this
      */
     protected function _runShowStatusOrMode()
     {
@@ -152,7 +152,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
     /**
      * Sets new mode for indexes
      *
-     * @return \Magento\Index\Model\Shell
+     * @return $this
      */
     protected function _runSetMode()
     {
@@ -183,7 +183,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
     /**
      * Reindexes indexer(s)
      *
-     * @return \Magento\Index\Model\Shell
+     * @return $this
      */
     protected function _runReindex()
     {

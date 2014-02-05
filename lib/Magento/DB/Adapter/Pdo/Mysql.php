@@ -25,7 +25,19 @@
  */
 namespace Magento\DB\Adapter\Pdo;
 
-class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\AdapterInterface
+use Magento\App\Filesystem;
+use Magento\Cache\FrontendInterface;
+use Magento\DB\Adapter\AdapterInterface;
+use Magento\DB\Ddl\Table;
+use Magento\DB\Helper;
+use Magento\DB\Profiler;
+use Magento\DB\Select;
+use Magento\DB\Statement\Parameter;
+use Magento\Debug;
+use Magento\Stdlib\DateTime;
+use Magento\Stdlib\String;
+
+class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
     const DEBUG_CONNECT         = 0;
     const DEBUG_TRANSACTION     = 1;
@@ -143,7 +155,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Filesystem class
      *
-     * @var \Magento\Filesystem
+     * @var Filesystem
      */
     protected $_filesystem;
 
@@ -157,7 +169,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Cache frontend adapter instance
      *
-     * @var \Magento\Cache\FrontendInterface
+     * @var FrontendInterface
      */
     protected $_cacheAdapter;
 
@@ -173,26 +185,26 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @var array
      */
     protected $_ddlColumnTypes      = array(
-        \Magento\DB\Ddl\Table::TYPE_BOOLEAN       => 'bool',
-        \Magento\DB\Ddl\Table::TYPE_SMALLINT      => 'smallint',
-        \Magento\DB\Ddl\Table::TYPE_INTEGER       => 'int',
-        \Magento\DB\Ddl\Table::TYPE_BIGINT        => 'bigint',
-        \Magento\DB\Ddl\Table::TYPE_FLOAT         => 'float',
-        \Magento\DB\Ddl\Table::TYPE_DECIMAL       => 'decimal',
-        \Magento\DB\Ddl\Table::TYPE_NUMERIC       => 'decimal',
-        \Magento\DB\Ddl\Table::TYPE_DATE          => 'date',
-        \Magento\DB\Ddl\Table::TYPE_TIMESTAMP     => 'timestamp',
-        \Magento\DB\Ddl\Table::TYPE_DATETIME      => 'datetime',
-        \Magento\DB\Ddl\Table::TYPE_TEXT          => 'text',
-        \Magento\DB\Ddl\Table::TYPE_BLOB          => 'blob',
-        \Magento\DB\Ddl\Table::TYPE_VARBINARY     => 'blob'
+        Table::TYPE_BOOLEAN       => 'bool',
+        Table::TYPE_SMALLINT      => 'smallint',
+        Table::TYPE_INTEGER       => 'int',
+        Table::TYPE_BIGINT        => 'bigint',
+        Table::TYPE_FLOAT         => 'float',
+        Table::TYPE_DECIMAL       => 'decimal',
+        Table::TYPE_NUMERIC       => 'decimal',
+        Table::TYPE_DATE          => 'date',
+        Table::TYPE_TIMESTAMP     => 'timestamp',
+        Table::TYPE_DATETIME      => 'datetime',
+        Table::TYPE_TEXT          => 'text',
+        Table::TYPE_BLOB          => 'blob',
+        Table::TYPE_VARBINARY     => 'blob'
     );
 
     /**
      * All possible DDL statements
      * First 3 symbols for each statement
      *
-     * @var array
+     * @var string[]
      */
     protected $_ddlRoutines = array('alt', 'cre', 'ren', 'dro', 'tru');
 
@@ -218,25 +230,25 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     protected $_queryHook = null;
 
     /**
-     * @var \Magento\Stdlib\String
+     * @var String
      */
     protected $string;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param Filesystem $filesystem
+     * @param String $string
+     * @param DateTime $dateTime
      * @param array $config
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
-        \Magento\Stdlib\String $string,
-        \Magento\Stdlib\DateTime $dateTime,
+        Filesystem $filesystem,
+        String $string,
+        DateTime $dateTime,
         array $config = array()
     ) {
         $this->_filesystem = $filesystem;
@@ -248,13 +260,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Begin new DB transaction for connection
      *
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      * @throws \Exception
      */
     public function beginTransaction()
     {
         if ($this->_isRolledBack) {
-            throw new \Exception(\Magento\DB\Adapter\AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE);
+            throw new \Exception(AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE);
         }
         if ($this->_transactionLevel === 0) {
             $this->_debugTimer();
@@ -268,7 +280,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Commit DB transaction
      *
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function commit()
     {
@@ -277,9 +289,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
             parent::commit();
             $this->_debugStat(self::DEBUG_TRANSACTION, 'COMMIT');
         } elseif ($this->_transactionLevel === 0) {
-            throw new \Exception(\Magento\DB\Adapter\AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE);
+            throw new \Exception(AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE);
         } elseif ($this->_isRolledBack) {
-            throw new \Exception(\Magento\DB\Adapter\AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE);
+            throw new \Exception(AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE);
         }
         --$this->_transactionLevel;
         return $this;
@@ -288,7 +300,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Rollback DB transaction
      *
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function rollBack()
     {
@@ -298,7 +310,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
             $this->_isRolledBack = false;
             $this->_debugStat(self::DEBUG_TRANSACTION, 'ROLLBACK');
         } elseif ($this->_transactionLevel === 0) {
-            throw new \Exception(\Magento\DB\Adapter\AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE);
+            throw new \Exception(AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE);
         } else {
             $this->_isRolledBack = true;
         }
@@ -319,8 +331,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Convert date to DB format
      *
-     * @param   mixed $date
-     * @return  string
+     * @param int|string|\Zend_Date $date
+     * @return \Zend_Db_Expr
      */
     public function convertDate($date)
     {
@@ -330,8 +342,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Convert date and time to DB format
      *
-     * @param   mixed $date
-     * @return  string
+     * @param   int|string|\Zend_Date $datetime
+     * @return \Zend_Db_Expr
      */
     public function convertDateTime($datetime)
     {
@@ -341,6 +353,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Creates a PDO object and connects to the database.
      *
+     * @return void
      * @throws \Zend_Db_Adapter_Exception
      */
     protected function _connect()
@@ -406,7 +419,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $sql
      * @param string|int $field
-     * @return boolean
+     * @return mixed|null
      */
     public function raw_fetchRow($sql, $field = null)
     {
@@ -430,7 +443,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Check transaction level in case of DDL query
      *
-     * @param string|Zend_Db_Select $sql
+     * @param string|\Zend_Db_Select $sql
+     * @return void
      * @throws \Zend_Db_Adapter_Exception
      */
     protected function _checkDdlTransaction($sql)
@@ -438,7 +452,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         if (is_string($sql) && $this->getTransactionLevel() > 0) {
             $startSql = strtolower(substr(ltrim($sql), 0, 3));
             if (in_array($startSql, $this->_ddlRoutines)) {
-                trigger_error(\Magento\DB\Adapter\AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
+                trigger_error(AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
             }
         }
     }
@@ -447,7 +461,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'.
      *
-     * @param string|Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
@@ -471,8 +485,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
             } catch (\Exception $e) {
                 // Finalize broken query
                 $profiler = $this->getProfiler();
-                if ($profiler instanceof \Magento\DB\Profiler) {
-                    /** @var \Magento\DB\Profiler $profiler */
+                if ($profiler instanceof Profiler) {
+                    /** @var Profiler $profiler */
                     $profiler->queryEndLast();
                 }
 
@@ -509,7 +523,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param \Zend_Db_Select|string $sql
      * @param mixed $bind
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     protected function _prepareQuery(&$sql, &$bind = array())
     {
@@ -548,7 +562,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * This method writes to $_bindParams, where query bind parameters are kept.
      * This method requires further normalizing, if bind array is positional.
      *
-     * @param array $matches
+     * @param string[] $matches
      * @return string
      */
     public function proccessBindCallback($matches)
@@ -591,7 +605,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $sql
      * @param array $bind
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     protected function _convertMixedBind(&$sql, &$bind)
     {
@@ -646,7 +660,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Previous hook is returned.
      *
      * @param array $hook
-     * @return mixed
+     * @return array|null
      */
     public function setQueryHook($hook)
     {
@@ -660,7 +674,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $sql
      * @throws \Zend_Db_Exception
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return array
      */
     public function multiQuery($sql)
     {
@@ -698,7 +712,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Split multi statement query
      *
-     * @param $sql string
+     * @param string $sql
      * @return array
      */
     protected function _splitMultiQuery($sql)
@@ -759,7 +773,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $tableName
      * @param string $fkName
      * @param string $schemaName
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function dropForeignKey($tableName, $fkName, $schemaName = null)
     {
@@ -789,14 +803,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $refTableName
      * @param string $refColumnName
      * @param string $onDelete
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function purgeOrphanRecords($tableName, $columnName, $refTableName, $refColumnName,
-                                       $onDelete = \Magento\DB\Adapter\AdapterInterface::FK_ACTION_CASCADE)
+                                       $onDelete = AdapterInterface::FK_ACTION_CASCADE)
     {
         $onDelete = strtoupper($onDelete);
-        if ($onDelete == \Magento\DB\Adapter\AdapterInterface::FK_ACTION_CASCADE
-            || $onDelete == \Magento\DB\Adapter\AdapterInterface::FK_ACTION_RESTRICT
+        if ($onDelete == AdapterInterface::FK_ACTION_CASCADE
+            || $onDelete == AdapterInterface::FK_ACTION_RESTRICT
         ) {
             $sql = sprintf("DELETE p.* FROM %s AS p LEFT JOIN %s AS r ON p.%s = r.%s WHERE r.%s IS NULL",
                 $this->quoteIdentifier($tableName),
@@ -805,7 +819,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
                 $this->quoteIdentifier($refColumnName),
                 $this->quoteIdentifier($refColumnName));
             $this->raw_query($sql);
-        } elseif ($onDelete == \Magento\DB\Adapter\AdapterInterface::FK_ACTION_SET_NULL) {
+        } elseif ($onDelete == AdapterInterface::FK_ACTION_SET_NULL) {
             $sql = sprintf("UPDATE %s AS p LEFT JOIN %s AS r ON p.%s = r.%s SET p.%s = NULL WHERE r.%s IS NULL",
                 $this->quoteIdentifier($tableName),
                 $this->quoteIdentifier($refTableName),
@@ -825,7 +839,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $tableName
      * @param string $columnName
      * @param string $schemaName
-     * @return boolean
+     * @return bool
      */
     public function tableColumnExists($tableName, $columnName, $schemaName = null)
     {
@@ -849,7 +863,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param   string $columnName
      * @param   array|string $definition  string specific or universal array DB Server definition
      * @param   string $schemaName
-     * @return  int|boolean
+     * @return  true|\Zend_Db_Statement_Pdo
      * @throws  \Zend_Db_Exception
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null)
@@ -890,7 +904,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $tableName
      * @param string $columnName
      * @param string $schemaName
-     * @return bool
+     * @return true|\Zend_Db_Statement_Pdo
      */
     public function dropColumn($tableName, $columnName, $schemaName = null)
     {
@@ -959,7 +973,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param array $definition
      * @param boolean $flushData        flush table statistic
      * @param string $schemaName
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return \Zend_Db_Statement_Pdo
      * @throws \Zend_Db_Exception
      */
     public function changeColumn($tableName, $oldColumnName, $newColumnName, $definition, $flushData = false,
@@ -1001,7 +1015,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param array|string $definition
      * @param boolean $flushData
      * @param string $schemaName
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      * @throws \Zend_Db_Exception
      */
     public function modifyColumn($tableName, $columnName, $definition, $flushData = false, $schemaName = null)
@@ -1032,7 +1046,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName
-     * @return array|false
+     * @return mixed
      */
     public function showTableStatus($tableName, $schemaName = null)
     {
@@ -1151,7 +1165,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * comment => string; table comment
      * engine  => string; table engine
      *
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @param array $tables
+     * @return $this
      */
     public function modifyTables($tables)
     {
@@ -1182,8 +1197,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
                     $onDelete = $options['ON_DELETE'];
                     $onUpdate = $options['ON_UPDATE'];
 
-                    if ($onDelete == \Magento\DB\Adapter\AdapterInterface::FK_ACTION_SET_NULL
-                        || $onUpdate == \Magento\DB\Adapter\AdapterInterface::FK_ACTION_SET_NULL) {
+                    if ($onDelete == AdapterInterface::FK_ACTION_SET_NULL
+                        || $onUpdate == AdapterInterface::FK_ACTION_SET_NULL) {
                            $columnDefinition['nullable'] = true;
                     }
                     $this->modifyColumn($options['TABLE_NAME'], $options['COLUMN_NAME'], $columnDefinition);
@@ -1193,8 +1208,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
                         $options['COLUMN_NAME'],
                         $options['REF_TABLE_NAME'],
                         $options['REF_COLUMN_NAME'],
-                        ($onDelete) ? $onDelete : \Magento\DB\Adapter\AdapterInterface::FK_ACTION_NO_ACTION,
-                        ($onUpdate) ? $onUpdate : \Magento\DB\Adapter\AdapterInterface::FK_ACTION_NO_ACTION
+                        ($onDelete) ? $onDelete : AdapterInterface::FK_ACTION_NO_ACTION,
+                        ($onUpdate) ? $onUpdate : AdapterInterface::FK_ACTION_NO_ACTION
                     );
                 }
             }
@@ -1229,7 +1244,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName
-     * @return array
+     * @return array|string|int
      */
     public function getIndexList($tableName, $schemaName = null)
     {
@@ -1246,14 +1261,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
                 $fieldColumn    = 'Column_name';
                 $fieldIndexType = 'Index_type';
 
-                if (strtolower($row[$fieldKeyName]) == \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY) {
-                    $indexType  = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY;
+                if (strtolower($row[$fieldKeyName]) == AdapterInterface::INDEX_TYPE_PRIMARY) {
+                    $indexType  = AdapterInterface::INDEX_TYPE_PRIMARY;
                 } elseif ($row[$fieldNonUnique] == 0) {
-                    $indexType  = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE;
-                } elseif (strtolower($row[$fieldIndexType]) == \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT) {
-                    $indexType  = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT;
+                    $indexType  = AdapterInterface::INDEX_TYPE_UNIQUE;
+                } elseif (strtolower($row[$fieldIndexType]) == AdapterInterface::INDEX_TYPE_FULLTEXT) {
+                    $indexType  = AdapterInterface::INDEX_TYPE_FULLTEXT;
                 } else {
-                    $indexType  = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX;
+                    $indexType  = AdapterInterface::INDEX_TYPE_INDEX;
                 }
 
                 $upperKeyName = strtoupper($row[$fieldKeyName]);
@@ -1284,8 +1299,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $table
      * @param array $fields
-     * @param array $ids
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @param string[] $ids
+     * @return $this
      */
     protected function _removeDuplicateEntry($table, $fields, $ids)
     {
@@ -1317,17 +1332,17 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Creates and returns a new \Zend_Db_Select object for this adapter.
      *
-     * @return \Magento\DB\Select
+     * @return Select
      */
     public function select()
     {
-        return new \Magento\DB\Select($this);
+        return new Select($this);
     }
 
     /**
      * Start debug timer
      *
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     protected function _debugTimer()
     {
@@ -1345,7 +1360,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $sql
      * @param array $bind
      * @param \Zend_Db_Statement_Pdo $result
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     protected function _debugStat($type, $sql, $bind = array(), $result = null)
     {
@@ -1381,7 +1396,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         $code .= 'TIME: ' . $time . $nl;
 
         if ($this->_logCallStack) {
-            $code .= 'TRACE: ' . \Magento\Debug::backtrace(true, false) . $nl;
+            $code .= 'TRACE: ' . Debug::backtrace(true, false) . $nl;
         }
 
         $code .= $nl;
@@ -1395,6 +1410,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Write exception and thow
      *
      * @param \Exception $e
+     * @return void
      * @throws \Exception
      */
     protected function _debugException(\Exception $e)
@@ -1414,12 +1430,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Debug write to file process
      *
      * @param string $str
+     * @return void
      */
     protected function _debugWriteToFile($str)
     {
         $str = '## ' . date('Y-m-d H:i:s') . "\r\n" . $str;
 
-        $stream = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT)->openFile($this->_debugFile, 'a');
+        $stream = $this->_filesystem->getDirectoryWrite(Filesystem::ROOT_DIR)->openFile($this->_debugFile, 'a');
         $stream->lock();
         $stream->write($str);
         $stream->unlock();
@@ -1451,6 +1468,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName
+     * @return string
      */
     protected function _getTableName($tableName, $schemaName = null)
     {
@@ -1504,7 +1522,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableCacheKey
      * @param int $ddlType
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @param array $data
+     * @return $this
      */
     public function saveDdlCache($tableCacheKey, $ddlType, $data)
     {
@@ -1528,7 +1547,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName OPTIONAL
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function resetDdlCache($tableName = null, $schemaName = null)
     {
@@ -1561,7 +1580,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
 
     /**
      * Disallow DDL caching
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function disallowDdlCache()
     {
@@ -1571,7 +1590,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
 
     /**
      * Allow DDL caching
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function allowDdlCache()
     {
@@ -1648,7 +1667,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
             $options['unsigned'] = true;
         }
         if ($columnData['NULLABLE'] === false
-            && !($type == \Magento\DB\Ddl\Table::TYPE_TEXT && strlen($columnData['DEFAULT']) != 0)
+            && !($type == Table::TYPE_TEXT && strlen($columnData['DEFAULT']) != 0)
         ) {
             $options['nullable'] = false;
         }
@@ -1656,7 +1675,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
             $options['primary'] = true;
         }
         if (!is_null($columnData['DEFAULT'])
-            && $type != \Magento\DB\Ddl\Table::TYPE_TEXT
+            && $type != Table::TYPE_TEXT
         ) {
             $options['default'] = $this->quote($columnData['DEFAULT']);
         }
@@ -1683,9 +1702,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Create \Magento\DB\Ddl\Table object by data from describe table
      *
-     * @param $tableName
-     * @param $newTableName
-     * @return \Magento\DB\Ddl\Table
+     * @param string $tableName
+     * @param string $newTableName
+     * @return Table
      */
     public function createTableByDdl($tableName, $newTableName)
     {
@@ -1712,7 +1731,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
              * For reliability check both name and type, because these values can start to differ in future.
              */
             if (($indexData['KEY_NAME'] == 'PRIMARY')
-                || ($indexData['INDEX_TYPE'] == \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY)
+                || ($indexData['INDEX_TYPE'] == AdapterInterface::INDEX_TYPE_PRIMARY)
             ) {
                 continue;
             }
@@ -1751,7 +1770,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param array $definition
      * @param boolean $flushData
      * @param string $schemaName
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function modifyColumnByDdl($tableName, $columnName, $definition, $flushData = false, $schemaName = null)
     {
@@ -1774,37 +1793,37 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     {
         switch ($column['DATA_TYPE']) {
             case 'bool':
-                return \Magento\DB\Ddl\Table::TYPE_BOOLEAN;
+                return Table::TYPE_BOOLEAN;
             case 'tinytext':
             case 'char':
             case 'varchar':
             case 'text':
             case 'mediumtext':
             case 'longtext':
-                return \Magento\DB\Ddl\Table::TYPE_TEXT;
+                return Table::TYPE_TEXT;
             case 'blob':
             case 'mediumblob':
             case 'longblob':
-                return \Magento\DB\Ddl\Table::TYPE_BLOB;
+                return Table::TYPE_BLOB;
             case 'tinyint':
             case 'smallint':
-                return \Magento\DB\Ddl\Table::TYPE_SMALLINT;
+                return Table::TYPE_SMALLINT;
             case 'mediumint':
             case 'int':
-                return \Magento\DB\Ddl\Table::TYPE_INTEGER;
+                return Table::TYPE_INTEGER;
             case 'bigint':
-                return \Magento\DB\Ddl\Table::TYPE_BIGINT;
+                return Table::TYPE_BIGINT;
             case 'datetime':
-                return \Magento\DB\Ddl\Table::TYPE_DATETIME;
+                return Table::TYPE_DATETIME;
             case 'timestamp':
-                return \Magento\DB\Ddl\Table::TYPE_TIMESTAMP;
+                return Table::TYPE_TIMESTAMP;
             case 'date':
-                return \Magento\DB\Ddl\Table::TYPE_DATE;
+                return Table::TYPE_DATE;
             case 'float':
-                return \Magento\DB\Ddl\Table::TYPE_FLOAT;
+                return Table::TYPE_FLOAT;
             case 'decimal':
             case 'numeric':
-                return \Magento\DB\Ddl\Table::TYPE_DECIMAL;
+                return Table::TYPE_DECIMAL;
         }
     }
 
@@ -1814,7 +1833,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $tableName
      * @param string $engine
      * @param string $schemaName
-     * @return mixed
+     * @return \Zend_Db_Statement_Pdo
      */
     public function changeTableEngine($tableName, $engine, $schemaName = null)
     {
@@ -1830,7 +1849,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $tableName
      * @param string $comment
      * @param string $schemaName
-     * @return mixed
+     * @return \Zend_Db_Statement_Pdo
      */
     public function changeTableComment($tableName, $comment, $schemaName = null)
     {
@@ -1860,7 +1879,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Inserts a table row with specified data.
      *
-     * @param mixed $table The table to insert data into.
+     * @param string $table The table to insert data into.
      * @param array $data Column-value pairs or array of column-value pairs.
      * @param array $fields update fields pairs or values
      * @return int The number of affected rows.
@@ -1931,7 +1950,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Inserts a table multiply rows with specified data.
      *
-     * @param mixed $table The table to insert data into.
+     * @param string|array|\Zend_Db_Expr $table The table to insert data into.
      * @param array $data Column-value pairs or array of Column-value pairs.
      * @return int The number of affected rows.
      * @throws \Zend_Db_Exception
@@ -2004,10 +2023,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Set cache adapter
      *
-     * @param \Magento\Cache\FrontendInterface $adapter
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @param FrontendInterface $adapter
+     * @return $this
      */
-    public function setCacheAdapter(\Magento\Cache\FrontendInterface $adapter)
+    public function setCacheAdapter(FrontendInterface $adapter)
     {
         $this->_cacheAdapter = $adapter;
         return $this;
@@ -2018,11 +2037,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName the table name
      * @param string $schemaName the database/schema name
-     * @return \Magento\DB\Ddl\Table
+     * @return Table
      */
     public function newTable($tableName = null, $schemaName = null)
     {
-        $table = new \Magento\DB\Ddl\Table();
+        $table = new Table();
         if ($tableName !== null) {
             $table->setName($tableName);
         }
@@ -2036,11 +2055,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Create table
      *
-     * @param \Magento\DB\Ddl\Table $table
+     * @param Table $table
      * @throws \Zend_Db_Exception
-     * @return \Zend_Db_Pdo_Statement
+     * @return \Zend_Db_Statement_Pdo
      */
-    public function createTable(\Magento\DB\Ddl\Table $table)
+    public function createTable(Table $table)
     {
         $columns = $table->getColumns();
         foreach ($columns as $columnEntry) {
@@ -2066,11 +2085,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Retrieve columns and primary keys definition array for create table
      *
-     * @param \Magento\DB\Ddl\Table $table
-     * @return array
+     * @param Table $table
+     * @return string[]
      * @throws \Zend_Db_Exception
      */
-    protected function _getColumnsDefinition(\Magento\DB\Ddl\Table $table)
+    protected function _getColumnsDefinition(Table $table)
     {
         $definition = array();
         $primary    = array();
@@ -2104,10 +2123,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Retrieve table indexes definition array for create table
      *
-     * @param \Magento\DB\Ddl\Table $table
-     * @return array
+     * @param Table $table
+     * @return string[]
      */
-    protected function _getIndexesDefinition(\Magento\DB\Ddl\Table $table)
+    protected function _getIndexesDefinition(Table $table)
     {
         $definition = array();
         $indexes    = $table->getIndexes();
@@ -2150,10 +2169,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Retrieve table foreign keys definition array for create table
      *
-     * @param \Magento\DB\Ddl\Table $table
-     * @return array
+     * @param Table $table
+     * @return string[]
      */
-    protected function _getForeignKeysDefinition(\Magento\DB\Ddl\Table $table)
+    protected function _getForeignKeysDefinition(Table $table)
     {
         $definition = array();
         $relations  = $table->getForeignKeys();
@@ -2180,11 +2199,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Retrieve table options definition array for create table
      *
-     * @param \Magento\DB\Ddl\Table $table
-     * @return array
+     * @param Table $table
+     * @return string[]
      * @throws \Zend_Db_Exception
      */
-    protected function _getOptionsDefinition(\Magento\DB\Ddl\Table $table)
+    protected function _getOptionsDefinition(Table $table)
     {
         $definition = array();
         $comment    = $table->getComment();
@@ -2262,15 +2281,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         // column size
         $cType = $this->_ddlColumnTypes[$ddlType];
         switch ($ddlType) {
-            case \Magento\DB\Ddl\Table::TYPE_SMALLINT:
-            case \Magento\DB\Ddl\Table::TYPE_INTEGER:
-            case \Magento\DB\Ddl\Table::TYPE_BIGINT:
+            case Table::TYPE_SMALLINT:
+            case Table::TYPE_INTEGER:
+            case Table::TYPE_BIGINT:
                 if (!empty($options['UNSIGNED'])) {
                     $cUnsigned = true;
                 }
                 break;
-            case \Magento\DB\Ddl\Table::TYPE_DECIMAL:
-            case \Magento\DB\Ddl\Table::TYPE_NUMERIC:
+            case Table::TYPE_DECIMAL:
+            case Table::TYPE_NUMERIC:
                 $precision  = 10;
                 $scale      = 0;
                 $match      = array();
@@ -2287,23 +2306,23 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
                 }
                 $cType .= sprintf('(%d,%d)', $precision, $scale);
                 break;
-            case \Magento\DB\Ddl\Table::TYPE_TEXT:
-            case \Magento\DB\Ddl\Table::TYPE_BLOB:
-            case \Magento\DB\Ddl\Table::TYPE_VARBINARY:
+            case Table::TYPE_TEXT:
+            case Table::TYPE_BLOB:
+            case Table::TYPE_VARBINARY:
                 if (empty($options['LENGTH'])) {
-                    $length = \Magento\DB\Ddl\Table::DEFAULT_TEXT_SIZE;
+                    $length = Table::DEFAULT_TEXT_SIZE;
                 } else {
                     $length = $this->_parseTextSize($options['LENGTH']);
                 }
                 if ($length <= 255) {
-                    $cType = $ddlType == \Magento\DB\Ddl\Table::TYPE_TEXT ? 'varchar' : 'varbinary';
+                    $cType = $ddlType == Table::TYPE_TEXT ? 'varchar' : 'varbinary';
                     $cType = sprintf('%s(%d)', $cType, $length);
                 } else if ($length > 255 && $length <= 65536) {
-                    $cType = $ddlType == \Magento\DB\Ddl\Table::TYPE_TEXT ? 'text' : 'blob';
+                    $cType = $ddlType == Table::TYPE_TEXT ? 'text' : 'blob';
                 } else if ($length > 65536 && $length <= 16777216) {
-                    $cType = $ddlType == \Magento\DB\Ddl\Table::TYPE_TEXT ? 'mediumtext' : 'mediumblob';
+                    $cType = $ddlType == Table::TYPE_TEXT ? 'mediumtext' : 'mediumblob';
                 } else {
-                    $cType = $ddlType == \Magento\DB\Ddl\Table::TYPE_TEXT ? 'longtext' : 'longblob';
+                    $cType = $ddlType == Table::TYPE_TEXT ? 'longtext' : 'longblob';
                 }
                 break;
         }
@@ -2327,14 +2346,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         }
 
         // prepare default value string
-        if ($ddlType == \Magento\DB\Ddl\Table::TYPE_TIMESTAMP) {
+        if ($ddlType == Table::TYPE_TIMESTAMP) {
             if ($cDefault === null) {
                 $cDefault = new \Zend_Db_Expr('NULL');
-            } elseif ($cDefault == \Magento\DB\Ddl\Table::TIMESTAMP_INIT) {
+            } elseif ($cDefault == Table::TIMESTAMP_INIT) {
                 $cDefault = new \Zend_Db_Expr('CURRENT_TIMESTAMP');
-            } else if ($cDefault == \Magento\DB\Ddl\Table::TIMESTAMP_UPDATE) {
+            } else if ($cDefault == Table::TIMESTAMP_UPDATE) {
                 $cDefault = new \Zend_Db_Expr('0 ON UPDATE CURRENT_TIMESTAMP');
-            } else if ($cDefault == \Magento\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE) {
+            } else if ($cDefault == Table::TIMESTAMP_INIT_UPDATE) {
                 $cDefault = new \Zend_Db_Expr('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
             } else if ($cNullable && !$cDefault) {
                 $cDefault = new \Zend_Db_Expr('NULL');
@@ -2366,7 +2385,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName
-     * @return boolean
+     * @return true
      */
     public function dropTable($tableName, $schemaName = null)
     {
@@ -2382,7 +2401,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      * @throws \Zend_Db_Exception
      */
     public function truncateTable($tableName, $schemaName = null)
@@ -2403,7 +2422,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName
-     * @return boolean
+     * @return bool
      */
     public function isTableExists($tableName, $schemaName = null)
     {
@@ -2416,7 +2435,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $oldTableName
      * @param string $newTableName
      * @param string $schemaName
-     * @return boolean
+     * @return true
      * @throws \Zend_Db_Exception
      */
     public function renameTable($oldTableName, $newTableName, $schemaName = null)
@@ -2451,14 +2470,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @throws \Zend_Db_Exception|Exception
      */
     public function addIndex($tableName, $indexName, $fields,
-        $indexType = \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX, $schemaName = null)
+        $indexType = AdapterInterface::INDEX_TYPE_INDEX, $schemaName = null)
     {
         $columns = $this->describeTable($tableName, $schemaName);
         $keyList = $this->getIndexList($tableName, $schemaName);
 
         $query = sprintf('ALTER TABLE %s', $this->quoteIdentifier($this->_getTableName($tableName, $schemaName)));
         if (isset($keyList[strtoupper($indexName)])) {
-            if ($keyList[strtoupper($indexName)]['INDEX_TYPE'] == \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY) {
+            if ($keyList[strtoupper($indexName)]['INDEX_TYPE'] == AdapterInterface::INDEX_TYPE_PRIMARY) {
                 $query .= ' DROP PRIMARY KEY,';
             } else {
                 $query .= sprintf(' DROP INDEX %s,', $this->quoteIdentifier($indexName));
@@ -2481,13 +2500,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         $fieldSql = implode(',', $fieldSql);
 
         switch (strtolower($indexType)) {
-            case \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY:
+            case AdapterInterface::INDEX_TYPE_PRIMARY:
                 $condition = 'PRIMARY KEY';
                 break;
-            case \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE:
+            case AdapterInterface::INDEX_TYPE_UNIQUE:
                 $condition = 'UNIQUE ' . $this->quoteIdentifier($indexName);
                 break;
-            case \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT:
+            case AdapterInterface::INDEX_TYPE_FULLTEXT:
                 $condition = 'FULLTEXT ' . $this->quoteIdentifier($indexName);
                 break;
             default:
@@ -2526,7 +2545,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $tableName
      * @param string $keyName
      * @param string $schemaName
-     * @return bool|Zend_Db_Statement_Interface
+     * @return true|\Zend_Db_Statement_Interface
      */
     public function dropIndex($tableName, $keyName, $schemaName = null)
     {
@@ -2561,14 +2580,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $refColumnName
      * @param string $onDelete
      * @param string $onUpdate
-     * @param boolean $purge            trying remove invalid data
+     * @param bool $purge            trying remove invalid data
      * @param string $schemaName
      * @param string $refSchemaName
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return \Zend_Db_Statement_Interface
      */
     public function addForeignKey($fkName, $tableName, $columnName, $refTableName, $refColumnName,
-        $onDelete = \Magento\DB\Adapter\AdapterInterface::FK_ACTION_CASCADE,
-        $onUpdate = \Magento\DB\Adapter\AdapterInterface::FK_ACTION_CASCADE,
+        $onDelete = AdapterInterface::FK_ACTION_CASCADE,
+        $onUpdate = AdapterInterface::FK_ACTION_CASCADE,
         $purge = false, $schemaName = null, $refSchemaName = null)
     {
         $this->dropForeignKey($tableName, $fkName, $schemaName);
@@ -2600,8 +2619,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Format Date to internal database date format
      *
-     * @param int|string|Zend_Date $date
-     * @param boolean $includeTime
+     * @param int|string|\Zend_Date $date
+     * @param bool $includeTime
      * @return \Zend_Db_Expr
      */
     public function formatDate($date, $includeTime = true)
@@ -2618,7 +2637,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Run additional environment before setup
      *
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function startSetup()
     {
@@ -2632,7 +2651,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Run additional environment after setup
      *
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function endSetup()
     {
@@ -2668,7 +2687,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * If non matched - sequential array is expected and OR conditions
      * will be built using above mentioned structure
      *
-     * @param string|array $fieldName
+     * @param string $fieldName
      * @param integer|string|array $condition
      * @return string
      */
@@ -2739,7 +2758,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Prepare Sql condition
      *
-     * @param  $text Condition value
+     * @param  string $text Condition value
      * @param  mixed $value
      * @param  string $fieldName
      * @return string
@@ -2783,7 +2802,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         if ($value instanceof \Zend_Db_Expr) {
             return $value;
         }
-        if ($value instanceof \Magento\DB\Statement\Parameter) {
+        if ($value instanceof Parameter) {
             return $value;
         }
 
@@ -2857,9 +2876,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Generate fragment of SQL, that check condition and return true or false value
      *
-     * @param \Zend_Db_Expr|Zend_Db_Select|string $expression
+     * @param \Zend_Db_Expr|\Zend_Db_Select|string $expression
      * @param string $true  true value
      * @param string $false false value
+     * @return \Zend_Db_Expr
      */
     public function getCheckSql($expression, $true, $false)
     {
@@ -2875,8 +2895,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Returns valid IFNULL expression
      *
-     * @param \Zend_Db_Expr|Zend_Db_Select|string $expression
-     * @param string $value OPTIONAL. Applies when $expression is NULL
+     * @param \Zend_Db_Expr|\Zend_Db_Select|string $expression
+     * @param string|int $value OPTIONAL. Applies when $expression is NULL
      * @return \Zend_Db_Expr
      */
     public function getIfNullSql($expression, $value = 0)
@@ -2897,6 +2917,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * @param string $valueName Name of value to check
      * @param array $casesResults Cases and results
      * @param string $defaultValue value to use if value doesn't confirm to any cases
+     * @return \Zend_Db_Expr
      */
     public function getCaseSql($valueName, $casesResults, $defaultValue = null)
     {
@@ -2916,7 +2937,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Generate fragment of SQL, that combine together (concatenate) the results from data array
      * All arguments in data must be quoted
      *
-     * @param array $data
+     * @param string[] $data
      * @param string $separator concatenate with separator
      * @return \Zend_Db_Expr
      */
@@ -2943,7 +2964,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * (minimum-valued) argument
      * All arguments in data must be quoted
      *
-     * @param array $data
+     * @param string[] $data
      * @return \Zend_Db_Expr
      */
     public function getLeastSql(array $data)
@@ -2956,7 +2977,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * (maximum-valued) argument
      * All arguments in data must be quoted
      *
-     * @param array $data
+     * @param string[] $data
      * @return \Zend_Db_Expr
      */
     public function getGreatestSql(array $data)
@@ -3050,8 +3071,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Prepare substring sql function
      *
      * @param \Zend_Db_Expr|string $stringExpression quoted field name or SQL statement
-     * @param int|string|Zend_Db_Expr $pos
-     * @param int|string|Zend_Db_Expr|null $len
+     * @param int|string|\Zend_Db_Expr $pos
+     * @param int|string|\Zend_Db_Expr|null $len
      * @return \Zend_Db_Expr
      */
     public function getSubstringSql($stringExpression, $pos, $len = null)
@@ -3096,9 +3117,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Minus superfluous characters from hash.
      *
-     * @param  $hash
-     * @param  $prefix
-     * @param  $maxCharacters
+     * @param  string $hash
+     * @param  string $prefix
+     * @param  int $maxCharacters
      * @return string
      */
      protected function _minusSuperfluous($hash, $prefix, $maxCharacters)
@@ -3121,7 +3142,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     {
         $prefix = 't_';
         if (strlen($tableName) > self::LENGTH_TABLE_NAME) {
-            $shortName = \Magento\DB\Helper::shortName($tableName);
+            $shortName = Helper::shortName($tableName);
             if (strlen($shortName) > self::LENGTH_TABLE_NAME) {
                 $hash = md5($tableName);
                 if (strlen($prefix.$hash) > self::LENGTH_TABLE_NAME) {
@@ -3142,7 +3163,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Check index name length and allowed symbols
      *
      * @param string $tableName
-     * @param string|array $fields  the columns list
+     * @param string|string[] $fields  the columns list
      * @param string $indexType
      * @return string
      */
@@ -3153,15 +3174,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         }
 
         switch (strtolower($indexType)) {
-            case \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE:
+            case AdapterInterface::INDEX_TYPE_UNIQUE:
                 $prefix = 'unq_';
                 $shortPrefix = 'u_';
                 break;
-            case \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT:
+            case AdapterInterface::INDEX_TYPE_FULLTEXT:
                 $prefix = 'fti_';
                 $shortPrefix = 'f_';
                 break;
-            case \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX:
+            case AdapterInterface::INDEX_TYPE_INDEX:
             default:
                 $prefix = 'idx_';
                 $shortPrefix = 'i_';
@@ -3170,7 +3191,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         $hash = $tableName . '_' . $fields;
 
         if (strlen($hash) + strlen($prefix) > self::LENGTH_INDEX_NAME) {
-            $short = \Magento\DB\Helper::shortName($prefix . $hash);
+            $short = Helper::shortName($prefix . $hash);
             if (strlen($short) > self::LENGTH_INDEX_NAME) {
                 $hash = md5($hash);
                 if (strlen($hash) + strlen($shortPrefix) > self::LENGTH_INDEX_NAME) {
@@ -3201,7 +3222,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         $prefix = 'fk_';
         $hash = sprintf('%s_%s_%s_%s', $priTableName, $priColumnName, $refTableName, $refColumnName);
         if (strlen($prefix.$hash) > self::LENGTH_FOREIGN_NAME) {
-            $short = \Magento\DB\Helper::shortName($prefix.$hash);
+            $short = Helper::shortName($prefix.$hash);
             if (strlen($short) > self::LENGTH_FOREIGN_NAME) {
                 $hash = md5($hash);
                 if (strlen($prefix.$hash) > self::LENGTH_FOREIGN_NAME) {
@@ -3224,7 +3245,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function disableTableKeys($tableName, $schemaName = null)
     {
@@ -3240,7 +3261,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param string $tableName
      * @param string $schemaName
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
     public function enableTableKeys($tableName, $schemaName = null)
     {
@@ -3254,13 +3275,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Get insert from Select object query
      *
-     * @param \Magento\DB\Select $select
+     * @param Select $select
      * @param string $table     insert into table
      * @param array $fields
      * @param int $mode
      * @return string
      */
-    public function insertFromSelect(\Magento\DB\Select $select, $table, array $fields = array(), $mode = false)
+    public function insertFromSelect(Select $select, $table, array $fields = array(), $mode = false)
     {
         $query = 'INSERT';
         if ($mode == self::INSERT_IGNORE) {
@@ -3299,11 +3320,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Get update table query using select object for join and update
      *
-     * @param \Magento\DB\Select $select
+     * @param Select $select
      * @param string|array $table
      * @return string
      */
-    public function updateFromSelect(\Magento\DB\Select $select, $table)
+    public function updateFromSelect(Select $select, $table)
     {
         if (!is_array($table)) {
             $table = array($table => $table);
@@ -3374,11 +3395,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Get delete from select object query
      *
-     * @param \Magento\DB\Select $select
+     * @param Select $select
      * @param string $table the table name or alias used in select
-     * @return string|int
+     * @return string
      */
-    public function deleteFromSelect(\Magento\DB\Select $select, $table)
+    public function deleteFromSelect(Select $select, $table)
     {
         $select = clone $select;
         $select->reset(\Zend_Db_Select::DISTINCT);
@@ -3394,7 +3415,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      *
      * @param array|string $tableNames array of tables names | table name
      * @param string $schemaName schema name
-     * @return arrray
+     * @return array
      */
     public function getTablesChecksum($tableNames, $schemaName = null)
     {
@@ -3413,7 +3434,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     /**
      * Check if the database support STRAIGHT JOIN
      *
-     * @return boolean
+     * @return true
      */
     public function supportStraightJoin()
     {
@@ -3424,11 +3445,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Adds order by random to select object
      * Possible using integer field for optimization
      *
-     * @param \Magento\DB\Select $select
+     * @param Select $select
      * @param string $field
-     * @return \Magento\DB\Adapter\Pdo\Mysql
+     * @return $this
      */
-    public function orderRand(\Magento\DB\Select $select, $field = null)
+    public function orderRand(Select $select, $field = null)
     {
         if ($field !== null) {
             $expression = new \Zend_Db_Expr(sprintf('RAND() * %s', $this->quoteIdentifier($field)));
@@ -3524,14 +3545,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     protected function _getDdlAction($action)
     {
         switch ($action) {
-            case \Magento\DB\Adapter\AdapterInterface::FK_ACTION_CASCADE:
-                return \Magento\DB\Ddl\Table::ACTION_CASCADE;
-            case \Magento\DB\Adapter\AdapterInterface::FK_ACTION_SET_NULL:
-                return \Magento\DB\Ddl\Table::ACTION_SET_NULL;
-            case \Magento\DB\Adapter\AdapterInterface::FK_ACTION_RESTRICT:
-                return \Magento\DB\Ddl\Table::ACTION_RESTRICT;
+            case AdapterInterface::FK_ACTION_CASCADE:
+                return Table::ACTION_CASCADE;
+            case AdapterInterface::FK_ACTION_SET_NULL:
+                return Table::ACTION_SET_NULL;
+            case AdapterInterface::FK_ACTION_RESTRICT:
+                return Table::ACTION_RESTRICT;
             default:
-                return \Magento\DB\Ddl\Table::ACTION_NO_ACTION;
+                return Table::ACTION_NO_ACTION;
         }
     }
 
@@ -3599,10 +3620,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
         }
 
         if (empty($size)) {
-            return \Magento\DB\Ddl\Table::DEFAULT_TEXT_SIZE;
+            return Table::DEFAULT_TEXT_SIZE;
         }
-        if ($size >= \Magento\DB\Ddl\Table::MAX_TEXT_SIZE) {
-            return \Magento\DB\Ddl\Table::MAX_TEXT_SIZE;
+        if ($size >= Table::MAX_TEXT_SIZE) {
+            return Table::MAX_TEXT_SIZE;
         }
 
         return intval($size);
@@ -3612,7 +3633,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
      * Converts fetched blob into raw binary PHP data.
      * The MySQL drivers do it nice, no processing required.
      *
-     * @mixed $value
+     * @param mixed $value
      * @return mixed
      */
     public function decodeVarbinary($value)
@@ -3621,7 +3642,57 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements \Magento\DB\Adapter\Ad
     }
 
     /**
+     * Create trigger
+     *
+     * @param \Magento\DB\Ddl\Trigger $trigger
+     * @throws \Zend_Db_Exception
+     * @return \Zend_Db_Statement_Pdo
+     */
+    public function createTrigger(\Magento\DB\Ddl\Trigger $trigger)
+    {
+        if (!$trigger->getStatements()) {
+            throw new \Zend_Db_Exception(sprintf(__('Trigger %s has not statements available'), $trigger->getName()));
+        }
+
+        $statements = implode("\n", $trigger->getStatements());
+
+        $sql = sprintf("CREATE TRIGGER %s %s %s ON %s FOR EACH ROW\nBEGIN\n%s\nEND",
+            $trigger->getName(),
+            $trigger->getTime(),
+            $trigger->getEvent(),
+            $trigger->getTable(),
+            $statements
+        );
+
+        return $this->query($sql);
+    }
+
+    /**
+     * Drop trigger from database
+     *
+     * @param string $triggerName
+     * @param string $schemaName
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
+    public function dropTrigger($triggerName, $schemaName = null)
+    {
+        if (empty($triggerName)) {
+            throw new \InvalidArgumentException(__('Trigger name is not defined'));
+        }
+
+        $triggerName = ($schemaName ? $schemaName . '.' : '') . $triggerName;
+
+        $sql = 'DROP TRIGGER IF EXISTS ' . $this->quoteIdentifier($triggerName);
+        $this->query($sql);
+
+        return true;
+    }
+
+    /**
      * Check if all transactions have been committed
+     *
+     * @return void
      */
     public function __destruct()
     {

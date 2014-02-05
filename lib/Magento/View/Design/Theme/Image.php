@@ -74,7 +74,7 @@ class Image
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Image\Factory $imageFactory
      * @param Image\Uploader $uploader
      * @param Image\PathInterface $themeImagePath
@@ -82,14 +82,14 @@ class Image
      * @param \Magento\View\Design\ThemeInterface $theme
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Image\Factory $imageFactory,
         Image\Uploader $uploader,
         Image\PathInterface $themeImagePath,
         \Magento\Logger $logger,
         \Magento\View\Design\ThemeInterface $theme = null
     ) {
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $this->_imageFactory = $imageFactory;
         $this->_uploader = $uploader;
         $this->_themeImagePath = $themeImagePath;

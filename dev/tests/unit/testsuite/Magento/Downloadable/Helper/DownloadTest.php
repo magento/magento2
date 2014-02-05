@@ -24,7 +24,7 @@
 namespace Magento\Downloadable\Helper;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\Filesystem\File\ReadInterface as FileReadInterface;
 use Magento\Filesystem\Directory\ReadInterface as DirReadInterface;
 use Magento\Downloadable\Helper\File as DownloadableFile;
@@ -67,7 +67,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         self::$functionExists = true;
         self::$mimeContentType = self::MIME_TYPE;
 
-        $this->_filesystemMock = $this->getMock('Magento\Filesystem', [], [], '', false);
+        $this->_filesystemMock = $this->getMock('Magento\App\Filesystem', [], [], '', false);
         $this->_handleMock = $this->getMock('Magento\Filesystem\File\ReadInterface', [], [], '', false);
         $this->_workingDirectoryMock = $this->getMock('Magento\Filesystem\Directory\ReadInterface', [], [], '', false);
         $this->_downloadableFileMock = $this->getMock('Magento\Downloadable\Helper\File', [], [], '', false);
@@ -208,7 +208,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->_filesystemMock
             ->expects($this->any())
             ->method('getDirectoryRead')
-            ->with(Filesystem::MEDIA)
+            ->with(Filesystem::MEDIA_DIR)
             ->will($this->returnValue($this->_workingDirectoryMock));
 
         $this->_helper->setResource($path, DownloadHelper::LINK_TYPE_FILE);

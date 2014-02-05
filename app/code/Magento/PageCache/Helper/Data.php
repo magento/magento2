@@ -33,142 +33,42 @@
  */
 namespace Magento\PageCache\Helper;
 
+/**
+ * Class Data
+ * @package Magento\PageCache\Helper
+ */
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
-     * Paths to external cache config options
+     * Private caching time one year
      */
-    const XML_PATH_EXTERNAL_CACHE_ENABLED  = 'system/external_page_cache/enabled';
-    const XML_PATH_EXTERNAL_CACHE_LIFETIME = 'system/external_page_cache/cookie_lifetime';
+    const PRIVATE_MAX_AGE_CACHE = 31536000;
 
     /**
-     * Cookie name for disabling external caching
+     * XML path to value for public max-age parameter
      */
-    const NO_CACHE_COOKIE = 'external_no_cache';
+    const PUBLIC_MAX_AGE_PATH = 'system/headers/public-max-age';
 
     /**
-     * Cookie name for locking the NO_CACHE_COOKIE for modification
+     * @var \Magento\App\ConfigInterface
      */
-    const NO_CACHE_LOCK_COOKIE = 'external_no_cache_cookie_locked';
-
-    /**
-     * @var bool
-     */
-    protected $_isNoCacheCookieLocked = false;
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Core\Model\Store\Config
-     */
-    protected $_coreStoreConfig;
+    protected $config;
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\PageCache\Model\CacheControlFactory $ccFactory
-     * @param \Magento\Stdlib\Cookie $cookie
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\App\ConfigInterface $config
      */
-    function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\PageCache\Model\CacheControlFactory $ccFactory,
-        \Magento\Stdlib\Cookie $cookie,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
-    ) {
+    public function __construct(\Magento\App\Helper\Context $context, \Magento\App\ConfigInterface $config)
+    {
         parent::__construct($context);
-        $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_isNoCacheCookieLocked = (bool)$cookie->get(self::NO_CACHE_LOCK_COOKIE);
-        $this->_cookie = $cookie;
-        $this->_ccFactory = $ccFactory;
+        $this->config = $config;
     }
 
     /**
-     * Check whether external cache is enabled
-     *
-     * @return bool
+     * @return mixed
      */
-    public function isEnabled()
+    public function getPublicMaxAgeCache()
     {
-        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_EXTERNAL_CACHE_ENABLED);
-    }
-
-    /**
-     * Initialize proper external cache control model
-     *
-     * @throws \Magento\Core\Exception
-     * @return \Magento\PageCache\Model\Control\ControlInterface
-     */
-    public function getCacheControlInstance()
-    {
-        return $this->_ccFactory->getCacheControlInstance();
-    }
-
-    /**
-     * Disable caching on external storage side by setting special cookie, if the cookie has not been locked
-     *
-     * @param int|null $lifetime
-     * @return \Magento\PageCache\Helper\Data
-     */
-    public function setNoCacheCookie($lifetime = null)
-    {
-        if ($this->_isNoCacheCookieLocked) {
-            return $this;
-        }
-        $lifetime = $lifetime !== null
-            ? $lifetime
-            : $this->_coreStoreConfig->getConfig(self::XML_PATH_EXTERNAL_CACHE_LIFETIME);
-        if ($this->_cookie->get(self::NO_CACHE_COOKIE)) {
-            $this->_cookie->renew(self::NO_CACHE_COOKIE, $lifetime);
-        } else {
-            $this->_cookie->set(self::NO_CACHE_COOKIE, '1', $lifetime);
-        }
-        return $this;
-    }
-
-    /**
-     * Remove the 'no cache' cookie, if it has not been locked
-     *
-     * @return \Magento\PageCache\Helper\Data
-     */
-    public function removeNoCacheCookie()
-    {
-        if (!$this->_isNoCacheCookieLocked) {
-            $this->_cookie->set(self::NO_CACHE_COOKIE, null);
-        }
-        return $this;
-    }
-
-    /**
-     * Disable modification of the 'no cache' cookie
-     *
-     * @return \Magento\PageCache\Helper\Data
-     */
-    public function lockNoCacheCookie()
-    {
-        $this->_cookie->set(self::NO_CACHE_LOCK_COOKIE, '1', 0);
-        $this->_isNoCacheCookieLocked = true;
-        return $this;
-    }
-
-    /**
-     * Enable modification of the 'no cache' cookie
-     *
-     * @return \Magento\PageCache\Helper\Data
-     */
-    public function unlockNoCacheCookie()
-    {
-        $this->_cookie->set(self::NO_CACHE_LOCK_COOKIE, null);
-        $this->_isNoCacheCookieLocked = false;
-        return $this;
-    }
-
-    /**
-     * Returns a lifetime of cookie for external cache
-     *
-     * @return string Time in seconds
-     */
-    public function getNoCacheCookieLifetime()
-    {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_EXTERNAL_CACHE_LIFETIME);
+        return $this->config->getValue(self::PUBLIC_MAX_AGE_PATH);
     }
 }

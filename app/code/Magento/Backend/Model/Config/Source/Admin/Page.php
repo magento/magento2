@@ -36,13 +36,6 @@ class Page implements \Magento\Core\Model\Option\ArrayInterface
 
     /**
      * @var \Magento\Backend\Model\Menu\Filter\IteratorFactory
-     *
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_objectFactory;
-
-    /**
-     * @var \Magento\Backend\Model\Menu\Filter\IteratorFactory
      */
     protected $_iteratorFactory;
 

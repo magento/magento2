@@ -64,6 +64,7 @@ class GroupedCollection extends Collection
     public function add($identifier, AssetInterface $asset, array $properties = array())
     {
         parent::add($identifier, $asset);
+        $properties = array_filter($properties);
         $properties[self::PROPERTY_CONTENT_TYPE] = $asset->getContentType();
         $properties[self::PROPERTY_CAN_MERGE] = $asset instanceof MergeableInterface;
         $this->getGroupFor($properties)->add($identifier, $asset);

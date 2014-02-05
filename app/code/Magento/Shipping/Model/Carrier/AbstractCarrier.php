@@ -18,16 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Shipping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Shipping\Model\Carrier;
 
-abstract class AbstractCarrier extends \Magento\Object
+use Magento\Object;
+use Magento\Sales\Model\Quote\Address\AbstractCarrierInterface;
+
+abstract class AbstractCarrier extends Object implements AbstractCarrierInterface
 {
     /**
      * Carrier's code
@@ -96,24 +95,24 @@ abstract class AbstractCarrier extends \Magento\Object
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Shipping\Model\Rate\Result\ErrorFactory
+     * @var \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory
      */
     protected $_rateErrorFactory;
 
     /**
-     * @var \Magento\Shipping\Model\Rate\Result\ErrorFactory
+     * @var \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory
      */
     protected $_logAdapterFactory;
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         array $data = array()
     ) {
@@ -157,21 +156,21 @@ abstract class AbstractCarrier extends \Magento\Object
      * Collect and get rates
      *
      * @abstract
-     * @param \Magento\Shipping\Model\Rate\Request $request
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result|bool|null
      */
-    abstract public function collectRates(\Magento\Shipping\Model\Rate\Request $request);
+    abstract public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request);
 
     /**
      * Do request to shipment
      * Implementation must be in overridden method
      *
      * @param \Magento\Shipping\Model\Shipment\Request $request
-     * @return \Magento\Object
+     * @return Object
      */
-    public function requestToShipment(\Magento\Shipping\Model\Shipment\Request $request)
+    public function requestToShipment($request)
     {
-        return new \Magento\Object();
+        return new Object();
     }
 
     /**
@@ -179,20 +178,20 @@ abstract class AbstractCarrier extends \Magento\Object
      * Implementation must be in overridden method
      *
      * @param $request
-     * @return \Magento\Object
+     * @return Object
      */
     public function returnOfShipment($request)
     {
-        return new \Magento\Object();
+        return new Object();
     }
 
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param Object|null $params
      * @return array
      */
-    public function getContainerTypes(\Magento\Object $params = null)
+    public function getContainerTypes(Object $params = null)
     {
         return array();
     }
@@ -200,10 +199,10 @@ abstract class AbstractCarrier extends \Magento\Object
     /**
      * Get allowed containers of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param Object|null $params
      * @return array|bool
      */
-    protected function _getAllowedContainers(\Magento\Object $params = null)
+    protected function _getAllowedContainers(Object $params = null)
     {
         $containersAll = $this->getContainerTypesAll();
         if (empty($containersAll)) {
@@ -263,19 +262,19 @@ abstract class AbstractCarrier extends \Magento\Object
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Object|null $params
+     * @param Object|null $params
      * @return array
      */
-    public function getDeliveryConfirmationTypes(\Magento\Object $params = null)
+    public function getDeliveryConfirmationTypes(Object $params = null)
     {
         return array();
     }
 
     /**
-     * @param \Magento\Shipping\Model\Rate\Request $request
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return $this|bool|false|\Magento\Core\Model\AbstractModel
      */
-    public function checkAvailableShipCountries(\Magento\Shipping\Model\Rate\Request $request)
+    public function checkAvailableShipCountries(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         $speCountriesAllow = $this->getConfigData('sallowspecific');
         /*
@@ -292,7 +291,7 @@ abstract class AbstractCarrier extends \Magento\Object
              } elseif ($showMethod && (!$availableCountries || ($availableCountries
                  && !in_array($request->getDestCountryId(), $availableCountries)))
              ){
-                   /** @var \Magento\Shipping\Model\Rate\Result\Error $error */
+                   /** @var \Magento\Sales\Model\Quote\Address\RateResult\Error $error */
                    $error = $this->_rateErrorFactory->create();
                    $error->setCarrier($this->_code);
                    $error->setCarrierTitle($this->getConfigData('title'));
@@ -313,10 +312,10 @@ abstract class AbstractCarrier extends \Magento\Object
     /**
      * Processing additional validation to check is carrier applicable.
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return \Magento\Shipping\Model\Carrier\AbstractCarrier|\Magento\Shipping\Model\Rate\Result\Error|boolean
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @return \Magento\Shipping\Model\Carrier\AbstractCarrier|\Magento\Sales\Model\Quote\Address\RateResult\Error|boolean
      */
-    public function proccessAdditionalValidation(\Magento\Shipping\Model\Rate\Request $request)
+    public function proccessAdditionalValidation(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         return $this;
     }
@@ -373,7 +372,7 @@ abstract class AbstractCarrier extends \Magento\Object
     }
 
     /**
-     * @param \Magento\Shipping\Model\Rate\Request $request
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return null
      */
     protected function _updateFreeMethodQuote($request)
@@ -406,12 +405,12 @@ abstract class AbstractCarrier extends \Magento\Object
 
             $result = $this->_getQuotes();
             if ($result && ($rates = $result->getAllRates()) && count($rates)>0) {
-                if ((count($rates) == 1) && ($rates[0] instanceof \Magento\Shipping\Model\Rate\Result\Method)) {
+                if ((count($rates) == 1) && ($rates[0] instanceof \Magento\Sales\Model\Quote\Address\RateResult\Method)) {
                     $price = $rates[0]->getPrice();
                 }
                 if (count($rates) > 1) {
                     foreach ($rates as $rate) {
-                        if ($rate instanceof \Magento\Shipping\Model\Rate\Result\Method
+                        if ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Method
                             && $rate->getMethod() == $freeMethod
                         ) {
                             $price = $rate->getPrice();
@@ -617,10 +616,10 @@ abstract class AbstractCarrier extends \Magento\Object
     /**
      * Return content types of package
      *
-     * @param \Magento\Object $params
+     * @param Object $params
      * @return array
      */
-    public function getContentTypes(\Magento\Object $params)
+    public function getContentTypes(Object $params)
     {
         return array();
     }

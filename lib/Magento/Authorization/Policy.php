@@ -33,7 +33,7 @@ interface Policy
      * @abstract
      * @param string $roleId
      * @param string $resourceId
-     * @param mixed $privilege
+     * @param string|null $privilege
      * @return bool
      */
     public function isAllowed($roleId, $resourceId, $privilege = null);

@@ -58,13 +58,13 @@ class Collection extends \Magento\Data\Collection\Filesystem
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Backup\Helper\Data $backupData
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Backup\Model\Backup $backup
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Backup\Helper\Data $backupData,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Backup\Model\Backup $backup
     ) {
         $this->_backupData = $backupData;
@@ -72,7 +72,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
 
         $this->_filesystem = $filesystem;
         $this->_backup = $backup;
-        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
 
         $this->_hideBackupsForApache();
 

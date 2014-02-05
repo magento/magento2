@@ -24,12 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Core\Model;
+
 /**
  * Store model
  *
- * @method \Magento\Core\Model\Resource\Store _getResource()
- * @method \Magento\Core\Model\Resource\Store getResource()
- * @method \Magento\Core\Model\Store setId(string $value)
  * @method \Magento\Core\Model\Store setCode(string $value)
  * @method \Magento\Core\Model\Store setWebsiteId(int $value)
  * @method \Magento\Core\Model\Store setGroupId(int $value)
@@ -39,9 +38,7 @@
  * @method \Magento\Core\Model\Store setSortOrder(int $value)
  * @method \Magento\Core\Model\Store setIsActive(int $value)
  */
-namespace Magento\Core\Model;
-
-class Store extends \Magento\Core\Model\AbstractModel
+class Store extends AbstractModel implements \Magento\Url\ScopeInterface
 {
     /**
      * Entity name
@@ -76,32 +73,21 @@ class Store extends \Magento\Core\Model\AbstractModel
     const XML_PATH_UNSECURE_BASE_MEDIA_URL  = 'web/unsecure/base_media_url';
     const XML_PATH_OFFLOADER_HEADER         = 'web/secure/offloader_header';
     const XML_PATH_PRICE_SCOPE              = 'catalog/price/scope';
-    /**#@- */
+    /**#@-*/
 
-    /**
+    /**#@+
      * Price scope constants
      */
     const PRICE_SCOPE_GLOBAL              = 0;
     const PRICE_SCOPE_WEBSITE             = 1;
-
-    /**#@+
-     * Possible URL types
-     */
-    const URL_TYPE_LINK                   = 'link';
-    const URL_TYPE_DIRECT_LINK            = 'direct_link';
-    const URL_TYPE_WEB                    = 'web';
-    const URL_TYPE_LIB                    = 'lib';
-    const URL_TYPE_MEDIA                  = 'media';
-    const URL_TYPE_STATIC                 = 'static';
-    const URL_TYPE_CACHE                  = 'cache';
-    const URL_TYPE_JS                     = 'js';
     /**#@-*/
 
-    /**
+    /**#@+
      * Code constants
      */
     const DEFAULT_CODE                    = 'default';
     const ADMIN_CODE                      = 'admin';
+    /**#@-*/
 
     /**
      * Cache tag
@@ -132,7 +118,12 @@ class Store extends \Magento\Core\Model\AbstractModel
      * Identifier of default store
      * used for loading data of default scope
      */
-    const DEFAULT_STORE_ID = 0;
+    const DEFAULT_STORE_ID                = 0;
+
+    /**
+     * Default store Id (for install)
+     */
+    const DISTRO_STORE_ID                 = 1;
 
     /**
      * @var \Magento\App\Cache\Type\Config
@@ -247,7 +238,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     /**
      * Url model for current store
      *
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -276,7 +267,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -288,7 +279,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ReinitableConfigInterface
      */
     protected $_config;
 
@@ -309,12 +300,12 @@ class Store extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ReinitableConfigInterface $coreConfig
      * @param \Magento\Core\Model\Resource\Store $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Session\SidResolverInterface $sidResolver
@@ -328,12 +319,12 @@ class Store extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\App\Cache\Type\Config $configCacheType,
-        \Magento\Core\Model\Url $url,
+        \Magento\UrlInterface $url,
         \Magento\App\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ReinitableConfigInterface $coreConfig,
         \Magento\Core\Model\Resource\Store $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Session\SidResolverInterface $sidResolver,
@@ -379,7 +370,7 @@ class Store extends \Magento\Core\Model\AbstractModel
         $this->_coreStoreConfig = \Magento\App\ObjectManager::getInstance()
             ->get('Magento\Core\Model\Store\Config');
         $this->_config = \Magento\App\ObjectManager::getInstance()
-            ->get('Magento\Core\Model\Config');
+            ->get('Magento\App\ReinitableConfigInterface');
         $this->_cookie = \Magento\App\ObjectManager::getInstance()
             ->get('Magento\Stdlib\Cookie');
     }
@@ -521,11 +512,10 @@ class Store extends \Magento\Core\Model\AbstractModel
      */
     public function getUrl($route = '', $params = array())
     {
-        /** @var $url \Magento\Core\Model\Url */
-        $url = $this->getUrlModel()
-            ->setStore($this);
+        /** @var $url \Magento\UrlInterface */
+        $url = $this->getUrlModel()->setScope($this);
         if ($this->_storeManager->getStore()->getId() != $this->getId()) {
-            $params['_store_to_url'] = true;
+            $params['_scope_to_url'] = true;
         }
 
         return $url->getUrl($route, $params);
@@ -539,65 +529,65 @@ class Store extends \Magento\Core\Model\AbstractModel
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getBaseUrl($type = self::URL_TYPE_LINK, $secure = null)
+    public function getBaseUrl($type = \Magento\UrlInterface::URL_TYPE_LINK, $secure = null)
     {
         $cacheKey = $type . '/' . (is_null($secure) ? 'null' : ($secure ? 'true' : 'false'));
         if (!isset($this->_baseUrlCache[$cacheKey])) {
             $secure = is_null($secure) ? $this->isCurrentlySecure() : (bool)$secure;
             switch ($type) {
-                case self::URL_TYPE_WEB:
+                case \Magento\UrlInterface::URL_TYPE_WEB:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_URL : self::XML_PATH_UNSECURE_BASE_URL;
                     $url = $this->getConfig($path);
                     break;
 
-                case self::URL_TYPE_LINK:
+                case \Magento\UrlInterface::URL_TYPE_LINK:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_LINK_URL : self::XML_PATH_UNSECURE_BASE_LINK_URL;
                     $url = $this->getConfig($path);
                     $url = $this->_updatePathUseRewrites($url);
                     $url = $this->_updatePathUseStoreView($url);
                     break;
 
-                case self::URL_TYPE_DIRECT_LINK:
+                case \Magento\UrlInterface::URL_TYPE_DIRECT_LINK:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_LINK_URL : self::XML_PATH_UNSECURE_BASE_LINK_URL;
                     $url = $this->getConfig($path);
                     $url = $this->_updatePathUseRewrites($url);
                     break;
 
-                case self::URL_TYPE_LIB:
+                case \Magento\UrlInterface::URL_TYPE_LIB:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_LIB_URL : self::XML_PATH_UNSECURE_BASE_LIB_URL;
                     $url = $this->getConfig($path);
                     if (!$url) {
-                        $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->filesystem->getUri(\Magento\Filesystem::PUB_LIB);
+                        $url = $this->getBaseUrl(\Magento\UrlInterface::URL_TYPE_WEB, $secure)
+                            . $this->filesystem->getUri(\Magento\App\Filesystem::PUB_LIB_DIR);
                     }
                     break;
 
-                case self::URL_TYPE_STATIC:
+                case \Magento\UrlInterface::URL_TYPE_STATIC:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_STATIC_URL : self::XML_PATH_UNSECURE_BASE_STATIC_URL;
                     $url = $this->getConfig($path);
                     if (!$url) {
-                        $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->filesystem->getUri(\Magento\Filesystem::STATIC_VIEW);
+                        $url = $this->getBaseUrl(\Magento\UrlInterface::URL_TYPE_WEB, $secure)
+                            . $this->filesystem->getUri(\Magento\App\Filesystem::STATIC_VIEW_DIR);
                     }
                     break;
 
-                case self::URL_TYPE_CACHE:
+                case \Magento\UrlInterface::URL_TYPE_CACHE:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_CACHE_URL : self::XML_PATH_UNSECURE_BASE_CACHE_URL;
                     $url = $this->getConfig($path);
                     if (!$url) {
-                        $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                            . $this->filesystem->getUri(\Magento\Filesystem::PUB_VIEW_CACHE);
+                        $url = $this->getBaseUrl(\Magento\UrlInterface::URL_TYPE_WEB, $secure)
+                            . $this->filesystem->getUri(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR);
                     }
                     break;
 
-                case self::URL_TYPE_MEDIA:
+                case \Magento\UrlInterface::URL_TYPE_MEDIA:
                     $url = $this->_getMediaScriptUrl($this->filesystem, $secure);
                     if (!$url) {
                         $path = $secure ? self::XML_PATH_SECURE_BASE_MEDIA_URL : self::XML_PATH_UNSECURE_BASE_MEDIA_URL;
                         $url = $this->getConfig($path);
                         if (!$url) {
-                            $url = $this->getBaseUrl(self::URL_TYPE_WEB, $secure)
-                                . $this->filesystem->getUri(\Magento\Filesystem::MEDIA);
+                            $url = $this->getBaseUrl(\Magento\UrlInterface::URL_TYPE_WEB, $secure)
+                                . $this->filesystem->getUri(\Magento\App\Filesystem::MEDIA_DIR);
                         }
                     }
                     break;
@@ -606,9 +596,9 @@ class Store extends \Magento\Core\Model\AbstractModel
                     throw new \InvalidArgumentException('Invalid base url type');
             }
 
-            if (false !== strpos($url, \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER)) {
+            if (false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
                 $distroBaseUrl = $this->_request->getDistroBaseUrl();
-                $url = str_replace(\Magento\Core\Model\Store::BASE_URL_PLACEHOLDER, $distroBaseUrl, $url);
+                $url = str_replace(self::BASE_URL_PLACEHOLDER, $distroBaseUrl, $url);
             }
 
             $this->_baseUrlCache[$cacheKey] = rtrim($url, '/') . '/';
@@ -655,17 +645,17 @@ class Store extends \Magento\Core\Model\AbstractModel
      * If we use Database file storage and server doesn't support rewrites (.htaccess in media folder)
      * we have to put name of fetching media script exactly into URL
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param bool $secure
      * @return string|bool
      */
-    protected function _getMediaScriptUrl(\Magento\Filesystem $filesystem, $secure)
+    protected function _getMediaScriptUrl(\Magento\App\Filesystem $filesystem, $secure)
     {
         if (!$this->getConfig(self::XML_PATH_USE_REWRITES)
             && $this->_coreFileStorageDatabase->checkDbUsage()
         ) {
-            return $this->getBaseUrl(self::URL_TYPE_WEB, $secure) . $filesystem->getUri(\Magento\Filesystem::PUB)
-            . '/' . self::MEDIA_REWRITE_SCRIPT;
+            return $this->getBaseUrl(\Magento\UrlInterface::URL_TYPE_WEB, $secure)
+                . $filesystem->getUri(\Magento\App\Filesystem::PUB_DIR) . '/' . self::MEDIA_REWRITE_SCRIPT;
         }
         return false;
     }
@@ -692,8 +682,8 @@ class Store extends \Magento\Core\Model\AbstractModel
     public function isUseStoreInUrl()
     {
         return !($this->hasDisableStoreInUrl() && $this->getDisableStoreInUrl())
-        && $this->_appState->isInstalled()
-        && $this->getConfig(self::XML_PATH_STORE_IN_URL);
+            && $this->_appState->isInstalled()
+            && $this->getConfig(self::XML_PATH_STORE_IN_URL);
     }
 
     /**
@@ -715,7 +705,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     {
         if ($this->_isFrontSecure === null) {
             $this->_isFrontSecure = $this->_coreStoreConfig->getConfigFlag(
-                \Magento\Core\Model\Url::XML_PATH_SECURE_IN_FRONT,
+                self::XML_PATH_SECURE_IN_FRONTEND,
                 $this->getId()
             );
         }
@@ -745,8 +735,8 @@ class Store extends \Magento\Core\Model\AbstractModel
         }
 
         if ($this->_appState->isInstalled()) {
-            $secureBaseUrl = $this->_coreStoreConfig->getConfig(\Magento\Core\Model\Url::XML_PATH_SECURE_URL);
-
+            $secureBaseUrl = $this->_coreStoreConfig->getConfig(self::XML_PATH_SECURE_BASE_URL);
+            
             if (!$secureBaseUrl) {
                 return false;
             }
@@ -774,8 +764,8 @@ class Store extends \Magento\Core\Model\AbstractModel
      */
     public function getBaseCurrencyCode()
     {
-        $configValue = $this->getConfig(\Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE);
-        if ($configValue == \Magento\Core\Model\Store::PRICE_SCOPE_GLOBAL) {
+        $configValue = $this->getConfig(self::XML_PATH_PRICE_SCOPE);
+        if ($configValue == self::PRICE_SCOPE_GLOBAL) {
             return \Magento\App\ObjectManager::getInstance()
                 ->get('Magento\Core\Model\App')->getBaseCurrencyCode();
         } else {
@@ -791,7 +781,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     public function getBaseCurrency()
     {
         $currency = $this->getData('base_currency');
-        if (is_null($currency)) {
+        if (null === $currency) {
             $currency = \Magento\App\ObjectManager::getInstance()->create('Magento\Directory\Model\Currency')
                 ->load($this->getBaseCurrencyCode());
             $this->setData('base_currency', $currency);
@@ -818,7 +808,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     public function getDefaultCurrency()
     {
         $currency = $this->getData('default_currency');
-        if (is_null($currency)) {
+        if (null === $currency) {
             $currency = \Magento\App\ObjectManager::getInstance()->create('Magento\Directory\Model\Currency')
                 ->load($this->getDefaultCurrencyCode());
             $this->setData('default_currency', $currency);
@@ -884,7 +874,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     public function getAvailableCurrencyCodes($skipBaseNotAllowed = false)
     {
         $codes = $this->getData('available_currency_codes');
-        if (is_null($codes)) {
+        if (null === $codes) {
             $codes = explode(',', $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW));
             // add base currency, if it is not in allowed currencies
             $baseCurrencyCode = $this->getBaseCurrencyCode();
@@ -1042,7 +1032,7 @@ class Store extends \Magento\Core\Model\AbstractModel
      */
     public function getGroup()
     {
-        if (is_null($this->getGroupId())) {
+        if (null === $this->getGroupId()) {
             return false;
         }
         return $this->_storeManager->getGroup($this->getGroupId());
@@ -1101,11 +1091,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     public function getCurrentUrl($fromStore = true)
     {
         $sidQueryParam = $this->_sidResolver->getSessionIdQueryParam($this->_getSession());
-        $requestString = $this->getUrlModel()->escape(ltrim(
-            \Magento\App\ObjectManager::getInstance()
-                ->get('Magento\Core\Model\App')->getRequest()->getRequestString(),
-            '/'
-        ));
+        $requestString = $this->getUrlModel()->escape(ltrim($this->_request->getRequestString(), '/'));
 
         $storeUrl = $this->_storeManager->getStore()->isCurrentlySecure()
             ? $this->getUrl('', array('_secure' => true))
@@ -1129,8 +1115,8 @@ class Store extends \Magento\Core\Model\AbstractModel
             unset($currQuery[$sidQueryParam]);
         }
 
-        foreach ($currQuery as $k => $v) {
-            $storeParsedQuery[$k] = $v;
+        foreach ($currQuery as $key => $value) {
+            $storeParsedQuery[$key] = $value;
         }
 
         if (!$this->isUseStoreInUrl()) {
@@ -1143,9 +1129,9 @@ class Store extends \Magento\Core\Model\AbstractModel
         }
 
         return $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host']
-        . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
-        . $storeParsedUrl['path'] . $requestString
-        . ($storeParsedQuery ? '?'.http_build_query($storeParsedQuery, '', '&amp;') : '');
+            . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
+            . $storeParsedUrl['path'] . $requestString
+            . ($storeParsedQuery ? '?'.http_build_query($storeParsedQuery, '', '&amp;') : '');
     }
 
     /**
@@ -1245,7 +1231,7 @@ class Store extends \Magento\Core\Model\AbstractModel
      */
     public function getFrontendName()
     {
-        if (is_null($this->_frontendName)) {
+        if (null === $this->_frontendName) {
             $storeGroupName = (string) $this->_coreStoreConfig->getConfig('general/store_information/name', $this);
             $this->_frontendName = (!empty($storeGroupName)) ? $storeGroupName : $this->getGroup()->getName();
         }
@@ -1255,7 +1241,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     /**
      * Set url model for current store
      *
-     * @param \Magento\Core\Model\Url $urlModel
+     * @param \Magento\UrlInterface $urlModel
      * @return \Magento\Core\Model\Store
      */
     public function setUrlModel($urlModel)
@@ -1267,7 +1253,7 @@ class Store extends \Magento\Core\Model\AbstractModel
     /**
      * Get url model by class name for current store
      *
-     * @return \Magento\Core\Model\Url
+     * @return \Magento\UrlInterface
      */
     public function getUrlModel()
     {

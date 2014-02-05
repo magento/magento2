@@ -39,7 +39,7 @@ class Install
     protected $_response;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -51,13 +51,13 @@ class Install
     /**
      * @param \Magento\App\State $appState
      * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\App\ActionFlag $actionFlag
      */
     public function __construct(
         \Magento\App\State $appState,
         \Magento\App\ResponseInterface $response,
-        \Magento\Core\Model\Url $url,
+        \Magento\UrlInterface $url,
         \Magento\App\ActionFlag $actionFlag
     ) {
         $this->_appState = $appState;

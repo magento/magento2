@@ -39,7 +39,7 @@ class End extends \Magento\Install\Block\AbstractBlock
     protected $_template = 'end.phtml';
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_coreConfig;
 
@@ -60,7 +60,7 @@ class End extends \Magento\Install\Block\AbstractBlock
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
      * @param \Magento\Session\Generic $session
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\AdminNotification\Model\Survey $survey
      * @param $cryptKey
      * @param array $data
@@ -70,7 +70,7 @@ class End extends \Magento\Install\Block\AbstractBlock
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
         \Magento\Session\Generic $session,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\AdminNotification\Model\Survey $survey,
         $cryptKey,
         array $data = array()

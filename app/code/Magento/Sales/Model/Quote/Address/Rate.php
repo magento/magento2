@@ -57,7 +57,9 @@
  */
 namespace Magento\Sales\Model\Quote\Address;
 
-class Rate extends \Magento\Shipping\Model\Rate\AbstractRate
+use \Magento\Core\Model\AbstractModel;
+
+class Rate extends AbstractModel
 {
     /**
      * @var \Magento\Sales\Model\Quote\Address
@@ -100,17 +102,17 @@ class Rate extends \Magento\Shipping\Model\Rate\AbstractRate
     }
 
     /**
-     * @param \Magento\Shipping\Model\Rate\Result\AbstractResult $rate
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\AbstractResult $rate
      * @return $this
      */
-    public function importShippingRate(\Magento\Shipping\Model\Rate\Result\AbstractResult $rate)
+    public function importShippingRate(\Magento\Sales\Model\Quote\Address\RateResult\AbstractResult $rate)
     {
-        if ($rate instanceof \Magento\Shipping\Model\Rate\Result\Error) {
+        if ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
             $this->setCode($rate->getCarrier() . '_error')
                 ->setCarrier($rate->getCarrier())
                 ->setCarrierTitle($rate->getCarrierTitle())
                 ->setErrorMessage($rate->getErrorMessage());
-        } elseif ($rate instanceof \Magento\Shipping\Model\Rate\Result\Method) {
+        } elseif ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Method) {
             $this->setCode($rate->getCarrier() . '_' . $rate->getMethod())
                 ->setCarrier($rate->getCarrier())
                 ->setCarrierTitle($rate->getCarrierTitle())

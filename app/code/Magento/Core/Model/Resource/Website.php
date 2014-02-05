@@ -100,7 +100,7 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _afterDelete(\Magento\Core\Model\AbstractModel $model)
     {
         $where = array(
-            'scope = ?'    => \Magento\Core\Model\Config::SCOPE_WEBSITES,
+            'scope = ?'    => \Magento\Core\Model\ScopeInterface::SCOPE_WEBSITES,
             'scope_id = ?' => $model->getWebsiteId()
         );
 

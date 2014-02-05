@@ -49,9 +49,9 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <cataloginventory_setup>Magento\Eav\Model\Entity\Setup</cataloginventory_setup>
-            </value>
+            <array>
+                <item key="cataloginventory_setup"><value>Magento\Eav\Model\Entity\Setup</value></item>
+            </array>
         </param>
     </type>
 </config>

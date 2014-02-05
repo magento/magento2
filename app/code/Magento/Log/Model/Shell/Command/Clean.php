@@ -23,15 +23,18 @@
  */
 namespace Magento\Log\Model\Shell\Command;
 
+use Magento\Core\Model\StoreManagerInterface;
+use Magento\Log\Model\LogFactory;
+
 class Clean implements \Magento\Log\Model\Shell\CommandInterface
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Log\Model\LogFactory
+     * @var LogFactory
      */
     protected $_logFactory;
 
@@ -42,9 +45,14 @@ class Clean implements \Magento\Log\Model\Shell\CommandInterface
      */
     protected $_days;
 
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param LogFactory $logFactory
+     * @param int $days
+     */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Log\Model\LogFactory $logFactory,
+        StoreManagerInterface $storeManager,
+        LogFactory $logFactory,
         $days
     ) {
         $this->_storeManager = $storeManager;

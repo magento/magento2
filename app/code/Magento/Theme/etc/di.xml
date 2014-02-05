@@ -34,10 +34,10 @@
     </type>
     <type name="Magento\Theme\Model\Uploader\Service">
         <param name="uploadLimits">
-            <value>
-                <css>2M</css>
-                <js>2M</js>
-            </value>
+            <array>
+                <item key="css"><value>2M</value></item>
+                <item key="js"><value>2M</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Theme\Model\Layout\Config\Reader">

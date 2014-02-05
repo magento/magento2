@@ -271,11 +271,8 @@ class Configurable
     {
         if ($this->_superAttributes) {
             $attrSetIdToName   = $this->_entityModel->getAttrSetIdToName();
-
-            $configData = $this->_productTypesConfig->getType('configurable');
-            $allowProductTypes = isset($configData['allow_product_types']) ? $configData['allow_product_types'] : array();
             foreach ($this->_productColFac->create()
-                        ->addFieldToFilter('type_id', $allowProductTypes)
+                        ->addFieldToFilter('type_id', $this->_productTypesConfig->getComposableTypes())
                         ->addAttributeToSelect(array_keys($this->_superAttributes)) as $product) {
                 $attrSetName = $attrSetIdToName[$product->getAttributeSetId()];
 

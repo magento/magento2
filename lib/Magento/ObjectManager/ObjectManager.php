@@ -67,6 +67,7 @@ class ObjectManager implements \Magento\ObjectManager
      * Set creation factory
      *
      * @param Factory $factory
+     * @return void
      */
     public function setFactory(Factory $factory)
     {

@@ -56,7 +56,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
 
     /**
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\App\ActionFlag $actionFlag
      * @param \Magento\Message\ManagerInterface $messageManager
@@ -66,7 +66,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Url $url,
+        \Magento\Backend\Model\UrlInterface $url,
         \Magento\App\ResponseInterface $response,
         \Magento\App\ActionFlag $actionFlag,
         \Magento\Message\ManagerInterface $messageManager,

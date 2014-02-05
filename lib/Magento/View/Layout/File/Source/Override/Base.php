@@ -26,7 +26,7 @@ namespace Magento\View\Layout\File\Source\Override;
 
 use Magento\View\Layout\File\SourceInterface;
 use Magento\View\Design\ThemeInterface;
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\Filesystem\Directory\ReadInterface;
 use Magento\View\Layout\File\Factory;
 
@@ -53,7 +53,7 @@ class Base implements SourceInterface
         Filesystem $filesystem,
         Factory $fileFactory
     ) {
-        $this->themesDirectory = $filesystem->getDirectoryRead(Filesystem::THEMES);
+        $this->themesDirectory = $filesystem->getDirectoryRead(Filesystem::THEMES_DIR);
         $this->fileFactory = $fileFactory;
     }
 

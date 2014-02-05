@@ -56,7 +56,7 @@ class BeginTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($fileName))
             ->will($this->returnValue($expectedTxt));
 
-        $fileSystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $fileSystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $fileSystem->expects($this->once())
             ->method('getDirectoryRead')
             ->will($this->returnValue($directoryMock));
@@ -76,7 +76,7 @@ class BeginTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLicenseHtmlWhenFileIsEmpty($fileName)
     {
-        $fileSystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $fileSystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $fileSystem->expects($this->never())->method('read');
 
         $block = $this->_objectManager->getObject('Magento\Install\Block\Begin',

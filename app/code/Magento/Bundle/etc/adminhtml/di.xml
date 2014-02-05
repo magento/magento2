@@ -27,4 +27,21 @@
     <type name="Magento\Sales\Model\Convert\Quote">
         <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
     </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
+        <plugin name="Bundle" type="Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle" sortOrder="60" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
+        <param name="constructors">
+            <array>
+                <item key="bundle"><value>Magento\Bundle\Model\Product\CopyConstructor\Bundle</value></item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock">
+        <param name="complexProductTypes">
+            <array>
+                <item key="bundle"><value type="const">Magento\Catalog\Model\Product\Type::TYPE_BUNDLE</value></item>
+            </array>
+        </param>
+    </type>
 </config>

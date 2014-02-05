@@ -103,6 +103,7 @@ class Renderer extends \Magento\View\Element\Template
         $this->_checkoutSession = $checkoutSession;
         $this->messageManager = $messageManager;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

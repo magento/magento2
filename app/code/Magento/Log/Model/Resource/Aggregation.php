@@ -123,6 +123,7 @@ class Aggregation extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Remove empty records
      *
      * @param string $date
+     * @return void
      */
     public function removeEmpty($date)
     {

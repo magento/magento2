@@ -24,9 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="checkout.cart.form">
-        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::cart/item/default.phtml" cacheable="false"/>
-    </referenceBlock>
     <referenceBlock name="checkout.cart.crosssell">
         <action method="addPriceBlockType">
             <argument name="type" xsi:type="string">bundle</argument>

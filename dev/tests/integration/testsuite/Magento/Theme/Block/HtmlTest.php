@@ -42,21 +42,24 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->will($this->returnValueMap($configData));
 
-        $securityInfoMock = $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface');
+        $securityInfoMock = $this->getMock('Magento\Url\SecurityInfoInterface');
         $codeData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $urlBuilder = $this->getMock(
-            'Magento\Core\Model\Url',
+            'Magento\Url',
             array('getBaseUrl'),
             array(
                 $this->getMock('Magento\App\Route\ConfigInterface'),
                 $this->getMock('Magento\App\Request\Http', array(), array(), '', false),
                 $securityInfoMock,
-                $storeConfig,
-                $this->getMock('Magento\Core\Model\App', array(), array(), '', false),
-                $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false),
+                $this->getMock('Magento\Url\ScopeResolverInterface', array(), array(), '', false),
                 $this->getMock('Magento\Core\Model\Session', array(), array(), '', false),
                 $this->getMock('Magento\Session\SidResolverInterface', array(), array(), '', false),
-                null,
+                $this->getMock(
+                    'Magento\Url\RouteParamsResolverFactory', array(), array(), '', false
+                ),
+                $this->getMock(
+                    'Magento\Url\QueryParamsResolver', array(), array(), '', false
+                ),
                 array()
             )
         );

@@ -42,7 +42,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryRead'), array(), '', false);
         $this->_directoryMock = $this->getMock(
             '\Magento\Filesystem\Directory\Read',
             array('isExist', 'search'),
@@ -52,7 +52,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         );
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::APP)
+            ->with(\Magento\App\Filesystem::APP_DIR)
             ->will($this->returnValue($this->_directoryMock));
         $this->_directoryMock->expects($this->once())
             ->method('isExist')

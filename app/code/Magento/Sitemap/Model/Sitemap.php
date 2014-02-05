@@ -161,7 +161,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Escaper $escaper
      * @param \Magento\Sitemap\Helper\Data $sitemapData
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory $categoryFactory
      * @param \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory
      * @param \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory
@@ -178,7 +178,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Escaper $escaper,
         \Magento\Sitemap\Helper\Data $sitemapData,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory $categoryFactory,
         \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory,
         \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory,
@@ -192,7 +192,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_cmsFactory = $cmsFactory;
@@ -561,7 +561,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * @param string $type
      * @return string
      */
-    protected function _getStoreBaseUrl($type = \Magento\Core\Model\Store::URL_TYPE_LINK)
+    protected function _getStoreBaseUrl($type = \Magento\UrlInterface::URL_TYPE_LINK)
     {
         return rtrim($this->_storeManager->getStore($this->getStoreId())->getBaseUrl($type), '/') . '/';
     }
@@ -573,7 +573,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * @param string $type
      * @return string
      */
-    protected function _getUrl($url, $type = \Magento\Core\Model\Store::URL_TYPE_LINK)
+    protected function _getUrl($url, $type = \Magento\UrlInterface::URL_TYPE_LINK)
     {
         return $this->_getStoreBaseUrl($type) . ltrim($url, '/');
     }
@@ -586,7 +586,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      */
     protected function _getMediaUrl($url)
     {
-        return $this->_getUrl($url, \Magento\Core\Model\Store::URL_TYPE_MEDIA);
+        return $this->_getUrl($url, \Magento\UrlInterface::URL_TYPE_MEDIA);
     }
 
     /**
@@ -629,7 +629,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
             $storeDomain = rtrim($url . '/' . $installationFolder, '/');
         } else {
             //case when documentRoot contains symlink to basedir
-            $url = $this->_getStoreBaseUrl(\Magento\Core\Model\Store::URL_TYPE_WEB);
+            $url = $this->_getStoreBaseUrl(\Magento\UrlInterface::URL_TYPE_WEB);
             $storeDomain = rtrim($url, '/');
         }
 

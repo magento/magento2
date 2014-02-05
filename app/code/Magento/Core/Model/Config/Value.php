@@ -32,19 +32,18 @@ namespace Magento\Core\Model\Config;
  * @method \Magento\Core\Model\Resource\Config\Data _getResource()
  * @method \Magento\Core\Model\Resource\Config\Data getResource()
  * @method string getScope()
- * @method \Magento\Core\Model\Config\Value setScope(string $value)
+ * @method \Magento\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()
- * @method \Magento\Core\Model\Config\Value setScopeId(int $value)
+ * @method \Magento\App\Config\ValueInterface setScopeId(int $value)
  * @method string getPath()
- * @method \Magento\Core\Model\Config\Value setPath(string $value)
+ * @method \Magento\App\Config\ValueInterface setPath(string $value)
  * @method string getValue()
- * @method \Magento\Core\Model\Config\Value setValue(string $value)
+ * @method \Magento\App\Config\ValueInterface setValue(string $value)
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Value extends \Magento\Core\Model\AbstractModel
+class Value extends \Magento\Core\Model\AbstractModel implements \Magento\App\Config\ValueInterface
 {
-    const ENTITY = 'core_config_data';
     /**
      * Prefix of model events names
      *
@@ -67,7 +66,7 @@ class Value extends \Magento\Core\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -75,7 +74,7 @@ class Value extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -84,7 +83,7 @@ class Value extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\ConfigInterface $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

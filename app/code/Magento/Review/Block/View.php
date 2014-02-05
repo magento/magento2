@@ -36,6 +36,9 @@ namespace Magento\Review\Block;
 
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
+    /**
+     * @var string
+     */
     protected $_template = 'view.phtml';
 
     /**
@@ -69,6 +72,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,7 +91,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_voteFactory = $voteFactory;
         $this->_reviewFactory = $reviewFactory;
@@ -104,7 +109,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
 

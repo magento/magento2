@@ -240,7 +240,7 @@ abstract class AbstractXml extends \Magento\Object
 
     protected function _getCallbackUrl()
     {
-        return $this->objectManager->create('Magento\Core\Model\Url')->getUrl(
+        return $this->objectManager->create('Magento\UrlInterface')->getUrl(
             'googlecheckout/api',
             array('_forced_secure'=>$this->_coreStoreConfig->getConfig('google/checkout/use_secure_callback_url',$this->getStoreId()))
         );

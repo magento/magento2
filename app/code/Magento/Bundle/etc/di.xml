@@ -26,19 +26,26 @@
 <config>
     <type name="Magento\Bundle\Model\Source\Option\Type">
         <param name="options">
-            <value>
-                <select>Drop-down</select>
-                <radio>Radio Buttons</radio>
-                <checkbox>Checkbox</checkbox>
-                <multi>Multiple Select</multi>
-            </value>
+            <array>
+                <item key="select"><value>Drop-down</value></item>
+                <item key="radio"><value>Radio Buttons</value></item>
+                <item key="checkbox"><value>Checkbox</value></item>
+                <item key="multi"><value>Multiple Select</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <bundle_setup>Magento\Catalog\Model\Resource\Setup</bundle_setup>
-            </value>
+            <array>
+                <item key="bundle_setup"><value>Magento\Catalog\Model\Resource\Setup</value></item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\Catalog\Model\Product\CatalogPrice">
+        <param name="priceModelPool">
+            <array>
+                <item key="bundle"><value>Magento\Bundle\Model\Product\CatalogPrice</value></item>
+            </array>
         </param>
     </type>
 </config>

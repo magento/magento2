@@ -43,18 +43,22 @@
     </type>
     <type name="Magento\App\RouterList" shared="true">
         <param name="routerList">
-            <value>
-                <standard>
-                    <instance>Magento\Core\App\Router\Base</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>20</sortOrder>
-                </standard>
-                <default>
-                    <instance>Magento\App\Router\DefaultRouter</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>100</sortOrder>
-                </default>
-            </value>
+            <array>
+                <item key="standard">
+                    <array>
+                        <item key="instance"><value>Magento\Core\App\Router\Base</value></item>
+                        <item key="disable"><value type="bool">false</value></item>
+                        <item key="sortOrder"><value>20</value></item>
+                    </array>
+                </item>
+                <item key="default">
+                    <array>
+                        <item key="instance"><value>Magento\App\Router\DefaultRouter</value></item>
+                        <item key="disable"><value type="bool">false</value></item>
+                        <item key="sortOrder"><value>100</value></item>
+                    </array>
+                </item>
+            </array>
         </param>
     </type>
 </config>

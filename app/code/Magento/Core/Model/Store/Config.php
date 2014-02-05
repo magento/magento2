@@ -34,7 +34,7 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\ConfigInterface
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -50,12 +50,12 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Resource\Store\CollectionFactory $factory
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\ConfigInterface $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Resource\Store\CollectionFactory $factory
     ) {
         $this->_storeManager = $storeManager;

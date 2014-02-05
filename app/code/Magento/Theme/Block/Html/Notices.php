@@ -30,21 +30,13 @@ namespace Magento\Theme\Block\Html;
 class Notices extends \Magento\View\Element\Template
 {
     /**
-     * @var \Magento\Core\Model\Url
-     */
-    protected $_urlModel;
-
-    /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         array $data = array()
     ) {
-        $this->_urlModel = $urlModel;
         parent::__construct($context, $data);
     }
 
@@ -75,6 +67,6 @@ class Notices extends \Magento\View\Element\Template
      */
     public function getPrivacyPolicyLink()
     {
-        return $this->_urlModel->getUrl('privacy-policy-cookie-restriction-mode');
+        return $this->_urlBuilder->getUrl('privacy-policy-cookie-restriction-mode');
     }
 }

@@ -32,7 +32,7 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
 class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorInterface
 {
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_urlModel;
 
@@ -52,11 +52,11 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
     protected $_extraParamsTemplate = array();
 
     /**
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param array $args
      * @throws \InvalidArgumentException
      */
-    public function __construct(\Magento\Backend\Model\Url $backendUrl, array $args = array())
+    public function __construct(\Magento\Backend\Model\UrlInterface $backendUrl, array $args = array())
     {
         if (!isset($args['path'])) {
             throw new \InvalidArgumentException('Not all required parameters passed');

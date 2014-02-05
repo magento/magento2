@@ -128,7 +128,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_configData->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->with('scope', \Magento\Core\Model\Config::SCOPE_STORES)
+            ->with('scope', \Magento\Core\Model\ScopeInterface::SCOPE_STORES)
             ->will($this->returnValue($this->_configData));
 
         $this->_configData->expects($this->at(2))
@@ -171,7 +171,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_configData->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->with('scope', \Magento\Core\Model\Config::SCOPE_STORES)
+            ->with('scope', \Magento\Core\Model\ScopeInterface::SCOPE_STORES)
             ->will($this->returnValue($this->_configData));
 
         $this->_configData->expects($this->at(2))

@@ -80,7 +80,7 @@
                         </item>
                         <item name="print_shipping_label" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Print Shipping Labels</item>
-                            <item name="url" xsi:type="string">sales/order_shipment/massPrintShippingLabel</item>
+                            <item name="url" xsi:type="string">adminhtml/order_shipment/massPrintShippingLabel</item>
                         </item>
                     </argument>
                 </arguments>

@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Review\Block\Adminhtml;
+
 /**
  * Review edit form
  */
-namespace Magento\Review\Block\Adminhtml;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -213,6 +213,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         ';
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderText()
     {
         $reviewData = $this->_coreRegistry->registry('review_data');

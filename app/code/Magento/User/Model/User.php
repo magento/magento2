@@ -532,7 +532,7 @@ class User
      */
     public function authenticate($username, $password)
     {
-        $config = $this->_config->getFlag('admin/security/use_case_sensitive_login');
+        $config = $this->_config->isSetFlag('admin/security/use_case_sensitive_login');
         $result = false;
 
         try {

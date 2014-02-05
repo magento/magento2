@@ -25,7 +25,7 @@
 
 namespace Magento\Install\App\Action\Plugin;
 
-use Magento\Filesystem,
+use Magento\App\Filesystem,
     Magento\Filesystem\FilesystemException,
     Magento\Filesystem\Directory\Write,
     Magento\App\State,

@@ -26,27 +26,12 @@
 
 namespace Magento\Core\Model;
 
-class Config implements \Magento\Core\Model\ConfigInterface
+class Config implements \Magento\App\ConfigInterface
 {
     /**
      * Config cache tag
      */
     const CACHE_TAG = 'CONFIG';
-
-    /**
-     * Default configuration scope
-     */
-    const SCOPE_DEFAULT = 'default';
-
-    /**
-     * Stores configuration scope
-     */
-    const SCOPE_STORES = 'stores';
-
-    /**
-     * Websites configuration scope
-     */
-    const SCOPE_WEBSITES = 'websites';
 
     /**
      * @var \Magento\Core\Model\Config\SectionPool
@@ -88,12 +73,15 @@ class Config implements \Magento\Core\Model\ConfigInterface
     }
 
     /**
-     * Reinitialize configuration
+     * Retrieve config flag
      *
-     * @return \Magento\Core\Model\Config
+     * @param string $path
+     * @param string $scope
+     * @param null|string $scopeCode
+     * @return bool
      */
-    public function reinit()
+    public function isSetFlag($path, $scope = 'default', $scopeCode = null)
     {
-        $this->_sectionPool->clean();
+        return (bool)$this->getValue($path, $scope, $scopeCode);
     }
 }

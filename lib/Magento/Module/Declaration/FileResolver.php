@@ -25,48 +25,51 @@
  */
 namespace Magento\Module\Declaration;
 
+use Magento\App\Filesystem;
+use Magento\Filesystem\Directory\ReadInterface;
+
 class FileResolver implements \Magento\Config\FileResolverInterface
 {
     /**
      * Modules directory with read access
      *
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $modulesDirectory;
 
     /**
      * Config directory with read access
      *
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $configDirectory;
 
     /**
      * Root directory with read access
      *
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $rootDirectory;
 
     /**
      * File iterator factory
      *
-     * @var FileIteratorFactory
+     * @var \Magento\Config\FileIteratorFactory
      */
     protected $iteratorFactory;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param Filesystem $filesystem
      * @param \Magento\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        Filesystem $filesystem,
         \Magento\Config\FileIteratorFactory $iteratorFactory
     ) {
-        $this->iteratorFactory      = $iteratorFactory;
-        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
-        $this->configDirectory  = $filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
-        $this->rootDirectory     = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->iteratorFactory  = $iteratorFactory;
+        $this->modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES_DIR);
+        $this->configDirectory  = $filesystem->getDirectoryRead(Filesystem::CONFIG_DIR);
+        $this->rootDirectory    = $filesystem->getDirectoryRead(Filesystem::ROOT_DIR);
     }
 
     /**
@@ -76,7 +79,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     public function get($filename, $scope)
     {
         $moduleDir = $this->modulesDirectory->getAbsolutePath();
-        $configDir =  $this->configDirectory->getAbsolutePath();
+        $configDir = $this->configDirectory->getAbsolutePath();
 
         $mageScopePath = $moduleDir . '/Magento';
         $output = array(

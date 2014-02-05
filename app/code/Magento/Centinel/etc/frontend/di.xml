@@ -39,9 +39,9 @@
     </virtualType>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <param name="secureUrlList">
-            <value>
-                <centinel>/centinel/</centinel>
-            </value>
+            <array>
+                <item key="centinel"><value>/centinel/</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Centinel\Model\Service">

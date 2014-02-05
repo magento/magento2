@@ -24,7 +24,7 @@
 
 namespace Magento\View\Design\FileResolution\Strategy\Fallback;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\View\Design\FileResolution\Strategy\Fallback;
 use Magento\View\Design\FileResolution\Strategy\FileInterface;
 use Magento\View\Design\FileResolution\Strategy\LocaleInterface;
@@ -98,7 +98,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     ) {
         $this->fallback = $fallback;
         $this->varDirectory = $filesystem->getDirectoryWrite(Filesystem::VAR_DIR);
-        $rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT);
+        $rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT_DIR);
         if (!$rootDirectory->isDirectory($rootDirectory->getRelativePath($baseDir))) {
             throw new \InvalidArgumentException("Wrong base directory specified: '{$baseDir}'");
         }

@@ -26,12 +26,12 @@
 namespace Magento\Core\App;
 
 use Magento\App\State,
-    Magento\AppInterface,
+    Magento\LauncherInterface,
     Magento\ObjectManager,
     Magento\Core\Model\File\Storage\Request,
     Magento\Core\Model\File\Storage\Response;
 
-class Media implements AppInterface
+class Media implements LauncherInterface
 {
     /**
      * @var \Magento\App\State
@@ -89,7 +89,7 @@ class Media implements AppInterface
     protected $_response;
 
     /**
-     * @var \Magento\Filesystem $filesystem
+     * @var \Magento\App\Filesystem $filesystem
      */
     protected $filesystem;
 
@@ -108,7 +108,7 @@ class Media implements AppInterface
      * @param $mediaDirectory
      * @param $configCacheFile
      * @param $relativeFileName
-     * @param \Magento\Filesystem $filesytem
+     * @param \Magento\App\Filesystem $filesytem
      */
     public function __construct(
         State $applicationState,
@@ -120,7 +120,7 @@ class Media implements AppInterface
         $mediaDirectory,
         $configCacheFile,
         $relativeFileName,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_applicationState = $applicationState;
         $this->_objectManager = $objectManager;
@@ -132,20 +132,20 @@ class Media implements AppInterface
         $this->_configCacheFile = $configCacheFile;
         $this->_relativeFileName = $relativeFileName;
         $this->filesystem = $filesystem;
-        $this->directory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        $this->directory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
     }
 
     /**
-     * Execute application
+     * Run application
      *
-     * @return int
+     * @return \Magento\App\ResponseInterface
      */
-    public function execute()
+    public function launch()
     {
         try {
             if (!$this->_applicationState->isInstalled()) {
-                $this->_response->sendNotFound();
-                return -1;
+                $this->_response->setHttpResponseCode(404);
+                return $this->_response;
             }
             if (!$this->_mediaDirectory) {
                 $config = $this->_objectManager->create(
@@ -159,29 +159,28 @@ class Media implements AppInterface
                 );
                 $isAllowed = $this->_isAllowed;
                 if (!$isAllowed($this->_relativeFileName, $allowedResources)) {
-                    $this->_response->sendNotFound();
-                    return -1;
+                    $this->_response->setHttpResponseCode(404);
+                    return $this->_response;
                 }
             }
 
             if (0 !== stripos($this->_request->getPathInfo(), $this->_mediaDirectory . '/')) {
-                $this->_response->sendNotFound();
-                return -1;
+                $this->_response->setHttpResponseCode(404);
+                return $this->_response;
             }
 
             $sync = $this->_objectManager->get('Magento\Core\Model\File\Storage\Synchronization');
             $sync->synchronize($this->_relativeFileName, $this->_request->getFilePath());
 
             if ($this->directory->isReadable($this->directory->getRelativePath($this->_request->getFilePath()))) {
-                $this->_response->sendFile($this->_request->getFilePath());
-                return 0;
+                $this->_response->setFilePath($this->_request->getFilePath());
             } else {
-                $this->_response->sendNotFound();
-                return -1;
+                $this->_response->setHttpResponseCode(404);
             }
+            return $this->_response;
         } catch (\Magento\Core\Model\Store\Exception $e) {
-            $this->_response->sendNotFound();
-            return -1;
+            $this->_response->setHttpResponseCode(404);
+            return $this->_response;
         }
     }
 }

@@ -34,8 +34,5 @@
  */
 require __DIR__ . '/app/bootstrap.php';
 
-\Magento\Profiler::start('magento');
 $entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $_SERVER);
-$result = $entryPoint->run('Magento\App\Http');
-\Magento\Profiler::stop('magento');
-return $result;
+$entryPoint->run('Magento\App\Http');

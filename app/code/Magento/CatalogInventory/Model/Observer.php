@@ -110,6 +110,11 @@ class Observer
     protected $_indexerPrice;
 
     /**
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     */
+    protected $typeConfig;
+
+    /**
      * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price $indexerPrice
      * @param \Magento\CatalogInventory\Model\Resource\Indexer\Stock $resourceIndexerStock
      * @param \Magento\CatalogInventory\Model\Resource\Stock $resourceStock
@@ -120,6 +125,7 @@ class Observer
      * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
      * @param \Magento\CatalogInventory\Model\StockFactory $stockFactory
      * @param \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Product\Indexer\Price $indexerPrice,
@@ -131,7 +137,8 @@ class Observer
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
         \Magento\CatalogInventory\Model\StockFactory $stockFactory,
-        \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory
+        \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory,
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig
     ) {
         $this->_indexerPrice = $indexerPrice;
         $this->_resourceIndexerStock = $resourceIndexerStock;
@@ -143,6 +150,7 @@ class Observer
         $this->_stockItemFactory = $stockItemFactory;
         $this->_stockFactory = $stockFactory;
         $this->_stockStatusFactory = $stockStatusFactory;
+        $this->typeConfig = $typeConfig;
     }
 
     /**
@@ -236,40 +244,6 @@ class Observer
         }
         $this->_prepareItemForSave($item, $product);
         $item->save();
-        return $this;
-    }
-
-    /**
-     * Copy product inventory data (used for product duplicate functionality)
-     *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
-     */
-    public function copyInventoryData($observer)
-    {
-        /** @var \Magento\Catalog\Model\Product $currentProduct */
-        $currentProduct = $observer->getEvent()->getCurrentProduct();
-        /** @var \Magento\Catalog\Model\Product $newProduct */
-        $newProduct = $observer->getEvent()->getNewProduct();
-
-        $newProduct->unsStockItem();
-        $stockData = array(
-            'use_config_min_qty'        => 1,
-            'use_config_min_sale_qty'   => 1,
-            'use_config_max_sale_qty'   => 1,
-            'use_config_backorders'     => 1,
-            'use_config_notify_stock_qty'=> 1
-        );
-        if ($currentStockItem = $currentProduct->getStockItem()) {
-            $stockData += array(
-                'use_config_enable_qty_inc'  => $currentStockItem->getData('use_config_enable_qty_inc'),
-                'enable_qty_increments'             => $currentStockItem->getData('enable_qty_increments'),
-                'use_config_qty_increments'         => $currentStockItem->getData('use_config_qty_increments'),
-                'qty_increments'                    => $currentStockItem->getData('qty_increments'),
-            );
-        }
-        $newProduct->setStockData($stockData);
-
         return $this;
     }
 
@@ -536,7 +510,7 @@ class Observer
             }
 
             /**
-             * When we work with subitem (as subproduct of bundle or configurable product)
+             * When we work with subitem (as subproduct of configurable product)
              */
             if ($quoteItem->getParentItem()) {
                 $rowQty = $quoteItem->getParentItem()->getQty() * $qty;
@@ -560,8 +534,8 @@ class Observer
 
             $productTypeCustomOption = $quoteItem->getProduct()->getCustomOption('product_type');
             if (!is_null($productTypeCustomOption)) {
-                // Check if product related to current item is a part of grouped product
-                if ($productTypeCustomOption->getValue() == \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE) {
+                // Check if product related to current item is a part of product that represents product set
+                if ($this->typeConfig->isProductSet($productTypeCustomOption->getValue())) {
                     $stockItem->setProductName($quoteItem->getProduct()->getName());
                     $stockItem->setIsChildItem(true);
                 }

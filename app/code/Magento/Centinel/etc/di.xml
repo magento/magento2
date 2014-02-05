@@ -26,12 +26,12 @@
 <config>
     <type name="Magento\Centinel\Model\StateFactory">
         <param name="stateClassMap">
-            <value>
-                <VI>Magento\Centinel\Model\State\Visa</VI>
-                <MC>Magento\Centinel\Model\State\Mastercard</MC>
-                <JCB>Magento\Centinel\Model\State\Jcb</JCB>
-                <SM>Magento\Centinel\Model\State\Mastercard</SM>
-            </value>
+            <array>
+                <item key="VI"><value>Magento\Centinel\Model\State\Visa</value></item>
+                <item key="MC"><value>Magento\Centinel\Model\State\Mastercard</value></item>
+                <item key="JCB"><value>Magento\Centinel\Model\State\Jcb</value></item>
+                <item key="SM"><value>Magento\Centinel\Model\State\Mastercard</value></item>
+            </array>
         </param>
     </type>
 </config>

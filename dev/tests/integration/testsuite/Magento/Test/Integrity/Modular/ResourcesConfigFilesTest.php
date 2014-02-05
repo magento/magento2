@@ -33,9 +33,9 @@ class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $filesystem \Magento\Filesystem */
-        $filesystem = $objectManager->get('Magento\Filesystem');
-        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        /** @var $filesystem \Magento\App\Filesystem */
+        $filesystem = $objectManager->get('Magento\App\Filesystem');
+        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
         $xmlFiles = $fileIteratorFactory->create(
             $modulesDirectory,
@@ -48,7 +48,7 @@ class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
         $validationStateMock->expects($this->any())
             ->method('isValidated')
             ->will($this->returnValue(true));
-        $localConfigMock = $this->getMock('Magento\App\Config', array(), array(), '', false);
+        $localConfigMock = $this->getMock('Magento\App\Arguments', array(), array(), '', false);
         $localConfigMock->expects($this->any())->method('getConfiguration')->will($this->returnValue(array()));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $objectManager->create('Magento\App\Resource\Config\Reader', array(

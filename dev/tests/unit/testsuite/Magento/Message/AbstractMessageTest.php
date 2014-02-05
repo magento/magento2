@@ -43,8 +43,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\AbstractMessage::getText
-     * @cover \Magento\Message\AbstractMessage::setText
+     * @covers \Magento\Message\AbstractMessage::getText
+     * @covers \Magento\Message\AbstractMessage::setText
      * @dataProvider setTextGetTextProvider
      */
     public function testSetTextGetText($text)
@@ -65,8 +65,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\AbstractMessage::getIdentifier
-     * @cover \Magento\Message\AbstractMessage::setIdentifier
+     * @covers \Magento\Message\AbstractMessage::getIdentifier
+     * @covers \Magento\Message\AbstractMessage::setIdentifier
      * @dataProvider setIdentifierGetIdentifierProvider
      */
     public function testSetIdentifierGetIdentifier($identifier)
@@ -87,8 +87,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\AbstractMessage::getIsSticky
-     * @cover \Magento\Message\AbstractMessage::setIsSticky
+     * @covers \Magento\Message\AbstractMessage::getIsSticky
+     * @covers \Magento\Message\AbstractMessage::setIsSticky
      */
     public function testSetIsStickyGetIsSticky()
     {
@@ -98,7 +98,7 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\AbstractMessage::toString
+     * @covers \Magento\Message\AbstractMessage::toString
      */
     public function testToString()
     {

@@ -42,7 +42,7 @@ class Factory
     private $_objectManager;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     private $_filesystem;
 
@@ -91,14 +91,14 @@ class Factory
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\App\Resource $resource
      * @param array $enforcedOptions
      * @param array $decorators
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\App\Resource $resource,
         array $enforcedOptions = array(),
         array $decorators = array()
@@ -122,20 +122,20 @@ class Factory
 
         foreach (array('backend_options', 'slow_backend_options') as $section) {
             if (!empty($options[$section]['cache_dir'])) {
-                $directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+                $directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
                 $directory->create($options[$section]['cache_dir']);
                 $options[$section]['cache_dir'] = $directory->getAbsolutePath($options[$section]['cache_dir']);
             }
         }
 
-        $this->_backendOptions['cache_dir'] = $this->_filesystem->getPath(\Magento\Filesystem::CACHE);
+        $this->_backendOptions['cache_dir'] = $this->_filesystem->getPath(\Magento\App\Filesystem::CACHE_DIR);
 
         $idPrefix = isset($options['id_prefix']) ? $options['id_prefix'] : '';
         if (!$idPrefix && isset($options['prefix'])) {
             $idPrefix = $options['prefix'];
         }
         if (empty($idPrefix)) {
-            $idPrefix = substr(md5($this->_filesystem->getPath(\Magento\Filesystem::CONFIG)), 0, 3) . '_';
+            $idPrefix = substr(md5($this->_filesystem->getPath(\Magento\App\Filesystem::CONFIG_DIR)), 0, 3) . '_';
         }
         $options['frontend_options']['cache_id_prefix'] = $idPrefix;
 

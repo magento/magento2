@@ -27,110 +27,143 @@ Back,返回
 "Cancel Coupon",取消优惠券
 "Cannot add the item to shopping cart",无法添加该条目到购物车
 "Card Verification Number Visual Reference","信用卡验证号码 视觉参考"
-"Cart Subtotal",购物车小计
-"Cart Subtotal:",购物车小计：
-Change,更改
-"Change Billing Address",更改账单地址
-"Checkbox Text",复选框文本
-Checkout,结账
-"Checkout Conditions",支付条件
-"Checkout Method",结账方法
-"Checkout Options",结账选项
-"Checkout Section",结账区域
-"Checkout Terms and Conditions",结账条款和情况
-"Checkout as Guest",作为访客结账
-"Checkout as a Guest",作为访客结账
-"Checkout as a Guest or Register",以访客身份结账或注册
-"Checkout with Multiple Addresses",按多个地址支付
-City,城市
-"Clear Shopping Cart",清空购物车
-"Click <a href=""%1"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"">这里来打印</a>您订单确认信息的拷贝。"
-"Click <a href=""%1"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","点击<a href=""%1"" onclick=""this.target=\'_blank\'"">这里打印</a>您的订单确认信息。"
-"Click <a href=""%1"">here</a> to continue shopping.","单击<a href=""%1"">这里</a>继续购物。"
-Close,关闭
-Company,公司
-"Condition Name",条件名称
-"Configurable Product Image",可配置产品图片
-"Confirm Password",确认密码
-Content,内容
-"Content Height",内容高度
-"Content Height (css)",内容高度（css）
-Continue,继续
-"Continue Shopping",继续购物
-"Continue to Billing Information",继续以查看账单信息
-"Continue to Review Your Order",继续以查看订单
-"Continue to Shipping Information",继续以查看运送信息
-Country,国家
-"Create Billing Address",创建账单地址
-"Create Shipping Address",创建运送地址
-"Customer Information",顾客信息
-"Data saving problem",数据保存问题
-"Default Billing",默认账单
-"Default Shipping",默认运送
-"Delete Condition",删除条件
-Details,详情
-Disabled,已禁用
-"Discount Codes",折扣代码
-"Display Cart Summary",显示购物车概要
-"Display Shopping Cart Sidebar",显示购物车侧边栏
-"Display item quantities",显示条目数量
-"Display number of items in cart",显示购物车中条目的数量
-"Easy access to your order history and status",更方便存取您的订单历史和状态
-Edit,编辑
-"Edit Address",编辑地址
-"Edit Billing Address",编辑账单地址
-"Edit Condition",编辑条件
-"Edit Items",编辑条目
-"Edit Shipping Address",编辑运送地址
-"Edit Terms and Conditions",编辑条款和条件
-"Edit Your Cart",编辑您的购物车
-"Edit item",编辑条目
-"Edit item parameters",编辑条目参数
-"Email Address",电子邮件地址
-"Enable Onepage Checkout",启用单页面结账
-"Enable Terms and Conditions",启用条款和条件
-Enabled,已启用
-"Enter a New Address",输入新地址
-"Enter your coupon code if you have one.",如果您有优惠代码，请输入。
-"Enter your destination to get a shipping estimate.",输入您的目的地来获得预计运送信息。
-"Estimate Shipping and Tax",预计运费和税费
-"Excl. Tax",不含税
-"Fast and easy check out",方便快捷的结账
-Fax,传真
-"Forgot an Item?",忘记某个条目？
-"Forgot your password?",忘记您的密码？
-"Get a Quote",获得报价
-"Get easy access to your order history and status.",很容易存储订单历史和状态。
-"Gift Message",礼品消息
-"Grand Total:",总计：
-"Grouped Product Image",已分组的产品图片
-HTML,HTML
-ID,ID
-"Incl. Tax",含税
-"Invalid checkout type",无效的结账类型
-"Invalid data",无效的数据
-"Invalid method: %1","无效的方法： %1"
-"Invalid shipping method",无效的货运方法
-"Item not found or already ordered",无法找到条目，或条目已被订购
-Items,条目
-"Load customer quote error",载入顾客报价错误
-"Loading next step...",正在载入下一步...
-Login,登录
-"Maximum Display Recently Added Item(s)",最大显示近期添加的条目
-"Maximum qty allowed for Shipping to multiple addresses is %1",最多允许多地址运送的数量为%1
-"Minimum order amount is %1",最小的订单额为%1
-Move,移动
-"Move to Wish List",移动收藏清单
-"Move to Wishlist",移动到收藏清单
-"My Cart",我的购物车
-"My Cart (%1 item)","我的购物车（%1 个条目）"
-"My Cart (%1 items)","我的购物车（%1 个条目）"
-"My Cart (1 item)",我的购物车（1个条目）
-"My Cart Link",我的购物车链接
-"New Address",新地址
-"New Condition",新条件
-"New Terms and Conditions",新建条款与协议
-"ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER",在你提交订单之前订单总数将显示
+"Cart Product API","购物车产品 API"
+"Cart Subtotal:","购物车小计："
+"Change","更改"
+"Change Billing Address","更改账单地址"
+"Checkbox Text","复选框文本"
+"Checkout","结账"
+"Checkout Conditions","支付条件"
+"Checkout Method","支付方法"
+"Checkout Options","支付选项"
+"Checkout Progress Wrapper","支付进度封装器"
+"Checkout Section","支付区域"
+"Checkout Terms and Conditions","结账条款和情况"
+"Checkout as Guest","作为来宾结账"
+"Checkout as a Guest or Register","以来宾身份结账或注册"
+"Checkout with Multiple Addresses","按多个地址支付"
+"City","城市"
+"Clear Shopping Cart","清空购物车"
+"Click <a href=""%s"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","单击<a href=""%s"">这里来打印</a>您订单确认信息的拷贝。"
+"Click <a href=""%s"">here</a> to continue shopping.","单击<a href=""%s"">这里</a>来继续购物。"
+"Close","关闭"
+"Company","公司"
+"Condition Name","条件名称"
+"Configurable Product Image","可配置产品图片"
+"Configure Cart Item","配置购物车项目"
+"Confirm Password","确认密码"
+"Content","内容"
+"Content Height","内容高度"
+"Content Height (css)","内容高度 (css)"
+"Continue","继续"
+"Continue Shopping","继续购物"
+"Continue to Billing Information","继续以查看账单信息"
+"Continue to Review Your Order","继续以查看订单"
+"Continue to Shipping Information","继续以查看运送信息"
+"Country","国家"
+"Coupon code ""%s"" is not valid.","优惠券代码“%s”无效。"
+"Coupon code ""%s"" was applied.","优惠代码“%s”已应用。"
+"Coupon code was canceled.","优惠代码已被取消。"
+"Create Billing Address","创建账单地址"
+"Create Shipping Address","创建运送地址"
+"Create an order from shopping cart","从购物车创建订单"
+"Create shopping cart","创建购物车"
+"Customer Address is not valid.","客户地址无效。"
+"Customer Information","客户信息"
+"Customer's information","客户信息"
+"Data saving problem","数据保存问题"
+"Default Billing","默认账单"
+"Default Shipping","默认运送"
+"Delete Condition","删除条件"
+"Details","详情"
+"Disabled","已禁用"
+"Discount Codes","折扣代码"
+"Display Cart Summary","显示购物车概要"
+"Display Shopping Cart Sidebar","显示购物车侧边栏"
+"Display item quantities","显示项目数量"
+"Display number of items in cart","显示购物车中项目的数量"
+"Display number of items in wishlist","显示愿望列表中项目的数量"
+"Easy access to your order history and status","轻松访问您的订单历史记录和状态"
+"Edit","编辑"
+"Edit Address","编辑地址"
+"Edit Billing Address","编辑账单地址"
+"Edit Condition","编辑条件"
+"Edit Items","编辑项目"
+"Edit Shipping Address","编辑运送地址"
+"Edit Terms and Conditions","编辑条款和条件"
+"Edit Your Cart","编辑您的购物车"
+"Edit item","编辑项目"
+"Edit item parameters","编辑项目参数"
+"Email Address","编辑电子邮件地址"
+"Enable Onepage Checkout","启用单页面结账"
+"Enable Terms and Conditions","启用条款和条件"
+"Enabled","已启用"
+"Enter a New Address","输入新地址"
+"Enter your coupon code if you have one.","如果您有优惠代码，请输入。"
+"Enter your destination to get a shipping estimate.","输入您的目的地来获得预计运送信息。"
+"Estimate Shipping and Tax","预计运费和税费"
+"Excl. Tax","不含税"
+"Fast and easy check out","方便快捷的结账"
+"Fax","传真"
+"Forgot an Item?","忘记某个项目？"
+"Forgot your password?","忘记您的密码？"
+"Get a Quote","获得报价"
+"Get list of available payment methods","获得可用支付方法的列表"
+"Get list of available shipping methods","获得可用运送方式的列表"
+"Get list of products in shopping cart","获得购物车中的产品列表"
+"Get terms and conditions","获取条款和条件"
+"Get total prices for shopping cart","获得购物车中总价格"
+"Gift Message","礼品消息"
+"Grand Total:","总计："
+"HTML","HTML"
+"ID","ID"
+"Incl. Tax","含税"
+"Invalid checkout type.","无效的结账类型。"
+"Invalid data.","无效数据。"
+"Invalid email address ""%s""","无效的电子邮件地址 ""%s"""
+"Invalid method: %s","无效的方法：%s"
+"Invalid shipping method.","运送方法无效。"
+"Item not found or already ordered","无法找到项目，或项目已被订购"
+"Items","项目"
+"Items After","项目晚于"
+"Items Before","之前的项目"
+"Load customer quote error","载入客户报价错误"
+"Loading next step...","正在载入下一步..."
+"Login","登录"
+"Login/Registration Before","登录/注册早于"
+"Manage Terms and Conditions","管理条款与协议"
+"Maximum Display Recently Added Item(s)","最大显示近期添加的项目"
+"Maximum qty allowed for Shipping to multiple addresses is %s","运送到多个地址所允许的最大数量为 %s"
+"Minimum order amount is %s","最小订购数量为 %s"
+"Move","移动"
+"Move to Wishlist","移动到愿望清单"
+"Multishipping Checkout","多重运送结账"
+"Multishipping Checkout Address (Any) Form","多重运送地址（任何）表单"
+"Multishipping Checkout Billing Address Creation","多重运送账单地址创建"
+"Multishipping Checkout Billing Address Edit Form","多重结账账单地址编辑表单"
+"Multishipping Checkout Billing Address Selection","多重运送结账账单地址选择"
+"Multishipping Checkout Billing Information Step","多重运送账单信息步骤"
+"Multishipping Checkout Customer Address Edit Form","多重运送结账客户地址编辑表单"
+"Multishipping Checkout Overview","多重运送结账概览"
+"Multishipping Checkout Shipping Address Creation","多重运送结账运送地址创建"
+"Multishipping Checkout Shipping Address Edit Form","多重运送结账运送地址编辑表单"
+"Multishipping Checkout Shipping Address Selection","多重运送结账运送地址选择"
+"Multishipping Checkout Shipping Information Step","多重运送结账运送信息步骤"
+"Multishipping Checkout Success","多重运送结账成功"
+"My Cart","我的购物车"
+"My Cart (%s item)","我的购物车（%s 个项目）"
+"My Cart (%s items)","我的购物车（%s 个项目）"
+"My Cart Link","我的购物车链接"
+"New Address","新地址"
+"New Condition","新条件"
+"New Terms and Conditions","新建条款与协议"
+"ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER","提交订单前将显示订购的总数"
+"One Page Checkout","单页面结账"
+"One Page Checkout Failure","单页面结账失败"
+"One Page Checkout Overview","单页面结账概览"
+"One Page Checkout Success","单页面结账成功"
+"One item of products do not have identifier or sku","产品中的一个项目不包含标识或 SKU"
+"One item of products is not belong any of quote item","产品中的一个项目不属于任何报价项目"
 "Order #","订单 #"
 "Order Review",订单总览
 "Order Success",订购成功
@@ -284,3 +317,15 @@ Total:,总计：
 "Your order number is ",您的订单号是
 "Your recurring payment profiles:",您的付款档案：
 "Zip/Postal Code",邮政编码
+"1 item",1个条目
+"Cart Subtotal",购物车小计
+"Checkout as a Guest",作为访客结账
+"Click <a href=""%1"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%1"">这里来打印</a>您订单确认信息的拷贝。"
+"Click <a href=""%1"">here</a> to continue shopping.","单击<a href=""%1"">这里</a>继续购物。"
+"Invalid checkout type",无效的结账类型
+"Invalid data",无效的数据
+"Invalid method: %1","无效的方法： %1"
+"Invalid shipping method",无效的货运方法
+"Minimum order amount is %1",最小的订单额为%1
+"My Cart (%1 items)","我的购物车（%1 个条目）"
+"My Cart (1 item)",我的购物车（1个条目）

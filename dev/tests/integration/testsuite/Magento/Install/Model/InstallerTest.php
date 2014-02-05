@@ -46,9 +46,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
-        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        /** @var \Magento\App\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
+        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         self::$_tmpDir = self::$_varDirectory->getAbsolutePath('InstallerTest');
         self::$_tmpConfigFile = self::$_tmpDir . '/local.xml';
         self::$_varDirectory->create(self::$_varDirectory->getRelativePath(self::$_tmpDir));
@@ -70,15 +70,16 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directoryList = $objectManager->create(
-                'Magento\Filesystem\DirectoryList',
-                    array(
-                        'root' => __DIR__,
-                        'directories' => array(
-                            \Magento\Filesystem::CONFIG => array('path' => self::$_tmpDir)
-                        )
-                    )
-                );
-        $filesystem = $objectManager->create('Magento\Filesystem', array('directoryList' => $directoryList));
+            'Magento\App\Filesystem\DirectoryList',
+            array(
+                'root' => __DIR__,
+                'directories' => array(
+                    \Magento\App\Filesystem::CONFIG_DIR => array('path' => self::$_tmpDir)
+                )
+            )
+        );
+        $objectManager->get('\Magento\App\Filesystem\DirectoryList\Configuration')->configure($directoryList);
+        $filesystem = $objectManager->create('Magento\App\Filesystem', array('directoryList' => $directoryList));
 
         if ($emulateConfig) {
             $installerConfig = new \Magento\Install\Model\Installer\Config(

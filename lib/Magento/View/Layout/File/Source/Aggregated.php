@@ -36,27 +36,27 @@ class Aggregated implements SourceInterface
     /**
      * @var Factory
      */
-    private $fileListFactory;
+    protected $fileListFactory;
 
     /**
      * @var SourceInterface
      */
-    private $baseFiles;
+    protected $baseFiles;
 
     /**
      * @var SourceInterface
      */
-    private $themeFiles;
+    protected $themeFiles;
 
     /**
      * @var SourceInterface
      */
-    private $overrideBaseFiles;
+    protected $overrideBaseFiles;
 
     /**
      * @var SourceInterface
      */
-    private $overrideThemeFiles;
+    protected $overrideThemeFiles;
 
     /**
      * @param Factory $fileListFactory
@@ -93,27 +93,11 @@ class Aggregated implements SourceInterface
         $list = $this->fileListFactory->create();
         $list->add($this->baseFiles->getFiles($theme, $filePath));
 
-        foreach ($this->getInheritedThemes($theme) as $currentTheme) {
+        foreach ($theme->getInheritedThemes() as $currentTheme) {
             $list->add($this->themeFiles->getFiles($currentTheme, $filePath));
             $list->replace($this->overrideBaseFiles->getFiles($currentTheme, $filePath));
             $list->replace($this->overrideThemeFiles->getFiles($currentTheme, $filePath));
         }
         return $list->getAll();
-    }
-
-    /**
-     * Return the full theme inheritance sequence, from the root theme till a specified one
-     *
-     * @param ThemeInterface $theme
-     * @return Theme[] Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
-     */
-    protected function getInheritedThemes(ThemeInterface $theme)
-    {
-        $result = array();
-        while ($theme) {
-            $result[] = $theme;
-            $theme = $theme->getParentTheme();
-        }
-        return array_reverse($result);
     }
 }

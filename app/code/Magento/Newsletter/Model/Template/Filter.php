@@ -38,7 +38,7 @@ class Filter extends \Magento\Widget\Model\Template\Filter
     /**
      * Generate widget HTML if template variables are assigned
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function widgetDirective($construction)

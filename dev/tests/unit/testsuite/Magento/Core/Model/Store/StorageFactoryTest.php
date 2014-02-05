@@ -54,7 +54,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_appMock;
+    protected $_sidResolverMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -87,8 +87,8 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
         $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $this->_logMock = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->_appMock
-            = $this->getMock('\Magento\Core\Model\AppInterface');
+        $this->_sidResolverMock
+            = $this->getMock('\Magento\Session\SidResolverInterface', array(), array(), '', false);
         $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->_storage = $this->getMock('Magento\Core\Model\Store\StorageInterface');
 
@@ -96,7 +96,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             $this->_objectManagerMock,
             $this->_eventManagerMock,
             $this->_logMock,
-            $this->_appMock,
+            $this->_sidResolverMock,
             $this->_appStateMock,
             $this->_defaultStorage,
             $this->_dbStorage
@@ -115,7 +115,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $this->_logMock->expects($this->never())->method('initForStore');
-        $this->_appMock->expects($this->never())->method('setUseSessionInUrl');
+        $this->_sidResolverMock->expects($this->never())->method('setUseSessionInUrl');
 
         /** test create instance */
         $this->assertEquals($this->_storage, $this->_model->get($this->_arguments));
@@ -159,7 +159,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly(2))
             ->method('addStreamLog');
 
-        $this->_appMock->expects($this->once())
+        $this->_sidResolverMock->expects($this->once())
             ->method('setUseSessionInUrl')->with(true);
 
         /** test create instance */
@@ -186,7 +186,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $this->_logMock->expects($this->never())->method('initForStore');
-        $this->_appMock->expects($this->never())->method('setUseSessionInUrl');
+        $this->_sidResolverMock->expects($this->never())->method('setUseSessionInUrl');
 
         /** test create instance */
         $this->assertEquals($this->_storage, $this->_model->get($this->_arguments));

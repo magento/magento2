@@ -47,7 +47,7 @@ class Session
     protected $_cookieCheckActions;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -76,7 +76,7 @@ class Session
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Stdlib\Cookie $cookie
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param string $sessionNamespace
@@ -87,7 +87,7 @@ class Session
         \Magento\App\ResponseInterface $response,
         \Magento\Core\Model\Session $session,
         \Magento\Stdlib\Cookie $cookie,
-        \Magento\Core\Model\Url $url,
+        \Magento\UrlInterface $url,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Session\SidResolverInterface $sidResolver,
         $sessionNamespace = '',

@@ -92,7 +92,7 @@ class Cache
     }
 
     /**
-     * @return \Magento\Core\Model\ConfigInterface|bool
+     * @return \Magento\App\ConfigInterface|bool
      */
     public function load()
     {

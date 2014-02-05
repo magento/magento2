@@ -52,7 +52,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
     /**#@-*/
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -97,7 +97,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\Url\CssResolver $cssUrlResolver
      * @param Service $viewService
      * @param FileSystem $viewFileSystem
@@ -106,7 +106,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\View\Url\CssResolver $cssUrlResolver,
         \Magento\View\Service $viewService,
         \Magento\View\FileSystem $viewFileSystem,
@@ -114,7 +114,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
         $allowDuplication
     ) {
         $this->_filesystem = $filesystem;
-        $this->rootDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
         $this->_cssUrlResolver = $cssUrlResolver;
         $this->_viewService = $viewService;
         $this->_viewFileSystem = $viewFileSystem;
@@ -198,7 +198,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
             $cssContent = $this->_getPublicCssContent($sourcePath, $targetPath, $filePath, $params);
         }
 
-        $targetDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::STATIC_VIEW);
+        $targetDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::STATIC_VIEW_DIR);
         $sourcePathRelative = $this->rootDirectory->getRelativePath($sourcePath);
         $targetPathRelative = $targetDirectory->getRelativePath($targetPath);
 
@@ -252,7 +252,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
      */
     protected function _needToProcessFile($filePath)
     {
-        $jsPath = $this->_filesystem->getPath(\Magento\Filesystem::PUB_LIB) . '/';
+        $jsPath = $this->_filesystem->getPath(\Magento\App\Filesystem::PUB_LIB_DIR) . '/';
         $filePath = str_replace('\\', '/', $filePath);
         if (strncmp($filePath, $jsPath, strlen($jsPath)) === 0) {
             return false;
@@ -267,7 +267,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
             return false;
         }
 
-        $themePath = $this->_filesystem->getPath(\Magento\Filesystem::STATIC_VIEW) . '/';
+        $themePath = $this->_filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR) . '/';
         if (strncmp($filePath, $themePath, strlen($themePath)) !== 0) {
             return true;
         }
@@ -322,7 +322,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
      */
     protected function _buildPublicViewSufficientFilename($filename, array $params)
     {
-        $designDir = $this->_filesystem->getPath(\Magento\Filesystem::THEMES) . '/';
+        $designDir = $this->_filesystem->getPath(\Magento\App\Filesystem::THEMES_DIR) . '/';
         if (0 === strpos($filename, $designDir)) {
             // theme file
             $publicFile = substr($filename, strlen($designDir));
@@ -394,7 +394,7 @@ class Publisher implements \Magento\View\PublicFilesManagerInterface
             $filePath = $this->_viewService->extractScope($this->_viewFileSystem->normalizePath($fileId), $params);
         } else {
             /* Check if module file overridden on theme level based on _module property and file path */
-            $themesPath = $this->_filesystem->getPath(\Magento\Filesystem::THEMES);
+            $themesPath = $this->_filesystem->getPath(\Magento\App\Filesystem::THEMES_DIR);
             if ($params['module'] && strpos($parentFilePath, $themesPath) === 0) {
                 /* Add module directory to relative URL */
                 $filePath = dirname($params['module'] . '/' . $parentFileName)

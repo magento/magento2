@@ -25,8 +25,7 @@
  */
 namespace Magento\Profiler\Driver\Standard;
 
-abstract class AbstractOutput
-    implements \Magento\Profiler\Driver\Standard\OutputInterface
+abstract class AbstractOutput implements OutputInterface
 {
     /**
      * PCRE Regular Expression for filter timer by id
@@ -40,11 +39,7 @@ abstract class AbstractOutput
      *
      * @var array
      */
-    protected $_thresholds = array(
-        \Magento\Profiler\Driver\Standard\Stat::TIME => 0.001,
-        \Magento\Profiler\Driver\Standard\Stat::COUNT => 10,
-        \Magento\Profiler\Driver\Standard\Stat::EMALLOC => 10000,
-    );
+    protected $_thresholds = array(Stat::TIME => 0.001, Stat::COUNT => 10, Stat::EMALLOC => 10000);
 
     /**
      * List of columns to output
@@ -52,12 +47,12 @@ abstract class AbstractOutput
      * @var array
      */
     protected $_columns = array(
-        'Timer Id' => \Magento\Profiler\Driver\Standard\Stat::ID,
-        'Time'     => \Magento\Profiler\Driver\Standard\Stat::TIME,
-        'Avg'      => \Magento\Profiler\Driver\Standard\Stat::AVG,
-        'Cnt'      => \Magento\Profiler\Driver\Standard\Stat::COUNT,
-        'Emalloc'  => \Magento\Profiler\Driver\Standard\Stat::EMALLOC,
-        'RealMem'  => \Magento\Profiler\Driver\Standard\Stat::REALMEM,
+        'Timer Id' => Stat::ID,
+        'Time'     => Stat::TIME,
+        'Avg'      => Stat::AVG,
+        'Cnt'      => Stat::COUNT,
+        'Emalloc'  => Stat::EMALLOC,
+        'RealMem'  => Stat::REALMEM
     );
 
     /**
@@ -81,6 +76,7 @@ abstract class AbstractOutput
      * Set profiler output with timer identifiers filter.
      *
      * @param string $filterPattern PCRE pattern to filter timers by their identifiers
+     * @return void
      */
     public function setFilterPattern($filterPattern)
     {
@@ -104,6 +100,7 @@ abstract class AbstractOutput
      *
      * @param string $fetchKey
      * @param int|float|null $minAllowedValue
+     * @return void
      */
     public function setThreshold($fetchKey, $minAllowedValue)
     {
@@ -127,18 +124,18 @@ abstract class AbstractOutput
     /**
      * Render statistics column value for specified timer
      *
-     * @param mixed $value
+     * @param string|float $value
      * @param string $columnKey
      * @return string
      */
     protected function _renderColumnValue($value, $columnKey)
     {
         switch ($columnKey) {
-            case \Magento\Profiler\Driver\Standard\Stat::ID:
+            case Stat::ID:
                 $result = $this->_renderTimerId($value);
                 break;
-            case \Magento\Profiler\Driver\Standard\Stat::TIME:
-            case \Magento\Profiler\Driver\Standard\Stat::AVG:
+            case Stat::TIME:
+            case Stat::AVG:
                 $result = number_format($value, 6);
                 break;
             default:
@@ -177,10 +174,10 @@ abstract class AbstractOutput
      *
      * Timer ids will be ordered and filtered by thresholds and filter pattern.
      *
-     * @param \Magento\Profiler\Driver\Standard\Stat $stat
-     * @return array
+     * @param Stat $stat
+     * @return string[]
      */
-    protected function _getTimerIds(\Magento\Profiler\Driver\Standard\Stat $stat)
+    protected function _getTimerIds(Stat $stat)
     {
         return $stat->getFilteredTimerIds($this->_thresholds, $this->_filterPattern);
     }

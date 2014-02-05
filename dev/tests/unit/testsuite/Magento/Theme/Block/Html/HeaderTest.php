@@ -34,7 +34,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLogoSrc()
     {
-        $filesystem = $this->getMock('\Magento\Filesystem', array(), array(), '', false );
+        $filesystem = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false );
         $mediaDirectory = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false );
         $storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array('getConfig'), array(), '', false);
 

@@ -37,7 +37,7 @@ class Registry extends \Zend_Acl_Role_Registry
      *
      * @param \Zend_Acl_Role_Interface|string $role
      * @param array|Zend_Acl_Role_Interface|string $parents
-     * @return \Magento\Acl\Role\Registry
+     * @return $this
      * @throws \Zend_Acl_Role_Registry_Exception
      */
     public function addParent($role, $parents)

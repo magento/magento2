@@ -145,7 +145,7 @@ class Fulltext extends \Magento\Index\Model\Indexer\AbstractIndexer
         \Magento\Core\Model\Store\Group::ENTITY => array(
             \Magento\Index\Model\Event::TYPE_SAVE
         ),
-        \Magento\Core\Model\Config\Value::ENTITY => array(
+        \Magento\App\Config\ValueInterface::ENTITY => array(
             \Magento\Index\Model\Event::TYPE_SAVE
         ),
         \Magento\Catalog\Model\Category::ENTITY => array(
@@ -241,7 +241,7 @@ class Fulltext extends \Magento\Index\Model\Indexer\AbstractIndexer
             } else {
                 $result = false;
             }
-        } else if ($entity == \Magento\Core\Model\Config\Value::ENTITY) {
+        } else if ($entity == \Magento\App\Config\ValueInterface::ENTITY) {
             $data = $event->getDataObject();
             if ($data && in_array($data->getPath(), $this->_relatedConfigSettings)) {
                 $result = $data->isValueChanged();
@@ -270,7 +270,7 @@ class Fulltext extends \Magento\Index\Model\Indexer\AbstractIndexer
                 $this->_registerCatalogProductEvent($event);
                 break;
 
-            case \Magento\Core\Model\Config\Value::ENTITY:
+            case \Magento\App\Config\ValueInterface::ENTITY:
             case \Magento\Core\Model\Store::ENTITY:
             case \Magento\Catalog\Model\Resource\Eav\Attribute::ENTITY:
             case \Magento\Core\Model\Store\Group::ENTITY:

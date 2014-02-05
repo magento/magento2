@@ -58,7 +58,7 @@ class Read implements ReadInterface
     /**
      * Constructor
      *
-     * @param $path
+     * @param string $path
      * @param DriverInterface $driver
      */
     public function __construct($path, DriverInterface $driver)
@@ -73,7 +73,6 @@ class Read implements ReadInterface
     /**
      * Open file
      *
-     * @throws FilesystemException
      * @return $this
      */
     protected function open()
@@ -190,6 +189,8 @@ class Read implements ReadInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @return array
      */
     public function stat()
     {

@@ -69,8 +69,8 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
             \Magento\Core\Model\App::PARAM_RUN_CODE => 'admin',
             \Magento\Core\Model\App::PARAM_RUN_TYPE => 'store',
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => __DIR__ . '/../../_files/design')
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/../../_files/design')
             ),
         ));
     }

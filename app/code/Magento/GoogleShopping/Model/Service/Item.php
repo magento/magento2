@@ -51,6 +51,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\GoogleShopping\Model\Config $config
+     * @param \Magento\Gdata\Gshopping\ContentFactory $contentFactory
      * @param \Magento\Core\Model\Date $date
      * @param \Magento\GoogleShopping\Helper\Data $gsData
      * @param array $data
@@ -59,13 +60,14 @@ class Item extends \Magento\GoogleShopping\Model\Service
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\GoogleShopping\Model\Config $config,
+        \Magento\Gdata\Gshopping\ContentFactory $contentFactory,
         \Magento\Core\Model\Date $date,
         \Magento\GoogleShopping\Helper\Data $gsData,
         array $data = array()
     ) {
         $this->_date = $date;
         $this->_gsData = $gsData;
-        parent::__construct($logAdapterFactory, $coreRegistry, $config, $data);
+        parent::__construct($logAdapterFactory, $coreRegistry, $config, $contentFactory, $data);
     }
 
     /**

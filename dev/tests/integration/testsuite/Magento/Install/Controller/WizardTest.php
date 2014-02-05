@@ -41,9 +41,9 @@ class WizardTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public static function setUpBeforeClass()
     {
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
-        $varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        /** @var \Magento\App\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
+        $varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $tmpDir =  'WizardTest';
         $varDirectory->delete($tmpDir);
         // deliberately create a file instead of directory to emulate broken access to static directory

@@ -158,7 +158,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
         $moduleName = 'Magento_Core',
         $connectionName = ''
     ) {
-        $this->_directory = $context->getFilesystem()->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->_directory = $context->getFilesystem()->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $this->_coreHelper = $helper;
         $this->_pathToMapFile = $confPathToMapFile;
         parent::__construct($context, $resourceName, $moduleName, $connectionName);
@@ -693,7 +693,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
             'googlebase'        => 'Magento_GoogleBase',
             'googlecheckout'    => 'Magento_GoogleCheckout',
             'importexport'      => 'Magento_ImportExport',
-            'paypaluk'          => 'Magento_PaypalUk',
             'productalert'      => 'Magento_ProductAlert',
             'salesrule'         => 'Magento_SalesRule',
         );

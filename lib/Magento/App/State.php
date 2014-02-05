@@ -129,6 +129,7 @@ class State
      * Set update mode flag
      *
      * @param bool $value
+     * @return void
      */
     public function setUpdateMode($value)
     {
@@ -150,6 +151,7 @@ class State
      * Set is downloader flag
      *
      * @param bool $flag
+     * @return void
      */
     public function setIsDownloader($flag = true)
     {
@@ -160,6 +162,7 @@ class State
      * Set install date
      *
      * @param string $date
+     * @return void
      */
     public function setInstallDate($date)
     {
@@ -170,6 +173,7 @@ class State
      * Set area code
      *
      * @param string $code
+     * @return void
      * @throws \Magento\Exception
      */
     public function setAreaCode($code)

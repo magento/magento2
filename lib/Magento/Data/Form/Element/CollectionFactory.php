@@ -26,18 +26,21 @@
 
 namespace Magento\Data\Form\Element;
 
+use Magento\ObjectManager;
+
+
 class CollectionFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -46,7 +49,7 @@ class CollectionFactory
      * Create collection factory with specified parameters
      *
      * @param array $data
-     * @return \Magento\Data\Form\Element\Collection
+     * @return Collection
      */
     public function create(array $data = array())
     {

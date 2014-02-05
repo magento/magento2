@@ -69,7 +69,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testDefaultConfiguration()
     {
         $this->assertEquals(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')->getPath('session'),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem')
+                ->getPath('session'),
             $this->_model->getSavePath()
         );
         $this->assertEquals(

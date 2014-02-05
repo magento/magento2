@@ -37,7 +37,7 @@ class SectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_applicationMock;
+    protected $_storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -54,11 +54,11 @@ class SectionTest extends \PHPUnit_Framework_TestCase
         $this->_iteratorMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Iterator\Field', array(), array(), '', false
         );
-        $this->_applicationMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->_authorizationMock = $this->getMock('Magento\AuthorizationInterface');
 
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Section(
-            $this->_applicationMock, $this->_iteratorMock, $this->_authorizationMock
+            $this->_storeManagerMock, $this->_iteratorMock, $this->_authorizationMock
         );
     }
 
@@ -66,7 +66,7 @@ class SectionTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->_model);
         unset($this->_iteratorMock);
-        unset($this->_applicationMock);
+        unset($this->_storeManagerMock);
         unset($this->_authorizationMock);
     }
 
@@ -88,14 +88,14 @@ class SectionTest extends \PHPUnit_Framework_TestCase
 
     public function testIsVisibleFirstChecksIfSectionIsAllowed()
     {
-        $this->_applicationMock->expects($this->never())->method('isSingleStoreMode');
+        $this->_storeManagerMock->expects($this->never())->method('isSingleStoreMode');
         $this->assertFalse($this->_model->isVisible());
     }
 
     public function testIsVisibleProceedsWithVisibilityCheckIfSectionIsAllowed()
     {
         $this->_authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(array('resource' => 'Magento_Adminhtml::all'), 'scope');
         $this->_model->isVisible();
     }

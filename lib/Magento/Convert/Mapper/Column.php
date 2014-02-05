@@ -34,9 +34,14 @@
  */
 namespace Magento\Convert\Mapper;
 
-class Column extends \Magento\Convert\Container\AbstractContainer
-    implements \Magento\Convert\Mapper\MapperInterface
+use Magento\Convert\Container\AbstractContainer;
+
+class Column extends AbstractContainer
+    implements MapperInterface
 {
+    /**
+     * @return $this
+     */
     public function map()
     {
         $data = $this->getData();

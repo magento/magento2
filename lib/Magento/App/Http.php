@@ -25,11 +25,13 @@
  */
 namespace Magento\App;
 
-use Magento\Config\Scope,
-    Magento\App\ObjectManager\ConfigLoader,
+use Magento\App\ObjectManager\ConfigLoader,
     Magento\Event;
 
-class Http implements \Magento\AppInterface
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Http implements \Magento\LauncherInterface
 {
     /**
      * @var \Magento\ObjectManager
@@ -47,14 +49,9 @@ class Http implements \Magento\AppInterface
     protected $_areaList;
 
     /**
-     * @var RequestInterface
+     * @var Request\Http
      */
     protected $_request;
-
-    /**
-     * @var \Magento\Config\Scope
-     */
-    protected $_configScope;
 
     /**
      * @var ConfigLoader
@@ -67,67 +64,70 @@ class Http implements \Magento\AppInterface
     protected $_state;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
+
+    /**
+     * @var Response\Http
+     */
+    protected $_response;
 
     /**
      * @param \Magento\ObjectManager $objectManager
      * @param Event\Manager $eventManager
      * @param AreaList $areaList
-     * @param RequestInterface $request
-     * @param Scope $configScope
+     * @param Request\Http $request
+     * @param Response\Http $response
      * @param ConfigLoader $configLoader
      * @param State $state
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         Event\Manager $eventManager,
         AreaList $areaList,
-        RequestInterface $request,
-        Scope $configScope,
+        \Magento\App\Request\Http $request,
+        \Magento\App\Response\Http $response,
         ConfigLoader $configLoader,
         State $state,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
         $this->_areaList = $areaList;
         $this->_request = $request;
-        $this->_configScope = $configScope;
+        $this->_response = $response;
         $this->_configLoader = $configLoader;
         $this->_state = $state;
         $this->_filesystem = $filesystem;
     }
 
     /**
-     * Execute application
+     * Run application
+     *
+     * @return ResponseInterface
      */
-    public function execute()
+    public function launch()
     {
         try {
             $areaCode = $this->_areaList->getCodeByFrontName($this->_request->getFrontName());
             $this->_state->setAreaCode($areaCode);
             $this->_objectManager->configure($this->_configLoader->load($areaCode));
-            $response = $this->_objectManager->get('Magento\App\FrontControllerInterface')->dispatch($this->_request);
+            $this->_response = $this->_objectManager
+                ->get('Magento\App\FrontControllerInterface')
+                ->dispatch($this->_request);
             // This event gives possibility to launch something before sending output (allow cookie setting)
-            $eventParams = array('request' => $this->_request, 'response' => $response);
+            $eventParams = array('request' => $this->_request, 'response' => $this->_response);
             $this->_eventManager->dispatch('controller_front_send_response_before', $eventParams);
-            \Magento\Profiler::start('send_response');
-            $response->sendResponse();
-            \Magento\Profiler::stop('send_response');
-            $this->_eventManager->dispatch('controller_front_send_response_after', $eventParams);
-            return 0;
-        } catch(\Exception $exception) {
-            echo $exception->getMessage() . "\n";
+        } catch (\Exception $exception) {
+            $message = $exception->getMessage() . "\n";
             try {
                 if ($this->_state->getMode() == State::MODE_DEVELOPER) {
-                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-                    print '<pre>';
-                    print $exception->getMessage() . "\n\n";
-                    print $exception->getTraceAsString();
-                    print '</pre>';
+                    $message .= '<pre>';
+                    $message .= $exception->getMessage() . "\n\n";
+                    $message .= $exception->getTraceAsString();
+                    $message .= '</pre>';
                 } else {
                     $reportData = array($exception->getMessage(), $exception->getTraceAsString());
                     // retrieve server data
@@ -139,14 +139,17 @@ class Http implements \Magento\AppInterface
                             $reportData['script_name'] = $_SERVER['SCRIPT_NAME'];
                         }
                     }
-                    require_once ($this->_filesystem->getPath(\Magento\Filesystem::PUB) . '/errors/report.php');
+                    require_once($this->_filesystem->getPath(\Magento\App\Filesystem::PUB_DIR) . '/errors/report.php');
+                    $processor = new \Error_Processor($this->_response);
+                    $processor->saveReport($reportData);
+                    $this->_response = $processor->processReport();
                 }
             } catch (\Exception $exception) {
-                $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP 1.1';
-                header($protocol . ' 500 Internal Server Error', true, 500);
-                print "Unknown error happened.";
+                $message .= "Unknown error happened.";
             }
-            return -1;
+            $this->_response->setHttpResponseCode(500);
+            $this->_response->setBody($message);
         }
+        return $this->_response;
     }
 }

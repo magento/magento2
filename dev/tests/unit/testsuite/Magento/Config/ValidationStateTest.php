@@ -32,7 +32,7 @@ class ValidationStateTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidated($appMode, $expectedResult)
     {
-        $model = new \Magento\App\Config\ValidationState($appMode);
+        $model = new \Magento\App\Arguments\ValidationState($appMode);
         $this->assertEquals($model->isValidated(), $expectedResult);
     }
 

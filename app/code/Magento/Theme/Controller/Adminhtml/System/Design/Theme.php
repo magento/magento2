@@ -297,7 +297,7 @@ class Theme extends \Magento\Backend\App\Action
                         'type'  => 'filename',
                         'value' => $customCssFile->getFullPath()
                     ),
-                    \Magento\Filesystem::ROOT
+                    \Magento\App\Filesystem::ROOT_DIR
                 );
             }
         } catch (\Exception $e) {
@@ -338,7 +338,7 @@ class Theme extends \Magento\Backend\App\Action
                     'type'  => 'filename',
                     'value' => $themeCss[$fileName]['path']
                 ),
-                \Magento\Filesystem::ROOT
+                \Magento\App\Filesystem::ROOT_DIR
             );
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot find file "%1".', $fileName));

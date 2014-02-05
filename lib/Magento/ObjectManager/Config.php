@@ -28,14 +28,14 @@ interface Config
     /**
      * Set class relations
      *
-     * @param \Magento\ObjectManager\Relations $relations
+     * @param Relations $relations
      */
     public function setRelations(Relations $relations);
 
     /**
      * Set configuration cache instance
      *
-     * @param \Magento\ObjectManager\ConfigCache $cache
+     * @param ConfigCache $cache
      */
     public function setCache(ConfigCache $cache);
 

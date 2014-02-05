@@ -36,14 +36,12 @@
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
         <param name="resourceTypes">
-            <value>
-                <downloadable_setup>Magento\Catalog\Model\Resource\Setup</downloadable_setup>
-            </value>
+            <array>
+                <item key="downloadable_setup"><value>Magento\Catalog\Model\Resource\Setup</value></item>
+            </array>
         </param>
     </type>
-    <type name="Magento\Downloadable\Block\Sales\Order\Email\Items\Downloadable">
-        <param name="urlGenerator">
-            <instance type="Magento\Core\Model\Url\Proxy"/>
-        </param>
+    <type name="Magento\Catalog\Model\Product\CartConfiguration">
+        <plugin name="Downloadable" type="Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable" />
     </type>
 </config>

@@ -57,7 +57,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                             <?php echo $this->getDetailsHtml($item) ?>
                         </td>
                         <td class="col comment"><?php echo $this->getEscapedDescription($item) ?></td>
-                        <td class="col actions">
+                        <td class="col actions" data-role="add-to-links">
                             <?php if ($product->isSaleable()): ?>
                                 <?php if ($isVisibleProduct): ?>
                                     <button type="button" title="<?php echo __('Add to Cart') ?>" onclick="setLocation('<?php echo $this->getSharedItemAddToCartUrl($item) ?>')" class="action tocart">
@@ -65,7 +65,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                                     </button>
                                 <?php endif ?>
                             <?php endif; ?>
-                            <a href="<?php echo $this->getAddToWishlistUrl($item) ?>" onclick="setLocation(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
+                            <a href="#" data-post='<?php echo $this->getAddToWishlistParams($item); ?>'  onclick="setLocation(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
                                 <span><?php echo __('Add to Wishlist') ?></span>
                             </a>
                         </td>

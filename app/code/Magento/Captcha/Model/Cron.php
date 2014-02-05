@@ -64,20 +64,20 @@ class Cron
      * @param Resource\LogFactory $resLogFactory
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Captcha\Helper\Adminhtml\Data $adminHelper
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\StoreManager $storeManager
      */
     public function __construct(
         \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Captcha\Helper\Adminhtml\Data $adminHelper,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\StoreManager $storeManager
     ) {
         $this->_resLogFactory = $resLogFactory;
         $this->_helper = $helper;
         $this->_adminHelper = $adminHelper;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $this->_storeManager = $storeManager;
     }
 

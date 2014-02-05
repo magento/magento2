@@ -47,6 +47,8 @@ class Encoder implements EncoderInterface
     }
 
     /**
+     * Encode the mixed $data into the JSON format.
+     *
      * @param mixed $data
      * @return string
      */

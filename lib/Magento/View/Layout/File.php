@@ -34,17 +34,22 @@ class File
     /**
      * @var string
      */
-    private $filename;
+    protected $filename;
 
     /**
      * @var string
      */
-    private $module;
+    protected $module;
 
     /**
      * @var ThemeInterface
      */
-    private $theme;
+    protected $theme;
+
+    /**
+     * @var string
+     */
+    protected $identifier;
 
     /**
      * @param string $filename
@@ -106,5 +111,19 @@ class File
     public function isBase()
     {
         return is_null($this->theme);
+    }
+
+    /**
+     * Calculate unique identifier for a layout file
+     *
+     * @return string
+     */
+    public function getFileIdentifier()
+    {
+        if (null === $this->identifier) {
+            $theme = ($this->getTheme() ? 'theme:' . $this->theme->getFullPath() : 'base');
+            $this->identifier = $theme . '|module:' . $this->getModule() . '|file:' . $this->getName();
+        }
+        return $this->identifier;
     }
 }

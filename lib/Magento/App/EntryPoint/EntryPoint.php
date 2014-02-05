@@ -28,7 +28,6 @@ namespace Magento\App\EntryPoint;
 use Magento\App\State,
     Magento\App\EntryPointInterface,
     Magento\ObjectManager;
-use Magento\Webapi\Exception;
 
 class EntryPoint implements EntryPointInterface
 {
@@ -70,16 +69,19 @@ class EntryPoint implements EntryPointInterface
      *
      * @param string $applicationName
      * @param array $arguments
-     * @return int
      */
     public function run($applicationName, array $arguments = array())
     {
         try {
+            \Magento\Profiler::start('magento');
             if (!$this->_locator) {
                 $locatorFactory = new \Magento\App\ObjectManagerFactory();
                 $this->_locator = $locatorFactory->create($this->_rootDir, $this->_parameters);
             }
-            return $this->_locator->create($applicationName, $arguments)->execute();
+            $application = $this->_locator->create($applicationName, $arguments);
+            $response = $application->launch();
+            \Magento\Profiler::stop('magento');
+            $response->sendResponse();
         } catch (\Exception $exception) {
             if (isset($this->_parameters[state::PARAM_MODE])
                 && $this->_parameters[State::PARAM_MODE] == State::MODE_DEVELOPER
@@ -98,7 +100,6 @@ class EntryPoint implements EntryPointInterface
                 }
                 print $message;
             }
-            return 1;
         }
     }
 }

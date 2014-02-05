@@ -55,8 +55,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = $objectManager->get('Magento\Filesystem')
-            ->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
 
         if ($mediaDirectory->isExist($config->getBaseMediaPath())) {
             $mediaDirectory->delete($config->getBaseMediaPath());
@@ -130,8 +130,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = $objectManager->get('Magento\Filesystem')
-            ->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());
         $targetFile = $config->getTmpMediaPath(basename($sourceFile));
@@ -147,7 +147,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testDuplicate()
     {
         $this->_model->load(1); // fixture
-        $duplicate = $this->_model->duplicate();
+        /** @var \Magento\Catalog\Model\Product\Copier $copier */
+        $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Catalog\Model\Product\Copier');
+        $duplicate = $copier->copy($this->_model);
         try {
             $this->assertNotEmpty($duplicate->getId());
             $this->assertNotEquals($duplicate->getId(), $this->_model->getId());
@@ -168,8 +171,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->load(1);
         $this->assertEquals('simple', $this->_model->getSku());
-        $duplicated = $this->_model->duplicate();
-        $this->assertEquals('simple-1', $duplicated->getSku());
+        /** @var \Magento\Catalog\Model\Product\Copier $copier */
+        $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Catalog\Model\Product\Copier');
+        $duplicate = $copier->copy($this->_model);
+        $this->assertEquals('simple-1', $duplicate->getSku());
     }
 
     /**
@@ -185,35 +191,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Product::isGrouped
-     * @covers \Magento\Catalog\Model\Product::isSuperGroup
-     * @covers \Magento\Catalog\Model\Product::isSuper
-     */
-    public function testIsGrouped()
-    {
-        $this->assertFalse($this->_model->isGrouped());
-        $this->assertFalse($this->_model->isSuperGroup());
-        $this->assertFalse($this->_model->isSuper());
-        $this->_model->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_GROUPED);
-        $this->assertTrue($this->_model->isGrouped());
-        $this->assertTrue($this->_model->isSuperGroup());
-        $this->assertTrue($this->_model->isSuper());
-    }
-
-    /**
      * @covers \Magento\Catalog\Model\Product::isConfigurable
-     * @covers \Magento\Catalog\Model\Product::isSuperConfig
-     * @covers \Magento\Catalog\Model\Product::isSuper
      */
     public function testIsConfigurable()
     {
         $this->assertFalse($this->_model->isConfigurable());
-        $this->assertFalse($this->_model->isSuperConfig());
-        $this->assertFalse($this->_model->isSuper());
         $this->_model->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE);
         $this->assertTrue($this->_model->isConfigurable());
-        $this->assertTrue($this->_model->isSuperConfig());
-        $this->assertTrue($this->_model->isSuper());
     }
 
     /**

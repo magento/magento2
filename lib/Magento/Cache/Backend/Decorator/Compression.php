@@ -70,14 +70,14 @@ class Compression extends \Magento\Cache\Backend\Decorator\AbstractDecorator
      * Note : $data is always "string" (serialization is done by the
      * core not by the backend)
      *
-     * @param  string $data             Datas to cache
-     * @param  string $cacheId          Cache id
-     * @param  array  $tags             Array of strings, the cache record will be tagged by each string entry
-     * @param  bool   $specificLifetime If != false, set a specific lifetime for this cache record
+     * @param string $data              Datas to cache
+     * @param string $cacheId           Cache id
+     * @param string[] $tags            Array of strings, the cache record will be tagged by each string entry
+     * @param bool $specificLifetime    If != false, set a specific lifetime for this cache record
      *                                  (null => infinite lifetime)
-     * @param  int    $priority         integer between 0 (very low priority) and 10 (maximum priority) used by
+     * @param int $priority             integer between 0 (very low priority) and 10 (maximum priority) used by
      *                                  some particular backends
-     * @return boolean true if no problem
+     * @return bool true if no problem
      */
     public function save($data, $cacheId, $tags = array(), $specificLifetime = false, $priority = 8)
     {

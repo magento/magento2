@@ -38,7 +38,4 @@
             <argument name="template" xsi:type="string">catalog/product/price.phtml</argument>
         </action>
     </referenceBlock>
-    <referenceBlock name="minicart">
-        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::cart/sidebar/default.phtml" cacheable="false"/>
-    </referenceBlock>
 </layout>

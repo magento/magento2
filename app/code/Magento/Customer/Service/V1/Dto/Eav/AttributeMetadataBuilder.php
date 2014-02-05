@@ -25,8 +25,6 @@
  */
 namespace Magento\Customer\Service\V1\Dto\Eav;
 
-use Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata;
-
 class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 {
     /**
@@ -89,7 +87,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
      */
     public function setOptions($options)
     {
-        $this->_set(AttributeMetadata::OPTIONS, $options);
+        return $this->_set(AttributeMetadata::OPTIONS, $options);
     }
 
     /**
@@ -121,11 +119,56 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
     }
 
     /**
-     * @param string
+     * @param string $dataModel
      * @return AttributeMetadataBuilder
      */
     public function setDataModel($dataModel)
     {
         return $this->_set(AttributeMetadata::DATA_MODEL, $dataModel);
+    }
+
+    /**
+     * @param $frontendClass
+     * @return AttributeMetadataBuilder
+     */
+    public function setFrontendClass($frontendClass)
+    {
+        return $this->_set(AttributeMetadata::FRONTEND_CLASS, $frontendClass);
+    }
+
+    /**
+     * @param bool $isUserDefined
+     * @return AttributeMetadataBuilder
+     */
+    public function setIsUserDefined($isUserDefined)
+    {
+        return $this->_set(AttributeMetadata::IS_USER_DEFINED, $isUserDefined);
+    }
+
+    /**
+     * @param int $sortOrder
+     * @return AttributeMetadataBuilder
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->_set(AttributeMetadata::SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * @param string $frontendLabel
+     * @return AttributeMetadataBuilder
+     */
+    public function setFrontendLabel($frontendLabel)
+    {
+        return $this->_set(AttributeMetadata::FRONTEND_LABEL, $frontendLabel);
+    }
+
+    /**
+     * @param bool $isSystem
+     * @return AttributeMetadataBuilder
+     */
+    public function setIsSystem($isSystem)
+    {
+        return $this->_set(AttributeMetadata::IS_SYSTEM, $isSystem);
     }
 }

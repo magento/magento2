@@ -94,8 +94,9 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Open image for processing
      *
-     * @throws \Exception
      * @param string $filename
+     * @return void
+     * @throws \Exception
      */
     public function open($filename)
     {
@@ -117,8 +118,10 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      * Save image to specific path.
      * If some folders of path does not exist they will be created
      *
-     * @param string $destination
-     * @param string $newName
+     * @param null|string $destination
+     * @param null|string $newName
+     * @return void
+     * @throws \Exception  if destination path is not writable
      */
     public function save($destination = null, $newName = null)
     {
@@ -163,9 +166,9 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Change the image size
      *
-     * @param int $frameWidth
-     * @param int $frameHeight
-     * @throws \Exception
+     * @param null|int $frameWidth
+     * @param null|int $frameHeight
+     * @return void
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -214,7 +217,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      * Rotate image on specific angle
      *
      * @param int $angle
-     * @throws \Exception
+     * @return void
      */
     public function rotate($angle)
     {
@@ -256,11 +259,13 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Add watermark to image
      *
-     * @param $imagePath
+     * @param string $imagePath
      * @param int $positionX
      * @param int $positionY
      * @param int $opacity
      * @param bool $tile
+     * @return void
+     * @throws \LogicException
      * @throws \Exception
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
@@ -359,6 +364,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Checks required dependencies
      *
+     * @return void
      * @throws \Exception if some of dependencies are missing
      */
     public function checkDependencies()
@@ -370,6 +376,8 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
 
     /**
      * Reassign image dimensions
+     *
+     * @return void
      */
     public function refreshImageDimensions()
     {
@@ -381,6 +389,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Standard destructor. Destroy stored information about image
      *
+     * @return void
      */
     public function __destruct()
     {
@@ -427,7 +436,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      * Check whether the adapter can work with the image
      *
      * @throws \LogicException
-     * @return bool
+     * @return true
      */
     protected function _checkCanProcess()
     {

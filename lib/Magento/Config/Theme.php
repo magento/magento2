@@ -30,12 +30,30 @@
  */
 namespace Magento\Config;
 
-class Theme extends \Magento\Config\AbstractXml
+class Theme
 {
     /**
      * Is used for separation path of themes
      */
     const THEME_PATH_SEPARATOR = '/';
+
+    /**
+     * Data extracted from the configuration file
+     *
+     * @var array
+     */
+    protected $_data;
+
+    /**
+     * @param string $configContent
+     */
+    public function __construct($configContent)
+    {
+        $config = new \DOMDocument;
+        $config->loadXML($configContent);
+        // todo: validation of the document
+        $this->_data = $this->_extractData($config);
+    }
 
     /**
      * Get absolute path to theme.xsd
@@ -117,25 +135,5 @@ class Theme extends \Magento\Config\AbstractXml
             return null;
         }
         return explode(self::THEME_PATH_SEPARATOR, $parentTheme);
-    }
-
-    /**
-     * Get initial XML of a valid document
-     *
-     * @return string
-     */
-    protected function _getInitialXml()
-    {
-        return '<?xml version="1.0" encoding="UTF-8"?><theme></theme>';
-    }
-
-    /**
-     * Design packages are unique by code. Themes are unique by code.
-     *
-     * @return array
-     */
-    protected function _getIdAttributes()
-    {
-        return array('/theme' => 'theme');
     }
 }

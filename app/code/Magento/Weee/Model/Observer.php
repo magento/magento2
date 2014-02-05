@@ -51,12 +51,18 @@ class Observer extends \Magento\Core\Model\AbstractModel
     protected $_layout;
 
     /**
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     */
+    protected $productTypeConfig;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Weee\Model\Tax $weeeTax
+     * @param Tax $weeeTax
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param \Magento\Catalog\Model\Product\Type $productType
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -68,6 +74,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Weee\Helper\Data $weeeData,
         \Magento\Catalog\Model\Product\Type $productType,
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -76,6 +83,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         $this->_weeeTax = $weeeTax;
         $this->_productType = $productType;
         $this->_weeeData = $weeeData;
+        $this->productTypeConfig = $productTypeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -158,9 +166,6 @@ class Observer extends \Magento\Core\Model\AbstractModel
                 '_default_value',
                 '_front_fieldset',
             ),
-            'disabled_types' => array(
-                \Magento\Catalog\Model\Product\Type::TYPE_GROUPED,
-            )
         );
 
         $response->setTypes($types);
@@ -184,7 +189,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
             if (!$object->getApplyTo()) {
                 $applyTo = array();
                 foreach ($this->_productType->getOptions() as $option) {
-                    if ($option['value'] == \Magento\Catalog\Model\Product\Type::TYPE_GROUPED) {
+                    if ($this->productTypeConfig->isProductSet($option['value'])) {
                         continue;
                     }
                     $applyTo[] = $option['value'];
@@ -199,7 +204,8 @@ class Observer extends \Magento\Core\Model\AbstractModel
     /**
      * Add custom element type for attributes form
      *
-     * @param   \Magento\Event\Observer $observer
+     * @param \Magento\Event\Observer $observer
+     * @return \Magento\Weee\Model\Observer
      */
     public function updateElementTypes(\Magento\Event\Observer $observer)
     {

@@ -46,6 +46,7 @@ class Failure extends \Magento\View\Element\Template
     ) {
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     public function getRealOrderId()

@@ -43,14 +43,14 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryRead'), array(), '', false);
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $this->_directory->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnArgument(0));
 
         $filesystem->expects($this->any())->method('getDirectoryRead')
-            ->with($this->equalTo(\Magento\Filesystem::THEMES))
+            ->with($this->equalTo(\Magento\App\Filesystem::THEMES_DIR))
             ->will($this->returnValue($this->_directory));
         $this->_fileFactory = $this->getMock('Magento\View\Layout\File\Factory', array(), array(), '', false);
         $this->_model = new \Magento\View\Layout\File\Source\Override\Theme(

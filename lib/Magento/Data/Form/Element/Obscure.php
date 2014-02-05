@@ -58,7 +58,7 @@ class Obscure extends \Magento\Data\Form\Element\Password
     /**
      * Returns list of html attributes possible to output in HTML
      *
-     * @return array()
+     * @return string[]
      */
     public function getHtmlAttributes()
     {

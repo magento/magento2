@@ -67,7 +67,7 @@ class Data extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Validate unique configuration data before save
      * Set id to object if exists configuration instead of throw exception
      *
-     * @param \Magento\Core\Model\Config\Value $object
+     * @param \Magento\Core\Model\AbstractModel $object
      * @return \Magento\Core\Model\Resource\Config\Data
      */
     protected function _checkUnique(\Magento\Core\Model\AbstractModel $object)

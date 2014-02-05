@@ -30,7 +30,7 @@ class Dom implements \Magento\Config\ConverterInterface
     /**
      * Convert configuration in DOM format to assoc array that can be used by object manager
      *
-     * @param mixed $config
+     * @param \DOMDocument $config
      * @return array
      * @throws \Exception
      * @todo this method has high cyclomatic complexity in order to avoid performance issues
@@ -98,6 +98,9 @@ class Dom implements \Magento\Config\ConverterInterface
                                         case 'value':
                                             $paramData = $this->_processValueNode($paramChildNode);
                                             break;
+                                        case 'array':
+                                            $paramData = $this->_processArrayNode($paramChildNode);
+                                            break;
                                         default:
                                             throw new \Exception(
                                                 "Invalid application config. Unknown node: {$paramChildNode->nodeName}."
@@ -145,6 +148,58 @@ class Dom implements \Magento\Config\ConverterInterface
     }
 
     /**
+     * Get value of array node
+     *
+     * Expected structure:
+     * <array>
+     *     <item key="key1"><value>...</value></value>
+     *     <item key="key2">
+     *         <array>...</array>
+     *     </item>
+     * </array>
+     *
+     * Which will convert to: array('key1' => ..., 'key2' => array(...))
+     *
+     * @param \DOMNode $valueNode
+     * @return array
+     * @throws \Exception
+     */
+    protected function _processArrayNode(\DOMNode $valueNode)
+    {
+        $result = array();
+        foreach ($valueNode->childNodes as $item) {
+            if ($item->nodeType != XML_ELEMENT_NODE) {
+                continue;
+            }
+            if ($item->nodeName != 'item') {
+                throw new \Exception("Unexpected node {$item->nodeName} under 'array' node.");
+            }
+            $count = 0;
+            $key = (string)$item->attributes->getNamedItem('key')->nodeValue;
+            foreach ($item->childNodes as $subItem) {
+                if ($subItem->nodeType != XML_ELEMENT_NODE) {
+                    continue;
+                }
+                $count++;
+                if ($count > 1) {
+                    throw new \Exception("The 'item' node expects one and only one child node.");
+                }
+                switch ($subItem->nodeName) {
+                    case 'value':
+                        $result[$key] = $this->_processValueNode($subItem);
+                        break;
+                    case 'array':
+                        $result[$key] = $this->_processArrayNode($subItem);
+                        break;
+                    default:
+                        throw new \Exception("Unexpected node {$subItem->nodeName} under 'item' node.");
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Retrieve value of the given node
      * Treat all child nodes as an assoc array
      * @todo this method has high cyclomatic complexity in order to avoid performance issues
@@ -168,8 +223,6 @@ class Dom implements \Magento\Config\ConverterInterface
                 $nodeType = $node->attributes->getNamedItem('type');
                 if ($nodeType && 'null' == $nodeType->nodeValue) {
                     $output[$node->nodeName] = null;
-                } else {
-                    $output[$node->nodeName] = $this->_processValueNode($node);
                 }
             } elseif (($node->nodeType == XML_TEXT_NODE || $node->nodeType == XML_CDATA_SECTION_NODE)
                 && $childNodesCount == 1

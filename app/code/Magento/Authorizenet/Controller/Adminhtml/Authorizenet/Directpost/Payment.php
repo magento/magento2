@@ -130,18 +130,18 @@ class Payment
                     $session->addCheckoutOrderIncrementId($order->getIncrementId());
                     $session->setLastOrderIncrementId($order->getIncrementId());
 
-                    $requestToPaygate = $payment->getMethodInstance()->generateRequestFromOrder($order);
-                    $requestToPaygate->setControllerActionName($controller);
-                    $requestToPaygate->setOrderSendConfirmation($sendConfirmationFlag);
-                    $requestToPaygate->setStoreId($this->_getOrderCreateModel()->getQuote()->getStoreId());
+                    $requestToAuthorizenet = $payment->getMethodInstance()->generateRequestFromOrder($order);
+                    $requestToAuthorizenet->setControllerActionName($controller);
+                    $requestToAuthorizenet->setOrderSendConfirmation($sendConfirmationFlag);
+                    $requestToAuthorizenet->setStoreId($this->_getOrderCreateModel()->getQuote()->getStoreId());
 
-                    $adminUrl = $this->_objectManager->get('Magento\Backend\Model\Url');
+                    $adminUrl = $this->_objectManager->get('Magento\Backend\Model\UrlInterface');
                     if ($adminUrl->useSecretKey()) {
-                        $requestToPaygate->setKey(
+                        $requestToAuthorizenet->setKey(
                             $adminUrl->getSecretKey('adminhtml', 'authorizenet_directpost_payment', 'redirect')
                         );
                     }
-                    $result['directpost'] = array('fields' => $requestToPaygate->getData());
+                    $result['directpost'] = array('fields' => $requestToAuthorizenet->getData());
                 }
 
                 $result['success'] = 1;
@@ -161,7 +161,7 @@ class Payment
                 $result['success'] = 0;
                 $result['error'] = 1;
                 $result['redirect'] = $this->_objectManager
-                    ->get('Magento\Backend\Model\Url')
+                    ->get('Magento\Backend\Model\UrlInterface')
                     ->getUrl('sales/order_create/');
             }
 

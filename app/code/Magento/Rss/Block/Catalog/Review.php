@@ -52,17 +52,11 @@ class Review extends \Magento\Backend\Block\AbstractBlock
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Url
-     */
-    protected $_urlModel;
-
-    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Core\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Url $urlModel
      * @param array $data
      */
     public function __construct(
@@ -71,14 +65,12 @@ class Review extends \Magento\Backend\Block\AbstractBlock
         \Magento\Core\Model\Resource\Iterator $resourceIterator,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Url $urlModel,
         array $data = array()
     ) {
         $this->_rssFactory = $rssFactory;
         $this->_resourceIterator = $resourceIterator;
         $this->_reviewFactory = $reviewFactory;
         $this->_storeManager = $storeManager;
-        $this->_urlModel = $urlModel;
         parent::__construct($context, $data);
     }
 
@@ -130,8 +122,8 @@ class Review extends \Magento\Backend\Block\AbstractBlock
         $rssObj = $args['rssObj'];
         $row = $args['row'];
 
-        $productUrl = $this->_urlModel
-            ->setStore($row['store_id'])
+        $productUrl = $this->_urlBuilder
+            ->setScope($row['store_id'])
             ->getUrl('catalog/product/view', array('id' => $row['entity_id']));
         $reviewUrl = $this->getUrl(
             'catalog/product_review/edit/',

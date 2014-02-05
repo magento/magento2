@@ -25,9 +25,10 @@
  */
 namespace Magento\Filesystem\Driver;
 
-use Magento\Filesystem\FilesystemException;
+use Magento\Filesystem\FilesystemException,
+    Magento\Filesystem\DriverInterface;
 
-class File implements \Magento\Filesystem\DriverInterface
+class File implements DriverInterface
 {
     /**
      * @var string
@@ -73,7 +74,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return array
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function stat($path)
     {
@@ -93,7 +94,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function isReadable($path)
     {
@@ -113,7 +114,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function isFile($path)
     {
@@ -133,7 +134,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function isDirectory($path)
     {
@@ -161,7 +162,7 @@ class File implements \Magento\Filesystem\DriverInterface
     {
         clearstatcache();
         $result = @file_get_contents($this->getScheme() . $path, $flag, $context);
-        if (!$result) {
+        if (false === $result) {
             throw new FilesystemException(
                 sprintf('Cannot read contents from file "%s" %s',
                     $path,
@@ -176,7 +177,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function isWritable($path)
     {
@@ -226,7 +227,7 @@ class File implements \Magento\Filesystem\DriverInterface
      * Read directory
      *
      * @param string $path
-     * @return array
+     * @return string[]
      * @throws FilesystemException
      */
     public function readDirectory($path)
@@ -251,7 +252,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $pattern
      * @param string $path
-     * @return array
+     * @return string[]
      * @throws FilesystemException
      */
     public function search($pattern, $path)
@@ -276,12 +277,22 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $oldPath
      * @param string $newPath
+     * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FilesystemException
      */
-    public function rename($oldPath, $newPath)
+    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null)
     {
-        $result = @rename($this->getScheme() . $oldPath, $newPath);
+        $result = false;
+        $targetDriver = $targetDriver ?: $this;
+        if (get_class($targetDriver) == get_class($this)) {
+            $result = @rename($this->getScheme() . $oldPath, $newPath);
+        } else {
+            $content = $this->fileGetContents($oldPath);
+            if (false !== $targetDriver->filePutContents($newPath, $content)) {
+                $result = $this->deleteFile($newPath);
+            }
+        }
         if (!$result) {
             throw new FilesystemException(
                 sprintf('The "%s" path cannot be renamed into "%s" %s',
@@ -298,12 +309,19 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $source
      * @param string $destination
+     * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FilesystemException
      */
-    public function copy($source, $destination)
+    public function copy($source, $destination, DriverInterface $targetDriver = null)
     {
-        $result = @copy($this->getScheme() . $source, $destination);
+        $targetDriver = $targetDriver ?: $this;
+        if (get_class($targetDriver) == get_class($this)) {
+            $result = @copy($this->getScheme() . $source, $destination);
+        } else {
+            $content = $this->fileGetContents($source);
+            $result = $targetDriver->filePutContents($destination, $content);
+        }
         if (!$result) {
             throw new FilesystemException(
                 sprintf('The file or directory "%s" cannot be copied to "%s" %s',
@@ -466,7 +484,7 @@ class File implements \Magento\Filesystem\DriverInterface
     public function fileReadLine($resource, $length, $ending = null)
     {
         $result = @stream_get_line($resource, $length, $ending);
-        if (!$result) {
+        if (false === $result) {
             throw new FilesystemException(
                 sprintf('File cannot be read %s',
                     $this->getWarningMessage()
@@ -599,7 +617,7 @@ class File implements \Magento\Filesystem\DriverInterface
     public function fileWrite($resource, $data)
     {
         $result = @fwrite($resource, $data);
-        if (!$result) {
+        if (false === $result) {
             throw new FilesystemException(
                 sprintf('Error occurred during execution of fileWrite %s',
                     $this->getWarningMessage()
@@ -652,7 +670,7 @@ class File implements \Magento\Filesystem\DriverInterface
     /**
      * Lock file in selected mode
      *
-     * @param $resource
+     * @param resource $resource
      * @param int $lockMode
      * @return bool
      * @throws FilesystemException
@@ -672,7 +690,7 @@ class File implements \Magento\Filesystem\DriverInterface
     /**
      * Unlock file
      *
-     * @param $resource
+     * @param resource $resource
      * @return bool
      * @throws FilesystemException
      */
@@ -741,24 +759,11 @@ class File implements \Magento\Filesystem\DriverInterface
     }
 
     /**
-     * Checks is directory contains path
-     * Utility method.
-     *
-     * @param string $path
-     * @param string $directory
-     * @return bool
-     */
-    public function isPathInDirectory($path, $directory)
-    {
-        return 0 === strpos($this->fixSeparator($path), $this->fixSeparator($directory));
-    }
-
-    /**
      * Read directory recursively
      *
-     * @param string|null $path
-     * @return array
-     * @throws \Magento\Filesystem\FilesystemException
+     * @param string $path
+     * @return string[]
+     * @throws FilesystemException
      */
     public function readDirectoryRecursively($path = null)
     {
@@ -777,5 +782,17 @@ class File implements \Magento\Filesystem\DriverInterface
             throw new FilesystemException($e->getMessage(), $e->getCode(), $e);
         }
         return $result;
+    }
+
+    /**
+     * Get real path
+     *
+     * @param string $path
+     *
+     * @return string|bool
+     */
+    public function getRealPath($path)
+    {
+        return realpath($path);
     }
 }

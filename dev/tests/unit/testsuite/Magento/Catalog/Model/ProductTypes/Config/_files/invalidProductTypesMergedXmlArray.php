@@ -23,12 +23,13 @@
  */
 return array
 (
-    'without_required_type_handle' => array(
-        '<?xml version="1.0" encoding="UTF-8"?><config></config>',
-        array("Element 'config': Missing child element(s). Expected is ( type ).")),
     'type_without_required_name' => array(
         '<?xml version="1.0" encoding="UTF-8"?><config><type label="some label" modelInstance="model_name" /></config>',
-        array("Element 'type': The attribute 'name' is required but missing.")),
+        array(
+            "Element 'type': The attribute 'name' is required but missing.",
+            "Element 'type': Not all fields of key identity-constraint 'productTypeKey' evaluate to a node."
+        )
+    ),
     'type_without_required_label' => array(
         '<?xml version="1.0" encoding="UTF-8"?><config><type name="some_name" modelInstance="model_name" /></config>',
         array("Element 'type': The attribute 'label' is required but missing.")),

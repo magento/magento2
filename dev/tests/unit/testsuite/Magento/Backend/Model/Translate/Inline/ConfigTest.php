@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $backendConfig = $this->getMockForAbstractClass('Magento\Backend\App\ConfigInterface');
         $backendConfig
             ->expects($this->once())
-            ->method('getFlag')
+            ->method('isSetFlag')
             ->with($this->equalTo('dev/translate_inline/active_admin'))
             ->will($this->returnValue($result));
         $config = new Config($backendConfig);

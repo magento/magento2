@@ -105,7 +105,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                 <?php if($_order->getBaseCurrencyCode() != $_order->getOrderCurrencyCode()): ?>
                 <tr>
                     <th><?php echo __('%1 / %2 rate:', $_order->getOrderCurrencyCode(), $_order->getBaseCurrencyCode()) ?></th>
-                    <th><?php echo $_order->getBaseToOrderRate() ?></td>
+                    <th><?php echo $_order->getBaseToOrderRate() ?></th>
                 </tr>
                 <?php endif; ?>
             </table>

@@ -146,20 +146,22 @@ interface DriverInterface
      *
      * @param string $oldPath
      * @param string $newPath
+     * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FilesystemException
      */
-    public function rename($oldPath, $newPath);
+    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null);
 
     /**
      * Copy source into destination
      *
      * @param string $source
      * @param string $destination
+     * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FilesystemException
      */
-    public function copy($source, $destination);
+    public function copy($source, $destination, DriverInterface $targetDriver = null);
 
     /**
      * Delete file
@@ -350,16 +352,15 @@ interface DriverInterface
     public function getAbsolutePath($basePath, $path, $scheme = null);
 
     /**
+     * @param $path
+     * @return mixed
+     */
+    public function getRealPath($path);
+
+    /**
      * @param string $basePath
      * @param null $path
      * @return mixed
      */
     public function getRelativePath($basePath, $path = null);
-
-    /**
-     * @param $path
-     * @param $directory
-     * @return mixed
-     */
-    public function isPathInDirectory($path, $directory);
 }
