@@ -35,5 +35,10 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit;
 
 class Js extends \Magento\Backend\Block\Template
 {
+    /**
+     * Js template
+     *
+     * @var string
+     */
     protected $_template = 'attribute/edit/js.phtml';
 }

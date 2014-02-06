@@ -26,22 +26,27 @@
 
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 
-class Widget extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Model\Category;
+use Magento\Core\Model\Registry;
+
+class Widget extends Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param Context $context
+     * @param Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        Context $context,
+        Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -98,6 +103,9 @@ class Widget extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_CatalogRule::promo_catalog');
@@ -105,6 +113,8 @@ class Widget extends \Magento\Backend\App\Action
 
     /**
      * Get tree node (Ajax version)
+     *
+     * @return void
      */
     public function categoriesJsonAction()
     {
@@ -125,7 +135,7 @@ class Widget extends \Magento\Backend\App\Action
     /**
      * Initialize category object in registry
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return Category
      */
     protected function _initCategory()
     {

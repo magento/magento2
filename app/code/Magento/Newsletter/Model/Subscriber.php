@@ -111,7 +111,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
     /**
      * Translate
      *
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translate;
 
@@ -146,7 +146,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Email\Model\TemplateFactory $emailTemplateFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Translate $translate
+     * @param \Magento\TranslateInterface $translate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -160,7 +160,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
         \Magento\Email\Model\TemplateFactory $emailTemplateFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Translate $translate,
+        \Magento\TranslateInterface $translate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

@@ -112,7 +112,7 @@ class Address extends \Magento\App\Action\Action
             }
 
             if ($this->_getCheckout()->getCustomerDefaultShippingAddress()) {
-                $addressForm->setBackUrl($this->_url->getUrl('*/multishipping/shipping'));
+                $addressForm->setBackUrl($this->_url->getUrl('*/checkout/shipping'));
             }
         }
         $this->_view->renderLayout();
@@ -124,7 +124,7 @@ class Address extends \Magento\App\Action\Action
             $this->_objectManager->create('Magento\Multishipping\Model\Checkout\Type\Multishipping')
                 ->updateQuoteCustomerShippingAddress($addressId);
         }
-        $this->_redirect('*/multishipping/shipping');
+        $this->_redirect('*/checkout/shipping');
     }
 
     public function selectBillingAction()

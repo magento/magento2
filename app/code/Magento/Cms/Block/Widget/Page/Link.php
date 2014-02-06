@@ -139,7 +139,7 @@ class Link
      *
      * @return string
      */
-    public function getLable()
+    public function getLabel()
     {
         if ($this->getData('anchor_text')) {
             $this->_anchorText = $this->getData('anchor_text');

@@ -96,7 +96,7 @@
     <preference for="Magento\View\Design\Theme\Image\PathInterface" type="Magento\Core\Model\Theme\Image\Path" />
     <preference for="Magento\Session\Config\ConfigInterface" type="Magento\Core\Model\Session\Config" />
     <preference for="Magento\Session\SidResolverInterface" type="Magento\Core\Model\Session\SidResolver\Proxy" />
-    <preference for="Magento\TranslateInterface" type="Magento\Core\Model\Translate" />
+    <preference for="Magento\TranslateInterface" type="Magento\Translate" />
     <preference for="Magento\Config\ScopeListInterface" type="interceptionConfigScope" />
     <preference for="Magento\View\Design\Theme\Label\ListInterface" type="Magento\Core\Model\Resource\Theme\Collection" />
     <virtualType name="interceptionConfigScope" type="Magento\Config\Scope">
@@ -167,7 +167,7 @@
             <value type="argument">Magento\Core\Model\App::PARAM_RUN_TYPE</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Translate">
+    <type name="Magento\Translate">
         <param name="cache">
             <instance type="Magento\App\Cache\Type\Translate" />
         </param>

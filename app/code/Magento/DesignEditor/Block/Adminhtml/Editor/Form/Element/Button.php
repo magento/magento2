@@ -23,18 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
 
 /**
  * Form element button
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
-
 class Button extends \Magento\Data\Form\Element\AbstractElement
 {
     /**
      * Additional html attributes
      *
-     * @var array
+     * @var string[]
      */
     protected $_htmlAttributes = array('data-mage-init');
 
@@ -70,7 +69,7 @@ class Button extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Html attributes
      *
-     * @return array
+     * @return string[]
      */
     public function getHtmlAttributes()
     {

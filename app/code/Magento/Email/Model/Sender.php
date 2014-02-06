@@ -66,7 +66,7 @@ class Sender
      * @param string $sender
      * @param array $templateParams
      * @param int $storeId
-     * @return \Magento\Email\Model\Sender
+     * @return $this
      */
     public function send($email, $name, $template, $sender, $templateParams, $storeId)
     {

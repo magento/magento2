@@ -36,7 +36,6 @@ namespace Magento\Reports\Model\Resource\Refresh;
 
 class Collection extends \Magento\Data\Collection
 {
-
     /**
      * @var \Magento\Core\Model\LocaleInterface
      */
@@ -65,8 +64,8 @@ class Collection extends \Magento\Data\Collection
     /**
      * Get if updated
      *
-     * @param $reportCode
-     * @return string|Zend_Date
+     * @param string $reportCode
+     * @return string|\Zend_Date
      */
     protected function _getUpdatedAt($reportCode)
     {
@@ -82,7 +81,10 @@ class Collection extends \Magento\Data\Collection
 
     /**
      * Load data
-     * @return \Magento\Reports\Model\Resource\Refresh\Collection|\Magento\Data\Collection
+     *
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return $this
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

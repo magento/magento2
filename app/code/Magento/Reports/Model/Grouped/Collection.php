@@ -25,6 +25,8 @@
  */
 namespace Magento\Reports\Model\Grouped;
 
+use Magento\Data\Collection\Db;
+
 class Collection
     extends \Magento\Data\Collection //\Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -46,7 +48,7 @@ class Collection
      * Set column to group by
      *
      * @param string $column
-     * @return \Magento\Reports\Model\Grouped\Collection
+     * @return $this
      */
     public function setColumnGroupBy($column)
     {
@@ -57,9 +59,9 @@ class Collection
     /**
      * Load collection
      *
-     * @param boolean $printQuery
-     * @param boolean $logQuery
-     * @return \Magento\Reports\Model\Grouped\Collection
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -81,8 +83,8 @@ class Collection
     /**
      * Setter for resource collection
      *
-     * @param \Magento\Data\Collection\Db $collection
-     * @return \Magento\Reports\Model\Grouped\Collection
+     * @param Db $collection
+     * @return $this
      */
     public function setResourceCollection($collection)
     {
@@ -93,7 +95,7 @@ class Collection
     /**
      * Merge empty data collection with resource collection
      *
-     * @return \Magento\Reports\Model\Grouped\Collection
+     * @return $this
      */
     protected function _mergeWithEmptyData()
     {
@@ -119,7 +121,7 @@ class Collection
     /**
      * Group data in resource collection
      *
-     * @return \Magento\Reports\Model\Grouped\Collection
+     * @return $this
      */
     protected function _groupResourceData()
     {

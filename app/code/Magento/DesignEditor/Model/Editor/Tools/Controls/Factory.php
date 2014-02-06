@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
+
 /**
  * Controls configuration factory
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
-
 class Factory
 {
     /**#@+
@@ -111,7 +111,7 @@ class Factory
      * @param string $type
      * @param \Magento\View\Design\ThemeInterface $theme
      * @param \Magento\View\Design\ThemeInterface $parentTheme
-     * @param array $files
+     * @param string[] $files
      * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
      * @throws \Magento\Exception
      */

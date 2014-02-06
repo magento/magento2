@@ -44,6 +44,8 @@ class Option extends \Magento\Core\Model\AbstractModel
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     public function _construct()
     {

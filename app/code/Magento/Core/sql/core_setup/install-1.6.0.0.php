@@ -307,7 +307,7 @@ $table = $installer->getConnection()
         ), 'Key Id of Translation')
     ->addColumn('string', \Magento\DB\Ddl\Table::TYPE_TEXT, 255, array(
         'nullable'  => false,
-        'default'   => \Magento\Core\Model\Translate::DEFAULT_STRING,
+        'default'   => \Magento\TranslateInterface::DEFAULT_STRING,
         ), 'Translation String')
     ->addColumn('store_id', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,

@@ -48,28 +48,16 @@ class Block extends \Magento\App\Action\Action
         $this->_view->loadLayout($handles);
         $data = array();
 
+        $layout = $this->_view->getLayout();
         foreach ($blocks as $blockName) {
-            $blockInstance = $this->_view->getLayout()->getBlock($blockName);
+            $blockInstance = $layout->getBlock($blockName);
             if (is_object($blockInstance)) {
                 $data[$blockName] = $blockInstance->toHtml();
             }
         }
 
-        $this->setPrivateHeaders();
+        $layout->setIsPrivate();
 
         $this->getResponse()->appendBody(json_encode($data));
-    }
-
-    /**
-     * Set header parameters for private cache
-     */
-    protected function setPrivateHeaders()
-    {
-        $this->getResponse()->setHeader('cache-control', 'private, max-age=' . Data::PRIVATE_MAX_AGE_CACHE, true);
-        $this->getResponse()->setHeader(
-            'expires',
-            gmdate('D, d M Y H:i:s T', strtotime('+' . Data::PRIVATE_MAX_AGE_CACHE . ' seconds')),
-            true
-        );
     }
 }

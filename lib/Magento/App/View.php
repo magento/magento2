@@ -42,9 +42,9 @@ class View implements ViewInterface
     protected $_eventManager;
 
     /**
-     * @var \Magento\TranslateInterface
+     * @var \Magento\Translate\InlineInterface
      */
-    protected $_translator;
+    protected $_translateInline;
 
     /**
      * @var \Magento\App\ActionFlag
@@ -72,7 +72,7 @@ class View implements ViewInterface
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\TranslateInterface $translator
+     * @param \Magento\Translate\InlineInterface $translateInline
      * @param \Magento\App\ActionFlag $actionFlag
      */
     public function __construct(
@@ -81,7 +81,7 @@ class View implements ViewInterface
         \Magento\App\ResponseInterface $response,
         \Magento\Config\ScopeInterface $configScope,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\TranslateInterface $translator,
+        \Magento\Translate\InlineInterface $translateInline,
         \Magento\App\ActionFlag $actionFlag
     ) {
         $this->_layout = $layout;
@@ -89,7 +89,7 @@ class View implements ViewInterface
         $this->_response = $response;
         $this->_configScope = $configScope;
         $this->_eventManager = $eventManager;
-        $this->_translator = $translator;
+        $this->_translateInline = $translateInline;
         $this->_actionFlag = $actionFlag;
     }
 
@@ -283,7 +283,7 @@ class View implements ViewInterface
         );
 
         $output = $this->getLayout()->getOutput();
-        $this->_translator->processResponseBody($output);
+        $this->_translateInline->processResponseBody($output);
         $this->_response->appendBody($output);
         \Magento\Profiler::stop('layout_render');
 

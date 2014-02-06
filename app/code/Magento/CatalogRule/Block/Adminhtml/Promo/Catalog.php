@@ -37,6 +37,9 @@ namespace Magento\CatalogRule\Block\Adminhtml\Promo;
 
 class Catalog extends \Magento\Backend\Block\Widget\Grid\Container
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_addButton('apply_rules', array(

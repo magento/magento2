@@ -179,7 +179,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      *
      * @param string $field
      * @param string $alias
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @return $this
      */
     protected function _addInventoryItemFieldToSelect($field, $alias = null)
     {
@@ -253,7 +253,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * Add filter by product type(s)
      *
      * @param array|string $typeFilter
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @return $this
      */
     public function filterByProductType($typeFilter)
     {
@@ -265,10 +265,9 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     }
 
     /**
-     * Add filter by product types from config
-     * Only types witch has QTY parameter
+     * Add filter by product types from config - only types which have QTY parameter
      *
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @return $this
      */
     public function filterByIsQtyProductTypes()
     {
@@ -281,8 +280,8 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     /**
      * Add Use Manage Stock Condition to collection
      *
-     * @param int|null $storeId
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @param null|int $storeId
+     * @return $this
      */
     public function useManageStockFilter($storeId = null)
     {
@@ -299,8 +298,8 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     /**
      * Add Notify Stock Qty Condition to collection
      *
-     * @param int $storeId
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @param null|int $storeId
+     * @return $this
      */
     public function useNotifyStockQtyFilter($storeId = null)
     {

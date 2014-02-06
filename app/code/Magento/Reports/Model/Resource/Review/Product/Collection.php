@@ -51,7 +51,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Join review table to result
      *
-     * @return \Magento\Reports\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     protected function _joinReview()
     {
@@ -98,7 +98,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Review\Product\Collection
+     * @return $this|\Magento\Catalog\Model\Resource\Product\Collection
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {

@@ -40,7 +40,7 @@ $connection->dropIndex($table, $installer->getIdxName(
 $connection->addColumn($table, 'crc_string', array(
     'type'     => \Magento\DB\Ddl\Table::TYPE_BIGINT,
     'nullable' => false,
-    'default'  => crc32(\Magento\Core\Model\Translate::DEFAULT_STRING),
+    'default'  => crc32(\Magento\TranslateInterface::DEFAULT_STRING),
     'comment'  => 'Translation String CRC32 Hash',
 ));
 

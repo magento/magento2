@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\DesignEditor\Model;
+
 /**
  * Design editor state model
  */
-namespace Magento\DesignEditor\Model;
-
 class State
 {
     /**
@@ -135,6 +135,7 @@ class State
      *
      * @param string $areaCode
      * @param \Magento\App\RequestInterface $request
+     * @return void
      */
     public function update($areaCode, \Magento\App\RequestInterface $request)
     {
@@ -154,7 +155,7 @@ class State
     /**
      * Reset VDE state data
      *
-     * @return \Magento\DesignEditor\Model\State
+     * @return $this
      */
     public function reset()
     {
@@ -169,6 +170,7 @@ class State
      *
      * @param string $mode
      * @param string $areaCode
+     * @return void
      */
     protected function _injectLayout($mode, $areaCode)
     {
@@ -182,6 +184,8 @@ class State
 
     /**
      * Create url model instance that will be used instead of \Magento\UrlInterface in navigation mode
+     *
+     * @return void
      */
     protected function _injectUrlModel($mode)
     {
@@ -195,6 +199,8 @@ class State
 
     /**
      * Set current VDE theme
+     *
+     * @return void
      */
     protected function _setTheme()
     {
@@ -213,6 +219,8 @@ class State
 
     /**
      * Disable some cache types in VDE mode
+     *
+     * @return void
      */
     protected function _disableCache()
     {

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model\Attribute;
 
 /**
  * Tax attribute model
@@ -31,8 +32,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model\Attribute;
-
 class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
 {
     /**
@@ -143,7 +142,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      *
      * @param string $state
      * @param string $zip
-     * @return array
+     * @return string[]
      */
     protected function _parseRegions($state, $zip)
     {
@@ -154,7 +153,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * Retrieve array of regions characterized by provided zip code
      *
      * @param string $zip
-     * @return array
+     * @return string[]
      */
     protected function _parseZip($zip)
     {

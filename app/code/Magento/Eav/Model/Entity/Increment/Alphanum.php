@@ -36,13 +36,26 @@
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
+use Magento\Eav\Exception;
+
 class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
+    /**
+     * Get allowed chars
+     *
+     * @return string
+     */
     public function getAllowedChars()
     {
         return '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     }
 
+    /**
+     * Get next id
+     *
+     * @return string
+     * @throws Exception
+     */
     public function getNextId()
     {
         $lastId = $this->getLastId();

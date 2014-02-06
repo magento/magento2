@@ -46,7 +46,6 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_canVoid                 = true;
     protected $_canUseInternal          = false;
     protected $_canUseCheckout          = false;
-    protected $_canUseForMultishipping  = false;
 
     /**
      * @var \Magento\GoogleCheckout\Model\ApiFactory

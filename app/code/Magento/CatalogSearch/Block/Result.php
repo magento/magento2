@@ -23,45 +23,52 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogSearch\Block;
+
+use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Model\Layer as ModelLayer;
+use Magento\CatalogSearch\Helper\Data;
+use Magento\CatalogSearch\Model\Query;
+use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
+use Magento\View\Element\Template;
+use Magento\View\Element\Template\Context;
 
 /**
  * Product search result block
  */
-class Result extends \Magento\View\Element\Template
+class Result extends Template
 {
     /**
      * Catalog Product collection
      *
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @var Collection
      */
     protected $productCollection;
 
     /**
      * Catalog search data
      *
-     * @var \Magento\CatalogSearch\Helper\Data
+     * @var Data
      */
     protected $catalogSearchData;
 
     /**
      * Catalog layer
      *
-     * @var \Magento\Catalog\Model\Layer
+     * @var ModelLayer
      */
     protected $catalogLayer;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
-     * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
+     * @param Context $context
+     * @param ModelLayer $catalogLayer
+     * @param Data $catalogSearchData
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Layer $catalogLayer,
-        \Magento\CatalogSearch\Helper\Data $catalogSearchData,
+        Context $context,
+        ModelLayer $catalogLayer,
+        Data $catalogSearchData,
         array $data = array()
     ) {
         $this->catalogLayer = $catalogLayer;
@@ -72,7 +79,7 @@ class Result extends \Magento\View\Element\Template
     /**
      * Retrieve query model object
      *
-     * @return \Magento\CatalogSearch\Model\Query
+     * @return Query
      */
     protected function _getQuery()
     {
@@ -82,7 +89,7 @@ class Result extends \Magento\View\Element\Template
     /**
      * Prepare layout
      *
-     * @return \Magento\CatalogSearch\Block\Result
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -118,7 +125,7 @@ class Result extends \Magento\View\Element\Template
     /**
      * Retrieve search list toolbar block
      *
-     * @return \Magento\Catalog\Block\Product\ListProduct
+     * @return ListProduct
      */
     public function getListBlock()
     {
@@ -128,7 +135,7 @@ class Result extends \Magento\View\Element\Template
     /**
      * Set search available list orders
      *
-     * @return \Magento\CatalogSearch\Block\Result
+     * @return $this
      */
     public function setListOrders()
     {
@@ -151,7 +158,7 @@ class Result extends \Magento\View\Element\Template
     /**
      * Set available view mode
      *
-     * @return \Magento\CatalogSearch\Block\Result
+     * @return $this
      */
     public function setListModes()
     {
@@ -163,7 +170,7 @@ class Result extends \Magento\View\Element\Template
     /**
      * Set Search Result collection
      *
-     * @return \Magento\CatalogSearch\Block\Result
+     * @return $this
      */
     public function setListCollection()
     {
@@ -185,7 +192,7 @@ class Result extends \Magento\View\Element\Template
     /**
      * Retrieve loaded category collection
      *
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @return Collection
      */
     protected function _getProductCollection()
     {

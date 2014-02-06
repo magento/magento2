@@ -46,7 +46,7 @@ class Manager
     protected $_authSession;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translator;
 
@@ -55,12 +55,12 @@ class Manager
      *
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\TranslateInterface $translator
      */
     public function __construct(
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Core\Model\Translate $translator
+        \Magento\TranslateInterface $translator
     ) {
         $this->_session = $session;
         $this->_authSession = $authSession;

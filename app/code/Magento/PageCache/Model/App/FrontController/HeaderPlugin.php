@@ -78,11 +78,12 @@ class HeaderPlugin
      */
     public function afterDispatch(\Magento\App\Response\Http $response)
     {
+        if ($this->layout->isPrivate()) {
+            $this->setPrivateHeaders($response);
+            return $response;
+        }
         if ($this->layout->isCacheable()) {
-            $response->setHeader('pragma', 'cache', true);
-            if(!$response->getHeader('cache-control')) {
-                $this->setPublicHeaders($response);
-            }
+            $this->setPublicHeaders($response);
         } else {
             $this->setNocacheHeaders($response);
         }
@@ -96,6 +97,7 @@ class HeaderPlugin
     protected function setPublicHeaders(\Magento\App\Response\Http $response)
     {
         $maxAge = $this->helper->getPublicMaxAgeCache();
+        $response->setHeader('pragma', 'cache', true);
         $response->setHeader('cache-control', 'public, max-age=' . $maxAge, true);
         $response->setHeader(
             'expires',
@@ -114,6 +116,22 @@ class HeaderPlugin
         $response->setHeader(
             'expires',
             gmdate('D, d M Y H:i:s T', strtotime('-1 year')),
+            true
+        );
+    }
+
+    /**
+     * Set header parameters for private cache
+     *
+     * @param \Magento\App\Response\Http $response
+     */
+    protected function setPrivateHeaders(\Magento\App\Response\Http $response)
+    {
+        $response->setHeader('pragma', 'cache', true);
+        $response->setHeader('cache-control', 'private, max-age=' . Data::PRIVATE_MAX_AGE_CACHE, true);
+        $response->setHeader(
+            'expires',
+            gmdate('D, d M Y H:i:s T', strtotime('+' . Data::PRIVATE_MAX_AGE_CACHE . ' seconds')),
             true
         );
     }

@@ -91,7 +91,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Availability options
      */
     protected $_canUseInternal          = false;
-    protected $_canUseForMultishipping  = false;
     protected $_isInitializeNeeded      = true;
     /**#@-*/
 

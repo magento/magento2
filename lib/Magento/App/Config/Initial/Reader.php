@@ -103,7 +103,10 @@ class Reader
     {
         $fileList = array();
         foreach ($this->_scopePriorityScheme as $scope) {
-            $fileList = array_merge($fileList, $this->_fileResolver->get($this->_fileName, $scope));
+            $directories = $this->_fileResolver->get($this->_fileName, $scope);
+            foreach ($directories as $key => $directory) {
+                $fileList[$key] = $directory;
+            }
         }
 
         if (!count($fileList)) {
@@ -117,12 +120,12 @@ class Reader
                 if (is_null($domDocument)) {
                     $class = $this->_domDocumentClass;
                     $domDocument = new $class(
-                        file_get_contents($file),
+                        $file,
                         array(),
                         $this->_schemaFile
                     );
                 } else {
-                    $domDocument->merge(file_get_contents($file));
+                    $domDocument->merge($file);
                 }
             } catch (\Magento\Config\Dom\ValidationException $e) {
                 throw new \Magento\Exception("Invalid XML in file " . $file . ":\n" . $e->getMessage());

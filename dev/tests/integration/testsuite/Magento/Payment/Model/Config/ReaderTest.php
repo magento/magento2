@@ -63,6 +63,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'groups' => array(
                 'paypal' => 'PayPal'
             ),
+            'methods' => array(
+                'checkmo' => array(
+                    'allow_multiple_address' => 1,
+                    'allow_multiple_with_3dsecure' => 1,
+                ),
+            ),
         );
         $this->assertEquals($expected, $result);
     }
@@ -87,6 +93,15 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'groups' => array(
                 'paypal' => 'PayPal Payment Methods',
                 'offline' => 'Offline Payment Methods',
+            ),
+            'methods' => array(
+                'checkmo' => array(
+                    'allow_multiple_address' => 1,
+                    'allow_multiple_with_3dsecure' => 1,
+                ),
+                'deny-method' => array(
+                    'allow_multiple_address' => 0,
+                ),
             ),
         );
         $this->assertEquals($expected, $result);

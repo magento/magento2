@@ -54,7 +54,7 @@ abstract class AbstractOptions extends \Magento\View\Element\AbstractBlock
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @return string
      */
     protected function _toHtml()

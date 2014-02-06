@@ -36,6 +36,16 @@ class Reader extends \Magento\Config\Reader\Filesystem
         '/config/template' => 'id',
     );
 
+    /**
+     * @param \Magento\Config\FileResolverInterface $fileResolver
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
+     * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param string $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
+     */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
         \Magento\Email\Model\Template\Config\Converter $converter,

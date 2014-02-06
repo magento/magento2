@@ -71,7 +71,7 @@ class Customergroup extends \Magento\View\Element\Html\Select
     /**
      * Retrieve allowed customer groups
      *
-     * @param int $groupId  return name by customer group id
+     * @param int $groupId return name by customer group id
      * @return array|string
      */
     protected function _getCustomerGroups($groupId = null)
@@ -89,6 +89,10 @@ class Customergroup extends \Magento\View\Element\Html\Select
         return $this->_customerGroups;
     }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setInputName($value)
     {
         return $this->setName($value);

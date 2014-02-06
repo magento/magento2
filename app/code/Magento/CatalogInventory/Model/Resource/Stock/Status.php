@@ -67,6 +67,7 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Resource model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,10 +80,10 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\CatalogInventory\Model\Stock\Status $object
      * @param int $productId
      * @param int $status
-     * @param float $qty
+     * @param float|int $qty
      * @param int $stockId
      * @param int|null $websiteId
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @return $this
      */
     public function saveProductStatus(\Magento\CatalogInventory\Model\Stock\Status $object, $productId, $status, $qty = 0,
         $stockId = 1, $websiteId = null)
@@ -234,7 +235,7 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\DB\Select $select
      * @param \Magento\Core\Model\Website $website
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @return Status
      */
     public function addStockStatusToSelect(\Magento\DB\Select $select, \Magento\Core\Model\Website $website)
     {
@@ -254,7 +255,7 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\DB\Select $select
      * @param string|Zend_Db_Expr $entityField
      * @param string|Zend_Db_Expr $websiteField
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @return $this
      */
     public function prepareCatalogProductIndexSelect(\Magento\DB\Select $select, $entityField, $websiteField)
     {
@@ -272,7 +273,7 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Add only is in stock products filter to product collection
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @return $this
      */
     public function addIsInStockFilterToCollection($collection)
     {

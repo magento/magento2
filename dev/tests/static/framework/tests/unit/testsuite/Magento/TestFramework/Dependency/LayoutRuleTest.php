@@ -51,39 +51,41 @@ class LayoutRuleTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                '<element module="Magento\AnotherModule">',
+                '<element module="Magento\AnotherModule"/>',
                 [[
                     'module' => 'Magento\AnotherModule',
                     'type'   => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                    'source' => '<element module="Magento\AnotherModule">',
+                    'source' => '<element module="Magento\AnotherModule"/>',
                 ]]
             ],
             [
-                '<element module="Magento\SomeModule">',
+                '<element module="Magento\SomeModule"/>',
                 []
             ],
             [
-                '<block class="Magento\AnotherModule\Several\Chunks">',
+                '<block class="Magento\AnotherModule\Several\Chunks"/>',
                 [[
                     'module' => 'Magento\AnotherModule',
                     'type'   => \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
-                    'source' => '<block class="Magento\AnotherModule\Several\Chunks">',
+                    'source' => '<block class="Magento\AnotherModule\Several\Chunks"/>',
                 ]]
             ],
             [
-                '<block class="Magento\SomeModule\Several\Chunks">',
+                '<block class="Magento\SomeModule\Several\Chunks"/>',
                 []
             ],
             [
-                '<extra></extra><block template="Magento_AnotherModule::template/path.phtml">',
+                '<any>
+                    <extra></extra><block template="Magento_AnotherModule::template/path.phtml"/>
+                </any>',
                 [[
                     'module' => 'Magento\AnotherModule',
                     'type'   => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                    'source' => '<block template="Magento_AnotherModule::template/path.phtml">',
+                    'source' => '<block template="Magento_AnotherModule::template/path.phtml"/>',
                 ]]
             ],
             [
-                '<block template="Magento_SomeModule::template/path.phtml">',
+                '<block template="Magento_SomeModule::template/path.phtml"/>',
                 []
             ],
             [
@@ -123,15 +125,15 @@ class LayoutRuleTest extends \PHPUnit_Framework_TestCase
                 []
             ],
             [
-                '<any helper="Magento\AnotherModule\Several\Chunks::text">',
+                '<any helper="Magento\AnotherModule\Several\Chunks::text"/>',
                 [[
                     'module' => 'Magento\AnotherModule',
                     'type'   => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                    'source' => '<any helper="Magento\AnotherModule\Several\Chunks::text">',
+                    'source' => '<any helper="Magento\AnotherModule\Several\Chunks::text"/>',
                 ]]
             ],
             [
-                '<any helper="Magento\SomeModule\Several\Chunks::text">',
+                '<any helper="Magento\SomeModule\Several\Chunks::text"/>',
                 []
             ],
         ];

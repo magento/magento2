@@ -38,7 +38,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected $_config;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translateAdapter;
 
@@ -85,13 +85,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array('/tmp/moduleOne/etc/validation.xml')));
 
         // Translate adapter mock
-        $this->_translateAdapter = $this->getMockBuilder('Magento\Core\Model\Translate')
-            ->setMethods(array('_getTranslatedString', 'translate'))
+        $this->_translateAdapter = $this->getMockBuilder('Magento\TranslateInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_translateAdapter->expects($this->any())
-            ->method('_getTranslatedString')
-            ->will($this->returnArgument(0));
     }
 
     /**

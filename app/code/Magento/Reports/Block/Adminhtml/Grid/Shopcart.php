@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Grid;
 
 /**
  * Adminhtml shopping carts report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Grid;
-
 class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -46,10 +43,10 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_storeIds            = array();
 
     /**
-     * storeIds setter
+     * StoreIds setter
      *
-     * @param  array $storeIds
-     * @return \Magento\Reports\Block\Adminhtml\Grid\Shopcart
+     * @param array $storeIds
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {
@@ -76,7 +73,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get currency rate (base to given currency)
      *
-     * @param string|\Magento\Directory\Model\Currency $currencyCode
+     * @param string|\Magento\Directory\Model\Currency $toCurrency
      * @return double
      */
     public function getRate($toCurrency)

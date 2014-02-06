@@ -56,7 +56,7 @@ class Cron extends \Magento\Core\Model\AbstractModel
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translate;
 
@@ -81,7 +81,7 @@ class Cron extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Log\Model\Log $log
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Translate $translate
+     * @param \Magento\TranslateInterface $translate
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -93,7 +93,7 @@ class Cron extends \Magento\Core\Model\AbstractModel
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Log\Model\Log $log,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Translate $translate,
+        \Magento\TranslateInterface $translate,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

@@ -29,6 +29,9 @@ namespace Magento\CatalogRule\Model\Resource\Rule\Product\Price;
 class Collection
     extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();

@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
 
 /**
  * Composite 'font' element renderer
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
-
 class Font
     extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer
 {
@@ -42,7 +41,7 @@ class Font
     /**
      * Get element CSS classes
      *
-     * @return array
+     * @return string[]
      */
     public function getClasses()
     {

@@ -23,20 +23,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Sales\Shipping;
 
 /**
  * Adminhtml shipping report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Sales\Shipping;
-
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
+    /**
+     * @var string
+     */
     protected $_columnGroupBy = 'period';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -44,6 +47,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         $this->setCountSubTotals(true);
     }
 
+    /**
+     * @return string
+     */
     public function getResourceCollectionName()
     {
         return ($this->getFilterData()->getData('report_type') == 'created_at_shipment')
@@ -51,6 +57,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
             : 'Magento\Sales\Model\Resource\Report\Shipping\Collection\Order';
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('period', array(
@@ -121,6 +130,4 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         return parent::_prepareColumns();
     }
 }
-
-
 

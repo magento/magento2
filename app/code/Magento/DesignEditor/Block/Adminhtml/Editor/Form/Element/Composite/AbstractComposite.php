@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite;
 
 /**
  * Parent composite form element for VDE
@@ -44,8 +45,6 @@
  * @method string getLabel()
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite setLegend($legend)
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite;
-
 abstract class AbstractComposite
     extends \Magento\Data\Form\Element\Fieldset
     implements \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
@@ -93,6 +92,8 @@ abstract class AbstractComposite
 
     /**
      * Constructor helper
+     *
+     * @return void
      */
     protected function _construct()
     {

@@ -1,3 +1,23 @@
+2.0.0.0-dev64
+=============
+* Modularity improvements:
+  * Moved abstract shopping cart logic from the Paypal module to the Payments module
+* Caching improvements:
+  * Added a new mechanism to uniquely identify page content (a hash-key for cache storage)
+  * Replaced the "magentoZoom" plugin with two widgets: the "gallery" and "zoom"
+* Fixed bugs:
+  * Fixed an issue with inserting an image in WYSIWYG editor where the selected folder was stored in session
+  * Fixed an issue with CMS Page Links not being shown because of the empty text in the link
+  * Fixed an issue where zooming functionality was not disabled for the responsive design
+  * Fixed an issue with zooming on a configurable product page where the main product image was shown instead of the selected option images
+* Updated various PHPDoc with parameter and return types
+* Moved quote-related multishipping logic to the Multishipping module
+* Resolved dependencies between the Payment and Multishipping modules
+* Moved the framework part of the Translate functionality from modules to the library
+* Created the architecture for the email template library
+* Introduced a consistent approach for using the Config scope
+* Fixed an issue with the dependency static test
+
 2.0.0.0-dev63
 =============
 * Modularity improvements:

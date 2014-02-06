@@ -43,6 +43,7 @@ class DataFactory
 
     /**
      * @param \Magento\ObjectManager $objectManager
+     * @param string $instanceName
      */
     public function __construct(\Magento\ObjectManager $objectManager, $instanceName = 'Magento\App\Config\Data')
     {
@@ -54,7 +55,7 @@ class DataFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Core\Model\Config\Data
+     * @return \Magento\App\Config\DataInterface
      */
     public function create(array $data = array())
     {

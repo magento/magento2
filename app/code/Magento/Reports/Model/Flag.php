@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Reports\Model;
 
 /**
  * Report Flag Model
@@ -32,8 +32,6 @@
  * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Model;
-
 class Flag extends \Magento\Core\Model\Flag
 {
     const REPORT_ORDER_FLAG_CODE    = 'report_order_aggregated';
@@ -49,7 +47,7 @@ class Flag extends \Magento\Core\Model\Flag
      * Setter for flag code
      *
      * @param string $code
-     * @return \Magento\Reports\Model\Flag
+     * @return $this
      */
     public function setReportFlagCode($code)
     {

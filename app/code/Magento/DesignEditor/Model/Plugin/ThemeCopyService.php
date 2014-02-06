@@ -43,6 +43,7 @@ class ThemeCopyService
      *
      * @param array $methodArguments
      * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @return void
      */
     public function aroundCopy(array $methodArguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
     {

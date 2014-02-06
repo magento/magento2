@@ -38,7 +38,8 @@ namespace Magento\Core\Model;
  * @method \Magento\Core\Model\Store setSortOrder(int $value)
  * @method \Magento\Core\Model\Store setIsActive(int $value)
  */
-class Store extends AbstractModel implements \Magento\Url\ScopeInterface
+class Store extends AbstractModel
+    implements \Magento\BaseScopeInterface, \Magento\Url\ScopeInterface
 {
     /**
      * Entity name
@@ -296,20 +297,26 @@ class Store extends AbstractModel implements \Magento\Url\ScopeInterface
     protected $_cookie;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @var \Magento\App\ResponseInterface
+     */
+    protected $response;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\UrlInterface $url
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
+     * @param Resource\Config\Data $configDataResource
      * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param Store\Config $coreStoreConfig
      * @param \Magento\App\ReinitableConfigInterface $coreConfig
-     * @param \Magento\Core\Model\Resource\Store $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param Resource\Store $resource
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Stdlib\Cookie $cookie
+     * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data
@@ -329,6 +336,7 @@ class Store extends AbstractModel implements \Magento\Url\ScopeInterface
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Stdlib\Cookie $cookie,
+        \Magento\App\ResponseInterface $response,
         \Magento\Data\Collection\Db $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = array()
@@ -345,6 +353,7 @@ class Store extends AbstractModel implements \Magento\Url\ScopeInterface
         $this->_storeManager = $storeManager;
         $this->_sidResolver = $sidResolver;
         $this->_cookie = $cookie;
+        $this->response = $response;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -655,7 +664,7 @@ class Store extends AbstractModel implements \Magento\Url\ScopeInterface
             && $this->_coreFileStorageDatabase->checkDbUsage()
         ) {
             return $this->getBaseUrl(\Magento\UrlInterface::URL_TYPE_WEB, $secure)
-                . $filesystem->getUri(\Magento\App\Filesystem::PUB_DIR) . '/' . self::MEDIA_REWRITE_SCRIPT;
+            . $filesystem->getUri(\Magento\App\Filesystem::PUB_DIR) . '/' . self::MEDIA_REWRITE_SCRIPT;
         }
         return false;
     }
@@ -682,8 +691,8 @@ class Store extends AbstractModel implements \Magento\Url\ScopeInterface
     public function isUseStoreInUrl()
     {
         return !($this->hasDisableStoreInUrl() && $this->getDisableStoreInUrl())
-            && $this->_appState->isInstalled()
-            && $this->getConfig(self::XML_PATH_STORE_IN_URL);
+        && $this->_appState->isInstalled()
+        && $this->getConfig(self::XML_PATH_STORE_IN_URL);
     }
 
     /**
@@ -736,7 +745,7 @@ class Store extends AbstractModel implements \Magento\Url\ScopeInterface
 
         if ($this->_appState->isInstalled()) {
             $secureBaseUrl = $this->_coreStoreConfig->getConfig(self::XML_PATH_SECURE_BASE_URL);
-            
+
             if (!$secureBaseUrl) {
                 return false;
             }
@@ -918,10 +927,23 @@ class Store extends AbstractModel implements \Magento\Url\ScopeInterface
                 $this->setCurrentCurrencyCode($baseCurrency->getCode());
             }
 
-            $this->setData('current_currency', $currency);
+            $this->setCurrentCurrency($currency);
         }
 
         return $currency;
+    }
+
+    /**
+     * Set current currency
+     *
+     * @param $currency
+     * @return $this
+     */
+    public function setCurrentCurrency($currency)
+    {
+        $this->response->setVary('current_currency', $currency->getCurrencyCode());
+        $this->setData('current_currency', $currency);
+        return $this;
     }
 
     /**
@@ -1129,9 +1151,9 @@ class Store extends AbstractModel implements \Magento\Url\ScopeInterface
         }
 
         return $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host']
-            . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
-            . $storeParsedUrl['path'] . $requestString
-            . ($storeParsedQuery ? '?'.http_build_query($storeParsedQuery, '', '&amp;') : '');
+        . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
+        . $storeParsedUrl['path'] . $requestString
+        . ($storeParsedQuery ? '?'.http_build_query($storeParsedQuery, '', '&amp;') : '');
     }
 
     /**

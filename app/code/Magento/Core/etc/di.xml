@@ -33,10 +33,10 @@
     <preference for="Magento\Session\SessionManagerInterface" type="Magento\Core\Model\Session" />
     <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Core\Model\Locale" />
     <preference for="Magento\Core\Model\DataService\ConfigInterface" type="Magento\Core\Model\DataService\Config" />
-    <preference for="Magento\App\ConfigInterface" type="Magento\Core\Model\Config" />
-    <preference for="Magento\App\ReinitableConfigInterface" type="Magento\Core\Model\ReinitableConfig" />
-    <preference for="Magento\Core\Model\Config\DataInterface" type="Magento\Core\Model\Config\Data" />
-    <preference for="Magento\Core\Model\Config\Storage\WriterInterface" type="Magento\Core\Model\Config\Storage\Writer\Db" />
+    <preference for="Magento\App\ConfigInterface" type="Magento\App\Config" />
+    <preference for="Magento\App\ReinitableConfigInterface" type="Magento\App\ReinitableConfig" />
+    <preference for="Magento\App\Config\Scope\ReaderPoolInterface" type="Magento\Core\Model\Config\Scope\ReaderPool" />
+    <preference for="Magento\App\Config\Storage\WriterInterface" type="Magento\Core\Model\Config\Storage\Db" />
     <preference for="Magento\PubSub\Event\QueueWriterInterface" type="Magento\PubSub\Event\QueueWriter" />
     <preference for="Magento\PubSub\Event\FactoryInterface" type="Magento\PubSub\Event\Factory" />
     <preference for="Magento\View\Design\Theme\FileInterface" type="Magento\Core\Model\Theme\File" />
@@ -53,10 +53,12 @@
     <preference for="Magento\View\Design\Theme\Customization\ConfigInterface" type="Magento\Core\Model\Theme\Customization\Config" />
     <preference for="Magento\View\Asset\ConfigInterface" type="Magento\Core\Model\Asset\Config" />
     <preference for="Magento\App\ViewInterface" type="Magento\App\View" />
-    <preference for="Magento\TranslateInterface" type="Magento\Core\Model\Translate" />
+    <preference for="Magento\TranslateInterface" type="Magento\Translate" />
     <preference for="Magento\App\Response\RedirectInterface" type="Magento\Core\App\Response\Redirect" />
     <preference for="Magento\Data\Collection\EntityFactoryInterface" type="Magento\Core\Model\EntityFactory" />
-    <preference for="Magento\Core\Model\Translate\InlineInterface" type="Magento\Core\Model\Translate\Inline" />
+    <preference for="Magento\Translate\InlineInterface" type="Magento\Translate\Inline" />
+    <preference for="Magento\Translate\Inline\ConfigInterface" type="Magento\Core\Model\Translate\Inline\Config" />
+    <preference for="Magento\Translate\Inline\ParserInterface" type="Magento\Core\Model\Translate\Inline\Parser" />
     <preference for="Magento\Session\ValidatorInterface" type="Magento\Core\Model\Session\Validator" />
     <preference for="Magento\Session\StorageInterface" type="Magento\Session\Storage" />
     <preference for="Magento\Url\RouteParamsResolverInterface" type="Magento\Core\Model\Url\RouteParamsResolver" />
@@ -72,6 +74,16 @@
     <preference for="Magento\Mview\View\SubscriptionInterface" type="Magento\Mview\View\Subscription" />
     <preference for="Magento\Mview\View\ChangelogInterface" type="Magento\Mview\View\Changelog" />
     <preference for="Magento\Css\PreProcessor\AdapterInterface" type="Magento\Css\PreProcessor\Adapter\Oyejorge" />
+    <preference for="Magento\Translate\ResourceInterface" type="Magento\Core\Model\Resource\Translate" />
+    <preference for="Magento\BaseScopeResolverInterface" type="Magento\Core\Model\BaseScopeResolver" />
+    <type name="Magento\Translate\Inline">
+        <param name="templateFileName">
+            <value>Magento_Core::translate_inline.phtml</value>
+        </param>
+        <param name="translatorRoute">
+            <value>core/ajax/translate</value>
+        </param>
+    </type>
     <type name="Magento\App\DefaultPath\DefaultPath">
         <param name="parts">
             <array>
@@ -265,27 +277,48 @@
     </type>
     <type name="Magento\Phrase\Renderer\Translate">
         <param name="translator">
-            <instance type="Magento\Core\Model\Translate" />
+            <instance type="Magento\Translate" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Translate\InlineParser">
+    <type name="Magento\Core\Model\Translate\Inline\Parser">
         <param name="inputFilter">
             <instance type="Magento\Core\Model\Input\Filter\MaliciousCode" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Config\SectionPool">
+    <type name="Magento\App\Config\ScopePool">
         <param name="cache">
             <instance type="Magento\App\Cache\Type\Config" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Config\Section\Reader\Website">
-        <param name="sectionPool">
-            <instance type="Magento\Core\Model\Config\SectionPool\Proxy" />
+    <type name="Magento\Core\Model\Config\Scope\Reader\Website">
+        <param name="scopePool">
+            <instance type="Magento\App\Config\ScopePool\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Config\Section\Reader\Store">
-        <param name="sectionPool">
-            <instance type="Magento\Core\Model\Config\SectionPool\Proxy" />
+    <type name="Magento\Core\Model\Config\Scope\Reader\Store">
+        <param name="scopePool">
+            <instance type="Magento\App\Config\ScopePool\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\App\Config\Initial\SchemaLocator">
+        <param name="moduleName">
+            <value>Magento_Core</value>
+        </param>
+    </type>
+    <type name="Magento\App\Config\Initial\Reader">
+        <param name="converter">
+            <instance type="Magento\App\Config\Initial\Converter" />
+        </param>
+    </type>
+    <type name="Magento\Core\Model\Config\Scope\ReaderPool">
+        <param name="default">
+            <instance type="Magento\Core\Model\Config\Scope\Reader\DefaultReader" />
+        </param>
+        <param name="website">
+            <instance type="Magento\Core\Model\Config\Scope\Reader\Website" />
+        </param>
+        <param name="store">
+            <instance type="Magento\Core\Model\Config\Scope\Reader\Store" />
         </param>
     </type>
     <type name="Magento\Core\App\Router\Base">
@@ -351,7 +384,7 @@
             <value>fieldset_config</value>
         </param>
     </type>
-    <type name="Magento\Core\Model\Locale\Hierarchy\Config">
+    <type name="Magento\Locale\Hierarchy\Config">
         <param name="reader">
             <instance type="Magento\Core\Model\Locale\Hierarchy\Config\Reader" />
         </param>
@@ -395,7 +428,7 @@
             <instance type="Magento\Core\Helper\Data\Proxy" />
         </param>
     </type>
-    <type name="Magento\Core\Model\Config\Section\Processor\Placeholder">
+    <type name="Magento\Core\Model\Config\Scope\Processor\Placeholder">
         <param name="request">
             <instance type="Magento\App\Request\Http\Proxy" />
         </param>
@@ -470,7 +503,7 @@
     </type>
     <type name="Magento\Core\Model\App\Area">
         <param name="translator">
-            <instance type="Magento\Core\Model\Translate\Proxy" />
+            <instance type="Magento\Translate" />
         </param>
         <param name="design">
             <instance type="Magento\Core\Model\Design\Proxy" />
@@ -549,6 +582,15 @@
                         <item key="class"><value>Magento\Less\PreProcessor\Instruction\MagentoImport</value></item>
                     </array>
                 </item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\App\Config\Initial\Converter">
+        <param name="nodeMap">
+            <array>
+                <item key="default"><value>/config/default</value></item>
+                <item key="stores"><value>/config/stores</value></item>
+                <item key="websites"><value>/config/websites</value></item>
             </array>
         </param>
     </type>

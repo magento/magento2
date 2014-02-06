@@ -39,6 +39,7 @@ class Collection extends \Magento\Wishlist\Model\Resource\Item\Collection
     /**
      * Resource initialization
      *
+     * @return void
      */
     public function _construct()
     {
@@ -48,7 +49,7 @@ class Collection extends \Magento\Wishlist\Model\Resource\Item\Collection
     /**
      * Add wishlist count
      *
-     * @return \Magento\Reports\Model\Resource\Wishlist\Product\Collection
+     * @return $this
      */
     public function addWishlistCount()
     {
@@ -66,9 +67,9 @@ class Collection extends \Magento\Wishlist\Model\Resource\Item\Collection
     }
 
     /**
-     * add customer count to result
+     * Add customer count to result
      *
-     * @return \Magento\Reports\Model\Resource\Wishlist\Product\Collection
+     * @return $this
      */
     public function getCustomerCount()
     {
@@ -108,7 +109,7 @@ class Collection extends \Magento\Wishlist\Model\Resource\Item\Collection
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Wishlist\Product\Collection
+     * @return $this
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {

@@ -31,4 +31,26 @@
             </array>
         </param>
     </type>
+    <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping">
+        <param name="paymentSpecification">
+            <instance type="Magento\Payment\Model\Method\Specification\Composite" />
+        </param>
+    </type>
+    <type name="Magento\Multishipping\Block\Checkout\Billing">
+        <param name="paymentSpecification">
+            <instance type="Magento\Payment\Model\Method\Specification\Composite" />
+        </param>
+    </type>
+    <type name="Magento\Payment\Model\Method\Specification\Composite">
+        <param name="specifications">
+            <array>
+                <item key="enabled">
+                    <value>Magento\Multishipping\Model\Payment\Method\Specification\Enabled</value>
+                </item>
+                <item key="3dsecure">
+                    <value>\Magento\Multishipping\Model\Payment\Method\Specification\Is3DSecure</value>
+                </item>
+            </array>
+        </param>
+    </type>
 </config>

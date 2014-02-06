@@ -34,11 +34,14 @@
  */
 namespace Magento\Eav\Model\Resource\Form\Type;
 
+use Magento\Eav\Model\Entity\Type;
+
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Initialize collection model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -58,12 +61,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add Entity type filter to collection
      *
-     * @param \Magento\Eav\Model\Entity\Type|int $entity
-     * @return \Magento\Eav\Model\Resource\Form\Type\Collection
+     * @param Type|int $entity
+     * @return $this
      */
     public function addEntityTypeFilter($entity)
     {
-        if ($entity instanceof \Magento\Eav\Model\Entity\Type) {
+        if ($entity instanceof Type) {
             $entity = $entity->getId();
         }
 

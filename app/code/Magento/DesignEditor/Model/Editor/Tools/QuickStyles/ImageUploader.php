@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles;
+
 /**
  * Quick style file uploader
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles;
-
 class ImageUploader extends \Magento\Object
 {
     /**
@@ -56,7 +56,7 @@ class ImageUploader extends \Magento\Object
     /**
      * Allowed extensions
      *
-     * @var array
+     * @var string[]
      */
     protected $_allowedExtensions = array('jpg', 'jpeg', 'gif', 'png');
 
@@ -96,7 +96,7 @@ class ImageUploader extends \Magento\Object
      * Set storage path
      *
      * @param string $path
-     * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\ImageUploader
+     * @return $this
      */
     public function setStoragePath($path)
     {
@@ -150,7 +150,7 @@ class ImageUploader extends \Magento\Object
      * Remove file
      *
      * @param string $file
-     * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\ImageUploader
+     * @return $this
      */
     public function removeFile($file)
     {

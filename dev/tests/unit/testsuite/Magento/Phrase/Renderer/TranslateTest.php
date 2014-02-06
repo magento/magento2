@@ -26,7 +26,7 @@ namespace Magento\Phrase\Renderer;
 class TranslateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Translate|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Translate|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_translator;
 
@@ -37,7 +37,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_translator = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
+        $this->_translator = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_renderer = $objectManagerHelper->getObject('Magento\Phrase\Renderer\Translate', array(

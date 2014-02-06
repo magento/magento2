@@ -67,7 +67,6 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      * Availability options
      */
     protected $_canUseInternal          = false;
-    protected $_canUseForMultishipping  = false;
     protected $_canSaveCc               = false;
     protected $_isInitializeNeeded      = true;
     /**#@-*/

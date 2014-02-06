@@ -27,6 +27,8 @@
  */
 namespace Magento\Paypal\Model\Api;
 
+use Magento\Payment\Model\Cart;
+
 class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 {
     /**#@+
@@ -295,14 +297,14 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @var array
      */
     protected $_lineItemTotalExportMap = array(
-        \Magento\Paypal\Model\Cart::TOTAL_TAX       => 'TAXAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_SHIPPING  => 'FREIGHTAMT',
+        Cart::AMOUNT_TAX         => 'TAXAMT',
+        Cart::AMOUNT_SHIPPING    => 'FREIGHTAMT',
     );
 
     protected $_lineItemsExportRequestTotalsFormat = array(
-        'amount' => 'PAYMENTREQUEST_%d_ITEMAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_TAX      => 'TAXAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_SHIPPING => 'FREIGHTAMT',
+        'amount'                 => 'PAYMENTREQUEST_%d_ITEMAMT',
+        Cart::AMOUNT_TAX         => 'TAXAMT',
+        Cart::AMOUNT_SHIPPING    => 'FREIGHTAMT',
     );
 
     protected $_lineItemExportItemsFormat = array(
@@ -694,11 +696,11 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
             return;
         }
 
-        $this->_cart->isDiscountAsItem(true);
+        $this->_cart->setTransferDiscountAsItem();
 
         // always add cart totals, even if line items are not requested
         if ($this->_lineItemTotalExportMap) {
-            foreach ($this->_cart->getTotals() as $key => $total) {
+            foreach ($this->_cart->getAmounts() as $key => $total) {
                 if (isset($this->_lineItemTotalExportMap[$key])) { // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
                     $request[$privateKey] = $this->_filterAmount($total);
@@ -710,7 +712,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         }
 
         // add cart line items
-        $items = $this->_cart->getItems();
+        $items = $this->_cart->getAllItems();
         if (empty($items) || !$this->getIsLineItemsEnabled()) {
             return;
         }

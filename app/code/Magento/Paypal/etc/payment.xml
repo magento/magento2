@@ -40,5 +40,31 @@
             <label>PayPal</label>
         </group>
     </groups>
+    <methods>
+        <method name="paypal_direct">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+        <method name="paypal_billing_agreement">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+        <method name="payflow_direct">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+        <method name="payflow_express">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+        <method name="payflow_advanced">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+        <method name="payflowpro">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+    </methods>
 </payment>
 

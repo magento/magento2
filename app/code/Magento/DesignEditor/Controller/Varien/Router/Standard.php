@@ -37,7 +37,7 @@ class Standard extends \Magento\Core\App\Router\Base
     /**
      * Routers that must not been matched
      *
-     * @var array
+     * @var string[]
      */
     protected $_excludedRouters = array('admin', 'vde');
 
@@ -150,7 +150,7 @@ class Standard extends \Magento\Core\App\Router\Base
      * Modify request path to imitate basic request
      *
      * @param \Magento\App\RequestInterface $request
-     * @return \Magento\DesignEditor\Controller\Varien\Router\Standard
+     * @return $this
      */
     protected function _prepareVdeRequest(\Magento\App\RequestInterface $request)
     {

@@ -37,14 +37,14 @@ class Minsaleqty
     extends \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
     /**
-     * @var \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup
+     * @var Customergroup
      */
     protected $_groupRenderer;
 
     /**
      * Retrieve group column renderer
      *
-     * @return \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup
+     * @return Customergroup
      */
     protected function _getGroupRenderer()
     {
@@ -60,6 +60,8 @@ class Minsaleqty
 
     /**
      * Prepare to render
+     *
+     * @return void
      */
     protected function _prepareToRender()
     {
@@ -77,7 +79,8 @@ class Minsaleqty
     /**
      * Prepare existing row data object
      *
-     * @param \Magento\Object
+     * @param \Magento\Object $row
+     * @return void
      */
     protected function _prepareArrayRow(\Magento\Object $row)
     {

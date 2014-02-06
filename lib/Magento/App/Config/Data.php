@@ -35,12 +35,28 @@ class Data implements \Magento\App\Config\DataInterface
     protected $_data = array();
 
     /**
+     * Config source data
+     *
+     * @var array
+     */
+    protected $_source = array();
+
+    /**
      * @param \Magento\App\Config\MetadataProcessor $processor
      * @param array $data
      */
     public function __construct(\Magento\App\Config\MetadataProcessor $processor, array $data)
     {
         $this->_data = $processor->process($data);
+        $this->_source = $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSource()
+    {
+        return $this->_source;
     }
 
     /**

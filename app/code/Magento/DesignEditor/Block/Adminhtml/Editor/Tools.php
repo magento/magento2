@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor;
 
 /**
  * Block that renders VDE tools panel
@@ -30,8 +31,6 @@
  * @method string getMode()
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Tools setMode($mode)
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor;
-
 class Tools extends \Magento\Backend\Block\Template
 {
     /**
@@ -104,7 +103,7 @@ class Tools extends \Magento\Backend\Block\Template
     /**
      * Get tabs html
      *
-     * @return array
+     * @return string[]
      */
     public function getTabContents()
     {
@@ -118,7 +117,7 @@ class Tools extends \Magento\Backend\Block\Template
     /**
      * Get tabs handles
      *
-     * @return array
+     * @return string[]
      */
     public function getTabHandles()
     {

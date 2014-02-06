@@ -99,7 +99,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * Get a text for option value
      *
-     * @param string|integer $value
+     * @param string|int $value
      * @return string
      */
     public function getOptionText($value)

@@ -58,7 +58,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_layoutCacheMock;
 
     /**
-     * @var \Magento\Core\Model\Config\Storage\WriterInterface
+     * @var \Magento\App\Config\Storage\WriterInterface
      */
     protected $_storeConfigWriter;
 
@@ -86,7 +86,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_layoutCacheMock = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
 
         $this->_storeConfigWriter = $this->getMock(
-            'Magento\Core\Model\Config\Storage\WriterInterface', array('save', 'delete')
+            'Magento\App\Config\Storage\WriterInterface', array('save', 'delete')
         );
 
         $this->_model = new \Magento\Theme\Model\Config(

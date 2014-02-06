@@ -85,11 +85,17 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     protected $_storeManager;
 
     /**
+     * @var \Magento\App\ResponseInterface
+     */
+    protected $response;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -100,6 +106,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\ResponseInterface $response,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -107,6 +114,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_app = $app;
         $this->_storeManager = $storeManager;
+        $this->response = $response;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -288,6 +296,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
             $this->setStoreId($currentStore->getId())->loadByIdPath($this->getIdPath());
 
             $this->_app->getCookie()->set(\Magento\Core\Model\Store::COOKIE_NAME, $currentStore->getCode(), true);
+            $this->response->setVary(\Magento\Core\Model\Store::ENTITY, $currentStore->getCode());
             $targetUrl = $request->getBaseUrl(). '/' . $this->getRequestPath();
 
             $this->_sendRedirectHeaders($targetUrl, true);
@@ -304,6 +313,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         if ($external === 'http:/' || $external === 'https:') {
             $destinationStoreCode = $this->_storeManager->getStore($this->getStoreId())->getCode();
             $this->_app->getCookie()->set(\Magento\Core\Model\Store::COOKIE_NAME, $destinationStoreCode, true);
+            $this->response->setVary(\Magento\Core\Model\Store::ENTITY, $destinationStoreCode);
 
             $this->_sendRedirectHeaders($this->getTargetPath(), $isPermanentRedirectOption);
         } else {

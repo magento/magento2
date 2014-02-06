@@ -24,15 +24,17 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\DesignEditor\Block\Adminhtml\Theme;
+
 /**
  * Button widget
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Theme;
-
 class Button extends \Magento\View\Element\Template
 {
     /**
      * Define block template
+     *
+     * @return void
      */
     protected function _construct()
     {

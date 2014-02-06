@@ -51,11 +51,14 @@
  */
 namespace Magento\CatalogRule\Model\Rule\Product;
 
+use Magento\DB\Select;
+
 class Price extends \Magento\Core\Model\AbstractModel
 {
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -65,16 +68,16 @@ class Price extends \Magento\Core\Model\AbstractModel
     /**
      * Apply price rule price to price index table
      *
-     * @param \Magento\DB\Select $select
+     * @param Select $select
      * @param array|string $indexTable
      * @param string $entityId
      * @param string $customerGroupId
      * @param string $websiteId
      * @param array $updateFields       the array fields for compare with rule price and update
      * @param string $websiteDate
-     * @return \Magento\CatalogRule\Model\Rule\Product\Price
+     * @return $this
      */
-    public function applyPriceRuleToIndexTable(\Magento\DB\Select $select, $indexTable, $entityId, $customerGroupId,
+    public function applyPriceRuleToIndexTable(Select $select, $indexTable, $entityId, $customerGroupId,
         $websiteId, $updateFields, $websiteDate)
     {
 

@@ -36,6 +36,12 @@ namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
 
 class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * Render grid column
+     *
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
         $str = '';

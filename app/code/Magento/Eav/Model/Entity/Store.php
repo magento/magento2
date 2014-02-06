@@ -47,6 +47,8 @@ class Store extends \Magento\Core\Model\AbstractModel
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -58,7 +60,7 @@ class Store extends \Magento\Core\Model\AbstractModel
      *
      * @param int $entityTypeId
      * @param int $storeId
-     * @return \Magento\Eav\Model\Entity\Store
+     * @return $this
      */
     public function loadByEntityStore($entityTypeId, $storeId)
     {

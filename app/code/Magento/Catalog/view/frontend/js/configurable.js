@@ -28,7 +28,8 @@
     $.widget('mage.configurable', {
         options: {
             superSelector: '.super-attribute-select',
-            state: {}
+            state: {},
+            mediaGallerySelector: '[data-role=media-gallery]'
         },
 
         _create: function() {
@@ -210,7 +211,8 @@
          */
         _changeProductImage: function () {
             var images = this.options.spConfig.images,
-                imagesArray = null;
+                imagesArray = null,
+                galleryElement = $(this.options.mediaGallerySelector);
             $.each(this.options.settings, function (k, v) {
                 var selectValue = parseInt(v.value, 10),
                     attributeId = v.id.replace(/[a-z]*/, '');
@@ -231,39 +233,21 @@
 
             var result = [];
             $.each(imagesArray || {}, function (k, v) {
-                result.push(v);
+                result.push({
+                    small: v,
+                    medium: v,
+                    large: v
+                });
             });
-            var baseImage = $('[data-role=base-image-container] img');
-            if (result.length === 1) {
-                baseImage.attr('src', result[0]).trigger('imageChanged', result[0]);
-            } else {
-                baseImage.attr('src', this.options.parentImage).trigger('loadOriginalImage', this.options.parentImage);
-            }
-            this._fitImageToContainer();
-        },
 
-        /**
-         * Fit image to container when changing displayed product image according to chosen options
-         * @private
-         */
-        _fitImageToContainer: function () {
-            var image = $('[data-role=base-image-container] img'),
-                imageContainer = image.closest('[data-role=base-image-container]'),
-                width = image.width(),
-                height = image.height(),
-                parentWidth = imageContainer.width(),
-                parentHeight = imageContainer.height();
-            // Image is not larger than parent container, no need to see full picture or zoom slider
-            if (width <= parentWidth && height <= parentHeight) {
-                return;
+            if (galleryElement.length && galleryElement.data('gallery')) {
+                if (result.length === 1) {
+                    this.initialGalleryImages = this.initialGalleryImages || galleryElement.gallery('option', 'images');
+                    galleryElement.gallery('option', 'images', result);
+                } else {
+                    galleryElement.gallery('option', 'images', this.initialGalleryImages);
+                }
             }
-            // Resize Image to fit parent container
-            image.css({
-                width:  width > height ? parentWidth : '',
-                height: width > height ? '' : parentHeight,
-                top:    width > height ? ((parentHeight - height) / 2) + 'px' : '',
-                left:   width > height ? '' : ((parentWidth - width) / 2) + 'px'
-            });
         },
 
         /**

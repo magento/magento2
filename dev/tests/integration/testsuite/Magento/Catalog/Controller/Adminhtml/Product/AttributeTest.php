@@ -111,9 +111,9 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         // emulate admin store and design
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDesignTheme(1);
-        /** @var \Magento\Core\Model\Translate $translate */
+        /** @var \Magento\TranslateInterface $translate */
         $translate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Translate');
+            ->create('Magento\TranslateInterface');
         $translate->init(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, null);
         return $translate->translate(array($string));
     }

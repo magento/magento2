@@ -33,21 +33,21 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Is initialized configuration flag
      *
-     * @var boolean
+     * @var bool
      */
     protected $_isConfig;
 
     /**
      * Manage Stock flag
      *
-     * @var boolean
+     * @var bool
      */
     protected $_isConfigManageStock;
 
     /**
      * Backorders
      *
-     * @var boolean
+     * @var bool
      */
     protected $_isConfigBackorders;
 
@@ -131,6 +131,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main table and initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -141,8 +142,8 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Lock product items
      *
      * @param \Magento\CatalogInventory\Model\Stock $stock
-     * @param int|array $productIds
-     * @return \Magento\CatalogInventory\Model\Resource\Stock
+     * @param int|int[] $productIds
+     * @return $this
      */
     public function lockProductItems($stock, $productIds)
     {
@@ -163,7 +164,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Get stock items data for requested products
      *
      * @param \Magento\CatalogInventory\Model\Stock $stock
-     * @param array $productIds
+     * @param int[] $productIds
      * @param bool $lockRows
      * @return array
      */
@@ -189,7 +190,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\CatalogInventory\Model\Stock $stock
      * @param array $productQtys
      * @param string $operator +/-
-     * @return \Magento\CatalogInventory\Model\Resource\Stock
+     * @return $this
      */
     public function correctItemsQty($stock, $productQtys, $operator = '-')
     {
@@ -220,10 +221,10 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * add join to select only in stock products
+     * Add join to select only in stock products
      *
      * @param \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection
-     * @return \Magento\CatalogInventory\Model\Resource\Stock
+     * @return $this
      */
     public function setInStockFilterToCollection($collection)
     {
@@ -253,6 +254,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Load some inventory configuration settings
      *
+     * @return void
      */
     protected function _initConfig()
     {
@@ -277,6 +279,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Set items out of stock basing on their quantities and config settings
      *
+     * @return void
      */
     public function updateSetOutOfStock()
     {
@@ -311,6 +314,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Set items in stock basing on their quantities and config settings
      *
+     * @return void
      */
     public function updateSetInStock()
     {
@@ -342,6 +346,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Update items low stock date basing on their quantities and config settings
      *
+     * @return void
      */
     public function updateLowStockDate()
     {
@@ -377,7 +382,7 @@ class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
      * @param array $fields
-     * @return \Magento\CatalogInventory\Model\Resource\Stock
+     * @return $this
      */
     public function addLowStockFilter(\Magento\Catalog\Model\Resource\Product\Collection $collection, $fields)
     {

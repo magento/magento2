@@ -23,23 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Model\Resource\Order;
 
+use Magento\DB\Select;
 
 /**
  * Reports orders collection
  *
- * @category    Magento
- * @package     Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Model\Resource\Order;
-
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 {
     /**
      * Is live
      *
-     * @var boolean
+     * @var bool
      */
     protected $_isLive   = false;
 
@@ -127,7 +125,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Check range for live mode
      *
      * @param unknown_type $range
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function checkIsLive($range)
     {
@@ -138,7 +136,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Retrieve is live flag for rep
      *
-     * @return boolean
+     * @return bool
      */
     public function isLive()
     {
@@ -207,7 +205,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param mixed $customStart
      * @param mixed $customEnd
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _prepareSummaryLive($range, $customStart, $customEnd, $isFilter = 0)
     {
@@ -263,7 +261,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param string $range
      * @param mixed $customStart
      * @param mixed $customEnd
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _prepareSummaryAggregated($range, $customStart, $customEnd)
     {
@@ -391,7 +389,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param string $range
      * @param string $customStart
      * @param string $customEnd
-     * @param boolean $returnObjects
+     * @param bool $returnObjects
      * @return array
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
@@ -470,7 +468,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Calculate totals report
      *
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function calculateTotals($isFilter = 0)
     {
@@ -487,7 +485,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Calculate totals live report
      *
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _calculateTotalsLive($isFilter = 0)
     {
@@ -539,7 +537,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Calculate totals aggregated report
      *
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _calculateTotalsAggregated($isFilter = 0)
     {
@@ -568,7 +566,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Calculate lifitime sales
      *
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function calculateSales($isFilter = 0)
     {
@@ -626,7 +624,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function setDateRange($fromDate, $toDate)
     {
@@ -648,7 +646,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Set store filter collection
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {
@@ -694,7 +692,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Add group By customer attribute
      *
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function groupByCustomer()
     {
@@ -708,7 +706,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Join Customer Name (concat)
      *
      * @param string $alias
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function joinCustomerName($alias = 'name')
     {
@@ -721,7 +719,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Add Order count field to select
      *
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addOrdersCount()
     {
@@ -735,8 +733,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Add revenue
      *
-     * @param boolean $convertCurrency
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @param bool $convertCurrency
+     * @return $this
      */
     public function addRevenueToSelect($convertCurrency = false)
     {
@@ -757,7 +755,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Add summary average totals
      *
      * @param int $storeId
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addSumAvgTotals($storeId = 0)
     {
@@ -787,7 +785,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Sort order by total amount
      *
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function orderByTotalAmount($dir = self::SORT_ORDER_DESC)
     {
@@ -798,8 +796,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Order by orders count
      *
-     * @param unknown_type $dir
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @param string $dir
+     * @return $this
      */
     public function orderByOrdersCount($dir = self::SORT_ORDER_DESC)
     {
@@ -810,8 +808,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Order by customer registration
      *
-     * @param unknown_type $dir
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @param string $dir
+     * @return $this
      */
     public function orderByCustomerRegistration($dir = self::SORT_ORDER_DESC)
     {
@@ -823,7 +821,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Sort order by order created_at date
      *
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function orderByCreatedAt($dir = self::SORT_ORDER_DESC)
     {
@@ -834,7 +832,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Get select count sql
      *
-     * @return unknown
+     * @return Select
      */
     public function getSelectCountSql()
     {
@@ -853,7 +851,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Initialize initial fields to select
      *
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _initInitialFieldsToSelect()
     {
@@ -865,7 +863,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Add period filter by created_at attribute
      *
      * @param string $period
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addCreateAtPeriodFilter($period)
     {

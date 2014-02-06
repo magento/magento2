@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Theme\Resource;
 
 /**
  * Theme change resource model
  */
-namespace Magento\DesignEditor\Model\Theme\Resource;
-
 class Change extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -39,6 +38,7 @@ class Change extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @return void
      */
     public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime $dateTime)
     {

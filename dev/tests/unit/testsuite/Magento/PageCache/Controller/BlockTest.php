@@ -124,8 +124,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $blocks = array('block1', 'block2');
         $handles = array('handle1', 'handle2');
         $expectedData = array('block1' => 'data1', 'block2' => 'data2');
-        // one year
-        $maxAge = 365 * 24 * 60 * 60;
 
         $blockInstance1 = $this->getMockForAbstractClass(
             'Magento\View\Element\AbstractBlock', array(), '', false, true, true, array('toHtml')
@@ -161,17 +159,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($blocks[1]))
             ->will($this->returnValue($blockInstance2));
 
-        $this->responseMock->expects($this->at(0))
-            ->method('setHeader')
-            ->with(
-                $this->equalTo('cache-control'),
-                $this->equalTo('private, max-age=' . $maxAge),
-                $this->equalTo(true)
-            );
-        $this->responseMock->expects($this->at(1))
-            ->method('setHeader')
-            ->with($this->equalTo('expires'));
-        $this->responseMock->expects($this->at(2))
+        $this->responseMock->expects($this->once())
             ->method('appendBody')
             ->with($this->equalTo(json_encode($expectedData)));
 

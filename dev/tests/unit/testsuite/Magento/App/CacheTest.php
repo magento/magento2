@@ -144,7 +144,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     public function saveDataProvider()
     {
-        $configTag = \Magento\Core\Model\Config::CACHE_TAG;
+        $configTag = \Magento\App\Config::CACHE_TAG;
         return array(
             'default tags' => array(
                 'test_data', 'test_id', array(), 'test_data', 'test_id', array()

@@ -23,6 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Helper;
 
 /**
  * Google Product Category helper
@@ -31,8 +32,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Helper;
-
 class Category
 {
     const CATEGORY_APPAREL  = 'Apparel &amp; Accessories';
@@ -47,7 +46,8 @@ class Category
     /**
      * Retrieve list of Google Product Categories
      *
-     * @return array
+     * @param bool $addOther
+     * @return string[]
      */
     public function getCategories($addOther = true)
     {

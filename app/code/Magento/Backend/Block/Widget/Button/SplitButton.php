@@ -32,7 +32,7 @@
  * @method string getClass()
  * @method string getLabel()
  * @method string getTitle()
- * @method string getDisabled()
+ * @method bool getDisabled()
  * @method string getStyle()
  * @method array getDataAttribute()
  */

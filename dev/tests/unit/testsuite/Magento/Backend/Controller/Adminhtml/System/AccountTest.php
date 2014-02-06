@@ -59,7 +59,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Locale\Manager */
     protected $_managerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Translate */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\TranslateInterface */
     protected $_translatorMock;
 
     protected function setUp()
@@ -109,9 +109,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('switchBackendInterfaceLocale'))
             ->getMock();
 
-        $this->_translatorMock = $this->getMockBuilder('Magento\Core\Model\Translate')
+        $this->_translatorMock = $this->getMockBuilder('Magento\TranslateInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array('_canUseCache'))
             ->getMock();
 
         $contextMock = $this->getMock('Magento\Backend\App\Action\Context', array(), array(), '', false);

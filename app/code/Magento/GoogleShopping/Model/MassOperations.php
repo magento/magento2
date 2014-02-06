@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
+
+use Magento\Core\Exception as CoreException;
+use Magento\GoogleShopping\Model\Resource\Item\Collection as ItemCollection;
 
 /**
  * Controller for mass opertions with items
@@ -31,8 +35,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
 class MassOperations
 {
     /**
@@ -153,11 +155,11 @@ class MassOperations
     /**
      * Add product to Google Content.
      *
-     * @param array $productIds
+     * @param int[] $productIds
      * @param int $storeId
      * @throws \Zend_Gdata_App_CaptchaRequiredException
-     * @throws \Magento\Core\Exception
-     * @return \Magento\GoogleShopping\Model\MassOperations
+     * @throws CoreException
+     * @return $this
      */
     public function addProducts($productIds, $storeId)
     {
@@ -187,7 +189,7 @@ class MassOperations
                         $message = __("The Google Content item for product '%1' (in '%2' store) already exists.", $product->getName(), $this->_storeManager->getStore($product->getStoreId())->getName());
                     }
                     $errors[] = $message;
-                } catch (\Magento\Core\Exception $e) {
+                } catch (CoreException $e) {
                     $errors[] = __('The product "%1" cannot be added to Google Content. %2', $product->getName(), $e->getMessage());
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
@@ -226,10 +228,10 @@ class MassOperations
     /**
      * Update Google Content items.
      *
-     * @param array|\Magento\GoogleShopping\Model\Resource\Item\Collection $items
+     * @param int[]|ItemCollection $items
      * @throws \Zend_Gdata_App_CaptchaRequiredException
-     * @throws \Magento\Core\Exception
-     * @return \Magento\GoogleShopping\Model\MassOperations
+     * @throws CoreException
+     * @return $this
      */
     public function synchronizeItems($items)
     {
@@ -270,7 +272,7 @@ class MassOperations
                     $errors[] = $this->_gleShoppingData
                         ->parseGdataExceptionMessage($e->getMessage(), $item->getProduct());
                     $totalFailed++;
-                } catch (\Magento\Core\Exception $e) {
+                } catch (CoreException $e) {
                     $errors[] = __('The item "%1" cannot be updated at Google Content. %2', $item->getProduct()->getName(), $e->getMessage());
                     $totalFailed++;
                 } catch (\Exception $e) {
@@ -301,9 +303,9 @@ class MassOperations
     /**
      * Remove Google Content items.
      *
-     * @param array|\Magento\GoogleShopping\Model\Resource\Item\Collection $items
+     * @param int[]|ItemCollection $items
      * @throws \Zend_Gdata_App_CaptchaRequiredException
-     * @return \Magento\GoogleShopping\Model\MassOperations
+     * @return $this
      */
     public function deleteItems($items)
     {
@@ -356,14 +358,14 @@ class MassOperations
     /**
      * Return items collection by IDs
      *
-     * @param array|\Magento\GoogleShopping\Model\Resource\Item\Collection $items
-     * @throws \Magento\Core\Exception
-     * @return null|\Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @param int[]|ItemCollection $items
+     * @throws CoreException
+     * @return null|ItemCollection
      */
     protected function _getItemsCollection($items)
     {
         $itemsCollection = null;
-        if ($items instanceof \Magento\GoogleShopping\Model\Resource\Item\Collection) {
+        if ($items instanceof ItemCollection) {
             $itemsCollection = $items;
         } else if (is_array($items)) {
             $itemsCollection = $this->_collectionFactory->create()->addFieldToFilter('item_id', $items);
@@ -384,6 +386,8 @@ class MassOperations
 
     /**
      * Provides general error information
+     *
+     * @return void
      */
     protected function _addGeneralError()
     {

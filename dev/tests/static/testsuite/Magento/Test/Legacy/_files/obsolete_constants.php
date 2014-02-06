@@ -37,7 +37,7 @@ return array(
         'Magento\Core\Model\Resource\Db\Collection\AbstractCollection',
         'Magento_Core_Model_Cache_Type_Collection::CACHE_TAG'
     ),
-    array('CACHE_TAG', 'Magento\Core\Model\Translate', 'Magento_Core_Model_Cache_Type_Translate::CACHE_TAG'),
+    array('CACHE_TAG', 'Magento\Translate', 'Magento_Core_Model_Cache_Type_Translate::CACHE_TAG'),
     array('CACHE_TAG', 'Magento\Rss\Block\Catalog\NotifyStock'),
     array('CACHE_TAG', 'Magento\Rss\Block\Catalog\Review'),
     array('CACHE_TAG', 'Magento\Rss\Block\Order\NewOrder'),

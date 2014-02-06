@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml;
 
 /**
  * Backend report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
@@ -202,7 +199,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Set filter values
      *
-     * @param mixed $data
+     * @param string $data
      * @return \Magento\Backend\Block\Widget\Grid|\Magento\Reports\Block\Adminhtml\Grid
      */
     protected function _setFilterValues($data)
@@ -216,7 +213,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Set visibility of store switcher
      *
-     * @param boolean $visible
+     * @param bool $visible
+     * @return void
      */
     public function setStoreSwitcherVisibility($visible=true)
     {
@@ -226,7 +224,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Return visibility of store switcher
      *
-     * @return boolean
+     * @return bool
      */
     public function getStoreSwitcherVisibility()
     {
@@ -246,7 +244,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Set visibility of date filter
      *
-     * @param boolean $visible
+     * @param bool $visible
+     * @return void
      */
     public function setDateFilterVisibility($visible=true)
     {
@@ -256,7 +255,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Return visibility of date filter
      *
-     * @return boolean
+     * @return bool
      */
     public function getDateFilterVisibility()
     {
@@ -295,6 +294,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Return refresh button html
+     *
+     * @return string
      */
     public function getRefreshButtonHtml()
     {
@@ -306,6 +307,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @param string $name
      * @param string $value
+     * @return void
      */
     public function setFilter($name, $value)
     {
@@ -334,6 +336,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Set sub-report rows count
      *
      * @param int $size
+     * @return void
      */
     public function setSubReportSize($size)
     {
@@ -362,6 +365,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * Prepare grid filter buttons
+     *
+     * @return void
      */
     protected function _prepareFilterButtons()
     {

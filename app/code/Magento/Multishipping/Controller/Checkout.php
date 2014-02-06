@@ -414,8 +414,7 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
         try {
             $payment = $this->getRequest()->getPost('payment', array());
-            $payment['checks'] = \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_MULTISHIPPING
-                | \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY
+            $payment['checks'] = \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY
                 | \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY
                 | \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
                 | \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL;

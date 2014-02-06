@@ -34,7 +34,7 @@
  */
 namespace Magento\CatalogInventory\Block\Stockqty;
 
-class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\AbstractStockqty
+class DefaultStockqty extends AbstractStockqty
 {
     /**
      * Render block HTML

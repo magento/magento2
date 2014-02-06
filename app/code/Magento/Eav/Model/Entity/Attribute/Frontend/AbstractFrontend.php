@@ -59,7 +59,7 @@ abstract class AbstractFrontend
      * Set attribute instance
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @return \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+     * @return $this
      */
     public function setAttribute($attribute)
     {
@@ -105,7 +105,7 @@ abstract class AbstractFrontend
     /**
      * Retrieve attribute value
      *
-     * @param $object
+     * @param \Magento\Object $object
      * @return mixed
      */
     public function getValue(\Magento\Object $object)
@@ -138,7 +138,7 @@ abstract class AbstractFrontend
     /**
      * Checks if attribute is visible on frontend
      *
-     * @return boolean
+     * @return bool
      */
     public function isVisible()
     {
@@ -229,7 +229,7 @@ abstract class AbstractFrontend
      * Retrieve option by option id
      *
      * @param int $optionId
-     * @return mixed|boolean
+     * @return mixed|bool
      */
     public function getOption($optionId)
     {

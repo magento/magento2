@@ -47,19 +47,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_translatorMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_context;
 
     protected function setUp()
     {
-        $this->_translatorMock = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
         $this->_context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
-        $this->_context
-            ->expects($this->any())->method('getTranslator')->will($this->returnValue($this->_translatorMock));
     }
 
     protected function tearDown()

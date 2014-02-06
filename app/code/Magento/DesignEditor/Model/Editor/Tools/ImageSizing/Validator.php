@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Editor\Tools\ImageSizing;
 
 /**
  * Image sizing validator
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\ImageSizing;
-
 class Validator
 {
     /**
@@ -64,7 +63,7 @@ class Validator
     /**
      * List of allowed filed control types
      *
-     * @var array
+     * @var string[]
      */
     protected $_allowedTypes = array(
         self::FIELD_WHITE_BORDER,
@@ -113,7 +112,7 @@ class Validator
      * Initialize list of controls for validation
      *
      * @param array $controls
-     * @return \Magento\DesignEditor\Model\Editor\Tools\ImageSizing\Validator
+     * @return $this
      */
     protected function _initFieldByTypes(array $controls)
     {
@@ -134,7 +133,7 @@ class Validator
      * @param array $validators
      * @param array $fields
      * @param array $data
-     * @return \Magento\DesignEditor\Model\Editor\Tools\ImageSizing\Validator
+     * @return $this
      */
     protected function _validate(array $validators, array $fields, array $data)
     {
@@ -208,7 +207,7 @@ class Validator
      * Instantiate class validator
      *
      * @param array $validators
-     * @return \Magento\DesignEditor\Model\Editor\Tools\ImageSizing\Validator
+     * @return $this
      */
     protected function _instantiateValidators(array &$validators)
     {

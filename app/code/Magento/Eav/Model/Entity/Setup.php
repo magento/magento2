@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Entity;
 
 /**
  * EAV Entity Setup Model
@@ -32,8 +32,6 @@
  * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity;
-
 class Setup extends \Magento\Core\Model\Resource\Setup
 {
     /**
@@ -120,7 +118,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Clean cache
      *
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function cleanCache()
     {
@@ -131,7 +129,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Install Default Group Ids
      *
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function installDefaultGroupIds()
     {
@@ -165,7 +163,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      *
      * @param string $code
      * @param array $params
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function addEntityType($code, array $params)
     {
@@ -208,7 +206,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * @param string $code
      * @param string $field
      * @param string $value
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function updateEntityType($code, $field, $value = null)
     {
@@ -235,7 +233,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Entity Type Id By Id or Code
      *
-     * @param mixed $entityTypeId
+     * @param int|string $entityTypeId
      * @return int
      */
     public function getEntityTypeId($entityTypeId)
@@ -253,8 +251,8 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Remove entity type by Id or Code
      *
-     * @param mixed $id
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @param int|string $id
+     * @return $this
      */
     public function removeEntityType($id)
     {
@@ -272,7 +270,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute Set Sort order
      *
-     * @param mixed $entityTypeId
+     * @param int|string $entityTypeId
      * @param int $sortOrder
      * @return int
      */
@@ -293,10 +291,10 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Add Attribute Set
      *
-     * @param mixed $entityTypeId
+     * @param int|string $entityTypeId
      * @param string $name
      * @param int $sortOrder
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function addAttributeSet($entityTypeId, $name, $sortOrder = null)
     {
@@ -321,11 +319,11 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Update attribute set data
      *
-     * @param mixed $entityTypeId
+     * @param int|string $entityTypeId
      * @param int $id
      * @param string $field
      * @param mixed $value
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function updateAttributeSet($entityTypeId, $id, $field, $value = null)
     {
@@ -340,8 +338,8 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute set data by id or name
      *
-     * @param mixed $entityTypeId
-     * @param mixed $id
+     * @param int|string $entityTypeId
+     * @param int|string $id
      * @param string $field
      * @return mixed
      */
@@ -357,10 +355,10 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute Set Id By Id or Name
      *
-     * @throws \Magento\Eav\Exception
-     * @param mixed $entityTypeId
-     * @param mixed $setId
+     * @param int|string $entityTypeId
+     * @param int|string $setId
      * @return int
+     * @throws \Magento\Eav\Exception
      */
     public function getAttributeSetId($entityTypeId, $setId)
     {
@@ -377,9 +375,9 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Remove Attribute Set
      *
-     * @param mixed $entityTypeId
-     * @param mixed $id
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @param int|string $entityTypeId
+     * @param int|string $id
+     * @return $this
      */
     public function removeAttributeSet($entityTypeId, $id)
     {
@@ -390,8 +388,9 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Set Default Attribute Set to Entity Type
      *
-     * @param mixed $entityType
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @param int|string $entityType
+     * @param string $attributeSet
+     * @return $this
      */
     public function setDefaultSetToEntityType($entityType, $attributeSet = 'Default')
     {
@@ -404,6 +403,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Get identifiers of all attribute sets
      *
+     * @param int|string|null $entityTypeId
      * @return array
      */
     public function getAllAttributeSetIds($entityTypeId = null)
@@ -446,8 +446,8 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute Group Sort order
      *
-     * @param mixed $entityTypeId
-     * @param mixed $setId
+     * @param int|string $entityTypeId
+     * @param int|string $setId
      * @param int $sortOrder
      * @return int
      */
@@ -468,11 +468,11 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Add Attribute Group
      *
-     * @param mixed $entityTypeId
-     * @param mixed $setId
+     * @param int|string $entityTypeId
+     * @param int|string $setId
      * @param string $name
      * @param int $sortOrder
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function addAttributeGroup($entityTypeId, $setId, $name, $sortOrder = null)
     {
@@ -506,12 +506,12 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Update Attribute Group Data
      *
-     * @param mixed $entityTypeId
-     * @param mixed $setId
-     * @param mixed $id
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param int|string $id
      * @param string $field
      * @param mixed $value
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function updateAttributeGroup($entityTypeId, $setId, $id, $field, $value = null)
     {
@@ -527,9 +527,9 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute Group Data
      *
-     * @param mixed $entityTypeId
-     * @param mixed $setId
-     * @param mixed $id
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param int|string $id
      * @param string $field
      * @return mixed
      */
@@ -556,10 +556,10 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute Group Id by Id or Name
      *
-     * @param mixed $entityTypeId
-     * @param mixed $setId
-     * @param mixed $groupId
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param int|string $groupId
+     * @return $this
      */
     public function getAttributeGroupId($entityTypeId, $setId, $groupId)
     {
@@ -580,10 +580,10 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Remove Attribute Group By Id or Name
      *
-     * @param mixed $entityTypeId
-     * @param mixed $setId
-     * @param mixed $id
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param int|string $id
+     * @return $this
      */
     public function removeAttributeGroup($entityTypeId, $setId, $id)
     {
@@ -690,8 +690,8 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * Validate attribute data before insert into table
      *
      * @param  array $data
-     * @throws \Magento\Eav\Exception
      * @return true
+     * @throws \Magento\Eav\Exception
      */
     protected function _validateAttributeData($data)
     {
@@ -716,7 +716,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * @param string|integer $entityTypeId
      * @param string $code
      * @param array $attr
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
@@ -770,6 +770,8 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * Add Attribure Option
      *
      * @param array $option
+     * @return void
+     * @throws \Magento\Core\Exception
      */
     public function addAttributeOption($option)
     {
@@ -839,12 +841,12 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Update Attribute data and Attribute additional data
      *
-     * @param mixed $entityTypeId
-     * @param mixed $id
+     * @param int|string $entityTypeId
+     * @param int|string $id
      * @param string $field
      * @param mixed $value
      * @param int $sortOrder
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function updateAttribute($entityTypeId, $id, $field, $value = null, $sortOrder = null)
     {
@@ -856,12 +858,12 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Update Attribute data
      *
-     * @param mixed $entityTypeId
-     * @param mixed $id
+     * @param int|string $entityTypeId
+     * @param int|string $id
      * @param string $field
      * @param mixed $value
      * @param int $sortOrder
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     protected function _updateAttribute($entityTypeId, $id, $field, $value = null, $sortOrder = null)
     {
@@ -902,11 +904,11 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Update Attribute Additional data
      *
-     * @param mixed $entityTypeId
-     * @param mixed $id
+     * @param int|string $entityTypeId
+     * @param int|string $id
      * @param string $field
      * @param mixed $value
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     protected function _updateAttributeAdditionalData($entityTypeId, $id, $field, $value = null)
     {
@@ -945,8 +947,8 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute Data By Id or Code
      *
-     * @param mixed $entityTypeId
-     * @param mixed $id
+     * @param int|string $entityTypeId
+     * @param int|string $id
      * @param string $field
      * @return mixed
      */
@@ -994,8 +996,8 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute Id Data By Id or Code
      *
-     * @param mixed $entityTypeId
-     * @param mixed $id
+     * @param int|string $entityTypeId
+     * @param int|string $id
      * @return int
      */
     public function getAttributeId($entityTypeId, $id)
@@ -1052,9 +1054,9 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Remove Attribute
      *
-     * @param mixed $entityTypeId
-     * @param mixed $code
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @param int|string $entityTypeId
+     * @param int|string $code
+     * @return $this
      */
     public function removeAttribute($entityTypeId, $code)
     {
@@ -1072,11 +1074,11 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Retrieve Attribute Sort Order
      *
-     * @param mixed $entityTypeId
-     * @param mixed $setId
-     * @param mixed $groupId
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param int|string $groupId
      * @param int $sortOrder
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function getAttributeSortOrder($entityTypeId, $setId, $groupId, $sortOrder = null)
     {
@@ -1095,12 +1097,12 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Add Attribute to All Groups on Attribute Set
      *
-     * @param mixed $entityTypeId
-     * @param mixed $setId
-     * @param mixed $groupId
-     * @param mixed $attributeId
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param int|string $groupId
+     * @param int|string $attributeId
      * @param int $sortOrder
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function addAttributeToSet($entityTypeId, $setId, $groupId, $attributeId, $sortOrder=null)
     {
@@ -1149,7 +1151,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * @param int|string $groupId
      * @param int|string $attributeId
      * @param int $sortOrder
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function addAttributeToGroup($entityType, $setId, $groupId, $attributeId, $sortOrder = null)
     {
@@ -1211,7 +1213,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * Install entities
      *
      * @param array $entities
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     public function installEntities($entities = null)
     {
@@ -1281,7 +1283,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * Insert attribute and filter data
      *
      * @param array $data
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     protected function _insertAttribute(array $data)
     {
@@ -1311,9 +1313,9 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Insert attribute additional data
      *
-     * @param int $entityTypeId
+     * @param int|string $entityTypeId
      * @param array $data
-     * @return \Magento\Eav\Model\Entity\Setup
+     * @return $this
      */
     protected function _insertAttributeAdditionalData($entityTypeId, array $data)
     {

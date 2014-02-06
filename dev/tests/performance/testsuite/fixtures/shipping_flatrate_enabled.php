@@ -29,10 +29,10 @@
  */
 $configData = $this->getObjectManager()->create('Magento\App\Config\ValueInterface');
 $configData->setPath('carriers/flatrate/active')
-    ->setScope(\Magento\Core\Model\ScopeInterface::SCOPE_DEFAULT)
+    ->setScope(\Magento\BaseScopeInterface::SCOPE_DEFAULT)
     ->setScopeId(0)
     ->setValue(1)
     ->save();
 
 $this->getObjectManager()->get('Magento\App\CacheInterface')
-    ->clean(array(\Magento\Core\Model\Config::CACHE_TAG));
+    ->clean(array(\Magento\App\Config::CACHE_TAG));

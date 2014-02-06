@@ -122,7 +122,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve language codes from config
      *
-     * @return array
+     * @return string[]
      */
     public function getLanguageCodes()
     {

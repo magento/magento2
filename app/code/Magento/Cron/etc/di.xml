@@ -26,16 +26,8 @@
 <config>
     <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config" />
     <type name="Magento\Cron\Model\Config\Reader\Db">
-        <param name="converter">
-            <instance type="Magento\Cron\Model\Config\Converter\Db" />
-        </param>
-    </type>
-    <type name="Magento\Cron\Model\Config\Reader\Xml">
-        <param name="converter">
-            <instance type="Magento\Cron\Model\Config\Converter\Xml" />
-        </param>
-        <param name="schemaLocator">
-            <instance type="Magento\Cron\Model\Config\SchemaLocator" />
+        <param name="defaultReader">
+            <instance type="Magento\Core\Model\Config\Scope\Reader\DefaultReader" />
         </param>
     </type>
     <type name="Magento\App\Cron">

@@ -34,14 +34,13 @@
  */
 namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
 
-class Configurable
-    extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+class Configurable extends DefaultStock
 {
     /**
      * Reindex stock data for defined configurable product ids
      *
      * @param int|array $entityIds
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Configurable
+     * @return $this
      */
     public function reindexEntity($entityIds)
     {

@@ -34,8 +34,13 @@
  */
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit;
 
+use Magento\Backend\Block\Widget\Form as WidgetForm;
+
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -43,6 +48,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setTitle(__('Rule Information'));
     }
 
+    /**
+     * @return WidgetForm
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */

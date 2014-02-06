@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
+
+use Magento\Catalog\Model\Product as CatalogModelProduct;
 
 /**
  * Google Content Item Types Model
@@ -31,8 +34,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
 class Item extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -106,7 +107,9 @@ class Item extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -130,7 +133,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * Set Service Item Instance
      *
      * @param \Magento\GoogleShopping\Model\Service\Item $service
-     * @return \Magento\GoogleShopping\Model\Item
+     * @return $this
      */
     public function setServiceItem($service)
     {
@@ -151,10 +154,10 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Save item to Google Content
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\GoogleShopping\Model\Item
+     * @param CatalogModelProduct $product
+     * @return $this
      */
-    public function insertItem(\Magento\Catalog\Model\Product $product)
+    public function insertItem(CatalogModelProduct $product)
     {
         $this->setProduct($product);
         $this->getServiceItem()
@@ -167,7 +170,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Update Item data
      *
-     * @return \Magento\GoogleShopping\Model\Item
+     * @return $this
      */
     public function updateItem()
     {
@@ -181,7 +184,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Delete Item from Google Content
      *
-     * @return \Magento\GoogleShopping\Model\Item
+     * @return $this
      */
     public function deleteItem()
     {
@@ -192,8 +195,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Load Item Model by Product
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\GoogleShopping\Model\Item
+     * @param CatalogModelProduct $product
+     * @return $this
      */
     public function loadByProduct($product)
     {
@@ -229,7 +232,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Product Getter. Load product if not exist.
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return CatalogModelProduct
      */
     public function getProduct()
     {
@@ -244,10 +247,10 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Product Setter.
      *
-     * @param \Magento\Catalog\Model\Product
-     * @return \Magento\GoogleShopping\Model\Item
+     * @param CatalogModelProduct $product
+     * @return $this
      */
-    public function setProduct(\Magento\Catalog\Model\Product $product)
+    public function setProduct(CatalogModelProduct $product)
     {
         $this->setData('product', $product);
         $this->setProductId($product->getId());

@@ -41,7 +41,7 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Customer\Orders\Collection
+     * @return $this
      */
     protected function _joinFields($fromDate = '', $toDate = '')
     {
@@ -57,7 +57,7 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Customer\Orders\Collection
+     * @return $this
      */
     public function setDateRange($fromDate, $toDate)
     {
@@ -70,7 +70,7 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      * Set store filter to collection
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Customer\Orders\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {

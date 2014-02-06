@@ -41,4 +41,9 @@
             <label>Offline Payment Methods</label>
         </group>
     </groups>
+    <methods>
+        <method name="deny-method">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+    </methods>
 </payment>

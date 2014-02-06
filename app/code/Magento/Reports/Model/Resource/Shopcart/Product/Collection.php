@@ -39,7 +39,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     /**
      * Join fields
      *
-     * @return \Magento\Reports\Model\Resource\Shopcart\Product\Collection
+     * @return $this
      */
     protected function _joinFields()
     {
@@ -55,8 +55,8 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * Set date range
      *
      * @param string $from
-     * @param strin $to
-     * @return \Magento\Reports\Model\Resource\Shopcart\Product\Collection
+     * @param string $to
+     * @return $this
      */
     public function setDateRange($from, $to)
     {

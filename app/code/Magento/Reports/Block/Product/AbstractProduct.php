@@ -23,17 +23,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Product;
 
 
 /**
  * Reports Recently Products Abstract Block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Product;
-
 abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**

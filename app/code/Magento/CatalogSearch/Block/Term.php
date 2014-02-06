@@ -33,36 +33,54 @@
  */
 namespace Magento\CatalogSearch\Block;
 
-class Term extends \Magento\View\Element\Template
+use Magento\CatalogSearch\Model\Resource\Query\CollectionFactory;
+use Magento\UrlFactory;
+use Magento\UrlInterface;
+use Magento\View\Element\Template;
+use Magento\View\Element\Template\Context;
+
+class Term extends Template
 {
+    /**
+     * @var array
+     */
     protected $_terms;
+
+
+    /**
+     * @var int
+     */
     protected $_minPopularity;
+
+    /**
+     * @var int
+     */
     protected $_maxPopularity;
 
     /**
      * Url factory
      *
-     * @var \Magento\UrlFactory
+     * @var UrlFactory
      */
     protected $_urlFactory;
 
     /**
      * Query collection factory
      *
-     * @var \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_queryCollectionFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queryCollectionFactory
-     * @param \Magento\UrlFactory $urlFactory
+     * @param Context $context
+     * @param CollectionFactory $queryCollectionFactory
+     * @param UrlFactory $urlFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queryCollectionFactory,
-        \Magento\UrlFactory $urlFactory,
+        Context $context,
+        CollectionFactory $queryCollectionFactory,
+        UrlFactory $urlFactory,
         array $data = array()
     ) {
         $this->_queryCollectionFactory = $queryCollectionFactory;
@@ -73,7 +91,7 @@ class Term extends \Magento\View\Element\Template
     /**
      * Load terms and try to sort it by names
      *
-     * @return \Magento\CatalogSearch\Block\Term
+     * @return $this
      */
     protected function _loadTerms()
     {
@@ -111,15 +129,22 @@ class Term extends \Magento\View\Element\Template
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getTerms()
     {
         $this->_loadTerms();
         return $this->_terms;
     }
 
+    /**
+     * @param /Magento/Object $obj
+     * @return string
+     */
     public function getSearchUrl($obj)
     {
-        /** @var $url \Magento\UrlInterface */
+        /** @var $url UrlInterface */
         $url = $this->_urlFactory->create();
         /*
         * url encoding will be done in Url.php http_build_query
@@ -129,11 +154,17 @@ class Term extends \Magento\View\Element\Template
         return $url->getUrl('catalogsearch/result');
     }
 
+    /**
+     * @return int
+     */
     public function getMaxPopularity()
     {
         return $this->_maxPopularity;
     }
 
+    /**
+     * @return int
+     */
     public function getMinPopularity()
     {
         return $this->_minPopularity;

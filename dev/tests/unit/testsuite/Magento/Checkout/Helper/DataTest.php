@@ -42,9 +42,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_translator = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
+        $this->_translator = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
         $context = $this->getMock('\Magento\App\Helper\Context', array(), array(), '', false);
-        $context->expects($this->any())->method('getTranslator')->will($this->returnValue($this->_translator));
 
         $storeConfig = $this->getMock('\Magento\Core\Model\Store\Config', array(), array(), '', false);
         $storeConfig->expects($this->any())->method('getConfig')->will($this->returnValueMap(array(
@@ -76,7 +75,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->_helper = new Data(
             $context, $storeConfig, $storeManager, $checkoutSession,
-            $locale, $collectionFactory, $emailTplFactory
+            $locale, $collectionFactory, $emailTplFactory, $this->_translator
         );
     }
 

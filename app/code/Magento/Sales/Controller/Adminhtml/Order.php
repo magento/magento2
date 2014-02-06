@@ -57,25 +57,25 @@ class Order extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\Translate\InlineInterface
      */
-    protected $_translator;
+    protected $_translateInline;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\Translate\InlineInterface $translateInline
      */
     public function __construct(
         Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Core\Model\Translate $translator
+        \Magento\Translate\InlineInterface $translateInline
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
-        $this->_translator = $translator;
+        $this->_translateInline = $translateInline;
         parent::__construct($context);
     }
 
@@ -381,8 +381,8 @@ class Order extends \Magento\Backend\App\Action
         $this->_initOrder();
         $html = $this->_view->getLayout()
             ->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\History')->toHtml();
-        if ($this->_translator->isAllowed()) {
-            $this->_translator->processResponseBody($html);
+        if ($this->_translateInline->isAllowed()) {
+            $this->_translateInline->processResponseBody($html);
         }
         $this->getResponse()->setBody($html);
     }

@@ -30,6 +30,8 @@
  */
 namespace Magento\Paypal\Model\Api;
 
+use Magento\Payment\Model\Cart;
+
 class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 {
     /**
@@ -454,9 +456,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @var array
      */
     protected $_lineItemTotalExportMap = array(
-        \Magento\Paypal\Model\Cart::TOTAL_SUBTOTAL => 'ITEMAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_TAX      => 'TAXAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_SHIPPING => 'SHIPPINGAMT',
+        Cart::AMOUNT_SUBTOTAL => 'ITEMAMT',
+        Cart::AMOUNT_TAX      => 'TAXAMT',
+        Cart::AMOUNT_SHIPPING => 'SHIPPINGAMT',
     );
     protected $_lineItemExportItemsFormat = array(
         'id'     => 'L_NUMBER%d',
@@ -1210,7 +1212,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         if (!$this->_cart) {
             return;
         }
-        $this->_cart->isDiscountAsItem(true);
+        $this->_cart->setTransferDiscountAsItem();
         return parent::_exportLineItems($request, $i);
     }
 

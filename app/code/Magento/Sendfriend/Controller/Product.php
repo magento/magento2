@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sendfriend\Controller;
+
+use Magento\App\Action\NotFoundException;
+use Magento\App\RequestInterface;
 
 /**
  * Email to a Friend Product Controller
@@ -31,11 +35,6 @@
  * @package     Magento_Sedfriend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sendfriend\Controller;
-
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-
 class Product extends \Magento\App\Action\Action
 {
     /**
@@ -150,6 +149,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Show Send to a Friend Form
      *
+     * @return void
      */
     public function sendAction()
     {
@@ -188,6 +188,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Send Email Post Action
      *
+     * @return void
      */
     public function sendmailAction()
     {

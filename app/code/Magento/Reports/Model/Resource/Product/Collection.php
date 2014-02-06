@@ -158,7 +158,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Set Type for COUNT SQL Select
      *
      * @param int $type
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function setSelectCountSqlType($type)
     {
@@ -170,7 +170,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Set product entity id
      *
      * @param $entityId
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function setProductEntityId($entityId)
     {
@@ -192,7 +192,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Set product entity table name
      *
      * @param string $value
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function setProductEntityTableName($value)
     {
@@ -214,7 +214,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Set product entity type id
      *
      * @param int $value
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function setProductEntityTypeId($value)
     {
@@ -223,7 +223,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     }
 
     /**
-     * Get product entity tyoe id
+     * Get product entity type id
      *
      * @return int
      */
@@ -235,7 +235,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Join fields
      *
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     protected function _joinFields()
     {
@@ -251,7 +251,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Get select count sql
      *
-     * @return unknown
+     * @return string
      */
     public function getSelectCountSql()
     {
@@ -284,7 +284,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add carts count
      *
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function addCartsCount()
     {
@@ -310,7 +310,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $from
      * @param string $to
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function addOrdersCount($from = '', $to = '')
     {
@@ -345,7 +345,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $from
      * @param string $to
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function addOrderedQty($from = '', $to = '')
     {
@@ -406,7 +406,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {
@@ -424,7 +424,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $from
      * @param string $to
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @return $this
      */
     public function addViewsCount($from = '', $to = '')
     {
@@ -465,9 +465,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Prepare between sql
      *
-     * @param  string $fieldName Field name with table suffix ('created_at' or 'main_table.created_at')
-     * @param  string $from
-     * @param  string $to
+     * @param string $fieldName Field name with table suffix ('created_at' or 'main_table.created_at')
+     * @param string $from
+     * @param string $to
      * @return string Formatted sql string
      */
     protected function _prepareBetweenSql($fieldName, $from, $to)
@@ -482,9 +482,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add store restrictions to product collection
      *
-     * @param  array $storeIds
-     * @param  array $websiteIds
-     * @return \Magento\Reports\Model\Resource\Product\Collection
+     * @param array $storeIds
+     * @param array $websiteIds
+     * @return $this
      */
     public function addStoreRestrictions($storeIds, $websiteIds)
     {

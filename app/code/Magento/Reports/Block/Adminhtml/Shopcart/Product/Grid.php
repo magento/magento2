@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
 
 /**
  * Adminhtml products in carts report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
-
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
@@ -56,12 +53,18 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('gridProducts');
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid
+     */
     protected function _prepareCollection()
     {
         /** @var $collection \Magento\Reports\Model\Resource\Quote\Collection */
@@ -72,6 +75,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('entity_id', array(
@@ -126,6 +132,9 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return string
+     */
     public function getRowUrl($row)
     {
         return $this->getUrl('catalog/product/edit', array('id'=>$row->getEntityId()));

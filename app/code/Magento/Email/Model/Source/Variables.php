@@ -128,7 +128,7 @@ class Variables implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * Retrieve option array of store contact variables
      *
-     * @param boolean $withGroup
+     * @param bool $withGroup
      * @return array
      */
     public function toOptionArray($withGroup = false)

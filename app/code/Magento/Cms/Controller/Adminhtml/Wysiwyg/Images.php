@@ -125,7 +125,7 @@ class Images extends \Magento\Backend\App\Action
     public function deleteFolderAction()
     {
         try {
-            $path = $this->getStorage()->getSession()->getCurrentPath();
+            $path = $this->getStorage()->getCmsWysiwygImages()->getCurrentPath();
             $this->getStorage()->deleteDirectory($path);
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());

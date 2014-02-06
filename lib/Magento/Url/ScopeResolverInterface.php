@@ -24,17 +24,8 @@
 
 namespace Magento\Url;
 
-interface ScopeResolverInterface
+interface ScopeResolverInterface extends \Magento\BaseScopeResolverInterface
 {
-
-    /**
-     * Retrieve application scope object
-     *
-     * @param null|int $scopeId
-     * @return \Magento\Url\ScopeInterface
-     */
-    public function getScope($scopeId = null);
-
     /**
      * Retrieve scopes array
      *

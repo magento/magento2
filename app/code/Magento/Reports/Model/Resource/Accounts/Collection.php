@@ -36,13 +36,12 @@ namespace Magento\Reports\Model\Resource\Accounts;
 
 class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
 {
-
     /**
      * Join created_at and accounts fields
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Accounts\Collection
+     * @return $this
      */
     protected function _joinFields($fromDate = '', $toDate = '')
     {
@@ -61,7 +60,7 @@ class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Accounts\Collection
+     * @return $this
      */
     public function setDateRange($fromDate, $toDate)
     {
@@ -74,7 +73,7 @@ class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
      * Set store ids to final result
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Accounts\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {

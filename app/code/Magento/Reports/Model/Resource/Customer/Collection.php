@@ -38,14 +38,14 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     /**
      * Add order statistics flag
      *
-     * @var boolean
+     * @var bool
      */
     protected $_addOrderStatistics           = false;
 
     /**
      * Add order statistics is filter flag
      *
-     * @var boolean
+     * @var bool
      */
     protected $_addOrderStatFilter   = false;
 
@@ -142,7 +142,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     /**
      * Add cart info to collection
      *
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     public function addCartInfo()
     {
@@ -168,7 +168,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     /**
      * Add customer name to results
      *
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     public function addCustomerName()
     {
@@ -181,7 +181,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     public function joinOrders($fromDate = '', $toDate = '')
     {
@@ -202,7 +202,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     /**
      * Add orders count
      *
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     public function addOrdersCount()
     {
@@ -215,11 +215,10 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     }
 
     /**
-     * Order summary info for each customer
-     * such as orders_count, orders_avg_amount, orders_total_amount
+     * Order summary info for each customer such as orders_count, orders_avg_amount, orders_total_amount
      *
      * @param int $storeId
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     public function addSumAvgTotals($storeId = 0)
     {
@@ -245,7 +244,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
      * Order by total amount
      *
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     public function orderByTotalAmount($dir = self::SORT_ORDER_DESC)
     {
@@ -257,8 +256,8 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     /**
      * Add order statistics
      *
-     * @param boolean $isFilter
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @param bool $isFilter
+     * @return $this
      */
     public function addOrdersStatistics($isFilter = false)
     {
@@ -270,7 +269,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     /**
      * Add orders statistics to collection items
      *
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     protected function _addOrdersStatistics()
     {
@@ -306,7 +305,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     /**
      * Collection after load operations like adding orders statistics
      *
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -318,7 +317,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
      * Order by customer registration
      *
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Customer\Collection
+     * @return $this
      */
     public function orderByCustomerRegistration($dir = self::SORT_ORDER_DESC)
     {

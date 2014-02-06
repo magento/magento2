@@ -41,7 +41,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      *
      * @param int $from
      * @param int $to
-     * @return \Magento\Reports\Model\Resource\Product\Sold\Collection
+     * @return $this
      */
     public function setDateRange($from, $to)
     {
@@ -56,7 +56,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * Set store filter to collection
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Product\Sold\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {
@@ -69,7 +69,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     /**
      * Add website product limitation
      *
-     * @return \Magento\Reports\Model\Resource\Product\Sold\Collection
+     * @return $this
      */
     protected function _productLimitationJoinWebsite()
     {

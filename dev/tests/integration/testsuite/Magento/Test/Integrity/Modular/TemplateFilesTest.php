@@ -94,7 +94,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 }
 
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadAreaPart(
-                    \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                    $area,
                     \Magento\Core\Model\App\Area::PART_CONFIG
                 );
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

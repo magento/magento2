@@ -48,7 +48,6 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
 
     protected $_isInitializeNeeded      = true;
     protected $_canUseInternal          = false;
-    protected $_canUseForMultishipping  = false;
 
     /**
      * Config instance
@@ -234,8 +233,8 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
         }
 
         // add cart totals and line items
-        $parameters = array('params' => array($order));
-        $api->setPaypalCart($this->_cartFactory->create($parameters))
+        $cart = $this->_cartFactory->create(array('salesModel' => $order));
+        $api->setPaypalCart($cart)
             ->setIsLineItemsEnabled($this->_config->lineItemsEnabled);
         $api->setCartSummary($this->_getAggregatedCartSummary());
         $api->setLocale($api->getLocaleCode());

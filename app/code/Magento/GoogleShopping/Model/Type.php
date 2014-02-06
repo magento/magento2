@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
+
+use Magento\Catalog\Model\Product as CatalogModelProduct;
+use Magento\Gdata\Gshopping\Entry;
 
 /**
  * Google Content Item Types Model
@@ -31,8 +35,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
 class Type extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -105,6 +107,9 @@ class Type extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\GoogleShopping\Model\Resource\Type');
@@ -126,8 +131,9 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare Entry data and attributes before saving in Google Content
      *
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param CatalogModelProduct $entry
+     * @param Entry $entry
+     * @return Entry
      */
     public function convertProductToEntry($product, $entry)
     {
@@ -147,10 +153,10 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Return Product attribute values array
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param CatalogModelProduct $product
      * @return array Product attribute values
      */
-    protected function _getAttributesMapByProduct(\Magento\Catalog\Model\Product $product)
+    protected function _getAttributesMapByProduct(CatalogModelProduct $product)
     {
         $result = array();
         $group = $this->_config->getAttributeGroupsFlat();
@@ -246,9 +252,9 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Remove attributes which were removed from mapping.
      *
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @param array $existAttributes
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param Entry $entry
+     * @param string[] $existAttributes
+     * @return Entry
      */
     protected function _removeNonexistentAttributes($entry, $existAttributes)
     {

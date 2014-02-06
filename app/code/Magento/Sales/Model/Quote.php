@@ -2162,4 +2162,14 @@ class Quote extends \Magento\Core\Model\AbstractModel
         }
         return parent::save();
     }
+
+    /**
+     * Check if there are more than one shipping address
+     *
+     * @return bool
+     */
+    public function isMultipleShippingAddresses()
+    {
+        return \count($this->getAllShippingAddresses()) > 1;
+    }
 }

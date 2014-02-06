@@ -54,7 +54,6 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_canVoid                 = false;
     protected $_canUseInternal          = false;
     protected $_canUseCheckout          = true;
-    protected $_canUseForMultishipping  = false;
 
     /**
      * "OUT" hash string components, correspond to the "IN" signature in Ogone.

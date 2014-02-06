@@ -37,6 +37,11 @@ namespace Magento\Email\Block\Adminhtml;
 class Template extends \Magento\Backend\Block\Template
 {
 
+    /**
+     * Template list
+     *
+     * @var string
+     */
     protected $_template = 'template/list.phtml';
 
     /**

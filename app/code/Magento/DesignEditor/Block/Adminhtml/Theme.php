@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml;
+
+use Magento\Backend\Block\Widget\Button;
 
 /**
  * Design editor theme
@@ -30,14 +33,12 @@
  * @method \Magento\DesignEditor\Block\Adminhtml\Theme setTheme(\Magento\View\Design\ThemeInterface $theme)
  * @method \Magento\View\Design\ThemeInterface getTheme()
  */
-namespace Magento\DesignEditor\Block\Adminhtml;
-
 class Theme extends \Magento\Backend\Block\Template
 {
     /**
      * Buttons array
      *
-     * @var array
+     * @var Button[]
      */
     protected $_buttons = array();
 
@@ -63,7 +64,7 @@ class Theme extends \Magento\Backend\Block\Template
     /**
      * Add button
      *
-     * @param \Magento\Backend\Block\Widget\Button $button
+     * @param Button $button
      * @return \Magento\DesignEditor\Block\Adminhtml\Theme
      */
     public function addButton($button)
@@ -91,7 +92,7 @@ class Theme extends \Magento\Backend\Block\Template
     public function getButtonsHtml()
     {
         $output = '';
-        /** @var $button \Magento\Backend\Block\Widget\Button */
+        /** @var $button Button */
         foreach ($this->_buttons as $button) {
             $output .= $button->toHtml();
         }
@@ -101,7 +102,7 @@ class Theme extends \Magento\Backend\Block\Template
     /**
      * Return array of assigned stores titles
      *
-     * @return array
+     * @return string[]
      */
     public function getStoresTitles()
     {
@@ -134,11 +135,11 @@ class Theme extends \Magento\Backend\Block\Template
     /**
      * Get quick save button
      *
-     * @return \Magento\Backend\Block\Widget\Button
+     * @return Button
      */
     public function getQuickSaveButton()
     {
-        /** @var $saveButton \Magento\Backend\Block\Widget\Button */
+        /** @var $saveButton Button */
         $saveButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
         $saveButton->setData(array(
             'label'     => __('Save'),

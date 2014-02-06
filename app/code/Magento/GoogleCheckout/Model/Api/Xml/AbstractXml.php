@@ -36,7 +36,7 @@ require_once('googlecheckout/googlerequest.php');
 abstract class AbstractXml extends \Magento\Object
 {
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translator;
 
@@ -54,13 +54,13 @@ abstract class AbstractXml extends \Magento\Object
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\TranslateInterface $translator
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param array $data
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Translate $translator,
+        \Magento\TranslateInterface $translator,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         array $data = array()
     ) {

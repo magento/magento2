@@ -34,9 +34,16 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
+use Magento\Catalog\Model\Resource\Eav\Attribute;
+
 abstract class AbstractMain
     extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    /**
+     * Attribute instance
+     *
+     * @var Attribute
+     */
     protected $_attribute = null;
 
     /**
@@ -88,6 +95,12 @@ abstract class AbstractMain
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * Set attribute object
+     *
+     * @param Attribute $attribute
+     * @return $this
+     */
     public function setAttributeObject($attribute)
     {
         $this->_attribute = $attribute;
@@ -95,7 +108,9 @@ abstract class AbstractMain
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * Return attribute object
+     *
+     * @return Attribute
      */
     public function getAttributeObject()
     {
@@ -108,7 +123,7 @@ abstract class AbstractMain
     /**
      * Preparing default form elements for editing attribute
      *
-     * @return \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -250,7 +265,7 @@ abstract class AbstractMain
     /**
      * Initialize form fileds values
      *
-     * @return \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
+     * @return $this
      */
     protected function _initFormValues()
     {
@@ -265,7 +280,7 @@ abstract class AbstractMain
     /**
      * This method is called before rendering HTML
      *
-     * @return \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
+     * @return $this
      */
     protected function _beforeToHtml()
     {

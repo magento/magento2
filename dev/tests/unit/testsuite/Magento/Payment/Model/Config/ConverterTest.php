@@ -54,6 +54,12 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'groups' => array(
                 'paypal' => 'PayPal',
             ),
+            'methods' => array(
+                'checkmo' => array(
+                    'allow_multiple_address' => 1,
+                    'allow_multiple_with_3dsecure' => 1,
+                ),
+            ),
         );
         $this->assertEquals($expectedResult, $this->_model->convert($dom), '', 0, 20);
     }

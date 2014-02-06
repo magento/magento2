@@ -27,6 +27,8 @@
 
 namespace Magento\PageCache\Model\App\FrontController;
 
+use Magento\PageCache\Helper\Data;
+
 class HeaderPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -83,6 +85,10 @@ class HeaderPluginTest extends \PHPUnit_Framework_TestCase
         $cacheControl = 'no-store, no-cache, must-revalidate, max-age=0';
 
         $this->layoutMock->expects($this->once())
+            ->method('isPrivate')
+            ->will($this->returnValue(false));
+
+        $this->layoutMock->expects($this->once())
             ->method('isCacheable')
             ->will($this->returnValue(false));
 
@@ -107,20 +113,25 @@ class HeaderPluginTest extends \PHPUnit_Framework_TestCase
     public function testAfterDispatchPrivateCache()
     {
         $pragma = 'cache';
+        $maxAge = Data::PRIVATE_MAX_AGE_CACHE;
+        $cacheControl = 'private, max-age=' . $maxAge;
 
         $this->layoutMock->expects($this->once())
-            ->method('isCacheable')
+            ->method('isPrivate')
             ->will($this->returnValue(true));
 
         $this->responseMock->expects($this->at(0))
             ->method('setHeader')
             ->with($this->equalTo('pragma'), $this->equalTo($pragma), $this->equalTo(true));
         $this->responseMock->expects($this->at(1))
-            ->method('getHeader')
-            ->with($this->equalTo('cache-control'))
-            ->will($this->returnValue(true));
+            ->method('setHeader')
+            ->with($this->equalTo('cache-control'), $this->equalTo($cacheControl), $this->equalTo(true));
+        $this->responseMock->expects($this->at(2))
+            ->method('setHeader')
+            ->with($this->equalTo('expires'));
 
-        $this->versionMock->expects($this->once())->method('process');
+        $this->layoutMock->expects($this->never())->method('isCacheable');
+        $this->versionMock->expects($this->never())->method('process');
 
         $this->plugin->afterDispatch($this->responseMock);
     }
@@ -135,6 +146,10 @@ class HeaderPluginTest extends \PHPUnit_Framework_TestCase
         $cacheControl = 'public, max-age=' . $maxAge;
 
         $this->layoutMock->expects($this->once())
+            ->method('isPrivate')
+            ->will($this->returnValue(false));
+
+        $this->layoutMock->expects($this->once())
             ->method('isCacheable')
             ->will($this->returnValue(true));
 
@@ -144,13 +159,9 @@ class HeaderPluginTest extends \PHPUnit_Framework_TestCase
             ->method('setHeader')
             ->with($this->equalTo('pragma'), $this->equalTo($pragma), $this->equalTo(true));
         $this->responseMock->expects($this->at(1))
-            ->method('getHeader')
-            ->with($this->equalTo('cache-control'))
-            ->will($this->returnValue(false));
-        $this->responseMock->expects($this->at(2))
             ->method('setHeader')
             ->with($this->equalTo('cache-control'), $this->equalTo($cacheControl), $this->equalTo(true));
-        $this->responseMock->expects($this->at(3))
+        $this->responseMock->expects($this->at(2))
             ->method('setHeader')
             ->with($this->equalTo('expires'));
 

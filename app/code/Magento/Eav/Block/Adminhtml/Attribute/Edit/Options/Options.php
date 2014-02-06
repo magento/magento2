@@ -33,6 +33,8 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
+use Magento\Core\Model\Resource\Store\Collection;
+
 class Options extends \Magento\Backend\Block\Template
 {
     /** @var \Magento\Core\Model\Registry */
@@ -87,7 +89,7 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * Retrieve stores collection with default store
      *
-     * @return array
+     * @return Collection
      */
     public function getStores()
     {
@@ -240,7 +242,7 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * Retrieve attribute option values for given store id
      *
-     * @param integer $storeId
+     * @param int $storeId
      * @return array
      */
     public function getStoreOptionValues($storeId)

@@ -23,19 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Product;
 
 /**
  * Adminhtml product downloads report
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Reports\Block\Adminhtml\Product;
-
 class Downloads extends \Magento\Backend\Block\Widget\Grid\Container
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_blockGroup = 'Magento_Reports';
@@ -45,6 +44,9 @@ class Downloads extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_removeButton('add');
     }
 
+    /**
+     * @return \Magento\View\Element\AbstractBlock
+     */
     protected function _prepareLayout()
     {
         $this->setChild('store_switcher',
@@ -56,6 +58,9 @@ class Downloads extends \Magento\Backend\Block\Widget\Grid\Container
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getStoreSwitcherHtml()
     {
         if (!$this->_storeManager->isSingleStoreMode()) {
@@ -64,6 +69,9 @@ class Downloads extends \Magento\Backend\Block\Widget\Grid\Container
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getGridHtml()
     {
         return $this->getStoreSwitcherHtml() . parent::getGridHtml();

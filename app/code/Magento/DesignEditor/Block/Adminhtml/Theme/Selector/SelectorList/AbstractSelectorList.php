@@ -65,7 +65,7 @@ abstract class AbstractSelectorList
     /**
      * Get list items of themes
      *
-     * @return array
+     * @return string[]
      */
     public function getListItems()
     {

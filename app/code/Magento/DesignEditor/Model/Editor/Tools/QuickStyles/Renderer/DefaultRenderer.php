@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer;
+
 /**
  * Default css renderer
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer;
-
 class DefaultRenderer
     extends \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\AbstractRenderer
 {

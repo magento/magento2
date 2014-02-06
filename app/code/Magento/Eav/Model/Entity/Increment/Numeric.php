@@ -38,6 +38,11 @@ namespace Magento\Eav\Model\Entity\Increment;
 
 class Numeric extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
+    /**
+     * Get next id
+     *
+     * @return string
+     */
     public function getNextId()
     {
         $last = $this->getLastId();

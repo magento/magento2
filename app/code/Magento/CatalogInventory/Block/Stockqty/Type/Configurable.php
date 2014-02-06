@@ -34,12 +34,14 @@
  */
 namespace Magento\CatalogInventory\Block\Stockqty\Type;
 
+use Magento\Catalog\Model\Product;
+
 class Configurable extends \Magento\CatalogInventory\Block\Stockqty\Composite
 {
     /**
      * Retrieve child products
      *
-     * @return array
+     * @return Product[]
      */
     protected function _getChildProducts()
     {

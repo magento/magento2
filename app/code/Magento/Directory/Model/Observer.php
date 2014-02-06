@@ -54,7 +54,7 @@ class Observer
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translate;
 
@@ -76,7 +76,7 @@ class Observer
     /**
      * @param \Magento\Directory\Model\Currency\Import\Factory $importFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Translate $translate
+     * @param \Magento\TranslateInterface $translate
      * @param \Magento\Email\Model\TemplateFactory $emailTemplateFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -84,7 +84,7 @@ class Observer
     public function __construct(
         \Magento\Directory\Model\Currency\Import\Factory $importFactory,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Translate $translate,
+        \Magento\TranslateInterface $translate,
         \Magento\Email\Model\TemplateFactory $emailTemplateFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory

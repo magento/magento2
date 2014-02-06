@@ -50,6 +50,10 @@ class ConcreteImplementationTest extends \PHPUnit_Framework_TestCase
             function ($file) {
                 $content = file_get_contents($file);
 
+                if (strpos($content, "namespace Magento\Core") !== false) {
+                    return;
+                }
+
                 $result = (bool)preg_match(
                     '/function __construct\(([^\)]*)\)/iS',
                     $content,

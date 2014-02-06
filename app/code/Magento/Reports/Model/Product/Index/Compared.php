@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Reports\Model\Product\Index;
 
 /**
  * Catalog Compared Product Index Model
@@ -42,8 +42,6 @@
  * @package     Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Model\Product\Index;
-
 class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {
     /**
@@ -106,6 +104,8 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {

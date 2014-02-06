@@ -68,6 +68,8 @@ class Customer extends \Magento\Core\Model\AbstractModel
     const SUBSCRIBED_YES = 'yes';
     const SUBSCRIBED_NO  = 'no';
 
+    const ENTITY = 'customer';
+
     /**
      * Model event prefix
      *
@@ -203,14 +205,14 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Customer\Model\Resource\Customer $resource
-     * @param \Magento\Customer\Model\Config\Share $configShare
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressesFactory
+     * @param Resource\Customer $resource
+     * @param Config\Share $configShare
+     * @param AddressFactory $addressFactory
+     * @param Resource\Address\CollectionFactory $addressesFactory
      * @param \Magento\Email\Model\Template\MailerFactory $mailerFactory
      * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
-     * @param \Magento\Customer\Model\AttributeFactory $attributeFactory
+     * @param AttributeFactory $attributeFactory
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Stdlib\DateTime $dateTime

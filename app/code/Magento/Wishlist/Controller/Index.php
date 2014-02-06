@@ -694,8 +694,8 @@ class Index
             return;
         }
 
-        $translate = $this->_objectManager->get('Magento\Core\Model\Translate');
-        /* @var $translate \Magento\Core\Model\Translate */
+        $translate = $this->_objectManager->get('Magento\TranslateInterface');
+        /* @var $translate \Magento\TranslateInterface */
         $translate->setTranslateInline(false);
         $sent = 0;
 

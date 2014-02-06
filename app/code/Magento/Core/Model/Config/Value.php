@@ -136,7 +136,7 @@ class Value extends \Magento\Core\Model\AbstractModel implements \Magento\App\Co
         if ($websiteCode) {
             return $this->_storeManager->getWebsite($websiteCode)->getConfig($path);
         }
-        return (string) $this->_config->getValue($path, 'default');
+        return (string) $this->_config->getValue($path, \Magento\BaseScopeInterface::SCOPE_DEFAULT);
     }
 
 

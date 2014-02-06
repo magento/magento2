@@ -84,8 +84,8 @@ class Index extends \Magento\App\Action\Action
         }
         $post = $this->getRequest()->getPost();
         if ($post) {
-            $translate = $this->_objectManager->get('Magento\Core\Model\Translate');
-            /* @var $translate \Magento\Core\Model\Translate */
+            $translate = $this->_objectManager->get('Magento\TranslateInterface');
+            /* @var $translate \Magento\TranslateInterface */
             $translate->setTranslateInline(false);
             try {
                 $postObject = new \Magento\Object();

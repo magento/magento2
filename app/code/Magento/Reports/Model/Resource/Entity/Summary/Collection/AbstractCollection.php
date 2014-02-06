@@ -66,7 +66,7 @@ class AbstractCollection extends \Magento\Data\Collection
      * @param string $periodType
      * @param string|int|null $customStart
      * @param string|int|null $customEnd
-     * @return \Magento\Reports\Model\Resource\Entity\Summary\Collection\AbstractCollection
+     * @return $this
      */
     public function setSelectPeriod($periodType, $customStart = null, $customEnd = null)
     {
@@ -102,7 +102,6 @@ class AbstractCollection extends \Magento\Data\Collection
 
         }
 
-
         return $this;
     }
 
@@ -110,7 +109,7 @@ class AbstractCollection extends \Magento\Data\Collection
      * Set date period
      *
      * @param int $period
-     * @return \Magento\Reports\Model\Resource\Entity\Summary\Collection\AbstractCollection
+     * @return $this
      */
     public function setDatePeriod($period)
     {
@@ -121,7 +120,7 @@ class AbstractCollection extends \Magento\Data\Collection
      * Set store filter
      *
      * @param int $storeId
-     * @return \Magento\Reports\Model\Resource\Entity\Summary\Collection\AbstractCollection
+     * @return $this
      */
     public function setStoreFilter($storeId)
     {
@@ -144,7 +143,7 @@ class AbstractCollection extends \Magento\Data\Collection
     /**
      * Init collection
      *
-     * @return \Magento\Reports\Model\Resource\Entity\Summary\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initCollection()
     {

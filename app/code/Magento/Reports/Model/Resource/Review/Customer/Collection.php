@@ -82,7 +82,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     /**
      * Init Select
      *
-     * @return \Magento\Reports\Model\Resource\Review\Customer\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -94,7 +94,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     /**
      * Join customers
      *
-     * @return \Magento\Reports\Model\Resource\Review\Customer\Collection
+     * @return $this
      */
     protected function _joinCustomers()
     {

@@ -38,6 +38,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 {
     /**
      * Initialize collection model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -121,8 +123,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Load data (join attribute data)
      *
-     * @param boolean $printQuery
-     * @param boolean $logQuery
+     * @param bool $printQuery
+     * @param bool $logQuery
      * @return \Magento\Eav\Model\Resource\Form\Element\Collection
      */
     public function load($printQuery = false, $logQuery = false)

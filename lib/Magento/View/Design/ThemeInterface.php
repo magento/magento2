@@ -102,4 +102,11 @@ interface ThemeInterface
      * @return ThemeInterface[] Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
      */
     public function getInheritedThemes();
+
+    /**
+     * Get theme id
+     *
+     * @return int
+     */
+    public function getId();
 }

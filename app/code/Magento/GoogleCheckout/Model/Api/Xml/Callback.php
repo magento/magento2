@@ -70,7 +70,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\TranslateInterface $translator
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
@@ -82,7 +82,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Translate $translator,
+        \Magento\TranslateInterface $translator,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,

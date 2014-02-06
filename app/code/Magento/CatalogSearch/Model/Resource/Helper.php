@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\CatalogSearch\Model\Resource;
 
 /**
  * CatalogSearch Mysql resource helper model
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource;
-
 class Helper extends \Magento\Eav\Model\Resource\Helper
 {
     /**
@@ -52,8 +50,8 @@ class Helper extends \Magento\Eav\Model\Resource\Helper
      *
      * @param string $table
      * @param string $alias
-     * @param  \Magento\DB\Select $select
-     * @return \Magento\DB\Select $select
+     * @param \Magento\DB\Select $select
+     * @return \Zend_Db_Expr
      */
     public function chooseFulltext($table, $alias, $select)
     {

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
 
 /**
@@ -53,7 +52,7 @@ class LogoUploader
      *
      * Upper is rendered first and is inserted into next using <?php echo $this->getHtml() ?>
      *
-     * @var array
+     * @var string[]
      */
     protected $_templates = array(
         'Magento_DesignEditor::editor/form/renderer/element/input.phtml',

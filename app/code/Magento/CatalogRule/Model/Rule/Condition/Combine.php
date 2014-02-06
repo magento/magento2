@@ -79,6 +79,10 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         return $conditions;
     }
 
+    /**
+     * @param array $productCollection
+     * @return $this
+     */
     public function collectValidatedAttributes($productCollection)
     {
         foreach ($this->getConditions() as $condition) {

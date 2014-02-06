@@ -45,7 +45,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $paymentData = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
         $string = $this->getMock('Magento\Stdlib\String', array(), array(), '', false);
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $translate = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
+        $translate = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
         $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $pdfItemsFactory = $this->getMock('Magento\Sales\Model\Order\Pdf\ItemsFactory', array(), array(), '', false);
         $localeMock = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false, false);

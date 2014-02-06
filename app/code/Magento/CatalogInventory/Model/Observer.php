@@ -29,6 +29,10 @@
  */
 namespace Magento\CatalogInventory\Model;
 
+use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\Event\Observer as EventObserver;
+use Magento\Sales\Model\Quote\Item as QuoteItem;
+
 class Observer
 {
     /**
@@ -39,6 +43,9 @@ class Observer
      */
     protected $_checkedQuoteItems = array();
 
+    /**
+     * @var Item[]
+     */
     protected $_itemsForReindex = array();
 
     /**
@@ -66,7 +73,7 @@ class Observer
     /**
      * Stock model factory
      *
-     * @var \Magento\CatalogInventory\Model\StockFactory
+     * @var StockFactory
      */
     protected $_stockFactory;
 
@@ -85,7 +92,7 @@ class Observer
     protected $_indexer;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock
+     * @var Stock
      */
     protected $_stock;
 
@@ -119,11 +126,11 @@ class Observer
      * @param \Magento\CatalogInventory\Model\Resource\Indexer\Stock $resourceIndexerStock
      * @param \Magento\CatalogInventory\Model\Resource\Stock $resourceStock
      * @param \Magento\Index\Model\Indexer $indexer
-     * @param \Magento\CatalogInventory\Model\Stock $stock
+     * @param Stock $stock
      * @param \Magento\CatalogInventory\Model\Stock\Status $stockStatus
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
-     * @param \Magento\CatalogInventory\Model\StockFactory $stockFactory
+     * @param StockFactory $stockFactory
      * @param \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig
      */
@@ -132,11 +139,11 @@ class Observer
         \Magento\CatalogInventory\Model\Resource\Indexer\Stock $resourceIndexerStock,
         \Magento\CatalogInventory\Model\Resource\Stock $resourceStock,
         \Magento\Index\Model\Indexer $indexer,
-        \Magento\CatalogInventory\Model\Stock $stock,
+        Stock $stock,
         \Magento\CatalogInventory\Model\Stock\Status $stockStatus,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
-        \Magento\CatalogInventory\Model\StockFactory $stockFactory,
+        StockFactory $stockFactory,
         \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig
     ) {
@@ -156,8 +163,8 @@ class Observer
     /**
      * Add stock information to product
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function addInventoryData($observer)
     {
@@ -176,8 +183,8 @@ class Observer
     /**
      * Remove stock information from static variable
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function removeInventoryData($observer)
     {
@@ -194,8 +201,8 @@ class Observer
      * Add information about producs stock status to collection
      * Used in for product collection after load
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function addStockStatusToCollection($observer)
     {
@@ -211,8 +218,8 @@ class Observer
     /**
      * Add Stock items to product collection
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function addInventoryDataToCollection($observer)
     {
@@ -224,8 +231,8 @@ class Observer
     /**
      * Saving product inventory data. Product qty calculated dynamically.
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function saveInventoryData($observer)
     {
@@ -250,9 +257,9 @@ class Observer
     /**
      * Prepare stock item data for save
      *
-     * @param \Magento\CatalogInventory\Model\Stock\Item $item
+     * @param Item $item
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @return $this
      */
     protected function _prepareItemForSave($item, $product)
     {
@@ -299,9 +306,9 @@ class Observer
     /**
      * Removes error statuses from quote and item, set by this observer
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param QuoteItem $item
      * @param int $code
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @return $this
      */
     protected function _removeErrorsFromQuoteAndItem($item, $code)
     {
@@ -349,14 +356,14 @@ class Observer
     /**
      * Check product inventory data when quote item quantity declaring
      *
-     * @param  \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function checkQuoteItemQty($observer)
     {
         $quoteItem = $observer->getEvent()->getItem();
-        /* @var $quoteItem \Magento\Sales\Model\Quote\Item */
+        /* @var $quoteItem QuoteItem */
         if (!$quoteItem || !$quoteItem->getProductId() || !$quoteItem->getQuote()
             || $quoteItem->getQuote()->getIsSuperMode()) {
             return $this;
@@ -438,8 +445,8 @@ class Observer
                     $stockItem->setProductName($quoteItem->getName());
                 }
 
-                /* @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-                if (!$stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
+                /* @var Item $stockItem */
+                if (!$stockItem instanceof Item) {
                     throw new \Magento\Core\Exception(__('The stock item for Product in option is not valid.'));
                 }
 
@@ -504,8 +511,8 @@ class Observer
                 $stockItem->unsIsChildItem();
             }
         } else {
-            /* @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-            if (!$stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
+            /* @var Item $stockItem */
+            if (!$stockItem instanceof Item) {
                 throw new \Magento\Core\Exception(__('The stock item for Product is not valid.'));
             }
 
@@ -605,8 +612,8 @@ class Observer
      * Get product qty includes information from all quote items
      * Need be used only in sungleton mode
      *
-     * @param int   $productId
-     * @param int   $quoteItemId
+     * @param int $productId
+     * @param int $quoteItemId
      * @param float $itemQty
      * @return int
      */
@@ -627,10 +634,10 @@ class Observer
     /**
      * Subtract qtys of quote item products after multishipping checkout
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function checkoutAllSubmitAfter(\Magento\Event\Observer $observer)
+    public function checkoutAllSubmitAfter(EventObserver $observer)
     {
         $quote = $observer->getEvent()->getQuote();
         if (!$quote->getInventoryProcessed()) {
@@ -646,9 +653,10 @@ class Observer
      * Used before order placing to make order save/place transaction smaller
      * Also called after every successful order placement to ensure subtraction of inventory
      *
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
+     * @return $this|void
      */
-    public function subtractQuoteInventory(\Magento\Event\Observer $observer)
+    public function subtractQuoteInventory(EventObserver $observer)
     {
         $quote = $observer->getEvent()->getQuote();
 
@@ -670,7 +678,9 @@ class Observer
 
     /**
      * Revert quote items inventory data (cover not success order place case)
-     * @param $observer
+     *
+     * @param EventObserver $observer
+     * @return void
      */
     public function revertQuoteInventory($observer)
     {
@@ -692,14 +702,16 @@ class Observer
      *  )
      * )
      *
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
+     * @param QuoteItem $quoteItem
      * @param array &$items
+     * @return void
      */
     protected function _addItemToQtyArray($quoteItem, &$items)
     {
         $productId = $quoteItem->getProductId();
-        if (!$productId)
+        if (!$productId) {
             return;
+        }
         if (isset($items[$productId])) {
             $items[$productId]['qty'] += $quoteItem->getTotalQty();
         } else {
@@ -749,7 +761,8 @@ class Observer
     /**
      * Refresh stock index for specific stock items after successful order placement
      *
-     * @param $observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function reindexQuoteInventory($observer)
     {
@@ -787,7 +800,8 @@ class Observer
     /**
      * Return creditmemo items qty to stock
      *
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
+     * @return void
      */
     public function refundOrderInventory($observer)
     {
@@ -825,8 +839,8 @@ class Observer
     /**
      * Cancel order item
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param   EventObserver $observer
+     * @return  $this
      */
     public function cancelOrderItem($observer)
     {
@@ -845,8 +859,8 @@ class Observer
     /**
      * Update items stock status and low stock date.
      *
-     * @param \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function updateItemsStockUponConfigChange($observer)
     {
@@ -859,10 +873,10 @@ class Observer
     /**
      * Update Only product status observer
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function productStatusUpdate(\Magento\Event\Observer $observer)
+    public function productStatusUpdate(EventObserver $observer)
     {
         $productId = $observer->getEvent()->getProductId();
         $this->_stockStatus->updateStatus($productId);
@@ -872,10 +886,10 @@ class Observer
     /**
      * Catalog Product website update
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function catalogProductWebsiteUpdate(\Magento\Event\Observer $observer)
+    public function catalogProductWebsiteUpdate(EventObserver $observer)
     {
         $websiteIds = $observer->getEvent()->getWebsiteIds();
         $productIds = $observer->getEvent()->getProductIds();
@@ -892,10 +906,10 @@ class Observer
     /**
      * Add stock status to prepare index select
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function addStockStatusToPrepareIndexSelect(\Magento\Event\Observer $observer)
+    public function addStockStatusToPrepareIndexSelect(EventObserver $observer)
     {
         $website    = $observer->getEvent()->getWebsite();
         $select     = $observer->getEvent()->getSelect();
@@ -908,10 +922,10 @@ class Observer
     /**
      * Add stock status limitation to catalog product price index select object
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function prepareCatalogProductIndexSelect(\Magento\Event\Observer $observer)
+    public function prepareCatalogProductIndexSelect(EventObserver $observer)
     {
         $select     = $observer->getEvent()->getSelect();
         $entity     = $observer->getEvent()->getEntityField();
@@ -925,7 +939,8 @@ class Observer
     /**
      * Reindex all events of product-massAction type
      *
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
+     * @return void
      */
     public function reindexProductsMassAction($observer)
     {
@@ -937,8 +952,8 @@ class Observer
     /**
      * Detects whether product status should be shown
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function displayProductStatusInfo($observer)
     {

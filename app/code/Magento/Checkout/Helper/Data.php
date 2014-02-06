@@ -71,6 +71,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_emailTemplFactory;
 
     /**
+     * Translator model
+     *
+     * @var \Magento\TranslateInterface
+     */
+    protected $_translator;
+
+    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -78,6 +85,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
      * @param \Magento\Email\Model\TemplateFactory $emailTemplFactory
+     * @param \Magento\TranslateInterface $translator
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
@@ -86,7 +94,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
-        \Magento\Email\Model\TemplateFactory $emailTemplFactory
+        \Magento\Email\Model\TemplateFactory $emailTemplFactory,
+        \Magento\TranslateInterface $translator
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
@@ -94,6 +103,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $this->_locale = $locale;
         $this->_agreementCollectionFactory = $agreementCollectionFactory;
         $this->_emailTemplFactory = $emailTemplFactory;
+        $this->_translator = $translator;
         parent::__construct($context);
     }
 

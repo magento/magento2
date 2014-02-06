@@ -34,7 +34,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with($this->equalTo('dev/translate_inline/active_admin'))
             ->will($this->returnValue($result));
-        $config = new Config($backendConfig);
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $config = $objectManager->getObject(
+            '\Magento\Backend\Model\Translate\Inline\Config',
+            array(
+                'config' => $backendConfig
+            )
+        );
         $this->assertEquals($result, $config->isActive('any'));
     }
 }

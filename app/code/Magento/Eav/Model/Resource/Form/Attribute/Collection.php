@@ -102,6 +102,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Resource initialization
      *
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _construct()

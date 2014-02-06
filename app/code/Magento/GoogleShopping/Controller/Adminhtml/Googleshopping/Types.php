@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * GoogleShopping Admin Item Types Controller
-*/
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
 use Magento\App\RequestInterface;
 
+/**
+ * GoogleShopping Admin Item Types Controller
+*/
 class Types extends \Magento\Backend\App\Action
 {
     /**
@@ -74,7 +73,7 @@ class Types extends \Magento\Backend\App\Action
     /**
      * Initialize attribute set mapping object
      *
-     * @return \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types
+     * @return $this
      */
     protected function _initItemType()
     {
@@ -92,7 +91,7 @@ class Types extends \Magento\Backend\App\Action
     /**
      * Initialize general settings for action
      *
-     * @return  \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items
+     * @return $this
      */
     protected function _initAction()
     {
@@ -105,6 +104,8 @@ class Types extends \Magento\Backend\App\Action
 
     /**
      * List of all maps (items)
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -117,6 +118,8 @@ class Types extends \Magento\Backend\App\Action
 
     /**
      * Grid for AJAX request
+     *
+     * @return void
      */
     public function gridAction()
     {
@@ -126,6 +129,8 @@ class Types extends \Magento\Backend\App\Action
 
     /**
      * Create new attribute set mapping
+     *
+     * @return void
      */
     public function newAction()
     {
@@ -149,6 +154,8 @@ class Types extends \Magento\Backend\App\Action
 
     /**
      * Edit attribute set mapping
+     *
+     * @return void
      */
     public function editAction()
     {
@@ -187,6 +194,8 @@ class Types extends \Magento\Backend\App\Action
 
     /**
      * Save attribute set mapping
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -245,6 +254,8 @@ class Types extends \Magento\Backend\App\Action
 
     /**
      * Delete attribute set mapping
+     *
+     * @return void
      */
     public function deleteAction()
     {
@@ -265,6 +276,8 @@ class Types extends \Magento\Backend\App\Action
 
     /**
      * Get Google Content attributes list
+     *
+     * @return void
      */
     public function loadAttributesAction()
     {
@@ -285,6 +298,8 @@ class Types extends \Magento\Backend\App\Action
 
     /**
      * Get available attribute sets
+     *
+     * @return void
      */
     protected function loadAttributeSetsAction()
     {

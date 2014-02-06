@@ -27,6 +27,11 @@ namespace Magento\Eav\Model\Adminhtml\System\Config\Source;
 
 class Inputtype implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * Return array of options
+     *
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

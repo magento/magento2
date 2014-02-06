@@ -24,11 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
+
 /**
  * Configuration of controls
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
-
 class Configuration
 {
     /**
@@ -130,7 +130,7 @@ class Configuration
     /**
      * Initialize view configurations
      *
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _initViewConfigs()
     {
@@ -148,7 +148,7 @@ class Configuration
     /**
      * Load all control values
      *
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _loadControlsData()
     {
@@ -165,7 +165,7 @@ class Configuration
      * Prepare list of control links
      *
      * @param array $controls
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _prepareControlList(array &$controls)
     {
@@ -184,7 +184,7 @@ class Configuration
      * @param array $control
      * @param string $paramName
      * @param \Magento\Config\View $viewConfiguration
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _loadControlData(array &$control, $paramName, \Magento\Config\View $viewConfiguration)
     {
@@ -224,7 +224,7 @@ class Configuration
      * Extract module and key name
      *
      * @param string $value
-     * @return array
+     * @return string[]
      */
     protected function _extractModuleKey($value)
     {
@@ -255,7 +255,7 @@ class Configuration
      * Save control values data
      *
      * @param array $controlsData
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     public function saveData(array $controlsData)
     {
@@ -299,7 +299,7 @@ class Configuration
      * Save customized DOM of view configuration
      *
      * @param \DOMDocument $config
-     * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
+     * @return $this
      */
     protected function _saveViewConfiguration(\DOMDocument $config)
     {

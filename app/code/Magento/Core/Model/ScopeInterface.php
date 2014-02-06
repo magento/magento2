@@ -28,7 +28,6 @@ interface ScopeInterface
     /**#@+
      * Scope types
      */
-    const SCOPE_DEFAULT = 'default';
     const SCOPE_STORES = 'stores';
     const SCOPE_WEBSITES = 'websites';
     /**#@-*/

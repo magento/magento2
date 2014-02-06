@@ -58,6 +58,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Add standard buttons
      * Add "Save and Apply" button
      * Add "Save and Continue" button
+     *
+     * @return void
      */
     protected function _construct()
     {

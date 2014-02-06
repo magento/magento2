@@ -445,7 +445,7 @@ abstract class AbstractApi extends \Magento\Object
 
         // always add cart totals, even if line items are not requested
         if ($this->_lineItemTotalExportMap) {
-            foreach ($this->_cart->getTotals() as $key => $total) {
+            foreach ($this->_cart->getAmounts() as $key => $total) {
                 if (isset($this->_lineItemTotalExportMap[$key])) { // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
                     $request[$privateKey] = $this->_filterAmount($total);
@@ -454,7 +454,7 @@ abstract class AbstractApi extends \Magento\Object
         }
 
         // add cart line items
-        $items = $this->_cart->getItems();
+        $items = $this->_cart->getAllItems();
         if (empty($items) || !$this->getIsLineItemsEnabled()) {
             return;
         }

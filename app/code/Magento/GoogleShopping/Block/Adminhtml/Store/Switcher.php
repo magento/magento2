@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Block\Adminhtml\Store;
 
 /**
  * Adminhtml GoogleShopping Store Switcher
@@ -31,8 +32,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Block\Adminhtml\Store;
-
 class Switcher extends \Magento\Backend\Block\Store\Switcher
 {
     /**
@@ -44,6 +43,8 @@ class Switcher extends \Magento\Backend\Block\Store\Switcher
 
     /**
      * Set overridden params
+     *
+     * @return void
      */
     protected function _construct()
     {

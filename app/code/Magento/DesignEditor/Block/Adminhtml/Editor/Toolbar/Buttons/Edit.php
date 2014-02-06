@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons;
 
 /**
  * Edit button block
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons;
-
 class Edit
     extends \Magento\Backend\Block\Widget\Button\SplitButton
 {
@@ -102,7 +101,7 @@ class Edit
     /**
      * Whether button is disabled
      *
-     * @return mixed
+     * @return bool
      */
     public function getDisabled()
     {

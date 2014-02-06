@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Product\Viewed;
 
 /**
  * Adminhtml most viewed products report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Product\Viewed;
-
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
     /**
@@ -51,6 +48,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * Init grid parameters
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -125,7 +124,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      *
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
      * @param \Magento\Object $filterData
-     * @return \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _addOrderStatusFilter($collection, $filterData)

@@ -47,7 +47,6 @@ abstract class AbstractMethod extends \Magento\Object
     const CHECK_USE_FOR_COUNTRY       = 1;
     const CHECK_USE_FOR_CURRENCY      = 2;
     const CHECK_USE_CHECKOUT          = 4;
-    const CHECK_USE_FOR_MULTISHIPPING = 8;
     const CHECK_USE_INTERNAL          = 16;
     const CHECK_ORDER_TOTAL_MIN_MAX   = 32;
     const CHECK_RECURRING_PROFILES    = 64;
@@ -83,7 +82,6 @@ abstract class AbstractMethod extends \Magento\Object
     protected $_canVoid                     = false;
     protected $_canUseInternal              = true;
     protected $_canUseCheckout              = true;
-    protected $_canUseForMultishipping      = true;
     protected $_isInitializeNeeded          = false;
     protected $_canFetchTransactionInfo     = false;
     protected $_canReviewPayment            = false;
@@ -246,16 +244,6 @@ abstract class AbstractMethod extends \Magento\Object
     public function canUseCheckout()
     {
         return $this->_canUseCheckout;
-    }
-
-    /**
-     * Using for multiple shipping address
-     *
-     * @return bool
-     */
-    public function canUseForMultishipping()
-    {
-        return $this->_canUseForMultishipping;
     }
 
     /**
@@ -730,11 +718,6 @@ abstract class AbstractMethod extends \Magento\Object
         }
         if ($checksBitMask & self::CHECK_USE_CHECKOUT) {
             if (!$this->canUseCheckout()) {
-                return false;
-            }
-        }
-        if ($checksBitMask & self::CHECK_USE_FOR_MULTISHIPPING) {
-            if (!$this->canUseForMultishipping()) {
                 return false;
             }
         }

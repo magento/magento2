@@ -28,6 +28,9 @@ namespace Magento\CatalogInventory\Model\Source;
 
 class Backorders implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

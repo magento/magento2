@@ -23,12 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form;
+
+use Magento\Data\Form;
 
 /**
  * VDE area model
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form;
-
 class Builder
 {
     /**
@@ -80,7 +81,7 @@ class Builder
      * Create varien data form with provided params
      *
      * @param array $data
-     * @return \Magento\Data\Form
+     * @return Form
      * @throws \InvalidArgumentException
      */
     public function create(array $data = array())
@@ -101,7 +102,7 @@ class Builder
         }
 
         if ($isFilePresent) {
-            /** @var $form \Magento\Data\Form */
+            /** @var $form Form */
             $form = $this->_formFactory->create(array(
                 'data' => $data,
             ));
@@ -130,7 +131,7 @@ class Builder
     /**
      * Check is any elements present in form
      *
-     * @param \Magento\Data\Form $form
+     * @param Form $form
      * @return bool
      */
     protected function _isFormEmpty($form)
@@ -150,7 +151,7 @@ class Builder
     /**
      * Add column elements to form
      *
-     * @param \Magento\Data\Form $form
+     * @param Form $form
      * @param string $tab
      * @return array
      */
@@ -241,7 +242,8 @@ class Builder
     /**
      * Add custom element types
      *
-     * @param \Magento\Data\Form $form
+     * @param Form $form
+     * @return void
      */
     protected function _addElementTypes($form)
     {

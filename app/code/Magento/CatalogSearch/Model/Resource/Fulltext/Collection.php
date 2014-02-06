@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
 /**
  * Fulltext Collection
@@ -32,8 +32,6 @@
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource\Fulltext;
-
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
@@ -71,7 +69,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -137,7 +135,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Add search query filter
      *
      * @param string $query
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @return $this
      */
     public function addSearchFilter($query)
     {
@@ -160,7 +158,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @return $this
      */
     public function setOrder($attribute, $dir = 'desc')
     {
@@ -175,7 +173,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Stub method for campatibility with other search engines
      *
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @return $this
      */
     public function setGeneralDefaultQuery()
     {

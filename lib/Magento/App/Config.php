@@ -29,55 +29,60 @@ namespace Magento\App;
 class Config implements \Magento\App\ConfigInterface
 {
     /**
-     * @var \Magento\App\Config\Loader
+     * Config cache tag
      */
-    protected $_loader;
+    const CACHE_TAG = 'CONFIG';
 
     /**
-     * @var \Magento\App\Config\Data
+     * @var \Magento\App\Config\ScopePool
      */
-    protected $_data;
+    protected $_scopePool;
 
     /**
-     * @param Arguments\Loader $loader
+     * @param \Magento\App\Config\ScopePool $scopePool
      */
-    public function __construct(Arguments\Loader $loader)
+    public function __construct(\Magento\App\Config\ScopePool $scopePool)
     {
-        $this->_loader = $loader;
-        $this->_data = $loader->load();
+        $this->_scopePool = $scopePool;
     }
 
     /**
-     * Retrieve config value by path
+     * Retrieve config value by path and scope
      *
      * @param string $path
+     * @param string $scope
+     * @param string $scopeCode
      * @return mixed
      */
-    public function getValue($path = null)
+    public function getValue($path = null, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
-        return $this->_data->getValue($path);
+        return $this->_scopePool->getScope($scope, $scopeCode)->getValue($path);
     }
 
     /**
-     * Set config value
+     * Set config value in the corresponding config scope
      *
      * @param string $path
      * @param mixed $value
+     * @param string $scope
+     * @param null|string $scopeCode
      * @return void
      */
-    public function setValue($path, $value)
+    public function setValue($path, $value, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
-        $this->_data->setValue($path, $value);
+        $this->_scopePool->getScope($scope, $scopeCode)->setValue($path, $value);
     }
 
     /**
      * Retrieve config flag
      *
      * @param string $path
+     * @param string $scope
+     * @param null|string $scopeCode
      * @return bool
      */
-    public function isSetFlag($path)
+    public function isSetFlag($path, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
-        return (bool)$this->_data->getValue($path);
+        return (bool)$this->getValue($path, $scope, $scopeCode);
     }
 }

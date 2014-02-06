@@ -44,14 +44,14 @@ class Daterange extends \Magento\Backend\Block\AbstractBlock
      *
      * @var array
      */
-    protected $_rangeValues     = array('from' => '', 'to' => '');
+    protected $_rangeValues = array('from' => '', 'to' => '');
 
     /**
      * Range string delimiter for from/to dates
      *
      * @var string
      */
-    protected $_rangeDelimiter  = '...';
+    protected $_rangeDelimiter = '...';
 
     /**
      * @var \Magento\Data\FormFactory
@@ -120,7 +120,7 @@ class Daterange extends \Magento\Backend\Block\AbstractBlock
      * Target element ID setter
      *
      * @param string $value
-     * @return \Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Daterange
+     * @return $this
      */
     public function setTargetElementId($value)
     {
@@ -133,7 +133,7 @@ class Daterange extends \Magento\Backend\Block\AbstractBlock
      *
      * @param string $from
      * @param string $to
-     * @return \Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Daterange
+     * @return $this
      */
     public function setRangeValues($from, $to)
     {
@@ -146,7 +146,7 @@ class Daterange extends \Magento\Backend\Block\AbstractBlock
      * Automatically attempts to split the string by delimiter
      *
      * @param string $delimitedString
-     * @return \Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Daterange
+     * @return $this
      */
     public function setRangeValue($delimitedString)
     {
@@ -162,7 +162,7 @@ class Daterange extends \Magento\Backend\Block\AbstractBlock
      * Range delimiter setter
      *
      * @param string $value
-     * @return \Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Daterange
+     * @return $this
      */
     public function setRangeDelimiter($value)
     {

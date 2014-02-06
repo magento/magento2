@@ -184,7 +184,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getBackUrl()
     {
-        return $this->getUrl('*/cart/');
+        return $this->getUrl('checkout/cart/');
     }
 
     /**

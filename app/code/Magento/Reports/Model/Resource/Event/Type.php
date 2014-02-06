@@ -37,8 +37,9 @@ namespace Magento\Reports\Model\Resource\Event;
 class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
-     * Main table initialization 
+     * Main table initialization
      *
+     * @return void
      */
     protected function _construct()
     {
