@@ -119,12 +119,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel
     protected $_catalogCategoryFlat = null;
 
     /**
-     * Core data
+     * Static URL Format instance
      *
-     * @var \Magento\Filter\FilterManager
+     * @var \Magento\Url\Helper\Format
      */
-    protected $filter;
-
+    protected $_urlFormat;
+    
     /**
      * Index indexer
      *
@@ -209,7 +209,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel
         \Magento\Index\Model\Indexer $indexIndexer,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Helper\Category\Flat $catalogCategoryFlat,
-        \Magento\Filter\FilterManager $filter,
+        \Magento\Url\Helper\Format $urlFormat,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -222,7 +222,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_catalogConfig = $catalogConfig;
         $this->_indexIndexer = $indexIndexer;
-        $this->filter = $filter;
+        $this->_urlFormat = $urlFormat;
         $this->_catalogCategoryFlat = $catalogCategoryFlat;
         $this->_treeModel = $categoryTreeResource;
         parent::__construct($context, $registry, $storeManager, $resource, $resourceCollection, $data);
@@ -566,11 +566,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel
      */
     public function formatUrlKey($str)
     {
-        $str = $this->filter->removeAccents($str);
-        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', $str);
-        $urlKey = strtolower($urlKey);
-        $urlKey = trim($urlKey, '-');
-        return $urlKey;
+        return $this->_urlFormat->formatUrlKey($str);
     }
 
     /**

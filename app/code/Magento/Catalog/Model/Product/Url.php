@@ -46,6 +46,13 @@ class Url extends \Magento\Object
     protected $_url;
 
     /**
+     * Static URL Format instance
+     *
+     * @var \Magento\Url\Helper\Format
+     */
+    protected $_urlFormat;
+
+    /**
      * Static URL Rewrite Instance
      *
      * @var \Magento\Core\Model\Url\Rewrite
@@ -92,6 +99,7 @@ class Url extends \Magento\Object
     public function __construct(
         \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory,
         \Magento\UrlInterface $url,
+        \Magento\Url\Helper\Format $urlformat,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Product\Url $catalogProductUrl,
@@ -100,6 +108,7 @@ class Url extends \Magento\Object
     ) {
         $this->_urlRewrite = $urlRewriteFactory->create();
         $this->_url = $url;
+        $this->_urlFormat = $urlformat;
         $this->_storeManager = $storeManager;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogProductUrl = $catalogProductUrl;
@@ -183,11 +192,7 @@ class Url extends \Magento\Object
      */
     public function formatUrlKey($str)
     {
-        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', $this->_catalogProductUrl->format($str));
-        $urlKey = strtolower($urlKey);
-        $urlKey = trim($urlKey, '-');
-
-        return $urlKey;
+        return $this->_urlFormat->formatUrlKey($str);
     }
 
     /**

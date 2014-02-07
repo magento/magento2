@@ -26,15 +26,15 @@
 
 
 /**
- * Catalog Product Url helper
+ * Url helper
  *
  * @category   Magento
- * @package    Magento_Catalog
+ * @package    Magento_Url
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Helper\Product;
+namespace Magento\Url\Helper;
 
-class Url extends \Magento\Core\Helper\Url
+class Format extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Symbol convert table
@@ -99,15 +99,11 @@ class Url extends \Magento\Core\Helper\Url
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config
     ) {
-        parent::__construct($context, $storeManager);
         $convertConfig = $config->getValue('url/convert', 'default');
         if ($convertConfig) {
             foreach ($convertConfig as $configValue) {
@@ -121,9 +117,38 @@ class Url extends \Magento\Core\Helper\Url
      *
      * @return array
      */
-    public function getConvertTable()
+    protected function getConvertTable()
     {
         return $this->_convertTable;
+    }
+
+    /**
+     * Process string based on convertation table
+     *
+     * @param   string $string
+     * @return  string
+     */
+    public function format($string)
+    {
+        $string = strtr($string, $this->getConvertTable());
+        return '"libiconv"' == ICONV_IMPL
+            ? iconv(\Magento\Stdlib\String::ICONV_CHARSET, 'ascii//ignore//translit', $string)
+            : $string;
+    }
+
+    /**
+     * Formats URL key
+     *
+     * @param $string URL
+     * @return string
+     */
+    public function formatUrlKey($string)
+    {
+        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', $this->format($string));
+        $urlKey = strtolower($urlKey);
+        $urlKey = trim($urlKey, '-');
+
+        return $urlKey;
     }
 
 }
