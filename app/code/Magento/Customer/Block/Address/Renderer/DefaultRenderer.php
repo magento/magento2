@@ -173,16 +173,18 @@ class DefaultRenderer
                 $data['region'] = __($address->getRegion());
             } else {
                 $dataModel = $this->_attrDataFactory->create($attribute, $address);
-                $value     = $dataModel->outputValue($dataFormat);
-                if ($attribute->getFrontendInput() == 'multiline') {
-                    $values    = $dataModel->outputValue(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_ARRAY);
-                    // explode lines
-                    foreach ($values as $k => $v) {
-                        $key = sprintf('%s%d', $attribute->getAttributeCode(), $k + 1);
-                        $data[$key] = $v;
+                if( is_object($dataModel) ) {
+                    $value     = $dataModel->outputValue($dataFormat);
+                    if ($attribute->getFrontendInput() == 'multiline') {
+                        $values    = $dataModel->outputValue(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_ARRAY);
+                        // explode lines
+                        foreach ($values as $k => $v) {
+                            $key = sprintf('%s%d', $attribute->getAttributeCode(), $k + 1);
+                            $data[$key] = $v;
+                        }
                     }
+                    $data[$attribute->getAttributeCode()] = $value;
                 }
-                $data[$attribute->getAttributeCode()] = $value;
             }
         }
 
