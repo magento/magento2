@@ -120,6 +120,6 @@
 "Welcome","Welcome"
 "Welcome to Magento's Installation Wizard","Welcome to Magento's Installation Wizard"
 "You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock","You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock"
-"You could enable this option to use web server rewrites functionality for improved search engines optimization.","You could enable this option to use web server rewrites functionality for improved search engines optimization."
+"You could enable this option to use web server rewrites functionality for improved search engine optimization.","You could enable this option to use web server rewrites functionality for improved search engine optimization."
 "You're All Set","You're All Set"
 "You're All Set!","You're All Set!"
