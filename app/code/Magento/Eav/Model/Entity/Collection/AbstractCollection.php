@@ -1546,4 +1546,38 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     {
         return array_keys($this->_items);
     }
+
+    /**
+     * Clear collection
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     */
+    public function clear()
+    {
+        $this->_itemsById = array();
+        return parent::clear();
+    }
+
+    /**
+     * Remove all items from collection
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     */
+    public function removeAllItems()
+    {
+        $this->_itemsById = array();
+        return parent::removeAllItems();
+    }
+
+    /**
+     * Remove item from collection by item key
+     *
+     * @param   mixed $key
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     */
+    public function removeItemByKey($key)
+    {
+        if (isset($this->_items[$key])) {
+            unset($this->_itemsById[$this->_items[$key]->getId()]);
+        }
+        return parent::removeItemByKey($key);
+    }
 }
