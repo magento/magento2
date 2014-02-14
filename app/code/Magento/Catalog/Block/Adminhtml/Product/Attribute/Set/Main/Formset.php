@@ -26,6 +26,8 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
+use Magento\Backend\Block\Widget\Form;
+
 class Formset
     extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -55,6 +57,7 @@ class Formset
     /**
      * Prepares attribute set form
      *
+     * @return void
      */
     protected function _prepareForm()
     {

@@ -23,17 +23,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Model\Resource\Review;
 
 
 /**
  * Review collection resource model
  *
- * @category    Magento
- * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Model\Resource\Review;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -85,11 +82,15 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_reviewData = null;
 
     /**
+     * Rating option model
+     *
      * @var \Magento\Rating\Model\Rating\Option\VoteFactory
      */
     protected $_voteFactory;
 
     /**
+     * Core model store manager interface
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -126,6 +127,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Define module
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -138,7 +140,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * init select
+     * Initialize select
      *
      * @return $this
      */
@@ -153,6 +155,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
+     * Add customer filter
+     *
      * @param int|string $customerId
      * @return $this
      */

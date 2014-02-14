@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard\Orders;
 
 /**
  * Adminhtml dashboard recent orders grid
@@ -31,9 +32,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard\Orders;
-
 class Grid extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
@@ -65,12 +63,18 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('lastOrdersGrid');
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         if (!$this->_moduleManager->isEnabled('Magento_Reports')) {
@@ -114,6 +118,9 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
 //        $this->getCollection()->setCurPage($this->getParam($this->getVarNamePage(), $this->_defaultPage));
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('customer', array(
@@ -148,6 +155,9 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareColumns();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRowUrl($row)
     {
         return $this->getUrl('sales/order/view', array('order_id'=>$row->getId()));

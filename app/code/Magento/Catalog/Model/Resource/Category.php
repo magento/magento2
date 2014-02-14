@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Model\Resource;
 
-class Category extends \Magento\Catalog\Model\Resource\AbstractResource
+class Category extends AbstractResource
 {
     /**
      * Category tree object
@@ -143,7 +143,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Set store Id
      *
      * @param integer $storeId
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -184,7 +184,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * delete child categories
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _beforeDelete(\Magento\Object $object)
     {
@@ -208,7 +208,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Delete children categories of specific category
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     public function deleteChildren(\Magento\Object $object)
     {
@@ -241,7 +241,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * prepare path and increment children count for parent categories
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _beforeSave(\Magento\Object $object)
     {
@@ -281,7 +281,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * save related products ids and update path value
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _afterSave(\Magento\Object $object)
     {
@@ -301,7 +301,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Update path field
      *
      * @param \Magento\Catalog\Model\Category $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _savePath($object)
     {
@@ -346,7 +346,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Save category products relation
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _saveCategoryProducts($category)
     {
@@ -647,7 +647,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Return parent categories of category
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @return array
+     * @return \Magento\Object[]
      */
     public function getParentCategories($category)
     {
@@ -823,7 +823,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * @param \Magento\Catalog\Model\Category $category
      * @param \Magento\Catalog\Model\Category $newParent
      * @param null|int $afterCategoryId
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     public function changeParent(\Magento\Catalog\Model\Category $category, \Magento\Catalog\Model\Category $newParent,
         $afterCategoryId = null

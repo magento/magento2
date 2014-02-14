@@ -35,15 +35,23 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
 class General extends \Magento\Catalog\Block\Adminhtml\Form
 {
-
+    /**
+     * @var array|null
+     */
     protected $_category;
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setShowGlobalIcon(true);
     }
 
+    /**
+     * @return array|null
+     */
     public function getCategory()
     {
         if (!$this->_category) {
@@ -52,6 +60,9 @@ class General extends \Magento\Catalog\Block\Adminhtml\Form
         return $this->_category;
     }
 
+    /**
+     * @return void
+     */
     public function _prepareLayout()
     {
         parent::_prepareLayout();
@@ -110,11 +121,19 @@ class General extends \Magento\Catalog\Block\Adminhtml\Form
         $this->setForm($form);
     }
 
+    /**
+     * @return array
+     */
     protected function _getAdditionalElementTypes()
     {
         return array('image' => 'Magento\Catalog\Block\Adminhtml\Category\Helper\Image');
     }
 
+    /**
+     * @param array|null $node
+     * @param array &$options
+     * @return array
+     */
     protected function _getParentCategoryOptions($node=null, &$options=array())
     {
         if (is_null($node)) {

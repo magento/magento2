@@ -24,13 +24,15 @@
  */
 -->
 <config>
-    <job name="indexer_reindex_all_invalid" instance="Magento\Indexer\Model\Processor" method="reindexAllInvalid">
-        <schedule>* * * * *</schedule>
-    </job>
-    <job name="indexer_update_all_views" instance="Magento\Indexer\Model\Processor" method="updateMview">
-        <schedule>* * * * *</schedule>
-    </job>
-    <job name="indexer_clean_all_changelogs" instance="Magento\Indexer\Model\Processor" method="clearChangelog">
-        <schedule>0 * * * *</schedule>
-    </job>
+    <group id="index">
+        <job name="indexer_reindex_all_invalid" instance="Magento\Indexer\Model\Processor" method="reindexAllInvalid">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="indexer_update_all_views" instance="Magento\Indexer\Model\Processor" method="updateMview">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="indexer_clean_all_changelogs" instance="Magento\Indexer\Model\Processor" method="clearChangelog">
+            <schedule>0 * * * *</schedule>
+        </job>
+    </group>
 </config>

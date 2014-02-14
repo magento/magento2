@@ -57,6 +57,8 @@ class Footer extends \Magento\View\Element\Template
 
     /**
      * Set footer data
+     *
+     * @return void
      */
     protected function _construct()
     {

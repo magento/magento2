@@ -32,12 +32,12 @@ class Code
     extends \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs\AbstractTabs
 {
     /**
-     * Tab HTML identifier
+     * @var string Tab HTML identifier
      */
     protected $_htmlId = 'vde-tab-code';
 
     /**
-     * Tab HTML title
+     * @var string Tab HTML title
      */
     protected $_title = 'Advanced';
 

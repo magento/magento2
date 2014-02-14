@@ -36,7 +36,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price;
 class Tier
     extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group\AbstractGroup
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/edit/price/tier.phtml';
 
     /**
@@ -87,7 +89,7 @@ class Tier
      * Prepare global layout
      * Add "Add tier" button to layout
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier
+     * @return $this
      */
     protected function _prepareLayout()
     {

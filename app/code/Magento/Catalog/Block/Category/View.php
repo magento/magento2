@@ -74,6 +74,9 @@ class View extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
@@ -124,16 +127,25 @@ class View extends \Magento\View\Element\Template
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function isRssCatalogEnable()
     {
         return $this->_storeConfig->getConfig('rss/catalog/category');
     }
 
+    /**
+     * @return bool
+     */
     public function isTopCategory()
     {
         return $this->getCurrentCategory()->getLevel()==2;
     }
 
+    /**
+     * @return string
+     */
     public function getRssLink()
     {
         return $this->_urlBuilder->getUrl('rss/catalog/category', array(
@@ -142,6 +154,9 @@ class View extends \Magento\View\Element\Template
         );
     }
 
+    /**
+     * @return string
+     */
     public function getProductListHtml()
     {
         return $this->getChildHtml('product_list');
@@ -160,6 +175,9 @@ class View extends \Magento\View\Element\Template
         return $this->getData('current_category');
     }
 
+    /**
+     * @return mixed
+     */
     public function getCmsBlockHtml()
     {
         if (!$this->getData('cms_block_html')) {

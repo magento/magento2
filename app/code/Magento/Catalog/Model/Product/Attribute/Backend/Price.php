@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 /**
  * Catalog product price attribute backend model
@@ -32,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Attribute\Backend;
-
 class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
@@ -92,7 +90,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Rewrite for redefine attribute scope
      *
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Price
+     * @return $this
      */
     public function setAttribute($attribute)
     {
@@ -105,7 +103,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Redefine Attribute scope
      *
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Price
+     * @return $this
      */
     public function setScope($attribute)
     {
@@ -122,7 +120,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * After Save Attribute manipulation
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Price
+     * @return $this
      */
     public function afterSave($object)
     {

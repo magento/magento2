@@ -46,7 +46,7 @@ class Assigned
      * Add theme buttons
      *
      * @param \Magento\DesignEditor\Block\Adminhtml\Theme $themeBlock
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Assigned
+     * @return $this
      */
     protected function _addThemeButtons($themeBlock)
     {

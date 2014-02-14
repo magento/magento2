@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Model\Acl\Loader;
 
 use Magento\User\Model\Acl\Role\Group as RoleGroup;
@@ -63,6 +62,7 @@ class Role implements \Magento\Acl\LoaderInterface
      * Populate ACL with roles from external storage
      *
      * @param \Magento\Acl $acl
+     * @return void
      */
     public function populateAcl(\Magento\Acl $acl)
     {

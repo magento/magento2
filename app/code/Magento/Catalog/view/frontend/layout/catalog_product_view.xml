@@ -138,6 +138,9 @@
         </block>
         <block class="Magento\Catalog\Block\Product\View\Additional" name="product.info.additional" as="product_additional_data"/>
     </referenceContainer>
+    <referenceBlock name="product.info.addtocart">
+        <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons"/>
+    </referenceBlock>
     <update handle="MAP_popup"/>
     <update handle="MAP_price_msrp_item"/>
 </layout>

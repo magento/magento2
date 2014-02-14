@@ -35,12 +35,18 @@ namespace Magento\Catalog\Block\Layer\Filter;
 
 class Attribute extends \Magento\Catalog\Block\Layer\Filter\AbstractFilter
 {
+    /**
+     *
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->_filterModelName = 'Magento\Catalog\Model\Layer\Filter\Attribute';
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareFilter()
     {
         $this->_filter->setAttributeModel($this->getAttributeModel());

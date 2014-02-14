@@ -23,8 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Attribute\Backend;
+
+use Magento\Core\Model\Layout\Update\ValidatorFactory;
+use Magento\Eav\Model\Entity\Attribute\Exception;
 
 /**
  * Product url key attribute backend
@@ -37,22 +39,31 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
     /**
      * Layout update validator factory
      *
-     * @var \Magento\Core\Model\Layout\Update\ValidatorFactory
+     * @var ValidatorFactory
      */
     protected $_layoutUpdateValidatorFactory;
 
     /**
+     * Construct the custom layout update class
+     *
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\Layout\Update\ValidatorFactory $layoutUpdateValidatorFactory
+     * @param ValidatorFactory $layoutUpdateValidatorFactory
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\Core\Model\Layout\Update\ValidatorFactory $layoutUpdateValidatorFactory
+        ValidatorFactory $layoutUpdateValidatorFactory
     ) {
         $this->_layoutUpdateValidatorFactory = $layoutUpdateValidatorFactory;
         parent::__construct($logger);
     }
 
+    /**
+     * Validate the custom layout update
+     *
+     * @param \Magento\Object $object
+     * @return bool
+     * @throws Exception
+     */
     public function validate($object)
     {
         $attributeName = $this->getAttribute()->getName();
@@ -68,7 +79,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
             $messages = $validator->getMessages();
             //Add first message to exception
             $massage = array_shift($messages);
-            $eavExc = new \Magento\Eav\Model\Entity\Attribute\Exception($massage);
+            $eavExc = new Exception($massage);
             $eavExc->setAttributeCode($attributeName);
             throw $eavExc;
         }

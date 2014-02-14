@@ -26,7 +26,7 @@
 $installer = $this;
 
 /**
- * Create table 'core_email_template'
+ * Create table 'email_template'
  */
 $table = $installer->getConnection()
     ->newTable($installer->getTable('email_template'))

@@ -32,7 +32,8 @@ class CrontabConfigFilesTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_idAttributes = array(
-        '/config/job' => 'name'
+        '/config/group'     => 'id',
+        '/config/group/job' => 'name',
     );
 
     /**

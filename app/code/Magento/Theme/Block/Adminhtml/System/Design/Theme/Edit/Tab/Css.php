@@ -83,7 +83,7 @@ class Css
     /**
      * Create a form element with necessary controls
      *
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -115,7 +115,7 @@ class Css
     /**
      * Set theme css fieldset
      *
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css
+     * @return $this
      */
     protected function _addThemeCssFieldset()
     {
@@ -159,7 +159,7 @@ class Css
     /**
      * Set custom css fieldset
      *
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css
+     * @return $this
      */
     protected function _addCustomCssFieldset()
     {

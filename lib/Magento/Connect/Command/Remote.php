@@ -32,9 +32,10 @@ extends \Magento\Connect\Command
 
     /**
      * List-upgrades callback
-     * @param srting $command
+     *
+     * @param string $command
      * @param array $options
-     * @param array $params
+     * @param string[] $params
      * @return void
      */
     public function doListUpgrades($command, $options, $params)
@@ -73,10 +74,10 @@ extends \Magento\Connect\Command
 
     /**
      * List available
-     * @param $command
-     * @param $options
-     * @param $params
-     * @return unknown_type
+     * @param string $command
+     * @param array $options
+     * @param string[] $params
+     * @return void
      */
 
     public function doListAvailable($command, $options, $params)
@@ -144,7 +145,7 @@ extends \Magento\Connect\Command
      *
      * @param string $command
      * @param array $options
-     * @param array $params
+     * @param string[] $params
      * @return void
      */
     public function doDownload($command, $options, $params)
@@ -197,9 +198,10 @@ extends \Magento\Connect\Command
 
     /**
      * Clear cache command callback
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
+     * @param string[] $params
      * @return void
      */
     public function doClearCache($command, $options, $params)

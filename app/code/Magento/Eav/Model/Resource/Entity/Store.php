@@ -23,7 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Resource\Entity;
 
+use Magento\Core\Model\AbstractModel;
+use Magento\Object;
 
 /**
  * Eav Entity store resource model
@@ -32,8 +35,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Entity;
-
 class Store extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -49,12 +50,12 @@ class Store extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Load an object by entity type and store
      *
-     * @param \Magento\Object $object
+     * @param Object|AbstractModel $object
      * @param int $entityTypeId
      * @param int $storeId
      * @return bool
      */
-    public function loadByEntityStore(\Magento\Core\Model\AbstractModel $object, $entityTypeId, $storeId)
+    public function loadByEntityStore(AbstractModel $object, $entityTypeId, $storeId)
     {
         $adapter = $this->_getWriteAdapter();
         $bind    = array(

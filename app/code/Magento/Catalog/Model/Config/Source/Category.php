@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Config\Source;
 
 /**
@@ -51,6 +50,12 @@ class Category implements \Magento\Core\Model\Option\ArrayInterface
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
     }
 
+    /**
+     * Return option array
+     *
+     * @param bool $addEmpty
+     * @return array
+     */
     public function toOptionArray($addEmpty = true)
     {
         /** @var \Magento\Catalog\Model\Resource\Category\Collection $collection */

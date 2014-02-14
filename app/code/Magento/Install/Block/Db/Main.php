@@ -75,7 +75,7 @@ class Main extends \Magento\View\Element\Template
      * @param  string $type database type
      * @param  string $block database block type
      * @param  string $template
-     * @return \Magento\Install\Block\Db\Main
+     * @return $this
      */
     public function addDatabaseBlock($type, $block, $template)
     {

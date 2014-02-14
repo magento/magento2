@@ -33,7 +33,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super;
 
-class Settings extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+
+class Settings extends Generic
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type\Configurable
@@ -69,6 +71,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare block children and data
      *
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -86,7 +89,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve currently edited product object
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return array|null
      */
     public function getProduct()
     {
@@ -96,7 +99,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form before rendering HTML
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Super\Settings
+     * @return $this
      */
     protected function _prepareForm()
     {

@@ -35,6 +35,9 @@ namespace Magento\Catalog\Block\Layer\Filter;
 
 class Category extends \Magento\Catalog\Block\Layer\Filter\AbstractFilter
 {
+    /**
+     *
+     */
     protected function _construct()
     {
         parent::_construct();

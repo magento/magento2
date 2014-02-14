@@ -18,22 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Dashboard Customer Info
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
 namespace Magento\Customer\Block\Account\Dashboard;
 
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
+use Magento\Exception\NoSuchEntityException;
+
+/**
+ * Dashboard Customer Info
+ */
 class Info extends \Magento\View\Element\Template
 {
     /**
@@ -54,27 +50,77 @@ class Info extends \Magento\View\Element\Template
     protected $_subscriberFactory;
 
     /**
+     * @var CustomerMetadataServiceInterface
+     */
+    protected $_metadataService;
+
+    /** @var  \Magento\Customer\Service\V1\CustomerServiceInterface */
+    protected $_customerService;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
+     * @param CustomerMetadataServiceInterface $metadataService
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
+        CustomerMetadataServiceInterface $metadataService,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
+        $this->_customerService = $customerService;
+        $this->_metadataService = $metadataService;
         $this->_subscriberFactory = $subscriberFactory;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
 
-
+    /**
+     * Returns the Magento Customer Model for this block
+     *
+     * @return \Magento\Customer\Service\V1\Dto\Customer
+     */
     public function getCustomer()
     {
-        return $this->_customerSession->getCustomer();
+        try {
+            return $this->_customerService->getCustomer($this->_customerSession->getId());
+        } catch (NoSuchEntityException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Get the full name of a customer
+     *
+     * @return string full name
+     */
+    public function getName()
+    {
+        $name = '';
+
+        $customer = $this->getCustomer();
+
+        if ($this->_metadataService->getCustomerAttributeMetadata('prefix')->isVisible()
+            && $customer->getPrefix()) {
+            $name .= $customer->getPrefix() . ' ';
+        }
+        $name .= $customer->getFirstname();
+        if ($this->_metadataService->getCustomerAttributeMetadata('middlename')->isVisible()
+            && $customer->getMiddlename()) {
+            $name .= ' ' . $customer->getMiddlename();
+        }
+        $name .=  ' ' . $customer->getLastname();
+        if ($this->_metadataService->getCustomerAttributeMetadata('suffix')->isVisible()
+            && $customer->getSuffix()) {
+            $name .= ' ' . $customer->getSuffix();
+        }
+        return $name;
     }
 
     public function getChangePasswordUrl()
@@ -91,7 +137,10 @@ class Info extends \Magento\View\Element\Template
     {
         if (!$this->_subscription) {
             $this->_subscription = $this->_createSubscriber();
-            $this->_subscription->loadByCustomer($this->_customerSession->getCustomer());
+            $customer = $this->getCustomer();
+            if ($customer) {
+                $this->_subscription->loadByEmail($customer->getEmail());
+            }
         }
         return $this->_subscription;
     }

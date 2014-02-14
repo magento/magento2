@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Category\Flat;
 
 /**
  * Catalog category flat collection
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Category\Flat;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -70,7 +68,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -87,8 +85,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     *  Collection initialization
+     * Collection initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -96,7 +95,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -110,8 +109,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add filter by entity id(s).
      *
-     * @param mixed $categoryIds
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @param array|int|string $categoryIds
+     * @return $this
      */
     public function addIdFilter($categoryIds)
     {
@@ -138,7 +137,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Before collection load
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     protected function _beforeLoad()
     {
@@ -149,7 +148,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * After collection load
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -161,7 +160,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set store id
      *
      * @param integer $storeId
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -187,7 +186,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by path to collection
      *
      * @param string $parent
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addParentPathFilter($parent)
     {
@@ -198,7 +197,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add store filter
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addStoreFilter()
     {
@@ -210,7 +209,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set field to sort by
      *
      * @param string $sorted
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addSortedField($sorted)
     {
@@ -223,7 +222,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addIsActiveFilter()
     {
@@ -236,7 +235,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add name field to result
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addNameToResult()
     {
@@ -248,7 +247,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add attribute to select
      *
      * @param array|string $attribute
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addAttributeToSelect($attribute = '*')
     {
@@ -299,7 +298,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -314,8 +313,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Emulate simple add attribute filter to collection
      *
      * @param string $attribute
-     * @param mixed $condition
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @param null|string|array $condition
+     * @return $this
      */
     public function addAttributeToFilter($attribute, $condition = null)
     {
@@ -327,7 +326,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addUrlRewriteToResult()
     {
@@ -345,7 +344,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * @param string|array $paths
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addPathsFilter($paths)
     {
@@ -367,7 +366,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * @param string $level
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addLevelFilter($level)
     {
@@ -377,7 +376,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * @param string $field
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function addOrderField($field)
     {
@@ -390,7 +389,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param integer $pageNum
      * @param integer $pageSize
-     * @return \Magento\Catalog\Model\Resource\Category\Flat\Collection
+     * @return $this
      */
     public function setPage($pageNum, $pageSize)
     {

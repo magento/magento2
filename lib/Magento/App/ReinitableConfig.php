@@ -1,7 +1,5 @@
 <?php
 /**
- * Application configuration used to re-initialize config.
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -23,13 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App;
 
 class ReinitableConfig extends \Magento\App\Config implements \Magento\App\ReinitableConfigInterface
 {
     /**
-     * (@inheritdoc)
+     * {@inheritdoc}
      */
     public function reinit()
     {

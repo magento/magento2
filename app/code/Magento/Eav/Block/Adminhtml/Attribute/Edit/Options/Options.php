@@ -37,14 +37,18 @@ use Magento\Core\Model\Resource\Store\Collection;
 
 class Options extends \Magento\Backend\Block\Template
 {
-    /** @var \Magento\Core\Model\Registry */
+    /**
+     * @var \Magento\Core\Model\Registry
+     */
     protected $_registry;
 
-    /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory */
+    /**
+     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory
+     */
     protected $_attrOptionCollectionFactory;
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $_template = 'Magento_Catalog::catalog/product/attribute/options.phtml';
 

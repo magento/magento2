@@ -23,11 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Design\Edit;
 
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -36,6 +38,9 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         $this->setTitle(__('Design Change'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareLayout()
     {
         $this->addTab('general', array(

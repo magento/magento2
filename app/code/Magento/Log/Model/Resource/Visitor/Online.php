@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Log\Model\Resource\Visitor;
 
 /**
  * Log Prepare Online visitors resource 
@@ -32,8 +32,6 @@
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model\Resource\Visitor;
-
 class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -54,6 +52,7 @@ class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection and define resource
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -64,7 +63,8 @@ class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Prepare online visitors for collection
      *
      * @param \Magento\Log\Model\Visitor\Online $object
-     * @return \Magento\Log\Model\Resource\Visitor\Online
+     * @return $this
+     * @throws \Exception
      */
     public function prepare(\Magento\Log\Model\Visitor\Online $object)
     {

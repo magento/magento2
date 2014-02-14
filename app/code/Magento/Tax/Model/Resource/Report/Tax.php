@@ -68,6 +68,8 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,7 +81,7 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
      *
      * @param mixed $from
      * @param mixed $to
-     * @return \Magento\Tax\Model\Resource\Report\Tax
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {

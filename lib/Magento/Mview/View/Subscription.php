@@ -71,6 +71,11 @@ class Subscription implements SubscriptionInterface
     protected $linkedViews = array();
 
     /**
+     * @var \Magento\App\Resource
+     */
+    protected $resource;
+
+    /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\DB\Ddl\TriggerFactory $triggerFactory
      * @param \Magento\Mview\View\CollectionInterface $viewCollection
@@ -92,6 +97,7 @@ class Subscription implements SubscriptionInterface
         $this->view = $view;
         $this->tableName = $tableName;
         $this->columnName = $columnName;
+        $this->resource = $resource;
 
         // Force collection clear
         $this->viewCollection->clear();
@@ -219,14 +225,14 @@ class Subscription implements SubscriptionInterface
             case \Magento\DB\Ddl\Trigger::EVENT_INSERT:
             case \Magento\DB\Ddl\Trigger::EVENT_UPDATE:
                 return sprintf("INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);",
-                    $this->write->quoteIdentifier($changelog->getName()),
+                    $this->write->quoteIdentifier($this->resource->getTableName($changelog->getName())),
                     $this->write->quoteIdentifier($changelog->getColumnName()),
                     $this->write->quoteIdentifier($this->getColumnName())
                 );
 
             case \Magento\DB\Ddl\Trigger::EVENT_DELETE:
                 return sprintf("INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);",
-                    $this->write->quoteIdentifier($changelog->getName()),
+                    $this->write->quoteIdentifier($this->resource->getTableName($changelog->getName())),
                     $this->write->quoteIdentifier($changelog->getColumnName()),
                     $this->write->quoteIdentifier($this->getColumnName())
                 );

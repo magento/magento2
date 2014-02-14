@@ -45,8 +45,8 @@ class Media extends \Magento\App\Helper\AbstractHelper
      * Constructor
      *
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Date $date
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\Helper\Context $context,

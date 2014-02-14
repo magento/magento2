@@ -27,11 +27,6 @@
     <referenceBlock name="header.links">
         <block class="Magento\Customer\Block\Account\Customer" name="customer" template="account/customer.phtml" before="-" cacheable="false"/>
         <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link-login" cacheable="false"/>
-        <block class="Magento\Customer\Block\Account\RegisterLink" after="authorization-link-login" name="register-link" cacheable="false">
-            <arguments>
-                <argument name="label" xsi:type="string">Register</argument>
-            </arguments>
-        </block>
     </referenceBlock>
     <move element="register-link" destination="header.links"/>
     <move element="top.links" destination="customer"/>

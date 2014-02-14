@@ -106,7 +106,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare customer/visitor, store data before save
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     protected function _beforeSave()
     {

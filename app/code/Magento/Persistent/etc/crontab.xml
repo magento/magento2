@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job name="persistent_clear_expired" instance="Magento\Persistent\Model\Observer" method="clearExpiredCronJob">
-        <schedule>0 0 * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="persistent_clear_expired" instance="Magento\Persistent\Model\Observer" method="clearExpiredCronJob">
+            <schedule>0 0 * * *</schedule>
+        </job>
+    </group>
 </config>

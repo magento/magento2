@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Resource;
 
 /**
  * Abstract resource model
@@ -31,8 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource;
-
 abstract class AbstractResource
 {
     /**
@@ -65,18 +64,22 @@ abstract class AbstractResource
 
     /**
      * Retrieve connection for read data
+     *
+     * @return \Magento\DB\Adapter\AdapterInterface
      */
     abstract protected function _getReadAdapter();
 
     /**
      * Retrieve connection for write data
+     *
+     * @return \Magento\DB\Adapter\AdapterInterface
      */
     abstract protected function _getWriteAdapter();
 
     /**
      * Start resource transaction
      *
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return $this
      */
     public function beginTransaction()
     {
@@ -87,8 +90,8 @@ abstract class AbstractResource
     /**
      * Subscribe some callback to transaction commit
      *
-     * @param callback $callback
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @param array $callback
+     * @return $this
      */
     public function addCommitCallback($callback)
     {
@@ -100,7 +103,7 @@ abstract class AbstractResource
     /**
      * Commit resource transaction
      *
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return $this
      */
     public function commit()
     {
@@ -124,7 +127,7 @@ abstract class AbstractResource
     /**
      * Roll back resource transaction
      *
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return $this
      */
     public function rollBack()
     {
@@ -139,7 +142,7 @@ abstract class AbstractResource
      * @param string $field
      * @param mixed $defaultValue
      * @param bool $unsetEmpty
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return $this
      */
     protected function _serializeField(\Magento\Object $object, $field, $defaultValue = null, $unsetEmpty = false)
     {
@@ -166,6 +169,7 @@ abstract class AbstractResource
      * @param \Magento\Core\Model\AbstractModel $object
      * @param string $field
      * @param mixed $defaultValue
+     * @return void
      */
     protected function _unserializeField(\Magento\Object $object, $field, $defaultValue = null)
     {
@@ -226,7 +230,7 @@ abstract class AbstractResource
     /**
      * Template method to return validate rules to be executed before entity is saved
      *
-     * @return \Zend_Validate_Interface|null
+     * @return null
      */
     public function getValidationRulesBeforeSave()
     {

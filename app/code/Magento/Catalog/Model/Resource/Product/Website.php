@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product;
 
 /**
  * Catalog Product Website Resource Model
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product;
-
 class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -68,6 +66,7 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection and define resource table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,7 +78,7 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Resource\Product\Website
+     * @return $this
      * @throws \Exception
      */
     public function removeProducts($websiteIds, $productIds)
@@ -114,7 +113,7 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Resource\Product\Website
+     * @return $this
      * @throws \Exception
      */
     public function addProducts($websiteIds, $productIds)

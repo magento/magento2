@@ -40,6 +40,9 @@ class Configure extends \Magento\Backend\Block\Widget
      */
     protected $_product;
 
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/composite/configure.phtml';
 
     /**
@@ -92,7 +95,7 @@ class Configure extends \Magento\Backend\Block\Widget
      * Set product object
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Composite\Configure
+     * @return $this
      */
     public function setProduct(\Magento\Catalog\Model\Product $product = null)
     {

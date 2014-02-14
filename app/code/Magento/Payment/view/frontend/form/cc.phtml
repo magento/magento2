@@ -76,10 +76,10 @@
         <div class="control">
             <input type="number" title="<?php echo __('Card Verification Number') ?>" class="input-text cvv" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{required:true, "validate-cc-cvn":"#<?php echo $_code ?>_cc_type"}' />
             <div class="note">
-                <a href="#" class="action cvv" data-mage-init='{toggleAdvanced: {toggleContainers: "#<?php echo $_code ?>_cc_type_cvv_div .tooltip"}}'><span><?php echo __('What is this?') ?></span></a>
+                <a href="#" class="action cvv" data-mage-init='{"toggleAdvanced": {"toggleContainers": "#<?php echo $_code ?>_cc_type_cvv_div .tooltip"}}'><span><?php echo __('What is this?') ?></span></a>
             </div>
             <div class="tooltip hidden">
-                <a data-mage-init='{toggleAdvanced: {toggleContainers: "#<?php echo $_code ?>_cc_type_cvv_div .tooltip"}}' href="#" title="<?php echo __('Close') ?>" class="action close"><span><?php echo __('Close') ?></span></a>
+                <a data-mage-init='{"toggleAdvanced": {"toggleContainers": "#<?php echo $_code ?>_cc_type_cvv_div .tooltip"}}' href="#" title="<?php echo __('Close') ?>" class="action close"><span><?php echo __('Close') ?></span></a>
                 <div class="content">
                     <img src="<?php echo $this->getViewFileUrl('Magento_Checkout::cvv.gif') ?>" alt="<?php echo __('Card Verification Number Visual Reference') ?>" title="<?php echo __('Card Verification Number Visual Reference') ?>" />
                 </div>

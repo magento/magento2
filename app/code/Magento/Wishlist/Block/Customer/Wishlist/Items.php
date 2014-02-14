@@ -56,7 +56,7 @@ class Items extends \Magento\View\Element\Template
     {
         $columns = array();
         foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $child) {
-            if ($child->isEnabled()){
+            if ($child->isEnabled()) {
                 $columns[] = $child;
             }
         }

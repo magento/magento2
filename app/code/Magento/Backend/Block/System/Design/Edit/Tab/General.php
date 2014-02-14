@@ -61,7 +61,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialise form fields
      *
-     * @return \Magento\Backend\Block\System\Design\Edit\Tab\General
+     * @return void
      */
     protected function _prepareForm()
     {

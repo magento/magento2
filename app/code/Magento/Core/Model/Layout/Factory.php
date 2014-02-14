@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Layout;
 
 class Factory
@@ -49,7 +48,7 @@ class Factory
     /**
      * @param array $arguments
      * @param string $className
-     * @return \Magento\Core\Model\Layout
+     * @return $this
      */
     public function createLayout(array $arguments = array(), $className = self::CLASS_NAME)
     {

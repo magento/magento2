@@ -23,6 +23,8 @@
  */
 namespace Magento\DesignEditor\Model\Plugin;
 
+use Magento\Code\Plugin\InvocationChain;
+
 class ThemeCopyService
 {
     /**
@@ -42,10 +44,10 @@ class ThemeCopyService
      * Copy additional information about theme change time
      *
      * @param array $methodArguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param InvocationChain $invocationChain
      * @return void
      */
-    public function aroundCopy(array $methodArguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
+    public function aroundCopy(array $methodArguments, InvocationChain $invocationChain)
     {
         $invocationChain->proceed($methodArguments);
 

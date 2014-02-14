@@ -41,7 +41,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     /**
      * Collect errors during sync process
      *
-     * @var array
+     * @var string[]
      */
     protected $_errors = array();
 
@@ -93,7 +93,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Load object data by path
      *
      * @param  string $path
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function loadByPath($path)
     {
@@ -148,7 +148,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Create directories recursively
      *
      * @param  string $path
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function createRecursive($path)
     {
@@ -201,7 +201,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      *
      * @param  array $dirs
      * @throws \Magento\Core\Exception
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function importDirectories($dirs)
     {
@@ -239,7 +239,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     /**
      * Clean directories at storage
      *
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function clearDirectories()
     {
@@ -251,7 +251,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Return subdirectories
      *
      * @param string $directory
-     * @return mixed
+     * @return array
      */
     public function getSubdirectories($directory)
     {
@@ -264,7 +264,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Delete directory from database
      *
      * @param string $dirPath
-     * @return \Magento\Core\Model\File\Storage\Directory\Database
+     * @return $this
      */
     public function deleteDirectory($dirPath)
     {

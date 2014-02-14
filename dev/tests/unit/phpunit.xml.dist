@@ -50,5 +50,8 @@
         <!--coverage_html_placeholder
             <log type="coverage-html" target="{{coverage_dir}}/test-reports/coverage" charset="UTF-8" yui="true" highlight="true"/>
         coverage_html_placeholder-->
+        <!--coverage_clover_placeholder
+            <log type="coverage-clover" target="{{coverage_dir}}/test-reports/phpunit.coverage.xml"/>
+        coverage_clover_placeholder-->
     </logging>
 </phpunit>

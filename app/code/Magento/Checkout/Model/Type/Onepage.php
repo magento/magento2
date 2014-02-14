@@ -703,6 +703,8 @@ class Onepage
 
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $quote->getCustomer();
+        // Need to set proper attribute id or future updates will cause data loss.
+        $customer->setData('attribute_set_id', 1);
         /** @var $customerBilling \Magento\Customer\Model\Address */
         $customerBilling = $billing->exportCustomerAddress();
         $customer->addAddress($customerBilling);
@@ -845,12 +847,6 @@ class Onepage
             $this->_checkoutSession->setLastOrderId($order->getId())
                 ->setRedirectUrl($redirectUrl)
                 ->setLastRealOrderId($order->getIncrementId());
-
-            // as well a billing agreement can be created
-            $agreement = $order->getPayment()->getBillingAgreement();
-            if ($agreement) {
-                $this->_checkoutSession->setLastBillingAgreementId($agreement->getId());
-            }
         }
 
         // add recurring profiles information to the session

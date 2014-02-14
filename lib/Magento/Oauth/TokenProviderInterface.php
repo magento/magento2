@@ -46,15 +46,16 @@ interface TokenProviderInterface
 
     /**
      * Create a request token for the specified consumer.
-     *
-     * @param ConsumerInterface $consumer
-     * @return array - The request token and secret.
+     * Example:
      * <pre>
      *     array(
      *         'oauth_token' => 'gshsjkndtyhwjhdbutfgbsnhtrequikf,
      *         'oauth_token_secret' => 'gshsjkndtyhwjhdbutfgbsnhtrequikf'
      *     )
      * </pre>
+     *
+     * @param ConsumerInterface $consumer
+     * @return array - The request token and secret.
      * @throws \Magento\Oauth\Exception - Validation errors.
      */
     public function createRequestToken($consumer);
@@ -72,15 +73,16 @@ interface TokenProviderInterface
 
     /**
      * Retrieve access token for the specified consumer given the consumer key.
-     *
-     * @param ConsumerInterface $consumer - The consumer given the 'oauth_consumer_key'.
-     * @return array - The access token and secret.
+     * Example:
      * <pre>
      *     array(
      *         'oauth_token' => 'gshsjkndtyhwjhdbutfgbsnhtrequikf,
      *         'oauth_token_secret' => 'gshsjkndtyhwjhdbutfgbsnhtrequikf'
      *     )
      * </pre>
+     *
+     * @param ConsumerInterface $consumer - The consumer given the 'oauth_consumer_key'.
+     * @return array - The access token and secret.
      * @throws \Magento\Oauth\Exception - Validation errors.
      */
     public function getAccessToken($consumer);
@@ -98,7 +100,7 @@ interface TokenProviderInterface
     /**
      * Validate an access token string.
      *
-     * @param string - The 'oauth_token' access token string.
+     * @param string $accessToken - The 'oauth_token' access token string.
      * @return int - Consumer ID if the access token is valid.
      * @throws \Magento\Oauth\Exception - Validation errors.
      */

@@ -83,7 +83,7 @@ class Visibility extends \Magento\Object
     /**
      * Retrieve visible in catalog ids array
      *
-     * @return array
+     * @return string[]
      */
     public function getVisibleInCatalogIds()
     {
@@ -93,7 +93,7 @@ class Visibility extends \Magento\Object
     /**
      * Retrieve visible in search ids array
      *
-     * @return array
+     * @return string[]
      */
     public function getVisibleInSearchIds()
     {
@@ -103,7 +103,7 @@ class Visibility extends \Magento\Object
     /**
      * Retrieve visible in site ids array
      *
-     * @return array
+     * @return string[]
      */
     public function getVisibleInSiteIds()
     {
@@ -138,7 +138,7 @@ class Visibility extends \Magento\Object
     }
 
     /**
-     * Retireve all options
+     * Retrieve all options
      *
      * @return array
      */
@@ -205,7 +205,6 @@ class Visibility extends \Magento\Object
     /**
      * Retrieve Select For Flat Attribute update
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @param int $store
      * @return \Magento\DB\Select|null
      */
@@ -219,7 +218,7 @@ class Visibility extends \Magento\Object
      * Set attribute instance
      *
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+     * @return $this
      */
     public function setAttribute($attribute)
     {
@@ -242,7 +241,7 @@ class Visibility extends \Magento\Object
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir direction
-     * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+     * @return $this
      */
     public function addValueSortToCollection($collection, $dir = 'asc')
     {

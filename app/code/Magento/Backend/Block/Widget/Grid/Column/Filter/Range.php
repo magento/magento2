@@ -35,6 +35,9 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
+    /**
+     * @return string
+     */
     public function getHtml()
     {
         $html = '<div class="range"><div class="range-line">'
@@ -51,6 +54,10 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
         return $html;
     }
 
+    /**
+     * @param string|null $index
+     * @return mixed
+     */
     public function getValue($index=null)
     {
         if ($index) {
@@ -65,6 +72,9 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
         return null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCondition()
     {
         $value = $this->getValue();

@@ -52,12 +52,7 @@ class PreProcessor
     protected $instructionFactory;
 
     /**
-     * @var \Magento\Logger
-     */
-    protected $logger;
-
-    /**
-     * @var array
+     * @var \Magento\Less\PreProcessorInterface[]
      */
     protected $preProcessors;
 
@@ -65,36 +60,33 @@ class PreProcessor
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Filesystem $filesystem
      * @param InstructionFactory $instructionFactory
-     * @param \Magento\Logger $logger
      * @param array $preProcessors
      */
     public function __construct(
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\Filesystem $filesystem,
         InstructionFactory $instructionFactory,
-        \Magento\Logger $logger,
         array $preProcessors = array()
     ) {
         $this->viewFileSystem = $viewFileSystem;
         $this->filesystem = $filesystem;
         $this->instructionFactory = $instructionFactory;
-        $this->logger = $logger;
-        $this->preProcessors = $preProcessors;
+        $this->preProcessors = $this->initLessPreProcessors($preProcessors);
     }
 
     /**
      * Instantiate instruction less preprocessors
      *
-     * @param array $params
+     * @param $preProcessors
      * @return \Magento\Less\PreProcessorInterface[]
      */
-    protected function getLessPreProcessors(array $params)
+    protected function initLessPreProcessors($preProcessors)
     {
-        $preProcessors = [];
-        foreach ($this->preProcessors as $preProcessorClass) {
-            $preProcessors[] = $this->instructionFactory->create($preProcessorClass['class'], $params);
+        $preProcessorsInstances = [];
+        foreach ($preProcessors as $preProcessorClass) {
+            $preProcessorsInstances[] = $this->instructionFactory->create($preProcessorClass['class']);
         }
-        return $preProcessors;
+        return $preProcessorsInstances;
     }
 
     /**
@@ -123,7 +115,7 @@ class PreProcessor
      * @param string $lessFileSourcePath
      * @return string
      */
-    protected function generateNewPath($lessFileSourcePath)
+    protected function generatePath($lessFileSourcePath)
     {
         $sourcePathPrefix = $this->getDirectoryRead()->getAbsolutePath();
         $targetPathPrefix = $this->getDirectoryWrite()->getAbsolutePath() . self::PUBLICATION_PREFIX_PATH . '/';
@@ -131,31 +123,46 @@ class PreProcessor
     }
 
     /**
+     * Save pre-processed less content to temporary folder
+     *
+     * @param string $lessFileSourcePath absolute path to source less file
+     * @param string $lessContent
+     * @return string absolute path to the pre-processed less file
+     */
+    protected function saveLessFile($lessFileSourcePath, $lessContent)
+    {
+        $lessFileTargetPath = $this->generatePath($lessFileSourcePath);
+        $directoryWrite = $this->getDirectoryWrite();
+        $directoryWrite->writeFile($directoryWrite->getRelativePath($lessFileTargetPath), $lessContent);
+        return $lessFileTargetPath;
+    }
+
+    /**
      * Process less content throughout all existed instruction preprocessors
      *
      * @param string $lessFilePath
-     * @param array $params
+     * @param array $viewParams
      * @return string of saved or original preprocessed less file
      */
-    public function processLessInstructions($lessFilePath, $params)
+    public function processLessInstructions($lessFilePath, $viewParams)
     {
-        $lessFileSourcePath = $this->viewFileSystem->getViewFile($lessFilePath, $params);
+        $lessFileTargetPath = $lessFileSourcePath = $this->viewFileSystem->getViewFile($lessFilePath, $viewParams);
         $directoryRead = $this->getDirectoryRead();
         $lessContent = $lessSourceContent = $directoryRead->readFile(
             $directoryRead->getRelativePath($lessFileSourcePath)
         );
 
-        foreach ($this->getLessPreProcessors($params) as $processor) {
-            $lessContent = $processor->process($lessContent);
+        foreach ($this->preProcessors as $processor) {
+            $lessContent = $processor->process(
+                $lessContent,
+                $viewParams,
+                ['parentPath' => $lessFilePath, 'parentAbsolutePath' => $lessFileSourcePath]
+            );
         }
 
-        $lessFileTargetPath = $this->generateNewPath($lessFileSourcePath);
-        if ($lessFileSourcePath != $lessFileTargetPath && $lessSourceContent != $lessContent) {
-            $directoryWrite = $this->getDirectoryWrite();
-            $directoryWrite->writeFile($directoryWrite->getRelativePath($lessFileTargetPath), $lessContent);
-            return $lessFileTargetPath;
+        if ($lessSourceContent != $lessContent) {
+            $lessFileTargetPath = $this->saveLessFile($lessFileSourcePath, $lessContent);
         }
-
-        return $lessFileSourcePath;
+        return $lessFileTargetPath;
     }
 }

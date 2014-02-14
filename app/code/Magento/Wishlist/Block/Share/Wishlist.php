@@ -109,7 +109,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Prepare global layout
      *
-     * @return \Magento\Wishlist\Block\Share\Wishlist
+     * @return $this
      *
      */
     protected function _prepareLayout()

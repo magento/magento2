@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Resource\Theme;
 
 /**
  * Theme collection
  */
-namespace Magento\Core\Model\Resource\Theme;
-
 class Collection
     extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
     implements \Magento\View\Design\Theme\Label\ListInterface, \Magento\View\Design\Theme\ListInterface
@@ -49,7 +48,7 @@ class Collection
     /**
      * Add title for parent themes
      *
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return $this
      */
     public function addParentTitle()
     {
@@ -65,7 +64,7 @@ class Collection
      * Add area filter
      *
      * @param string $area
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return $this
      */
     public function addAreaFilter($area = \Magento\Core\Model\App\Area::AREA_FRONTEND)
     {
@@ -78,7 +77,7 @@ class Collection
      *
      * @param int $typeParent
      * @param int $typeChild
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return $this
      */
     public function addTypeRelationFilter($typeParent, $typeChild)
     {
@@ -94,7 +93,7 @@ class Collection
      * Add type filter
      *
      * @param string|array $type
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return $this
      */
     public function addTypeFilter($type)
     {
@@ -105,7 +104,7 @@ class Collection
     /**
      * Filter visible themes in backend (physical and virtual only)
      *
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return $this
      */
     public function filterVisibleThemes()
     {
@@ -209,7 +208,7 @@ class Collection
      *
      * @param string $area
      * @param int $type
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return $this
      */
     public function filterThemeCustomizations(
         $area = \Magento\Core\Model\App\Area::AREA_FRONTEND,

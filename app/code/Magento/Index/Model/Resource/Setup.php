@@ -73,7 +73,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     /**
      * Sync indexes declarations in config and in DB
      *
-     * @return \Magento\Index\Model\Resource\Setup
+     * @return $this
      */
     protected function _syncIndexes()
     {

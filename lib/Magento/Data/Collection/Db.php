@@ -23,11 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
-/**
- * Base items collection class
- */
 namespace Magento\Data\Collection;
 
 use Magento\Data\Collection\Db\FetchStrategyInterface;
@@ -35,6 +30,9 @@ use Magento\DB\Adapter\AdapterInterface;
 use Magento\DB\Select;
 use Magento\Logger;
 
+/**
+ * Base items collection class
+ */
 class Db extends \Magento\Data\Collection
 {
     /**

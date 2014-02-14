@@ -85,7 +85,6 @@ abstract class AbstractMethod extends \Magento\Object
     protected $_isInitializeNeeded          = false;
     protected $_canFetchTransactionInfo     = false;
     protected $_canReviewPayment            = false;
-    protected $_canCreateBillingAgreement   = false;
     protected $_canManageRecurringProfiles  = true;
     /**#@-*/
 
@@ -267,16 +266,6 @@ abstract class AbstractMethod extends \Magento\Object
     }
 
     /**
-     * Check whether payment method instance can create billing agreements
-     *
-     * @return bool
-     */
-    public function canCreateBillingAgreement()
-    {
-        return $this->_canCreateBillingAgreement;
-    }
-
-    /**
      * Fetch transaction info
      *
      * @param \Magento\Payment\Model\Info $payment
@@ -338,16 +327,6 @@ abstract class AbstractMethod extends \Magento\Object
     public function canUseForCurrency($currencyCode)
     {
         return true;
-    }
-
-    /**
-     * Check manage billing agreements availability
-     *
-     * @return bool
-     */
-    public function canManageBillingAgreements()
-    {
-        return ($this instanceof \Magento\Payment\Model\Billing\Agreement\MethodInterface);
     }
 
     /**

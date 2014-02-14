@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Controller\Adminhtml\System;
+
+use Magento\Backend\App\Action;
 
 /**
  * Store controller
@@ -31,9 +34,7 @@
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Controller\Adminhtml\System;
-
-class Store extends \Magento\Backend\App\Action
+class Store extends Action
 {
     /**
      * Core registry
@@ -65,18 +66,21 @@ class Store extends \Magento\Backend\App\Action
     /**
      * Init actions
      *
-     * @return \Magento\Cms\Controller\Adminhtml\Page
+     * @return $this
      */
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::system_store')
+        $this->_setActiveMenu('Magento_Backend::system_store')
             ->_addBreadcrumb(__('System'), __('System'))
             ->_addBreadcrumb(__('Manage Stores'), __('Manage Stores'));
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Stores'));
@@ -84,18 +88,27 @@ class Store extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function newWebsiteAction()
     {
         $this->_coreRegistry->register('store_type', 'website');
         $this->_forward('newStore');
     }
 
+    /**
+     * @return void
+     */
     public function newGroupAction()
     {
         $this->_coreRegistry->register('store_type', 'group');
         $this->_forward('newStore');
     }
 
+    /**
+     * @return void
+     */
     public function newStoreAction()
     {
         if (!$this->_coreRegistry->registry('store_type')) {
@@ -105,18 +118,27 @@ class Store extends \Magento\Backend\App\Action
         $this->_forward('editStore');
     }
 
+    /**
+     * @return void
+     */
     public function editWebsiteAction()
     {
         $this->_coreRegistry->register('store_type', 'website');
         $this->_forward('editStore');
     }
 
+    /**
+     * @return void
+     */
     public function editGroupAction()
     {
         $this->_coreRegistry->register('store_type', 'group');
         $this->_forward('editStore');
     }
 
+    /**
+     * @return void
+     */
     public function editStoreAction()
     {
         $this->_title->add(__('Stores'));
@@ -182,6 +204,9 @@ class Store extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * @return void
+     */
     public function saveAction()
     {
         if ($this->getRequest()->isPost() && $postData = $this->getRequest()->getPost()) {
@@ -267,6 +292,9 @@ class Store extends \Magento\Backend\App\Action
         $this->_redirect('adminhtml/*/');
     }
 
+    /**
+     * @return void
+     */
     public function deleteWebsiteAction()
     {
         $this->_title->add(__('Delete Web Site'));
@@ -296,6 +324,9 @@ class Store extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function deleteGroupAction()
     {
         $this->_title->add(__('Delete Store'));
@@ -325,6 +356,9 @@ class Store extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function deleteStoreAction()
     {
         $this->_title->add(__('Delete Store View'));
@@ -354,6 +388,9 @@ class Store extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function deleteWebsitePostAction()
     {
         $itemId = $this->getRequest()->getParam('item_id');
@@ -385,6 +422,9 @@ class Store extends \Magento\Backend\App\Action
         $this->_redirect('adminhtml/*/editWebsite', array('website_id' => $itemId));
     }
 
+    /**
+     * @return void
+     */
     public function deleteGroupPostAction()
     {
         $itemId = $this->getRequest()->getParam('item_id');
@@ -418,6 +458,7 @@ class Store extends \Magento\Backend\App\Action
     /**
      * Delete store view post action
      *
+     * @return void
      */
     public function deleteStorePostAction()
     {
@@ -452,6 +493,9 @@ class Store extends \Magento\Backend\App\Action
         $this->_redirect('adminhtml/*/editStore', array('store_id' => $itemId));
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Adminhtml::store');
@@ -462,7 +506,7 @@ class Store extends \Magento\Backend\App\Action
      *
      * @param string $failPath redirect path if backup failed
      * @param array $arguments
-     * @return \Magento\Backend\Controller\Adminhtml\System\Store
+     * @return $this|void
      */
     protected function _backupDatabase($failPath, $arguments=array())
     {
@@ -497,7 +541,7 @@ class Store extends \Magento\Backend\App\Action
      * Add notification on deleting store / store view / website
      *
      * @param string $typeTitle
-     * @return \Magento\Backend\Controller\Adminhtml\System\Store
+     * @return $this
      */
     protected function _addDeletionNotice($typeTitle)
     {

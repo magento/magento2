@@ -74,6 +74,8 @@ class Search extends \Magento\Backend\Block\Widget
 
     /**
      * Define block template
+     *
+     * @return void
      */
     protected function _construct()
     {

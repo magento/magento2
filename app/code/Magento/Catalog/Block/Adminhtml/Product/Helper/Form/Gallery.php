@@ -34,7 +34,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-class Gallery extends \Magento\Data\Form\Element\AbstractElement
+use Magento\Data\Form\Element\AbstractElement;
+use Magento\Eav\Model\Entity\Attribute;
+
+class Gallery extends AbstractElement
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -67,6 +70,9 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
+    /**
+     * @return string
+     */
     public function getElementHtml()
     {
         $html = $this->getContentHtml();
@@ -89,6 +95,9 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
         return $content->toHtml();
     }
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return '';
@@ -97,7 +106,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Check "Use default" checkbox display availability
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return bool
      */
     public function canDisplayUseDefault($attribute)
@@ -112,7 +121,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Check default value usage fact
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return bool
      */
     public function usedDefault($attribute)
@@ -137,7 +146,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
      *
      * GLOBAL | WEBSITE | STORE
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return string
      */
     public function getScopeLabel($attribute)
@@ -160,7 +169,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Retrieve data object related with form
      *
-     * @return \Magento\Catalog\Model\Product || \Magento\Catalog\Model\Category
+     *@return mixed
      */
     public function getDataObject()
     {
@@ -171,7 +180,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
      * Retrieve attribute field name
      *
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return string
      */
     public function getAttributeFieldName($attribute)
@@ -186,7 +195,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Check readonly attribute
      *
-     * @param \Magento\Eav\Model\Entity\Attribute|string $attribute
+     * @param Attribute|string $attribute
      * @return boolean
      */
     public function getAttributeReadonly($attribute)
@@ -202,6 +211,9 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function toHtml()
     {
         return '<tr><td class="value" colspan="3">' . $this->getElementHtml() . '</td></tr>';

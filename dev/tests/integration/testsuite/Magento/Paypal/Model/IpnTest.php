@@ -106,7 +106,7 @@ class IpnTest extends \PHPUnit_Framework_TestCase
         $this->_model->processIpnRequest($ipnData, $this->_createMockedHttpAdapter());
 
         $recurringProfile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Recurring\Profile');
+            ->create('Magento\RecurringProfile\Model\Profile');
         $recurringProfile->loadByInternalReferenceId('5-33949e201adc4b03fbbceafccba893ce');
         $orderIds = $recurringProfile->getChildOrderIds();
         $this->assertEquals(1, count($orderIds));

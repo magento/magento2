@@ -25,8 +25,9 @@
 namespace Magento\Webapi\Controller;
 
 use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
-use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Service\Entity\MagentoDtoInterface;
+use Magento\Webapi\Controller\Rest\Request as RestRequest;
+use Magento\Webapi\Controller\Rest\Response as RestResponse;
+use Magento\Webapi\Controller\Rest\Router;
 
 /**
  * Front controller for WebAPI REST area.
@@ -37,13 +38,13 @@ use Magento\Service\Entity\MagentoDtoInterface;
  */
 class Rest implements \Magento\App\FrontControllerInterface
 {
-    /** @var \Magento\Webapi\Controller\Rest\Router */
+    /** @var Router */
     protected $_router;
 
-    /** @var \Magento\Webapi\Controller\Rest\Request */
+    /** @var RestRequest */
     protected $_request;
 
-    /** @var \Magento\Webapi\Controller\Rest\Response */
+    /** @var RestResponse */
     protected $_response;
 
     /** @var \Magento\ObjectManager */
@@ -64,37 +65,37 @@ class Rest implements \Magento\App\FrontControllerInterface
     /** @var ServiceArgsSerializer */
     protected $_serializer;
 
-    /** @var \Magento\Webapi\Controller\ErrorProcessor */
+    /** @var ErrorProcessor */
     protected $_errorProcessor;
 
     /**
      * Initialize dependencies.
      *
-     * TODO: Consider removal of warning suppression
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @param Rest\Request $request
-     * @param Rest\Response $response
-     * @param Rest\Router $router
+     * @param RestRequest $request
+     * @param RestResponse $response
+     * @param Router $router
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\App\State $appState
      * @param \Magento\Oauth\OauthInterface $oauthService
      * @param \Magento\Oauth\Helper\Request $oauthHelper
      * @param AuthorizationService $authorizationService
      * @param ServiceArgsSerializer $serializer
-     * @param \Magento\Webapi\Controller\ErrorProcessor $errorProcessor
+     * @param ErrorProcessor $errorProcessor
+     *
+     * TODO: Consider removal of warning suppression
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Webapi\Controller\Rest\Request $request,
-        \Magento\Webapi\Controller\Rest\Response $response,
-        \Magento\Webapi\Controller\Rest\Router $router,
+        RestRequest $request,
+        RestResponse $response,
+        Router $router,
         \Magento\ObjectManager $objectManager,
         \Magento\App\State $appState,
         \Magento\Oauth\OauthInterface $oauthService,
         \Magento\Oauth\Helper\Request $oauthHelper,
         AuthorizationService $authorizationService,
         ServiceArgsSerializer $serializer,
-        \Magento\Webapi\Controller\ErrorProcessor $errorProcessor
+        ErrorProcessor $errorProcessor
     ) {
         $this->_router = $router;
         $this->_request = $request;

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Resource\Product\Compare\Item;
 
 /**
@@ -93,7 +92,7 @@ class Collection
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -147,6 +146,8 @@ class Collection
 
     /**
      * Initialize resources
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -158,7 +159,7 @@ class Collection
      * Set customer filter to collection
      *
      * @param int $customerId
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function setCustomerId($customerId)
     {
@@ -171,7 +172,7 @@ class Collection
      * Set visitor filter to collection
      *
      * @param int $visitorId
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function setVisitorId($visitorId)
     {
@@ -221,7 +222,7 @@ class Collection
     /**
      * Add join to select
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function _addJoinToSelect()
     {
@@ -346,7 +347,7 @@ class Collection
     /**
      * Load Comparable attributes
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function loadComparableAttributes()
     {
@@ -363,7 +364,7 @@ class Collection
     /**
      * Use product as collection item
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function useProductItem()
     {
@@ -378,7 +379,7 @@ class Collection
     /**
      * Retrieve product ids from collection
      *
-     * @return array
+     * @return int[]
      */
     public function getProductIds()
     {
@@ -393,7 +394,7 @@ class Collection
     /**
      * Clear compare items by condition
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function clear()
     {

@@ -91,6 +91,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Set the selected resources, which is an array of resource ids. If everything is allowed, the
      * array will contain just the root resource id, which is "Magento_Adminhtml::all".
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -99,7 +101,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -109,7 +111,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -117,7 +119,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -125,7 +127,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isHidden()
     {

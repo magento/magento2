@@ -30,8 +30,9 @@
  */
 ?>
 <div class="paypal choice field items" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
-    <p><?php echo $this->getRedirectMessage() ?></p>
-    <?php if ($code = $this->getCreateBACode()): ?>
+    <p><?php echo $this->getRedirectMessage(); ?></p>
+    <?php $code = $this->getBillingAgreementCode(); ?>
+    <?php if ($code): ?>
         <input type="checkbox" id="<?php echo $code ?>" value="1" name="payment[<?php echo $code ?>]" class="checkbox">
         <label for="<?php echo $code ?>" class="label">
             <span><?php echo __('Sign a billing agreement to streamline further purchases with PayPal.') ?></span>

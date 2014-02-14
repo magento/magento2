@@ -30,7 +30,7 @@
             <?php foreach ($_options as $_option) : ?>
                 <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
                 <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
-                <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated" data-mage-init="{truncateOptions:[]}"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
+                <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated" data-mage-init='{"truncateOptions":[]}'<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                         <dl class="item options">
                             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>

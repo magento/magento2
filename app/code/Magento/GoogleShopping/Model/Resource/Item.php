@@ -44,7 +44,7 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Load Item model by product
      *
      * @param \Magento\GoogleShopping\Model\Item $model
-     * @return \Magento\GoogleShopping\Model\Resource\Item
+     * @return $this
      */
     public function loadByProduct($model)
     {

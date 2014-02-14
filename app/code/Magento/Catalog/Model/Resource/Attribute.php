@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource;
 
 /**
  * Catalog attribute resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource;
-
 class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
 {
     /**
@@ -65,7 +63,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      * Perform actions before object save
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @return $this
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -79,8 +77,8 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     /**
      * Perform actions after object save
      *
-     * @param  \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @param \Magento\Core\Model\AbstractModel $object
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -92,7 +90,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      * Clear useless attribute values
      *
      * @param  \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @return $this
      */
     protected function _clearUselessAttributeValues(\Magento\Core\Model\AbstractModel $object)
     {
@@ -120,7 +118,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      * Delete entity
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function deleteEntity(\Magento\Core\Model\AbstractModel $object)

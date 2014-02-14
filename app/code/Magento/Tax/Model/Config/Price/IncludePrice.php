@@ -57,6 +57,9 @@ class IncludePrice extends \Magento\Core\Model\Config\Value
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     public function _afterSave()
     {
         parent::_afterSave();

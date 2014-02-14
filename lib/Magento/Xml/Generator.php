@@ -32,15 +32,24 @@ class Generator
      */
     const DEFAULT_ENTITY_ITEM_NAME = 'item';
 
-    /** @var \DOMDocument|null */
+    /**
+     * @var \DOMDocument|null
+     */
     protected $_dom = null;
 
-    /** @var \DOMDocument */
+    /**
+     * @var \DOMDocument
+     */
     protected $_currentDom;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_defaultIndexedArrayItemName;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->_dom = new \DOMDocument('1.0');

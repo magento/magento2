@@ -35,6 +35,7 @@
             <module name="Magento_Core"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Catalog"/>
+            <module name="Magento_RecurringProfile"/>
             <module name="Magento_Payment"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Directory"/>

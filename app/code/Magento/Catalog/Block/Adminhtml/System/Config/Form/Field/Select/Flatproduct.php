@@ -34,8 +34,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select;
 
-class Flatproduct
-    extends \Magento\Backend\Block\System\Config\Form\Field
+use Magento\Backend\Block\System\Config\Form\Field;
+use Magento\Data\Form\Element\AbstractElement;
+
+class Flatproduct extends Field
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Flat
@@ -59,10 +61,10 @@ class Flatproduct
     /**
      * Retrieve Element HTML
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element) {
+    protected function _getElementHtml(AbstractElement $element) {
         if (!$this->_flatProduct->isBuilt()) {
             $element->setDisabled(true)
                 ->setValue(0);

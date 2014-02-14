@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Form;
 
 /**
  * Eav Form Fieldset Model
@@ -40,8 +40,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Form;
-
 class Fieldset extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -56,6 +54,14 @@ class Fieldset extends \Magento\Core\Model\AbstractModel
      */
     protected $_storeManager;
 
+    /**
+     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param array $data
+     */
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
@@ -102,7 +108,7 @@ class Fieldset extends \Magento\Core\Model\AbstractModel
      * Validate data before save data
      *
      * @throws \Magento\Core\Exception
-     * @return \Magento\Eav\Model\Form\Fieldset
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -134,7 +140,7 @@ class Fieldset extends \Magento\Core\Model\AbstractModel
      * Input array where key - store_id and value = label
      *
      * @param array $labels
-     * @return \Magento\Eav\Model\Form\Fieldset
+     * @return $this
      */
     public function setLabels(array $labels)
     {
@@ -146,7 +152,7 @@ class Fieldset extends \Magento\Core\Model\AbstractModel
      *
      * @param int $storeId
      * @param string $label
-     * @return \Magento\Eav\Model\Form\Fieldset
+     * @return $this
      */
     public function setStoreLabel($storeId, $label)
     {

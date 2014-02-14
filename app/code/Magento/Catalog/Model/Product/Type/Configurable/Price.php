@@ -38,9 +38,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     /**
      * Get product final price
      *
-     * @param   double $qty
+     * @param   float $qty
      * @param   \Magento\Catalog\Model\Product $product
-     * @return  double
+     * @return  float
      */
     public function getFinalPrice($qty, $product)
     {
@@ -108,12 +108,12 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Calculate configurable product selection price
      *
      * @param   array $priceInfo
-     * @param   decimal $productPrice
-     * @return  decimal
+     * @param   float $productPrice
+     * @return  float
      */
     protected function _calcSelectionPrice($priceInfo, $productPrice)
     {
-        if($priceInfo['is_percent']) {
+        if ($priceInfo['is_percent']) {
             $ratio = $priceInfo['pricing_value']/100;
             $price = $productPrice * $ratio;
         } else {
@@ -122,9 +122,14 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         return $price;
     }
 
+    /**
+     * @param array $values
+     * @param int $index
+     * @return array|false
+     */
     protected function _getValueByIndex($values, $index) {
         foreach ($values as $value) {
-            if($value['value_index'] == $index) {
+            if ($value['value_index'] == $index) {
                 return $value;
             }
         }

@@ -112,7 +112,7 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
         $adapter    = $this->_getReadAdapter();
 
         $table      = $this->getMainTable();
-        $storeId    = (int)$this->_storeManager->getStore()->getId();
+        $storeId    = (int)$this->_storeManager->getStore(\Magento\Core\Model\Store::ADMIN_CODE)->getId();
         $select     = parent::_getLoadSelect($field, $value, $object);
         $codeExpr   = $adapter->getIfNullSql('title.value', "{$table}.rating_code");
 

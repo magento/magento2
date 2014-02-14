@@ -81,7 +81,7 @@ class Request extends \Magento\Webapi\Controller\Request
     /**
      * Retrieve accept types understandable by requester in a form of array sorted by quality in descending order.
      *
-     * @return array
+     * @return string[]
      */
     public function getAcceptTypes()
     {

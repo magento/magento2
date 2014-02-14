@@ -60,10 +60,10 @@ class Log
     /**
      * Clean events by old visitors after plugin for clean method
      *
-     * @see Global Log Clean Settings
-     *
      * @param \Magento\Log\Model\Resource\Log $logResourceModel
      * @return \Magento\Log\Model\Resource\Log
+     *
+     * @see Global Log Clean Settings
      */
     public function afterClean($logResourceModel)
     {

@@ -57,7 +57,7 @@ class Response extends \Zend_Controller_Response_Http implements \Magento\App\Re
      * Set header appropriate to specified MIME type.
      *
      * @param string $mimeType MIME type
-     * @return \Magento\Webapi\Controller\Response
+     * @return $this
      */
     public function setMimeType($mimeType)
     {
@@ -71,7 +71,7 @@ class Response extends \Zend_Controller_Response_Http implements \Magento\App\Re
      * @param string $code
      * @param array $params
      * @param string $type
-     * @return \Magento\Webapi\Controller\Response
+     * @return $this
      */
     public function addMessage($message, $code, $params = array(), $type = self::MESSAGE_TYPE_ERROR)
     {
@@ -104,7 +104,7 @@ class Response extends \Zend_Controller_Response_Http implements \Magento\App\Re
     /**
      * Clear messages.
      *
-     * @return \Magento\Webapi\Controller\Response
+     * @return $this
      */
     public function clearMessages()
     {

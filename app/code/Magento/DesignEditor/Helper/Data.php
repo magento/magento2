@@ -25,6 +25,7 @@
  */
 namespace Magento\DesignEditor\Helper;
 
+use Magento\App\Helper\Context;
 use Magento\App\RequestInterface;
 
 /**
@@ -62,12 +63,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_translationMode;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param Context $context
      * @param string $frontName
      * @param array $disabledCacheTypes
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        Context $context,
         $frontName,
         array $disabledCacheTypes = array()
     ) {

@@ -63,6 +63,8 @@ interface SetupInterface
 
     /**
      *  Apply data updates to the system after upgrading
+     *
+     * @return void
      */
     public function applyDataUpdates();
 }

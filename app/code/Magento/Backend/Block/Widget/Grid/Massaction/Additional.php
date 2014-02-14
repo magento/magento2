@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 /**
  * Backend widget grid massaction additional action
@@ -31,10 +32,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  *
- */
-namespace Magento\Backend\Block\Widget\Grid\Massaction;
-
-/**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Additional extends \Magento\Backend\Block\Widget\Form\Generic
@@ -66,7 +63,7 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form before rendering HTML
      *
-     * @return \Magento\Backend\Block\Widget\Form
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -83,7 +80,8 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form item
      *
-     * @param array $item
+     * @param array &$item
+     * @return void
      */
     protected function _prepareFormItem(array &$item)
     {

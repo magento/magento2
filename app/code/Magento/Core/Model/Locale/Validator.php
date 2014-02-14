@@ -54,7 +54,7 @@ class Validator
      * Validate locale code
      *
      * @param string $localeCode
-     * @return boolean
+     * @return bool
      */
     public function isValid($localeCode)
     {

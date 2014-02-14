@@ -24,6 +24,10 @@
 
 namespace Magento\Customer\Service\V1;
 
+use Magento\Exception\InputException;
+use Magento\Exception\NoSuchEntityException;
+use Magento\Exception\StateException;
+
 /**
  * \Magento\Customer\Service\V1\CustomerAccountService
  *
@@ -34,15 +38,6 @@ namespace Magento\Customer\Service\V1;
  */
 class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 {
-
-    const STREET = 'Parmer';
-    const CITY = 'Albuquerque';
-    const POSTCODE = '90014';
-    const TELEPHONE = '7143556767';
-    const REGION = 'Alabama';
-    const REGION_ID = 1;
-    const COUNTRY_ID = 'US';
-
     /** Sample values for testing */
     const ID = 1;
     const FIRSTNAME = 'Jane';
@@ -61,24 +56,9 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     private $_customerFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\AddressFactory
-     */
-    private $_addressFactoryMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Customer
      */
     private $_customerModelMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Attribute
-     */
-    private $_attributeModelMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
-     */
-    private $_eavMetadataServiceMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Event\ManagerInterface
@@ -106,19 +86,18 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     private $_storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Dto\AddressBuilder
+     * @var \Magento\Customer\Model\Metadata\Validator
      */
-    private $_addressBuilder;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Dto\CustomerBuilder
-     */
-    private $_customerBuilder;
-
     private $_validator;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\CustomerService
+     */
     private $_customerServiceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\CustomerAddressService
+     */
     private $_customerAddressServiceMock;
 
     public function setUp()
@@ -177,30 +156,10 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
 
-        $this->_addressFactoryMock = $this->getMockBuilder('Magento\Customer\Model\AddressFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(array('create'))
-            ->getMock();
-
-        $this->_eavMetadataServiceMock =
-            $this->getMockBuilder('Magento\Customer\Service\Eav\AttributeMetadataServiceV1Interface')
-                ->disableOriginalConstructor()
-                ->getMock();
-
         $this->_eventManagerMock =
             $this->getMockBuilder('\Magento\Event\ManagerInterface')
                 ->disableOriginalConstructor()
                 ->getMock();
-
-        $this->_attributeModelMock =
-            $this->getMockBuilder('\Magento\Customer\Model\Attribute')
-                ->disableOriginalConstructor()
-                ->getMock();
-
-        $this->_attributeModelMock
-            ->expects($this->any())
-            ->method('getAttributeCode')
-            ->will($this->returnValue(self::ATTRIBUTE_CODE));
 
         $this->_customerModelMock
             ->expects($this->any())
@@ -222,11 +181,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_validator = $this->getMockBuilder('\Magento\Customer\Model\Metadata\Validator')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->_addressBuilder = new Dto\AddressBuilder(
-            new Dto\RegionBuilder());
-
-        $this->_customerBuilder = new Dto\CustomerBuilder();
 
         $customerBuilder = new Dto\CustomerBuilder();
 
@@ -277,7 +231,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException  \Magento\Customer\Service\Entity\V1\Exception
+     * @expectedException  \Magento\Exception\StateException
+     * @expectedExceptionCode \Magento\Exception\StateException::INVALID_STATE
      */
     public function testActivateAccountAlreadyActive()
     {
@@ -309,10 +264,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $customerService->activateAccount(self::ID, self::EMAIL_CONFIRMATION_KEY);
     }
 
-    /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionMessage No customer with customerId 1 exists.
-     */
     public function testActivateAccountDoesntExist()
     {
         $this->_customerModelMock->expects($this->any())
@@ -338,44 +289,23 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
         $customerService = $this->_createService();
 
-        $customerService->activateAccount(self::ID, self::EMAIL_CONFIRMATION_KEY);
+        try {
+            $customerService->activateAccount(self::ID, self::EMAIL_CONFIRMATION_KEY);
+            $this->fail('Expected exception not thrown.');
+        } catch (\Magento\Exception\NoSuchEntityException $nsee) {
+            $this->assertSame($nsee->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
+            $this->assertSame(
+                $nsee->getParams(),
+                [
+                    'customerId' => self::ID,
+                ]
+            );
+        }
     }
 
     /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionMessage DB was down
-     */
-    public function testActivateAccountLoadError()
-    {
-        $this->_customerModelMock->expects($this->any())
-            ->method('load')
-            ->will($this->throwException(new \Exception('DB was down')));
-
-        $this->_mockReturnValue(
-            $this->_customerModelMock,
-            array(
-                'getId' => 0,
-            )
-        );
-
-        $this->_customerFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->_customerModelMock));
-
-        // Assertions
-        $this->_customerModelMock->expects($this->never())
-            ->method('save');
-        $this->_customerModelMock->expects($this->never())
-            ->method('setConfirmation');
-
-        $customerService = $this->_createService();
-
-        $customerService->activateAccount(self::ID, self::EMAIL_CONFIRMATION_KEY);
-    }
-
-    /**
-     * @expectedException \Magento\Core\Exception
-     * @expectedExceptionMessage Wrong confirmation key
+     * @expectedException \Magento\Exception\StateException
+     * @expectedExceptionCode \Magento\Exception\StateException::INPUT_MISMATCH
      */
     public function testActivateAccountBadKey()
     {
@@ -387,7 +317,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             $this->_customerModelMock,
             array(
                 'getId' => self::ID,
-                'getConfirmation' => self::EMAIL_CONFIRMATION_KEY . 'BAD',
+                'getConfirmation' => self::EMAIL_CONFIRMATION_KEY,
             )
         );
 
@@ -403,12 +333,12 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
         $customerService = $this->_createService();
 
-        $customerService->activateAccount(self::ID, self::EMAIL_CONFIRMATION_KEY);
+        $customerService->activateAccount(self::ID, self::EMAIL_CONFIRMATION_KEY . 'BAD');
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
-     * @expectedExceptionMessage Failed to confirm customer account
+     * @expectedException \Exception
+     * @expectedExceptionMessage DB is down
      */
     public function testActivateAccountSaveFailed()
     {
@@ -464,7 +394,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
+     * @expectedException \Magento\Exception\AuthenticationException
      * @expectedExceptionMessage exception message
      */
     public function testLoginAccountWithException()
@@ -513,9 +443,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_RESET_TOKEN_EXPIRED
-     * @expectedExceptionMessage Your password reset link has expired.
+     * @expectedException \Magento\Exception\StateException
+     * @expectedExceptionCode \Magento\Exception\StateException::EXPIRED
      */
     public function testValidateResetPasswordLinkTokenExpired()
     {
@@ -540,9 +469,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_RESET_TOKEN_EXPIRED
-     * @expectedExceptionMessage Your password reset link has expired.
+     * @expectedException \Magento\Exception\StateException
+     * @expectedExceptionCode \Magento\Exception\StateException::INPUT_MISMATCH
      */
     public function testValidateResetPasswordLinkTokenInvalid()
     {
@@ -567,11 +495,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $customerService->validateResetPasswordLinkToken(self::ID, $invalidToken);
     }
 
-    /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_INVALID_CUSTOMER_ID
-     * @expectedExceptionMessage No customer with customerId 1 exists
-     */
     public function testValidateResetPasswordLinkTokenWrongUser()
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
@@ -591,14 +514,20 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
         $customerService = $this->_createService();
 
-        $customerService->validateResetPasswordLinkToken(1, $resetToken);
+        try {
+            $customerService->validateResetPasswordLinkToken(1, $resetToken);
+            $this->fail("Expected NoSuchEntityException not caught");
+        } catch (\Magento\Exception\NoSuchEntityException $nsee) {
+            $this->assertSame($nsee->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
+            $this->assertSame(
+                $nsee->getParams(),
+                [
+                    'customerId' => self::ID,
+                ]
+            );
+        }
     }
 
-    /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_INVALID_RESET_TOKEN
-     * @expectedExceptionMessage Invalid password reset token
-     */
     public function testValidateResetPasswordLinkTokenNull()
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
@@ -618,7 +547,19 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
         $customerService = $this->_createService();
 
-        $customerService->validateResetPasswordLinkToken(null, null);
+        try {
+            $customerService->validateResetPasswordLinkToken(14, null);
+            $this->fail('Expected exception not thrown.');
+        } catch ( InputException $e) {
+            $expectedParams = [
+                [
+                    'code' => InputException::INVALID_FIELD_VALUE,
+                    'fieldName' => 'resetPasswordLinkToken',
+                    'value' => null,
+                ]
+            ];
+            $this->assertEquals($expectedParams, $e->getParams());
+        }
     }
 
     public function testSendPasswordResetLink()
@@ -644,11 +585,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $customerService->sendPasswordResetLink($email, self::WEBSITE_ID);
     }
 
-    /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_EMAIL_NOT_FOUND
-     * @expectedExceptionMessage No customer found for the provided email and website ID
-     */
     public function testSendPasswordResetLinkBadEmailOrWebsite()
     {
         $email = 'foo@example.com';
@@ -669,12 +605,23 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
         $customerService = $this->_createService();
 
-        $customerService->sendPasswordResetLink($email, 0);
+        try {
+            $customerService->sendPasswordResetLink($email, 0);
+            $this->fail("Expected NoSuchEntityException not caught");
+        } catch (\Magento\Exception\NoSuchEntityException $nsee) {
+            $this->assertSame($nsee->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
+            $this->assertSame(
+                $nsee->getParams(),
+                [
+                    'email' => $email,
+                    'websiteId' => 0
+                ]
+            );
+        }
     }
 
     /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_UNKNOWN
+     * @expectedException \Magento\Core\Exception
      * @expectedExceptionMessage Invalid transactional email code: 0
      */
     public function testSendPasswordResetLinkSendException()
@@ -774,9 +721,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_RESET_TOKEN_EXPIRED
-     * @expectedExceptionMessage Your password reset link has expired.
+     * @expectedException \Magento\Exception\StateException
+     * @expectedExceptionCode \Magento\Exception\StateException::EXPIRED
      */
     public function testResetPasswordTokenExpired()
     {
@@ -809,9 +755,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_RESET_TOKEN_EXPIRED
-     * @expectedExceptionMessage Your password reset link has expired.
+     * @expectedException \Magento\Exception\StateException
+     * @expectedExceptionCode \Magento\Exception\StateException::INPUT_MISMATCH
      */
     public function testResetPasswordTokenInvalid()
     {
@@ -844,11 +789,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $customerService->resetPassword(self::ID, $password, $invalidToken);
     }
 
-    /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_INVALID_CUSTOMER_ID
-     * @expectedExceptionMessage No customer with customerId 4200 exists
-     */
     public function testResetPasswordTokenWrongUser()
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
@@ -876,14 +816,20 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
         $customerService = $this->_createService();
 
-        $customerService->resetPassword(4200, $password, $resetToken);
+        try {
+            $customerService->resetPassword(4200, $password, $resetToken);
+            $this->fail("Expected NoSuchEntityException not caught");
+        } catch (\Magento\Exception\NoSuchEntityException $nsee) {
+            $this->assertSame($nsee->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
+            $this->assertSame(
+                $nsee->getParams(),
+                [
+                    'customerId' => 4200,
+                ]
+            );
+        }
     }
 
-    /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_INVALID_RESET_TOKEN
-     * @expectedExceptionMessage Invalid password reset token
-     */
     public function testResetPasswordTokenInvalidUserId()
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
@@ -911,9 +857,20 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
         $customerService = $this->_createService();
 
-        $customerService->resetPassword(0, $password, $resetToken);
+        try {
+            $customerService->resetPassword(0, $password, $resetToken);
+            $this->fail('Expected exception not thrown.');
+        } catch ( InputException $e) {
+            $expectedParams = [
+                [
+                    'code' => InputException::INVALID_FIELD_VALUE,
+                    'fieldName' => 'customerId',
+                    'value' => 0,
+                ]
+            ];
+            $this->assertEquals($expectedParams, $e->getParams());
+        }
     }
-
 
     public function testSendConfirmation()
     {
@@ -937,10 +894,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $customerService->sendConfirmation('email');
     }
 
-    /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_EMAIL_NOT_FOUND
-     */
     public function testSendConfirmationNoEmail()
     {
         $this->_customerFactoryMock->expects($this->any())
@@ -954,12 +907,21 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_customerModelMock));
 
         $customerService = $this->_createService();
-        $customerService->sendConfirmation('email');
+        try {
+            $customerService->sendConfirmation('email@no.customer');
+            $this->fail("Expected NoSuchEntityException not caught");
+        } catch (NoSuchEntityException $nsee) {
+            $expectedParams = [
+                'email' => 'email@no.customer',
+                'websiteId' => null
+            ];
+            $this->assertEquals($expectedParams, $nsee->getParams());
+        }
     }
 
     /**
-     * @expectedException \Magento\Customer\Service\Entity\V1\Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_CONFIRMATION_NOT_NEEDED
+     * @expectedException \Magento\Exception\StateException
+     * @expectedExceptionCode \Magento\Exception\StateException::INVALID_STATE
      */
     public function testSendConfirmationNotNeeded()
     {
@@ -969,14 +931,17 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_customerModelMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(55));
+        $this->_storeMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->will($this->returnValue(2));
         $this->_customerModelMock->expects($this->once())
             ->method('setWebsiteId')
+            ->with(2)
             ->will($this->returnValue($this->_customerModelMock));
 
         $customerService = $this->_createService();
-        $customerService->sendConfirmation('email');
+        $customerService->sendConfirmation('email@test.com');
     }
-
 
     private function _setupStoreMock()
     {
@@ -994,7 +959,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->_storeMock));
     }
-
 
     /**
      * @param \PHPUnit_Framework_MockObject_MockObject $mock

@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job name="aggregate_sales_report_shipment_data" instance="Magento\Shipping\Model\Observer" method="aggregateSalesReportShipmentData">
-        <schedule>0 0 * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="aggregate_sales_report_shipment_data" instance="Magento\Shipping\Model\Observer" method="aggregateSalesReportShipmentData">
+            <schedule>0 0 * * *</schedule>
+        </job>
+    </group>
 </config>

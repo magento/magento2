@@ -50,7 +50,7 @@ class Pear extends \Magento\Install\Model\Installer\AbstractInstaller
 
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getPackages()
     {

@@ -33,12 +33,14 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
+use Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain;
+
+class Main extends AbstractMain
 {
     /**
      * Adding product form elements for editing attribute
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main
+     * @return $this
      */
     protected function _prepareForm()
     {

@@ -97,9 +97,9 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
      * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Catalog\Model\Product\Flat\Flag $flatFlag
-     * @param $addFilterableAttrs
-     * @param $addChildData
-     * @param $isAvailable
+     * @param mixed $addFilterableAttrs
+     * @param mixed $addChildData
+     * @param bool $isAvailable
      */
     public function __construct(
         \Magento\App\Helper\Context $context,

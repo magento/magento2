@@ -65,7 +65,7 @@ class Flat extends \Magento\Core\Model\Config\Value
     /**
      * After enable flat products required reindex
      *
-     * @return \Magento\Catalog\Model\System\Config\Backend\Catalog\Product\Flat
+     * @return $this
      */
     protected function _afterSave()
     {

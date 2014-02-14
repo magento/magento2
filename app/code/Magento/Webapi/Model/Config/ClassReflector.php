@@ -48,8 +48,8 @@ class ClassReflector
     /**
      * Reflect methods in given class and set retrieved data into reader.
      *
-     * @param array $methods
      * @param string $className
+     * @param array $methods
      * @return array <pre>array(
      *     $firstMethod => array(
      *         'documentation' => $methodDocumentation,

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect\Package;
 
 /**
  * Class to create archive.
@@ -31,64 +32,61 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect\Package;
-
 class Writer
 {
-
     /**
-    * Name of package configuration file
-    */
+     * Name of package configuration file
+     */
     const DEFAULT_NAME_PACKAGE_CONFIG = 'package.xml';
 
     /**
-    * Temporary dir for extract DEFAULT_NAME_PACKAGE.
-    */
+     * Temporary dir for extract DEFAULT_NAME_PACKAGE.
+     */
     const PATH_TO_TEMPORARY_DIRECTORY = 'var/package/tmp/';
 
     /**
-    * Files are used in package.
-    *
-    * @var array
-    */
+     * Files are used in package.
+     *
+     * @var array
+     */
     protected $_files = array();
 
     /**
-    * Archivator is used for extract DEFAULT_NAME_PACKAGE.
-    *
-    * @var \Magento\Archive
-    */
+     * Archivator is used for extract DEFAULT_NAME_PACKAGE.
+     *
+     * @var \Magento\Archive
+     */
     protected $_archivator = null;
 
     /**
-    * Name of package with extension. Extension should be only one.
-    * "package.tar.gz" is not ability, only "package.tgz".
-    *
-    * @var string
-    */
+     * Name of package with extension. Extension should be only one.
+     * "package.tar.gz" is not ability, only "package.tgz".
+     *
+     * @var string
+     */
     protected $_namePackage = 'package';
 
     /**
-    * Temporary directory where package is situated.
-    *
-    * @var string
-    */
+     * Temporary directory where package is situated.
+     *
+     * @var string
+     */
     protected $_temporaryPackageDir = '';
 
     /**
-    * Path to archive with package.
-    *
-    * @var mixed
-    */
+     * Path to archive with package.
+     *
+     * @var string
+     */
     protected $_pathToArchive = '';
 
     /**
-    * Constructor initializes $_file.
-    *
-    * @param array $files
-    * @param string $namePackage
-    * @return \Magento\Connect\Package\Reader
-    */
+     * Constructor initializes $_file.
+     *
+     * @param array $files
+     * @param string $namePackage
+     * @return $this
+     */
     public function __construct($files, $namePackage='')
     {
         $this->_files = $files;
@@ -97,10 +95,10 @@ class Writer
     }
 
     /**
-    * Retrieve archivator.
-    *
-    * @return \Magento\Archive
-    */
+     * Retrieve archivator.
+     *
+     * @return \Magento\Archive
+     */
     protected function _getArchivator()
     {
         if (is_null($this->_archivator)) {
@@ -110,18 +108,18 @@ class Writer
     }
 
     /**
-    * Create dir in PATH_TO_TEMPORARY_DIRECTORY and move all files
-    * to this dir.
-    *
-    * @return \Magento\Connect\Package\Writer
-    */
+     * Create dir in PATH_TO_TEMPORARY_DIRECTORY and move all files
+     * to this dir.
+     *
+     * @return $this
+     */
     public function composePackage()
     {
-        @mkdir(self::PATH_TO_TEMPORARY_DIRECTORY, 0777, true);        
+        @mkdir(self::PATH_TO_TEMPORARY_DIRECTORY, 0777, true);
         $root = self::PATH_TO_TEMPORARY_DIRECTORY . basename($this->_namePackage);
         @mkdir($root, 0777, true);
         foreach ($this->_files as $file) {
-            
+
             if (is_dir($file) || is_file($file)) {
                 $fileName = basename($file);
                 $filePath = dirname($file);
@@ -138,13 +136,13 @@ class Writer
     }
 
     /**
-    * Create dir in PATH_TO_TEMPORARY_DIRECTORY and move all files
-    * to this dir.
-    * This dir has a structure compatible with previous version of Magento Connact Manager
-    *
-    * @param arra $destinationFiles
-    * @return \Magento\Connect\Package\Writer
-    */
+     * Create dir in PATH_TO_TEMPORARY_DIRECTORY and move all files
+     * to this dir.
+     * This dir has a structure compatible with previous version of Magento Connact Manager
+     *
+     * @param array $destinationFiles
+     * @return $this
+     */
     public function composePackageV1x(array $destinationFiles)
     {
         @mkdir(self::PATH_TO_TEMPORARY_DIRECTORY, 0777, true);
@@ -170,11 +168,11 @@ class Writer
     }
 
     /**
-    * Add package.xml to temporary package directory.
-    *
-    * @param $content
-    * @return \Magento\Connect\Package\Writer
-    */
+     * Add package.xml to temporary package directory.
+     *
+     * @param mixed $content
+     * @return $this
+     */
     public function addPackageXml($content)
     {
         file_put_contents($this->_temporaryPackageDir . '/' . self::DEFAULT_NAME_PACKAGE_CONFIG, $content);
@@ -182,10 +180,10 @@ class Writer
     }
 
     /**
-    * Archives package.
-    *
-    * @return \Magento\Connect\Package\Writer
-    */
+     * Archives package.
+     *
+     * @return $this
+     */
     public function archivePackage()
     {
         $this->_pathToArchive = $this->_getArchivator()->pack(
@@ -197,12 +195,12 @@ class Writer
         \Magento\System\Dirs::rm(array("-r", $this->_temporaryPackageDir));
         return $this;
     }
-    
+
     /**
-    * Getter for pathToArchive
-    *
-    * @return string
-    */
+     * Getter for pathToArchive
+     *
+     * @return string
+     */
     public function getPathToArchive()
     {
         return $this->_pathToArchive;

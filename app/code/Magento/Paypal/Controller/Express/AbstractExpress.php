@@ -412,11 +412,6 @@ abstract class AbstractExpress extends \Magento\App\Action\Action
             if ($order) {
                 $this->_getCheckoutSession()->setLastOrderId($order->getId())
                     ->setLastRealOrderId($order->getIncrementId());
-                // as well a billing agreement can be created
-                $agreement = $this->_checkout->getBillingAgreement();
-                if ($agreement) {
-                    $this->_getCheckoutSession()->setLastBillingAgreementId($agreement->getId());
-                }
             }
 
             // recurring profiles may be created along with the order or without it

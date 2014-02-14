@@ -25,6 +25,7 @@
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
+use Magento\Catalog\Model\Resource\Category\Collection;
 
 /**
  * Product form category field helper
@@ -82,6 +83,7 @@ class Category extends \Magento\Data\Form\Element\Multiselect
 
     /**
      * Get values for select
+     *
      * @return array
      */
     public function getValues()
@@ -107,7 +109,8 @@ class Category extends \Magento\Data\Form\Element\Multiselect
 
     /**
      * Get categories collection
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     *
+     * @return Collection
      */
     protected function _getCategoriesCollection()
     {

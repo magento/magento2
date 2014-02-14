@@ -31,6 +31,9 @@ namespace Magento\Install\Block;
 
 class Begin extends \Magento\Install\Block\AbstractBlock
 {
+    /**
+     * @var string
+     */
     protected $_template = 'begin.phtml';
 
     /**

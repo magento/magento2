@@ -27,7 +27,7 @@ namespace Magento\Indexer\Model;
 class Processor
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     protected $config;
 
@@ -47,13 +47,13 @@ class Processor
     protected $mviewProcessor;
 
     /**
-     * @param Config $config
+     * @param ConfigInterface $config
      * @param IndexerFactory $indexerFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param \Magento\Mview\ProcessorInterface $mviewProcessor
      */
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         IndexerFactory $indexerFactory,
         Indexer\CollectionFactory $indexersFactory,
         \Magento\Mview\ProcessorInterface $mviewProcessor
@@ -69,10 +69,10 @@ class Processor
      */
     public function reindexAllInvalid()
     {
-        foreach ($this->config->getIndexerIds() as $indexerId) {
+        foreach (array_keys($this->config->getIndexers()) as $indexerId) {
             $indexer = $this->indexerFactory->create();
             $indexer->load($indexerId);
-            if ($indexer->getState()->getStatus() == Indexer\State::STATUS_INVALID) {
+            if ($indexer->isInvalid()) {
                 $indexer->reindexAll();
             }
         }
@@ -83,7 +83,7 @@ class Processor
      */
     public function reindexAll()
     {
-        /** @var Indexer[] $indexers */
+        /** @var IndexerInterface[] $indexers */
         $indexers = $this->indexersFactory->create()->getItems();
         foreach ($indexers as $indexer) {
             $indexer->reindexAll();

@@ -121,7 +121,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      * @param null|string $destination
      * @param null|string $newName
      * @return void
-     * @throws \Exception  if destination path is not writable
+     * @throws \Exception  If destination path is not writable
      */
     public function save($destination = null, $newName = null)
     {
@@ -135,7 +135,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Apply options to image. Will be usable later when create an option container
      *
-     * @return \Magento\Image\Adapter\ImageMagick
+     * @return $this
      */
     protected function _applyOptions()
     {
@@ -365,7 +365,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      * Checks required dependencies
      *
      * @return void
-     * @throws \Exception if some of dependencies are missing
+     * @throws \Exception If some of dependencies are missing
      */
     public function checkDependencies()
     {
@@ -388,8 +388,6 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
 
     /**
      * Standard destructor. Destroy stored information about image
-     *
-     * @return void
      */
     public function __destruct()
     {
@@ -399,7 +397,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Destroy stored information about image
      *
-     * @return \Magento\Image\Adapter\ImageMagick
+     * @return $this
      */
     public function destroy()
     {

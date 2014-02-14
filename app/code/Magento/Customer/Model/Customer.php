@@ -119,13 +119,6 @@ class Customer extends \Magento\Core\Model\AbstractModel
      */
     protected $_isReadonly = false;
 
-    /**
-     * Confirmation requirement flag
-     *
-     * @var boolean
-     */
-    private static $_isConfirmationRequired;
-
     /** @var \Magento\Email\Model\Sender */
     protected $_sender;
 
@@ -716,12 +709,9 @@ class Customer extends \Magento\Core\Model\AbstractModel
         if ($this->canSkipConfirmation()) {
             return false;
         }
-        if (self::$_isConfirmationRequired === null) {
-            $storeId = $this->getStoreId() ? $this->getStoreId() : null;
-            self::$_isConfirmationRequired = (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_IS_CONFIRM, $storeId);
-        }
+        $storeId = $this->getStoreId() ? $this->getStoreId() : null;
 
-        return self::$_isConfirmationRequired;
+        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_IS_CONFIRM, $storeId);
     }
 
     /**

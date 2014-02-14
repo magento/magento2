@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\User\Model\Resource\Role\User;
 
 /**
  * Admin role users collection
@@ -32,13 +32,12 @@
  * @package     Magento_User
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\User\Model\Resource\Role\User;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +47,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Initialize select
      *
-     * @return \Magento\User\Model\Resource\Role\User\Collection
+     * @return $this
      */
     protected function _initSelect()
     {

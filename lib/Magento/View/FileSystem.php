@@ -95,8 +95,9 @@ class FileSystem
         $filePath = $this->_viewService->extractScope($this->normalizePath($fileId), $params);
         $this->_viewService->updateDesignParams($params);
         $skipProxy = isset($params['skipProxy']) && $params['skipProxy'];
-        return $this->_resolutionPool->getViewStrategy($skipProxy)->getViewFile($params['area'],
-            $params['themeModel'], $params['locale'], $filePath, $params['module']);
+        return $this->_resolutionPool->getViewStrategy($skipProxy)->getViewFile(
+            $params['area'], $params['themeModel'], $params['locale'], $filePath, $params['module']
+        );
     }
 
     /**

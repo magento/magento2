@@ -31,6 +31,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 class Price extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    /**
+     * @return void
+     */
     protected function _prepareForm()
     {
         $product = $this->_coreRegistry->registry('product');
@@ -59,4 +62,4 @@ class Price extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->setForm($form);
     }
-}// Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price END
+}

@@ -29,9 +29,9 @@ namespace Magento\Customer\Block\Widget;
 class AbstractWidget extends \Magento\View\Element\Template
 {
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
      */
-    protected $_eavConfig;
+    protected $_attributeMetadata;
 
     /**
      * @var \Magento\Customer\Helper\Address
@@ -40,18 +40,18 @@ class AbstractWidget extends \Magento\View\Element\Template
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $attributeMetadata
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $attributeMetadata,
         array $data = array()
     ) {
         $this->_addressHelper = $addressHelper;
-        $this->_eavConfig = $eavConfig;
+        $this->_attributeMetadata = $attributeMetadata;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -91,10 +91,10 @@ class AbstractWidget extends \Magento\View\Element\Template
      * Retrieve customer attribute instance
      *
      * @param string $attributeCode
-     * @return \Magento\Customer\Model\Attribute|false
+     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata
      */
     protected function _getAttribute($attributeCode)
     {
-        return $this->_eavConfig->getAttribute('customer', $attributeCode);
+        return $this->_attributeMetadata->getAttributeMetadata('customer', $attributeCode);
     }
 }

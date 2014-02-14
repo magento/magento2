@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job name="aggregate_sales_report_coupons_data" instance="Magento\SalesRule\Model\Observer" method="aggregateSalesReportCouponsData">
-        <schedule>0 0 * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="aggregate_sales_report_coupons_data" instance="Magento\SalesRule\Model\Observer" method="aggregateSalesReportCouponsData">
+            <schedule>0 0 * * *</schedule>
+        </job>
+    </group>
 </config>

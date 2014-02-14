@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Resource\Entity\Attribute;
 
+use Magento\Eav\Model\Entity\Type;
 
 /**
  * EAV attribute resource collection
@@ -32,10 +34,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Entity\Attribute;
-
-use Magento\Eav\Model\Entity\Type;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -168,7 +166,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter for selecting of attributes that is in all sets
      *
-     * @param array $setIds
+     * @param int[] $setIds
      * @return $this
      */
     public function setInAllAttributeSetsFilter(array $setIds)

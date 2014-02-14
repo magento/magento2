@@ -70,7 +70,7 @@ class File
      * Lock process file
      *
      * @param bool $nonBlocking
-     * @return bool
+     * @return void
      */
     public function processLock($nonBlocking = true)
     {

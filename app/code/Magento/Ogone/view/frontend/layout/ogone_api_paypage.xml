@@ -25,12 +25,12 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <remove name="catalog.topnav"/>
-    <referenceBlock name="header-wrapper">
+    <referenceContainer name="header-wrapper">
         <remove name="top.links"/>
         <remove name="top.search"/>
         <remove name="store_language"/>
         <remove name="top.container"/>
-    </referenceBlock>
+    </referenceContainer>
     <referenceBlock name="footer">
         <remove name="cms_footer_links"/>
         <remove name="footer_links"/>

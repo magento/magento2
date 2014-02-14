@@ -50,6 +50,9 @@ abstract class AbstractFrontend
      */
     protected $_attrBooleanFactory;
 
+    /**
+     * @param \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory
+     */
     function __construct(\Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory)
     {
         $this->_attrBooleanFactory = $attrBooleanFactory;

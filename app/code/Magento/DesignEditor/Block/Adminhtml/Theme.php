@@ -65,7 +65,7 @@ class Theme extends \Magento\Backend\Block\Template
      * Add button
      *
      * @param Button $button
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme
+     * @return $this
      */
     public function addButton($button)
     {
@@ -76,7 +76,7 @@ class Theme extends \Magento\Backend\Block\Template
     /**
      * Clear buttons
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme
+     * @return $this
      */
     public function clearButtons()
     {

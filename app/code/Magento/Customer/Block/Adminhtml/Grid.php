@@ -46,9 +46,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_customersFactory;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Group\CollectionFactory
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
-    protected $_groupsFactory;
+    protected $_groupService;
+    
+    /**
+     * @var \Magento\Convert\Object
+     */
+    protected $_converter;
 
     /**
      * @var \Magento\Customer\Helper\Data
@@ -60,8 +65,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
-     * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory
-     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param \Magento\Convert\Object $converter
      * @param array $data
      */
     public function __construct(
@@ -69,14 +74,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory,
-        \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory,
-        \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        \Magento\Convert\Object $converter,
         array $data = array()
     ) {
-        $this->_customerHelper = $customerHelper;
         $this->_systemStore = $systemStore;
         $this->_customersFactory = $customersFactory;
-        $this->_groupsFactory = $groupsFactory;
+        $this->_groupService = $groupService;
+        $this->_converter = $converter;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -133,10 +138,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'index'     => 'email'
         ));
 
-        $groups = $this->_groupsFactory->create()
-            ->addFieldToFilter('customer_group_id', array('gt'=> 0))
-            ->load()
-            ->toOptionHash();
+        $groups = $this->_groupService->getGroups(FALSE);
+        $groups = $this->_converter->toOptionHash($groups, 'id', 'code');
 
         $this->addColumn('group', array(
             'header'    =>  __('Group'),
@@ -235,7 +238,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
              'url'      => $this->getUrl('customer/*/massUnsubscribe')
         ));
 
-        $groups = $this->_customerHelper->getGroups()->toOptionArray();
+        $groups = $this->_converter->toOptionArray($this->_groupService->getGroups(), 'id', 'code');
 
         array_unshift($groups, array('label'=> '', 'value'=> ''));
         $this->getMassactionBlock()->addItem('assign_group', array(

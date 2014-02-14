@@ -36,7 +36,7 @@ namespace Magento\Reports\Model\Resource\Product\Sold\Collection;
 
 class Initial extends \Magento\Reports\Model\Resource\Report\Collection
 {
-    /*
+    /**
      * Report sub-collection class name
      *
      * @var string

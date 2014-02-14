@@ -23,21 +23,28 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Helper;
 
 /**
  * Eav data helper
  */
-namespace Magento\Eav\Helper;
-
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * XML path to input types validator data in config
+     *
+     * @var string
      */
     const XML_PATH_VALIDATOR_DATA_INPUT_TYPES = 'general/validator_data/input_types';
 
+    /**
+     * @var array
+     */
     protected $_attributesLockedFields = array();
 
+    /**
+     * @var array
+     */
     protected $_entityTypeFrontendClasses = array();
 
     /**

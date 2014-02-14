@@ -269,7 +269,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * Get thumbnail path in current directory by image name
      *
-     * @param $imageName
+     * @param string $imageName
      * @return string
      * @throws \InvalidArgumentException
      */
@@ -305,7 +305,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * Get allowed extensions by type
      *
-     * @return array
+     * @return string[]
      * @throws \Magento\Exception
      */
     public function getAllowedExtensionsByType()

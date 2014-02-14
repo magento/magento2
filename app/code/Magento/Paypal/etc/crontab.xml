@@ -24,5 +24,7 @@
  */
 -->
 <config>
-    <job name="paypal_fetch_settlement_reports" instance="Magento\Paypal\Model\Observer" method="fetchReports" />
+    <group id="default">
+        <job name="paypal_fetch_settlement_reports" instance="Magento\Paypal\Model\Observer" method="fetchReports" />
+    </group>
 </config>

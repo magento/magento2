@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Store;
 
 /**
  * Adminhtml store content block
@@ -31,9 +32,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\System\Store;
-
 class Store extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
@@ -41,6 +39,9 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected $_blockGroup = 'Magento_Adminhtml';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_blockGroup = 'Magento_Backend';
@@ -49,6 +50,9 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Container
         parent::_construct();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareLayout()
     {
         /* Update default add button to add website button */

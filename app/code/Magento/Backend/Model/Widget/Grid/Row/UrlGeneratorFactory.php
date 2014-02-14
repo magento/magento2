@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Backend\Model\Widget\Grid\Row;
 
 /**
  * Grid row url generator factory
@@ -32,8 +32,6 @@
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Model\Widget\Grid\Row;
-
 class UrlGeneratorFactory
 {
     /**

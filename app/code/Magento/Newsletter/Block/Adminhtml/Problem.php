@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Newsletter\Block\Adminhtml;
+
+use Magento\Newsletter\Model\Resource\Problem\Collection;
 
 /**
  * Newsletter problem block template.
@@ -31,10 +34,6 @@
  * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Block\Adminhtml;
-
-use Magento\Newsletter\Model\Resource\Problem\Collection;
-
 class Problem extends \Magento\Backend\Block\Template
 {
 
@@ -62,6 +61,9 @@ class Problem extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();

@@ -69,8 +69,8 @@ class Dir
     /**
      * Clear temporary directories
      *
-     * @param $arguments
-     * @return mixed
+     * @param array $arguments
+     * @return array
      */
     public function beforeDispatch($arguments)
     {

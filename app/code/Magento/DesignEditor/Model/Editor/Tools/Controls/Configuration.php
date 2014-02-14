@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
 
 /**
@@ -164,7 +163,7 @@ class Configuration
     /**
      * Prepare list of control links
      *
-     * @param array $controls
+     * @param array &$controls
      * @return $this
      */
     protected function _prepareControlList(array &$controls)
@@ -181,7 +180,7 @@ class Configuration
     /**
      * Load data item values and default values from the view configuration
      *
-     * @param array $control
+     * @param array &$control
      * @param string $paramName
      * @param \Magento\Config\View $viewConfiguration
      * @return $this

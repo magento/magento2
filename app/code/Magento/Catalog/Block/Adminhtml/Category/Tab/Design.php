@@ -27,12 +27,23 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
 class Design extends \Magento\Catalog\Block\Adminhtml\Form
 {
+    /**
+     * @var array|null
+     */
+    protected $_category;
+
+    /**
+     * @return void
+     */
     public function _construct()
     {
         parent::_construct();
         $this->setShowGlobalIcon(true);
     }
 
+    /**
+     * @return array|null
+     */
     public function getCategory()
     {
         if (!$this->_category) {
@@ -41,6 +52,9 @@ class Design extends \Magento\Catalog\Block\Adminhtml\Form
         return $this->_category;
     }
 
+    /**
+     * @return void
+     */
     public function _prepareLayout()
     {
         parent::_prepareLayout();

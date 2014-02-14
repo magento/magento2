@@ -23,11 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Config\Source\Price;
 
-class Step implements \Magento\Core\Model\Option\ArrayInterface
+use Magento\Core\Model\Option\ArrayInterface;
+
+class Step implements ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return array(

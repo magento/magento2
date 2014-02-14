@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Category\Attribute;
 
 /**
  * Catalog category EAV additional attribute resource collection
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Category\Attribute;
-
 class Collection
     extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
 {
@@ -50,7 +48,7 @@ class Collection
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -70,7 +68,7 @@ class Collection
      * Main select object initialization.
      * Joins catalog/eav_attribute table
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Attribute\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -89,7 +87,7 @@ class Collection
      * Specify attribute entity type filter
      *
      * @param int $typeId
-     * @return \Magento\Catalog\Model\Resource\Category\Attribute\Collection
+     * @return $this
      */
     public function setEntityTypeFilter($typeId)
     {

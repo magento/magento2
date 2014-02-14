@@ -31,7 +31,7 @@ class Collection
     /**
      * Sets flag for customer info loading on load
      *
-     * @return \Magento\Newsletter\Model\Resource\Subscriber\Grid\Collection
+     * @return $this
      */
     protected function _initSelect()
     {

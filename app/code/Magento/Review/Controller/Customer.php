@@ -23,23 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Customer reviews controller
- *
- * @category    Magento
- * @package     Magento_Review
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
 namespace Magento\Review\Controller;
 
 use Magento\App\Action\NotFoundException;
 use Magento\App\RequestInterface;
 
+/**
+ * Customer reviews controller
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 class Customer extends \Magento\App\Action\Action
 {
     /**
+     * Customer session model
+     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -71,6 +69,8 @@ class Customer extends \Magento\App\Action\Action
     }
 
     /**
+     * Render my product reviews
+     *
      * @return void
      */
     public function indexAction()
@@ -91,6 +91,8 @@ class Customer extends \Magento\App\Action\Action
     }
 
     /**
+     * Render review details
+     *
      * @return void
      */
     public function viewAction()

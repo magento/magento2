@@ -33,6 +33,7 @@ interface WriterInterface
      * @param   string $path
      * @param   string $scope
      * @param   int $scopeId
+     * @return void
      */
     public function delete($path, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeId = 0);
 
@@ -43,6 +44,7 @@ interface WriterInterface
      * @param string $value
      * @param string $scope
      * @param int $scopeId
+     * @return void
      */
     public function save($path, $value, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeId = 0);
 }

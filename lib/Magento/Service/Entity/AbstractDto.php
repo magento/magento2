@@ -23,6 +23,10 @@
  */
 namespace Magento\Service\Entity;
 
+/**
+ * Class AbstractDto
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 abstract class AbstractDto
 {
     /**
@@ -53,8 +57,6 @@ abstract class AbstractDto
 
     /**
      * Return DTO data in array format.
-     *
-     * This only handles use cases of nested DTOs and array of DTOs
      *
      * @return array
      */

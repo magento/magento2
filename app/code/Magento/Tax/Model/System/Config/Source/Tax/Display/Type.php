@@ -33,8 +33,14 @@ namespace Magento\Tax\Model\System\Config\Source\Tax\Display;
 
 class Type implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @var array
+     */
     protected $_options;
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         if (!$this->_options) {

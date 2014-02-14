@@ -57,8 +57,9 @@ class Placeholder
     /**
      * Process array data recursively
      *
-     * @param array $data
+     * @param array &$data
      * @param string $path
+     * @return void
      */
     protected function _processData(&$data, $path)
     {
@@ -129,7 +130,7 @@ class Placeholder
      *
      * @param string $path
      * @param array $data
-     * @return mixed
+     * @return array|null
      */
     protected function _getValue($path, array $data)
     {
@@ -147,9 +148,10 @@ class Placeholder
     /**
      * Set array value by path
      *
-     * @param array $container
+     * @param array &$container
      * @param string $path
      * @param string $value
+     * @return void
      */
     protected function _setValue(array &$container, $path, $value)
     {

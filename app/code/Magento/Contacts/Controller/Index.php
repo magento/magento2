@@ -142,7 +142,7 @@ class Index extends \Magento\App\Action\Action
                 return;
             } catch (\Exception $e) {
                 $translate->setTranslateInline(true);
-                $this->messageManager->addError(__('Something went wrong submitting your request.'));
+                $this->messageManager->addError(__('We can\'t process your request right now. Sorry, that\'s all we know.'));
                 $this->_redirect('*/*/');
                 return;
             }

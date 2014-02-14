@@ -107,7 +107,7 @@ class Head extends \Magento\View\Element\Template
      *
      * @param string $title
      * @param string $href
-     * @return \Magento\Theme\Block\Html\Head
+     * @return $this
      */
     public function addRss($title, $href)
     {
@@ -123,10 +123,10 @@ class Head extends \Magento\View\Element\Template
     }
 
     /**
+     * Render HTML for the added head items
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
-     * Render HTML for the added head items
      *
      * @return string
      */
@@ -208,6 +208,7 @@ class Head extends \Magento\View\Element\Template
                 $result .= sprintf($template, $asset->getUrl());
             }
         } catch (\Magento\Exception $e) {
+            $this->_logger->logException($e);
             $result .= sprintf($template, $this->_getNotFoundUrl());
         }
         return $result;
@@ -290,7 +291,7 @@ class Head extends \Magento\View\Element\Template
     /**
      * Same as getTitle(), but return only first item from chunk for backend pages
      *
-     * @return mixed|string
+     * @return mixed
      */
     public function getShortTitle()
     {

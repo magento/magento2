@@ -43,12 +43,15 @@ class Dashboard extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Dashboard'));
 
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::dashboard');
+        $this->_setActiveMenu('Magento_Backend::dashboard');
         $this->_addBreadcrumb(__('Dashboard'), __('Dashboard'));
         $this->_view->renderLayout();
     }
@@ -56,6 +59,7 @@ class Dashboard extends \Magento\Backend\App\Action
     /**
      * Gets most viewed products list
      *
+     * @return void
      */
     public function productsViewedAction()
     {
@@ -66,6 +70,7 @@ class Dashboard extends \Magento\Backend\App\Action
     /**
      * Gets latest customers list
      *
+     * @return void
      */
     public function customersNewestAction()
     {
@@ -76,6 +81,7 @@ class Dashboard extends \Magento\Backend\App\Action
     /**
      * Gets the list of most active customers
      *
+     * @return void
      */
     public function customersMostAction()
     {
@@ -83,6 +89,9 @@ class Dashboard extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function ajaxBlockAction()
     {
         $output   = '';
@@ -104,6 +113,8 @@ class Dashboard extends \Magento\Backend\App\Action
      * Forward request for a graph image to the web-service
      *
      * This is done in order to include the image to a HTTPS-page regardless of web-service settings
+     *
+     * @return void
      */
     public function tunnelAction()
     {
@@ -144,6 +155,9 @@ class Dashboard extends \Magento\Backend\App\Action
             ->setHttpResponseCode($httpCode);
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Adminhtml::dashboard');

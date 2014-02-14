@@ -137,6 +137,7 @@ class ErrorProcessor
      *
      * @param \Exception $exception
      * @param int $httpCode
+     * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function renderException(\Exception $exception, $httpCode = self::DEFAULT_ERROR_HTTP_CODE)
@@ -179,6 +180,7 @@ class ErrorProcessor
      * @param string $errorMessage
      * @param string $trace
      * @param int $httpCode
+     * @return void
      */
     public function render(
         $errorMessage,
@@ -205,9 +207,9 @@ class ErrorProcessor
      *
      * @param string $errorMessage
      * @param string $trace
-     * @param string $format
      * @param int $httpCode
-     * @return array
+     * @param string $format
+     * @return array|string
      */
     protected function _formatError($errorMessage, $trace, $httpCode, $format)
     {
@@ -242,7 +244,7 @@ class ErrorProcessor
     /**
      * Declare web API-specific shutdown function.
      *
-     * @return \Magento\Webapi\Controller\ErrorProcessor
+     * @return $this
      */
     public function registerShutdownFunction()
     {
@@ -252,6 +254,8 @@ class ErrorProcessor
 
     /**
      * Function to catch errors, that has not been caught by the user error dispatcher function.
+     *
+     * @return void
      */
     public function apiShutdownFunction()
     {

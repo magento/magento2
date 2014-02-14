@@ -37,6 +37,7 @@ class Observer
      * Blocks are wrapped only if page is cacheable
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function processLayoutRenderElement(\Magento\Event\Observer $observer)
     {

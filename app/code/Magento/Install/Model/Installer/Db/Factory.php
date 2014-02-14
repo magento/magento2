@@ -31,6 +31,9 @@ namespace Magento\Install\Model\Installer\Db;
 
 class Factory
 {
+    /**
+     * @var array
+     */
     protected $_types = array(
         'mysql4' => 'Magento\Install\Model\Installer\Db\Mysql4'
     );

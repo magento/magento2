@@ -25,12 +25,14 @@
  */
 namespace Magento\Core\Model\Session;
 
+use Magento\Session\Config\ConfigInterface;
+
 /**
  * Magento session configuration
  *
  * @method Config setSaveHandler()
  */
-class Config implements \Magento\Session\Config\ConfigInterface
+class Config implements ConfigInterface
 {
     /**
      * Configuration path for session save method
@@ -102,7 +104,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
     /**
      * List of boolean options
      *
-     * @var array
+     * @var string[]
      */
     protected $booleanOptions = array(
         'session.use_cookies',
@@ -504,7 +506,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
      * Set storage option in backend configuration store
      *
      * @param string $option
-     * @param mixed $value
+     * @param string $value
      * @return $this
      * @throws \InvalidArgumentException
      */
@@ -522,7 +524,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
      * Retrieve a storage option from a backend configuration store
      *
      * @param string $option
-     * @return mixed
+     * @return string|bool
      */
     protected function getStorageOption($option)
     {
@@ -567,7 +569,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
      * @param  string $method
      * @param  array $args
      * @return mixed
-     * @throws \BadMethodCallException on non-getter/setter method
+     * @throws \BadMethodCallException On non-getter/setter method
      */
     public function __call($method, $args)
     {

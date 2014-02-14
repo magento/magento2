@@ -40,6 +40,11 @@ class RewriteService
      */
     protected $_routerList;
 
+    /**
+     * @param \Magento\App\RouterList $routerList
+     * @param \Magento\Core\Model\Url\RewriteFactory $rewriteFactory
+     * @param \Magento\App\ConfigInterface $config
+     */
     public function __construct(
         \Magento\App\RouterList $routerList,
         \Magento\Core\Model\Url\RewriteFactory $rewriteFactory,
@@ -54,6 +59,7 @@ class RewriteService
      * Apply rewrites to current request
      *
      * @param \Magento\App\RequestInterface $request
+     * @return void
      */
     public function applyRewrites(\Magento\App\RequestInterface $request)
     {

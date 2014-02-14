@@ -38,7 +38,7 @@ class Custompath extends \Magento\Core\Model\Config\Value
     /**
      * Check whether redirect should be set
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Custom
+     * @return $this
      */
     protected function _beforeSave()
     {

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Button;
 
 /**
  * Split button widget
@@ -36,12 +37,12 @@
  * @method string getStyle()
  * @method array getDataAttribute()
  */
-namespace Magento\Backend\Block\Widget\Button;
-
 class SplitButton extends \Magento\Backend\Block\Widget
 {
     /**
      * Define block template
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -205,7 +206,8 @@ class SplitButton extends \Magento\Backend\Block\Widget
      * Add data attributes to $attributes array
      *
      * @param array $data
-     * @param array $attributes
+     * @param array &$attributes
+     * @return void
      */
     protected function _getDataAttributes($data, &$attributes)
     {

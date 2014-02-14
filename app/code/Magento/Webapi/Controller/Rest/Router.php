@@ -47,11 +47,11 @@ class Router
      * Route the Request, the only responsibility of the class.
      * Find route that matches current URL, set parameters of the route to Request object.
      *
-     * @param \Magento\Webapi\Controller\Rest\Request $request
+     * @param Request $request
      * @return \Magento\Webapi\Controller\Rest\Router\Route
      * @throws \Magento\Webapi\Exception
      */
-    public function match(\Magento\Webapi\Controller\Rest\Request $request)
+    public function match(Request $request)
     {
         /** @var \Magento\Webapi\Controller\Rest\Router\Route[] $routes */
         $routes = $this->_apiConfig->getRestRoutes($request);

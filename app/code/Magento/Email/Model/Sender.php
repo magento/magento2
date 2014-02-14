@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Email\Model;
 
 /**
  * Common sender
@@ -31,17 +32,21 @@
  * @package    Magento_Email
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Email\Model;
-
 class Sender
 {
-    /** @var \Magento\Email\Model\Template\Mailer */
+    /**
+     * @var \Magento\Email\Model\Template\Mailer
+     */
     protected $_mailer;
 
-    /** @var \Magento\Email\Model\Info */
+    /**
+     * @var \Magento\Email\Model\Info
+     */
     protected $_emailInfo;
 
-    /** @var \Magento\Core\Model\Store */
+    /**
+     * @var \Magento\Core\Model\Store
+     */
     protected $_store;
 
     /**

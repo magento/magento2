@@ -27,7 +27,9 @@ namespace Magento\Backend\Model\Config\Source\Web;
 
 class Redirect implements \Magento\Core\Model\Option\ArrayInterface
 {
-
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

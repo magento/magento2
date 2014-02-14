@@ -169,6 +169,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Set current customer
      *
      * @param \Magento\Customer\Model\Customer $customer
+     * @return void
      */
     public function setCustomer(\Magento\Customer\Model\Customer $customer)
     {
@@ -312,7 +313,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @param array $params
-     * @return array
+     * @return string
      */
     public function getAddParams($item, array $params = array())
     {
@@ -351,7 +352,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      *
-     * @return  string|bool
+     * @return  string|false
      */
     public function getUpdateParams($item)
     {
@@ -378,7 +379,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve URL for adding item to shoping cart
+     * Retrieve URL for adding item to shopping cart
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string
@@ -464,7 +465,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve customer name
      *
-     * @return string|null
+     * @return string|void
      */
     public function getCustomerName()
     {
@@ -477,7 +478,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve RSS URL
      *
-     * @param $wishlistId
+     * @param int|string|null $wishlistId
      * @return string
      */
     public function getRssUrl($wishlistId = null)
@@ -534,7 +535,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Method called after wishlist modifications and trigger 'wishlist_items_renewed' event.
      * Depends from configuration.
      *
-     * @return \Magento\Wishlist\Helper\Data
+     * @return $this
      */
     public function calculate()
     {

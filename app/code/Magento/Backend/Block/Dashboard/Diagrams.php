@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard;
 
 /**
  * Adminhtml dashboard diagram tabs
@@ -31,14 +32,16 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard;
-
 class Diagrams extends \Magento\Backend\Block\Widget\Tabs
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -46,6 +49,9 @@ class Diagrams extends \Magento\Backend\Block\Widget\Tabs
         $this->setDestElementId('diagram_tab_content');
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $this->addTab('orders', array(

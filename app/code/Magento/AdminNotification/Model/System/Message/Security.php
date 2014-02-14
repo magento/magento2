@@ -27,7 +27,7 @@ class Security
     implements \Magento\AdminNotification\Model\System\MessageInterface
 {
     /**
-     * Cache kay for saving verification result
+     * Cache key for saving verification result
      */
     const VERIFICATION_RESULT_CACHE_KEY = 'configuration_files_access_level_verification';
 

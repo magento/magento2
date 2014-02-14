@@ -25,8 +25,6 @@
  */
 namespace Magento\Customer\Service\V1\Dto\Eav;
 
-use Magento\Customer\Service\V1\Dto\Eav\Option;
-
 class OptionBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 {
     /**

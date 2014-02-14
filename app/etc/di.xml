@@ -317,12 +317,28 @@
             </array>
         </param>
     </type>
+    <preference for="Magento\Mview\ConfigInterface" type="Magento\Mview\Config" />
+    <preference for="Magento\Mview\ViewInterface" type="Magento\Mview\View" />
+    <preference for="Magento\Mview\ProcessorInterface" type="Magento\Mview\Processor" />
+    <preference for="Magento\Mview\View\CollectionInterface" type="Magento\Mview\View\Collection" />
+    <preference for="Magento\Mview\View\SubscriptionInterface" type="Magento\Mview\View\Subscription" />
+    <preference for="Magento\Mview\View\ChangelogInterface" type="Magento\Mview\View\Changelog" />
     <type name="Magento\Mview\View">
         <param name="state">
             <instance type="Magento\Core\Model\Mview\View\State" shared="false"/>
         </param>
         <param name="changelog">
             <instance type="Magento\Mview\View\Changelog" shared="false"/>
+        </param>
+    </type>
+    <type name="Magento\Mview\Config">
+        <param name="configData">
+            <instance type="Magento\Mview\Config\Data\Proxy"/>
+        </param>
+    </type>
+    <type name="Magento\Mview\Config\Data">
+        <param name="stateCollection">
+            <instance type="Magento\Mview\View\State\CollectionInterface" shared="false"/>
         </param>
     </type>
 </config>

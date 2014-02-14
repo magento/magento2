@@ -59,6 +59,7 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * @param array $config
      * @param \Magento\Backend\Model\Menu\Builder $builder
      * @param \Magento\Logger $logger
+     * @return void
      */
     public function direct(
         array $config,

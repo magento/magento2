@@ -35,6 +35,9 @@ namespace Magento\Catalog\Block\Adminhtml;
 
 class Product extends \Magento\Backend\Block\Widget\Container
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product.phtml';
 
     /**

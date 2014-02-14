@@ -26,7 +26,7 @@
  */
 
 $recurringProfile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Recurring\Profile');
+    ->create('Magento\RecurringProfile\Model\Profile');
 $recurringProfile->addData(array(
     'store_id'                => 1,
     'method_code'             => \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS,

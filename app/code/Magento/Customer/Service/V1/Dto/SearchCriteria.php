@@ -63,4 +63,15 @@ class SearchCriteria extends \Magento\Service\Entity\AbstractDto
     {
         return $this->_get('current_page');
     }
+
+    /**
+     * Create Array
+     *
+     * @todo to be implemented in MAGETWO-18201
+     *
+     * @return array
+     */
+    private function _createArray()
+    {
+    }
 }

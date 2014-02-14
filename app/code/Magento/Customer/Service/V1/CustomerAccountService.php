@@ -23,43 +23,56 @@
  */
 
 namespace Magento\Customer\Service\V1;
-use Magento\Customer\Service\Entity\V1\Exception;
+
+use Magento\Core\Model\StoreManagerInterface;
+use Magento\Customer\Model\Converter;
+use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\Metadata\Validator;
+use Magento\Event\ManagerInterface;
+use Magento\Exception\InputException;
+use Magento\Exception\AuthenticationException;
+use Magento\Exception\NoSuchEntityException;
+use Magento\Exception\StateException;
+use Magento\Math\Random;
 
 /**
- * Manipulate Customer Address Entities *
+ *  Handle various customer account actions
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerAccountService implements CustomerAccountServiceInterface
 {
-
-    /** @var \Magento\Customer\Model\CustomerFactory */
+    /** @var CustomerFactory */
     private $_customerFactory;
+
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var ManagerInterface
      */
-    private $_eventManager = null;
+    private $_eventManager;
 
-    /** @var \Magento\Core\Model\StoreManagerInterface */
+    /** @var StoreManagerInterface */
     private $_storeManager;
 
     /**
-     * @var \Magento\Math\Random
+     * @var Random
      */
     private $_mathRandom;
 
     /**
-     * @var \Magento\Customer\Model\Converter
+     * @var Converter
      */
     private $_converter;
 
     /**
-     * @var \Magento\Customer\Model\Metadata\Validator
+     * @var Validator
      */
     private $_validator;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\Response\CreateCustomerAccountResponseBuilder
+     * @var Dto\Response\CreateCustomerAccountResponseBuilder
      */
     private $_createCustomerAccountResponseBuilder;
 
@@ -76,25 +89,23 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     /**
      * Constructor
      *
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $eavMetadataService
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Customer\Model\Converter $converter
-     * @param \Magento\Customer\Model\Metadata\Validator $validator
-     * @param \Magento\Customer\Service\V1\Dto\RegionBuilder $regionBuilder
-     * @param \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder
-     * @param \Magento\Customer\Service\V1\Dto\Response\CreateCustomerAccountResponseBuilder $createCustomerAccountResponseBuilder
+     * @param CustomerFactory $customerFactory
+     * @param ManagerInterface $eventManager
+     * @param StoreManagerInterface $storeManager
+     * @param Random $mathRandom
+     * @param Converter $converter
+     * @param Validator $validator
+     * @param Dto\Response\CreateCustomerAccountResponseBuilder $createCustomerAccountResponseBuilder
+     * @param CustomerServiceInterface $customerService
+     * @param CustomerAddressServiceInterface $customerAddressService
      */
     public function __construct(
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Customer\Model\Converter $converter,
-        \Magento\Customer\Model\Metadata\Validator $validator,
+        CustomerFactory $customerFactory,
+        ManagerInterface $eventManager,
+        StoreManagerInterface $storeManager,
+        Random $mathRandom,
+        Converter $converter,
+        Validator $validator,
         Dto\Response\CreateCustomerAccountResponseBuilder $createCustomerAccountResponseBuilder,
         CustomerServiceInterface $customerService,
         CustomerAddressServiceInterface $customerAddressService
@@ -112,28 +123,25 @@ class CustomerAccountService implements CustomerAccountServiceInterface
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function sendConfirmation($email)
     {
         $customer = $this->_customerFactory->create();
-        $customer->setWebsiteId($this->_storeManager->getStore()->getWebsiteId())->loadByEmail($email);
+        $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+        $customer->setWebsiteId($websiteId)->loadByEmail($email);
         if (!$customer->getId()) {
-            throw new Exception('Wrong email.', Exception::CODE_EMAIL_NOT_FOUND);
+            throw (new NoSuchEntityException('email', $email))->addField('websiteId', $websiteId);
         }
         if ($customer->getConfirmation()) {
             $customer->sendNewAccountEmail('confirmation', '', $this->_storeManager->getStore()->getId());
         } else {
-            throw new Exception(
-                'This email does not require confirmation.',
-                Exception::CODE_CONFIRMATION_NOT_NEEDED
-            );
+            throw new StateException('No confirmation needed.', StateException::INVALID_STATE);
         }
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function activateAccount($customerId, $key)
     {
@@ -143,29 +151,21 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         // check if customer is inactive
         if ($customer->getConfirmation()) {
             if ($customer->getConfirmation() !== $key) {
-                throw new \Magento\Core\Exception('Wrong confirmation key.');
+                throw new StateException('Invalid confirmation token', StateException::INPUT_MISMATCH);
             }
-
             // activate customer
-            try {
-                $customer->setConfirmation(null);
-                $customer->save();
-            } catch (\Exception $e) {
-                throw new \Magento\Core\Exception('Failed to confirm customer account.');
-            }
+            $customer->setConfirmation(null);
+            $customer->save();
             $customer->sendNewAccountEmail('confirmed', '', $this->_storeManager->getStore()->getId());
         } else {
-            throw new Exception(
-                'Customer account is already active.',
-                Exception::CODE_ACCT_ALREADY_ACTIVE
-            );
+            throw new StateException('Account already active', StateException::INVALID_STATE);
         }
 
         return $this->_converter->createCustomerFromModel($customer);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function authenticate($username, $password)
     {
@@ -175,16 +175,16 @@ class CustomerAccountService implements CustomerAccountServiceInterface
             $customerModel->authenticate($username, $password);
         } catch (\Magento\Core\Exception $e) {
             switch ($e->getCode()) {
-                case \Magento\Customer\Model\Customer::EXCEPTION_EMAIL_NOT_CONFIRMED:
-                    $code = Exception::CODE_EMAIL_NOT_CONFIRMED;
+                case CustomerModel::EXCEPTION_EMAIL_NOT_CONFIRMED:
+                    $code = AuthenticationException::EMAIL_NOT_CONFIRMED;
                     break;
-                case \Magento\Customer\Model\Customer::EXCEPTION_INVALID_EMAIL_OR_PASSWORD:
-                    $code = Exception::CODE_INVALID_EMAIL_OR_PASSWORD;
+                case CustomerModel::EXCEPTION_INVALID_EMAIL_OR_PASSWORD:
+                    $code = AuthenticationException::INVALID_EMAIL_OR_PASSWORD;
                     break;
                 default:
-                    $code = Exception::CODE_UNKNOWN;
+                    $code = AuthenticationException::UNKNOWN;
             }
-            throw new Exception($e->getMessage(), $code, $e);
+            throw new AuthenticationException($e->getMessage(), $code, $e);
         }
 
         $this->_eventManager->dispatch('customer_login', array('customer'=>$customerModel));
@@ -193,7 +193,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken)
     {
@@ -201,7 +201,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function sendPasswordResetLink($email, $websiteId)
     {
@@ -210,20 +210,15 @@ class CustomerAccountService implements CustomerAccountServiceInterface
             ->loadByEmail($email);
 
         if (!$customer->getId()) {
-            throw new Exception(
-                'No customer found for the provided email and website ID.', Exception::CODE_EMAIL_NOT_FOUND);
+            throw (new NoSuchEntityException('email', $email))->addField('websiteId', $websiteId);
         }
-        try {
-            $newPasswordToken = $this->_mathRandom->getUniqueHash();
-            $customer->changeResetPasswordLinkToken($newPasswordToken);
-            $customer->sendPasswordResetConfirmationEmail();
-        } catch (\Exception $exception) {
-            throw new Exception($exception->getMessage(), Exception::CODE_UNKNOWN, $exception);
-        }
+        $newPasswordToken = $this->_mathRandom->getUniqueHash();
+        $customer->changeResetPasswordLinkToken($newPasswordToken);
+        $customer->sendPasswordResetConfirmationEmail();
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function resetPassword($customerId, $password, $resetToken)
     {
@@ -235,7 +230,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAccount(
         Dto\Customer $customer,
@@ -254,7 +249,15 @@ class CustomerAccountService implements CustomerAccountServiceInterface
                     ->create();
             }
         }
-        $customerId = $this->_customerService->saveCustomer($customer, $password);
+        try {
+            $customerId = $this->_customerService->saveCustomer($customer, $password);
+        } catch (\Magento\Customer\Exception $e) {
+            if ($e->getCode() === CustomerModel::EXCEPTION_EMAIL_EXISTS) {
+                throw new StateException('Provided email already exists.', StateException::INPUT_MISMATCH);
+            }
+            throw $e;
+        }
+
         $this->_customerAddressService->saveAddresses($customerId, $addresses);
 
         $customerModel = $this->_converter->getCustomerModel($customerId);
@@ -280,7 +283,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validateCustomerData(Dto\Customer $customer, array $attributes)
     {
@@ -290,6 +293,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
             'customer'
         );
 
+        // FIXME: $customerErrors is a boolean but we are treating it as an array here
         if ($customerErrors !== true) {
             return array(
                 'error'     => -1,
@@ -311,29 +315,39 @@ class CustomerAccountService implements CustomerAccountServiceInterface
 
 
     /**
+     * Validate the Reset Password Token for a customer.
+     *
      * @param $customerId
      * @param $resetPasswordLinkToken
-     * @return \Magento\Customer\Model\Customer
-     * @throws Exception
+     * @return CustomerModel
+     * @throws \Magento\Exception\StateException if token is expired or mismatched
+     * @throws \Magento\Exception\InputException if token or customer id is invalid
+     * @throws \Magento\Exception\NoSuchEntityException if customer doesn't exist
      */
     private function _validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
-        if (!is_int($customerId)
-            || !is_string($resetPasswordLinkToken)
-            || empty($resetPasswordLinkToken)
-            || empty($customerId)
-            || $customerId < 0
-        ) {
-            throw new Exception('Invalid password reset token.', Exception::CODE_INVALID_RESET_TOKEN);
+        if (!is_int($customerId) || empty($customerId) || $customerId < 0) {
+            throw InputException::create(
+                InputException::INVALID_FIELD_VALUE,
+                'customerId',
+                $customerId
+            );
+        }
+        if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
+            throw InputException::create(
+                InputException::INVALID_FIELD_VALUE,
+                'resetPasswordLinkToken',
+                $resetPasswordLinkToken
+            );
         }
 
         $customerModel = $this->_converter->getCustomerModel($customerId);
 
         $customerToken = $customerModel->getRpToken();
-        if (strcmp($customerToken, $resetPasswordLinkToken) !== 0
-            || $customerModel->isResetPasswordLinkTokenExpired($customerId)
-        ) {
-            throw new Exception('Your password reset link has expired.', Exception::CODE_RESET_TOKEN_EXPIRED);
+        if (strcmp($customerToken, $resetPasswordLinkToken) !== 0) {
+            throw new StateException('Reset password token mismatch.', StateException::INPUT_MISMATCH);
+        } else if ($customerModel->isResetPasswordLinkTokenExpired($customerId)) {
+            throw new StateException('Reset password token expired.', StateException::EXPIRED);
         }
 
         return $customerModel;

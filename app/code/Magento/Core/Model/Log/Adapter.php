@@ -35,8 +35,7 @@ namespace Magento\Core\Model\Log;
 
 class Adapter
 {
-
-    /**
+ /**
      * Store log file name
      *
      * @var string
@@ -78,7 +77,7 @@ class Adapter
      * Perform forced log data to file
      *
      * @param mixed $data
-     * @return \Magento\Core\Model\Log\Adapter
+     * @return $this
      */
     public function log($data = null)
     {
@@ -101,7 +100,7 @@ class Adapter
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Core\Model\Log\Adapter
+     * @return $this
      * @todo replace whole data
      */
     public function setData($key, $value = null)
@@ -119,7 +118,7 @@ class Adapter
      * Setter for private data keys, that should be replaced in debug data with '***'
      *
      * @param array $keys
-     * @return \Magento\Core\Model\Log\Adapter
+     * @return $this
      */
     public function setFilterDataKeys($keys)
     {
@@ -134,7 +133,7 @@ class Adapter
      * Recursive filter data by private conventions
      *
      * @param mixed $debugData
-     * @return mixed
+     * @return string|array
      */
     protected function _filterDebugData($debugData)
     {

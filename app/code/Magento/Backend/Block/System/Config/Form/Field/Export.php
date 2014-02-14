@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Config\Form\Field;
 
 /**
  * Export CSV button for shipping table rates
@@ -31,8 +32,6 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\System\Config\Form\Field;
-
 class Export extends \Magento\Data\Form\Element\AbstractElement
 {
     /**
@@ -58,6 +57,9 @@ class Export extends \Magento\Data\Form\Element\AbstractElement
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
+    /**
+     * @return string
+     */
     public function getElementHtml()
     {
         /** @var \Magento\Backend\Block\Widget\Button $buttonBlock  */

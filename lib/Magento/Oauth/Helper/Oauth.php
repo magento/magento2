@@ -26,7 +26,8 @@ namespace Magento\Oauth\Helper;
 
 class Oauth
 {
-    /**#@+
+    /**
+     * #@+
      * Lengths of token fields
      */
     const LENGTH_TOKEN = 32;
@@ -34,7 +35,8 @@ class Oauth
     const LENGTH_TOKEN_VERIFIER = 32;
     /**#@- */
 
-    /**#@+
+    /**
+     * #@+
      * Lengths of consumer fields
      */
     const LENGTH_CONSUMER_KEY = 32;

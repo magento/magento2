@@ -25,6 +25,8 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="content">
-        <block class="Magento\View\Element\Template" template="Magento_Catalog::msrp/popup.phtml" name="product.tooltip"/>
+        <block class="Magento\View\Element\Template" template="Magento_Catalog::msrp/popup.phtml" name="product.tooltip">
+            <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog\PositionAfter" name="map.shortcut.buttons"/>
+        </block>
     </referenceContainer>
 </layout>

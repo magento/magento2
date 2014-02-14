@@ -48,7 +48,7 @@ interface UrlInterface extends \Magento\UrlInterface
     /**
      * Return secret key settings flag
      *
-     * @return boolean
+     * @return bool
      */
     public function useSecretKey();
 

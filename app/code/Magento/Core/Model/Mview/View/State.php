@@ -70,7 +70,7 @@ class State extends \Magento\Core\Model\AbstractModel implements \Magento\Mview\
      * Fill object with state data by view ID
      *
      * @param string $viewId
-     * @return \Magento\Mview\View\StateInterface
+     * @return void
      */
     public function loadByView($viewId)
     {
@@ -83,7 +83,7 @@ class State extends \Magento\Core\Model\AbstractModel implements \Magento\Mview\
     /**
      * Processing object before save data
      *
-     * @return \Magento\Core\Model\Mview\View\State
+     * @return void
      */
     protected function _beforeSave()
     {
@@ -115,7 +115,7 @@ class State extends \Magento\Core\Model\AbstractModel implements \Magento\Mview\
      * Set state mode
      *
      * @param string $mode
-     * @return \Magento\Mview\View\StateInterface
+     * @return $this
      */
     public function setMode($mode)
     {
@@ -137,7 +137,7 @@ class State extends \Magento\Core\Model\AbstractModel implements \Magento\Mview\
      * Set state status
      *
      * @param string $status
-     * @return \Magento\Mview\View\StateInterface
+     * @return $this
      */
     public function setStatus($status)
     {
@@ -159,7 +159,7 @@ class State extends \Magento\Core\Model\AbstractModel implements \Magento\Mview\
      * Set state updated time
      *
      * @param string|int|\Zend_Date $updated
-     * @return \Magento\Mview\View\StateInterface
+     * @return $this
      */
     public function setUpdated($updated)
     {
@@ -181,7 +181,7 @@ class State extends \Magento\Core\Model\AbstractModel implements \Magento\Mview\
      * Set state version ID
      *
      * @param int $versionId
-     * @return \Magento\Mview\View\StateInterface
+     * @return $this
      */
     public function setVersionId($versionId)
     {

@@ -34,6 +34,8 @@ use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
 class Summary extends \Magento\Backend\Block\Template
 {
     /**
+     * Rating summary template name
+     *
      * @var string
      */
     protected $_template = 'Magento_Rating::rating/stars/summary.phtml';
@@ -46,11 +48,15 @@ class Summary extends \Magento\Backend\Block\Template
     protected $_coreRegistry = null;
 
     /**
+     * Rating resource option model
+     *
      * @var \Magento\Rating\Model\Resource\Rating\Option\Vote\CollectionFactory
      */
     protected $_votesFactory;
 
     /**
+     * Rating model
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
@@ -75,6 +81,11 @@ class Summary extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Initialize review data
+     *
+     * @return void
+     */
     protected function _construct()
     {
         if ($this->_coreRegistry->registry('review_data')) {
@@ -83,6 +94,8 @@ class Summary extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get collection of ratings
+     *
      * @return RatingCollection
      */
     public function getRating()
@@ -98,6 +111,8 @@ class Summary extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get rating summary
+     *
      * @return string
      */
     public function getRatingSummary()

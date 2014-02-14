@@ -260,10 +260,11 @@ class Tar extends \Magento\Archive\AbstractArchive implements \Magento\Archive\A
      * Walk through directory and add to tar file or directory.
      * Result is packed string on TAR format.
      *
-     * @deprecated after 1.7.0.0
-     * @param boolean $skipRoot
+     * @param bool $skipRoot
      * @return string
      * @throws \Magento\Exception
+     *
+     * @deprecated after 1.7.0.0
      */
     protected function _packToTar($skipRoot=false)
     {
@@ -295,8 +296,8 @@ class Tar extends \Magento\Archive\AbstractArchive implements \Magento\Archive\A
     /**
      * Recursively walk through file tree and create tarball
      *
-     * @param boolean $skipRoot
-     * @param boolean $finalize
+     * @param bool $skipRoot
+     * @param bool $finalize
      * @return void
      * @throws \Magento\Exception
      */
@@ -365,7 +366,7 @@ class Tar extends \Magento\Archive\AbstractArchive implements \Magento\Archive\A
      * method breaks header into two pieces. First contains
      * header and data with long name. Second contain only header.
      *
-     * @param boolean $long
+     * @param bool $long
      * @return string
      */
     protected function _composeHeader($long = false)
@@ -478,9 +479,10 @@ class Tar extends \Magento\Archive\AbstractArchive implements \Magento\Archive\A
     /**
      * Get header from TAR string and unpacked it by format.
      *
+     * @param resource &$pointer
+     * @return string|bool
+     *
      * @deprecated after 1.7.0.0
-     * @param resource $pointer
-     * @return string
      */
     protected function _parseHeader(&$pointer)
     {
@@ -534,7 +536,7 @@ class Tar extends \Magento\Archive\AbstractArchive implements \Magento\Archive\A
     /**
      * Read and decode file header information from tarball
      *
-     * @return array|boolean
+     * @return array|bool
      */
     protected function _extractFileHeader()
     {
@@ -620,7 +622,7 @@ class Tar extends \Magento\Archive\AbstractArchive implements \Magento\Archive\A
      *
      * @param string $source
      * @param string $destination
-     * @param boolean $skipRoot
+     * @param bool $skipRoot
      * @return string
      */
     public function pack($source, $destination, $skipRoot = false)

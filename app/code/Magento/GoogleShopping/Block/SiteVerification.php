@@ -30,7 +30,9 @@ use Magento\View\Element\AbstractBlock;
  */
 class SiteVerification extends \Magento\View\Element\AbstractBlock
 {
-    /** @var \Magento\GoogleShopping\Model\Config */
+    /**
+     * @var \Magento\GoogleShopping\Model\Config
+     */
     protected $_config;
 
     /**

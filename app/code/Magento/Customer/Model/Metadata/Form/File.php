@@ -20,8 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -83,10 +81,7 @@ class File extends AbstractData
     }
 
     /**
-     * Extract data from request and return value
-     *
-     * @param \Magento\App\RequestInterface $request
-     * @return array|string
+     * {@inheritdoc}
      */
     public function extractValue(\Magento\App\RequestInterface $request)
     {
@@ -148,7 +143,7 @@ class File extends AbstractData
      */
     protected function _validateByRules($value)
     {
-        $label  = $this->getAttribute()->getStoreLabel();
+        $label  = $value['name'];
         $rules  = $this->getAttribute()->getValidationRules();
         $extension  = pathinfo($value['name'], PATHINFO_EXTENSION);
 
@@ -157,7 +152,7 @@ class File extends AbstractData
             $extensions = array_map('trim', $extensions);
             if (!in_array($extension, $extensions)) {
                 return array(
-                    __('"%1" is not a valid file extension.', $label)
+                    __('"%1" is not a valid file extension.', $extension)
                 );
             }
         }
@@ -169,7 +164,7 @@ class File extends AbstractData
             return $this->_fileValidator->getMessages();
         }
 
-        if (!is_uploaded_file($value['tmp_name'])) {
+        if (!$this->_isUploadedFile($value['tmp_name'])) {
             return array(
                 __('"%1" is not a valid file.', $label)
             );
@@ -188,11 +183,20 @@ class File extends AbstractData
     }
 
     /**
-     * Validate data
+     * Helper function that checks if the file was uploaded.
      *
-     * @param array|string $value
-     * @throws \Magento\Core\Exception
-     * @return boolean
+     * This helper function is needed for testing.
+     *
+     * @param string $filename
+     * @return bool
+     */
+    protected function _isUploadedFile($filename)
+    {
+        return is_uploaded_file($filename);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function validateValue($value)
     {
@@ -231,11 +235,7 @@ class File extends AbstractData
     }
 
     /**
-     * Export attribute value to entity model
-     *
-     * @param \Magento\Core\Model\AbstractModel $entity
-     * @param array|string $value
-     * @return string
+     * {@inheritdoc}
      */
     public function compactValue($value)
     {
@@ -286,27 +286,22 @@ class File extends AbstractData
     }
 
     /**
-     * Restore attribute value from SESSION to entity model
-     *
-     * @param array|string $value
-     * @return \Magento\Customer\Model\Metadata\Form\File
+     * {@inheritdoc}
      */
     public function restoreValue($value)
     {
-        return $this;
+        return $this->_value;
     }
 
     /**
-     * Return formated attribute value from entity model
-     *
-     * @return string|array
+     * {@inheritdoc}
      */
-    public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
+    public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {
         $output = '';
         if ($this->_value) {
             switch ($format) {
-                case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON:
+                case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_JSON:
                     $output = array(
                         'value'     => $this->_value,
                         'url_key'   => $this->_coreData->urlEncode($this->_value)

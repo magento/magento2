@@ -78,19 +78,19 @@ class Fault extends \RuntimeException
     /** @var \Magento\Core\Model\App */
     protected $_application;
 
-    /** @var \Magento\Webapi\Model\Soap\Server */
+    /** @var Server */
     protected $_soapServer;
 
     /**
      * Construct exception.
      *
      * @param \Magento\Core\Model\App $application
+     * @param Server $soapServer
      * @param \Magento\Webapi\Exception $previousException
-     * @param \Magento\Webapi\Model\Soap\Server $soapServer
      */
     public function __construct(
         \Magento\Core\Model\App $application,
-        \Magento\Webapi\Model\Soap\Server $soapServer,
+        Server $soapServer,
         \Magento\Webapi\Exception $previousException
     ) {
         parent::__construct($previousException->getMessage(), $previousException->getCode(), $previousException);
@@ -145,7 +145,8 @@ class Fault extends \RuntimeException
     /**
      * Define current SOAP fault name. It is used as a name of the wrapper node for SOAP fault details.
      *
-     * @param $exceptionName
+     * @param string $exceptionName
+     * @return void
      */
     protected function _setFaultName($exceptionName)
     {
@@ -173,7 +174,7 @@ class Fault extends \RuntimeException
      * Add details about current fault.
      *
      * @param array $details Associative array containing details about current fault
-     * @return \Magento\Webapi\Model\Soap\Fault
+     * @return $this
      */
     public function addDetails($details)
     {

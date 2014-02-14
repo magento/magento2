@@ -659,7 +659,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $optionIds = array_keys($options);
 
             if (empty($optionIds) && $isStrictProcessMode) {
-                return __('Please select options for the product.');
+                return __('Please specify product option(s).');
             }
 
             $product->getTypeInstance()->setStoreFilter($product->getStoreId(), $product);

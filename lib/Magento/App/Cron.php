@@ -25,7 +25,6 @@
  */
 namespace Magento\App;
 
-use Magento\App\Console\Response;
 use \Magento\App\ObjectManager\ConfigLoader,
     \Magento\Event\ManagerInterface;
 
@@ -42,6 +41,11 @@ class Cron implements \Magento\LauncherInterface
     protected $_state;
 
     /**
+     * @var Console\Request
+     */
+    protected $_request;
+
+    /**
      * @var Console\Response
      */
     protected $_response;
@@ -49,15 +53,21 @@ class Cron implements \Magento\LauncherInterface
     /**
      * @param ManagerInterface $eventManager
      * @param State $state
-     * @param Response $response
+     * @param Console\Request $request
+     * @param Console\Response $response
+     * @param array $parameters
      */
     public function __construct(
         ManagerInterface $eventManager,
         State $state,
-        Response $response
+        Console\Request $request,
+        Console\Response $response,
+        array $parameters = array()
     ) {
         $this->_eventManager = $eventManager;
         $this->_state = $state;
+        $this->_request = $request;
+        $this->_request->setParam($parameters);
         $this->_response = $response;
     }
 

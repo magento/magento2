@@ -84,7 +84,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
 
         $eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $objectFactoryMock = $this->getMock('Magento\Validator\Composite\VarienObjectFactory', array('create'),
+        $objectFactoryMock = $this->getMock('Magento\Validator\ObjectFactory', array('create'),
             array(), '', false);
         $roleFactoryMock = $this->getMock('Magento\User\Model\RoleFactory', array('create'),
             array(), '', false);
@@ -103,7 +103,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'registry' => $coreRegistry,
             'resource' => $this->_resourceMock,
             'resourceCollection' => $this->_collectionMock,
-            'validatorCompositeFactory' => $objectFactoryMock,
+            'validatorObjectFactory' => $objectFactoryMock,
             'roleFactory' => $roleFactoryMock,
             'emailInfoFactory' => $emailFactoryMock,
             'mailerFactory' => $mailerFactoryMock,

@@ -23,20 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Controller;
+
+use Magento\App\RequestInterface;
+use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Review\Model\Review;
 
 /**
  * Review controller
  *
- * @category   Magento
- * @package    Magento_Review
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Controller;
-
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-use Magento\Review\Model\Review;
-
 class Product extends \Magento\App\Action\Action
 {
     /**
@@ -47,56 +44,78 @@ class Product extends \Magento\App\Action\Action
     protected $_coreRegistry = null;
 
     /**
+     * Customer session model
+     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * @var \Magento\Review\Model\Session
+     * Generic session
+     *
+     * @var \Magento\Session\Generic
      */
     protected $_reviewSession;
 
     /**
+     * Catalog catgory model
+     *
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $_categoryFactory;
 
     /**
+     * Logger
+     *
      * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
+     * Catalog product model
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Review model
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
 
     /**
+     * Rating model
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
+     * Core session model
+     *
      * @var \Magento\Core\Model\Session
      */
     protected $_session;
 
     /**
+     * Catalog design model
+     *
      * @var \Magento\Catalog\Model\Design
      */
     protected $_catalogDesign;
 
     /**
+     * Core model store manager interface
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * Core form key validator
+     *
      * @var \Magento\Core\App\Action\FormKeyValidator
      */
     protected $_formKeyValidator;
@@ -179,7 +198,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Initialize and check product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return CatalogProduct
      */
     protected function _initProduct()
     {
@@ -216,7 +235,7 @@ class Product extends \Magento\App\Action\Action
      * Return false if product was not loaded or has incorrect status.
      *
      * @param int $productId
-     * @return bool|\Magento\Catalog\Model\Product
+     * @return bool|CatalogProduct
      */
     protected function _loadProduct($productId)
     {
@@ -227,7 +246,7 @@ class Product extends \Magento\App\Action\Action
         $product = $this->_productFactory->create()
             ->setStoreId($this->_storeManager->getStore()->getId())
             ->load($productId);
-        /* @var $product \Magento\Catalog\Model\Product */
+        /* @var $product CatalogProduct */
         if (!$product->getId() || !$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility()) {
             return false;
         }
@@ -401,6 +420,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Load specific layout handles by product type id
      *
+     * @param Product $product
      * @return void
      */
     protected function _initProductLayout($product)

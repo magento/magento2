@@ -26,16 +26,24 @@ namespace Magento\Oauth;
 
 class Oauth implements OauthInterface
 {
-    /** @var  \Magento\Oauth\Helper\Oauth */
+    /**
+     * @var  \Magento\Oauth\Helper\Oauth
+     */
     protected $_oauthHelper;
 
-    /** @var  \Zend_Oauth_Http_Utility */
+    /**
+     * @var  \Zend_Oauth_Http_Utility
+     */
     protected $_httpUtility;
 
-    /** @var \Magento\Oauth\NonceGeneratorInterface */
+    /**
+     * @var \Magento\Oauth\NonceGeneratorInterface
+     */
     protected $_nonceGenerator;
 
-    /** @var \Magento\Oauth\TokenProviderInterface */
+    /**
+     * @var \Magento\Oauth\TokenProviderInterface
+     */
     protected $_tokenProvider;
 
     /**

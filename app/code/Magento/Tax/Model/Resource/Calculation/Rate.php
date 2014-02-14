@@ -38,6 +38,8 @@ class Rate extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -47,7 +49,7 @@ class Rate extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize unique fields
      *
-     * @return \Magento\Tax\Model\Resource\Calculation\Rate
+     * @return $this
      */
     protected function _initUniqueFields()
     {
@@ -61,7 +63,7 @@ class Rate extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Delete all rates
      *
-     * @return \Magento\Tax\Model\Resource\Calculation\Rate
+     * @return $this
      */
     public function deleteAllRates()
     {

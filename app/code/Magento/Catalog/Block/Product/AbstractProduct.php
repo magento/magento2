@@ -34,8 +34,14 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+use Magento\View\Element\BlockInterface;
+use Magento\View\Element\Template\Helper;
+
 abstract class AbstractProduct extends \Magento\View\Element\Template
 {
+    /**
+     * @var array
+     */
     protected $_priceBlock = array();
 
     /**
@@ -45,10 +51,19 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      */
     protected $_block = 'Magento\Catalog\Block\Product\Price';
 
+    /**
+     * @var string
+     */
     protected $_priceBlockDefaultTemplate = 'product/price.phtml';
 
+    /**
+     * @var string
+     */
     protected $_tierPriceDefaultTemplate  = 'product/view/tierprices.phtml';
 
+    /**
+     * @var array
+     */
     protected $_priceBlockTypes = array();
 
     /**
@@ -58,6 +73,9 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      */
     protected $_useLinkForAsLowAs = true;
 
+    /**
+     * @var Helper
+     */
     protected $_reviewsHelperBlock;
 
     /**
@@ -268,6 +286,10 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return null;
     }
 
+    /**
+     * @param string $productTypeId
+     * @return BlockInterface
+     */
     protected function _getPriceBlock($productTypeId)
     {
         if (!isset($this->_priceBlock[$productTypeId])) {
@@ -282,6 +304,10 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return $this->_priceBlock[$productTypeId];
     }
 
+    /**
+     * @param string $productTypeId
+     * @return string
+     */
     protected function _getPriceBlockTemplate($productTypeId)
     {
         if (isset($this->_priceBlockTypes[$productTypeId])) {
@@ -341,6 +367,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      * @param string $type
      * @param string $block
      * @param string $template
+     * @return void
      */
     public function addPriceBlockType($type, $block = '', $template = '')
     {

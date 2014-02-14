@@ -36,39 +36,40 @@ namespace Magento\Customer\Model\Customer\Attribute\Source;
 class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
-     * @var \Magento\Customer\Model\Resource\Group\CollectionFactory
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
-    protected $_groupsFactory;
+    protected $_groupService;
+
+    /**
+     * @var \Magento\Convert\Object
+     */
+    protected $_converter;
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
-     * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param \Magento\Convert\Object $converter
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
-        \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        \Magento\Convert\Object $converter
     ) {
-        $this->_groupsFactory = $groupsFactory;
+        $this->_groupService = $groupService;
+        $this->_converter = $converter;
         parent::__construct($coreData, $attrOptionCollectionFactory, $attrOptionFactory);
     }
 
     public function getAllOptions()
     {
         if (!$this->_options) {
-            $this->_options = $this->_getCustomerGroupsCollection()->setRealGroupsFilter()->load()->toOptionArray();
+            $groups = $this->_groupService->getGroups(false);
+            $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
         }
         return $this->_options;
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Resource\Group\Collection
-     */
-    protected function _getCustomerGroupsCollection()
-    {
-        return $this->_groupsFactory->create();
     }
 }

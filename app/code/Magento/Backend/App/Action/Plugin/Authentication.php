@@ -34,7 +34,7 @@ class Authentication
     protected $_auth;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $_openActions = array(
         'forgotpassword',
@@ -112,6 +112,7 @@ class Authentication
      * Process not logged in user data
      *
      * @param \Magento\App\RequestInterface $request
+     * @return void
      */
     protected function _processNotLoggedInUser(\Magento\App\RequestInterface $request)
     {

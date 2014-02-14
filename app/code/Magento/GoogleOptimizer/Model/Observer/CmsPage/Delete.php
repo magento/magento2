@@ -44,7 +44,7 @@ class Delete
      * Delete Product scripts after deleting product
      *
      * @param \Magento\Object $observer
-     * @return \Magento\GoogleOptimizer\Model\Observer\CmsPage\Delete
+     * @return $this
      */
     public function deleteCmsGoogleExperimentScript($observer)
     {

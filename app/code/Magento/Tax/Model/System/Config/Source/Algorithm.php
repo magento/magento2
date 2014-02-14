@@ -28,8 +28,14 @@ namespace Magento\Tax\Model\System\Config\Source;
 
 class Algorithm implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @var array
+     */
     protected $_options;
 
+    /**
+     * Initialize the options array
+     */
     public function __construct()
     {
         $this->_options = array(
@@ -48,6 +54,9 @@ class Algorithm implements \Magento\Core\Model\Option\ArrayInterface
         );
     }
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return $this->_options;

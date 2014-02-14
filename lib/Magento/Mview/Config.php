@@ -17,35 +17,46 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Mview;
 
-class Config extends \Magento\Config\Data implements ConfigInterface
+class Config implements ConfigInterface
 {
     /**
-     * @param \Magento\Mview\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @var Config\Data
      */
-    public function __construct(
-        \Magento\Mview\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
-        $cacheId = 'mview_config'
-    ) {
-        parent::__construct($reader, $cache, $cacheId);
+    protected $configData;
+
+    /**
+     * @param Config\Data $configData
+     */
+    public function __construct(Config\Data $configData)
+    {
+        $this->configData = $configData;
     }
 
     /**
-     * Get views configuration
+     * Get views list
      *
-     * @return mixed
+     * @return array[]
      */
-    public function getAll()
+    public function getViews()
     {
-        return $this->get();
+        return $this->configData->get();
+    }
+
+    /**
+     * Get view by ID
+     *
+     * @param string $viewId
+     * @return array
+     */
+    public function getView($viewId)
+    {
+        return $this->configData->get($viewId);
     }
 }

@@ -28,6 +28,8 @@ class Noroute extends \Magento\Backend\App\Action
 {
     /**
      * Noroute action
+     *
+     * @return void
      */
     public function indexAction()
     {

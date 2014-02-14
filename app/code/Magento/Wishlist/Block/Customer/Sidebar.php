@@ -50,7 +50,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      * Add sidebar conditions to collection
      *
      * @param  \Magento\Wishlist\Model\Resource\Item\Collection $collection
-     * @return \Magento\Wishlist\Block\Customer\Wishlist
+     * @return $this
      */
     protected function _prepareCollection($collection)
     {

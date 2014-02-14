@@ -86,7 +86,7 @@ class Custom extends \Magento\Core\Model\Config\Value
     /**
      * Validate value before save
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Custom
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -103,7 +103,7 @@ class Custom extends \Magento\Core\Model\Config\Value
     /**
      * Change secure/unsecure base_url after use_custom_url was modified
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Custom
+     * @return $this
      */
     public function _afterSave()
     {

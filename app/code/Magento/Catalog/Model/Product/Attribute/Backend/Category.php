@@ -39,7 +39,7 @@ class Category extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * Set category ids to product data
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function afterLoad($object)
     {

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Product\Flat;
 
 /**
  * Catalog Product Flat Indexer Model
@@ -51,8 +51,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Flat;
-
 class Indexer extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -103,8 +101,9 @@ class Indexer extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Standart model resource initialization
+     * Standard model resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -114,8 +113,8 @@ class Indexer extends \Magento\Core\Model\AbstractModel
     /**
      * Rebuild Catalog Product Flat Data
      *
-     * @param mixed $store
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @param int $store
+     * @return $this
      */
     public function rebuild($store = null)
     {
@@ -138,7 +137,7 @@ class Indexer extends \Magento\Core\Model\AbstractModel
      * @param string $attributeCode
      * @param int $store
      * @param int|array $productIds
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
      */
     public function updateAttribute($attributeCode, $store = null, $productIds = null)
     {
@@ -162,7 +161,7 @@ class Indexer extends \Magento\Core\Model\AbstractModel
      * Prepare datastorage for catalog product flat
      *
      * @param int $store
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
      */
     public function prepareDataStorage($store = null)
     {
@@ -183,7 +182,7 @@ class Indexer extends \Magento\Core\Model\AbstractModel
      * Update events observer attributes
      *
      * @param int $store
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
      */
     public function updateEventAttributes($store = null)
     {
@@ -208,7 +207,7 @@ class Indexer extends \Magento\Core\Model\AbstractModel
      * @param int $productId
      * @param int $status
      * @param int $store
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
      */
     public function updateProductStatus($productId, $status, $store = null)
     {
@@ -234,7 +233,8 @@ class Indexer extends \Magento\Core\Model\AbstractModel
      *
      * @param int|array $productIds
      * @param int $store
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
+     * @throws \Exception
      */
     public function updateProduct($productIds, $store = null)
     {
@@ -265,7 +265,8 @@ class Indexer extends \Magento\Core\Model\AbstractModel
      *
      * @param int|array $productIds
      * @param int $store
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
+     * @throws \Exception
      */
     public function saveProduct($productIds, $store = null)
     {
@@ -296,7 +297,7 @@ class Indexer extends \Magento\Core\Model\AbstractModel
      *
      * @param int|array $productIds
      * @param int $store
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
      */
     public function removeProduct($productIds, $store = null)
     {
@@ -316,7 +317,7 @@ class Indexer extends \Magento\Core\Model\AbstractModel
      * Delete store process
      *
      * @param int $store
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
      */
     public function deleteStore($store)
     {
@@ -327,7 +328,7 @@ class Indexer extends \Magento\Core\Model\AbstractModel
     /**
      * Rebuild Catalog Product Flat Data for all stores
      *
-     * @return \Magento\Catalog\Model\Product\Flat\Indexer
+     * @return $this
      */
     public function reindexAll()
     {

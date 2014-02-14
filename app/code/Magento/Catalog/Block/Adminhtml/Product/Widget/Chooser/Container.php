@@ -33,7 +33,12 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser;
 
-class Container extends \Magento\Backend\Block\Template
+use Magento\Backend\Block\Template;
+
+class Container extends Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/widget/chooser/container.phtml';
 }

@@ -134,7 +134,7 @@ HTML;
     /**
      * Check whether wysiwyg enabled or not
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsWysiwygEnabled()
     {

@@ -88,6 +88,9 @@ class Country extends \Magento\Core\Model\AbstractModel
         $this->_regionCollectionFactory = $regionCollectionFactory;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Directory\Model\Resource\Country');
@@ -197,7 +200,7 @@ T: {{telephone}}";
      * Retrieve format
      *
      * @param string $type
-     * @return \Magento\Directory\Model\Country\Format
+     * @return \Magento\Directory\Model\Country\Format|null
      */
     public function getFormat($type)
     {

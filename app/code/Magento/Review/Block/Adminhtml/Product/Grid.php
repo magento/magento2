@@ -23,19 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block\Adminhtml\Product;
 
 /**
  * Adminhtml product grid block
  *
- * @category   Magento
- * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block\Adminhtml\Product;
-
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 {
     /**
+     * Website collection
+     *
      * @var \Magento\Core\Model\Resource\Website\CollectionFactory
      */
     protected $_websitesFactory;
@@ -83,6 +82,11 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
         );
     }
 
+    /**
+     * Initialize review
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -91,6 +95,8 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     }
 
     /**
+     * Prepare product review grid
+     *
      * @return void
      */
     protected function _prepareColumns()
@@ -158,6 +164,8 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     }
 
     /**
+     * Get catalog product grid url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -166,6 +174,9 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     }
 
     /**
+     * Get catalog product row url
+     *
+     * @param \Magento\Object $row
      * @return string
      */
     public function getRowUrl($row)
@@ -174,6 +185,8 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     }
 
     /**
+     * Prepare mass action
+     *
      * @return $this
      */
     protected function _prepareMassaction()

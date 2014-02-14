@@ -155,13 +155,6 @@ class Payment extends \Magento\Payment\Model\Info
     protected $_order;
 
     /**
-     * Billing agreement instance that may be created during payment processing
-     *
-     * @var \Magento\Sales\Model\Billing\Agreement
-     */
-    protected $_billingAgreement = null;
-
-    /**
      * Whether can void
      * @var string
      */
@@ -200,11 +193,6 @@ class Payment extends \Magento\Payment\Model\Info
     protected $_transactionCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Billing\AgreementFactory
-     */
-    protected $_agreementFactory;
-
-    /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -217,7 +205,6 @@ class Payment extends \Magento\Payment\Model\Info
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
      * @param \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
-     * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -231,7 +218,6 @@ class Payment extends \Magento\Payment\Model\Info
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
-        \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -240,7 +226,6 @@ class Payment extends \Magento\Payment\Model\Info
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_transactionFactory = $transactionFactory;
         $this->_transactionCollectionFactory = $transactionCollectionFactory;
-        $this->_agreementFactory = $agreementFactory;
         $this->_storeManager = $storeManager;
         parent::__construct($context, $registry, $paymentData, $encryptor, $resource, $resourceCollection, $data);
     }
@@ -373,8 +358,6 @@ class Payment extends \Magento\Payment\Model\Info
                 }
             }
         }
-
-        $this->_createBillingAgreement();
 
         $orderIsNotified = null;
         if ($stateObject->getState() && $stateObject->getStatus()) {
@@ -1305,16 +1288,6 @@ class Payment extends \Magento\Payment\Model\Info
     }
 
     /**
-     * Get the billing agreement, if any
-     *
-     * @return \Magento\Sales\Model\Billing\Agreement|null
-     */
-    public function getBillingAgreement()
-    {
-        return $this->_billingAgreement;
-    }
-
-    /**
      * Totals updater utility method
      * Updates self totals by keys in data array('key' => $delta)
      *
@@ -1548,27 +1521,6 @@ class Payment extends \Magento\Payment\Model\Info
         }
 
         return $this;
-    }
-
-    /**
-     * Generate billing agreement object if there is billing agreement data
-     * Adds it to order as related object
-     */
-    protected function _createBillingAgreement()
-    {
-        if ($this->getBillingAgreementData()) {
-            $order = $this->getOrder();
-            $agreement = $this->_agreementFactory->create()->importOrderPayment($this);
-            if ($agreement->isValid()) {
-                $message = __('Created billing agreement #%1.', $agreement->getReferenceId());
-                $order->addRelatedObject($agreement);
-                $this->_billingAgreement = $agreement;
-            } else {
-                $message = __('We couldn\'t create a billing agreement for this order.');
-            }
-            $comment = $order->addStatusHistoryComment($message);
-            $order->addRelatedObject($comment);
-        }
     }
 
     /**

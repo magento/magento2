@@ -48,7 +48,7 @@ class Title extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete title by rate identifier
      *
      * @param int $rateId
-     * @return \Magento\Tax\Model\Resource\Calculation\Rate\Title
+     * @return $this
      */
     public function deleteByRateId($rateId)
     {

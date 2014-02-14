@@ -110,6 +110,8 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
 
     /**
      * Initialize block
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -117,13 +119,13 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
         $this->_eventManager->dispatch('product_option_renderer_init', array('block' => $this));
     }
 
-    /*
+    /**
      * Adds config for rendering product type options
      *
      * @param string $productType
      * @param string $helperName
      * @param null|string $template
-     * @return \Magento\Wishlist\Block\Customer\Wishlist\Item\Options
+     * @return $this
      */
     public function addOptionsRenderCfg($productType, $helperName, $template = null)
     {

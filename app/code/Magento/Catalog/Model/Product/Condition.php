@@ -26,8 +26,16 @@
 
 namespace Magento\Catalog\Model\Product;
 
+use Magento\DB\Adapter\AdapterInterface;
+use Magento\DB\Select;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+
 class Condition extends \Magento\Object implements \Magento\Catalog\Model\Product\Condition\ConditionInterface
 {
+    /**
+     * @param AbstractCollection $collection
+     * @return $this
+     */
     public function applyToCollection($collection)
     {
         if ($this->getTable() && $this->getPkFieldName()) {
@@ -40,6 +48,10 @@ class Condition extends \Magento\Object implements \Magento\Catalog\Model\Produc
         return $this;
     }
 
+    /**
+     * @param AdapterInterface $dbAdapter
+     * @return Select|string
+     */
     public function getIdsSelect($dbAdapter)
     {
         if ($this->getTable() && $this->getPkFieldName()) {

@@ -52,6 +52,8 @@ class Wishlist extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Set main entity table name and primary key field name
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -63,7 +65,7 @@ class Wishlist extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param mixed $object
+     * @param \Magento\Core\Model\AbstractModel $object
      * @return \Zend_Db_Select
      */
     protected function _getLoadSelect($field, $value, $object)
@@ -89,9 +91,8 @@ class Wishlist extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Setter for customer ID field name
      *
-     * @param $fieldName
-     *
-     * @return \Magento\Wishlist\Model\Resource\Wishlist
+     * @param string $fieldName
+     * @return $this
      */
     public function setCustomerIdFieldName($fieldName)
     {

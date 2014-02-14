@@ -26,8 +26,7 @@
 
 namespace Magento\Backend\Model\Config\Structure\Element;
 
-class Group
-    extends \Magento\Backend\Model\Config\Structure\Element\AbstractComposite
+class Group extends AbstractComposite
 {
     /**
      * Group clone model factory
@@ -87,6 +86,7 @@ class Group
      * Populate form fieldset with group data
      *
      * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @return void
      */
     public function populateFieldset(\Magento\Data\Form\Element\Fieldset $fieldset)
     {
@@ -122,7 +122,7 @@ class Group
     /**
      * Retrieve field dependencies
      *
-     * @param $storeCode
+     * @param string $storeCode
      * @return array
      */
     public function getDependencies($storeCode)

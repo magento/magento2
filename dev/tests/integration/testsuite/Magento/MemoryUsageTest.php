@@ -41,7 +41,7 @@ class MemoryUsageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new \Magento\TestFramework\Helper\Memory(new \Magento\Shell);
+        $this->_helper = new \Magento\TestFramework\Helper\Memory(new \Magento\Shell(new \Magento\OSInfo()));
     }
 
     /**

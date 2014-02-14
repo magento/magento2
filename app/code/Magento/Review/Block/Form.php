@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block;
+
+use Magento\Catalog\Model\Product;
+use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
 
 /**
  * Review form block
@@ -31,11 +35,6 @@
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block;
-
-use Magento\Catalog\Model\Product;
-use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
-
 class Form extends \Magento\View\Element\Template
 {
     /**
@@ -46,31 +45,43 @@ class Form extends \Magento\View\Element\Template
     protected $_reviewData = null;
 
     /**
+     * Customer session model
+     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
+     * Catalog product model
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Rating model
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
+     * Review session model
+     *
      * @var \Magento\Review\Model\Session
      */
     protected $_reviewSession;
 
     /**
+     * Core helper data
+     *
      * @var \Magento\Core\Helper\Data
      */
     protected $_coreData;
 
     /**
+     * Message manager interface
+     *
      * @var \Magento\Message\ManagerInterface
      */
     protected $messageManager;
@@ -108,6 +119,11 @@ class Form extends \Magento\View\Element\Template
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * Initialize review form
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -143,6 +159,8 @@ class Form extends \Magento\View\Element\Template
     }
 
     /**
+     * Get product info
+     *
      * @return Product
      */
     public function getProductInfo()
@@ -152,6 +170,8 @@ class Form extends \Magento\View\Element\Template
     }
 
     /**
+     * Get review product post action
+     *
      * @return string
      */
     public function getAction()
@@ -161,6 +181,8 @@ class Form extends \Magento\View\Element\Template
     }
 
     /**
+     * Get collection of ratings
+     *
      * @return RatingCollection
      */
     public function getRatings()

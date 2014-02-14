@@ -36,8 +36,8 @@ class AttributeMetadata extends \Magento\Service\Entity\AbstractDto
     const STORE_LABEL = 'store_label';
     const VALIDATION_RULES = 'validation_rules';
     const OPTIONS = 'options';
-    const VISIBLE = 'is_visible';
-    const REQUIRED = 'is_required';
+    const VISIBLE = 'visible';
+    const REQUIRED = 'required';
     const MULTILINE_COUNT = 'multiline_count';
     const DATA_MODEL = 'data_model';
     const IS_USER_DEFINED = 'is_user_defined';

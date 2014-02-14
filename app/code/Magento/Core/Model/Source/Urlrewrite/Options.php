@@ -33,7 +33,9 @@
  */
 namespace Magento\Core\Model\Source\Urlrewrite;
 
-class Options implements \Magento\Core\Model\Option\ArrayInterface
+use Magento\Core\Model\Option\ArrayInterface;
+
+class Options implements ArrayInterface
 {
     const TEMPORARY = 'R';
     const PERMANENT = 'RP';
@@ -63,7 +65,7 @@ class Options implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * Get options list (redirects only)
      *
-     * @return array
+     * @return string[]
      */
     public function getRedirectOptions()
     {

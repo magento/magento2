@@ -39,7 +39,9 @@
                 return ;
             }
             var placeholders = this._searchPlaceholders(this.element.comments());
-            this._ajax(placeholders, version);
+            if (placeholders.length) {
+                this._ajax(placeholders, version);
+            }
         },
         _searchPlaceholders: function (elements) {
             var placeholders = [],

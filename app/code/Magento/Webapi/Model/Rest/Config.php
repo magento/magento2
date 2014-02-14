@@ -23,7 +23,9 @@
  */
 namespace Magento\Webapi\Model\Rest;
 
+use Magento\Webapi\Controller\Rest\Router\Route;
 use \Magento\Webapi\Model\Config\Converter;
+use Magento\Webapi\Model\Config as ModelConfig;
 
 /**
  * Webapi Config Model for Rest.
@@ -49,18 +51,18 @@ class Config
     const KEY_ACL_RESOURCES = 'resources';
     /*#@-*/
 
-    /** @var \Magento\Webapi\Model\Config  */
+    /** @var ModelConfig */
     protected $_config;
 
     /** @var \Magento\Controller\Router\Route\Factory */
     protected $_routeFactory;
 
     /**
-     * @param \Magento\Webapi\Model\Config
+     * @param ModelConfig $config
      * @param \Magento\Controller\Router\Route\Factory $routeFactory
      */
     public function __construct(
-        \Magento\Webapi\Model\Config $config,
+        ModelConfig $config,
         \Magento\Controller\Router\Route\Factory $routeFactory
     ) {
         $this->_config = $config;
@@ -114,7 +116,7 @@ class Config
      * Generate the list of available REST routes. Current HTTP method is taken into account.
      *
      * @param \Magento\Webapi\Controller\Rest\Request $request
-     * @return array
+     * @return Route[]
      * @throws \Magento\Webapi\Exception
      */
     public function getRestRoutes(\Magento\Webapi\Controller\Rest\Request $request)

@@ -30,14 +30,13 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Currency;
 
-class DefaultCurrency
-    extends \Magento\Backend\Model\Config\Backend\Currency\AbstractCurrency
+class DefaultCurrency extends AbstractCurrency
 {
     /**
      * Check default currency is available in installed currencies
      * Check default currency is available in allowed currencies
      *
-     * @return \Magento\Backend\Model\Config\Backend\Currency\DefaultCurrency
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _afterSave()

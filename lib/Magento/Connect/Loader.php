@@ -39,7 +39,7 @@ class Loader
     /**
      * Factory for HTTP client
      * @param string/false $protocol  'curl'/'socket' or false for auto-detect
-     * @return \Magento\HTTP\Client/\Magento\Connect\Loader\Ftp
+     * @return \Magento\HTTP\Client|\Magento\Connect\Loader\Ftp
      */
     public static function getInstance($protocol='')
     {

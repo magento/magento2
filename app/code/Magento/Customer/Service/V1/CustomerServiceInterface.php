@@ -24,6 +24,9 @@
 
 namespace Magento\Customer\Service\V1;
 
+use Magento\Exception\InputException;
+use Magento\Exception\NoSuchEntityException;
+
 /**
  * Manipulate Customer Address Entities *
  */
@@ -32,9 +35,10 @@ interface CustomerServiceInterface
     /**
      * Create or update customer information
      *
-     * @param \Magento\Customer\Service\V1\Dto\Customer $customer
+     * @param Dto\Customer $customer
      * @param string $password
-     * @throws \Magento\Customer\Service\Entity\V1\Exception
+     * @throws \Magento\Customer\Exception If something goes wrong during save
+     * @throws InputException If bad input is provided
      * @return int customer ID
      */
     public function saveCustomer(Dto\Customer $customer, $password = null);
@@ -43,7 +47,8 @@ interface CustomerServiceInterface
      * Retrieve Customer
      *
      * @param int $customerId
-     * @return \Magento\Customer\Service\V1\Dto\Customer
+     * @throws NoSuchEntityException If customer with customerId is not found.
+     * @return Dto\Customer
      */
     public function getCustomer($customerId);
 

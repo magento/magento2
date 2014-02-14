@@ -23,16 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Indexer strategy
- */
 namespace Magento\Index\Model;
 
 use Magento\Event\ManagerInterface;
 use Magento\Index\Model\Resource\Process as ResourceProcess;
 use Magento\Index\Model\Resource\Process\Collection;
 
+/**
+ * Indexer strategy
+ */
 class Indexer
 {
     /**
@@ -266,7 +265,7 @@ class Indexer
      * @param Collection $collection
      * @return void
      */
-    private function _reindexCollection(\Magento\Index\Model\Resource\Process\Collection $collection)
+    private function _reindexCollection(Collection $collection)
     {
         /** @var $process \Magento\Index\Model\Process */
         foreach ($collection as $process) {

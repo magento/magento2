@@ -28,7 +28,7 @@ namespace Magento\Paypal\Model\System\Config\Backend;
 
 class Cron extends \Magento\Core\Model\Config\Value
 {
-    const CRON_STRING_PATH = 'crontab/jobs/paypal_fetch_settlement_reports/schedule/cron_expr';
+    const CRON_STRING_PATH = 'crontab/default/jobs/paypal_fetch_settlement_reports/schedule/cron_expr';
     const CRON_MODEL_PATH_INTERVAL = 'paypal/fetch_reports/schedule';
 
     /**

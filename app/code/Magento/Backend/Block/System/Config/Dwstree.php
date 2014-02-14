@@ -31,6 +31,9 @@ namespace Magento\Backend\Block\System\Config;
 
 class Dwstree extends \Magento\Backend\Block\Widget\Tabs
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -39,7 +42,7 @@ class Dwstree extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
-     * @return \Magento\Backend\Block\System\Config\Dwstree
+     * @return $this
      */
     public function initTabs()
     {

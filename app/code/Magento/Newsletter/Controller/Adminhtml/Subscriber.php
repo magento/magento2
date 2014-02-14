@@ -23,8 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Newsletter\Controller\Adminhtml;
+
+use Magento\App\ResponseInterface;
 
 /**
  * Newsletter subscribers controller
@@ -86,7 +87,7 @@ class Subscriber extends \Magento\Backend\App\Action
     /**
      * Export subscribers grid to CSV format
      *
-     * @return void
+     * @return ResponseInterface
      */
     public function exportCsvAction()
     {
@@ -104,7 +105,7 @@ class Subscriber extends \Magento\Backend\App\Action
     /**
      * Export subscribers grid to XML format
      *
-     * @return void
+     * @return ResponseInterface
      */
     public function exportXmlAction()
     {

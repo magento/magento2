@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Layout\Argument\Handler;
 
 /**
  * Layout argument. Type boolean.
@@ -31,7 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Layout\Argument\Handler;
 
 class Boolean extends \Magento\Core\Model\Layout\Argument\AbstractHandler
 {
@@ -50,6 +50,7 @@ class Boolean extends \Magento\Core\Model\Layout\Argument\AbstractHandler
 
     /**
      * @param array $argument
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _validate(array $argument)

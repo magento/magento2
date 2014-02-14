@@ -31,6 +31,17 @@
             <headers>
                 <public-max-age>0</public-max-age>
             </headers>
+            <full_page_cache>
+                <varnish>
+                    <path>Magento/PageCache/etc/varnish.vcl</path>
+                </varnish>
+                <default>
+                    <access_list>localhost</access_list>
+                    <backend_host>localhost</backend_host>
+                    <backend_port>8080</backend_port>
+                    <ttl>120</ttl>
+                </default>
+            </full_page_cache>
         </system>
     </default>
 </config>

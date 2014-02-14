@@ -105,7 +105,7 @@ class Dependencies
      *
      * @param array $field
      * @param array $config
-     * @return array
+     * @return string[]
      * @throws \InvalidArgumentException
      */
     protected function _getDependPath($field, $config)

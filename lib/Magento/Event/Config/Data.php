@@ -43,8 +43,8 @@ class Data extends \Magento\Config\Data\Scoped
      * @param \Magento\Event\Config\Reader $reader
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Config\CacheInterface $cache
-     * @param string $cacheId
      * @param \Magento\App\State $appState
+     * @param string $cacheId
      */
     public function __construct(
         \Magento\Event\Config\Reader $reader,

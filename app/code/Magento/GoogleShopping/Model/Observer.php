@@ -99,7 +99,7 @@ class Observer
      * Update product item in Google Content
      *
      * @param \Magento\Object $observer
-     * @return \Magento\GoogleShopping\Model\Observer
+     * @return $this
      */
     public function saveProductItem($observer)
     {
@@ -119,7 +119,7 @@ class Observer
      * Delete product item from Google Content
      *
      * @param \Magento\Object $observer
-     * @return \Magento\GoogleShopping\Model\Observer
+     * @return $this
      */
     public function deleteProductItem($observer)
     {
@@ -161,7 +161,7 @@ class Observer
      * Check if synchronize process is finished and generate notification message
      *
      * @param  \Magento\Event\Observer $observer
-     * @return \Magento\GoogleShopping\Model\Observer
+     * @return $this
      */
     public function checkSynchronizationOperations(\Magento\Event\Observer $observer)
     {

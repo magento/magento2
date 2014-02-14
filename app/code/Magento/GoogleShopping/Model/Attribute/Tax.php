@@ -44,7 +44,9 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      */
     protected $_taxData = null;
 
-    /** @var \Magento\GoogleCheckout\Helper\Data  */
+    /**
+     * @var \Magento\GoogleCheckout\Helper\Data
+     */
     protected $checkoutDataHelper;
 
     /**

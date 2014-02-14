@@ -34,6 +34,8 @@ use Magento\Review\Model\Resource\Review\Product\Collection;
 class Recent extends \Magento\View\Element\Template
 {
     /**
+     * Customer list template name
+     *
      * @var string
      */
     protected $_template = 'customer/list.phtml';
@@ -46,11 +48,14 @@ class Recent extends \Magento\View\Element\Template
     protected $_collection;
 
     /**
+     * Review resource model
+     *
      * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
+     * Customer session model
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -94,6 +99,7 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Initialize review collection
      * @return $this
      */
     protected function _initCollection()
@@ -110,6 +116,8 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Get number of reviews
+     *
      * @return int
      */
     public function count()
@@ -118,6 +126,7 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Initialize and return collection of reviews
      * @return Collection
      */
     protected function _getCollection()
@@ -129,6 +138,8 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Return collection of reviews
+     *
      * @return Collection
      */
     public function getCollection()
@@ -137,6 +148,8 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Return review customer view url
+     *
      * @return string
      */
     public function getReviewLink()
@@ -145,6 +158,8 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Return catalog product view url
+     *
      * @return string
      */
     public function getProductLink()
@@ -153,6 +168,9 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Format review date
+     *
+     * @param string $date
      * @return string
      */
     public function dateFormat($date)
@@ -161,6 +179,8 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Return review customer url
+     *
      * @return string
      */
     public function getAllReviewsUrl()
@@ -169,6 +189,9 @@ class Recent extends \Magento\View\Element\Template
     }
 
     /**
+     * Return review customer view url for a specific customer/review
+     *
+     * @param int $id
      * @return string
      */
     public function getReviewUrl($id)

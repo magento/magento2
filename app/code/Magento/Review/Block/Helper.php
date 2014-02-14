@@ -38,6 +38,8 @@ use Magento\Catalog\Model\Product;
 class Helper extends \Magento\View\Element\Template
 {
     /**
+     * Array of available template name
+     *
      * @var array
      */
     protected $_availableTemplates = array(
@@ -46,6 +48,8 @@ class Helper extends \Magento\View\Element\Template
     );
 
     /**
+     * Review model factory
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
@@ -65,6 +69,8 @@ class Helper extends \Magento\View\Element\Template
     }
 
     /**
+     * Get review summary html
+     *
      * @param Product $product
      * @param string $templateType
      * @param bool $displayIfNoReviews
@@ -89,6 +95,8 @@ class Helper extends \Magento\View\Element\Template
     }
 
     /**
+     * Get ratings summary
+     *
      * @return string
      */
     public function getRatingSummary()
@@ -97,6 +105,8 @@ class Helper extends \Magento\View\Element\Template
     }
 
     /**
+     * Get count of reviews
+     *
      * @return int
      */
     public function getReviewsCount()
@@ -105,6 +115,8 @@ class Helper extends \Magento\View\Element\Template
     }
 
     /**
+     * Get review product list url
+     *
      * @return string
      */
     public function getReviewsUrl()

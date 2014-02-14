@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Collection;
 
 /**
  * Catalog EAV collection resource abstract model
@@ -33,8 +33,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Collection;
-
 class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
     /**
@@ -62,7 +60,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -98,7 +96,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * Set store scope
      *
      * @param int|string|\Magento\Core\Model\Store $store
-     * @return \Magento\Catalog\Model\Resource\Collection\AbstractCollection
+     * @return $this
      */
     public function setStore($store)
     {
@@ -110,7 +108,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * Set store scope
      *
      * @param int|string|\Magento\Core\Model\Store $storeId
-     * @return \Magento\Catalog\Model\Resource\Collection\AbstractCollection
+     * @return $this
      */
     public function setStoreId($storeId)
     {

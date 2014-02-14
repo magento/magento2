@@ -29,6 +29,7 @@ class Output
      * Export variable
      *
      * @param mixed $var
+     * @return void
      */
     public function export($var)
     {
@@ -39,6 +40,7 @@ class Output
      * Display message
      *
      * @param string $message
+     * @return void
      */
     public function success($message)
     {
@@ -49,6 +51,7 @@ class Output
      * Display error
      *
      * @param string $message
+     * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function error($message)

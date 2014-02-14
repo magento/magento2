@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <typo name="job1" instance="Model1" method="method1">
-        <schedule>30 2 * * *</schedule>
-    </typo>
+    <group id="default">
+        <typo name="job1" instance="Model1" method="method1">
+            <schedule>30 2 * * *</schedule>
+        </typo>
+    </group>
 </config>

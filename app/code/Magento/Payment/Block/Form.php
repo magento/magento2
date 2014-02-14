@@ -67,14 +67,4 @@ class Form extends \Magento\View\Element\Template
     {
         return $this->escapeHtml($this->getMethod()->getInfoInstance()->getData($field));
     }
-
-    /**
-     * Check whether current payment method can create billing agreement
-     *
-     * @return bool
-     */
-    public function canCreateBillingAgreement()
-    {
-        return $this->getMethod()->canCreateBillingAgreement();
-    }
 }

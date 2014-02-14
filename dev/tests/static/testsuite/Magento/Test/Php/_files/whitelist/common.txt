@@ -63,6 +63,7 @@ app/code/Magento/Customer/Block/Account/{Authorization,Register}Link.php
 app/code/Magento/Customer/Block/Adminhtml/Edit/Tab/Account.php
 app/code/Magento/Customer/Model/Address/Config
 app/code/Magento/Customer/Model/Address/Config.php
+app/code/Magento/Customer/Service
 app/code/Magento/Directory/Model/Currency/DefaultLocator.php
 app/code/Magento/Directory/Model/Resource/Region
 app/code/Magento/Eav/Model/Cache/Type.php
@@ -95,6 +96,7 @@ app/code/Magento/Log/Model/Shell.php
 app/code/Magento/Log/Model/Shell
 app/code/Magento/Theme/Block/Html/Head
 app/code/Magento/ProductAlert/Block/Product/View
+app/code/Magento/RecurringProfile
 app/code/Magento/Reports/Block/Adminhtml/Customer
 app/code/Magento/Reports/Block/Adminhtml/Product
 app/code/Magento/Reports/Controller/Adminhtml/Report/Customer.php
@@ -105,9 +107,6 @@ app/code/Magento/Reports/Model/Resource/Customer
 app/code/Magento/Reports/Model/Resource/Report/Collection.php
 app/code/Magento/Sales/Block/Guest/Link.php
 app/code/Magento/Sales/Block/Order/Link.php
-app/code/Magento/Sales/Block/Recurring/Profile/Grid.php
-app/code/Magento/Sales/Block/Recurring/Profile/Related/Orders/Grid.php
-app/code/Magento/Sales/Block/Recurring/Profile/View
 app/code/Magento/Sales/Model/Order/Pdf/Config
 app/code/Magento/Sales/Model/Order/Pdf/Config.php
 app/code/Magento/Sales/Model/Order/Pdf/Total/Factory.php
@@ -134,9 +133,11 @@ lib/Magento/Backup/Db
 lib/Magento/Backup/Factory.php
 lib/Magento/Cache/Core.php
 lib/Magento/Convert
+lib/Magento/Exception
 lib/Magento/Stdlib/DateTime.php
 lib/Magento/Object.php
 lib/Magento/App
 lib/Magento/ObjectManager
+lib/Magento/Service
 lib/Magento/Url/SecurityInfoInterface.php
 lib/Magento/View

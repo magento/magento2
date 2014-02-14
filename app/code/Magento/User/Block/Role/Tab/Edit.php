@@ -32,7 +32,9 @@ namespace Magento\User\Block\Role\Tab;
 class Edit extends \Magento\Backend\Block\Widget\Form
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'role/edit.phtml';
 
     /**
@@ -159,7 +161,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form
     /**
      * Check if everything is allowed
      *
-     * @return boolean
+     * @return bool
      */
     public function isEverythingAllowed()
     {

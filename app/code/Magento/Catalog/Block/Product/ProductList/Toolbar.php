@@ -88,7 +88,7 @@ class Toolbar extends \Magento\View\Element\Template
     /**
      * List of available view types
      *
-     * @var string
+     * @var array
      */
     protected $_availableMode       = array();
 
@@ -140,6 +140,9 @@ class Toolbar extends \Magento\View\Element\Template
     protected $_paramsMemorizeAllowed = true;
 
 
+    /**
+     * @var string
+     */
     protected $_template = 'product/list/toolbar.phtml';
 
 
@@ -187,7 +190,6 @@ class Toolbar extends \Magento\View\Element\Template
 
     /**
      * Init Toolbar
-     *
      */
     protected function _construct()
     {
@@ -220,6 +222,8 @@ class Toolbar extends \Magento\View\Element\Template
 
     /**
      * Disable list state params memorizing
+     *
+     * @return $this
      */
     public function disableParamsMemorizing()
     {
@@ -232,7 +236,7 @@ class Toolbar extends \Magento\View\Element\Template
      *
      * @param string $param parameter name
      * @param mixed $value parameter value
-     * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
+     * @return $this
      */
     protected function _memorizeParam($param, $value)
     {
@@ -246,7 +250,7 @@ class Toolbar extends \Magento\View\Element\Template
      * Set collection to pager
      *
      * @param \Magento\Data\Collection $collection
-     * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
+     * @return $this
      */
     public function setCollection($collection)
     {
@@ -411,7 +415,7 @@ class Toolbar extends \Magento\View\Element\Template
      * Set default Order field
      *
      * @param string $field
-     * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
+     * @return $this
      */
     public function setDefaultOrder($field)
     {
@@ -425,7 +429,7 @@ class Toolbar extends \Magento\View\Element\Template
      * Set default sort direction
      *
      * @param string $dir
-     * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
+     * @return $this
      */
     public function setDefaultDirection($dir)
     {
@@ -449,7 +453,7 @@ class Toolbar extends \Magento\View\Element\Template
      * Set Available order fields list
      *
      * @param array $orders
-     * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
+     * @return $this
      */
     public function setAvailableOrders($orders)
     {
@@ -473,7 +477,7 @@ class Toolbar extends \Magento\View\Element\Template
      * Remove order from available orders if exists
      *
      * @param string $order
-     * @param \Magento\Catalog\Block\Product\ProductList\Toolbar
+     * @return $this
      */
     public function removeOrderFromAvailableOrders($order)
     {
@@ -572,7 +576,7 @@ class Toolbar extends \Magento\View\Element\Template
     }
 
     /**
-     * Retrieve availables view modes
+     * Retrieve available view modes
      *
      * @return array
      */
@@ -585,7 +589,7 @@ class Toolbar extends \Magento\View\Element\Template
      * Set available view modes list
      *
      * @param array $modes
-     * @return \Magento\Catalog\Block\Product\ProductList\Toolbar
+     * @return $this
      */
     public function setModes($modes)
     {
@@ -777,33 +781,52 @@ class Toolbar extends \Magento\View\Element\Template
         ));
     }
 
+    /**
+     * @param int $limit
+     * @return bool
+     */
     public function isLimitCurrent($limit)
     {
         return $limit == $this->getLimit();
     }
 
+    /**
+     * @return int
+     */
     public function getFirstNum()
     {
         $collection = $this->getCollection();
         return $collection->getPageSize()*($collection->getCurPage()-1)+1;
     }
 
+    /**
+     * @return int
+     */
     public function getLastNum()
     {
         $collection = $this->getCollection();
         return $collection->getPageSize()*($collection->getCurPage()-1)+$collection->count();
     }
 
+    /**
+     * @return int
+     */
     public function getTotalNum()
     {
         return $this->getCollection()->getSize();
     }
 
+    /**
+     * @return bool
+     */
     public function isFirstPage()
     {
         return $this->getCollection()->getCurPage() == 1;
     }
 
+    /**
+     * @return int
+     */
     public function getLastPageNum()
     {
         return $this->getCollection()->getLastPageNumber();

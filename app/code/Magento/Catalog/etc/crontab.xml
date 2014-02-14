@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job name="catalog_product_index_price_reindex_all" instance="Magento\Catalog\Model\Observer" method="reindexProductPrices">
-        <schedule>0 2 * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="catalog_product_index_price_reindex_all" instance="Magento\Catalog\Model\Observer" method="reindexProductPrices">
+            <schedule>0 2 * * *</schedule>
+        </job>
+    </group>
 </config>

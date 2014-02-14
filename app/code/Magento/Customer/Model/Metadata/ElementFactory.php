@@ -30,6 +30,13 @@ namespace Magento\Customer\Model\Metadata;
 
 class ElementFactory
 {
+    const OUTPUT_FORMAT_JSON    = 'json';
+    const OUTPUT_FORMAT_TEXT    = 'text';
+    const OUTPUT_FORMAT_HTML    = 'html';
+    const OUTPUT_FORMAT_PDF     = 'pdf';
+    const OUTPUT_FORMAT_ONELINE = 'oneline';
+    const OUTPUT_FORMAT_ARRAY   = 'array'; // available only for multiply attributes
+
     /**
      * @var \Magento\ObjectManager
      */

@@ -26,20 +26,22 @@
 
 namespace Magento\Backend\Model\Config\Source\Website;
 
+use Magento\Core\Model\System\Store;
+
 class OptionHash
     implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
      * System Store Model
      *
-     * @var \Magento\Core\Model\System\Store
+     * @var Store
      */
     protected $_systemStore;
 
     /**
-     * @param \Magento\Core\Model\System\Store
+     * @param Store $systemStore
      */
-    public function __construct(\Magento\Core\Model\System\Store $systemStore)
+    public function __construct(Store $systemStore)
     {
         $this->_systemStore = $systemStore;
     }

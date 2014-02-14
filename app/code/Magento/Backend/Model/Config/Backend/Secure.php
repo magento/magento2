@@ -64,6 +64,8 @@ class Secure extends \Magento\Core\Model\Config\Value
 
     /**
      * Clean compiled JS/CSS when updating configuration settings
+     *
+     * @return void
      */
     protected function _afterSave()
     {

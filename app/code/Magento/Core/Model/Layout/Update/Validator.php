@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Layout\Update;
 
 
 /**
@@ -34,7 +35,6 @@
  * @package    Magento_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Layout\Update;
 
 class Validator extends \Zend_Validate_Abstract
 {
@@ -103,7 +103,7 @@ class Validator extends \Zend_Validate_Abstract
     /**
      * Initialize messages templates with translating
      *
-     * @return \Magento\Core\Model\Layout\Update\Validator
+     * @return $this
      */
     protected function _initMessageTemplates()
     {
@@ -128,7 +128,7 @@ class Validator extends \Zend_Validate_Abstract
      *
      * @param string $value
      * @param string $schema
-     * @param boolean $isSecurityCheck
+     * @param bool $isSecurityCheck
      * @return bool
      */
     public function isValid($value, $schema = self::LAYOUT_SCHEMA_SINGLE_HANDLE, $isSecurityCheck = true)

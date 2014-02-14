@@ -114,7 +114,7 @@ abstract class AbstractXml extends \Magento\Object
     public function getCurrency()
     {
         if (!$this->hasData('currency')) {
-            $this->setData('currency', $this->objectManager->get('Magento\Core\Mode\StoreManager')->getStore()->getBaseCurrencyCode());
+            $this->setData('currency', $this->objectManager->get('Magento\Core\Model\StoreManager')->getStore()->getBaseCurrencyCode());
             //$this->setData('currency', $this->getLocale()=='en_US' ? 'USD' : 'GBP');
         }
         return $this->getData('currency');
@@ -257,7 +257,7 @@ abstract class AbstractXml extends \Magento\Object
     {
         if ($quote->getQuoteCurrencyCode() != $quote->getBaseCurrencyCode()) {
             $amount = $amount * $quote->getStoreToQuoteRate();
-            $amount = $this->objectManager->get('Magento\Core\Mode\StoreManager')->getStore()->roundPrice($amount);
+            $amount = $this->objectManager->get('Magento\Core\Model\StoreManager')->getStore()->roundPrice($amount);
         }
         return $amount;
     }

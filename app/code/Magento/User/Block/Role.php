@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\User\Block;
 
 /**
  * Magento_User role block
@@ -31,9 +32,6 @@
  * @package    Magento_User
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\User\Block;
-
 class Role extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
@@ -46,6 +44,11 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected $_blockGroup = 'Magento_User';
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_headerText = __('Roles');
@@ -53,11 +56,17 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
         parent::_construct();
     }
 
+    /**
+     * @return string
+     */
     public function getCreateUrl()
     {
         return $this->getUrl('*/*/editrole');
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         if (!$this->getLayout()->getChildName($this->getNameInLayout(), 'grid')) {

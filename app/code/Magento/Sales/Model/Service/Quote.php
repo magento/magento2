@@ -365,7 +365,7 @@ class Quote
         $profiles = $this->_quote->prepareRecurringPaymentProfiles();
         foreach ($profiles as $profile) {
             if (!$profile->isValid()) {
-                throw new \Magento\Core\Exception($profile->getValidationErrors(true, true));
+                throw new \Magento\Core\Exception($profile->getValidationErrors());
             }
             $profile->submit();
         }

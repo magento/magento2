@@ -31,7 +31,6 @@
  * @package    Magento_Email
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Email\Block\Adminhtml;
 
 class Template extends \Magento\Backend\Block\Template

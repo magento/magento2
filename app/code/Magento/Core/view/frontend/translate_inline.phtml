@@ -60,7 +60,7 @@
     {{if message}}<p class="a-center accent">${message}</p>{{/if}}
 </script>
 
-<div data-role="translate-dialog" data-mage-init="{translateInline: {ajaxUrl:&quot;<?php echo $this->getAjaxUrl() ?>&quot;}, loader: {}}"></div>
+<div data-role="translate-dialog" data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $this->getAjaxUrl() ?>"}, "loader": {}}'></div>
 <script type="text/javascript">
     (function($){
         $('body').editTrigger({alwaysShown:true, singleElement:false}).addClass('trnslate-inline-area');

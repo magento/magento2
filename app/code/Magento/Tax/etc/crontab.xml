@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job name="aggregate_sales_report_tax_data" instance="Magento\Tax\Model\Observer" method="aggregateSalesReportTaxData">
-        <schedule>0 0 * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="aggregate_sales_report_tax_data" instance="Magento\Tax\Model\Observer" method="aggregateSalesReportTaxData">
+            <schedule>0 0 * * *</schedule>
+        </job>
+    </group>
 </config>

@@ -95,6 +95,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testSaveActionWithInvalidCustomerAddressData()
     {
         $post = array(

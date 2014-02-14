@@ -43,6 +43,7 @@ class Html extends \Magento\View\Element\Template
 
     /**
      * Add block data
+     * @return void
      */
     protected function _construct()
     {
@@ -141,7 +142,7 @@ class Html extends \Magento\View\Element\Template
      * Set header title
      *
      * @param string $title
-     * @return \Magento\Theme\Block\Html
+     * @return $this
      */
     public function setHeaderTitle($title)
     {
@@ -163,7 +164,7 @@ class Html extends \Magento\View\Element\Template
      * Add CSS class to page body tag
      *
      * @param string $className
-     * @return \Magento\Theme\Block\Html
+     * @return $this
      */
     public function addBodyClass($className)
     {

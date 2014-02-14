@@ -32,9 +32,10 @@ extends \Magento\Connect\Command
 
     /**
      * List-installed callback
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
+     * @param string[] $params
      * @return void
      */
     public function doList($command, $options, $params)
@@ -69,9 +70,10 @@ extends \Magento\Connect\Command
 
     /**
      * list-files callback
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
+     * @param string[] $params
      * @return void
      */
     public function doFileList($command, $options, $params)
@@ -127,10 +129,11 @@ extends \Magento\Connect\Command
     /**
      * Installed package info
      * info command callback
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
-     * @return
+     * @param string[] $params
+     * @return void
      */
     public function doInfo($command, $options, $params)
     {

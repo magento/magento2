@@ -23,7 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Resource\Entity;
 
+use Magento\Core\Model\AbstractModel;
+use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\DB\Select;
 
 /**
  * EAV attribute resource model
@@ -32,12 +37,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Entity;
-
-use Magento\Core\Model\AbstractModel;
-use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
-use Magento\DB\Select;
-
 class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -60,7 +59,7 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Type
+     * @var Type
      */
     protected $_eavEntityType;
 
@@ -69,12 +68,12 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
+     * @param Type $eavEntityType
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
+        Type $eavEntityType
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavEntityType = $eavEntityType;
@@ -547,11 +546,11 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Retrieve Select For Flat Attribute update
      *
-     * @param EntityAttribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @param int $storeId
      * @return Select
      */
-    public function getFlatUpdateSelect(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute, $storeId)
+    public function getFlatUpdateSelect(AbstractAttribute $attribute, $storeId)
     {
         $adapter = $this->_getReadAdapter();
         $joinConditionTemplate = "%s.entity_id=%s.entity_id"

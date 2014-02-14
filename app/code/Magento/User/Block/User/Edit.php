@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\User\Block\User;
 
 /**
  * User edit page
@@ -31,8 +32,6 @@
  * @package    Magento_User
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\User\Block\User;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -56,6 +55,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'user_id';
@@ -68,6 +72,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('delete', 'label', __('Delete User'));
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('permissions_user')->getId()) {

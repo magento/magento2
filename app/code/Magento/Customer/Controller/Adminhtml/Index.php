@@ -284,6 +284,8 @@ class Index extends \Magento\Backend\App\Action
                 } else {
                     // create a new customer
                     $customer = $this->_customerFactory->create();
+                    // Need to set proper attribute id or future updates will cause data loss.
+                    $customer->setData('attribute_set_id', 1);
                     $this->_preparePasswordForSave($customer, $customerData);
                 }
 
@@ -463,9 +465,9 @@ class Index extends \Magento\Backend\App\Action
     private function _changePassword($customer, array $customerData)
     {
         if (!empty($customerData['password']) || $this->_isAutogeneratePassword($customerData)) {
-                $newPassword = $this->_getCustomerPassword($customer, $customerData);
-                $customer->changePassword($newPassword);
-                $customer->sendPasswordReminderEmail();
+            $newPassword = $this->_getCustomerPassword($customer, $customerData);
+            $customer->changePassword($newPassword);
+            $customer->sendPasswordReminderEmail();
         }
     }
 

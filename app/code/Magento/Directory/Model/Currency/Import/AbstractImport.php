@@ -101,7 +101,7 @@ abstract class AbstractImport
     /**
      * Import rates
      *
-     * @return \Magento\Directory\Model\Currency\Import\AbstractImport
+     * @return $this
      */
     public function importRates()
     {
@@ -140,6 +140,10 @@ abstract class AbstractImport
         return $data;
     }
 
+    /**
+     * @param float|int $number
+     * @return float|int
+     */
     protected function _numberFormat($number)
     {
         return $number;

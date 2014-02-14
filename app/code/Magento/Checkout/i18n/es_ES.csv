@@ -324,7 +324,6 @@
 "You have no items in your shopping cart.","No tiene artículos en su carrito de compras."
 "You will receive an order confirmation email with details of your order and a link to track its progress.","Recibirá un mensaje de correo electrónico con los detalles de su pedido y un enlace para hacer un seguimiento de su progreso."
 "Your Checkout Progress","Progreso de su compra"
-"Your billing agreement # is: %s.","Su número de acuerdo de facturación es: %s."
 "Your order # is: %s.","Su número de pedido es: %s."
 "Your order cannot be completed at this time as there is no payment methods available for it.","Su pedido no se ha podido completar porque no hay ningún método de pago disponible."
 "Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.","Su pedido no puede completarse en este momento ya que no hay métodos de envío disponibles. Realice los cambios necesarios en su dirección de envío."

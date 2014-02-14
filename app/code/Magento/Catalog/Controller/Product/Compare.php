@@ -23,11 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller\Product;
 
+use Magento\Core\App\Action\FormKeyValidator;
+
 /**
- * Catalog comapare controller
+ * Catalog compare controller
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
@@ -102,7 +103,7 @@ class Compare extends \Magento\App\Action\Action
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var FormKeyValidator
      */
     protected $_formKeyValidator;
 
@@ -117,6 +118,7 @@ class Compare extends \Magento\App\Action\Action
      * @param \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param FormKeyValidator $formKeyValidator
      */
     public function __construct(
         \Magento\App\Action\Context $context,
@@ -129,7 +131,7 @@ class Compare extends \Magento\App\Action\Action
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+        FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
         $this->_customerFactory = $customerFactory;
@@ -146,6 +148,8 @@ class Compare extends \Magento\App\Action\Action
 
     /**
      * Compare index action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -172,6 +176,8 @@ class Compare extends \Magento\App\Action\Action
 
     /**
      * Add item to compare list
+     *
+     * @return void
      */
     public function addAction()
     {
@@ -206,6 +212,8 @@ class Compare extends \Magento\App\Action\Action
 
     /**
      * Remove item from compare list
+     *
+     * @return void
      */
     public function removeAction()
     {
@@ -251,6 +259,8 @@ class Compare extends \Magento\App\Action\Action
 
     /**
      * Remove all items from comparison list
+     *
+     * @return void
      */
     public function clearAction()
     {
@@ -282,7 +292,7 @@ class Compare extends \Magento\App\Action\Action
      * Setter for customer id
      *
      * @param int $customerId
-     * @return \Magento\Catalog\Controller\Product\Compare
+     * @return $this
      */
     public function setCustomerId($customerId)
     {

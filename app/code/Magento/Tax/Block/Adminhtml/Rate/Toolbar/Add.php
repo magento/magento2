@@ -37,8 +37,14 @@ namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 class Add extends \Magento\Backend\Block\Template
 {
 
+    /**
+     * @var string
+     */
     protected $_template = 'toolbar/rate/add.phtml';
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $this->addChild('addButton', 'Magento\Backend\Block\Widget\Button', array(

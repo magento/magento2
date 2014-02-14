@@ -108,7 +108,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return string;
+     * @return string
      */
     public function getResourceCollectionName()
     {
@@ -152,7 +152,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param string $columnId
      * @param array $column
-     * @return \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
+     * @return $this
      */
     public function addColumn($columnId, $column)
     {
@@ -281,7 +281,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return int
+     * @return array
      */
     public function getCountTotals()
     {
@@ -329,7 +329,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param mixed $storeIds
+     * @param array $storeIds
      *
      * @return $this
      */
@@ -340,7 +340,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return string
+     * @return string|\Magento\Directory\Model\Currency $currencyCode
      */
     public function getCurrentCurrencyCode()
     {
@@ -356,7 +356,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get currency rate (base to given currency)
      *
      * @param string|\Magento\Directory\Model\Currency $toCurrency
-     * @return double
+     * @return float
      */
     public function getRate($toCurrency)
     {

@@ -60,7 +60,6 @@ class ServiceArgsSerializer
      * @param string $serviceClassName name of the service class that we are trying to call
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
-     *
      * @return array list of parameters that can be used to call the service method
      */
     public function getInputData($serviceClassName, $serviceMethodName, array $inputArray)

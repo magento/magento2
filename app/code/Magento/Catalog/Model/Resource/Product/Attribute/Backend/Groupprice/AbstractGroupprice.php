@@ -42,7 +42,7 @@ abstract class AbstractGroupprice
      *
      * @param int $productId
      * @param int $websiteId
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice
+     * @return array
      */
     public function loadPriceData($productId, $websiteId = null)
     {

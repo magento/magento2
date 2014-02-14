@@ -40,7 +40,7 @@ class Background
     /**
      * Add form elements
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Background
+     * @return $this
      */
     protected function _addFields()
     {
@@ -73,7 +73,7 @@ class Background
     /**
      * Add element types used in composite font element
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Background
+     * @return $this
      */
     protected function _addElementTypes()
     {

@@ -34,12 +34,17 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit;
 
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
-{
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Data\Form as DataForm;
 
+class Form extends Generic
+{
+    /**
+     * @return $this
+     */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var DataForm $form */
         $form = $this->_formFactory->create(array(
             'data' => array(
                 'id' => 'edit_form',

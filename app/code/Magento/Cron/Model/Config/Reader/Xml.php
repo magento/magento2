@@ -37,7 +37,8 @@ class Xml extends \Magento\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = array(
-        '/config/job' => 'name'
+        '/config/group'     => 'id',
+        '/config/group/job' => 'name',
     );
 
     /**

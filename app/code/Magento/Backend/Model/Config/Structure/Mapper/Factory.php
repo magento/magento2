@@ -55,6 +55,9 @@ class Factory
         self::MAPPER_EXTENDS => 'Magento\Backend\Model\Config\Structure\Mapper\ExtendsMapper',
     );
 
+    /**
+     * @param \Magento\ObjectManager $objectManager
+     */
     public function __construct(\Magento\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
@@ -64,7 +67,6 @@ class Factory
      * Get mapper instance
      *
      * @param string $type
-     * @param array $arguments
      * @return \Magento\Backend\Model\Config\Structure\MapperInterface
      * @throws \Exception
      */
@@ -87,7 +89,7 @@ class Factory
      * Get mapper class name by type
      *
      * @param string $type
-     * @return string mixed
+     * @return string
      * @throws \InvalidArgumentException
      */
     protected function _getMapperClassNameByType($type)

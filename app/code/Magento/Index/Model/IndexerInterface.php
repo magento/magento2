@@ -49,7 +49,7 @@ interface IndexerInterface
      * Register data required by process in event object
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\IndexerInterface
+     * @return $this
      */
     public function register(\Magento\Index\Model\Event $event);
 
@@ -57,7 +57,7 @@ interface IndexerInterface
      * Process event
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\IndexerInterface
+     * @return $this
      */
     public function processEvent(\Magento\Index\Model\Event $event);
 
@@ -80,6 +80,8 @@ interface IndexerInterface
 
     /**
      * Rebuild all index data
+     *
+     * @return void
      */
     public function reindexAll();
 

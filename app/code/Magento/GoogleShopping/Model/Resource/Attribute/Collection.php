@@ -52,7 +52,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param int $attributeSetId
      * @param string $targetCountry two words ISO format
-     * @return \Magento\GoogleShopping\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function addAttributeSetFilter($attributeSetId, $targetCountry)
     {
@@ -68,7 +68,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add type filter
      *
      * @param int $type_id
-     * @return \Magento\GoogleShopping\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function addTypeFilter($type_id)
     {

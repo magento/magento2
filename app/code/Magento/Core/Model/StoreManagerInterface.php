@@ -37,8 +37,8 @@ interface StoreManagerInterface extends \Magento\Core\Model\Store\ListInterface
     /**
      * Retrieve application store object without Store_Exception
      *
-     * @param string|int|\Magento\Core\Model\Store $storeId
-     * @return \Magento\Core\Model\Store
+     * @param string|int|Store $storeId
+     * @return Store
      */
     public function getSafeStore($storeId = null);
 

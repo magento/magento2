@@ -81,7 +81,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param \Zend_Controller_Request_Abstract $request
      * @param \Magento\Catalog\Block\Layer\Filter\Decimal $filterBlock
-     * @return \Magento\Catalog\Model\Layer\Filter\Decimal
+     * @return $this
      */
     public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
     {

@@ -44,6 +44,8 @@ class Api extends \Magento\Object
     protected $_debugReplacePrivateDataKeys = array('TransactionPwd', 'CardNumber', 'CardExpMonth', 'CardExpYear');
 
     /**
+     * Array of ISO 4217 Currency codes and numbers
+     *
      * @var array
      */
     protected static $_iso4217Currencies = array(
@@ -278,6 +280,7 @@ class Api extends \Magento\Object
      * Log debug data to file
      *
      * @param array $debugData
+     * @return void
      */
     protected function _debug($debugData)
     {

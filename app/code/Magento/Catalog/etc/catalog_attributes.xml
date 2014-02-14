@@ -69,7 +69,6 @@
         <attribute name="media_gallery_content" />
         <attribute name="group_price" />
         <attribute name="tier_price" />
-        <attribute name="recurring_profileinit_may_fail" />
         <attribute name="gift_message_available" />
         <attribute name="inventory_manage_stock" />
     </group>

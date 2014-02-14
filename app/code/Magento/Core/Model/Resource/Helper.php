@@ -212,7 +212,7 @@ class Helper extends \Magento\Core\Model\Resource\Helper\AbstractHelper
      *
      * @param \Magento\DB\Select $select
      * @param string|null $groupByCondition OPTIONAL
-     * @return array
+     * @return mixed|array
      * @throws \Zend_Db_Exception
      */
     public function prepareColumnsList(\Magento\DB\Select $select, $groupByCondition = null)

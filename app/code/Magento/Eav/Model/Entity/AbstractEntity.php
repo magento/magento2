@@ -23,7 +23,16 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Entity;
 
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Core\Exception;
+use Magento\Core\Model\Config\Element;
+use Magento\Core\Model\AbstractModel;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -32,19 +41,8 @@
  * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity;
-
-use Magento\Eav\Model\Entity\Type;
-use Magento\Core\Exception;
-use Magento\Core\Model\Config\Element;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Core\Model\AbstractModel;
-use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
-use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
-use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
-
 abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResource
-    implements \Magento\Eav\Model\Entity\EntityInterface
+    implements EntityInterface
 {
     /**
      * Read connection
@@ -82,7 +80,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     protected $_attributesByCode            = array();
 
     /**
-     * 2-dimentional array by table name and attribute name
+     * Two-dimensional array by table name and attribute name
      *
      * @var array
      */
@@ -518,7 +516,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
      * Return default static virtual attribute that doesn't exists in EAV attributes
      *
      * @param string $attributeCode
-     * @return \Magento\Eav\Model\Entity\Attribute
+     * @return Attribute
      */
     protected function _getDefaultAttribute($attributeCode)
     {
@@ -651,8 +649,8 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     /**
      * Compare attributes
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $firstAttribute
-     * @param \Magento\Eav\Model\Entity\Attribute $secondAttribute
+     * @param Attribute $firstAttribute
+     * @param Attribute $secondAttribute
      * @return int
      */
     public function attributesCompare($firstAttribute, $secondAttribute)
@@ -1208,7 +1206,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     /**
      * Aggregate Data for attributes that will be deleted
      *
-     * @param array $delete
+     * @param array &$delete
      * @param AbstractAttribute $attribute
      * @param \Magento\Eav\Model\Entity\AbstractEntity $object
      * @return void
@@ -1226,7 +1224,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     /**
      * Prepare entity object data for save
      *
-     * result array structure:
+     * Result array structure:
      * array (
      *  'newObject', 'entityRow', 'insert', 'update', 'delete'
      * )
@@ -1540,7 +1538,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     }
 
     /**
-     * Save and detele collected attribute values
+     * Save and delete collected attribute values
      *
      * @return $this
      */

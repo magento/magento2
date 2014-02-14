@@ -24,5 +24,7 @@
  */
 -->
 <config>
-    <job name="currency_rates_update" instance="Magento\Directory\Model\Observer" method="scheduledUpdateCurrencyRates" />
+    <group id="default">
+        <job name="currency_rates_update" instance="Magento\Directory\Model\Observer" method="scheduledUpdateCurrencyRates" />
+    </group>
 </config>

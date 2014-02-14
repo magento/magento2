@@ -33,32 +33,32 @@ namespace Magento\Reports\Block\Adminhtml;
 class Wishlist extends \Magento\Backend\Block\Template
 {
     /**
-     * @var
+     * @var int
      */
     public $wishlists_count;
 
     /**
-     * @var
+     * @var int
      */
     public $items_bought;
 
     /**
-     * @var
+     * @var int
      */
     public $shared_count;
 
     /**
-     * @var
+     * @var int
      */
     public $referrals_count;
 
     /**
-     * @var
+     * @var int
      */
     public $conversions_count;
 
     /**
-     * @var
+     * @var int
      */
     public $customer_with_wishlist;
 

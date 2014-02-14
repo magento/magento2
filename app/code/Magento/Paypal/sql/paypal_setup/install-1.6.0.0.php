@@ -33,6 +33,85 @@ $installer = $this;
 $installer->startSetup();
 
 /**
+ * Create table 'paypal_billing_agreement'
+ */
+$table = $installer->getConnection()
+    ->newTable($installer->getTable('paypal_billing_agreement'))
+    ->addColumn('agreement_id', \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
+        'identity'  => true,
+        'unsigned'  => true,
+        'nullable'  => false,
+        'primary'   => true,
+    ), 'Agreement Id')
+    ->addColumn('customer_id', \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+    ), 'Customer Id')
+    ->addColumn('method_code', \Magento\DB\Ddl\Table::TYPE_TEXT, 32, array(
+        'nullable'  => false,
+    ), 'Method Code')
+    ->addColumn('reference_id', \Magento\DB\Ddl\Table::TYPE_TEXT, 32, array(
+        'nullable'  => false,
+    ), 'Reference Id')
+    ->addColumn('status', \Magento\DB\Ddl\Table::TYPE_TEXT, 20, array(
+        'nullable'  => false,
+    ), 'Status')
+    ->addColumn('created_at', \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, null, array(
+        'nullable'  => false,
+    ), 'Created At')
+    ->addColumn('updated_at', \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, null, array(
+    ), 'Updated At')
+    ->addColumn('store_id', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
+        'unsigned'  => true,
+    ), 'Store Id')
+    ->addColumn('agreement_label', \Magento\DB\Ddl\Table::TYPE_TEXT, 255, array(
+    ), 'Agreement Label')
+    ->addIndex($installer->getIdxName('paypal_billing_agreement', array('customer_id')),
+        array('customer_id'))
+    ->addIndex($installer->getIdxName('paypal_billing_agreement', array('store_id')),
+        array('store_id'))
+    ->addForeignKey($installer->getFkName('paypal_billing_agreement', 'customer_id', 'customer_entity', 'entity_id'),
+        'customer_id', $installer->getTable('customer_entity'), 'entity_id',
+        \Magento\DB\Ddl\Table::ACTION_CASCADE, \Magento\DB\Ddl\Table::ACTION_CASCADE)
+    ->addForeignKey($installer->getFkName('paypal_billing_agreement', 'store_id', 'core_store', 'store_id'),
+        'store_id', $installer->getTable('core_store'), 'store_id',
+        \Magento\DB\Ddl\Table::ACTION_SET_NULL, \Magento\DB\Ddl\Table::ACTION_CASCADE)
+    ->setComment('Sales Billing Agreement');
+$installer->getConnection()->createTable($table);
+
+/**
+ * Create table 'paypal_billing_agreement_order'
+ */
+$table = $installer->getConnection()
+    ->newTable($installer->getTable('paypal_billing_agreement_order'))
+    ->addColumn('agreement_id', \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'primary'   => true,
+    ), 'Agreement Id')
+    ->addColumn('order_id', \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
+        'unsigned'  => true,
+        'nullable'  => false,
+        'primary'   => true,
+    ), 'Order Id')
+    ->addIndex($installer->getIdxName('paypal_billing_agreement_order', array('order_id')),
+        array('order_id'))
+    ->addForeignKey(
+        $installer->getFkName(
+            'paypal_billing_agreement_order',
+            'agreement_id',
+            'paypal_billing_agreement',
+            'agreement_id'
+        ),
+        'agreement_id', $installer->getTable('paypal_billing_agreement'), 'agreement_id',
+        \Magento\DB\Ddl\Table::ACTION_CASCADE, \Magento\DB\Ddl\Table::ACTION_CASCADE)
+    ->addForeignKey($installer->getFkName('paypal_billing_agreement_order', 'order_id', 'sales_flat_order', 'entity_id'),
+        'order_id', $installer->getTable('sales_flat_order'), 'entity_id',
+        \Magento\DB\Ddl\Table::ACTION_CASCADE, \Magento\DB\Ddl\Table::ACTION_CASCADE)
+    ->setComment('Sales Billing Agreement Order');
+$installer->getConnection()->createTable($table);
+
+/**
  * Create table 'paypal_settlement_report'
  */
 $table = $installer->getConnection()

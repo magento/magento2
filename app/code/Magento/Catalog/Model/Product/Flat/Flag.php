@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Product\Flat;
 
 /**
  * Calatog Product Flat Flag Model
@@ -32,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Flat;
-
 class Flag extends \Magento\Core\Model\Flag
 {
     /**
@@ -78,7 +76,7 @@ class Flag extends \Magento\Core\Model\Flag
      *
      * @param bool $flag
      *
-     * @return \Magento\Catalog\Model\Product\Flat\Flag
+     * @return $this
      */
     public function setIsBuilt($flag)
     {
@@ -91,11 +89,10 @@ class Flag extends \Magento\Core\Model\Flag
     /**
      * Set Catalog Product Flat Data is built flag
      *
-     * @deprecated after 1.7.0.0 use \Magento\Catalog\Model\Product\Flat\Flag::setIsBuilt() instead
-     *
      * @param bool $flag
+     * @return $this
      *
-     * @return \Magento\Catalog\Model\Product\Flat\Flag
+     * @deprecated after 1.7.0.0 use \Magento\Catalog\Model\Product\Flat\Flag::setIsBuilt() instead
      */
     public function setIsBuild($flag)
     {

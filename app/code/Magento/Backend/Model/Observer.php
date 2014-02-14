@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model;
 
 /**
  * Backend event observer
  */
-namespace Magento\Backend\Model;
-
 class Observer
 {
     /**
@@ -65,7 +64,7 @@ class Observer
      * Bind locale
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Backend\Model\Observer
+     * @return $this
      */
     public function bindLocale($observer)
     {
@@ -82,7 +81,7 @@ class Observer
     /**
      * Clear result of configuration files access level verification in system cache
      *
-     * @return \Magento\Backend\Model\Observer
+     * @return $this
      */
     public function clearCacheConfigurationFilesAccessLevelVerification()
     {
@@ -92,7 +91,7 @@ class Observer
     /**
      * Backend will always use base class for translation.
      *
-     * @return \Magento\Backend\Model\Observer
+     * @return $this
      */
     public function initializeTranslation()
     {
@@ -103,7 +102,7 @@ class Observer
      * Set url class name for store 'admin'
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Backend\Model\Observer
+     * @return $this
      */
     public function setUrlClassName(\Magento\Event\Observer $observer)
     {

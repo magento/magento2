@@ -182,14 +182,14 @@ abstract class AbstractComposite
     /**
      * Add form elements
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite
+     * @return $this
      */
     abstract protected function _addFields();
 
     /**
      * Add element types used in composite font element
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite
+     * @return $this
      */
     abstract protected function _addElementTypes();
 }

@@ -54,7 +54,7 @@ abstract class AbstractSelectorList
      * Add theme buttons
      *
      * @param \Magento\DesignEditor\Block\Adminhtml\Theme $themeBlock
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
+     * @return $this
      */
     protected function _addThemeButtons($themeBlock)
     {

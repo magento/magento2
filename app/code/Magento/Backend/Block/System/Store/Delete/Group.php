@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Store\Delete;
 
 /**
  * Adminhtml store delete group block
@@ -31,11 +32,11 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\System\Store\Delete;
-
 class Group extends \Magento\Backend\Block\Template
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareLayout()
     {
         $itemId = $this->getRequest()->getParam('group_id');

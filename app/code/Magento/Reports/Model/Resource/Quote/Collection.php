@@ -68,6 +68,16 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
      */
     protected $_customerResource;
 
+    /**
+     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Logger $logger
+     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Catalog\Model\Resource\Product\Collection $productResource
+     * @param \Magento\Customer\Model\Resource\Customer $customerResource
+     * @param null $connection
+     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,

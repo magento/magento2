@@ -39,6 +39,7 @@
                 <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" as="totals" template="cart/totals.phtml" cacheable="false"/>
                 <block class="Magento\Checkout\Block\Cart" name="checkout.cart.methods.bottom" template="cart/methods.phtml" cacheable="false">
                     <container name="checkout.cart.methods" as="methods" label="Payment Methods After Checkout Button">
+                        <block class="Magento\Checkout\Block\QuoteShortcutButtons" name="checkout.cart.shortcut.buttons"/>
                         <block class="Magento\Checkout\Block\Onepage\Link" name="checkout.cart.methods.onepage.bottom" template="onepage/link.phtml" cacheable="false"/>
                     </container>
                 </block>

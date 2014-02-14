@@ -33,10 +33,16 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 
-class YearRange extends \Magento\Backend\Block\System\Config\Form\Field
-{
+use Magento\Backend\Block\System\Config\Form\Field;
+use Magento\Data\Form\Element\AbstractElement;
 
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+class YearRange extends Field
+{
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(AbstractElement $element)
     {
         $element->setStyle('width:70px;')
             ->setName($element->getName() . '[]');

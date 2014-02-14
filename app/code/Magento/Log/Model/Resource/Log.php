@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Log\Model\Resource;
 
 /**
  * Log Resource Model
@@ -32,8 +32,6 @@
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model\Resource;
-
 class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -74,6 +72,7 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Init Resource model and connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -84,7 +83,7 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Clean logs
      *
      * @param \Magento\Log\Model\Log $object
-     * @return \Magento\Log\Model\Resource\Log
+     * @return $this
      */
     public function clean(\Magento\Log\Model\Log $object)
     {
@@ -101,7 +100,7 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Clean visitors table
      *
      * @param int $time
-     * @return \Magento\Log\Model\Resource\Log
+     * @return $this
      */
     protected function _cleanVisitors($time)
     {
@@ -150,7 +149,7 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Clean customer table
      *
      * @param int $time
-     * @return \Magento\Log\Model\Resource\Log
+     * @return $this
      */
     protected function _cleanCustomers($time)
     {
@@ -247,7 +246,7 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Clean url table
      *
-     * @return \Magento\Log\Model\Resource\Log
+     * @return $this
      */
     protected function _cleanUrls()
     {

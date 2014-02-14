@@ -33,7 +33,7 @@ namespace Magento\Directory\Model;
 
 class Observer
 {
-    const CRON_STRING_PATH = 'crontab/jobs/currency_rates_update/schedule/cron_expr';
+    const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
     const IMPORT_ENABLE = 'currency/import/enabled';
     const IMPORT_SERVICE = 'currency/import/service';
 
@@ -97,6 +97,10 @@ class Observer
         $this->_currencyFactory = $currencyFactory;
     }
 
+    /**
+     * @param mixed $schedule
+     * @return void
+     */
     public function scheduledUpdateCurrencyRates($schedule)
     {
         $importWarnings = array();

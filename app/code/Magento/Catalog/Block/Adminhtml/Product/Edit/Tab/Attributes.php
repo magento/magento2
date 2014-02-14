@@ -70,6 +70,8 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 
     /**
      * Load Wysiwyg on demand and prepare layout
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -84,7 +86,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
     /**
      * Prepare attributes form
      *
-     * @return null
+     * @return void
      */
     protected function _prepareForm()
     {

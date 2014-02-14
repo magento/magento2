@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Option;
 
 /**
  * Catalog product custom option resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Option;
-
 class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -80,6 +78,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main table and initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -105,6 +104,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Save option value price data
      *
      * @param \Magento\Core\Model\AbstractModel $object
+     * @return void
      */
     protected function _saveValuePrices(\Magento\Core\Model\AbstractModel $object)
     {
@@ -147,8 +147,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         $scope = (int)$this->_storeManager->getStore()->getConfig(\Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE);
 
-        if ($object->getStoreId() != '0' && $scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE
-            && !$object->getData('scope', 'price')) {
+        if ($object->getStoreId() != '0' && $scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE) {
 
             $baseCurrency = $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
                 'default');
@@ -215,6 +214,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Save option value title data
      *
      * @param \Magento\Core\Model\AbstractModel $object
+     * @return void
      */
     protected function _saveValueTitles(\Magento\Core\Model\AbstractModel $object)
     {
@@ -285,7 +285,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete values by option id
      *
      * @param int $optionId
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value
+     * @return $this
      */
     public function deleteValue($optionId)
     {
@@ -313,6 +313,7 @@ class Value extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete values by option type
      *
      * @param int $optionTypeId
+     * @return void
      */
     public function deleteValues($optionTypeId)
     {

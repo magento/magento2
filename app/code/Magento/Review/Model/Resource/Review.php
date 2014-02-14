@@ -86,21 +86,29 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
     private $_deleteCache   = array();
 
     /**
+     * Core date model
+     *
      * @var \Magento\Core\Model\Date
      */
     protected $_date;
 
     /**
+     * Core model store manager interface
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * Rating model
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
+     * Rating resource model
+     *
      * @var \Magento\Rating\Model\Resource\Rating\Option
      */
     protected $_ratingOptions;
@@ -130,6 +138,7 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main table. Define other tables name
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -212,7 +221,6 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
             $detail['review_id']  = $object->getId();
             $adapter->insert($this->_reviewDetailTable, $detail);
         }
-
 
         /**
          * save stores
@@ -470,7 +478,7 @@ class Review extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Better to call this method in transaction, because operation performed on two separated tables
      *
      * @param int $productId
-     * @return \Magento\Review\Model\Resource\Review
+     * @return $this
      */
     public function deleteReviewsByProductId($productId)
     {

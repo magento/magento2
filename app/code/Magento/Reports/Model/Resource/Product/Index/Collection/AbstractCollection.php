@@ -121,6 +121,8 @@ abstract class AbstractCollection
 
     /**
      * Retrieve Product Index table name
+     *
+     * @return string
      */
     abstract protected function _getTableName();
 

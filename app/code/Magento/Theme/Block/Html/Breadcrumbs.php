@@ -39,7 +39,7 @@ class Breadcrumbs extends \Magento\View\Element\Template
     /**
      * List of available breadcrumb properties
      *
-     * @var array
+     * @var string[]
      */
     protected $_properties = array(
         'label',
@@ -69,7 +69,7 @@ class Breadcrumbs extends \Magento\View\Element\Template
      *
      * @param string $crumbName
      * @param array $crumbInfo
-     * @return \Magento\Theme\Block\Html\Breadcrumbs
+     * @return $this
      */
     public function addCrumb($crumbName, $crumbInfo)
     {

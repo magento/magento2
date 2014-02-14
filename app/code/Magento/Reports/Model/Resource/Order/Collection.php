@@ -150,7 +150,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param mixed $customStart
      * @param mixed $customEnd
      * @param int $isFilter
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function prepareSummary($range, $customStart, $customEnd, $isFilter = 0)
     {
@@ -456,7 +456,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Add item count expression
      *
-     * @return \Magento\Reports\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addItemCountExpr()
     {

@@ -102,7 +102,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             'Magento\TestFramework\Bootstrap\Memory', array('activateStatsDisplaying', 'activateLimitValidation'),
             array(), '', false
         );
-        $this->_shell = $this->getMock('Magento\Shell', array('execute'));
+        $this->_shell = $this->getMock('Magento\Shell', array('execute'), array(), '', false);
         $this->_object = new \Magento\TestFramework\Bootstrap(
             $this->_settings,
             $this->_envBootstrap,

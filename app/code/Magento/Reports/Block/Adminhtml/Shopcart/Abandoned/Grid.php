@@ -87,6 +87,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * @param array $column
+     *
      * @return $this
      */
     protected function _addColumnFilterToCollection($column)
@@ -208,6 +210,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * @param \Magento\Object $row
+     *
      * @return string
      */
     public function getRowUrl($row)

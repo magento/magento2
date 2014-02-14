@@ -193,7 +193,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Catalog\Model\Product');
         $product->load(1); // fixture
         $this->assertEquals(
-            'Please specify the product required option(s).',
+            'Please specify the product\'s required option(s).',
             $this->_model->prepareForCart(new \Magento\Object, $product)
         );
     }

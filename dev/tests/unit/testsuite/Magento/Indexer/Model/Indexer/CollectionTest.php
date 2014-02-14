@@ -71,7 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $entityFactory->expects($this->any())
             ->method('create')
-            ->with('Magento\Indexer\Model\Indexer')
+            ->with('Magento\Indexer\Model\IndexerInterface')
             ->will($this->returnValue($indexer));
 
         $statesFactory->expects($this->once())
@@ -79,8 +79,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($states));
 
         $config->expects($this->once())
-            ->method('getIndexerIds')
-            ->will($this->returnValue(array($indexerIdOne, $indexerIdSecond)));
+            ->method('getIndexers')
+            ->will($this->returnValue(array($indexerIdOne => 1, $indexerIdSecond => 2)));
 
         $states->expects($this->any())
             ->method('getItems')

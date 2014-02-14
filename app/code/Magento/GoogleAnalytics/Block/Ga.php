@@ -88,10 +88,10 @@ class Ga extends \Magento\View\Element\Template
      * Render regular page tracking javascript code
      * The custom "page name" may be set from layout or somewhere else. It must start from slash.
      *
-     * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiBasicConfiguration.html#_gat.GA_Tracker_._trackPageview
-     * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApi_gaq.html
      * @param string $accountId
      * @return string
+     * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiBasicConfiguration.html#_gat.GA_Tracker_._trackPageview
+     * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApi_gaq.html
      */
     public function getPageTrackingCode($accountId)
     {
@@ -110,7 +110,7 @@ _gaq.push(['_trackPageview'{$optPageURL}]);
      * Render information about specified orders and their items
      *
      * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiEcommerce.html#_gat.GA_Tracker_._addTrans
-     * @return string
+     * @return string|void
      */
     public function getOrdersTrackingCode()
     {

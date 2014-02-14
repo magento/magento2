@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Form;
 
 /**
  * Backend form container block
@@ -31,20 +32,41 @@
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Widget\Form;
-
 class Container extends \Magento\Backend\Block\Widget\Container
 {
+    /**
+     * @var string
+     */
     protected $_objectId = 'id';
+
+    /**
+     * @var string[]
+     */
     protected $_formScripts = array();
+
+    /**
+     * @var string[]
+     */
     protected $_formInitScripts = array();
+
+    /**
+     * @var string
+     */
     protected $_mode = 'edit';
+
+    /**
+     * @var string
+     */
     protected $_blockGroup = 'Magento_Backend';
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/form/container.phtml';
 
-
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -84,7 +106,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     /**
      * Create form block
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -122,6 +144,9 @@ class Container extends \Magento\Backend\Block\Widget\Container
         return $this->getUrl('*/*/');
     }
 
+    /**
+     * @return string
+     */
     public function getDeleteUrl()
     {
         return $this->getUrl('*/*/delete', array($this->_objectId => $this->getRequest()->getParam($this->_objectId)));
@@ -151,12 +176,18 @@ class Container extends \Magento\Backend\Block\Widget\Container
         return $this->getUrl('*/*/save');
     }
 
+    /**
+     * @return string
+     */
     public function getFormHtml()
     {
         $this->getChildBlock('form')->setData('action', $this->getSaveUrl());
         return $this->getChildHtml('form');
     }
 
+    /**
+     * @return string
+     */
     public function getFormInitScripts()
     {
         if ( !empty($this->_formInitScripts) && is_array($this->_formInitScripts) ) {
@@ -165,6 +196,9 @@ class Container extends \Magento\Backend\Block\Widget\Container
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getFormScripts()
     {
         if ( !empty($this->_formScripts) && is_array($this->_formScripts) ) {
@@ -173,16 +207,25 @@ class Container extends \Magento\Backend\Block\Widget\Container
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderWidth()
     {
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderCssClass()
     {
         return 'icon-head head-' . strtr($this->_controller, '_', '-');
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderHtml()
     {
         return '<h3 class="' . $this->getHeaderCssClass() . '">' . $this->getHeaderText() . '</h3>';
@@ -192,7 +235,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * Set data object and pass it to form
      *
      * @param \Magento\Object $object
-     * @return \Magento\Backend\Block\Widget\Form\Container
+     * @return $this
      */
     public function setDataObject($object)
     {

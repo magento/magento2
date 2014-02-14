@@ -23,26 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools;
 
 /**
  * Block that renders Design tab
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools;
-
 class QuickStyles
     extends \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs\AbstractTabs
 {
     /**
-     * Tab HTML identifier
-     *
-     * @var string
+     * @var string Tab HTML identifier
      */
     protected $_htmlId = 'vde-tab-quick-styles';
 
     /**
-     * Tab HTML title
-     *
-     * @var string
+     * @var string Tab HTML title
      */
     protected $_title = 'Quick Styles';
 

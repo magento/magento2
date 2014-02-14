@@ -35,7 +35,14 @@ namespace Magento\Catalog\Block\Adminhtml\Product;
 
 class Created extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var \Magento\Catalog\Model\Product
+     */
     protected $_configurableProduct;
+
+    /**
+     * @var \Magento\Catalog\Model\Product
+     */
     protected $_product;
 
     /**
@@ -70,6 +77,9 @@ class Created extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         $this->addChild('close_button', 'Magento\Backend\Block\Widget\Button', array(
@@ -78,12 +88,17 @@ class Created extends \Magento\Backend\Block\Widget
         ));
     }
 
-
+    /**
+     * @return string
+     */
     public function getCloseButtonHtml()
     {
         return $this->getChildHtml('close_button');
     }
 
+    /**
+     * @return int
+     */
     public function getProductId()
     {
         return (int) $this->getRequest()->getParam('id');

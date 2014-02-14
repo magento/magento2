@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model;
 
 /**
  * Abstract model for catalog entities
@@ -31,8 +32,6 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model;
-
 abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -105,7 +104,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Lock attribute
      *
      * @param string $attributeCode
-     * @return \Magento\Catalog\Model\AbstractModel
+     * @return $this
      */
     public function lockAttribute($attributeCode)
     {
@@ -117,7 +116,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Unlock attribute
      *
      * @param string $attributeCode
-     * @return \Magento\Catalog\Model\AbstractModel
+     * @return $this
      */
     public function unlockAttribute($attributeCode)
     {
@@ -131,7 +130,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Unlock all attributes
      *
-     * @return \Magento\Catalog\Model\AbstractModel
+     * @return $this
      */
     public function unlockAttributes()
     {
@@ -162,6 +161,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve locked attributes
      *
+     * @param mixed $attributeCode
      * @return boolean
      */
     public function isLockedAttribute($attributeCode)
@@ -172,7 +172,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Overwrite data in the object.
      *
-     * $key can be string or array.
+     * The $key can be string or array.
      * If $key is string, the attribute value will be overwritten by $value
      *
      * If $key is an array, it will overwrite all the data in the object.
@@ -181,7 +181,6 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      *
      * @param string|array $key
      * @param mixed $value
-     * @param boolean $isChanged
      * @return \Magento\Object
      */
     public function setData($key, $value = null)
@@ -206,13 +205,12 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Unset data from the object.
      *
-     * $key can be a string only. Array will be ignored.
+     * The $key can be a string only. Array will be ignored.
      *
      * $isChanged will specify if the object needs to be saved after an update.
      *
      * @param string $key
-     * @param boolean $isChanged
-     * @return \Magento\Catalog\Model\AbstractModel
+     * @return $this
      */
     public function unsetData($key = null)
     {
@@ -283,8 +281,8 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Default value existing is flag for using store value in data
      *
      * @param   string $attributeCode
-     * @value   mixed  $value
-     * @return  \Magento\Catalog\Model\AbstractModel
+     * @param   mixed  $value
+     * @return  $this
      */
     public function setAttributeDefaultValue($attributeCode, $value)
     {
@@ -308,7 +306,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * value of default store as value
      *
      * @param   string $attributeCode
-     * @return  \Magento\Catalog\Model\AbstractModel
+     * @return  $this
      */
     public function setExistsStoreValueFlag($attributeCode)
     {
@@ -352,7 +350,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set is deletable flag
      *
      * @param boolean $value
-     * @return \Magento\Catalog\Model\AbstractModel
+     * @return $this
      */
     public function setIsDeleteable($value)
     {
@@ -374,7 +372,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set is deletable flag
      *
      * @param boolean $value
-     * @return \Magento\Catalog\Model\AbstractModel
+     * @return $this
      */
     public function setIsReadonly($value)
     {

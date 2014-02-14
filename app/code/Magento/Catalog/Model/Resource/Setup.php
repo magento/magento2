@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource;
 
 /**
  * Catalog entity setup
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource;
-
 class Setup extends \Magento\Eav\Model\Entity\Setup
 {
     /**
@@ -94,18 +92,6 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     public function createCategory($data = array())
     {
         return $this->_categoryFactory->create($data);
-    }
-
-    /**
-     * Creates indexer model
-     *
-     * @param array $data
-     * @return \Magento\Index\Model\Indexer
-     */
-    public function createIndexer($data = array())
-    {
-        return $this->_indexerFactory
-            ->create($data);
     }
 
     /**

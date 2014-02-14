@@ -1,6 +1,6 @@
 <?php
 /**
- * Test \Magento\Customer\Service\Entity\V1\Region
+ * Test \Magento\Customer\Service\V1\Dto\Region
  *
  * Magento
  *

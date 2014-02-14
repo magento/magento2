@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Log\Model;
 
 /**
  * Log Model
@@ -45,8 +45,6 @@
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model;
-
 class Log extends \Magento\Core\Model\AbstractModel
 {
     const XML_LOG_CLEAN_DAYS    = 'system/log/clean_after_day';
@@ -81,6 +79,7 @@ class Log extends \Magento\Core\Model\AbstractModel
     /**
      * Init Resource Model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -89,6 +88,7 @@ class Log extends \Magento\Core\Model\AbstractModel
 
     /**
      * Return log clean time in seconds
+     *
      * @return null|string
      */
     public function getLogCleanTime()
@@ -99,7 +99,7 @@ class Log extends \Magento\Core\Model\AbstractModel
     /**
      * Clean Logs
      *
-     * @return \Magento\Log\Model\Log
+     * @return $this
      */
     public function clean()
     {

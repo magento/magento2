@@ -56,6 +56,7 @@ class String extends \Magento\Core\Model\Layout\Argument\AbstractHandler
 
     /**
      * @param array $argument
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _validate(array $argument)

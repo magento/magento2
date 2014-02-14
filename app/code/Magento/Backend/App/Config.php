@@ -59,6 +59,7 @@ class Config implements ConfigInterface
      *
      * @param string $path
      * @param mixed $value
+     * @return void
      */
     public function setValue($path, $value)
     {
@@ -67,6 +68,8 @@ class Config implements ConfigInterface
 
     /**
      * Reinitialize configuration
+     *
+     * @return void
      */
     public function reinit()
     {

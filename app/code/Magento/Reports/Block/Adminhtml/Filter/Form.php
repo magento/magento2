@@ -58,6 +58,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $fieldId
      * @param bool $visibility
+     *
      * @return void
      */
     public function setFieldVisibility($fieldId, $visibility)
@@ -85,7 +86,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $fieldId Field id
      * @param mixed $option Field option name
-     * @param mixed $value Field option value
+     * @param mixed|null $value Field option value
      *
      * @return void
      */
@@ -120,7 +121,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add fieldset with general report fields
      *
-     * @return \Magento\Reports\Block\Adminhtml\Filter\Form
+     * @return $this
      */
     protected function _prepareForm()
     {

@@ -24,29 +24,40 @@
 
 namespace Magento\Indexer\Model;
 
-class Config extends \Magento\Config\Data implements ConfigInterface
+class Config implements ConfigInterface
 {
     /**
-     * @param \Magento\Indexer\Model\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @var Config\Data
      */
-    public function __construct(
-        \Magento\Indexer\Model\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
-        $cacheId = 'indexer_config'
-    ) {
-        parent::__construct($reader, $cache, $cacheId);
+    protected $configData;
+
+    /**
+     * @param Config\Data $configData
+     */
+    public function __construct(Config\Data $configData)
+    {
+        $this->configData = $configData;
     }
 
     /**
-     * Get indexer's config
+     * Get indexers list
      *
-     * @return mixed
+     * @return array[]
      */
-    public function getAll()
+    public function getIndexers()
     {
-        return $this->get();
+        return $this->configData->get();
+    }
+
+    /**
+     * Get indexer by ID
+     *
+     * @param string $indexerId
+     * @return array
+     */
+    public function getIndexer($indexerId)
+    {
+        return $this->configData->get($indexerId);
     }
 
     /**

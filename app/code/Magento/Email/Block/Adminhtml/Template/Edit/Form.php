@@ -67,7 +67,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare layout.
      * Add files to use dialog windows
      *
-     * @return \Magento\Email\Block\Adminhtml\Template\Edit\Form
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -97,7 +97,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'magento-adminhtml-variables-js',
                 'Magento\Theme\Block\Html\Head\Script',
                 array(
-                    'file' => 'Magento_Adminhtml::variables.js'
+                    'file' => 'Magento_Backend::variables.js'
                 )
             );
         }

@@ -29,6 +29,8 @@
  */
 namespace Magento\Install\Model;
 
+use Magento\UrlInterface;
+
 class Wizard
 {
     /**
@@ -41,20 +43,25 @@ class Wizard
     /**
      * Url builder
      *
-     * @var \Magento\UrlInterface
+     * @var UrlInterface
      */
     protected $_urlBuilder;
 
     /**
      * Init install wizard
+     * @param UrlInterface $urlBuilder
+     * @param Config $installConfig
      */
-    public function __construct(\Magento\UrlInterface $urlBuilder, \Magento\Install\Model\Config $installConfig)
+    public function __construct(UrlInterface $urlBuilder, Config $installConfig)
     {
         $this->_steps = $installConfig->getWizardSteps();
         $this->_urlBuilder = $urlBuilder;
         $this->_initSteps();
     }
 
+    /**
+     * @return void
+     */
     protected function _initSteps()
     {
         foreach (array_keys($this->_steps) as $index) {

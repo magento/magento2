@@ -40,7 +40,7 @@ $bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
 <body class="page-empty<?php echo $bodyCss ?>"
       data-container="body"
       <?php echo $this->getAddAttribute() ?>
-      data-mage-init="{loaderAjax: {}, loader: {}}">
+      data-mage-init='{"loaderAjax": {}, "loader": {}}'>
     <?php echo $this->getChildHtml('after_body_start') ?>
     <div class="page wrapper">
         <?php echo $this->getChildHtml('global_notices') ?>

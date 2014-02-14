@@ -21,13 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Flat;
 
 /**
  * Catalog Product Flat Indexer Resource Model
  */
-namespace Magento\Catalog\Model\Resource\Product\Flat;
-
 class Indexer extends \Magento\Index\Model\Resource\AbstractResource
 {
     /**
@@ -57,7 +55,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
     /**
      * Required system attributes for preload
      *
-     * @var array
+     * @var string[]
      */
     protected $_systemAttributes     = array('status', 'required_options', 'tax_class_id', 'weight');
 
@@ -130,7 +128,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
     protected $_maxIndexCount;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $_flatAttributeGroups;
 
@@ -186,7 +184,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param string $maxIndexCount
-     * @param array $flatAttributeGroups
+     * @param string[] $flatAttributeGroups
      */
     public function __construct(
         \Magento\App\Resource $resource,
@@ -223,6 +221,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -233,7 +232,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      * Rebuild Catalog Product Flat Data
      *
      * @param \Magento\Core\Model\Store|int $store
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function rebuild($store = null)
     {
@@ -649,7 +648,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int $storeId
      * @throws \Magento\Core\Exception
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function prepareFlatTable($storeId)
     {
@@ -864,7 +863,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int $storeId
      * @param int|array $productIds update only product(s)
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function updateStaticAttributes($storeId, $productIds = null)
     {
@@ -940,7 +939,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int $storeId
      * @param int|array $productIds
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function cleanNonWebsiteProducts($storeId, $productIds = null)
     {
@@ -987,7 +986,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @param int $storeId
      * @param int|array $productIds update only product(s)
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function updateAttribute($attribute, $storeId, $productIds = null)
     {
@@ -1048,7 +1047,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int $storeId
      * @param int|array $productIds update only product(s)
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function updateEavAttributes($storeId, $productIds = null)
     {
@@ -1069,6 +1068,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      * Update events observer attributes
      *
      * @param int $storeId
+     * @return void
      */
     public function updateEventAttributes($storeId = null)
     {
@@ -1104,7 +1104,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int $storeId
      * @param int|array $productIds Update child product(s) only
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function updateRelationProducts($storeId, $productIds = null)
     {
@@ -1163,7 +1163,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int $storeId
      * @param int|array $productIds
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function updateChildrenDataFromParent($storeId, $productIds = null)
     {
@@ -1200,7 +1200,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      * Clean unused relation products
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function cleanRelationProducts($storeId)
     {
@@ -1259,7 +1259,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int|array $productIds
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function removeProduct($productIds, $storeId)
     {
@@ -1284,7 +1284,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int|array $productIds
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function removeProductChildren($productIds, $storeId)
     {
@@ -1305,7 +1305,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int|array $productIds
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function updateProduct($productIds, $storeId)
     {
@@ -1329,7 +1329,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      *
      * @param int|array $productIds
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function saveProduct($productIds, $storeId)
     {
@@ -1347,7 +1347,7 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
      * Delete flat table process
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
      */
     public function deleteFlatTable($storeId)
     {
@@ -1419,7 +1419,8 @@ class Indexer extends \Magento\Index\Model\Resource\AbstractResource
     /**
      * Transactional rebuild Catalog Product Flat Data
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Flat\Indexer
+     * @return $this
+     * @throws \Exception
      */
     public function reindexAll()
     {

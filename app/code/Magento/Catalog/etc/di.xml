@@ -42,11 +42,6 @@
             <instance type="Magento\Catalog\Model\Product\Status\Proxy" />
         </param>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Category\Flat">
-        <param name="catalogCategory">
-            <instance type="Magento\Catalog\Model\Category\Proxy" />
-        </param>
-    </type>
     <type name="Magento\Catalog\Model\Resource\Product\Flat\Indexer">
         <param name="maxIndexCount">
             <value type="int">64</value>
@@ -147,6 +142,35 @@
     <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations\Main">
         <param name="inputTypeFactory">
             <instance type="Magento\Catalog\Model\System\Config\Source\InputtypeFactory" />
+        </param>
+    </type>
+    <type name="Magento\Catalog\Model\Category">
+        <param name="flatIndexer">
+            <instance type="Magento\Indexer\Model\IndexerInterface" shared="false"/>
+        </param>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode">
+        <param name="flatIndexer">
+            <instance type="Magento\Indexer\Model\IndexerInterface" shared="false"/>
+        </param>
+    </type>
+    <type name="Magento\Core\Model\Resource\Store">
+        <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
+    </type>
+    <type name="Magento\Core\Model\Resource\Store\Group">
+        <plugin name="storeGroupResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\AbstractStore">
+        <param name="indexer">
+            <instance type="Magento\Indexer\Model\IndexerInterface" shared="false"/>
+        </param>
+    </type>
+    <type name="Magento\Indexer\Model\Config\Data">
+        <plugin name="indexerConfigGet" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat">
+        <param name="indexer">
+            <instance type="Magento\Indexer\Model\IndexerInterface" shared="false"/>
         </param>
     </type>
     <type name="Magento\Catalog\Model\Product\LinkTypeProvider">

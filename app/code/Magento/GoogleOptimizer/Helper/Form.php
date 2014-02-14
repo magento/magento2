@@ -48,7 +48,7 @@ class Form extends \Magento\App\Helper\AbstractHelper
         $fieldset->addField('experiment_script', 'textarea', array(
             'name' => 'experiment_script',
             'label' => __('Experiment Code'),
-            'value' => $experimentCodeModel ? $experimentCodeModel->getExperimentScript() : array(),
+            'value' => $experimentCodeModel ? $experimentCodeModel->getExperimentScript() : '',
             'class' => 'textarea googleoptimizer',
             'required' => false,
             'note' => __('Note: Experiment code should be added to the original page only.'),

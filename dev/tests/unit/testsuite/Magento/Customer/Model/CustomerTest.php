@@ -84,7 +84,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         $this->_config->expects($this->any())->method('getAttribute')->will($this->returnValue($this->_attribute));
 
-        $this->_attribute->expects($this->any())->method('getIsVisible')->will($this->returnValue(false));
+        $this->_attribute->expects($this->any())->method('isVisible')->will($this->returnValue(false));
 
         $this->_storeManager->expects($this->once())
             ->method('getWebsite')

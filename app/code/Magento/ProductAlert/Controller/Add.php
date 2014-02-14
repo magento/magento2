@@ -163,6 +163,6 @@ class Add extends \Magento\App\Action\Action
         }
         $currentStore = $this->_storeManager->getStore();
         return strpos($url, $currentStore->getBaseUrl()) === 0
-            || strpos($url, $currentStore->getBaseUrl($currentStore::URL_TYPE_LINK, true)) === 0;
+            || strpos($url, $currentStore->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)) === 0;
     }
 }

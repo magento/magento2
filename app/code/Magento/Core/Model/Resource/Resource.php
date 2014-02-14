@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource;
 
 /**
  * Core Resource Resource Model
@@ -32,8 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource;
-
 class Resource extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -67,7 +65,7 @@ class Resource extends \Magento\Core\Model\Resource\Db\AbstractDb
      * reissuing new sql just to get 'db' version of module.
      *
      * @param string $needType Can be 'db' or 'data'
-     * @return \Magento\Core\Model\Resource\Resource
+     * @return $this
      */
     protected function _loadVersionData($needType)
     {
@@ -100,7 +98,7 @@ class Resource extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Get Module version from DB
      *
      * @param string $resName
-     * @return bool|string
+     * @return false|string
      */
     public function getDbVersion($resName)
     {
@@ -158,7 +156,7 @@ class Resource extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string $resName
      * @param string $version
-     * @return \Magento\Core\Model\Resource\Resource
+     * @return $this
      */
     public function setDataVersion($resName, $version)
     {

@@ -51,6 +51,7 @@ class Attribute extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -61,7 +62,7 @@ class Attribute extends \Magento\Core\Model\AbstractModel
      * Add price data to attribute
      *
      * @param array $priceData
-     * @return \Magento\Catalog\Model\Product\Type\Configurable\Attribute
+     * @return $this
      */
     public function addPrice($priceData)
     {
@@ -93,7 +94,7 @@ class Attribute extends \Magento\Core\Model\AbstractModel
     /**
      * After save process
      *
-     * @return \Magento\Catalog\Model\Product\Type\Configurable\Attribute
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -107,7 +108,8 @@ class Attribute extends \Magento\Core\Model\AbstractModel
      * Load counfigurable attribute by product and product's attribute
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Eav\Model\Attribute  $attribute
+     * @param \Magento\Catalog\Model\Resource\Eav\Attribute  $attribute
+     * @return void
      */
     public function loadByProductAndAttribute($product, $attribute)
     {
@@ -121,6 +123,7 @@ class Attribute extends \Magento\Core\Model\AbstractModel
      * Delete configurable attributes by product id
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @return void
      */
     public function deleteByProduct($product)
     {

@@ -24,6 +24,8 @@
  */
 -->
 <page_types>
+    <type id="paypal_billing_agreement_index" label="Billing Agreement"/>
+    <type id="paypal_billing_agreement_view" label="Billing Agreement View"/>
     <type id="paypal_express_review" label="PayPal Express Order Review Form"/>
     <type id="paypal_hostedpro_cancel" label="Paypal Hosted Pro Frame"/>
     <type id="paypal_payflow_cancelpayment" label="Paypal Payflow Cancel Payment"/>

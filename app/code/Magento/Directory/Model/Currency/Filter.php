@@ -34,7 +34,7 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Rate value
      *
-     * @var decimal
+     * @var float
      */
     protected $_rate;
 
@@ -76,7 +76,8 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Set filter rate
      *
-     * @param double $rate
+     * @param float $rate
+     * @return void
      */
     public function setRate($rate)
     {
@@ -86,8 +87,8 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Filter value
      *
-     * @param   double $value
-     * @return  string
+     * @param float $value
+     * @return string
      */
     public function filter($value)
     {

@@ -23,6 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block\Customer;
+
+use Magento\Catalog\Model\Product as Product;
+use Magento\Rating\Model\Resource\Rating\Option\Vote\Collection as VoteCollection;
+use Magento\Review\Model\Review as Review;
 
 /**
  * Customer Review detailed view block
@@ -31,38 +36,46 @@
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Review\Block\Customer;
-
-use Magento\Catalog\Model\Product as Product;
-use Magento\Rating\Model\Rating\Option\Vote\Collection as VoteCollection;
-use Magento\Review\Model\Review as Review;
-
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
+    /**
+     * Customer view template name
+     *
+     * @var string
+     */
     protected $_template = 'customer/view.phtml';
 
     /**
+     * Catalog product model
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Review model
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
 
     /**
+     * Rating option model
+     *
      * @var \Magento\Rating\Model\Rating\Option\VoteFactory
      */
     protected $_voteFactory;
 
     /**
+     * Rating model
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
+     * Customer session model
+     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -133,7 +146,11 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_isScopePrivate = true;
     }
 
-
+    /**
+     * Initialize review id
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -141,11 +158,13 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
+     * Get product data
+     *
      * @return Product
      */
     public function getProductData()
     {
-        if( $this->getReviewId() && !$this->getProductCacheData() ) {
+        if ($this->getReviewId() && !$this->getProductCacheData()) {
             $product = $this->_productFactory->create()
                 ->setStoreId($this->_storeManager->getStore()->getId())
                 ->load($this->getReviewData()->getEntityPkValue());
@@ -155,17 +174,21 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
+     * Get review data
+     *
      * @return Review
      */
     public function getReviewData()
     {
-        if( $this->getReviewId() && !$this->getReviewCachedData() ) {
+        if ($this->getReviewId() && !$this->getReviewCachedData()) {
             $this->setReviewCachedData($this->_reviewFactory->create()->load($this->getReviewId()));
         }
         return $this->getReviewCachedData();
     }
 
     /**
+     * Return review customer url
+     *
      * @return string
      */
     public function getBackUrl()
@@ -174,11 +197,13 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
+     * Get review rating collection
+     *
      * @return VoteCollection
      */
     public function getRating()
     {
-        if( !$this->getRatingCollection() ) {
+        if (!$this->getRatingCollection()) {
             $ratingCollection = $this->_voteFactory->create()
                 ->getResourceCollection()
                 ->setReviewFilter($this->getReviewId())
@@ -193,28 +218,35 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
+     * Get rating summary
+     *
      * @return array
      */
     public function getRatingSummary()
     {
-        if( !$this->getRatingSummaryCache() ) {
+        if (!$this->getRatingSummaryCache()) {
             $this->setRatingSummaryCache($this->_ratingFactory->create()->getEntitySummary($this->getProductData()->getId()));
         }
         return $this->getRatingSummaryCache();
     }
 
     /**
+     * Get total reviews
+     *
      * @return int
      */
     public function getTotalReviews()
     {
-        if( !$this->getTotalReviewsCache() ) {
+        if (!$this->getTotalReviewsCache()) {
             $this->setTotalReviewsCache($this->_reviewFactory->create()->getTotalReviews($this->getProductData()->getId()), false, $this->_storeManager->getStore()->getId());
         }
         return $this->getTotalReviewsCache();
     }
 
     /**
+     * Get formatted date
+     *
+     * @param string $date
      * @return string
      */
     public function dateFormat($date)

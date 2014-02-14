@@ -72,6 +72,9 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         parent::__construct($context, $categoryTree, $registry, $data);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         if ($head = $this->getLayout()->getBlock('head')) {
@@ -121,6 +124,9 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getStoreConfigurationUrl()
     {
         $storeId = (int) $this->getRequest()->getParam('store');
@@ -134,11 +140,17 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         return $this->getUrl('catalog/system_store', $params);
     }
 
+    /**
+     * @return string
+     */
     public function getDeleteButtonHtml()
     {
         return $this->getChildHtml('delete_button');
     }
 
+    /**
+     * @return string
+     */
     public function getSaveButtonHtml()
     {
         if ($this->hasStoreRootCategory()) {
@@ -147,6 +159,9 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getResetButtonHtml()
     {
         if ($this->hasStoreRootCategory()) {
@@ -174,7 +189,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param string $alias
      * @param array $config
-     * @return \Magento\Catalog\Block\Adminhtml\Category\Edit\Form
+     * @return $this
      */
     public function addAdditionalButton($alias, $config)
     {
@@ -191,7 +206,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * Remove additional button
      *
      * @param string $alias
-     * @return \Magento\Catalog\Block\Adminhtml\Category\Edit\Form
+     * @return $this
      */
     public function removeAdditionalButton($alias)
     {
@@ -203,11 +218,17 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTabsHtml()
     {
         return $this->getChildHtml('tabs');
     }
 
+    /**
+     * @return string
+     */
     public function getHeader()
     {
         if ($this->hasStoreRootCategory()) {
@@ -225,6 +246,10 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         return __('Set Root Category for Store');
     }
 
+    /**
+     * @param array $args
+     * @return string
+     */
     public function getDeleteUrl(array $args = array())
     {
         $params = array('_current'=>true);
@@ -245,6 +270,9 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         return $this->getUrl('catalog/*/refreshPath', $params);
     }
 
+    /**
+     * @return string
+     */
     public function getProductsJson()
     {
         $products = $this->getCategory()->getProductsPosition();
@@ -254,6 +282,9 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         return '{}';
     }
 
+    /**
+     * @return bool
+     */
     public function isAjax()
     {
         return $this->_request->isXmlHttpRequest() || $this->_request->getParam('isAjax');

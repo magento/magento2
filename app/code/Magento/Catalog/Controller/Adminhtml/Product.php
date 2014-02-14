@@ -209,6 +209,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Output specified blocks as a text list
+     *
+     * @return void
      */
     protected function _outputBlocks()
     {
@@ -222,6 +224,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Product list page
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -233,6 +237,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Create new product page
+     *
+     * @return void
      */
     public function newAction()
     {
@@ -283,6 +289,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Product edit form
+     *
+     * @return void
      */
     public function editAction()
     {
@@ -344,6 +352,7 @@ class Product extends \Magento\Backend\App\Action
     /**
      * WYSIWYG editor action for ajax request
      *
+     * @return void
      */
     public function wysiwygAction()
     {
@@ -368,6 +377,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Product grid for AJAX request
+     *
+     * @return void
      */
     public function gridAction()
     {
@@ -377,6 +388,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get specified tab grid
+     *
+     * @return void
      */
     public function gridOnlyAction()
     {
@@ -395,6 +408,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Generate product variations matrix
+     *
+     * @return void
      */
     public function generateVariationsAction()
     {
@@ -411,6 +426,8 @@ class Product extends \Magento\Backend\App\Action
      *   when full set of operations for attribute options during
      *   product creation will be implemented: edit labels, remove, reorder.
      * Currently only addition of options to end and removal of just added option is supported.
+     *
+     * @return void
      */
     protected function _saveAttributeOptions()
     {
@@ -456,6 +473,7 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Get categories fieldset block
      *
+     * @return void
      */
     public function categoriesAction()
     {
@@ -467,6 +485,7 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Get options fieldset block
      *
+     * @return void
      */
     public function optionsAction()
     {
@@ -477,6 +496,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get related products grid and serializer block
+     *
+     * @return void
      */
     public function relatedAction()
     {
@@ -489,6 +510,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get upsell products grid and serializer block
+     *
+     * @return void
      */
     public function upsellAction()
     {
@@ -501,6 +524,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get crosssell products grid and serializer block
+     *
+     * @return void
      */
     public function crosssellAction()
     {
@@ -513,6 +538,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get related products grid
+     *
+     * @return void
      */
     public function relatedGridAction()
     {
@@ -525,6 +552,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get upsell products grid
+     *
+     * @return void
      */
     public function upsellGridAction()
     {
@@ -537,6 +566,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get crosssell products grid
+     *
+     * @return void
      */
     public function crosssellGridAction()
     {
@@ -550,6 +581,7 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Get product reviews grid
      *
+     * @return void
      */
     public function reviewsAction()
     {
@@ -564,6 +596,7 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Get super config grid
      *
+     * @return void
      */
     public function superConfigAction()
     {
@@ -575,6 +608,7 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Validate product
      *
+     * @return void
      */
     public function validateAction()
     {
@@ -661,7 +695,6 @@ class Product extends \Magento\Backend\App\Action
      *
      * @param \Magento\Catalog\Model\Product $parentProduct
      * @param array $products
-     *
      * @return array
      */
     protected function _validateProductVariations($parentProduct, array $products)
@@ -703,6 +736,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Save product action
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -804,6 +839,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Create product duplicate
+     *
+     * @return void
      */
     public function duplicateAction()
     {
@@ -821,6 +858,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get alerts price grid
+     *
+     * @return void
      */
     public function alertsPriceGridAction()
     {
@@ -830,6 +869,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Get alerts stock grid
+     *
+     * @return void
      */
     public function alertsStockGridAction()
     {
@@ -837,6 +878,9 @@ class Product extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function addAttributeAction()
     {
         $this->_view->loadLayout('popup');
@@ -847,6 +891,9 @@ class Product extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function createdAction()
     {
         $this->_view->loadLayout('popup');
@@ -856,6 +903,9 @@ class Product extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function massDeleteAction()
     {
         $productIds = $this->getRequest()->getParam('product');
@@ -882,6 +932,7 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Update product(s) status action
      *
+     * @return void
      */
     public function massStatusAction()
     {
@@ -912,10 +963,10 @@ class Product extends \Magento\Backend\App\Action
     /**
      * Validate batch of products before theirs status will be set
      *
-     * @throws \Magento\Core\Exception
-     * @param  array $productIds
-     * @param  int $status
+     * @param array $productIds
+     * @param int $status
      * @return void
+     * @throws \Magento\Core\Exception
      */
     public function _validateMassStatus(array $productIds, $status)
     {
@@ -942,6 +993,7 @@ class Product extends \Magento\Backend\App\Action
      * Show item update result from updateAction
      * in Wishlist and Cart controllers.
      *
+     * @return bool
      */
     public function showUpdateResultAction()
     {
@@ -959,6 +1011,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Show product grid for custom options import popup
+     *
+     * @return void
      */
     public function optionsImportGridAction()
     {
@@ -968,6 +1022,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Show custom options in JSON format for specified products
+     *
+     * @return void
      */
     public function customOptionsAction()
     {
@@ -978,6 +1034,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Action for product template selector
+     *
+     * @return void
      */
     public function suggestProductTemplatesAction()
     {
@@ -990,6 +1048,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Search for attributes by part of attribute's label in admin store
+     *
+     * @return void
      */
     public function suggestAttributesAction()
     {
@@ -1001,6 +1061,8 @@ class Product extends \Magento\Backend\App\Action
 
     /**
      * Add attribute to product template
+     *
+     * @return void
      */
     public function addAttributeToTemplateAction()
     {

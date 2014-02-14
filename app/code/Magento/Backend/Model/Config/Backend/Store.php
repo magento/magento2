@@ -31,6 +31,9 @@ namespace Magento\Backend\Model\Config\Backend;
 
 class Store extends \Magento\Core\Model\Config\Value
 {
+    /**
+     * @return void
+     */
     protected function _afterSave()
     {
         $this->_storeManager->getStore()->setConfig(\Magento\Core\Model\Store::XML_PATH_STORE_IN_URL, $this->getValue());

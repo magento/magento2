@@ -33,12 +33,12 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     /**
      * Mysql PDO DB adapter mock
      *
-     * @var \Magento\DB\Adapter\Pdo\Mysql
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\DB\Adapter\Pdo\Mysql
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Resource
      */
     protected $resourceMock;
 
@@ -46,18 +46,22 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     {
         $this->connectionMock = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
 
-        $this->resourceMock = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
-        $this->resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+        $this->resourceMock = $this->getMock(
+            'Magento\App\Resource', array('getConnection', 'getTableName'), array(), '', false, false
+        );
+        $this->mockGetConnection($this->connectionMock);
 
         $this->model = new \Magento\Mview\View\Changelog($this->resourceMock);
-        $this->model->setViewId('ViewIdTest');
     }
 
     public function testInstanceOf()
     {
-        $this->assertInstanceOf('\Magento\Mview\View\ChangelogInterface', $this->model);
+        $resourceMock = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
+        $resourceMock->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue(true));
+        $model = new \Magento\Mview\View\Changelog($resourceMock);
+        $this->assertInstanceOf('\Magento\Mview\View\ChangelogInterface', $model);
     }
 
     /**
@@ -77,6 +81,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
+        $this->model->setViewId('ViewIdTest');
         $this->assertEquals('ViewIdTest' . '_' . \Magento\Mview\View\Changelog::NAME_SUFFIX, $this->model->getName());
     }
 
@@ -88,90 +93,79 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function testGetVersionWithException()
     {
         $changelogTableName = 'viewIdtest_cl';
-        $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array('isTableExists'), array(), '', false);
-        $connection->expects($this->once())->method('isTableExists')
-            ->with($this->equalTo($changelogTableName))
-            ->will($this->returnValue(false));
+        $this->mockIsTableExists($changelogTableName, false);
+        $this->mockGetTableName();
 
-        $resource = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
-        $resource->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue($connection));
-        $model = new \Magento\Mview\View\Changelog($resource);
-        $model->setViewId('viewIdtest');
         $this->setExpectedException('Exception', "Table {$changelogTableName} does not exist");
-        $model->getVersion();
+        $this->model->setViewId('viewIdtest');
+        $this->model->getVersion();
     }
 
     public function testDropWithException()
     {
         $changelogTableName = 'viewIdtest_cl';
-        $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array('isTableExists'), array(), '', false);
-        $connection->expects($this->once())->method('isTableExists')
-            ->with($this->equalTo($changelogTableName))
-            ->will($this->returnValue(false));
+        $this->mockIsTableExists($changelogTableName, false);
+        $this->mockGetTableName();
 
-        $resource = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
-        $resource->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue($connection));
-        $model = new \Magento\Mview\View\Changelog($resource);
-        $model->setViewId('viewIdtest');
         $this->setExpectedException('Exception', "Table {$changelogTableName} does not exist");
-        $model->drop();
+        $this->model->setViewId('viewIdtest');
+        $this->model->drop();
     }
 
     public function testCreateWithException()
     {
         $changelogTableName = 'viewIdtest_cl';
-        $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array('isTableExists'), array(), '', false);
-        $connection->expects($this->once())->method('isTableExists')
-            ->with($this->equalTo($changelogTableName))
-            ->will($this->returnValue(true));
+        $this->mockIsTableExists($changelogTableName, true);
+        $this->mockGetTableName();
 
-        $resource = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
-        $resource->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue($connection));
-        $model = new \Magento\Mview\View\Changelog($resource);
-        $model->setViewId('viewIdtest');
         $this->setExpectedException('Exception', "Table {$changelogTableName} already exist");
-        $model->create();
+        $this->model->setViewId('viewIdtest');
+        $this->model->create();
     }
 
     public function testGetListWithException()
     {
         $changelogTableName = 'viewIdtest_cl';
-        $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array('isTableExists'), array(), '', false);
-        $connection->expects($this->once())->method('isTableExists')
-            ->with($this->equalTo($changelogTableName))
-            ->will($this->returnValue(false));
+        $this->mockIsTableExists($changelogTableName, false);
+        $this->mockGetTableName();
 
-        $resource = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
-        $resource->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue($connection));
-        $model = new \Magento\Mview\View\Changelog($resource);
-        $model->setViewId('viewIdtest');
         $this->setExpectedException('Exception', "Table {$changelogTableName} does not exist");
-        $model->getList(mt_rand(1, 200), mt_rand(201, 400));
+        $this->model->setViewId('viewIdtest');
+        $this->model->getList(mt_rand(1, 200), mt_rand(201, 400));
     }
 
     public function testClearWithException()
     {
         $changelogTableName = 'viewIdtest_cl';
-        $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array('isTableExists'), array(), '', false);
-        $connection->expects($this->once())->method('isTableExists')
-            ->with($this->equalTo($changelogTableName))
-            ->will($this->returnValue(false));
+        $this->mockIsTableExists($changelogTableName, false);
+        $this->mockGetTableName();
 
-        $resource = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
-        $resource->expects($this->once())
+        $this->setExpectedException('Exception', "Table {$changelogTableName} does not exist");
+        $this->model->setViewId('viewIdtest');
+        $this->model->clear(mt_rand(1, 200));
+    }
+
+    /**
+     * @param $connection
+     */
+    protected function mockGetConnection($connection)
+    {
+        $this->resourceMock->expects($this->once())
             ->method('getConnection')
             ->will($this->returnValue($connection));
-        $model = new \Magento\Mview\View\Changelog($resource);
-        $model->setViewId('viewIdtest');
-        $this->setExpectedException('Exception', "Table {$changelogTableName} does not exist");
-        $model->clear(mt_rand(1, 200));
+    }
+
+    protected function mockGetTableName()
+    {
+        $this->resourceMock->expects($this->once())
+            ->method('getTableName')
+            ->will($this->returnArgument(0));
+    }
+
+    protected function mockIsTableExists($changelogTableName, $result)
+    {
+        $this->connectionMock->expects($this->once())->method('isTableExists')
+            ->with($this->equalTo($changelogTableName))
+            ->will($this->returnValue($result));
     }
 }

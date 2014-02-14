@@ -84,7 +84,7 @@ class Uploader extends \Magento\File\Uploader
      * Save file to storage
      *
      * @param  array $result
-     * @return \Magento\Core\Model\File\Uploader
+     * @return $this
      */
     protected function _afterSave($result)
     {

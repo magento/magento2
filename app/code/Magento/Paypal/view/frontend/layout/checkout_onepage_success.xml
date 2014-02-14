@@ -24,5 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <update handle="SHORTCUT_popup"/>
+    <referenceContainer name="order.success.additional.info">
+        <block class="Magento\Paypal\Block\Checkout\Onepage\Success\BillingAgreement" name="onepage.success.billing_agreement" template="checkout/onepage/success/billing_agreement.phtml"/>
+    </referenceContainer>
 </layout>

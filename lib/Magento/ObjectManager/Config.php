@@ -29,6 +29,8 @@ interface Config
      * Set class relations
      *
      * @param Relations $relations
+     *
+     * @return void
      */
     public function setRelations(Relations $relations);
 
@@ -36,6 +38,8 @@ interface Config
      * Set configuration cache instance
      *
      * @param ConfigCache $cache
+     *
+     * @return void
      */
     public function setCache(ConfigCache $cache);
 

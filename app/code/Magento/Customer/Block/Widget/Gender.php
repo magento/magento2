@@ -47,23 +47,23 @@ class Gender extends \Magento\Customer\Block\Widget\AbstractWidget
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $attributeMetadata
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $attributeMetadata,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
         $this->_customerResource = $customerResource;
-        parent::__construct($context, $eavConfig, $addressHelper, $data);
+        parent::__construct($context, $addressHelper,  $attributeMetadata, $data);
         $this->_isScopePrivate = true;
     }
 
@@ -83,7 +83,7 @@ class Gender extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function isEnabled()
     {
-        return (bool)$this->_getAttribute('gender')->getIsVisible();
+        return (bool)$this->_getAttribute('gender')->isVisible();
     }
 
     /**
@@ -93,7 +93,7 @@ class Gender extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function isRequired()
     {
-        return (bool)$this->_getAttribute('gender')->getIsRequired();
+        return (bool)$this->_getAttribute('gender')->isRequired();
     }
 
     /**

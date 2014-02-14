@@ -100,7 +100,7 @@ class Configure extends \Magento\View\Element\Template
     /**
      * Configure product view blocks
      *
-     * @return \Magento\Wishlist\Block\Item\Configure
+     * @return $this
      */
     protected function _prepareLayout()
     {

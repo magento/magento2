@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job name="newsletter_send_all" instance="Magento\Newsletter\Model\Observer" method="scheduledSend">
-        <schedule>*/5 * * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="newsletter_send_all" instance="Magento\Newsletter\Model\Observer" method="scheduledSend">
+            <schedule>*/5 * * * *</schedule>
+        </job>
+    </group>
 </config>

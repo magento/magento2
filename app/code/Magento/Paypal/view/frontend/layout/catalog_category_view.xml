@@ -24,7 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <update handle="SHORTCUT_popup"/>
     <referenceContainer name="right">
         <block class="Magento\Paypal\Block\Logo" name="paypal.partner.right.logo" template="partner/logo.phtml"/>
     </referenceContainer>

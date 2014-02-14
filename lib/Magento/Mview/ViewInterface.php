@@ -27,6 +27,34 @@ namespace Magento\Mview;
 interface ViewInterface
 {
     /**
+     * Return view ID
+     *
+     * @return string
+     */
+    public function getId();
+
+    /**
+     * Return view action class
+     *
+     * @return string
+     */
+    public function getActionClass();
+
+    /**
+     * Return view group
+     *
+     * @return string
+     */
+    public function getGroup();
+
+    /**
+     * Return view subscriptions
+     *
+     * @return array
+     */
+    public function getSubscriptions();
+
+    /**
      * Fill view data from config
      *
      * @param string $viewId
@@ -52,9 +80,21 @@ interface ViewInterface
     public function unsubscribe();
 
     /**
-     * @return mixed
+     * Materialize view by IDs in changelog
+     *
+     * @throws \Exception
      */
     public function update();
+
+    /**
+     * Pause view updates and set version ID to changelog's end
+     */
+    public function suspend();
+
+    /**
+     * Resume view updates
+     */
+    public function resume();
 
     /**
      * Clear precessed changelog entries
@@ -77,18 +117,39 @@ interface ViewInterface
     public function setState(View\StateInterface $state);
 
     /**
-     * Return view mode
+     * Check whether view is enabled
      *
-     * @return string
+     * @return bool
      */
-    public function getMode();
+    public function isEnabled();
 
     /**
-     * Return view status
+     * Check whether view is idle
+     *
+     * @return bool
+     */
+    public function isIdle();
+
+    /**
+     * Check whether view is working
+     *
+     * @return bool
+     */
+    public function isWorking();
+
+    /**
+     * Check whether view is paused
+     *
+     * @return bool
+     */
+    public function isSuspended();
+
+    /**
+     * Return view updated datetime
      *
      * @return string
      */
-    public function getStatus();
+    public function getUpdated();
 
     /**
      * Retrieve linked changelog

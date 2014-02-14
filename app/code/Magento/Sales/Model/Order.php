@@ -187,8 +187,6 @@
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
  * @method int getPaymentAuthExpiration()
  * @method \Magento\Sales\Model\Order setPaymentAuthExpiration(int $value)
- * @method int getPaypalIpnCustomerNotified()
- * @method \Magento\Sales\Model\Order setPaypalIpnCustomerNotified(int $value)
  * @method int getQuoteAddressId()
  * @method \Magento\Sales\Model\Order setQuoteAddressId(int $value)
  * @method int getQuoteId()

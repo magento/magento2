@@ -32,6 +32,7 @@ namespace Magento\Review\Block\Product\View;
 class Other extends \Magento\View\Element\Template
 {
     /**
+     * Core model registry
      * @var \Magento\Core\Model\Registry
      */
     protected $_registry;
@@ -51,6 +52,8 @@ class Other extends \Magento\View\Element\Template
     }
 
     /**
+     * Get product object
+     *
      * @return \Magento\Catalog\Model\Product
      */
     public function getProduct()

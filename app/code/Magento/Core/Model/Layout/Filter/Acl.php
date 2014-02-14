@@ -47,6 +47,7 @@ class Acl
      * In any case, the "acl" attribute will be unset
      *
      * @param \Magento\Simplexml\Element $xml
+     * @return void
      */
     public function filterAclNodes(\Magento\Simplexml\Element $xml)
     {

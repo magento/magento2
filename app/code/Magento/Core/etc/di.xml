@@ -76,6 +76,7 @@
     <preference for="Magento\Css\PreProcessor\AdapterInterface" type="Magento\Css\PreProcessor\Adapter\Oyejorge" />
     <preference for="Magento\Translate\ResourceInterface" type="Magento\Core\Model\Resource\Translate" />
     <preference for="Magento\BaseScopeResolverInterface" type="Magento\Core\Model\BaseScopeResolver" />
+    <preference for="Magento\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Less\PreProcessor\ErrorHandler" />
     <type name="Magento\Translate\Inline">
         <param name="templateFileName">
             <value>Magento_Core::translate_inline.phtml</value>
@@ -356,8 +357,30 @@
         </param>
     </type>
     <type name="Magento\View\Publisher">
+        <param name="preProcessor">
+            <instance type="Magento\View\Asset\PreProcessor\Composite" />
+        </param>
         <param name="allowDuplication">
             <value type="bool">true</value>
+        </param>
+    </type>
+    <type name="Magento\View\Asset\PreProcessor\Composite">
+        <param name="preProcessorsConfig">
+            <array>
+                <item key="css_preprocessor">
+                    <array>
+                        <item key="class"><value>Magento\Css\PreProcessor\Composite</value></item>
+                        <item key="asset_type"><value>css</value></item>
+                    </array>
+                </item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\Css\PreProcessor\Composite">
+        <param name="preProcessors">
+            <array>
+                <item key="css_source_processor"><value>Magento\Css\PreProcessor\Less</value></item>
+            </array>
         </param>
     </type>
     <type name="Magento\Object\Copy\Config\Reader">
@@ -459,7 +482,7 @@
             </array>
         </param>
     </type>
-    <type name="\Magento\Image">
+    <type name="Magento\Image">
         <param name="adapter">
             <instance type="Magento\Image\Adapter\Gd2"/>
         </param>
@@ -569,7 +592,11 @@
             <instance type="Magento\Less\File\Source\Theme" />
         </param>
     </type>
+    <type name="Magento\Css\PreProcessor\Less">
+        <plugin name="process_less" type="Magento\Css\PreProcessor\Cache\Plugin" sortOrder="10"/>
+    </type>
     <type name="Magento\Less\PreProcessor">
+        <plugin name="process_less_instructions" type="Magento\Css\PreProcessor\Cache\Plugin" sortOrder="10"/>
         <param name="preProcessors">
             <array>
                 <item key="import">

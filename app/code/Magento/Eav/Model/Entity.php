@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model;
 
 /**
  * EAV entity model
@@ -31,8 +31,6 @@
  * @category   Magento
  * @package    Magento_Eav
  */
-namespace Magento\Eav\Model;
-
 class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     const DEFAULT_ENTITY_MODEL      = 'Magento\Eav\Model\Entity';

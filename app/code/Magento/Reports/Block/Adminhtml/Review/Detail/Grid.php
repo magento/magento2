@@ -86,7 +86,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-
         $this->addColumn('nickname', array(
             'header'    =>__('Customer'),
             'width'     =>'100px',

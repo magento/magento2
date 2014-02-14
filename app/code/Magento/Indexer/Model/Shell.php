@@ -125,20 +125,12 @@ class Shell extends \Magento\Core\Model\AbstractShell
                     case \Magento\Indexer\Model\Indexer\State::STATUS_INVALID:
                         $status = 'Reindex required';
                         break;
-
                     case \Magento\Indexer\Model\Indexer\State::STATUS_WORKING:
                         $status = 'Processing';
                         break;
                 }
             } else {
-                switch ($indexer->getMode()) {
-                    case \Magento\Mview\View\StateInterface::MODE_DISABLED:
-                        $status = 'Update on Save';
-                        break;
-                    case \Magento\Mview\View\StateInterface::MODE_ENABLED:
-                        $status = 'Update by Schedule';
-                        break;
-                }
+                $status = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
             }
             echo sprintf('%-50s ', $indexer->getTitle() . ':') . $status . PHP_EOL;
         }
@@ -212,7 +204,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
      * Parses string with indexers and return array of indexer instances
      *
      * @param string $string
-     * @return Indexer[]
+     * @return IndexerInterface[]
      */
     protected function parseIndexerString($string)
     {

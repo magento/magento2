@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Store\Edit;
 
 /**
@@ -40,6 +39,7 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Class constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -50,7 +50,7 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form data
      *
-     * return \Magento\Backend\Block\Widget\Form
+     * @return \Magento\Backend\Block\Widget\Form
      */
     protected function _prepareForm()
     {
@@ -89,8 +89,9 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Build store type specific fieldset
      *
-     * @abstract
      * @param \Magento\Data\Form $form
+     * @return void
+     * @abstract
      */
     abstract protected function _prepareStoreFieldset(\Magento\Data\Form $form);
 }

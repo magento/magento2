@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Setup;
 
 /**
@@ -194,6 +193,8 @@ class Migration extends \Magento\Core\Model\Resource\Setup
 
     /**
      * Start process of replacing aliases with class names using rules
+     *
+     * @return void
      */
     public function doUpdateClassAliases()
     {
@@ -207,6 +208,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      *
      * @param string $tableName name of table to replace aliases in
      * @param array $tableRules replacing rules for table
+     * @return void
      */
     protected function _updateClassAliasesInTable($tableName, array $tableRules)
     {
@@ -227,7 +229,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $tableName name of table to replace aliases in
      * @param string $fieldName name of table column to replace aliases in
      * @param string $additionalWhere additional where condition
-     *
      * @return int
      */
     protected function _getRowsCount($tableName, $fieldName, $additionalWhere = '')
@@ -252,6 +253,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $fieldName name of table column to replace aliases in
      * @param array $fieldRule
      * @param int $currentPage
+     * @return void
      */
     protected function _applyFieldRule($tableName, $fieldName, array $fieldRule, $currentPage = 0)
     {
@@ -293,6 +295,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $tableName
      * @param string $fieldName
      * @param array $fieldReplacements
+     * @return void
      */
     protected function _updateRowsData($tableName, $fieldName, array $fieldReplacements)
     {
@@ -321,7 +324,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param array $fieldsToSelect array of fields to select
      * @param string $additionalWhere additional where condition
      * @param int $currPage
-     *
      * @return array
      */
     protected function _getTableData($tableName, $fieldName, array $fieldsToSelect, $additionalWhere = '',
@@ -350,7 +352,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $data
      * @param string $contentType type of data (field content)
      * @param string $entityType entity type of alias
-     *
      * @return string
      */
     protected function _getReplacement($data, $contentType, $entityType = '')
@@ -378,7 +379,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      *
      * @param string $alias
      * @param string $entityType entity type of alias
-     *
      * @return string
      */
     protected function _getCorrespondingClassName($alias, $entityType = '')
@@ -479,7 +479,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * @param string $module
      * @param string $type
      * @param string $name
-     *
      * @return string
      */
     protected function _getClassName($module, $type, $name = null)
@@ -497,7 +496,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * Whether the given class name is a factory name
      *
      * @param string $factoryName
-     *
      * @return bool
      */
     protected function _isFactoryName($factoryName)
@@ -509,7 +507,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * Transform factory name into a pair of module and name
      *
      * @param string $factoryName
-     *
      * @return array
      */
     protected function _getModuleName($factoryName)
@@ -532,8 +529,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**
      * Get composite module name by module alias
      *
-     * @param $moduleAlias
-     *
+     * @param string $moduleAlias
      * @return string|null
      */
     protected function _getCompositeModuleName($moduleAlias)
@@ -552,7 +548,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      *
      * @param string $alias
      * @param string $entityType
-     *
      * @return string
      */
     protected function _getAliasFromMap($alias, $entityType = '')
@@ -581,9 +576,10 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**
      * Store already generated class name for alias
      *
-     * @param $entityType
-     * @param $alias
-     * @param $className
+     * @param string $entityType
+     * @param string $alias
+     * @param string $className
+     * @return void
      */
     protected function _pushToMap($entityType, $alias, $className)
     {
@@ -623,7 +619,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
      * Load aliases to classes map from file
      *
      * @param string $pathToMapFile
-     *
      * @return string
      */
     protected function _loadMap($pathToMapFile)
@@ -638,7 +633,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**
      * @param string $data
      * @param string $entityType
-     * @return mixed
+     * @return string
      */
     protected function _getAliasInSerializedStringReplacement($data, $entityType = '')
     {
@@ -660,7 +655,7 @@ class Migration extends \Magento\Core\Model\Resource\Setup
     /**
      * Parse class aliases from serialized string
      *
-     * @param $string
+     * @param string $string
      * @return array
      */
     protected function _parseSerializedString($string)

@@ -35,6 +35,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 
 class Main extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/attribute/set/main.phtml';
 
     /**
@@ -111,7 +114,7 @@ class Main extends \Magento\Backend\Block\Template
     /**
      * Prepare Global Layout
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main
+     * @return $this
      */
     protected function _prepareLayout()
     {

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard;
 
 /**
  * Adminhtml dashboard bar block
@@ -31,19 +32,32 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard;
-
 class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
+    /**
+     * @var array
+     */
     protected $_totals = array();
+
+    /**
+     * @var \Magento\Directory\Model\Currency|null
+     */
     protected $_currentCurrencyCode = null;
 
+    /**
+     * @return array
+     */
     protected function getTotals()
     {
         return $this->_totals;
     }
 
+    /**
+     * @param string $label
+     * @param float $value
+     * @param bool $isQuantity
+     * @return $this
+     */
     public function addTotal($label, $value, $isQuantity=false)
     {
         /*if (!$isQuantity) {
@@ -68,9 +82,9 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     }
 
     /**
-     * Formating value specific for this store
+     * Formatting value specific for this store
      *
-     * @param decimal $price
+     * @param float $price
      * @return string
      */
     public function format($price)
@@ -82,6 +96,7 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Setting currency model
      *
      * @param \Magento\Directory\Model\Currency $currency
+     * @return void
      */
     public function setCurrency($currency)
     {

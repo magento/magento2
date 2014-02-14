@@ -42,7 +42,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     public function testCRUD()
     {
-        $this->_model->setCustomerGroupCode('test');
+        $this->_model->setCode('test');
         $crud = new \Magento\TestFramework\Entity($this->_model, array('customer_group_code' => uniqid()));
         $crud->testCrud();
     }

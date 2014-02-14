@@ -37,7 +37,7 @@ class String extends \Magento\App\Helper\AbstractHelper
      * Split every part into pieces by _ and \ and uppercase every piece
      * Then join them back using \
      *
-     * @param $parts
+     * @param string[] $parts
      * @return string
      */
     public static function buildClassName($parts)

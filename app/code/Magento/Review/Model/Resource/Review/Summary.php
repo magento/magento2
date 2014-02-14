@@ -30,8 +30,6 @@ use Magento\Core\Model\AbstractModel;
 /**
  * Review summary resource model
  *
- * @category    Magento
- * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Summary extends \Magento\Core\Model\Resource\Db\AbstractDb
@@ -39,6 +37,7 @@ class Summary extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define module
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -61,10 +60,10 @@ class Summary extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Reaggregate all data by rating summary
+     * Re-aggregate all data by rating summary
      *
      * @param array $summary
-     * @return \Magento\Review\Model\Resource\Review\Summary
+     * @return $this
      */
     public function reAggregate($summary)
     {

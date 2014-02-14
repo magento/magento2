@@ -44,11 +44,18 @@ namespace Magento\Core\Model\Translate;
 
 class String extends \Magento\Core\Model\AbstractModel
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Core\Model\Resource\Translate\String');
     }
 
+    /**
+     * @param string $string
+     * @return $this
+     */
     public function setString($string)
     {
         $this->setData('string', $string);

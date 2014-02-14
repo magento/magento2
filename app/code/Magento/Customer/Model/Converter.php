@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,22 +24,20 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Service\Entity\V1\Exception;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
+use Magento\Exception\NoSuchEntityException;
+use Magento\Customer\Service\V1\Dto\Customer as CustomerDto;
+use Magento\Customer\Service\V1\Dto\CustomerBuilder as CustomerDtoBuilder;
 
 /**
  * Customer Model converter.
  *
- * Converts a Customer Model to a DTO.
- *
- * TODO: Remove this class after service refactoring is done and the model
- * TODO: is no longer needed outside of service.  Then this function could
- * TODO: be moved to the service.
+ * Converts a Customer Model to a DTO or vice versa.
  */
 class Converter
 {
     /**
-     * @var \Magento\Customer\Service\V1\Dto\CustomerBuilder
+     * @var CustomerDtoBuilder
      */
     protected $_customerBuilder;
 
@@ -51,12 +48,10 @@ class Converter
 
     /**
      * @param CustomerFactory $customerFactory
-     * @param \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder
+     * @param CustomerDtoBuilder $customerBuilder
      */
-    public function __construct(
-        \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder,
-        \Magento\Customer\Model\CustomerFactory $customerFactory
-    ) {
+    public function __construct(CustomerDtoBuilder $customerBuilder, CustomerFactory $customerFactory)
+    {
         $this->_customerBuilder = $customerBuilder;
         $this->_customerFactory = $customerFactory;
     }
@@ -64,43 +59,32 @@ class Converter
     /**
      * Convert a customer model to a customer entity
      *
-     * @param \Magento\Customer\Model\Customer $customerModel
-     * @throws \InvalidArgumentException
-     * @return \Magento\Customer\Service\V1\Dto\Customer
+     * @param Customer $customerModel
+     * @return CustomerDto
      */
-    public function createCustomerFromModel($customerModel)
+    public function createCustomerFromModel(Customer $customerModel)
     {
-        if (!($customerModel instanceof \Magento\Customer\Model\Customer)) {
-            throw new \InvalidArgumentException('customer model is invalid');
-        }
-        $this->_convertAttributesFromModel($this->_customerBuilder, $customerModel);
-        $this->_customerBuilder->setCustomerId($customerModel->getId());
-        $this->_customerBuilder->setFirstname($customerModel->getFirstname());
-        $this->_customerBuilder->setLastname($customerModel->getLastname());
-        $this->_customerBuilder->setEmail($customerModel->getEmail());
-        return $this->_customerBuilder->create();
+        $customerBuilder = $this->_populateBuilderWithAttributes($customerModel);
+        $customerBuilder->setCustomerId($customerModel->getId());
+        $customerBuilder->setFirstname($customerModel->getFirstname());
+        $customerBuilder->setLastname($customerModel->getLastname());
+        $customerBuilder->setEmail($customerModel->getEmail());
+        return $customerBuilder->create();
     }
 
 
     /**
      * @param int $customerId
-     * @throws Exception If customerId is not found or other error occurs.
+     * @throws NoSuchEntityException If customer with customerId is not found.
      * @return Customer
      */
     public function getCustomerModel($customerId)
     {
-        try {
-            $customer = $this->_customerFactory->create()->load($customerId);
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
-        }
+        $customer = $this->_customerFactory->create()->load($customerId);
 
         if (!$customer->getId()) {
             // customer does not exist
-            throw new Exception(
-                'No customer with customerId ' . $customerId . ' exists.',
-                Exception::CODE_INVALID_CUSTOMER_ID
-            );
+            throw new NoSuchEntityException('customerId', $customerId);
         } else {
             return $customer;
         }
@@ -110,10 +94,10 @@ class Converter
     /**
      * Creates a customer model from a customer entity.
      *
-     * @param \Magento\Customer\Service\V1\Dto\Customer $customer
+     * @param CustomerDto $customer
      * @return Customer
      */
-    public function createCustomerModel(\Magento\Customer\Service\V1\Dto\Customer $customer)
+    public function createCustomerModel(CustomerDto $customer)
     {
         $customerModel = $this->_customerFactory->create();
 
@@ -144,10 +128,10 @@ class Converter
     /**
      * Loads the values from a customer model
      *
-     * @param \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder
-     * @param \Magento\Customer\Model\Customer $customerModel
+     * @param Customer $customerModel
+     * @return CustomerDtoBuilder
      */
-    protected function _convertAttributesFromModel($customerBuilder, $customerModel)
+    protected function _populateBuilderWithAttributes(Customer $customerModel)
     {
         $attributes = [];
         foreach ($customerModel->getAttributes() as $attribute) {
@@ -159,7 +143,7 @@ class Converter
             $attributes[$attrCode] = $value;
         }
 
-        $customerBuilder->populateWithArray($attributes);
+        return $this->_customerBuilder->populateWithArray($attributes);
     }
 
 }

@@ -84,7 +84,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * @param \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory
      * @param \Magento\GoogleShopping\Model\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\GoogleShopping\Model\Resource\Item $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param array $data

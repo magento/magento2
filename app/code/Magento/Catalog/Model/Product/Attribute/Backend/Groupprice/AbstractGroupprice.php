@@ -249,7 +249,7 @@ abstract class AbstractGroupprice
      * Assign group prices to product data
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Groupprice\AbstractGroupprice
+     * @return $this
      */
     public function afterLoad($object)
     {
@@ -287,7 +287,7 @@ abstract class AbstractGroupprice
      * After Save Attribute manipulation
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Groupprice\AbstractGroupprice
+     * @return $this
      */
     public function afterSave($object)
     {

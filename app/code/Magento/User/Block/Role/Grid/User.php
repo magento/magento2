@@ -21,12 +21,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\User\Block\Role\Grid;
+
+use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Acl role user grid.
  */
-namespace Magento\User\Block\Role\Grid;
-
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -70,6 +71,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_roleFactory = $roleFactory;
     }
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -80,6 +86,10 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setUseAjax(true);
     }
 
+    /**
+     * @param Column $column
+     * @return $this
+     */
     protected function _addColumnFilterToCollection($column)
     {
         if ($column->getId() == 'in_role_users') {
@@ -100,6 +110,9 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         $roleId = $this->getRequest()->getParam('rid');
@@ -109,6 +122,9 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('in_role_users', array(
@@ -185,12 +201,19 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         $roleId = $this->getRequest()->getParam('rid');
         return $this->getUrl('*/*/editrolegrid', array('rid' => $roleId));
     }
 
+    /**
+     * @param bool $json
+     * @return string|array
+     */
     public function getUsers($json=false)
     {
         if ( $this->getRequest()->getParam('in_role_user') != "" ) {

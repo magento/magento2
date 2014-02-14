@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Massaction;
+
+use Magento\View\Element\Template;
 
 /**
  * Grid widget massaction block
@@ -33,10 +36,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Massaction;
-
-use Magento\View\Element\Template;
-
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {
     /**
@@ -51,6 +50,9 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     protected $_items = array();
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/grid/massaction.phtml';
 
     /**
@@ -67,11 +69,14 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
 
-        $this->escapeJsQuote(__('Please select items.'));
+        $this->setErrorText($this->escapeJsQuote(__('Please select items.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {
@@ -84,6 +89,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     /**
      * Add new massaction item
      *
+     * Item array to be passed in looks like:
      * $item = array(
      *      'label'    => string,
      *      'complete' => string, // Only for ajax enabled grid (optional)
@@ -94,7 +100,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *
      * @param string $itemId
      * @param array|\Magento\Object $item
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\AbstractMassaction
+     * @return $this
      */
     public function addItem($itemId, $item)
     {
@@ -115,7 +121,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve massaction item with id $itemId
      *
      * @param string $itemId
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Item
+     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Item|null
      */
     public function getItem($itemId)
     {
@@ -229,7 +235,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     /**
      * Retrieve array of selected checkboxes
      *
-     * @return array
+     * @return string[]
      */
     public function getSelected()
     {
@@ -251,6 +257,9 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         return $this->getButtonHtml(__('Submit'), $this->getJsObjectName() . ".apply()");
     }
 
+    /**
+     * @return string
+     */
     public function getJavaScript()
     {
         return " var {$this->getJsObjectName()} = new varienGridMassaction('{$this->getHtmlId()}', "
@@ -263,6 +272,9 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
             . "{$this->getJsObjectName()}.errorText = '{$this->getErrorText()}';";
     }
 
+    /**
+     * @return string
+     */
     public function getGridIdsJson()
     {
         if (!$this->getUseSelectAll()) {
@@ -277,6 +289,9 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getHtmlId()
     {
         return $this->getParentBlock()->getHtmlId() . '_massaction';
@@ -286,7 +301,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Remove existing massaction item by its id
      *
      * @param string $itemId
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\AbstractMassaction
+     * @return $this
      */
     public function removeItem($itemId)
     {
@@ -311,7 +326,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve select all functionality flag check
      *
      * @param boolean $flag
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\AbstractMassaction
+     * @return $this
      */
     public function setUseSelectAll($flag)
     {
@@ -322,7 +337,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     /**
      * Prepare grid massaction column
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     public function prepareMassactionColumn()
     {

@@ -112,7 +112,7 @@ class Link extends \Magento\View\Element\Html\Link
      * Create button label based on wishlist item quantity
      *
      * @param int $count
-     * @return string
+     * @return string|void
      */
     protected function _createCounter($count)
     {

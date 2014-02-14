@@ -47,7 +47,7 @@ class Country implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * Options array
      *
-     * @var type
+     * @var array
      */
     protected $_options;
 

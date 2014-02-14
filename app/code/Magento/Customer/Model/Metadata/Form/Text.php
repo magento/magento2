@@ -20,19 +20,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-
-/**
- * EAV Entity Attribute Text Data Model
- *
- * @category    Magento
- * @package     Magento_Eav
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
@@ -47,8 +36,8 @@ class Text extends AbstractData
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Logger $logger
      * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
-     * @param null $value
-     * @param $entityTypeCode
+     * @param string $value
+     * @param string $entityTypeCode
      * @param bool $isAjax
      * @param \Magento\Stdlib\String $stringHelper
      */
@@ -56,7 +45,7 @@ class Text extends AbstractData
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Logger $logger,
         \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute,
-        $value = null,
+        $value,
         $entityTypeCode,
         $isAjax = false,
         \Magento\Stdlib\String $stringHelper
@@ -66,23 +55,15 @@ class Text extends AbstractData
     }
 
     /**
-     * Extract data from request and return value
-     *
-     * @param \Magento\App\RequestInterface $request
-     * @return array|string
+     * {@inheritdoc}
      */
     public function extractValue(\Magento\App\RequestInterface $request)
     {
-        $value = $this->_getRequestValue($request);
-        return $this->_applyInputFilter($value);
+        return $this->_applyInputFilter($this->_getRequestValue($request));
     }
 
     /**
-     * Validate data
-     * Return true or array of errors
-     *
-     * @param array|string $value
-     * @return boolean|array
+     * {@inheritdoc}
      */
     public function validateValue($value)
     {
@@ -128,24 +109,15 @@ class Text extends AbstractData
     }
 
     /**
-     * Export attribute value to entity model
-     *
-     * @param array|string $value
-     * @return string|value
+     * {@inheritdoc}
      */
     public function compactValue($value)
     {
-        if ($value !== false) {
-            $value;
-        }
-        return false;
+        return $value;
     }
 
     /**
-     * Restore attribute value from SESSION to entity model
-     *
-     * @param array|string $value
-     * @return string|value
+     * {@inheritdoc}
      */
     public function restoreValue($value)
     {
@@ -153,16 +125,10 @@ class Text extends AbstractData
     }
 
     /**
-     * Return formated attribute value from entity model
-     *
-     * @param string $format
-     * @return string|array
+     * {@inheritdoc}
      */
-    public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
+    public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {
-        $value = $this->_value;
-        $value = $this->_applyOutputFilter($value);
-
-        return $value;
+        return $this->_applyOutputFilter($this->_value);
     }
 }

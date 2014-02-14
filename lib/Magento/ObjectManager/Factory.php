@@ -29,6 +29,7 @@ interface Factory
      * Set object manager
      *
      * @param \Magento\ObjectManager $objectManager
+     * @return void
      */
     public function setObjectManager(\Magento\ObjectManager $objectManager);
 
@@ -36,6 +37,7 @@ interface Factory
      * Set application arguments
      *
      * @param array $array
+     * @return void
      */
     public function setArguments($array);
 

@@ -27,6 +27,9 @@ namespace Magento\Tax\Model\Config\Source\Apply;
 
 class On implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

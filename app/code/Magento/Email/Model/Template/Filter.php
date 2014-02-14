@@ -231,10 +231,10 @@ class Filter extends \Magento\Filter\Template
     /**
      * Retrieve Block html directive
      *
+     * @param array $construction
+     * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param string[] $construction
-     * @return string
      */
     public function blockDirective($construction)
     {
@@ -589,9 +589,9 @@ class Filter extends \Magento\Filter\Template
      * Filter the string as template.
      * Rewrited for logging exceptions
      *
-     * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      * @param string $value
      * @return string
+     * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      */
     public function filter($value)
     {

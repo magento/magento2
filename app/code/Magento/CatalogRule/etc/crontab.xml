@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job name="catalogrule_apply_all" instance="Magento\CatalogRule\Model\Observer" method="dailyCatalogUpdate">
-        <schedule>0 1 * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="catalogrule_apply_all" instance="Magento\CatalogRule\Model\Observer" method="dailyCatalogUpdate">
+            <schedule>0 1 * * *</schedule>
+        </job>
+    </group>
 </config>

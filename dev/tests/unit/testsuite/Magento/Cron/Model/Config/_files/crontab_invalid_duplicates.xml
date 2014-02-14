@@ -24,10 +24,12 @@
  */
 -->
 <config>
-    <job name="job1" instance="Model1" method="method1">
-        <schedule>30 2 * * *</schedule>
-    </job>
-    <job name="job1" instance="Model1" method="method1">
-        <schedule>30 2 * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="job1" instance="Model1" method="method1">
+            <schedule>30 2 * * *</schedule>
+        </job>
+        <job name="job1" instance="Model1" method="method1">
+            <schedule>30 2 * * *</schedule>
+        </job>
+    </group>
 </config>

@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
+
+use Magento\HTTP\IClient;
 
 /**
  * Class to manipulate with packages
@@ -31,9 +34,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Connect;
-
 class Packager
 {
     /**
@@ -48,9 +48,11 @@ class Packager
      * @var \Magento\Archive
      */
     protected $_archiver = null;
+
+    /**
+     * @var IClient
+     */
     protected $_http = null;
-
-
 
     /**
      *
@@ -64,18 +66,24 @@ class Packager
         return $this->_archiver;
     }
 
+    /**
+     * @return IClient
+     */
     public function getDownloader()
     {
-        if(is_null($this->_http)) {
+        if (is_null($this->_http)) {
             $this->_http = \Magento\HTTP\Client::getInstance();
         }
         return $this->_http;
     }
 
-
+    /**
+     * @param string $ftpString
+     * @return \Magento\Object[]
+     */
     public function getRemoteConf($ftpString)
     {
-        $ftpObj = new \Magento\Connect\Ftp();
+        $ftpObj = new Ftp();
         $ftpObj->connect($ftpString);
         $cfgFile = "connect.cfg";
         $cacheFile = "cache.cfg";
@@ -85,13 +93,13 @@ class Packager
 
         $remoteConfigExists = $ftpObj->fileExists($cfgFile);
         $tempConfigFile = uniqid($cfgFile."_temp");
-        if(!$remoteConfigExists) {
-            $remoteCfg = new \Magento\Connect\Config($tempConfigFile);
+        if (!$remoteConfigExists) {
+            $remoteCfg = new Config($tempConfigFile);
             $remoteCfg->store();
             $ftpObj->upload($cfgFile, $tempConfigFile);
         } else {
             $ftpObj->get($tempConfigFile, $cfgFile);
-            $remoteCfg = new \Magento\Connect\Config($tempConfigFile);
+            $remoteCfg = new Config($tempConfigFile);
         }
 
         $ftpObj->chdir($wd);
@@ -99,42 +107,48 @@ class Packager
         $remoteCacheExists = $ftpObj->fileExists($cacheFile);
         $tempCacheFile = uniqid($cacheFile."_temp");
 
-        if(!$remoteCacheExists) {
-            $remoteCache = new \Magento\Connect\Singleconfig($tempCacheFile);
+        if (!$remoteCacheExists) {
+            $remoteCache = new Singleconfig($tempCacheFile);
             $remoteCache->clear();
             $ftpObj->upload($cacheFile, $tempCacheFile);
         } else {
             $ftpObj->get($tempCacheFile, $cacheFile);
-            $remoteCache = new \Magento\Connect\Singleconfig($tempCacheFile);
+            $remoteCache = new Singleconfig($tempCacheFile);
         }
         $ftpObj->chdir($wd);
         return array($remoteCache, $remoteCfg, $ftpObj);
     }
 
-
+    /**
+     * @param string $ftpString
+     * @return \Magento\Object[]
+     */
     public function getRemoteCache($ftpString)
     {
 
-        $ftpObj = new \Magento\Connect\Ftp();
+        $ftpObj = new Ftp();
         $ftpObj->connect($ftpString);
         $remoteConfigExists = $ftpObj->fileExists("cache.cfg");
         if(!$remoteConfigExists) {
             $configFile= uniqid("temp_cachecfg_");
-            $remoteCfg = new \Magento\Connect\Singleconfig($configFile);
+            $remoteCfg = new Singleconfig($configFile);
             $remoteCfg->clear();
             $ftpObj->upload("cache.cfg", $configFile);
         } else {
             $configFile = uniqid("temp_cachecfg_");
             $ftpObj->get($configFile, "cache.cfg");
-            $remoteCfg = new \Magento\Connect\Singleconfig($configFile);
+            $remoteCfg = new Singleconfig($configFile);
         }
         return array($remoteCfg, $ftpObj);
     }
 
-
+    /**
+     * @param string $ftpString
+     * @return \Magento\Object[]
+     */
     public function getRemoteConfig($ftpString)
     {
-        $ftpObj = new \Magento\Connect\Ftp();
+        $ftpObj = new Ftp();
         $ftpObj->connect($ftpString);
         $cfgFile = "connect.cfg";
 
@@ -142,17 +156,22 @@ class Packager
         $remoteConfigExists = $ftpObj->fileExists($cfgFile);
         $tempConfigFile = uniqid($cfgFile."_temp");
         if(!$remoteConfigExists) {
-            $remoteCfg = new \Magento\Connect\Config($tempConfigFile);
+            $remoteCfg = new Config($tempConfigFile);
             $remoteCfg->store();
             $ftpObj->upload($cfgFile, $tempConfigFile);
         } else {
             $ftpObj->get($tempConfigFile, $cfgFile);
-            $remoteCfg = new \Magento\Connect\Config($tempConfigFile);
+            $remoteCfg = new Config($tempConfigFile);
         }
         $ftpObj->chdir($wd);
         return array($remoteCfg, $ftpObj);
     }
 
+    /**
+     * @param Singleconfig $cache
+     * @param Ftp $ftpObj
+     * @return void
+     */
     public function writeToRemoteCache($cache, $ftpObj)
     {
         $wd = $ftpObj->getcwd();
@@ -161,6 +180,11 @@ class Packager
         $ftpObj->chdir($wd);
     }
 
+    /**
+     * @param Singleconfig $cache
+     * @param Ftp $ftpObj
+     * @return void
+     */
     public function writeToRemoteConfig($cache, $ftpObj)
     {
         $wd = $ftpObj->getcwd();
@@ -171,11 +195,11 @@ class Packager
 
     /**
      *
-     * @param $chanName
-     * @param $package
-     * @param \Magento\Connect\Singleconfig $cacheObj
-     * @param $ftp
-     * @return unknown_type
+     * @param string $chanName
+     * @param string $package
+     * @param Singleconfig $cacheObj
+     * @param Config $configObj
+     * @return void
      */
     public function processUninstallPackage($chanName, $package, $cacheObj, $configObj)
     {
@@ -196,11 +220,11 @@ class Packager
 
     /**
      *
-     * @param $chanName
-     * @param $package
-     * @param \Magento\Connect\Singleconfig $cacheObj
-     * @param \Magento\Connect\Ftp $ftp
-     * @return unknown_type
+     * @param string $chanName
+     * @param string $package
+     * @param Singleconfig $cacheObj
+     * @param Ftp $ftp
+     * @return void
      */
     public function processUninstallPackageFtp($chanName, $package, $cacheObj, $ftp)
     {
@@ -213,11 +237,23 @@ class Packager
         $ftp->chdir($ftpDir);
     }
 
+    /**
+     * @param string $str
+     * @return string
+     */
     protected function convertFtpPath($str)
     {
         return str_replace("\\", "/", $str);
     }
 
+    /**
+     *
+     * @param string $package
+     * @param string $file
+     * @param Config $configObj
+     * @param Ftp $ftp
+     * @return void
+     */
     public function processInstallPackageFtp($package, $file, $configObj, $ftp)
     {
         $ftpDir = $ftp->getcwd();
@@ -249,6 +285,7 @@ class Packager
      * Package installation to FS
      * @param \Magento\Connect\Package $package
      * @param string $file
+     * @param Config $configObj
      * @return void
      * @throws \Exception
      */
@@ -284,11 +321,11 @@ class Packager
 
     /**
      * Get local modified files
-     * @param $chanName
-     * @param $package
-     * @param $cacheObj
-     * @param $configObj
-     * @return array
+     * @param string $chanName
+     * @param string $package
+     * @param Singleconfig $cacheObj
+     * @param Config $configObj
+     * @return string[]
      */
     public function getLocalModifiedFiles($chanName, $package, $cacheObj, $configObj)
     {
@@ -306,11 +343,11 @@ class Packager
     /**
      * Get remote modified files
      *
-     * @param $chanName
-     * @param $package
-     * @param $cacheObj
-     * @param \Magento\Connect\Ftp $ftp
-     * @return array
+     * @param string $chanName
+     * @param string $package
+     * @param Singleconfig $cacheObj
+     * @param Ftp $ftp
+     * @return string[]
      */
     public function getRemoteModifiedFiles($chanName, $package, $cacheObj, $ftp)
     {
@@ -333,11 +370,11 @@ class Packager
 
 
     /**
-     *
      * Get upgrades list
      *
      * @param string/array $channels
-     * @param \Magento\Connect\Singleconfig $cacheObject
+     * @param Singleconfig $cacheObject
+     * @param Config $configObj
      * @param \Magento\Connect\Rest $restObj optional
      * @param bool $checkConflicts
      * @return array
@@ -367,7 +404,7 @@ class Packager
             }
 
             $channel = $cacheObject->getChannel($chan);
-            $uri = $channel[\Magento\Connect\Singleconfig::K_URI];
+            $uri = $channel[Singleconfig::K_URI];
             $restObj->setChannel($uri);
             $remotePackages = $restObj->getPackagesHashed();
 
@@ -382,7 +419,7 @@ class Packager
                 }
                 $package = $remotePackages[$localName];
                 $neededToUpgrade = false;
-                $remoteVersion = $localVersion = trim($localData[\Magento\Connect\Singleconfig::K_VER]);
+                $remoteVersion = $localVersion = trim($localData[Singleconfig::K_VER]);
                 foreach($package as $version => $s) {
 
                     if( $cacheObject->compareStabilities($s, $state) < 0 ) {
@@ -415,10 +452,11 @@ class Packager
 
     /**
      * Get uninstall list
+     *
      * @param string $chanName
      * @param string $package
-     * @param \Magento\Connect\Singleconfig $cache
-     * @param \Magento\Connect\Config $config
+     * @param Singleconfig $cache
+     * @param Config $config
      * @param bool $withDepsRecursive
      * @return array
      */
@@ -485,14 +523,16 @@ class Packager
     /**
      * Get dependencies list/install order info
      *
-     *
      * @param string $chanName
      * @param string $package
-     * @param \Magento\Connect\Singleconfig $cache
-     * @param \Magento\Connect\Config $config
-     * @param mixed $versionMax
-     * @param mixed $versionMin
-     * @return mixed
+     * @param Singleconfig $cache
+     * @param Config $config
+     * @param string|false $versionMax
+     * @param string|false $versionMin
+     * @param bool $withDepsRecursive
+     * @param bool $forceRemote
+     * @return array
+     * @throws \Exception
      */
     public function getDependenciesList($chanName, $package, $cache, $config, $versionMax = false, $versionMin = false,
         $withDepsRecursive = true, $forceRemote = false
@@ -623,7 +663,7 @@ class Packager
      * Process dependencies hash
      * Makes topological sorting and gives operation order list
      *
-     * @param array $depsHash
+     * @param array &$depsHash
      * @param bool $sortReverse
      * @return array
      */

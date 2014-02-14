@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Widget\Grid\Row;
 
 /**
  * Grid row url generator
  */
-namespace Magento\Backend\Model\Widget\Grid\Row;
-
 class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorInterface
 {
     /**
@@ -73,6 +72,7 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
 
     /**
      * Create url for passed item using passed url model
+     *
      * @param \Magento\Object $item
      * @return string
      */
@@ -87,8 +87,9 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
 
     /**
      * Convert template params array and merge with preselected params
-     * @param $item
-     * @return mixed
+     *
+     * @param \Magento\Object $item
+     * @return array
      */
     protected function _prepareParameters($item)
     {

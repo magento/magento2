@@ -77,7 +77,7 @@ if ($exist = ($this->getProductCollection() && $this->getProductCollection()->ge
                                             <?php if($_item->isSaleable()): ?>
                                                 <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
                                                     <button class="action tocart"
-                                                            data-mage-init="{redirectUrl: {url: '<?php echo $this->getAddToCartUrl($_item) ?>'}}"
+                                                            data-mage-init='{"redirectUrl":{"url":"<?php echo $this->getAddToCartUrl($_item) ?>"}}'
                                                             type="button" title="<?php echo __('Add to Cart') ?>">
                                                         <span><?php echo __('Add to Cart') ?></span>
                                                     </button>

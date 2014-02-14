@@ -24,5 +24,7 @@
  */
 -->
 <config>
-    <job name="system_backup" instance="Magento\Backup\Model\Observer" method="scheduledBackup" />
+    <group id="default">
+        <job name="system_backup" instance="Magento\Backup\Model\Observer" method="scheduledBackup" />
+    </group>
 </config>

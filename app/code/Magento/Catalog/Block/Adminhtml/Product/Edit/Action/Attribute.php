@@ -34,30 +34,36 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action;
 
+use Magento\Catalog\Helper\Product\Edit\Action\Attribute as ActionAttribute;
+use Magento\Catalog\Model\Resource\Product\Collection;
+
 class Attribute extends \Magento\Backend\Block\Widget
 {
 
     /**
      * Adminhtml catalog product edit action attribute
      *
-     * @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
+     * @var ActionAttribute
      */
     protected $_helperActionAttribute = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helperActionAttribute
+     * @param ActionAttribute $helperActionAttribute
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helperActionAttribute,
+        ActionAttribute $helperActionAttribute,
         array $data = array()
     ) {
         $this->_helperActionAttribute = $helperActionAttribute;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
@@ -85,7 +91,7 @@ class Attribute extends \Magento\Backend\Block\Widget
     /**
      * Retrieve selected products for update
      *
-     * @return unknown
+     * @return Collection
      */
     public function getProducts()
     {
@@ -95,7 +101,7 @@ class Attribute extends \Magento\Backend\Block\Widget
     /**
      * Retrieve block attributes update helper
      *
-     * @return \Magento\Catalog\Helper\Product\Edit\Action\Attribute
+     * @return ActionAttribute|null
      */
     protected function _getHelper()
     {

@@ -112,7 +112,7 @@ implements \Magento\HTTP\IClient
      * User overrides options hash
      * Are applied before curl_exec
      *
-     * @var array();
+     * @var array
      */
     protected $_curlUserOptions = array();
 
@@ -246,11 +246,12 @@ implements \Magento\HTTP\IClient
 
     /**
      * Make POST request
-     * @see lib/Magento/HTTP/\Magento\HTTP\Client#post($uri, $params)
      *
      * @param string $uri
      * @param array $params
      * @return void
+     *
+     * @see lib/Magento/HTTP/\Magento\HTTP\Client#post($uri, $params)
      */
     public function post($uri, $params)
     {

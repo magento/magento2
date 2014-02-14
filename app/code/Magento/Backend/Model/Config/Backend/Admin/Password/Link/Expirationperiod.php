@@ -39,7 +39,7 @@ class Expirationperiod
     /**
      * Validate expiration period value before saving
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Password\Link\Expirationperiod
+     * @return $this
      */
     protected function _beforeSave()
     {

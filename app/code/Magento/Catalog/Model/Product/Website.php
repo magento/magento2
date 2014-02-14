@@ -44,6 +44,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -65,7 +66,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Product\Website
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function removeProducts($websiteIds, $productIds)
@@ -85,7 +86,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Product\Website
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function addProducts($websiteIds, $productIds)

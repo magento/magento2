@@ -145,7 +145,7 @@ class Handler
     /**
      * Convert service response into format acceptable by SoapServer.
      *
-     * @param object|array|string|int|double|null $data
+     * @param object|array|string|int|float|null $data
      * @return array
      * @throws \InvalidArgumentException
      */

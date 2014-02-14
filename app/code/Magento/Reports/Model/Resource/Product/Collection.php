@@ -60,7 +60,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     protected $_productEntityTypeId;
 
     /**
-     * select count
+     * Select count
      *
      * @var int
      */
@@ -169,7 +169,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Set product entity id
      *
-     * @param $entityId
+     * @param string $entityId
      * @return $this
      */
     public function setProductEntityId($entityId)

@@ -116,9 +116,9 @@
                 var SSChecked<?php echo $_code ?> = function() {
                     var elm = $('<?php echo $_code ?>_cc_type');
                     if (['SS','SM','SO'].indexOf(elm.value) != -1) {
-                        $('<?php echo $_code ?>_cc_type_ss_div').show();
+                        jQuery('#' + '<?php echo $_code ?>_cc_type_ss_div').show().removeClass('ignore-validate');
                     } else {
-                        $('<?php echo $_code ?>_cc_type_ss_div').hide();
+                        jQuery('#' + '<?php echo $_code ?>_cc_type_ss_div').hide().addClass('ignore-validate');
                     }
                 };
                 Event.observe($('<?php echo $_code ?>_cc_type'), 'change', SSChecked<?php echo $_code ?>);

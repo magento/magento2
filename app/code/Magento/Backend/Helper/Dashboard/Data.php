@@ -46,7 +46,7 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
-     * @param $installDate
+     * @param string $installDate
      * @param bool $dbCompatibleMode
      */
     public function __construct(
@@ -72,7 +72,7 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Retrieve stores configured in system.
      *
-     * @return array
+     * @return \Magento\Data\Collection\Db
      */
     public function getStores()
     {

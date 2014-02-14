@@ -28,6 +28,9 @@ namespace Magento\Tax\Model\System\Config\Source\Tax;
 
 class Region implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @var array
+     */
     protected $_options;
 
     /**
@@ -43,6 +46,11 @@ class Region implements \Magento\Core\Model\Option\ArrayInterface
         $this->_regionsFactory = $regionsFactory;
     }
 
+    /**
+     * @param bool $noEmpty
+     * @param string|array|null $country
+     * @return array
+     */
     public function toOptionArray($noEmpty = false, $country = null)
     {
         /** @var $region \Magento\Directory\Model\Resource\Region\Collection */

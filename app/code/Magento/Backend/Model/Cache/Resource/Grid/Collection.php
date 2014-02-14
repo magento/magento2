@@ -49,7 +49,7 @@ class Collection extends \Magento\Data\Collection
      *
      * @param bool $printQuery
      * @param bool $logQuery
-     * @return \Magento\Backend\Model\Cache\Resource\Grid\Collection
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadData($printQuery = false, $logQuery = false)

@@ -64,7 +64,7 @@ $bootstrap = new \Magento\TestFramework\Bootstrap(
     new \Magento\TestFramework\Bootstrap\Environment(),
     new \Magento\TestFramework\Bootstrap\DocBlock("$testsBaseDir/testsuite"),
     new \Magento\TestFramework\Bootstrap\Profiler(new \Magento\Profiler\Driver\Standard()),
-    new \Magento\Shell(),
+    new \Magento\Shell(new \Magento\OSInfo()),
     $testsTmpDir
 );
 $bootstrap->runBootstrap();

@@ -32,6 +32,8 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
+use Magento\Backend\Block\Widget\Form;
+
 class Formgroup
     extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -58,6 +60,9 @@ class Formgroup
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
@@ -99,6 +104,9 @@ class Formgroup
         $this->setForm($form);
     }
 
+    /**
+     * @return int
+     */
     protected function _getSetId()
     {
         return ( intval($this->getRequest()->getParam('id')) > 0 )

@@ -80,9 +80,7 @@ class CssResolver
                 $filePath = dirname($originalPath) . '/' . $originalRelativeUrl;
             }
             $filePath = $this->viewFileSystem->normalizePath(str_replace('\\', '/', $filePath));
-            $relativePath = $this->_getFileRelativePath(
-                str_replace('\\', '/', $newPath), $filePath
-            );
+            $relativePath = $this->_getFileRelativePath(str_replace('\\', '/', $newPath), $filePath);
             $urlNotationNew = str_replace($originalRelativeUrl, $relativePath, $urlNotation);
             $cssContent = str_replace($urlNotation, $urlNotationNew, $cssContent);
         }

@@ -26,6 +26,10 @@
 
 namespace Magento\Catalog\Helper;
 
+use Magento\Catalog\Model\Category as ModelCategory;
+use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Filter\Template;
+
 class Output extends \Magento\App\Helper\AbstractHelper
 {
     /**
@@ -38,14 +42,14 @@ class Output extends \Magento\App\Helper\AbstractHelper
     /**
      * Template processor instance
      *
-     * @var \Magento\Filter\Template
+     * @var Template
      */
     protected $_templateProcessor = null;
 
     /**
      * Catalog data
      *
-     * @var \Magento\Catalog\Helper\Data
+     * @var Data
      */
     protected $_catalogData = null;
 
@@ -64,13 +68,13 @@ class Output extends \Magento\App\Helper\AbstractHelper
     /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param Data $catalogData
      * @param \Magento\Escaper $escaper
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Catalog\Helper\Data $catalogData,
+        Data $catalogData,
         \Magento\Escaper $escaper
     ) {
         $this->_eavConfig = $eavConfig;
@@ -79,6 +83,9 @@ class Output extends \Magento\App\Helper\AbstractHelper
         parent::__construct($context);
     }
 
+    /**
+     * @return Template
+     */
     protected function _getTemplateProcessor()
     {
         if (null === $this->_templateProcessor) {
@@ -91,9 +98,9 @@ class Output extends \Magento\App\Helper\AbstractHelper
     /**
      * Adding method handler
      *
-     * @param   string $method
-     * @param   object $handler
-     * @return  \Magento\Catalog\Helper\Output
+     * @param string $method
+     * @param object $handler
+     * @return $this
      */
     public function addHandler($method, $handler)
     {
@@ -113,8 +120,8 @@ class Output extends \Magento\App\Helper\AbstractHelper
     /**
      * Get all handlers for some method
      *
-     * @param   string $method
-     * @return  array
+     * @param string $method
+     * @return array
      */
     public function getHandlers($method)
     {
@@ -125,10 +132,10 @@ class Output extends \Magento\App\Helper\AbstractHelper
     /**
      * Process all method handlers
      *
-     * @param   string $method
-     * @param   mixed $result
-     * @param   array $params
-     * @return unknown
+     * @param string $method
+     * @param mixed $result
+     * @param array $params
+     * @return mixed
      */
     public function process($method, $result, $params)
     {
@@ -143,14 +150,14 @@ class Output extends \Magento\App\Helper\AbstractHelper
     /**
      * Prepare product attribute html output
      *
-     * @param   \Magento\Catalog\Model\Product $product
-     * @param   string $attributeHtml
-     * @param   string $attributeName
-     * @return  string
+     * @param ModelProduct $product
+     * @param string $attributeHtml
+     * @param string $attributeName
+     * @return string
      */
     public function productAttribute($product, $attributeHtml, $attributeName)
     {
-        $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeName);
+        $attribute = $this->_eavConfig->getAttribute(ModelProduct::ENTITY, $attributeName);
         if ($attribute && $attribute->getId() && ($attribute->getFrontendInput() != 'media_image')
             && (!$attribute->getIsHtmlAllowedOnFront() && !$attribute->getIsWysiwygEnabled())) {
                 if ($attribute->getFrontendInput() != 'price') {
@@ -177,14 +184,14 @@ class Output extends \Magento\App\Helper\AbstractHelper
     /**
      * Prepare category attribute html output
      *
-     * @param   \Magento\Catalog\Model\Category $category
-     * @param   string $attributeHtml
-     * @param   string $attributeName
-     * @return  string
+     * @param ModelCategory $category
+     * @param string $attributeHtml
+     * @param string $attributeName
+     * @return string
      */
     public function categoryAttribute($category, $attributeHtml, $attributeName)
     {
-        $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Category::ENTITY, $attributeName);
+        $attribute = $this->_eavConfig->getAttribute(ModelCategory::ENTITY, $attributeName);
 
         if ($attribute && ($attribute->getFrontendInput() != 'image')
             && (!$attribute->getIsHtmlAllowedOnFront() && !$attribute->getIsWysiwygEnabled())) {

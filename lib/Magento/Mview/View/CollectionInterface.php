@@ -35,14 +35,6 @@ interface CollectionInterface
     public function getViewsByStateMode($mode);
 
     /**
-     * Return views by given state status
-     *
-     * @param string $status
-     * @return \Magento\Mview\ViewInterface[]
-     */
-    public function getViewsByStateStatus($status);
-
-    /**
      * Search all views by field value
      *
      * @param   string $column

@@ -52,6 +52,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'id';
@@ -64,6 +67,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('delete', 'label', __('Delete Search'));
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderText()
     {
         if ($this->coreRegistry->registry('current_catalog_search')->getId()) {

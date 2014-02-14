@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job name="core_clean_cache" instance="Magento\Core\Model\Observer" method="cleanCache">
-        <schedule>30 2 * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="core_clean_cache" instance="Magento\Core\Model\Observer" method="cleanCache">
+            <schedule>30 2 * * *</schedule>
+        </job>
+    </group>
 </config>

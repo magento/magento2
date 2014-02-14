@@ -38,7 +38,7 @@ class Mapper
     /**
      * Dependency Field model
      *
-     * @var \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory
+     * @var FieldFactory
      */
     protected $_fieldFactory;
 
@@ -52,12 +52,12 @@ class Mapper
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator
-     * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+     * @param FieldFactory $fieldFactory
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator,
-        \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+        FieldFactory $fieldFactory
     ) {
 
         $this->_fieldLocator = $fieldLocator;

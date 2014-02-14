@@ -111,6 +111,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Set grid params
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -140,7 +141,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Add filter
      *
      * @param object $column
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Upsell
+     * @return $this
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -200,7 +201,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add columns to grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareColumns()
     {

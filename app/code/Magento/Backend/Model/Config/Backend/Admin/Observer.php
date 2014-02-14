@@ -81,6 +81,7 @@ class Observer
     /**
      * Log out user and redirect him to new admin custom url
      *
+     * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function afterCustomUrlChanged()

@@ -60,6 +60,9 @@ class Image extends \Magento\Data\Form\Element\Image
         parent::__construct($factoryElement, $factoryCollection, $escaper, $urlBuilder, $data);
     }
 
+    /**
+     * @return bool|string
+     */
     protected function _getUrl()
     {
         $url = false;

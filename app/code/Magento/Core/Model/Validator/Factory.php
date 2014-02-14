@@ -40,7 +40,7 @@ class Factory
     /**
      * Validator config files
      *
-     * @var array
+     * @var array|null
      */
     protected $_configFiles = null;
 
@@ -65,6 +65,8 @@ class Factory
 
     /**
      * Create and set default translator to \Magento\Validator\AbstractValidator.
+     *
+     * @return void
      */
     protected function _initializeDefaultTranslator()
     {

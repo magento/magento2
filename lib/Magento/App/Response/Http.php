@@ -30,7 +30,7 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
     /**
      * Cookie to store page vary string
      */
-    const COOKIE_VARY_STRING = 'X-VARY-STRING';
+    const COOKIE_VARY_STRING = 'X-Magento-Vary';
 
     /**
      * Response vary identifiers

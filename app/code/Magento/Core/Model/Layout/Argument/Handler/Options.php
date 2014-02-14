@@ -52,7 +52,7 @@ class Options extends \Magento\Core\Model\Layout\Argument\AbstractHandler
      * Process Option argument
      *
      * @param array $argument
-     * @return string
+     * @return array
      * @throws \InvalidArgumentException
      */
     public function process(array $argument)

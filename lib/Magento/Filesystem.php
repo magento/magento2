@@ -189,17 +189,4 @@ class Filesystem
         $config = $this->directoryList->getConfig($code);
         return isset($config['uri']) ? $config['uri'] : '';
     }
-
-    /**
-     * Retrieve absolute path for for given code
-     *
-     * @param string $code
-     * @return string
-     */
-    public function getPath($code = '')
-    {
-        $config = $this->directoryList->getConfig($code);
-        $path = isset($config['path']) ? $config['path'] : '';
-        return str_replace('\\', '/', $path);
-    }
 }

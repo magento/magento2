@@ -36,7 +36,7 @@ $customerAddress->setCustomerId(1)
         'postcode' => 75477,
         'country_id' => 'US',
         'city' => 'CityM',
-        'street' => 'Green str, 67',
+        'street' => array('Green str, 67'),
         'lastname' => 'Smith',
         'firstname' => 'John',
         'parent_id' => 1,

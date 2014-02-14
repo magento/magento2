@@ -63,7 +63,7 @@ class Database extends \Magento\Core\Model\Config\Value
     /**
      * Create db structure
      *
-     * @return \Magento\Backend\Model\Config\Backend\Storage\Media\Database
+     * @return $this
      */
     protected function _afterSave()
     {

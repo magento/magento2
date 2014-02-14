@@ -72,7 +72,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_storeIds = array();
 
     /**
-     * Add days in whishlist filter of product collection
+     * Add days in wishlist filter of product collection
      *
      * @var boolean
      */
@@ -174,7 +174,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
      * @param \Magento\App\State $appState
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -227,7 +227,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * After load processing
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -248,7 +248,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add options to items
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     protected function _assignOptions()
     {
@@ -270,7 +270,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add products to items and item options
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     protected function _assignProducts()
     {
@@ -345,7 +345,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by wishlist object
      *
      * @param \Magento\Wishlist\Model\Wishlist $wishlist
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addWishlistFilter(\Magento\Wishlist\Model\Wishlist $wishlist)
     {
@@ -357,7 +357,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filtration by customer id
      *
      * @param int $customerId
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addCustomerIdFilter($customerId)
     {
@@ -375,8 +375,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by shared stores
      *
      * @param array $storeIds
-     *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addStoreFilter($storeIds = array())
     {
@@ -392,7 +391,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add items store data to collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addStoreData()
     {
@@ -407,7 +406,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Reset sort order
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function resetSortOrder()
     {
@@ -419,7 +418,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set product Visibility Filter to product collection flag
      *
      * @param bool $flag
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function setVisibilityFilter($flag = true)
     {
@@ -432,7 +431,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * This filter apply Salable Product Types Filter to product collection.
      *
      * @param bool $flag
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function setSalableFilter($flag = true)
     {
@@ -445,7 +444,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * This filter remove items with no salable product.
      *
      * @param bool $flag
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function setInStockFilter($flag = true)
     {
@@ -456,7 +455,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Set flag of adding days in wishlist
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addDaysInWishlist()
     {
@@ -467,10 +466,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Adds filter on days in wishlist
      *
-     * $constraints may contain 'from' and 'to' indexes with number of days to look for items
+     * The $constraints may contain 'from' and 'to' indexes with number of days to look for items
      *
      * @param array $constraints
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addDaysFilter($constraints)
     {
@@ -507,7 +506,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Joins product name attribute value to use it in WHERE and ORDER clauses
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     protected function _joinProductNameTable()
     {
@@ -538,7 +537,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Adds filter on product name
      *
      * @param string $productName
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addProductNameFilter($productName)
     {
@@ -553,7 +552,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Sets ordering by product name
      *
      * @param string $dir
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return $this
      */
     public function setOrderByProductName($dir)
     {
@@ -581,7 +580,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection|\Magento\Data\Collection\Db
+     * @return $this
      */
     protected function _afterLoadData()
     {

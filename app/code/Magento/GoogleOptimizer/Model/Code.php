@@ -1,4 +1,6 @@
 <?php
+namespace Magento\GoogleOptimizer\Model;
+
 /**
  * Google Experiment Code Model
  *
@@ -33,8 +35,6 @@
  * @method \Magento\GoogleOptimizer\Model\Code setExperimentScript(int $value)
  * @method string getExperimentScript()
  */
-namespace Magento\GoogleOptimizer\Model;
-
 class Code extends \Magento\Core\Model\AbstractModel
 {
     /**#@+
@@ -52,6 +52,7 @@ class Code extends \Magento\Core\Model\AbstractModel
 
     /**
      * Model construct that should be used for object initialization
+     * @return void
      */
     protected function _construct()
     {
@@ -65,7 +66,7 @@ class Code extends \Magento\Core\Model\AbstractModel
      * @param int $entityId
      * @param string $entityType One of self::CODE_ENTITY_TYPE_
      * @param int $storeId
-     * @return \Magento\GoogleOptimizer\Model\Code
+     * @return $this
      */
     public function loadByEntityIdAndType($entityId, $entityType, $storeId = 0)
     {

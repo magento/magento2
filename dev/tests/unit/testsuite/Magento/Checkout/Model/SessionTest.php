@@ -31,6 +31,16 @@ include(__DIR__ . '/../_files/session.php');
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
+    protected $_helper;
+
+    public function setUp()
+    {
+        $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+    }
+
+    /**
      * @param int|null $orderId
      * @param int|null $incrementId
      * @param \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject $orderMock
@@ -59,8 +69,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMock('\Magento\App\Request\Http', array(), array(), '', false);
         $request->expects($this->any())->method('getHttpHost')->will($this->returnValue(array()));
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $constructArguments = $objectManager->getConstructArguments(
+        $constructArguments = $this->_helper->getConstructArguments(
             'Magento\Checkout\Model\Session',
             array(
                 'request' => $this->getMock('Magento\App\RequestInterface', array(), array(), '', false),
@@ -71,7 +80,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             )
         );
         /** @var \Magento\Checkout\Model\Session $session */
-        $session = $objectManager->getObject('Magento\Checkout\Model\Session', $constructArguments);
+        $session = $this->_helper->getObject('Magento\Checkout\Model\Session', $constructArguments);
         $session->setLastRealOrderId($orderId);
 
         $this->assertSame($orderMock, $session->getLastRealOrder());
@@ -122,5 +131,35 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         }
 
         return $order;
+    }
+
+    /**
+     * @param $paramToClear
+     * @dataProvider clearHelperDataDataProvider
+     */
+    public function testClearHelperData($paramToClear)
+    {
+        $storage = new \Magento\Session\Storage('default', array($paramToClear => 'test_data'));
+        $session = $this->_helper->getObject(
+            'Magento\Checkout\Model\Session',
+            array('storage' => $storage)
+        );
+
+        $session->clearHelperData();
+        $this->assertNull($session->getData($paramToClear));
+    }
+
+    /**
+     * @return array
+     */
+    public function clearHelperDataDataProvider()
+    {
+        return array(
+            array('redirect_url'),
+            array('last_order_id'),
+            array('last_real_order_id'),
+            array('last_recurring_profile_ids'),
+            array('additional_messages')
+        );
     }
 }

@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Controller\Adminhtml;
+
+use Magento\Backend\App\AbstractAction;
 
 /**
  * System admin controller
@@ -31,10 +34,11 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Controller\Adminhtml;
-
-class System extends \Magento\Backend\App\AbstractAction
+class System extends AbstractAction
 {
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_view->loadLayout();
@@ -46,6 +50,9 @@ class System extends \Magento\Backend\App\AbstractAction
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function setStoreAction()
     {
         $storeId = (int) $this->getRequest()->getParam('store');
@@ -55,6 +62,9 @@ class System extends \Magento\Backend\App\AbstractAction
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Adminhtml::system');

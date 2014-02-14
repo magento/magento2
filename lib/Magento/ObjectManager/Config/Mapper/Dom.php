@@ -202,10 +202,11 @@ class Dom implements \Magento\Config\ConverterInterface
     /**
      * Retrieve value of the given node
      * Treat all child nodes as an assoc array
-     * @todo this method has high cyclomatic complexity in order to avoid performance issues
+     *
      * @param \DOMNode $valueNode
      * @return array|string
      * @throws \InvalidArgumentException
+     * @todo this method has high cyclomatic complexity in order to avoid performance issues
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _processValueNode(\DOMNode $valueNode)

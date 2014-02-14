@@ -107,6 +107,8 @@ class Server
 
     /**
      * Handle SOAP request. Response is sent by SOAP server.
+     *
+     * @return void
      */
     public function handle()
     {
@@ -128,7 +130,7 @@ class Server
     public function getApiCharset()
     {
         $charset = $this->_storeManager->getStore()->getConfig(self::CONFIG_PATH_SOAP_CHARSET);
-        return $charset ? $charset : \Magento\Webapi\Model\Soap\Server::SOAP_DEFAULT_ENCODING;
+        return $charset ? $charset : self::SOAP_DEFAULT_ENCODING;
     }
 
     /**
@@ -141,7 +143,7 @@ class Server
     {
         $params = array(
             self::REQUEST_PARAM_SERVICES => $this->_request->getParam(
-                \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_SERVICES
+                self::REQUEST_PARAM_SERVICES
             )
         );
         if ($isWsdl) {
@@ -166,8 +168,8 @@ class Server
      * Generate exception if request is invalid.
      *
      * @param string $soapRequest
-     * @throws \Magento\Webapi\Exception with invalid SOAP extension
-     * @return \Magento\Webapi\Model\Soap\Server
+     * @throws \Magento\Webapi\Exception With invalid SOAP extension
+     * @return $this
      */
     protected function _checkRequest($soapRequest)
     {

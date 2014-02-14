@@ -83,6 +83,8 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Check and prepare file system
      *
+     * @return $this
+     * @throws \Exception
      */
     public function install()
     {

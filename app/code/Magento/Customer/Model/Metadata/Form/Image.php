@@ -20,8 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -39,14 +37,14 @@ class Image extends File
      */
     protected function _validateByRules($value)
     {
-        $label  = __($this->getAttribute()->getStoreLabel());
+        $label  = $value['name'];
         $rules  = $this->getAttribute()->getValidationRules();
 
         $imageProp = @getimagesize($value['tmp_name']);
 
-        if (!is_uploaded_file($value['tmp_name']) || !$imageProp) {
+        if (!$this->_isUploadedFile($value['tmp_name']) || !$imageProp) {
             return array(
-                __('"%1" is not a valid file', $label)
+                __('"%1" is not a valid file.', $label)
             );
         }
 
@@ -58,7 +56,7 @@ class Image extends File
 
         if (!isset($allowImageTypes[$imageProp[2]])) {
             return array(
-                __('"%1" is not a valid image format', $label)
+                __('"%1" is not a valid image format.', $label)
             );
         }
 

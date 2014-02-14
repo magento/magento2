@@ -38,6 +38,7 @@ class Option extends \Magento\Object
 {
     /**
      * Returns value of this option
+     *
      * @return mixed
      */
     public function getValue()

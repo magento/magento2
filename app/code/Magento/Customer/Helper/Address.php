@@ -189,7 +189,7 @@ class Address extends \Magento\App\Helper\AbstractHelper
     public function getFormat($code)
     {
         $format = $this->_addressConfig->getFormatByCode($code);
-        return $format->getRenderer() ? $format->getRenderer()->getFormat() : '';
+        return $format->getRenderer() ? $format->getRenderer()->getFormatArray() : '';
     }
 
     /**

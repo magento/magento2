@@ -48,6 +48,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_coreStoreConfig;
 
     /**
+     * Escaper
+     *
      * @var \Magento\Escaper
      */
     protected $_escaper;
@@ -71,6 +73,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
+     * Get review detail
+     *
      * @param string $origDetail
      * @return string
      */
@@ -80,7 +84,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * getDetailHtml return short detail info in HTML
+     * Return short detail info in HTML
+     *
      * @param string $origDetail Full detail info
      * @return string
      */
@@ -90,6 +95,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
+     * Return an indicator of whether or not guest is allowed to write
+     *
      * @return bool
      */
     public function getIsGuestAllowToWrite()

@@ -79,7 +79,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param mixed $store
      * @param bool $withAdmin
-     * @return \Magento\Core\Model\Resource\Url\Rewrite\Collection
+     * @return $this
      */
     public function addStoreFilter($store, $withAdmin = true)
     {
@@ -99,7 +99,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *  Add filter by catalog product Id
      *
      * @param int $productId
-     * @return \Magento\Core\Model\Resource\Url\Rewrite\Collection
+     * @return $this
      */
     public function filterAllByProductId($productId)
     {
@@ -113,7 +113,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add filter by all catalog category
      *
-     * @return \Magento\Core\Model\Resource\Url\Rewrite\Collection
+     * @return $this
      */
     public function filterAllByCategory()
     {

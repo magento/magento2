@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Cache;
 
 /**
  * System / Cache Management / Cache type "EAV types and attributes"
  *
  * @todo utilize the class for all manipulations with the cache type
  */
-namespace Magento\Eav\Model\Cache;
-
 class Type extends \Magento\Cache\Frontend\Decorator\TagScope
 {
     /**

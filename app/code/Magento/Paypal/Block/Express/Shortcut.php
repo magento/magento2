@@ -29,14 +29,10 @@
  */
 namespace Magento\Paypal\Block\Express;
 
-class Shortcut extends \Magento\View\Element\Template
-{
-    /**
-     * Position of "OR" label against shortcut
-     */
-    const POSITION_BEFORE = 'before';
-    const POSITION_AFTER = 'after';
+use Magento\Catalog\Block as CatalogBlock;
 
+class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\ShortcutInterface
+{
     /**
      * Whether the block should be eventually rendered
      *
@@ -136,10 +132,10 @@ class Shortcut extends \Magento\View\Element\Template
         \Magento\Core\Model\Registry $registry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
         \Magento\Math\Random $mathRandom,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession = null,
         array $data = array()
     ) {
         $this->_registry = $registry;
@@ -164,7 +160,7 @@ class Shortcut extends \Magento\View\Element\Template
         $params = array($this->_paymentMethodCode);
         $config = $this->_paypalConfigFactory->create(array('params' => $params));
         $isInCatalog = $this->getIsInCatalogProduct();
-        $quote = ($isInCatalog || '' == $this->getIsQuoteAllowed()) ? null : $this->_checkoutSession->getQuote();
+        $quote = ($isInCatalog || !$this->_checkoutSession) ? null : $this->_checkoutSession->getQuote();
 
         // check visibility on cart or product page
         $context = $isInCatalog ? 'visible_on_product' : 'visible_on_cart';
@@ -251,8 +247,7 @@ class Shortcut extends \Magento\View\Element\Template
      */
     public function isOrPositionBefore()
     {
-        return ($this->getIsInCatalogProduct() && !$this->getShowOrPosition())
-            || ($this->getShowOrPosition() && $this->getShowOrPosition() == self::POSITION_BEFORE);
+        return $this->getShowOrPosition() == CatalogBlock\ShortcutButtons::POSITION_BEFORE;
 
     }
 
@@ -263,7 +258,16 @@ class Shortcut extends \Magento\View\Element\Template
      */
     public function isOrPositionAfter()
     {
-        return (!$this->getIsInCatalogProduct() && !$this->getShowOrPosition())
-            || ($this->getShowOrPosition() && $this->getShowOrPosition() == self::POSITION_AFTER);
+        return $this->getShowOrPosition() == CatalogBlock\ShortcutButtons::POSITION_AFTER;
+    }
+
+    /**
+     * Get shortcut alias
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'product.info.addtocart.paypal';
     }
 }

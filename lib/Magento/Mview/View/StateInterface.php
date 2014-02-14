@@ -38,6 +38,7 @@ interface StateInterface
      */
     const STATUS_IDLE = 'idle';
     const STATUS_WORKING = 'working';
+    const STATUS_SUSPENDED = 'suspended';
     /**#@-*/
 
     /**

@@ -34,7 +34,7 @@
     <type name="Magento\Sales\Model\Quote\Item\RelatedProducts">
         <param name="relatedProductTypes">
             <array>
-                <item key="grouped"><value type="const">\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</value></item>
+                <item key="grouped"><value type="const">Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</value></item>
             </array>
         </param>
     </type>
@@ -48,7 +48,7 @@
     <type name="Magento\Sales\Model\Resource\Report\Bestsellers">
         <param name="ignoredProductTypes">
             <array>
-                <item key="grouped"><value type="const">\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</value></item>
+                <item key="grouped"><value type="const">Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</value></item>
             </array>
         </param>
     </type>

@@ -36,6 +36,10 @@ namespace Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer;
 
 class Data extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @param \Magento\Object $row
+     * @return int|string
+     */
     protected function _getValue (\Magento\Object $row)
     {
         $data = parent::_getValue($row);

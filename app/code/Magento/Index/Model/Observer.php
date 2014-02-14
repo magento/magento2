@@ -33,8 +33,6 @@ class Observer
     /**
      * @var \Magento\Index\Model\Indexer
      *
-     * @var \Magento\Index\Model\Indexer
-     */
     protected $_indexer;
 
     /**

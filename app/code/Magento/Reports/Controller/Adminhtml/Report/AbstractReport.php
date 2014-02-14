@@ -84,7 +84,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     /**
      * Add report breadcrumbs
      *
-     * @return \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
+     * @return $this
      */
     public function _initAction()
     {
@@ -97,7 +97,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      * Report action init operations
      *
      * @param array|\Magento\Object $blocks
-     * @return \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
+     * @return $this
      */
     public function _initReportAction($blocks)
     {
@@ -134,7 +134,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      *
      * @param string $flagCode
      * @param string $refreshCode
-     * @return \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
+     * @return $this
      */
     protected function _showLastExecutionTime($flagCode, $refreshCode)
     {

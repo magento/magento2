@@ -29,7 +29,7 @@
             <arguments>
                 <argument name="css_class" xsi:type="string">items</argument>
             </arguments>
-            <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.billing-agreements">
+            <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.information">
                 <arguments>
                     <argument name="path" xsi:type="string">sales/order/view</argument>
                     <argument name="label" xsi:type="string">Order Information</argument>

@@ -34,7 +34,7 @@ class FilterBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
     {
         parent::__construct();
 
-        /* XXX: special constructor to set default values */
+        // special constructor to set default values
         $this->_data['condition_type'] = 'and';
     }
 

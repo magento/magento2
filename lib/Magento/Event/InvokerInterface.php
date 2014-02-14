@@ -32,6 +32,7 @@ interface InvokerInterface
      *
      * @param array $configuration
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function dispatch(array $configuration, \Magento\Event\Observer $observer);
 }

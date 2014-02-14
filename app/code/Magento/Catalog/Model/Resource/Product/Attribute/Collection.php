@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Attribute;
 
 /**
  * Catalog product EAV additional attribute resource collection
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Attribute;
-
 class Collection
     extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
 {
@@ -50,7 +48,7 @@ class Collection
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -69,6 +67,7 @@ class Collection
     /**
      * Resource model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -76,9 +75,9 @@ class Collection
     }
 
     /**
-     * initialize select object
+     * Initialize select object
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -108,7 +107,7 @@ class Collection
      * Entity type is defined.
      *
      * @param  int $typeId
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function setEntityTypeFilter($typeId)
     {
@@ -118,7 +117,7 @@ class Collection
     /**
      * Return array of fields to load attribute values
      *
-     * @return array
+     * @return string[]
      */
     protected function _getLoadDataFields()
     {
@@ -137,7 +136,7 @@ class Collection
     /**
      * Remove price from attribute list
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function removePriceFilter()
     {
@@ -147,7 +146,7 @@ class Collection
     /**
      * Specify "is_visible_in_advanced_search" filter
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function addDisplayInAdvancedSearchFilter()
     {
@@ -157,7 +156,7 @@ class Collection
     /**
      * Specify "is_filterable" filter
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function addIsFilterableFilter()
     {
@@ -167,7 +166,7 @@ class Collection
     /**
      * Add filterable in search filter
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function addIsFilterableInSearchFilter()
     {
@@ -177,7 +176,7 @@ class Collection
     /**
      * Specify filter by "is_visible" field
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function addVisibleFilter()
     {
@@ -187,7 +186,7 @@ class Collection
     /**
      * Specify "is_searchable" filter
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function addIsSearchableFilter()
     {
@@ -198,7 +197,7 @@ class Collection
      * Specify filter for attributes that have to be indexed
      *
      * @param bool $addRequiredCodes
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function addToIndexFilter($addRequiredCodes = false)
     {
@@ -223,7 +222,7 @@ class Collection
     /**
      * Specify filter for attributes used in quick search
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return $this
      */
     public function addSearchableAttributeFilter()
     {

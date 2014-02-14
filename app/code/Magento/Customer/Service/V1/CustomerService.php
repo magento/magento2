@@ -24,8 +24,9 @@
 
 namespace Magento\Customer\Service\V1;
 
-use Magento\Customer\Service\Entity\V1\Exception;
-use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Converter;
+use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Exception\InputException;
 use Magento\Validator\ValidatorException;
 
 /**
@@ -37,37 +38,34 @@ class CustomerService implements CustomerServiceInterface
     /** @var array Cache of DTOs */
     private $_cache = [];
 
-
     /**
-     * @var \Magento\Customer\Model\Converter
+     * @var Converter
      */
     private $_converter;
+
+    /**
+     * @var CustomerMetadataService
+     */
+    private $_customerMetadataService;
 
 
     /**
      * Constructor
      *
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $eavMetadataService
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Customer\Model\Converter $converter
-     * @param \Magento\Customer\Model\Metadata\Validator $validator
-     * @param \Magento\Customer\Service\V1\Dto\RegionBuilder $regionBuilder
-     * @param \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder
-     * @param \Magento\Customer\Service\V1\Dto\Response\CreateCustomerAccountResponseBuilder $createCustomerAccountResponseBuilder
+     * @param Converter $converter
+     * @param CustomerMetadataService $customerMetadataService
      */
     public function __construct(
-        \Magento\Customer\Model\Converter $converter
+        Converter $converter,
+        CustomerMetadataService $customerMetadataService
     ) {
         $this->_converter = $converter;
+        $this->_customerMetadataService = $customerMetadataService;
     }
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCustomer($customerId)
     {
@@ -82,7 +80,7 @@ class CustomerService implements CustomerServiceInterface
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function saveCustomer(Dto\Customer $customer, $password = null)
     {
@@ -92,29 +90,53 @@ class CustomerService implements CustomerServiceInterface
             $customerModel->setPassword($password);
         }
 
-        $validationErrors = $customerModel->validate();
-        if ($validationErrors !== true) {
-            throw new Exception(
-                'There were one or more errors validating the customer object.',
-                Exception::CODE_VALIDATION_FAILED,
-                new ValidatorException([$validationErrors])
-            );
-        }
+        $this->_validate($customerModel);
 
-        try {
-            $customerModel->save();
-            unset($this->_cache[$customerModel->getId()]);
-        } catch (\Exception $e) {
-            switch ($e->getCode()) {
-                case Customer::EXCEPTION_EMAIL_EXISTS:
-                    $code = Exception::CODE_EMAIL_EXISTS;
-                    break;
-                default:
-                    $code = Exception::CODE_UNKNOWN;
-            }
-            throw new Exception($e->getMessage(), $code, $e);
-        }
+        $customerModel->save();
+        unset($this->_cache[$customerModel->getId()]);
 
         return $customerModel->getId();
+    }
+
+    /**
+     * Validate customer attribute values.
+     *
+     * @param CustomerModel $customerModel
+     * @throws InputException
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function _validate(CustomerModel $customerModel)
+    {
+        $exception = new InputException();
+        if (!\Zend_Validate::is(trim($customerModel->getFirstname()), 'NotEmpty')) {
+            $exception->addError(InputException::REQUIRED_FIELD, 'firstname', '');
+        }
+
+        if (!\Zend_Validate::is(trim($customerModel->getLastname()), 'NotEmpty')) {
+            $exception->addError(InputException::REQUIRED_FIELD, 'lastname', '');
+        }
+
+        if (!\Zend_Validate::is($customerModel->getEmail(), 'EmailAddress')) {
+            $exception->addError(InputException::INVALID_FIELD_VALUE, 'email', $customerModel->getEmail());
+        }
+
+        $dob = $this->_customerMetadataService->getCustomerAttributeMetadata('dob');
+        if ($dob->isRequired() && '' == trim($customerModel->getDob())) {
+            $exception->addError(InputException::REQUIRED_FIELD, 'dob', '');
+        }
+        $taxvat = $this->_customerMetadataService->getCustomerAttributeMetadata('taxvat');
+        if ($taxvat->isRequired() && '' == trim($customerModel->getTaxvat())) {
+            $exception->addError(InputException::REQUIRED_FIELD, 'taxvat', '');
+        }
+        $gender = $this->_customerMetadataService->getCustomerAttributeMetadata('gender');
+        if ($gender->isRequired() && '' == trim($customerModel->getGender())) {
+            $exception->addError(InputException::REQUIRED_FIELD, 'gender', '');
+        }
+        if ($exception->getErrors()) {
+            throw $exception;
+        }
     }
 }

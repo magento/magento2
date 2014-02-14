@@ -65,11 +65,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return $this|\Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {
-
         $collection = $this->_productsFactory->create()
             ->addAttributeToSelect('entity_id')
             ->addAttributeToSelect('name')

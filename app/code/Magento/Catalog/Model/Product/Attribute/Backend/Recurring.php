@@ -34,7 +34,9 @@ extends \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
 {
     /**
      * Serialize or remove before saving
+     *
      * @param \Magento\Catalog\Model\Product $product
+     * @return void
      */
     public function beforeSave($product)
     {
@@ -49,7 +51,9 @@ extends \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
 
     /**
      * Unserialize or remove on failure
+     *
      * @param \Magento\Catalog\Model\Product $product
+     * @return void
      */
     protected function _unserialize(\Magento\Object $product)
     {

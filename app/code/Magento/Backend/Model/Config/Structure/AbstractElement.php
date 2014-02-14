@@ -26,8 +26,9 @@
 
 namespace Magento\Backend\Model\Config\Structure;
 
-abstract class AbstractElement
-    implements \Magento\Backend\Model\Config\Structure\ElementInterface
+use Magento\Core\Model\StoreManagerInterface;
+
+abstract class AbstractElement implements ElementInterface
 {
     /**
      * Element data
@@ -46,14 +47,14 @@ abstract class AbstractElement
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
+    public function __construct(StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -77,6 +78,7 @@ abstract class AbstractElement
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {

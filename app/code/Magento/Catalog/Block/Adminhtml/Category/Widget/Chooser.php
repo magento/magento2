@@ -35,14 +35,22 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Widget;
 
 class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 {
+    /**
+     * @var array
+     */
     protected $_selectedCategories = array();
 
     /**
      * Block construction
      * Defines tree template and init tree params
+     *
+     * @var string
      */
     protected $_template = 'catalog/category/widget/tree.phtml';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -54,7 +62,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * Setter
      *
      * @param array $selectedCategories
-     * @return \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser
+     * @return $this
      */
     public function setSelectedCategories($selectedCategories)
     {
@@ -168,6 +176,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     /**
      * Tree JSON source URL
      *
+     * @param bool|null $expanded
      * @return string
      */
     public function getLoadTreeUrl($expanded=null)

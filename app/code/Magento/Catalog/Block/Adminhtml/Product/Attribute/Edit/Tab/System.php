@@ -34,8 +34,13 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-class System extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+
+class System extends Generic
 {
+    /**
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('entity_attribute');

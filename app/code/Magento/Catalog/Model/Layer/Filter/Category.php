@@ -100,7 +100,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Get filter value for reset current filter state
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function getResetValue()
     {
@@ -122,7 +122,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param   \Zend_Controller_Request_Abstract $request
      * @param   \Magento\View\Element\AbstractBlock $filterBlock
-     * @return  \Magento\Catalog\Model\Layer\Filter\Category
+     * @return  $this
      */
     public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
     {
@@ -152,8 +152,8 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Validate category for be using as filter
      *
-     * @param   \Magento\Catalog\Model\Category $category
-     * @return unknown
+     * @param  \Magento\Catalog\Model\Category $category
+     * @return mixed
      */
     protected function _isValidCategory($category)
     {

@@ -101,7 +101,7 @@ class Authors
     /**
      * Return array of authors
      *
-     * @return array
+     * @return string[]
      */
     public function getAuthors()
     {

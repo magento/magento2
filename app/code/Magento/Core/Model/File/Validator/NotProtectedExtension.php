@@ -51,7 +51,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     /**
      * Protected file types
      *
-     * @var array
+     * @var string[]
      */
     protected $_protectedFileExtensions = array();
 
@@ -77,7 +77,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     /**
      * Initialize message templates with translating
      *
-     * @return \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @return $this
      */
     protected function _initMessageTemplates()
     {
@@ -92,7 +92,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     /**
      * Initialize protected file extensions
      *
-     * @return \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @return $this
      */
     protected function _initProtectedFileExtensions()
     {
@@ -113,7 +113,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * Return list with protected file extensions
      *
      * @param \Magento\Core\Model\Store|string|int $store
-     * @return array
+     * @return string|string[]
      */
     public function getProtectedFileExtensions($store = null)
     {

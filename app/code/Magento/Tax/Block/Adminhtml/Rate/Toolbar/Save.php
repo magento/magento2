@@ -37,8 +37,14 @@ namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 class Save extends \Magento\Backend\Block\Template
 {
 
+    /**
+     * @var string
+     */
     protected $_template = 'toolbar/rate/save.phtml';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -46,6 +52,9 @@ class Save extends \Magento\Backend\Block\Template
 
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $this->addChild('backButton', 'Magento\Backend\Block\Widget\Button', array(
@@ -72,16 +81,25 @@ class Save extends \Magento\Backend\Block\Template
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getBackButtonHtml()
     {
         return $this->getChildHtml('backButton');
     }
 
+    /**
+     * @return string
+     */
     public function getResetButtonHtml()
     {
         return $this->getChildHtml('resetButton');
     }
 
+    /**
+     * @return string
+     */
     public function getSaveButtonHtml()
     {
         $formId = $this->getLayout()->getBlock('tax_rate_form')->getDestElementId();
@@ -94,6 +112,9 @@ class Save extends \Magento\Backend\Block\Template
         return $this->getChildHtml('saveButton');
     }
 
+    /**
+     * @return string|void
+     */
     public function getDeleteButtonHtml()
     {
         if( intval($this->getRequest()->getParam('rate')) == 0 ) {

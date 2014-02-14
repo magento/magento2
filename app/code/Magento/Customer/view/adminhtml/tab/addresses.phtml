@@ -51,7 +51,7 @@
     </legend>
     <br />
 
-    <div id="address-tabs" data-mage-init='{addressTabs:{itemCount: <?php echo count($addressCollection) ?>,
+    <div id="address-tabs" data-mage-init='{"addressTabs":{"itemCount": <?php echo count($addressCollection) ?>,
             deleteConfirmPrompt: "<?php echo __('Are you sure you want to delete this address?') ?>",
             regionsUrl: "<?php echo $this->getRegionsUrl(); ?>",
             optionalZipCountries: <?php echo $this->helper("Magento\Directory\Helper\Data")->getCountriesWithOptionalZip(true) ?>,
@@ -65,7 +65,7 @@
                 <?php foreach ($addressCollection as $_address): ?>
 
                     <li class="address-list-item" id="address_item_<?php echo $_address->getId() ?>" data-item="<?php echo $_address->getId() ?>">
-                        <a href="#form_address_item_<?php echo $_address->getId() ?>" data-mage-init="{dataItemDeleteButton: {}}">
+                        <a href="#form_address_item_<?php echo $_address->getId() ?>" data-mage-init='{"dataItemDeleteButton": {}}'>
                             <?php if (!$this->isReadonly()): ?>
                                 <div class="address-list-item-actions">
                                     <button class="action-delete" type="button" title="Remove address" id="delete_button<?php echo ++$_iterator ?>" data-role="delete">
@@ -103,7 +103,7 @@
         <script data-template="address-tab" type="text/x-jquery-tmpl">
             <div id="address_item_template" class="hidden template">
                 <li class="address-list-item" id="address_item_${itemId}" data-item="${itemId}">
-                    <a href="#form_new_item${itemId}" data-mage-init="{dataItemDeleteButton: {}}">
+                    <a href="#form_new_item${itemId}" data-mage-init='{"dataItemDeleteButton": {}}'>
                         <?php if (!$this->isReadonly()): ?>
                             <div class="address-list-item-actions">
                                 <button class="action-delete" type="button" title="Remove address" id="delete_button${itemId}" data-role="delete">
@@ -140,7 +140,7 @@
         <script data-template="address-form" type="text/x-jquery-tmpl">
             <div id="address_form_template" class="no-display template"><!-- Don`t delete class no-display, save customer stops work  -->
                 <div id="form_${formName}" data-item="${itemCount}" class="address-item-edit-content"
-                     data-mage-init="{observableInputs:{'name': '${formName}'}}">
+                     data-mage-init='{"observableInputs":{"name": "${formName}"}}'>
                     <?php
                     // Set form template elements prefix
                     $this->getForm()->setHtmlIdPrefix($_templatePrefix)
@@ -155,7 +155,7 @@
         <div data-container="address-forms" class="address-item-edit" id="address_form_container">
             <?php if(count($addressCollection)): ?>
                 <?php foreach ($addressCollection as $_address): ?>
-                    <div class="address-item-edit-content" id="form_address_item_<?php echo $_address->getId() ?>" data-item="<?php echo $_address->getId() ?>" style="display:none" data-mage-init="{observableInputs: {'name': 'address_item_<?php echo $_address->getId() ?>'}}">
+                    <div class="address-item-edit-content" id="form_address_item_<?php echo $_address->getId() ?>" data-item="<?php echo $_address->getId() ?>" style="display:none" data-mage-init='{"observableInputs": {"name": "address_item_<?php echo $_address->getId() ?>"}}'>
                         <?php
                         $this->getForm()->addValues($_address->getData())
                             ->setHtmlIdPrefix("_item{$_address->getId()}")

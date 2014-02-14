@@ -54,7 +54,7 @@ class Observer
      * Register Sendfriend Model in global registry
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Sendfriend\Model\Observer
+     * @return $this
      */
     public function register(\Magento\Event\Observer $observer)
     {

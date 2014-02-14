@@ -34,7 +34,7 @@ class Sender extends \Magento\Core\Model\Config\Value
     /**
      * Check sender name validity
      *
-     * @return \Magento\Backend\Model\Config\Backend\Email\Sender
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _beforeSave()

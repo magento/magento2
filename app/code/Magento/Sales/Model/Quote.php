@@ -275,7 +275,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     protected $_quotePaymentCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Recurring\ProfileFactory
+     * @var \Magento\RecurringProfile\Model\Profile
      */
     protected $_recurringProfileFactory;
 
@@ -302,7 +302,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory
      * @param \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
-     * @param \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfileFactory
+     * @param \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory
      * @param \Magento\Object\Copy $objectCopyService
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -326,7 +326,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory,
         \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
-        \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfileFactory,
+        \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory,
         \Magento\Object\Copy $objectCopyService,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

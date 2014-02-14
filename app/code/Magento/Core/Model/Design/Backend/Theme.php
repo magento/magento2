@@ -61,6 +61,8 @@ class Theme extends \Magento\Core\Model\Config\Value
 
     /**
      * Validate specified value against frontend area
+     *
+     * @return $this
      */
     protected function _beforeSave()
     {

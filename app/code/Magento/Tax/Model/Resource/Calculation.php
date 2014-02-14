@@ -37,14 +37,14 @@ class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @var array
      */
-    protected $_ratesCache              = array();
+    protected $_ratesCache = array();
 
     /**
      * Primary key auto increment flag
      *
      * @var bool
      */
-    protected $_isPkAutoIncrement    = false;
+    protected $_isPkAutoIncrement = false;
 
     /**
      * Tax data
@@ -76,6 +76,7 @@ class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -86,7 +87,7 @@ class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete calculation settings by rule id
      *
      * @param int $ruleId
-     * @return \Magento\Tax\Model\Resource\Calculation
+     * @return $this
      */
     public function deleteByRuleId($ruleId)
     {
@@ -143,7 +144,7 @@ class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve Calculation Process
      *
      * @param \Magento\Object $request
-     * @param array $rates
+     * @param array|null $rates
      * @return array
      */
     public function getCalculationProcess($request, $rates = null)
@@ -224,7 +225,7 @@ class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Create search templates for postcode
      *
      * @param string $postcode
-     * @return array  $strArr
+     * @return string[]
      */
     protected function _createSearchPostCodeTemplates($postcode)
     {

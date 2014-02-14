@@ -120,10 +120,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add field filter to collection
      *
-     * @see self::_getConditionSql for $condition
      * @param string $field
      * @param null|string|array $condition
      * @return $this
+     * @see self::_getConditionSql for $condition
      */
     public function addFieldToFilter($field, $condition=null)
     {

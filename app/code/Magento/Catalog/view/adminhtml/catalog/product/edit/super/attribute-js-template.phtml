@@ -104,10 +104,10 @@
                                                     <div class="field field-pricing-measure">
                                                         <div class="actions-split actions-select">
                                                             <input name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][is_percent]" type="hidden" value="0"/>
-                                                            <button type="button" class="action-toggle" data-toggle="dropdown" data-mage-init="{dropdown:{}}">
+                                                            <button type="button" class="action-toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
                                                                 <span><?php echo $this->getBaseCurrency()->getSymbol() ?></span>
                                                             </button>
-                                                            <ul class="dropdown-menu" data-role="dropdown-menu" data-mage-init="{menu:{}}">
+                                                            <ul class="dropdown-menu" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
                                                                 <li data-value="0"><a class="item"><?php echo $this->getBaseCurrency()->getSymbol() ?></a></li>
                                                                 <li data-value="1"><a class="item"><?php echo __('%')?></a></li>
                                                             </ul>
@@ -174,10 +174,10 @@
                             <div class="actions-split actions-select">
                                 <input type="hidden" value="0"
                                     name="product[configurable_attributes_data][${attribute.id}][values][${option.id}][is_percent]"/>
-                                <button type="button" class="action-toggle" data-toggle="dropdown" data-mage-init="{dropdown:{}}">
+                                <button type="button" class="action-toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
                                     <span><?php echo $this->getBaseCurrency()->getSymbol() ?></span>
                                 </button>
-                                <ul class="dropdown-menu" data-role="dropdown-menu" data-mage-init="{menu:{}}">
+                                <ul class="dropdown-menu" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
                                     <li data-value="0"><a class="item"><?php echo $this->getBaseCurrency()->getSymbol() ?></a></li>
                                     <li data-value="1"><a class="item"><?php echo __('%')?></a></li>
                                 </ul>

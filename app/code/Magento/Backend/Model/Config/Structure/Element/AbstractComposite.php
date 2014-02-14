@@ -32,17 +32,17 @@ abstract class AbstractComposite
     /**
      * Child elements iterator
      *
-     * @var \Magento\Backend\Model\Config\Structure\Element\Iterator
+     * @var Iterator
      */
     protected $_childrenIterator;
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
+     * @param Iterator $childrenIterator
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
+        Iterator $childrenIterator
     ) {
         parent::__construct($storeManager);
         $this->_childrenIterator = $childrenIterator;
@@ -53,6 +53,7 @@ abstract class AbstractComposite
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {

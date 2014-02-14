@@ -78,6 +78,9 @@ class ClassModel extends \Magento\Core\Model\AbstractModel
         $this->_classFactory = $classFactory;
     }
 
+    /**
+     * @return void
+     */
     public function _construct()
     {
         $this->_init('Magento\Tax\Model\Resource\TaxClass');

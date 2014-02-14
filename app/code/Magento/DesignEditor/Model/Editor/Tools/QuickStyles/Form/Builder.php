@@ -186,6 +186,7 @@ class Builder
      *
      * @param array $columns
      * @param string $tab
+     * @return void
      */
     protected function _populateColumns($columns, $tab)
     {

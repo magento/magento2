@@ -32,6 +32,8 @@ interface ObjectManager
      * Set factory
      *
      * @param ObjectManager\Factory $factory
+     *
+     * @return void
      */
     public function setFactory(ObjectManager\Factory $factory);
 
@@ -56,6 +58,7 @@ interface ObjectManager
      * Configure object manager
      *
      * @param array $configuration
+     * @return void
      */
     public function configure(array $configuration);
 }

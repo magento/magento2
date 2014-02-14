@@ -41,13 +41,16 @@ interface CustomerAccountServiceInterface
     /**
      * Create Customer Account
      *
-     * @param \Magento\Customer\Service\V1\Dto\Customer $customer
-     * @param \Magento\Customer\Service\V1\Dto\Address[] $addresses
+     * @param Dto\Customer $customer
+     * @param Dto\Address[] $addresses
      * @param string $password
      * @param string $confirmationBackUrl
      * @param string $registeredBackUrl
      * @param int $storeId
      * @return Dto\Response\CreateCustomerAccountResponse
+     * @throws \Exception If something goes wrong during save
+     * @throws \Magento\Exception\InputException If bad input is provided
+     * @throws \Magento\Exception\StateException If the provided email is already used
      */
     public function createAccount(
         Dto\Customer $customer,
@@ -63,9 +66,11 @@ interface CustomerAccountServiceInterface
      *
      * @param int $customerId
      * @param string $key
-     * @throws \Magento\Customer\Service\Entity\V1\Exception If customerId is invalid, does not exist, or customer account was already active
-     * @throws \Magento\Core\Exception If there is an issue with supplied $customerId or $key
-     * @return \Magento\Customer\Service\V1\Dto\Customer
+     * @return Dto\Customer
+     * @throws \Magento\Exception\NoSuchEntityException If customer doesn't exist
+     * @throws \Magento\Exception\StateException
+     *      StateException::INPUT_MISMATCH if key doesn't match expected.
+     *      StateException::INVALID_STATE_CHANGE if account already active.
      */
     public function activateAccount($customerId, $key);
 
@@ -74,8 +79,8 @@ interface CustomerAccountServiceInterface
      *
      * @param string $username username in plain-text
      * @param string $password password in plain-text
-     * @throws \Magento\Customer\Service\Entity\V1\Exception if unable to login due to issue with username or password or others
-     * @return \Magento\Customer\Service\V1\Dto\Customer
+     * @return Dto\Customer
+     * @throws \Magento\Exception\AuthenticationException if unable to authenticate
      */
     public function authenticate($username, $password);
 
@@ -84,7 +89,10 @@ interface CustomerAccountServiceInterface
      *
      * @param int $customerId
      * @param string $resetPasswordLinkToken
-     * @throws \Magento\Customer\Service\Entity\V1\Exception if expired or invalid
+     * @return void
+     * @throws \Magento\Exception\StateException if token is expired or mismatched
+     * @throws \Magento\Exception\InputException if token or customer id is invalid
+     * @throws \Magento\Exception\NoSuchEntityException if customer doesn't exist
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
 
@@ -93,7 +101,8 @@ interface CustomerAccountServiceInterface
      *
      * @param string $email
      * @param int $websiteId
-     * @throws \Magento\Customer\Service\Entity\V1\Exception
+     * @return void
+     * @throws \Magento\Exception\NoSuchEntityException
      */
     public function sendPasswordResetLink($email, $websiteId);
 
@@ -104,6 +113,10 @@ interface CustomerAccountServiceInterface
      * @param int $customerId
      * @param string $password
      * @param string $resetToken
+     * @return void
+     * @throws \Magento\Exception\StateException if token is expired or mismatched
+     * @throws \Magento\Exception\InputException if token or customer id is invalid
+     * @throws \Magento\Exception\NoSuchEntityException if customer doesn't exist
      */
     public function resetPassword($customerId, $password, $resetToken);
 
@@ -111,15 +124,17 @@ interface CustomerAccountServiceInterface
      * Send Confirmation email
      *
      * @param string $email email address of customer
-     * @throws Entity\V1\Exception if error occurs getting customerId
+     * @return void
+     * @throws \Magento\Exception\NoSuchEntityException if no customer found for provided email
+     * @throws \Magento\Exception\StateException if confirmation is not needed
      */
     public function sendConfirmation($email);
 
     /**
      * Validate customer entity
      *
-     * @param \Magento\Customer\Service\V1\Dto\Customer $customer
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[] $attributes
+     * @param Dto\Customer $customer
+     * @param Dto\Eav\AttributeMetadata[] $attributes
      * @return array|bool
      */
     public function validateCustomerData(Dto\Customer $customer, array $attributes);

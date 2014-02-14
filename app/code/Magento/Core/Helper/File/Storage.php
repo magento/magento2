@@ -45,7 +45,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * List of internal storages
      *
-     * @var array
+     * @var int[]
      */
     protected $_internalStorageList = array(
         \Magento\Core\Model\File\Storage::STORAGE_MEDIA_FILE_SYSTEM

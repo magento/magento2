@@ -123,9 +123,9 @@ class Design implements \Magento\View\DesignInterface
     /**
      * Set package area
      *
-     * @deprecated
      * @param string $area
-     * @return \Magento\Core\Model\View\Design
+     * @return $this
+     * @deprecated
      */
     public function setArea($area)
     {
@@ -149,7 +149,7 @@ class Design implements \Magento\View\DesignInterface
      *
      * @param \Magento\View\Design\ThemeInterface|string $theme
      * @param string $area
-     * @return \Magento\Core\Model\View\Design
+     * @return $this
      */
     public function setDesignTheme($theme, $area = null)
     {
@@ -173,7 +173,7 @@ class Design implements \Magento\View\DesignInterface
      *
      * Write default theme to core_config_data
      *
-     * @param string $area
+     * @param string|null $area
      * @param array $params
      * @return string|int
      */
@@ -213,7 +213,7 @@ class Design implements \Magento\View\DesignInterface
     /**
      * Set default design theme
      *
-     * @return \Magento\Core\Model\View\Design
+     * @return $this
      */
     public function setDefaultDesignTheme()
     {

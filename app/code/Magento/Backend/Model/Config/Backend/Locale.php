@@ -87,7 +87,7 @@ class Locale extends \Magento\Core\Model\Config\Value
     }
 
     /**
-     * @return \Magento\Backend\Model\Config\Backend\Locale
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _afterSave()

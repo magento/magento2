@@ -40,7 +40,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * List of required request parameters
      * Order sensitive
-     * @var array
+     * @var string[]
      */
     protected $_requiredParams = array(
         'moduleFrontName',
@@ -98,11 +98,11 @@ class Base extends \Magento\App\Router\AbstractRouter
      * @param \Magento\App\ResponseFactory $responseFactory
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\Url|\Magento\UrlInterface $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface|\Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
-     * @param $routerId
+     * @param string $routerId
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -235,7 +235,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Get not found controller instance
      *
-     * @param $currentModuleName
+     * @param string $currentModuleName
      * @param \Magento\App\RequestInterface $request
      * @return \Magento\App\Action\Action|null
      */

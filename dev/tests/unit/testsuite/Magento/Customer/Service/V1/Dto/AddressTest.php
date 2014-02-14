@@ -29,26 +29,7 @@ use Magento\Customer\Service\V1\Dto\AddressBuilder;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
-    /** Sample values for testing */
-    const ID = 14;
-    const IS_SHIPPING = true;
-    const IS_BILLING = false;
-    const COMPANY = 'Company Name';
-    const FAX = '(555) 555-5555';
-    const MIDDLENAME = 'Mid';
-    const PREFIX = 'Mr.';
-    const SUFFIX = 'Esq.';
-    const VAT_ID = 'S45';
-    const FIRSTNAME = 'Jane';
-    const LASTNAME = 'Doe';
-    const STREET_LINE_0 = '7700 W Parmer Ln';
-    const CITY = 'Austin';
-    const COUNTRY_CODE = 'US';
-    const POSTCODE = '78620';
-    const TELEPHONE = '5125125125';
-    const REGION = 'Texas';
-
-    protected $_expectedValues = [
+    private $_expectedValues = [
         'id' => 14,
         'default_shipping' => true,
         'default_billing' => false,
@@ -65,14 +46,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         'country_id' => 'US',
         'postcode' => '78620',
         'telephone' => '5125125125',
-        'region_id' => 0,
-        'region' => 'Texas',
+        'region' => [
+            'region_id' => 0,
+            'region' => 'Texas',
+        ],
     ];
 
     /**
      * @var \Magento\Customer\Service\V1\Dto\AddressBuilder
      */
-    protected $_addressBuilder;
+    private $_addressBuilder;
 
     protected function setUp()
     {
@@ -172,7 +155,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $addressBuilder->setCity($this->_expectedValues['city']);
         $addressBuilder->setCountryId($this->_expectedValues['country_id']);
         $addressBuilder->setRegion(
-            new \Magento\Customer\Service\V1\Dto\Region(['region' => $this->_expectedValues['region'],
+            new \Magento\Customer\Service\V1\Dto\Region(['region' => $this->_expectedValues['region']['region'],
                 'region_code' => ''])
         );
         $addressBuilder->setPostcode($this->_expectedValues['postcode']);
@@ -208,7 +191,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_expectedValues['city'], $address->getCity());
         $this->assertEquals($this->_expectedValues['country_id'], $address->getCountryId());
         $this->assertEquals(
-            new \Magento\Customer\Service\V1\Dto\Region(['region' => $this->_expectedValues['region'],
+            new \Magento\Customer\Service\V1\Dto\Region(['region' => $this->_expectedValues['region']['region'],
                 'region_code' => '']),
             $address->getRegion()
         );

@@ -175,7 +175,7 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     /**
      * Accept option value and return its formatted view
      *
-     * @param mixed $optionValue
+     * @param string|array $optionValue
      * Method works well with these $optionValue format:
      *      1. String
      *      2. Indexed array e.g. array(val1, val2, ...)

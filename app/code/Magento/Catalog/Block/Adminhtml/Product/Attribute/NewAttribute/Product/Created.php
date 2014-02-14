@@ -35,7 +35,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\NewAttribute\Product
 
 class Created extends \Magento\Backend\Block\Widget
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/attribute/new/created.phtml';
 
     /**

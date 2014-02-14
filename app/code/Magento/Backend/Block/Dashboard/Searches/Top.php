@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard\Searches;
 
 /**
  * Adminhtml dashboard last search keywords block
@@ -31,11 +32,11 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard\Searches;
-
 class Top extends \Magento\Backend\Block\Dashboard\Grid
 {
+    /**
+     * @var \Magento\CatalogSearch\Model\Resource\Query\Collection
+     */
     protected $_collection;
 
     /**
@@ -67,12 +68,18 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('topSearchGrid');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareCollection()
     {
         if (!$this->_moduleManager->isEnabled('Magento_CatalogSearch')) {
@@ -98,6 +105,9 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareCollection();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('search_query', array(
@@ -127,6 +137,9 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareColumns();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRowUrl($row)
     {
         return $this->getUrl('catalog/search/edit', array('id'=>$row->getId()));

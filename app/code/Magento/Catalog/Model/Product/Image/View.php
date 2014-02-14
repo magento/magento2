@@ -114,7 +114,7 @@ class View extends \Magento\Object
      * @param \Magento\Catalog\Model\Product $product
      * @param string $location
      * @param string $module
-     * @return \Magento\Catalog\Model\Product\Image\View
+     * @return $this
      */
     public function init(\Magento\Catalog\Model\Product $product, $location, $module = null)
     {
@@ -208,7 +208,7 @@ class View extends \Magento\Object
      * Getter config view config var by suffix
      *
      * @param string $suffix
-     * @return string mixed
+     * @return string|false
      */
     protected function _getImageVar($suffix)
     {

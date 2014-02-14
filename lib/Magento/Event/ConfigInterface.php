@@ -30,7 +30,7 @@ interface ConfigInterface
     /**
      * Get observers by event name
      *
-     * @param $eventName
+     * @param string $eventName
      * @return array
      */
     public function getObservers($eventName);

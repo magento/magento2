@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
 
 /**
  * Newsletter queue edit form
@@ -31,9 +32,6 @@
  * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -80,8 +78,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Form can be run from newsletter template grid by option "Queue newsletter"
      * or from  newsletter queue grid by edit option.
      *
-     * @param void
-     * @return \Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form
+     * @return $this
      */
     protected function _prepareForm()
     {

@@ -25,8 +25,6 @@
  */
 namespace Magento\Customer\Service\V1\Dto;
 
-use Magento\Customer\Service\V1\Dto\Region;
-
 class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 {
     protected $_regionBuilder;
@@ -34,9 +32,8 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
     /**
      * @param \Magento\Customer\Service\V1\Dto\RegionBuilder $regionBuilder
      */
-    public function __construct(
-      \Magento\Customer\Service\V1\Dto\RegionBuilder $regionBuilder
-    ) {
+    public function __construct(RegionBuilder $regionBuilder)
+    {
         parent::__construct();
         $this->_regionBuilder = $regionBuilder;
         $this->_data['region'] = $regionBuilder->create();
@@ -44,7 +41,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param int $id
-     * @return AddressBuilder
+     * @return $this
      */
     public function setId($id)
     {
@@ -53,7 +50,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param boolean $defaultShipping
-     * @return AddressBuilder
+     * @return $this
      */
     public function setDefaultShipping($defaultShipping)
     {
@@ -62,7 +59,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param boolean $defaultBilling
-     * @return AddressBuilder
+     * @return $this
      */
     public function setDefaultBilling($defaultBilling)
     {
@@ -70,27 +67,20 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
     }
 
     /**
-     * @param string[] $data
-     * @return AddressBuilder
+     * {@inheritdoc}
      */
     public function populateWithArray(array $data)
     {
-        unset($data['region_id']);
         if (isset($data['region'])) {
-            $region = $data['region'];
-            if (!($region instanceof Region)) {
-                unset($data['region']);
-            }
+            $data['region'] = new Region($data['region']);
         }
 
-        parent::populateWithArray($data);
-
-        return $this;
+        return parent::populateWithArray($data);
     }
 
     /**
      * @param Region $region
-     * @return AddressBuilder
+     * @return $this
      */
     public function setRegion(Region $region)
     {
@@ -99,7 +89,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param int $countryId
-     * @return AddressBuilder
+     * @return $this
      */
     public function setCountryId($countryId)
     {
@@ -108,7 +98,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param \string[] $street
-     * @return AddressBuilder
+     * @return $this
      */
     public function setStreet($street)
     {
@@ -117,7 +107,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $company
-     * @return AddressBuilder
+     * @return $this
      */
     public function setCompany($company)
     {
@@ -126,7 +116,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $telephone
-     * @return AddressBuilder
+     * @return $this
      */
     public function setTelephone($telephone)
     {
@@ -135,7 +125,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $fax
-     * @return AddressBuilder
+     * @return $this
      */
     public function setFax($fax)
     {
@@ -144,7 +134,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $postcode
-     * @return AddressBuilder
+     * @return $this
      */
     public function setPostcode($postcode)
     {
@@ -153,7 +143,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $city
-     * @return AddressBuilder
+     * @return $this
      */
     public function setCity($city)
     {
@@ -162,7 +152,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $firstname
-     * @return AddressBuilder
+     * @return $this
      */
     public function setFirstname($firstname)
     {
@@ -171,7 +161,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $lastname
-     * @return AddressBuilder
+     * @return $this
      */
     public function setLastname($lastname)
     {
@@ -180,7 +170,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $middlename
-     * @return AddressBuilder
+     * @return $this
      */
     public function setMiddlename($middlename)
     {
@@ -189,7 +179,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $prefix
-     * @return AddressBuilder
+     * @return $this
      */
     public function setPrefix($prefix)
     {
@@ -198,7 +188,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $suffix
-     * @return AddressBuilder
+     * @return $this
      */
     public function setSuffix($suffix)
     {
@@ -207,7 +197,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $vatId
-     * @return AddressBuilder
+     * @return $this
      */
     public function setVatId($vatId)
     {
@@ -216,7 +206,7 @@ class AddressBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 
     /**
      * @param string $customerId
-     * @return AddressBuilder
+     * @return $this
      */
     public function setCustomerId($customerId)
     {

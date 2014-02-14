@@ -194,9 +194,9 @@ class Theme extends \Magento\App\Helper\AbstractHelper
     /**
      * Detect theme view file belongs to and set it to file data under "theme" key
      *
-     * @param array $file
+     * @param array &$file
      * @param string $designDir
-     * @return \Magento\Core\Helper\Theme
+     * @return $this
      * @throws \LogicException
      */
     protected function _detectTheme(&$file, $designDir)
@@ -234,11 +234,11 @@ class Theme extends \Magento\App\Helper\AbstractHelper
     /**
      * Detect group where file should be placed and set it to file data under "group" key
      *
-     * @param array $file
+     * @param array &$file
      * @param string $designDir
      * @param string $jsDir
      * @param string $codeDir
-     * @return \Magento\Core\Helper\Theme
+     * @return $this
      * @throws \LogicException
      */
     protected function _detectGroup(&$file, $designDir, $jsDir, $codeDir)

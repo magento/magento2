@@ -206,7 +206,7 @@ class Validator
     /**
      * Instantiate class validator
      *
-     * @param array $validators
+     * @param array &$validators
      * @return $this
      */
     protected function _instantiateValidators(array &$validators)

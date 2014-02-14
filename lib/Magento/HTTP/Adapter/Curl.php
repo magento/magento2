@@ -139,11 +139,12 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Connect to the remote server
      *
-     * @deprecated since 1.4.0.0-rc1
      * @param string  $host
      * @param int     $port
      * @param boolean $secure
      * @return $this
+     *
+     * @deprecated since 1.4.0.0-rc1
      */
     public function connect($host, $port = 80, $secure = false)
     {

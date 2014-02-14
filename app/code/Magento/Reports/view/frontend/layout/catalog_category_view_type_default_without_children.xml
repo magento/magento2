@@ -26,6 +26,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <remove name="right.reports.product.viewed"/>
     <referenceContainer name="right">
-        <block class="Magento\Reports\Block\Product\Viewed" before="right.permanent.callout" name="left.reports.product.viewed" template="product_viewed.phtml"/>
+        <block class="Magento\Reports\Block\Product\Viewed" name="left.reports.product.viewed" template="product_viewed.phtml"/>
     </referenceContainer>
 </layout>

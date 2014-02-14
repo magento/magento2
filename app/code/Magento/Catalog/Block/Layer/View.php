@@ -103,6 +103,8 @@ class View extends \Magento\View\Element\Template
 
     /**
      * Initialize blocks names
+     *
+     * @return void
      */
     protected function _initBlocks()
     {
@@ -165,7 +167,7 @@ class View extends \Magento\View\Element\Template
     /**
      * Get all fiterable attributes of current category
      *
-     * @return array
+     * @return mixed
      */
     protected function _getFilterableAttributes()
     {

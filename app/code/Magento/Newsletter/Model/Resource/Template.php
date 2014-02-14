@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Newsletter\Model\Resource;
 
 /**
  * Newsletter template resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource;
-
 class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -56,6 +54,7 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -67,7 +66,7 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Newsletter\Model\Template $object
      * @param string $templateCode
-     * @return \Magento\Newsletter\Model\Resource\Template
+     * @return $this
      */
     public function loadByCode(\Magento\Newsletter\Model\Template $object, $templateCode)
     {
@@ -142,7 +141,7 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Perform actions before object save
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Newsletter\Model\Resource\Template
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)

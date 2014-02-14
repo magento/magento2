@@ -47,11 +47,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      * Return array of mocked views
      *
      * @param string $method
-     * @return \Magento\Mview\View[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return \Magento\Mview\ViewInterface[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
     protected function getViews($method)
     {
-        $viewMock = $this->getMock('Magento\Mview\View', array(), array(), '', false);
+        $viewMock = $this->getMock('Magento\Mview\ViewInterface', array(), array(), '', false);
         $viewMock->expects($this->exactly(2))
             ->method($method);
         return array(

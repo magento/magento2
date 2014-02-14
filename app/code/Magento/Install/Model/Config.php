@@ -67,7 +67,7 @@ class Config
     /**
      * Get array of wizard steps
      *
-     * array($index => \Magento\Object)
+     * Array($index => \Magento\Object)
      *
      * @return array
      */
@@ -85,7 +85,7 @@ class Config
     /**
      * Retrieve writable path for checking
      *
-     * array(
+     * Array(
      *      ['writeable'] => array(
      *          [$index] => array(
      *              ['path']

@@ -18,64 +18,63 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata;
+
+use Magento\TestFramework\Helper\Bootstrap;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Metadata\FormFactory
+     * @var Form
      */
-    protected $_formFactory;
+    protected $_form;
 
-    /**
-     * @var array
-     */
-    protected $_attributes = [];
+    /** @var array */
+    protected $_attributes;
 
-    /**
-     * @var \Magento\App\RequestInterface
-     */
+    /** @var \Magento\App\RequestInterface */
     protected $_request;
 
     /** @var array */
-    protected $_expected = [];
+    protected $_expected;
+
+    /** @var array */
+    protected $_requestData = [];
 
     public function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_formFactory = $objectManager
-            ->create('Magento\Customer\Model\Metadata\FormFactory');
+        $objectManager = Bootstrap::getObjectManager();
 
-        $this->_requestData = [
+        /** @var FormFactory $formFactory */
+        $formFactory = $objectManager->create('Magento\Customer\Model\Metadata\FormFactory');
+        $this->_form = $formFactory->create('customer_address', 'customer_address_edit');
+
+        $this->_attributes = [
             'id' => 14,
-            'default_shipping' => true,
-            'default_billing' => false,
+            'default_shipping' => 1,
+            'default_billing' => 0,
             'company' => 'Company Name',
             'fax' => '(555) 555-5555',
             'middlename' => 'Mid',
             'prefix' => 'Mr.',
             'suffix' => 'Esq.',
-            'vat_id' => 'S45',
+            'vat_id' => '',
             'firstname' => 'Jane',
             'lastname' => 'Doe',
-            'street' => ['7700 W Parmer Ln'],
-            'city' => 'Austin',
+            'street' => ['2211 North First Street'],
+            'city' => 'San Jose',
             'country_id' => 'US',
-            'postcode' => '78620',
+            'postcode' => '95131',
             'telephone' => '5125125125',
-            'region_id' => 0,
-            'region' => 'Texas',
+            'region_id' => 12,
+            'region' => 'California'
         ];
 
-        $this->_expected = $this->_requestData;
-        /** Unset data which is not part of the form */
+        $this->_expected = $this->_attributes;
+
         unset($this->_expected['id']);
         unset($this->_expected['default_shipping']);
         unset($this->_expected['default_billing']);
@@ -84,18 +83,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
         unset($this->_expected['suffix']);
 
         $this->_request = $objectManager->get('Magento\App\RequestInterface');
-        $this->_request->setParams($this->_requestData);
+        $this->_request->setParams($this->_attributes);
     }
 
     public function testCompactData()
     {
-        $addressForm = $this->_formFactory->create(
-            'customer_address',
-            'customer_address_edit',
-            []
-        );
-        $addressData = $addressForm->extractData($this->_request);
-        $attributeValues = $addressForm->compactData($addressData);
+        $attributeValues = $this->_form->compactData($this->_form->extractData($this->_request));
         $this->assertEquals($this->_expected, $attributeValues);
     }
 
@@ -105,22 +98,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'prefix', 'firstname', 'middlename', 'lastname', 'suffix', 'company', 'street', 'city', 'country_id',
             'region', 'region_id', 'postcode', 'telephone', 'fax', 'vat_id'
         ];
-        $addressForm = $this->_formFactory->create(
-            'customer_address',
-            'customer_address_edit',
-            []
-        );
-        $this->assertEquals($expectedAttributes, array_keys($addressForm->getAttributes()));
+        $this->assertEquals($expectedAttributes, array_keys($this->_form->getAttributes()));
     }
 
     public function testGetSystemAttributes()
     {
-        $addressForm = $this->_formFactory->create(
-            'customer_address',
-            'customer_address_edit',
-            []
-        );
-        $this->assertCount(15, $addressForm->getSystemAttributes());
+        $this->assertCount(15, $this->_form->getSystemAttributes());
     }
 
     /**
@@ -129,11 +112,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testGetUserAttributes()
     {
         $expectedAttributes = ['user_attribute'];
-        $addressForm = $this->_formFactory->create(
-            'customer_address',
-            'customer_address_edit',
-            []
-        );
-        $this->assertEquals($expectedAttributes, array_keys($addressForm->getUserAttributes()));
+        $this->assertEquals($expectedAttributes, array_keys($this->_form->getUserAttributes()));
+    }
+
+    public function testRestoreData()
+    {
+        $attributeValues = $this->_form->restoreData($this->_form->extractData($this->_request));
+        $this->assertEquals($this->_expected, $attributeValues);
     }
 }

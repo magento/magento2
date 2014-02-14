@@ -36,7 +36,7 @@ interface HelperInterface
      *
      * @param string $mainTable
      * @param array $data
-     * $param mixed $matchFields
+     * @param mixed $matchFields
      * @return string
      */
     public function mergeVisitorProductIndex($mainTable, $data, $matchFields);

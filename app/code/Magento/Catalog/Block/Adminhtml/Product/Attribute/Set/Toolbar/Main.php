@@ -41,6 +41,9 @@ class Main extends \Magento\Backend\Block\Template
      */
     protected $_template = 'catalog/product/attribute/set/toolbar/main.phtml';
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $this->addChild('addButton', 'Magento\Backend\Block\Widget\Button', array(
@@ -51,16 +54,25 @@ class Main extends \Magento\Backend\Block\Template
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getNewButtonHtml()
     {
         return $this->getChildHtml('addButton');
     }
 
+    /**
+     * @return string
+     */
     protected function _getHeader()
     {
         return __('Product Templates');
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         $this->_eventManager->dispatch('adminhtml_catalog_product_attribute_set_toolbar_main_html_before', array(

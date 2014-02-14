@@ -95,7 +95,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Apply sorting and filtering to collection
      *
-     * @return \Magento\Backend\Block\Widget\Grid|\Magento\Reports\Block\Adminhtml\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -199,8 +199,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * Set filter values
      *
-     * @param string $data
-     * @return \Magento\Backend\Block\Widget\Grid|\Magento\Reports\Block\Adminhtml\Grid
+     * @param array $data
+     * @return $this
      */
     protected function _setFilterValues($data)
     {
@@ -214,6 +214,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Set visibility of store switcher
      *
      * @param bool $visible
+     *
      * @return void
      */
     public function setStoreSwitcherVisibility($visible=true)
@@ -245,6 +246,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Set visibility of date filter
      *
      * @param bool $visible
+     *
      * @return void
      */
     public function setDateFilterVisibility($visible=true)
@@ -307,6 +309,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @param string $name
      * @param string $value
+     *
      * @return void
      */
     public function setFilter($name, $value)
@@ -336,6 +339,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Set sub-report rows count
      *
      * @param int $size
+     *
      * @return void
      */
     public function setSubReportSize($size)

@@ -49,4 +49,14 @@ class Shortcut extends \Magento\Paypal\Block\Express\Shortcut
      * @var string
      */
     protected $_checkoutType = 'Magento\Paypal\Model\PayflowExpress\Checkout';
+
+    /**
+     * Get shortcut alias
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'product.info.addtocart.payflow';
+    }
 }

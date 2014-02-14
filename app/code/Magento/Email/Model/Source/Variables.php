@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Email\Model\Source;
 
 /**
  * Store Contact Information source model
@@ -32,8 +32,6 @@
  * @package    Magento_Email
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Email\Model\Source;
-
 class Variables implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
@@ -45,7 +43,6 @@ class Variables implements \Magento\Core\Model\Option\ArrayInterface
 
     /**
      * Constructor
-     *
      */
     public function __construct()
     {

@@ -41,7 +41,6 @@ class Url extends \Magento\Core\Model\Layout\Argument\AbstractHandler
     protected $_urlModel;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
      * @param \Magento\UrlInterface $urlModel
      */
     public function __construct(\Magento\UrlInterface  $urlModel)
@@ -66,6 +65,7 @@ class Url extends \Magento\Core\Model\Layout\Argument\AbstractHandler
 
     /**
      * @param array $argument
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _validate(array $argument)

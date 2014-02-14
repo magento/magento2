@@ -40,7 +40,7 @@ class Font
     /**
      * Add form elements
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Font
+     * @return $this
      */
     protected function _addFields()
     {
@@ -80,7 +80,7 @@ class Font
     /**
      * Add element types used in composite font element
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Font
+     * @return $this
      */
     protected function _addElementTypes()
     {

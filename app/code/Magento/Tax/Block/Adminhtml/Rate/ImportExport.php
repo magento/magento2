@@ -29,6 +29,9 @@ namespace Magento\Tax\Block\Adminhtml\Rate;
 
 class ImportExport extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var string
+     */
     protected $_template = 'importExport.phtml';
 
     /**

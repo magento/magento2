@@ -69,7 +69,7 @@ class Scoped extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollecti
     /**
      * Initialize select
      *
-     * @return $this|\Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelect()
     {

@@ -24,21 +24,30 @@
 
 namespace Magento\Webapi\Helper;
 
+use Magento\App\Helper\Context;
+use Magento\Core\Model\Registry;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 
 class Data extends \Magento\App\Helper\AbstractHelper
 {
-    /** @var \Magento\Core\Model\Registry */
+    /** @var Registry */
     protected $_registry;
 
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Registry $registry
+        Context $context,
+        Registry $registry
     ) {
         $this->_registry = $registry;
         parent::__construct($context);
     }
 
+    /**
+     * @return array
+     */
     public function getSelectedResources()
     {
         $selectedResourceIds = array();
@@ -81,7 +90,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      *
      * @param string $className
      * @param bool $preserveVersion Should version be preserved during class name conversion into service name
-     * @return array
+     * @return string[]
      * @throws \InvalidArgumentException When class is not valid API service.
      */
     public function getServiceNameParts($className, $preserveVersion = false)

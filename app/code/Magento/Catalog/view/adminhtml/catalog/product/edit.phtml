@@ -149,7 +149,7 @@ jQuery(function($) {
 
             $.each(this._masks, function(field, mask) {
                 var $field = $('#' + field);
-                if (!$field.val() && mask.length > 0 && !self.varRegexp.test(mask)) {
+                if (!$field.val() && mask && mask.length > 0 && !self.varRegexp.test(mask)) {
                     $field.val(mask);
                 }
                 $field.trigger('change');
@@ -182,13 +182,15 @@ jQuery(function($) {
             var self = this;
             var fieldReverseIndex = {};
             $.each(masks, function(field, mask) {
-                $.each(mask.toString().match(self.varsRegexp) || [], function(key, maskName) {
-                    var fieldName = maskName.slice(2, -2);
-                    if (!(fieldName in fieldReverseIndex)) {
-                        fieldReverseIndex[fieldName] = [];
-                    }
-                    fieldReverseIndex[fieldName].push(field);
-                })
+                if (mask) {
+                    $.each(mask.toString().match(self.varsRegexp) || [], function (key, maskName) {
+                        var fieldName = maskName.slice(2, -2);
+                        if (!(fieldName in fieldReverseIndex)) {
+                            fieldReverseIndex[fieldName] = [];
+                        }
+                        fieldReverseIndex[fieldName].push(field);
+                    })
+                }
             });
             return fieldReverseIndex;
         }

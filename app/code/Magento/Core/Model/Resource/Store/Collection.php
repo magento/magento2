@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Store;
 
 /**
  * Stores collection
@@ -32,8 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Store;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -63,8 +61,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Set flag for load default (admin) store
      *
-     * @param boolean $loadDefault
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @param bool $loadDefault
+     * @return $this
      */
     public function setLoadDefault($loadDefault)
     {
@@ -75,7 +73,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Is load default (admin) store
      *
-     * @return boolean
+     * @return bool
      */
     public function getLoadDefault()
     {
@@ -85,7 +83,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add disable default store filter to collection
      *
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return $this
      */
     public function setWithoutDefaultFilter()
     {
@@ -98,7 +96,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Group id can be passed as one single value or array of values.
      *
      * @param int|array $groupId
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return $this
      */
     public function addGroupFilter($groupId)
     {
@@ -109,7 +107,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add store id(s) filter to collection
      *
      * @param int|array $store
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return $this
      */
     public function addIdFilter($store)
     {
@@ -120,7 +118,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by website to collection
      *
      * @param int|array $website
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return $this
      */
     public function addWebsiteFilter($website)
     {
@@ -131,7 +129,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add root category id filter to store collection
      *
      * @param int|array $category
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return $this
      */
     public function addCategoryFilter($category)
     {
@@ -164,9 +162,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Load collection data
      *
-     * @param boolean $printQuery
-     * @param boolean $logQuery
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -186,7 +184,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add root category id filter to store collection
      *
      * @param array $categories
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return $this
      */
     public function loadByCategoryIds(array $categories)
     {
@@ -199,7 +197,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add store root category data to collection
      *
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return $this
      */
     public function addRootCategoryIdAttribute()
     {

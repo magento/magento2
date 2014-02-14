@@ -25,6 +25,8 @@
  */
 namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element;
 
+use Magento\ObjectManager;
+
 class Factory
 {
     /**
@@ -32,7 +34,10 @@ class Factory
      */
     protected $_objectManager;
 
-    public function __construct(\Magento\ObjectManager $objectManager)
+    /**
+     * @param ObjectManager $objectManager
+     */
+    public function __construct(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }

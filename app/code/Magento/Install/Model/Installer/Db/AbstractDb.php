@@ -117,6 +117,7 @@ abstract class AbstractDb
      * Set configuration data
      *
      * @param array $config the connection configuration
+     * @return void
      */
     public function setConfig($config)
     {

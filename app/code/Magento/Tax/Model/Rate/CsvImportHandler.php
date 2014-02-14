@@ -105,6 +105,7 @@ class CsvImportHandler
      * Import Tax Rates from CSV file
      *
      * @param array $file file info retrieved from $_FILES array
+     * @return void
      * @throws \Magento\Core\Exception
      */
     public function importFromCsvFile($file)
@@ -135,7 +136,7 @@ class CsvImportHandler
      * Filter file fields (i.e. unset invalid fields)
      *
      * @param array $fileFields
-     * @return array filtered fields
+     * @return string[] filtered fields
      */
     protected function _filterFileFields(array $fileFields)
     {
@@ -192,7 +193,7 @@ class CsvImportHandler
      *
      * This cache is used to quickly retrieve store ID when handling locale-specific tax rate titles
      *
-     * @param $validFields list of valid CSV file fields
+     * @param string[] $validFields list of valid CSV file fields
      * @return array
      */
     protected function _composeStoreCache($validFields)

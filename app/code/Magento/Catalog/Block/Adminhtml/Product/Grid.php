@@ -108,6 +108,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -120,12 +123,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     }
 
+    /**
+     * @return \Magento\Core\Model\Store
+     */
     protected function _getStore()
     {
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         return $this->_storeManager->getStore($storeId);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         $store = $this->_getStore();
@@ -155,7 +164,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'entity_id',
                 null,
                 'inner',
-                \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                Store::DEFAULT_STORE_ID
             );
             $collection->joinAttribute(
                 'custom_name',
@@ -202,6 +211,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+    /**
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
+     * @return $this
+     */
     protected function _addColumnFilterToCollection($column)
     {
         if ($this->getCollection()) {
@@ -219,6 +232,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_addColumnFilterToCollection($column);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
         $this->addColumn(
@@ -399,6 +415,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareMassaction()
     {
         $this->setMassactionIdField('entity_id');
@@ -439,11 +458,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('catalog/*/grid', array('_current'=>true));
     }
 
+    /**
+     * @param \Magento\Catalog\Model\Product|\Magento\Object $row
+     * @return string
+     */
     public function getRowUrl($row)
     {
         return $this->getUrl(

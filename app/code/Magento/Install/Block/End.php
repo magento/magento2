@@ -62,7 +62,7 @@ class End extends \Magento\Install\Block\AbstractBlock
      * @param \Magento\Session\Generic $session
      * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\AdminNotification\Model\Survey $survey
-     * @param $cryptKey
+     * @param string $cryptKey
      * @param array $data
      */
     public function __construct(

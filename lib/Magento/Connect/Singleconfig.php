@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Class to manipulate with channel/package cache file
@@ -31,9 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Connect;
-
 class Singleconfig
 {
 
@@ -51,13 +49,13 @@ class Singleconfig
 
     /**
      *
-     * @var unknown_type
+     * @var bool
      */
     protected $_debug = false;
 
     /**
      *
-     * @var unknown_type
+     * @var Validator
      */
     protected $_validator;
 
@@ -78,6 +76,10 @@ class Singleconfig
     const K_PACK_DEPS = 'pack_deps';
     const K_CONFIG = 'config';
 
+    /**
+     * @param string $str
+     * @return string|false
+     */
     public function getValidUri($str)
     {
         $data = parse_url($str);
@@ -87,11 +89,18 @@ class Singleconfig
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function getFilename()
     {
         return $this->_readFilename;
     }
 
+    /**
+     * @param string $uri
+     * @return string
+     */
     public function formatUri($uri)
     {
         $uri = rtrim($uri, "/");
@@ -102,7 +111,7 @@ class Singleconfig
 
     /**
      * Get data
-     * @return unknown_type
+     * @return array
      */
     public function getData()
     {
@@ -111,8 +120,7 @@ class Singleconfig
 
     /**
      * Constructor
-     * @param srting $file
-     * @return void
+     * @param string $file
      */
     public function __construct($file = "cache.cfg")
     {
@@ -126,7 +134,8 @@ class Singleconfig
 
     /**
      * Load cache from file
-     * @param string $file
+     *
+     * @param string|false $file
      * @return void
      */
     public function load($file = false)
@@ -183,7 +192,7 @@ class Singleconfig
 
     /**
      * Save contents
-     * @param string $file
+     * @param string|false $file
      * @return void
      */
     public function save($file = false)
@@ -217,7 +226,10 @@ class Singleconfig
         );
     }
 
-
+    /**
+     * @param string $chanName
+     * @return bool
+     */
     public function isChannel($chanName)
     {
         if($this->isChannelName($chanName)) {
@@ -251,7 +263,7 @@ class Singleconfig
 
     /**
      * Is channel name?
-     * @param $chanName
+     * @param string $chanName
      * @return bool
      */
     public function isChannelName($chanName)
@@ -271,7 +283,7 @@ class Singleconfig
 
     /**
      * Is channel uri?
-     * @param $uri
+     * @param string $uri
      * @return bool
      */
     public function isChannelUri($uri)
@@ -339,7 +351,7 @@ class Singleconfig
      * Set channel record
      * @param string $chanName
      * @param string $uri
-     * @param mixed $data
+     * @param array $data
      * @param array $packages
      * @return void
      */
@@ -357,7 +369,8 @@ class Singleconfig
      * Set package record
      * @param string $chanName
      * @param string $packageName
-     * @param mixed $data
+     * @param array $data
+     * @param string $oneField
      * @return void
      */
     protected function setPackageRecord($chanName, $packageName, $data, $oneField = null)
@@ -368,8 +381,6 @@ class Singleconfig
             $this->_data[self::K_CHAN][$chanName][self::K_PACK][$packageName][$oneField] = $data;
         }
     }
-
-
 
     /**
      * Unset package record
@@ -386,6 +397,7 @@ class Singleconfig
      * Get package record
      * @param string $chanName
      * @param string $packageName
+     * @param string $field
      * @return array
      */
     protected function fetchPackage($chanName, $packageName, $field = null)
@@ -477,9 +489,9 @@ class Singleconfig
 
     /**
      * Add channel
-     * @param $chanName
-     * @param $uri
-     * @param $data
+     * @param string $chanName
+     * @param string $uri
+     * @param array $data
      * @return void
      */
     public function addChannel($chanName, $uri, $data = array())
@@ -503,7 +515,7 @@ class Singleconfig
 
     /**
      * Delete channel
-     * @param $chanName
+     * @param string $chanName
      * @return void
      */
     public function deleteChannel($chanName)
@@ -531,8 +543,8 @@ class Singleconfig
     /**
      * Converts channel name, url or alias to channel name
      * throws exception if not found
-     * @param srting $chanName
-     * @return string
+     * @param string $chanName
+     * @return string|void
      */
     public function chanName($chanName)
     {
@@ -543,6 +555,10 @@ class Singleconfig
         return $channelData[self::K_NAME];
     }
 
+    /**
+     * @param string $chan
+     * @return string|void
+     */
     public function chanUrl($chan)
     {
         $channelData = $this->getChannel($chan);
@@ -555,7 +571,8 @@ class Singleconfig
 
     /**
      * Add package
-     * @param \Magento\Connect\Package $package
+     *
+     * @param Package $package
      * @return void
      */
     public function addPackage($package)
@@ -606,17 +623,29 @@ class Singleconfig
         return null;
     }
 
+    /**
+     * @param string $chanName
+     * @param string $package
+     * @return Package
+     * @throws \Exception
+     */
     public function getPackageObject($chanName, $package)
     {
         $chanName = $this->chanName($chanName);
         if($this->hasPackageRecord($chanName, $package)) {
             $data = $this->fetchPackage($chanName, $package);
-            return new \Magento\Connect\Package($data[self::K_XML]);
+            return new Package($data[self::K_XML]);
         }
         throw new \Exception("Cannot get package: '{$package}'");
     }
 
-
+    /**
+     * @param string $chanName
+     * @param string $package
+     * @param string|false $versionMin
+     * @param string|false $versionMax
+     * @return bool
+     */
     public function hasPackage($chanName, $package, $versionMin = false, $versionMax = false)
     {
         $chanName = $this->chanName($chanName);
@@ -628,6 +657,12 @@ class Singleconfig
         return $this->versionInRange($installedVersion, $versionMin, $versionMax);
     }
 
+    /**
+     * @param string $version
+     * @param string|false $versionMin
+     * @param string|false $versionMax
+     * @return bool
+     */
     public function versionInRange($version, $versionMin = false, $versionMax = false)
     {
         if(false === $versionMin) {
@@ -643,6 +678,13 @@ class Singleconfig
         return $minOk && $maxOk;
     }
 
+    /**
+     * @param string $min1
+     * @param string $max1
+     * @param string $min2
+     * @param string $max2
+     * @return bool
+     */
     public function hasVersionRangeIntersect($min1, $max1, $min2, $max2)
     {
         if(version_compare($min1, $min2, ">") && version_compare($max1, $max2, ">")) {
@@ -669,7 +711,7 @@ class Singleconfig
 
     /**
      * Output error - throw exception
-     * @param $message
+     * @param string $message
      * @throws \Exception
      * @return void
      */
@@ -678,23 +720,28 @@ class Singleconfig
         throw new \Exception($message);
     }
 
-
-
-
-
+    /**
+     * @param int $s1
+     * @param int $s2
+     * @return int
+     */
     public function compareStabilities($s1, $s2)
     {
         if(!$this->_validator) {
-            $this->_validator = new \Magento\Connect\Validator();
+            $this->_validator = new Validator();
         }
         return $this->_validator->compareStabilities($s1, $s2);
     }
 
-
-
+    /**
+     * @param array $restData
+     * @param string|false $argVersionMin
+     * @param string|false $argVersionMax
+     * @param string $preferredStability
+     * @return bool|string
+     */
     public function detectVersionFromRestArray($restData, $argVersionMin = false, $argVersionMax = false, $preferredStability = 'devel')
     {
-
         if(!is_array($restData)) {
             return false;
         }
@@ -710,7 +757,12 @@ class Singleconfig
         return false;
     }
 
-
+    /**
+     * @param string $chanName
+     * @param string $package
+     * @param array $data
+     * @return bool
+     */
     public function setPackageDependencies($chanName, $package, $data)
     {
         $chanName = $this->chanName($chanName);
@@ -722,6 +774,11 @@ class Singleconfig
         return false;
     }
 
+    /**
+     * @param string $chanName
+     * @param string $package
+     * @return array|false
+     */
     public function getPackageDependencies($chanName, $package)
     {
         $chanName = $this->chanName($chanName);
@@ -731,8 +788,12 @@ class Singleconfig
         return false;
     }
 
-
-
+    /**
+     * @param string $chanName
+     * @param string $package
+     * @param array $data
+     * @return bool
+     */
     public function setDependencyInfo($chanName, $package, $data)
     {
         $chanName = $this->chanName($chanName);
@@ -744,6 +805,11 @@ class Singleconfig
         return false;
     }
 
+    /**
+     * @param string $chanName
+     * @param string $package
+     * @return array|false
+     */
     public function getDependencyInfo($chanName, $package)
     {
         $chanName = $this->chanName($chanName);
@@ -753,13 +819,18 @@ class Singleconfig
         return false;
     }
 
-
-
+    /**
+     * @return array
+     */
     public function getChannelNames()
     {
         return array_keys($this->_data[self::K_CHAN]);
     }
 
+    /**
+     * @param string|false $channel
+     * @return array
+     */
     public function getPackagesData($channel = false)
     {
         if(false == $channel) {
@@ -772,6 +843,12 @@ class Singleconfig
         return $this->getChannel($channel);
     }
 
+    /**
+     * @param array $deps
+     * @param string $chanName
+     * @param string $packageName
+     * @return bool
+     */
     public function specifiedInDependencyList($deps, $chanName, $packageName)
     {
         foreach($deps as $dep) {
@@ -782,6 +859,12 @@ class Singleconfig
         return false;
     }
 
+    /**
+     * @param string $chanName
+     * @param string $packageName
+     * @param array $excludeList
+     * @return array
+     */
     public function requiredByOtherPackages($chanName, $packageName, $excludeList = array())
     {
         $out = array();
@@ -799,9 +882,10 @@ class Singleconfig
         return $out;
     }
 
-
-
-
+    /**
+     * @param string|false $chanName
+     * @return array
+     */
     public function getInstalledPackages($chanName = false)
     {
         if(false == $chanName) {
@@ -823,8 +907,6 @@ class Singleconfig
         }
         return $out;
     }
-
-
 
     /**
      * Check if package conflicts with installed packages
@@ -860,8 +942,4 @@ class Singleconfig
         }
         return count($conflicts) ? $conflicts : false;
     }
-
-
-
-
 }

@@ -139,7 +139,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * @param null|string $destination
      * @param null|string $newName
      * @return void
-     * @throws \Exception  if destination path is not writable
+     * @throws \Exception  If destination path is not writable
      */
     public function save($destination = null, $newName = null)
     {
@@ -227,9 +227,9 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Fill image with main background color.
      * Returns a color identifier.
      *
-     * @throws \Exception
-     * @param resource $imageResourceTo
+     * @param resource &$imageResourceTo
      * @return int
+     * @throws \Exception
      */
     private function _fillBackgroundColor(&$imageResourceTo)
     {
@@ -303,8 +303,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      *
      * @param resource $imageResource
      * @param int $fileType one of the constants IMAGETYPE_*
-     * @param bool $isAlpha
-     * @param bool $isTrueColor
+     * @param bool &$isAlpha
+     * @param bool &$isTrueColor
      * @return boolean
      */
     private function _getTransparency($imageResource, $fileType, &$isAlpha = false, &$isTrueColor = false)
@@ -573,7 +573,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Checks required dependencies
      *
      * @return void
-     * @throws \Exception if some of dependencies are missing
+     * @throws \Exception If some of dependencies are missing
      */
     public function checkDependencies()
     {
@@ -586,6 +586,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
 
     /**
      * Reassign image dimensions
+     *
+     * @return void
      */
     public function refreshImageDimensions()
     {
@@ -603,10 +605,11 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
         }
     }
 
-    /*
+    /**
      * Fixes saving PNG alpha channel
      *
      * @param resource $imageHandler
+     * @return void
      */
     private function _saveAlpha($imageHandler)
     {
@@ -656,7 +659,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Create Image using standard font
      *
-     * @param $text
+     * @param string $text
+     * @return void
      */
     protected function _createImageFromText($text)
     {
@@ -675,6 +679,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      *
      * @param string $text
      * @param string $font
+     * @return void
      * @throws \Exception
      */
     protected function _createImageFromTtfText($text, $font)
@@ -696,8 +701,9 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Create empty image with transparent background
      *
-     * @param $width
-     * @param $height
+     * @param int $width
+     * @param int $height
+     * @return void
      */
     protected function _createEmptyImage($width, $height)
     {

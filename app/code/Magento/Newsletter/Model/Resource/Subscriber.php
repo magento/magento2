@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Newsletter\Model\Resource;
 
 /**
  * Newsletter subscriber resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource;
-
 class Subscriber extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -97,6 +95,7 @@ class Subscriber extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Initialize resource model
      * Get tablename from config
      *
+     * @return void
      */
     protected function _construct()
     {

@@ -27,6 +27,9 @@ namespace Magento\Wishlist\Model\Config\Source;
 
 class Summary implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

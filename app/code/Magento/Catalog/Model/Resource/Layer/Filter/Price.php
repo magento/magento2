@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Layer\Filter;
 
 /**
  * Catalog Layer Price Filter resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Layer\Filter;
-
 class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -61,6 +59,7 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection and define main table name
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -166,10 +165,11 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Prepare response object and dispatch prepare price event
      * Return response object
      *
-     * @deprecated since 1.7.0.0
      * @param \Magento\Catalog\Model\Layer\Filter\Price $filter
      * @param \Magento\DB\Select $select
      * @return \Magento\Object
+     *
+     * @deprecated since 1.7.0.0
      */
     protected function _dispatchPreparePriceEvent($filter, $select)
     {
@@ -183,9 +183,10 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Retrieve maximal price for attribute
      *
-     * @deprecated since 1.7.0.0
      * @param \Magento\Catalog\Model\Layer\Filter\Price $filter
      * @return float
+     *
+     * @deprecated since 1.7.0.0
      */
     public function getMaxPrice($filter)
     {
@@ -278,11 +279,12 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Apply attribute filter to product collection
      *
-     * @deprecated since 1.7.0.0
      * @param \Magento\Catalog\Model\Layer\Filter\Price $filter
      * @param int $range
-     * @param int $index    the range factor
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @param int $index the range factor
+     * @return $this
+     *
+     * @deprecated since 1.7.0.0
      */
     public function applyFilterToCollection($filter, $range, $index)
     {
@@ -330,6 +332,7 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Layer\Filter\Price $filter
      * @param float $price
      * @param int $index
+     * @param null|int $lowerPrice
      * @return array|false
      */
     public function loadPreviousPrices($filter, $price, $index, $lowerPrice = null)
@@ -355,7 +358,7 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param float $price
      * @param int $rightIndex
      * @param null|int $upperPrice
-     * @return array
+     * @return array|false
      */
     public function loadNextPrices($filter, $price, $rightIndex, $upperPrice = null)
     {
@@ -390,7 +393,7 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Apply price range filter to product collection
      *
      * @param \Magento\Catalog\Model\Layer\Filter\Price $filter
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @return $this
      */
     public function applyPriceRange($filter)
     {
@@ -422,6 +425,5 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
 
         return $this;
-
     }
 }

@@ -92,6 +92,7 @@ class IntegrationServiceV1
      * Add the list of allowed resources to the integration object data by 'resource' key.
      *
      * @param IntegrationModel $integration
+     * @return void
      */
     protected function _addAllowedResources(IntegrationModel $integration)
     {
@@ -108,6 +109,7 @@ class IntegrationServiceV1
      * If 'all_resources' is set and is evaluated to true, permissions to all resources will be granted.
      *
      * @param IntegrationModel $integration
+     * @return void
      */
     protected function _saveApiPermissions(IntegrationModel $integration)
     {

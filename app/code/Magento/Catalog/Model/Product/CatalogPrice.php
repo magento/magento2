@@ -76,8 +76,8 @@ class CatalogPrice implements CatalogPriceInterface
      * Regular catalog price
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @return float
      * @throws \UnexpectedValueException
-     * @return null
      */
     public function getCatalogRegularPrice(\Magento\Catalog\Model\Product $product)
     {

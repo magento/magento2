@@ -46,9 +46,10 @@ class Converter implements \Magento\Config\ConverterInterface
     /**
      * Set array value by path
      *
-     * @param array $container
+     * @param array &$container
      * @param string $path
      * @param string $value
+     * @return void
      */
     protected function _setArrayValue(array &$container, $path, $value)
     {

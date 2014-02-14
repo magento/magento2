@@ -38,6 +38,8 @@ class Topmenu extends \Magento\View\Element\Template
 
     /**
      * Init top menu tree structure
+     *
+     * @return void
      */
     public function _construct()
     {
@@ -95,7 +97,7 @@ class Topmenu extends \Magento\View\Element\Template
      *
      * @param \Magento\Backend\Model\Menu $items
      * @param int $limit
-     * @return array
+     * @return array|void
      *
      * @todo: Add Depth Level limit, and better logic for columns
      */

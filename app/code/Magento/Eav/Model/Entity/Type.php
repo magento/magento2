@@ -92,7 +92,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      */
     protected $_attSetFactory;
 
-    /***
+    /**
      * @var \Magento\Eav\Model\Entity\StoreFactory
      */
     protected $_storeFactory;

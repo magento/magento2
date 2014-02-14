@@ -272,5 +272,17 @@ return array(
     array('_messagesBlock', 'Magento\View\Element\AbstractBlock'),
     array('_messagesBlock', 'Magento\Connect\Helper\Data'),
     array('escapeMessageFlag', 'Magento\View\Block\Messages'),
+    array('_flatResourceFactory', 'Magento\Catalog\Model\Observer'),
+    array('_catalogCategoryFlat', 'Magento\Catalog\Model\Observer'),
+    array('_catalogCategoryFlat', 'Magento\Catalog\Block\Navigation'),
+    array('_catalogCategoryFlat', 'Magento\Catalog\Model\Category'),
+    array('_storesRootCategories', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_resourceHelper', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_catalogCategory', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_isRebuilt', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_isBuilt', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_attributeCodes', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_columnsSql', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_columns', 'Magento\Catalog\Model\Resource\Category\Flat'),
     array('fileIteratorFactory', 'Magento\Core\Model\Theme\Collection')
 );

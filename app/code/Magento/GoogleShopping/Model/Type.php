@@ -120,7 +120,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      *
      * @param int $attributeSetId Attribute Set
      * @param string $targetCountry Two-letters country ISO code
-     * @return \Magento\GoogleShopping\Model\Type
+     * @return $this
      */
     public function loadByAttributeSetId($attributeSetId, $targetCountry)
     {
@@ -131,7 +131,7 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare Entry data and attributes before saving in Google Content
      *
-     * @param CatalogModelProduct $entry
+     * @param CatalogModelProduct $product
      * @param Entry $entry
      * @return Entry
      */

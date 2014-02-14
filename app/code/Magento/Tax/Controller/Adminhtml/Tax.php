@@ -37,6 +37,8 @@ class Tax extends \Magento\Backend\App\Action
 {
     /**
      * Save Tax Class via AJAX
+     *
+     * @return void
      */
     public function ajaxSaveAction()
     {
@@ -76,6 +78,8 @@ class Tax extends \Magento\Backend\App\Action
 
     /**
      * Delete Tax Class via AJAX
+     *
+     * @return void
      */
     public function ajaxDeleteAction()
     {

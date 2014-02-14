@@ -30,12 +30,12 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Currency;
 
-class Base extends \Magento\Backend\Model\Config\Backend\Currency\AbstractCurrency
+class Base extends AbstractCurrency
 {
     /**
      * Check base currency is available in installed currencies
      *
-     * @return \Magento\Backend\Model\Config\Backend\Currency\Base
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _afterSave()

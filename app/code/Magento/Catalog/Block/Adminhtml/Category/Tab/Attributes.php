@@ -72,6 +72,7 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize tab
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -81,6 +82,8 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Load Wysiwyg on demand and Prepare layout
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -93,7 +96,7 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form before rendering HTML
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes
+     * @return $this
      */
     protected function _prepareForm()
     {

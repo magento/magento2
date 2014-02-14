@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Resource\Eav;
 
 /**
  * Catalog attribute model
@@ -70,8 +71,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Eav;
-
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     const SCOPE_STORE                           = 0;
@@ -160,6 +159,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         );
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Catalog\Model\Resource\Attribute');
@@ -168,8 +170,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * Processing object before save data
      *
-     * @throws \Magento\Core\Exception
      * @return \Magento\Core\Model\AbstractModel
+     * @throws \Magento\Core\Exception
      */
     protected function _beforeSave()
     {
@@ -218,7 +220,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * Register indexing event before delete catalog eav attribute
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _beforeDelete()
@@ -235,7 +237,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * Init indexing process after catalog eav attribute delete commit
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return $this
      */
     protected function _afterDeleteCommit()
     {
@@ -304,7 +306,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Retrieve apply to products array
      * Return empty array if applied to all products
      *
-     * @return array
+     * @return string[]
      */
     public function getApplyTo()
     {

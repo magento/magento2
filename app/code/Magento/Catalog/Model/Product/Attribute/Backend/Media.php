@@ -33,8 +33,13 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
+use Magento\Core\Exception;
+
 class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
+    /**
+     * @var array
+     */
     protected $_renamedImages = array();
 
     /**
@@ -145,6 +150,11 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @param string[] &$image
+     * @return string
+     */
     protected function _getDefaultValue($key, &$image)
     {
         if (isset($image[$key . '_default'])) {
@@ -158,8 +168,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Validate media_gallery attribute data
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Core\Exception
      * @return bool
+     * @throws Exception
      */
     public function validate($object)
     {
@@ -174,7 +184,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                throw new \Magento\Core\Exception(
+                throw new Exception(
                     __('The value of attribute "%1" must be unique.', $label)
                 );
             }
@@ -183,6 +193,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         return true;
     }
 
+    /**
+     * @param \Magento\Object $object
+     * @return $this|void
+     */
     public function beforeSave($object)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
@@ -269,6 +283,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         return $file;
     }
 
+    /**
+     * @param \Magento\Object $object
+     * @return void
+     */
     public function afterSave($object)
     {
         if ($object->getIsDuplicate() == true) {
@@ -340,25 +358,25 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string                     $file              file path of image in file system
-     * @param string|array               $mediaAttribute    code of attribute with type 'media_image',
+     * @param string|string[]            $mediaAttribute    code of attribute with type 'media_image',
      *                                                      leave blank if image should be only in gallery
      * @param boolean                    $move              if true, it will move source file
      * @param boolean                    $exclude           mark image as disabled in product page view
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws Exception
      */
     public function addImage(\Magento\Catalog\Model\Product $product, $file,
         $mediaAttribute = null, $move = false, $exclude = true
     ) {
         $file = $this->_mediaDirectory->getRelativePath($file);
         if (!$this->_mediaDirectory->isFile($file)) {
-            throw new \Magento\Core\Exception(__('The image does not exist.'));
+            throw new Exception(__('The image does not exist.'));
         }
 
         $pathinfo = pathinfo($file);
         $imgExtensions = array('jpg','jpeg','gif','png');
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
-            throw new \Magento\Core\Exception(__('Please correct the image file type.'));
+            throw new Exception(__('Please correct the image file type.'));
         }
 
         $fileName       = \Magento\Core\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
@@ -384,7 +402,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $this->_mediaDirectory->changePermissions($destinationFile, 0777);
             }
         } catch (\Exception $e) {
-            throw new \Magento\Core\Exception(
+            throw new Exception(
                 __('We couldn\'t move this file: %1.', $e->getMessage())
             );
         }
@@ -465,7 +483,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Catalog\Model\Product $product
      * @param string $file
      * @param array $data
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Media
+     * @return $this
      */
     public function updateImage(\Magento\Catalog\Model\Product $product, $file, $data)
     {
@@ -503,7 +521,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $file
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Media
+     * @return $this
      */
     public function removeImage(\Magento\Catalog\Model\Product $product, $file)
     {
@@ -554,8 +572,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Clear media attribute value
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param string|array $mediaAttribute
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Media
+     * @param string|string[] $mediaAttribute
+     * @return $this
      */
     public function clearMediaAttribute(\Magento\Catalog\Model\Product $product, $mediaAttribute)
     {
@@ -578,9 +596,9 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Set media attribute value
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param string|array $mediaAttribute
+     * @param string|string[] $mediaAttribute
      * @param string $value
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Media
+     * @return $this
      */
     public function setMediaAttribute(\Magento\Catalog\Model\Product $product, $mediaAttribute, $value)
     {
@@ -668,6 +686,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param string $file
      * @return string
+     * @throws Exception
      */
     protected function _copyImage($file)
     {
@@ -694,12 +713,16 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return str_replace('\\', '/', $destinationFile);
         } catch (\Exception $e) {
             $file = $this->_mediaConfig->getMediaPath($file);
-            throw new \Magento\Core\Exception(
+            throw new Exception(
                 __('We couldn\'t copy file %1. Please delete media with non-existing images and try again.', $file)
             );
         }
     }
 
+    /**
+     * @param \Magento\Object $object
+     * @return $this
+     */
     public function duplicate($object)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
@@ -722,9 +745,9 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Get filename which is not duplicated with other files in media temporary and media directories
      *
-     * @param String $fileName
-     * @param String $dispretionPath
-     * @return String
+     * @param string $fileName
+     * @param string $dispretionPath
+     * @return string
      */
     protected function _getNotDuplicatedFilename($fileName, $dispretionPath)
     {

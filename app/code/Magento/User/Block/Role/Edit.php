@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Block\Role;
 
 class Edit extends \Magento\Backend\Block\Widget\Tabs
@@ -53,6 +52,11 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
         parent::__construct($context, $jsonEncoder, $authSession, $data);
     }
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -61,6 +65,9 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
         $this->setTitle(__('Role Information'));
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $role = $this->_coreRegistry->registry('current_role');

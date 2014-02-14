@@ -34,18 +34,21 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-class Advanced
-    extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Model\Config\Source\Yesno;
+use Magento\Eav\Helper\Data;
+
+class Advanced extends Generic
 {
     /**
      * Eav data
      *
-     * @var \Magento\Eav\Helper\Data
+     * @var Data
      */
     protected $_eavData = null;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var Yesno
      */
     protected $_yesNo;
 
@@ -53,16 +56,16 @@ class Advanced
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Backend\Model\Config\Source\Yesno $yesNo
-     * @param \Magento\Eav\Helper\Data $eavData
+     * @param Yesno $yesNo
+     * @param Data $eavData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Backend\Model\Config\Source\Yesno $yesNo,
-        \Magento\Eav\Helper\Data $eavData,
+        Yesno $yesNo,
+        Data $eavData,
         array $data = array()
     ) {
         $this->_yesNo = $yesNo;
@@ -73,7 +76,7 @@ class Advanced
     /**
      * Adding product form elements for editing attribute
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -227,7 +230,7 @@ class Advanced
     /**
      * Initialize form fileds values
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced
+     * @return $this
      */
     protected function _initFormValues()
     {
@@ -238,7 +241,7 @@ class Advanced
     /**
      * Retrieve attribute object from registry
      *
-     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return mixed
      */
     private function getAttributeObject()
     {

@@ -61,6 +61,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Initialize Grid block
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -97,7 +98,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid columns
      *
-     * @return \Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab\Grid
+     * @return $this
      */
     protected function _prepareColumns()
     {
@@ -120,6 +121,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Self URL getter
      *
+     * @param array $params
      * @return string
      */
     public function getCurrentUrl($params = array())
@@ -133,6 +135,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Row URL getter
      *
+     * @param string $row
      * @return string
      */
     public function getRowUrl($row)

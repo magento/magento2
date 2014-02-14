@@ -40,7 +40,7 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
     protected $_allowedModules;
 
     /**
-     * {@inheritdoc}
+     * @var array
      */
     protected $_idAttributes = array(
         '/config/module' => 'name',

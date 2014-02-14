@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
  * Layer category filter abstract model
@@ -31,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Layer\Filter;
-
 abstract class AbstractFilter extends \Magento\Object
 {
     /**
@@ -135,7 +134,9 @@ abstract class AbstractFilter extends \Magento\Object
     /**
      * Apply filter to collection
      *
-     * @param  \Zend_Controller_Request_Abstract $request
+     * @param \Zend_Controller_Request_Abstract $request
+     * @param \Magento\Object $filterBlock
+     * @return $this
      */
     public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
     {
@@ -168,7 +169,7 @@ abstract class AbstractFilter extends \Magento\Object
     /**
      * Get data array for building filter items
      *
-     * result array should have next structure:
+     * Result array should have next structure:
      * array(
      *      $index => array(
      *          'label' => $label,
@@ -313,7 +314,7 @@ abstract class AbstractFilter extends \Magento\Object
      * Set store id scope
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -338,7 +339,7 @@ abstract class AbstractFilter extends \Magento\Object
      * Set Website ID scope
      *
      * @param int $websiteId
-     * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
+     * @return $this
      */
     public function setWebsiteId($websiteId)
     {

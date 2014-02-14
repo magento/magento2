@@ -85,7 +85,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set wishlist table name
      *
      * @param string $value
-     * @return \Magento\Reports\Model\Resource\Wishlist\Collection
+     * @return $this
      */
     public function setWishlistTable($value)
     {

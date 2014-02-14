@@ -36,6 +36,8 @@ namespace Magento\Review\Block\Adminhtml\Grid\Filter;
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
+     * Get grid options
+     *
      * @return array
      */
     protected function _getOptions()
@@ -49,6 +51,8 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     }
 
     /**
+     * Get condition
+     *
      * @return int
      */
     public function getCondition()

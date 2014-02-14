@@ -24,13 +24,7 @@
 
 namespace Magento\Indexer\Model;
 
-/**
- * @method int getViewId()
- * @method string getActionClass()
- * @method string getTitle()
- * @method string getDescription()
- */
-class Indexer extends \Magento\Object
+class Indexer extends \Magento\Object implements IndexerInterface
 {
     /**
      * @var string
@@ -48,7 +42,7 @@ class Indexer extends \Magento\Object
     protected $actionFactory;
 
     /**
-     * @var \Magento\Mview\View
+     * @var \Magento\Mview\ViewInterface
      */
     protected $view;
 
@@ -92,15 +86,55 @@ class Indexer extends \Magento\Object
     }
 
     /**
+     * Return indexer's view ID
+     *
+     * @return string
+     */
+    public function getViewId()
+    {
+        return $this->getData('view_id');
+    }
+
+    /**
+     * Return indexer action class
+     *
+     * @return string
+     */
+    public function getActionClass()
+    {
+        return $this->getData('action_class');
+    }
+
+    /**
+     * Return indexer title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getData('title');
+    }
+
+    /**
+     * Return indexer description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getData('description');
+    }
+
+    /**
      * Fill indexer data from config
      *
      * @param string $indexerId
-     * @return \Magento\Indexer\Model\Indexer
+     * @return IndexerInterface
      * @throws \InvalidArgumentException
      */
     public function load($indexerId)
     {
-        $indexer = $this->config->get($indexerId);
+        $indexer = $this->config->getIndexer($indexerId);
         if (empty($indexer) || empty($indexer['indexer_id']) || $indexer['indexer_id'] != $indexerId) {
             throw new \InvalidArgumentException("{$indexerId} indexer does not exist.");
         }
@@ -114,7 +148,7 @@ class Indexer extends \Magento\Object
     /**
      * Return related view object
      *
-     * @return \Magento\Mview\View
+     * @return \Magento\Mview\ViewInterface
      */
     public function getView()
     {
@@ -145,7 +179,7 @@ class Indexer extends \Magento\Object
      * Set indexer state object
      *
      * @param Indexer\State $state
-     * @return Indexer
+     * @return IndexerInterface
      */
     public function setState(Indexer\State $state)
     {
@@ -154,35 +188,66 @@ class Indexer extends \Magento\Object
     }
 
     /**
-     * Return indexer mode
+     * Check whether indexer is run by schedule
      *
-     * @return string
+     * @return bool
      */
-    public function getMode()
+    public function isScheduled()
     {
-        return $this->getView()->getMode();
+        return $this->getView()->isEnabled();
     }
 
     /**
-     * Turn changelog mode of
+     * Turn scheduled mode on/off
      *
-     * @return string
+     * @param bool $scheduled
      */
-    public function turnViewOff()
+    public function setScheduled($scheduled)
     {
-        $this->getView()->unsubscribe();
+        if ($scheduled) {
+            $this->getView()->subscribe();
+        } else {
+            $this->getView()->unsubscribe();
+        }
         $this->getState()->save();
     }
 
     /**
-     * Turn changelog mode on
+     * Check whether indexer is valid
      *
-     * @return string
+     * @return bool
      */
-    public function turnViewOn()
+    public function isValid()
     {
-        $this->getView()->subscribe();
-        $this->getState()->save();
+        return $this->getState()->getStatus() == Indexer\State::STATUS_VALID;
+    }
+
+    /**
+     * Check whether indexer is invalid
+     *
+     * @return bool
+     */
+    public function isInvalid()
+    {
+        return $this->getState()->getStatus() == Indexer\State::STATUS_INVALID;
+    }
+
+    /**
+     * Check whether indexer is working
+     *
+     * @return bool
+     */
+    public function isWorking()
+    {
+        return $this->getState()->getStatus() == Indexer\State::STATUS_WORKING;
+    }
+
+    /**
+     * Set indexer invalid
+     */
+    public function invalidate()
+    {
+        $this->getState()->setStatus(Indexer\State::STATUS_INVALID)->save();
     }
 
     /**
@@ -192,24 +257,17 @@ class Indexer extends \Magento\Object
      */
     public function getStatus()
     {
-        if ($this->getView()->getMode() == \Magento\Mview\View\StateInterface::MODE_ENABLED
-            && $this->getView()->getStatus() == \Magento\Mview\View\StateInterface::STATUS_WORKING
-        ) {
-            return \Magento\Indexer\Model\Indexer\State::STATUS_WORKING;
-        }
         return $this->getState()->getStatus();
     }
 
     /**
-     * Return indexer updated time
+     * Return indexer or mview latest updated time
      *
      * @return string
      */
-    public function getUpdated()
+    public function getLatestUpdated()
     {
-        if ($this->getView()->getMode() == \Magento\Mview\View\StateInterface::MODE_ENABLED
-            && $this->getView()->getUpdated()
-        ) {
+        if ($this->getView()->isEnabled() && $this->getView()->getUpdated()) {
             if (!$this->getState()->getUpdated()) {
                 return $this->getView()->getUpdated();
             }
@@ -243,15 +301,20 @@ class Indexer extends \Magento\Object
             $this->getState()
                 ->setStatus(Indexer\State::STATUS_WORKING)
                 ->save();
+            if ($this->getView()->isEnabled()) {
+                $this->getView()->suspend();
+            }
             try {
                 $this->getActionInstance()->executeFull();
                 $this->getState()
                     ->setStatus(Indexer\State::STATUS_VALID)
                     ->save();
+                $this->getView()->resume();
             } catch (\Exception $exception) {
                 $this->getState()
                     ->setStatus(Indexer\State::STATUS_INVALID)
                     ->save();
+                $this->getView()->resume();
                 throw $exception;
             }
         }
@@ -265,6 +328,7 @@ class Indexer extends \Magento\Object
     public function reindexRow($id)
     {
         $this->getActionInstance()->executeRow($id);
+        $this->getState()->save();
     }
 
     /**
@@ -275,5 +339,6 @@ class Indexer extends \Magento\Object
     public function reindexList($ids)
     {
         $this->getActionInstance()->executeList($ids);
+        $this->getState()->save();
     }
 }

@@ -41,22 +41,6 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     protected $_dateInputs = array();
 
-    /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Customer\Helper\Address $addressHelper,
-        array $data = array()
-    ) {
-        parent::__construct($context, $eavConfig, $addressHelper, $data);
-        $this->_isScopePrivate = true;
-    }
-
     public function _construct()
     {
         parent::_construct();
@@ -65,12 +49,12 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
 
     public function isEnabled()
     {
-        return (bool)$this->_getAttribute('dob')->getIsVisible();
+        return (bool)$this->_getAttribute('dob')->isVisible();
     }
 
     public function isRequired()
     {
-        return (bool)$this->_getAttribute('dob')->getIsRequired();
+        return (bool)$this->_getAttribute('dob')->isRequired();
     }
 
     public function setDate($date)
@@ -148,7 +132,7 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function getMinDateRange()
     {
-        $rules = $this->_getAttribute('dob')->getValidateRules();
+        $rules = $this->_getAttribute('dob')->getValidationRules();
         return isset($rules[self::MIN_DATE_RANGE_KEY]) ? date("Y/m/d", $rules[self::MIN_DATE_RANGE_KEY]) : null;
     }
 
@@ -159,7 +143,7 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function getMaxDateRange()
     {
-        $rules = $this->_getAttribute('dob')->getValidateRules();
+        $rules = $this->_getAttribute('dob')->getValidationRules();
         return isset($rules[self::MAX_DATE_RANGE_KEY]) ? date("Y/m/d", $rules[self::MAX_DATE_RANGE_KEY]) : null;
     }
 }

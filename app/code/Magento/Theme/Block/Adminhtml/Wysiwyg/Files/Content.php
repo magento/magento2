@@ -62,6 +62,8 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Block construction
+     *
+     * @return void
      */
     protected function _construct()
     {

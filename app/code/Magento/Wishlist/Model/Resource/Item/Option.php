@@ -35,6 +35,9 @@ namespace Magento\Wishlist\Model\Resource\Item;
 
 class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('wishlist_item_option', 'option_id');

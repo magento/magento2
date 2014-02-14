@@ -32,7 +32,9 @@
         <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="cart/minicart.phtml" cacheable="false">
             <block class="Magento\View\Element\RendererList" name="checkout.cart.sidebar.item.renderers" as="renderer.list" />
             <container name="minicart.extra.info" as="minicart_info" label="My Cart Extra info"/>
-            <container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions"/>
+            <container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions">
+                <block class="Magento\Catalog\Block\ShortcutButtons" name="topCart.shortcut.buttons"/>
+            </container>
         </block>
     </referenceContainer>
 </layout>

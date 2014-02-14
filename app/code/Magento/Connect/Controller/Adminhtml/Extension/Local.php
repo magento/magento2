@@ -38,6 +38,7 @@ class Local extends \Magento\Backend\App\Action
     /**
      * Redirect to Magento Connect
      *
+     * @return void
      */
     public function indexAction()
     {

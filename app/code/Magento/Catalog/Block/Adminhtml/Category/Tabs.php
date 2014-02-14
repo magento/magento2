@@ -38,12 +38,15 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected $_attributeTabBlock = 'Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes';
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
-   /**
+    /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Core\Model\Registry|null
      */
     protected $_coreRegistry = null;
 
@@ -85,6 +88,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * Initialize Tabs
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -96,7 +101,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
-     * Retrieve cattegory object
+     * Retrieve category object
      *
      * @return \Magento\Catalog\Model\Category
      */
@@ -121,7 +126,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     /**
      * Prepare Layout Content
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Category\Tabs
+     * @return $this
      */
     protected function _prepareLayout()
     {

@@ -186,7 +186,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      *
      * @param array $data
      * @param bool $unsetOldParams
-     * @return \Magento\Backend\Model\UrlInterface
+     * @return $this
      */
     protected function _setRouteParams(array $data, $unsetOldParams = true)
     {
@@ -279,7 +279,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     /**
      * Return secret key settings flag
      *
-     * @return boolean
+     * @return bool
      */
     public function useSecretKey()
     {
@@ -289,7 +289,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     /**
      * Enable secret key using
      *
-     * @return \Magento\Backend\Model\UrlInterface
+     * @return $this
      */
     public function turnOnSecretKey()
     {
@@ -300,7 +300,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     /**
      * Disable secret key using
      *
-     * @return \Magento\Backend\Model\UrlInterface
+     * @return $this
      */
     public function turnOffSecretKey()
     {
@@ -311,7 +311,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
     /**
      * Refresh admin menu cache etc.
      *
-     * @return \Magento\Backend\Model\UrlInterface
+     * @return void
      */
     public function renewSecretUrls()
     {
@@ -372,7 +372,7 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
      * Set custom auth session
      *
      * @param \Magento\Backend\Model\Auth\Session $session
-     * @return \Magento\Backend\Model\UrlInterface
+     * @return $this
      */
     public function setSession(\Magento\Backend\Model\Auth\Session $session)
     {

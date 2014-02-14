@@ -23,6 +23,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product\Indexer;
+
 /**
  * @method \Magento\Catalog\Model\Resource\Product\Indexer\Price _getResource()
  * @method \Magento\Catalog\Model\Resource\Product\Indexer\Price getResource()
@@ -48,8 +50,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Indexer;
-
 class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
 {
     /**
@@ -82,6 +82,9 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
         )
     );
 
+    /**
+     * @var string[]
+     */
     protected $_relatedConfigSettings = array(
         \Magento\Catalog\Helper\Data::XML_PATH_PRICE_SCOPE,
         \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK
@@ -90,6 +93,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -119,7 +123,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
     /**
      * Retrieve attribute list has an effect on product price
      *
-     * @return array
+     * @return string[]
      */
     protected function _getDependentAttributes()
     {
@@ -171,6 +175,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by catalog product delete process
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCatalogProductDeleteEvent(\Magento\Index\Model\Event $event)
     {
@@ -187,6 +192,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by catalog product save process
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCatalogProductSaveEvent(\Magento\Index\Model\Event $event)
     {
@@ -210,6 +216,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
 
     /**
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCatalogProductMassActionEvent(\Magento\Index\Model\Event $event)
     {
@@ -244,6 +251,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by process in event object
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerEvent(\Magento\Index\Model\Event $event)
     {
@@ -283,6 +291,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Process event
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _processEvent(\Magento\Index\Model\Event $event)
     {

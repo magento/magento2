@@ -36,8 +36,7 @@ class TypeProcessor
 
     /**
      * Array of types data.
-     *
-     * @var array <pre>array(
+     * <pre>array(
      *     $complexTypeName => array(
      *         'documentation' => $typeDocumentation
      *         'parameters' => array(
@@ -52,16 +51,19 @@ class TypeProcessor
      *     ),
      *     ...
      * )</pre>
+     *
+     * @var array
      */
     protected $_types = array();
 
     /**
      * Types class map.
-     *
-     * @var array <pre>array(
+     * <pre>array(
      *     $complexTypeName => $interfaceName,
      *     ...
      * )</pre>
+     *
+     * @var array
      */
     protected $_typeToClassMap = array();
 
@@ -105,6 +107,7 @@ class TypeProcessor
      *
      * @param string $typeName
      * @param array $data
+     * @return void
      */
     public function setTypeData($typeName, $data)
     {
@@ -182,6 +185,7 @@ class TypeProcessor
      *
      * @param \Zend\Code\Reflection\MethodReflection $methodReflection
      * @param string $typeName
+     * @return void
      */
     protected function _processMethod(\Zend\Code\Reflection\MethodReflection $methodReflection, $typeName)
     {

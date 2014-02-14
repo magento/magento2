@@ -102,6 +102,7 @@ class Xml implements
      * @param string $errorMessage
      * @param string $errorFile
      * @param integer $errorLine
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handleErrors($errorNumber, $errorMessage, $errorFile, $errorLine)

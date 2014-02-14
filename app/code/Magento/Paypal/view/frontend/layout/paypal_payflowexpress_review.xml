@@ -43,7 +43,7 @@
                        as="totals" template="onepage/review/totals.phtml" cacheable="false"/>
             </block>
             <block class="Magento\Checkout\Block\Agreements" name="paypal.express.review.details.agreements"
-                   as="agreements" template="onepage/agreements.phtml"/>
+                   as="agreements" template="agreements.phtml"/>
         </block>
     </referenceContainer>
 </layout>

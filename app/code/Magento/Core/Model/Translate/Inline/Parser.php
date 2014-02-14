@@ -214,6 +214,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
      * Validate the structure of translation parameters
      *
      * @param array $translateParams
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _validateTranslationParams(array $translateParams)
@@ -230,8 +231,9 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     /**
      * Apply input filter to values of translation parameters
      *
-     * @param array $translateParams
+     * @param array &$translateParams
      * @param array $fieldNames Names of fields values of which are to be filtered
+     * @return void
      */
     protected function _filterTranslationParams(array &$translateParams, array $fieldNames)
     {
@@ -272,7 +274,8 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     /**
      * Sets the body content that is being parsed passed upon the passed in string.
      *
-     * @param $content string
+     * @param string $content
+     * @return void
      */
     public function setContent($content)
     {
@@ -368,7 +371,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
      * Get translate data by regexp
      *
      * @param string $regexp
-     * @param string $text
+     * @param string &$text
      * @param string|array $locationCallback
      * @param array $options
      * @return array
@@ -393,6 +396,8 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
 
     /**
      * Prepare tags inline translates
+     *
+     * @return void
      */
     private function _tagAttributes()
     {
@@ -402,7 +407,8 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     /**
      * Prepare tags inline translates for the content
      *
-     * @param string $content
+     * @param string &$content
+     * @return void
      */
     private function _prepareTagAttributesForContent(&$content)
     {
@@ -479,6 +485,8 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
 
     /**
      * Prepare special tags
+     *
+     * @return void
      */
     private function _specialTags()
     {
@@ -489,9 +497,10 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     /**
      * Prepare simple tags
      *
-     * @param string $content
+     * @param string &$content
      * @param array $tagsList
      * @param string|array $formatCallback
+     * @return void
      */
     private function _translateTags(&$content, $tagsList, $formatCallback)
     {
@@ -572,6 +581,8 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
 
     /**
      * Prepare other text inline translates
+     *
+     * @return void
      */
     private function _otherText()
     {
@@ -614,7 +625,7 @@ class Parser implements \Magento\Translate\Inline\ParserInterface
     /**
      * Add an additional html attribute if needed.
      *
-     * @param mixed|string $tagName
+     * @param mixed $tagName
      * @return string
      */
     protected function _getAdditionalHtmlAttribute($tagName = null)

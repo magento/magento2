@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
  * Layer price filter
@@ -31,9 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Catalog\Model\Layer\Filter;
-
 class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
     /**
@@ -213,10 +211,10 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Prepare text of item label
      *
+     * @param      int $range
+     * @param      float $value
+     * @return     string
      * @deprecated since 1.7.0.0
-     * @param   int $range
-     * @param   float $value
-     * @return  string
      */
     protected function _renderItemLabel($range, $value)
     {
@@ -354,7 +352,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Apply price range filter to collection
      *
-     * @return \Magento\Catalog\Model\Layer\Filter\Price
+     * @return $this
      */
     protected function _applyPriceRange()
     {
@@ -387,9 +385,8 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Apply price range filter
      *
      * @param \Zend_Controller_Request_Abstract $request
-     * @param $filterBlock
-     *
-     * @return \Magento\Catalog\Model\Layer\Filter\Price
+     * @param \Magento\Object $filterBlock
+     * @return $this
      */
     public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
     {
@@ -439,10 +436,10 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Apply filter value to product collection based on filter range and selected value
      *
-     * @deprecated since 1.7.0.0
      * @param int $range
      * @param int $index
      * @return \Magento\Catalog\Model\Layer\Filter\Price
+     * @deprecated since 1.7.0.0
      */
     protected function _applyToCollection($range, $index)
     {
@@ -468,7 +465,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Set active customer group id for filter
      *
      * @param int $customerGroupId
-     * @return \Magento\Catalog\Model\Layer\Filter\Price
+     * @return $this
      */
     public function setCustomerGroupId($customerGroupId)
     {
@@ -496,7 +493,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Set active currency rate for filter
      *
      * @param float $rate
-     * @return \Magento\Catalog\Model\Layer\Filter\Price
+     * @return $this
      */
     public function setCurrencyRate($rate)
     {
@@ -565,7 +562,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param null|int $offset
      * @param null|int $lowerPrice
      * @param null|int $upperPrice
-     * @return array|false
+     * @return array
      */
     public function loadPrices($limit, $offset = null, $lowerPrice = null, $upperPrice = null)
     {

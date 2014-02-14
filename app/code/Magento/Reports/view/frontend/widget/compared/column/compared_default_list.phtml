@@ -69,7 +69,7 @@ if ($exist = $this->getRecentlyComparedProducts()) {
                     <div class="actions">
                         <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
                             <button class="action tocart"
-                                    data-mage-init="{redirectUrl: {url: '<?php echo $this->getAddToCartUrl($_product) ?>'}}"
+                                    data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_product) ?>"}}'
                                     type="button" title="<?php echo __('Add to Cart') ?>">
                                 <span><?php echo __('Add to Cart') ?></span>
                             </button>

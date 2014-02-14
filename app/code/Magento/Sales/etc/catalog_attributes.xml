@@ -41,8 +41,6 @@
         <attribute name="special_to_date"/>
         <attribute name="special_price"/>
         <attribute name="cost"/>
-        <attribute name="is_recurring"/>
-        <attribute name="recurring_profile"/>
         <attribute name="gift_message_available"/>
         <attribute name="msrp_enabled"/>
         <attribute name="msrp"/>

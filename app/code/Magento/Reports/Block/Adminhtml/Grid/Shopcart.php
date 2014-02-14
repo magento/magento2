@@ -33,12 +33,16 @@ namespace Magento\Reports\Block\Adminhtml\Grid;
 class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * stores current currency code
+     * Stores current currency code
+     *
+     * @var array
      */
     protected $_currentCurrencyCode = null;
 
     /**
-     * ids of current stores
+     * Ids of current stores
+     *
+     * @var array
      */
     protected $_storeIds            = array();
 
@@ -74,7 +78,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get currency rate (base to given currency)
      *
      * @param string|\Magento\Directory\Model\Currency $toCurrency
-     * @return double
+     * @return float
      */
     public function getRate($toCurrency)
     {

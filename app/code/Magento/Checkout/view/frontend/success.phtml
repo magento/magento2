@@ -40,9 +40,7 @@
         <?php endif;?>
     <?php endif;?>
 
-    <?php if ($this->getAgreementRefId()): ?>
-        <p><?php echo __('Your billing agreement # is: %1.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
-    <?php endif;?>
+    <?php echo $this->getAdditionalInfoHtml() ?>
 
     <?php if ($profiles = $this->getRecurringProfiles()):?>
     <p><?php echo __('Your recurring payment profiles:'); ?></p>

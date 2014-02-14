@@ -27,10 +27,14 @@ namespace Magento\Reports\Model;
 
 class Item extends \Magento\Object
 {
-    /** @var bool */
+    /**
+     * @var bool
+     */
     protected $_isEmpty  = false;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $_children = array();
 
     /**
@@ -74,7 +78,7 @@ class Item extends \Magento\Object
     /**
      * Set children
      *
-     * @param $children
+     * @param array $children
      * @return $this
      */
     public function setChildren($children)

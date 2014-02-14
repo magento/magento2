@@ -33,13 +33,15 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Popup;
 
+use Magento\Catalog\Model\Product;
+
 class Grid
     extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 {
     /**
      * Return empty row url for disabling JS click events
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Object
+     * @param Product|\Magento\Object $row
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -50,6 +52,8 @@ class Grid
 
     /**
      * Remove some grid columns for product grid in popup
+     *
+     * @return void
      */
     public function _prepareColumns()
     {
@@ -63,7 +67,7 @@ class Grid
     /**
      * Add import action to massaction block
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Popup\Grid
+     * @return $this
      */
     public function _prepareMassaction()
     {

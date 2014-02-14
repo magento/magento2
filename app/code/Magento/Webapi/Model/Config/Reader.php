@@ -50,8 +50,8 @@ class Reader extends \Magento\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Webapi\Model\Config\Converter $converter,
-        \Magento\Webapi\Model\Config\SchemaLocator $schemaLocator,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'webapi.xml',
         $idAttributes = array(),

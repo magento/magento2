@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * Reviews admin controller
  */
-namespace Magento\Catalog\Controller\Adminhtml\Product;
-
 class Review extends \Magento\Backend\App\Action
 {
     /**
@@ -57,6 +56,9 @@ class Review extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Customer Reviews'));
@@ -75,6 +77,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function pendingAction()
     {
         $this->_title->add(__('Customer Reviews'));
@@ -94,6 +99,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $this->_title->add(__('Customer Reviews'));
@@ -108,6 +116,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function newAction()
     {
         $this->_title->add(__('Customer Reviews'));
@@ -125,6 +136,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return mixed
+     */
     public function saveAction()
     {
         if (($data = $this->getRequest()->getPost()) && ($reviewId = $this->getRequest()->getParam('id'))) {
@@ -176,6 +190,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_redirect('catalog/*/');
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $reviewId   = $this->getRequest()->getParam('id', false);
@@ -200,6 +217,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_redirect('catalog/*/edit/',array('id'=>$reviewId));
     }
 
+    /**
+     * @return void
+     */
     public function massDeleteAction()
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
@@ -225,6 +245,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_redirect('catalog/*/' . $this->getRequest()->getParam('ret', 'index'));
     }
 
+    /**
+     * @return void
+     */
     public function massUpdateStatusAction()
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
@@ -252,6 +275,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_redirect('catalog/*/' . $this->getRequest()->getParam('ret', 'index'));
     }
 
+    /**
+     * @return void
+     */
     public function massVisibleInAction()
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
@@ -279,6 +305,9 @@ class Review extends \Magento\Backend\App\Action
         $this->_redirect('catalog/*/pending');
     }
 
+    /**
+     * @return void
+     */
     public function productGridAction()
     {
         $this->getResponse()->setBody(
@@ -286,6 +315,9 @@ class Review extends \Magento\Backend\App\Action
         );
     }
 
+    /**
+     * @return void
+     */
     public function reviewGridAction()
     {
         $this->getResponse()->setBody(
@@ -293,6 +325,9 @@ class Review extends \Magento\Backend\App\Action
         );
     }
 
+    /**
+     * @return void
+     */
     public function jsonProductInfoAction()
     {
         $response = new \Magento\Object();
@@ -311,6 +346,9 @@ class Review extends \Magento\Backend\App\Action
         $this->getResponse()->setBody($response->toJSON());
     }
 
+    /**
+     * @return void
+     */
     public function postAction()
     {
         $productId  = $this->getRequest()->getParam('product_id', false);
@@ -365,6 +403,9 @@ class Review extends \Magento\Backend\App\Action
         return;
     }
 
+    /**
+     * @return void
+     */
     public function ratingItemsAction()
     {
         $this->getResponse()->setBody(
@@ -375,6 +416,9 @@ class Review extends \Magento\Backend\App\Action
         );
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {

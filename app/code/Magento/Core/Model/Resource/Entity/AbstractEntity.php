@@ -23,12 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Entity;
 
 abstract class AbstractEntity
 {
+    /**
+     * @var string
+     */
     protected $_name = null;
+
     /**
      * Configuration object
      *
@@ -50,7 +53,7 @@ abstract class AbstractEntity
      * Get config by key
      *
      * @param string $key
-     * @return string|boolean
+     * @return \Magento\Simplexml\Config|string|false
      */
     public function getConfig($key = '')
     {

@@ -48,7 +48,7 @@
                     <value>Magento\Multishipping\Model\Payment\Method\Specification\Enabled</value>
                 </item>
                 <item key="3dsecure">
-                    <value>\Magento\Multishipping\Model\Payment\Method\Specification\Is3DSecure</value>
+                    <value>Magento\Multishipping\Model\Payment\Method\Specification\Is3DSecure</value>
                 </item>
             </array>
         </param>

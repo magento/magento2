@@ -184,7 +184,7 @@ class Customization
      * NOTE: To get into "assigned" list theme customization not necessary should be assigned to store-view directly.
      * It can be set to website or as default theme and be used by store-view via config fallback mechanism.
      *
-     * @return Customization
+     * @return $this
      */
     protected function _prepareThemeCustomizations()
     {

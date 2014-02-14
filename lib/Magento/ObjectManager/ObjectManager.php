@@ -105,6 +105,7 @@ class ObjectManager implements \Magento\ObjectManager
      * Configure di instance
      *
      * @param array $configuration
+     * @return void
      */
     public function configure(array $configuration)
     {

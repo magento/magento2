@@ -99,7 +99,7 @@ class Translate extends \Magento\App\Helper\AbstractHelper
      * @param string $localeCode
      * @param bool $forceReload
      * @param null $area
-     * @return \Magento\TranslateInterface
+     * @return $this
      */
     public function initTranslate($localeCode, $forceReload, $area = null)
     {

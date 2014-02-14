@@ -1,9 +1,4 @@
 <?php
-
-namespace Magento\Customer\Service\V1;
-use Magento\Customer\Service\V1;
-use Magento\Customer\Service\Entity\V1\Exception;
-
 /**
  * Integration test for service layer \Magento\Customer\Service\V1\CustomerAddressService
  *
@@ -27,7 +22,14 @@ use Magento\Customer\Service\Entity\V1\Exception;
  *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *
+ */
+namespace Magento\Customer\Service\V1;
+
+use Magento\Customer\Service\V1;
+use Magento\Exception\InputException;
+use Magento\Exception\NoSuchEntityException;
+
+/**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
@@ -62,11 +64,13 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             ->setDefaultBilling(true)
             ->setDefaultShipping(true)
             ->setPostcode('75477')
-            ->setRegion(new V1\Dto\Region([
-                'region_code' => 'AL',
-                'region' => 'Alabama',
-                'region_id' => 1
-            ]))
+            ->setRegion(
+                new V1\Dto\Region([
+                    'region_code' => 'AL',
+                    'region'      => 'Alabama',
+                    'region_id'   => 1
+                ])
+            )
             ->setStreet(['Green str, 67'])
             ->setTelephone('3468676')
             ->setCity('CityM')
@@ -81,11 +85,13 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             ->setDefaultBilling(false)
             ->setDefaultShipping(false)
             ->setPostcode('47676')
-            ->setRegion(new V1\Dto\Region([
-                'region_code' => 'AL',
-                'region' => 'Alabama',
-                'region_id' => 1
-            ]))
+            ->setRegion(
+                new V1\Dto\Region([
+                    'region_code' => 'AL',
+                    'region'      => 'Alabama',
+                    'region_id'   => 1
+                ])
+            )
             ->setStreet(['Black str, 48'])
             ->setCity('CityX')
             ->setTelephone('3234676')
@@ -97,15 +103,15 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
     public function testSaveAddressChanges()
     {
         $customerId = 1;
-        $address = $this->_service->getAddressById($customerId, 2);
+        $address = $this->_service->getAddressById(2);
         $proposedAddressBuilder = $this->_addressBuilder->populate($address);
         $proposedAddressBuilder->setTelephone('555' . $address->getTelephone());
         $proposedAddress = $proposedAddressBuilder->create();
@@ -119,9 +125,9 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
     public function testSaveAddressesIdSetButNotAlreadyExisting()
@@ -145,17 +151,17 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
     public function testGetAddresses()
     {
         $customerId = 1;
         $addresses = $this->_service->getAddresses($customerId);
-        $this->assertEquals(2, count($this->_expectedAddresses) );
-        $this->assertEquals(2, count($addresses) );
+        $this->assertEquals(2, count($this->_expectedAddresses));
+        $this->assertEquals(2, count($addresses));
         $this->_assertAddressAndRegionArrayEquals(
             $this->_expectedAddresses[0]->__toArray(),
             $addresses[0]->__toArray()
@@ -167,9 +173,9 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
     public function testGetDefaultBillingAddress()
@@ -180,34 +186,41 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
     public function testGetAddressById()
     {
-        $customerId = 1;
         $addressId = 2;
-        $addresses = $this->_service->getAddressById($customerId, $addressId);
+        $addresses = $this->_service->getAddressById($addressId);
         $this->assertEquals($this->_expectedAddresses[1], $addresses);
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @expectedException Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_ADDRESS_NOT_FOUND
      */
     public function testGetAddressByIdBadAddrId()
     {
-        // Should throw the address not found excetion
-        $this->_service->getAddressById(1, 12345);
+        // Should throw the address not found exception
+        try {
+            $this->_service->getAddressById(12345);
+            $this->fail("Expected NoSuchEntityException not caught");
+        } catch (NoSuchEntityException $exception) {
+            $this->assertSame($exception->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
+            $this->assertSame(
+                $exception->getParams(),
+                [
+                    'addressId' => 12345
+                ]
+            );
+        }
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoAppIsolation enabled
      */
     public function testSaveNewAddress()
@@ -227,17 +240,22 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoAppIsolation enabled
      */
     public function testSaveNewAddressWithAttributes()
     {
-        $this->_addressBuilder->populateWithArray(array_merge($this->_expectedAddresses[1]->__toArray(), [
-            'firstname' => 'Jane',
-            'id' => 4200,
-            'weird' => 'something_strange_with_hair'
-        ]))->setId(null);
+        $this->_addressBuilder->populateWithArray(
+            array_merge(
+                $this->_expectedAddresses[1]->__toArray(),
+                [
+                    'firstname' => 'Jane',
+                    'id'        => 4200,
+                    'weird'     => 'something_strange_with_hair'
+                ]
+            )
+        )->setId(null);
         $proposedAddress = $this->_addressBuilder->create();
 
         $customerId = 1;
@@ -250,45 +268,58 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoAppIsolation enabled
      */
     public function testSaveNewInvalidAddresses()
     {
         $firstAddressBuilder = $this->_addressBuilder->populateWithArray(
-            array_merge($this->_expectedAddresses[0]->__toArray(), [
-                'firstname' => null
-            ])
+            array_merge(
+                $this->_expectedAddresses[0]->__toArray(),
+                [
+                    'firstname' => null
+                ]
+            )
         )->setId(null);
         $firstAddress = $firstAddressBuilder->create();
         $secondAddressBuilder = $this->_addressBuilder->populateWithArray(
-            array_merge($this->_expectedAddresses[0]->__toArray(), [
-                'lastname' => null
-            ])
+            array_merge(
+                $this->_expectedAddresses[0]->__toArray(),
+                [
+                    'lastname' => null
+                ]
+            )
         )->setId(null);
         $secondAddress = $secondAddressBuilder->create();
         $customerId = 1;
         try {
             $this->_service->saveAddresses($customerId, [$firstAddress, $secondAddress]);
-        } catch (\Magento\Customer\Service\Entity\V1\AggregateException $ae) {
-            $failures = $ae->getExceptions();
-            $firstAddressError = $failures[0];
-            $this->assertInstanceOf('\Magento\Customer\Service\Entity\V1\Exception', $firstAddressError);
-            $this->assertInstanceOf('\Magento\Validator\ValidatorException', $firstAddressError->getPrevious());
-            $this->assertSame('Please enter the first name.', $firstAddressError->getPrevious()->getMessage());
-
-            $secondAddressError = $failures[1];
-            $this->assertInstanceOf('\Magento\Customer\Service\Entity\V1\Exception', $secondAddressError);
-            $this->assertInstanceOf('\Magento\Validator\ValidatorException', $secondAddressError->getPrevious());
-            $this->assertSame('Please enter the last name.', $secondAddressError->getPrevious()->getMessage());
-            return;
+            $this->fail("Expected NoSuchEntityException not caught");
+        } catch (InputException $exception) {
+            $this->assertSame($exception->getCode(), \Magento\Exception\InputException::INPUT_EXCEPTION);
+            $this->assertSame(
+                $exception->getParams(),
+                [
+                    [
+                        'index' => 0,
+                        'fieldName' => 'firstname',
+                        'code'      => 'REQUIRED_FIELD',
+                        'value'     => null
+                    ],
+                    [
+                        'index' => 1,
+                        'fieldName' => 'lastname',
+                        'code'      => 'REQUIRED_FIELD',
+                        'value'     => null
+                    ]
+                ]
+            );
         }
-        $this->fail('Expected AggregateException not caught.');
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
      * @magentoAppIsolation enabled
      */
     public function testSaveNewAddressDefaults()
@@ -315,8 +346,8 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoAppIsolation enabled
      */
     public function testSaveSeveralNewAddressesSameDefaults()
@@ -363,8 +394,8 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoAppIsolation enabled
      */
     public function testSaveSeveralNewAddressesDifferentDefaults()
@@ -419,9 +450,9 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
     public function testSaveAddressesNoAddresses()
@@ -433,24 +464,34 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_expectedAddresses, $addresses);
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage No customer with customerId 4200 exists
-     */
     public function testSaveAddressesCustomerIdNotExist()
     {
         $proposedAddress = $this->_createSecondAddressBuilder()->create();
-        $this->_service->saveAddresses(4200, [$proposedAddress]);
+        try {
+            $this->_service->saveAddresses(4200, [$proposedAddress]);
+            $this->fail('Expected exception not thrown');
+        } catch (NoSuchEntityException $nsee) {
+            $expectedParams = [
+                'customerId' => '4200',
+            ];
+            $this->assertEquals($expectedParams, $nsee->getParams());
+            $this->assertEquals('No such entity with customerId = 4200', $nsee->getMessage());
+        }
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage No customer with customerId this_is_not_a_valid_id exists
-     */
     public function testSaveAddressesCustomerIdInvalid()
     {
         $proposedAddress = $this->_createSecondAddressBuilder()->create();
-        $this->_service->saveAddresses('this_is_not_a_valid_id', [$proposedAddress]);
+        try {
+            $this->_service->saveAddresses('this_is_not_a_valid_id', [$proposedAddress]);
+            $this->fail('Expected exception not thrown');
+        } catch (NoSuchEntityException $nsee) {
+            $expectedParams = [
+                'customerId' => 'this_is_not_a_valid_id',
+            ];
+            $this->assertEquals($expectedParams, $nsee->getParams());
+            $this->assertEquals('No such entity with customerId = this_is_not_a_valid_id', $nsee->getMessage());
+        }
     }
 
     /**
@@ -459,58 +500,47 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteAddressFromCustomer()
     {
-        $customerId = 1;
         $addressId = 1;
         // See that customer already has an address with expected addressId
-        $addressDto = $this->_service->getAddressById($customerId, $addressId);
+        $addressDto = $this->_service->getAddressById($addressId);
         $this->assertEquals($addressDto->getId(), $addressId);
 
         // Delete the address from the customer
-        $this->_service->deleteAddressFromCustomer($customerId, $addressId);
+        $this->_service->deleteAddress($addressId);
 
         // See that address is deleted
         try {
-            $addressDto = $this->_service->getAddressById($customerId, $addressId);
-            $this->fail('Did not catch expected exception');
-        } catch (Exception $e) {
-            $this->assertEquals($e->getCode(), Exception::CODE_ADDRESS_NOT_FOUND);
+            $addressDto = $this->_service->getAddressById($addressId);
+            $this->fail("Expected NoSuchEntityException not caught");
+        } catch (NoSuchEntityException $exception) {
+            $this->assertSame($exception->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
+            $this->assertSame(
+                $exception->getParams(),
+                [
+                    'addressId' => $addressId
+                ]
+            );
         }
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @expectedException Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_ADDRESS_NOT_FOUND
      */
     public function testDeleteAddressFromCustomerBadAddrId()
     {
         // Should throw the address not found exception
-        $this->_service->deleteAddressFromCustomer(1, 12345);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @expectedException Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_INVALID_ADDRESS_ID
-     */
-    public function testDeleteAddressFromCustomerAddrIdNotSet()
-    {
-        // Should throw the address not found exception
-        $this->_service->deleteAddressFromCustomer(1, 0);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
-     * @expectedException Exception
-     * @expectedExceptionCode \Magento\Customer\Service\Entity\V1\Exception::CODE_CUSTOMER_ID_MISMATCH
-     */
-    public function testDeleteAddressFromCustomerBadCustMismatch()
-    {
-        // Should throw the address not found excetion
-        $this->_service->deleteAddressFromCustomer(2, 1);
+        try {
+            $this->_service->deleteAddress(12345);
+            $this->fail("Expected NoSuchEntityException not caught");
+        } catch (NoSuchEntityException $exception) {
+            $this->assertSame($exception->getCode(), \Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY);
+            $this->assertSame(
+                $exception->getParams(),
+                [
+                    'addressId' => 12345
+                ]
+            );
+        }
     }
 
     /**

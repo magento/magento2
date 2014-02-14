@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect\Model\Extension;
 
 /**
  * Extension packages files collection
@@ -31,7 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect\Model\Extension;
 
 class Collection extends \Magento\Data\Collection\Filesystem
 {
@@ -41,7 +41,15 @@ class Collection extends \Magento\Data\Collection\Filesystem
      * @var string
      */
     protected $_allowedDirsMask     = '/^[a-z0-9\.\-]+$/i';
+
+    /**
+     * @var string
+     */
     protected $_allowedFilesMask    = '/^[a-z0-9\.\-\_]+\.(xml|ser)$/i';
+
+    /**
+     * @var string
+     */
     protected $_disallowedFilesMask = '/^package\.xml$/i';
 
     /**

@@ -97,7 +97,7 @@ abstract class AbstractCurrency extends \Magento\Core\Model\Config\Value
     /**
      * Retrieve Installed Currencies
      *
-     * @return array
+     * @return string[]
      */
     protected function _getInstalledCurrencies()
     {
@@ -122,7 +122,7 @@ abstract class AbstractCurrency extends \Magento\Core\Model\Config\Value
     }
 
     /**
-     * Retrieve Default desplay Currency value for current scope
+     * Retrieve Default display Currency value for current scope
      *
      * @return string
      */

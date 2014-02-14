@@ -53,7 +53,7 @@ class Updated extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
      * Set modified date
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\Time\Updated
+     * @return $this
      */
     public function beforeSave($object)
     {

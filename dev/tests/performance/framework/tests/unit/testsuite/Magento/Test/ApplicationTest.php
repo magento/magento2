@@ -77,7 +77,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->_config = new \Magento\TestFramework\Performance\Config(
             $this->_fixtureConfigData, $this->_fixtureDir, $this->_fixtureDir . '/app_base_dir'
         );
-        $this->_shell = $this->getMock('Magento\Shell', array('execute'));
+        $this->_shell = $this->getMock('Magento\Shell', array('execute'), array(), '', false);
 
         $this->_object = $this->getMock(
             'Magento\TestFramework\Application',

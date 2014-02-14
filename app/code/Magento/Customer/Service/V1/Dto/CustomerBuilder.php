@@ -22,13 +22,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Customer\Service\V1\Dto;
-use Magento\Customer\Service\V1\Dto\Customer;
 
 /**
  * Class Customer
  * Uses array to hold data, setters return $this so they can be chained.
  *
- * @package Magento\Customer\Service\Entity\V1
+ * @package Magento\Customer\Service\V1\Dto
  */
 class CustomerBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
 {

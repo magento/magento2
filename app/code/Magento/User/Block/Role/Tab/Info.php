@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Block\Role\Tab;
 
 /**
@@ -35,26 +34,41 @@ class Info
     extends \Magento\Backend\Block\Widget\Form\Generic
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+    /**
+     * @return string
+     */
     public function getTabLabel()
     {
         return __('Role Info');
     }
 
+    /**
+     * @return string
+     */
     public function getTabTitle()
     {
         return $this->getTabLabel();
     }
 
+    /**
+     * @return bool
+     */
     public function canShowTab()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isHidden()
     {
         return false;
     }
 
+    /**
+     * @return $this
+     */
     public function _beforeToHtml()
     {
         $this->_initForm();
@@ -62,6 +76,9 @@ class Info
         return parent::_beforeToHtml();
     }
 
+    /**
+     * @return void
+     */
     protected function _initForm()
     {
         /** @var \Magento\Data\Form $form */

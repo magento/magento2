@@ -29,8 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure;
 
-abstract class AbstractMapper
-    implements \Magento\Backend\Model\Config\Structure\MapperInterface
+abstract class AbstractMapper implements MapperInterface
 {
     /**
      * Check value existence

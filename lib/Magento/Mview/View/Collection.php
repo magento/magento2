@@ -34,7 +34,7 @@ class Collection extends \Magento\Data\Collection implements CollectionInterface
     protected $_itemObjectClass = 'Magento\Mview\ViewInterface';
 
     /**
-     * @var \Magento\Indexer\Model\ConfigInterface
+     * @var \Magento\Mview\ConfigInterface
      */
     protected $config;
 
@@ -71,7 +71,7 @@ class Collection extends \Magento\Data\Collection implements CollectionInterface
     {
         if (!$this->isLoaded()) {
             $states = $this->statesFactory->create();
-            foreach (array_keys($this->config->getAll()) as $viewId) {
+            foreach (array_keys($this->config->getViews()) as $viewId) {
                 /** @var \Magento\Mview\ViewInterface $view */
                 $view = $this->getNewEmptyItem();
                 $view->load($viewId);
@@ -103,26 +103,6 @@ class Collection extends \Magento\Data\Collection implements CollectionInterface
         foreach ($this as $view) {
             /** @var \Magento\Mview\ViewInterface $view */
             if ($view->getState()->getMode() == $mode) {
-                $result[] = $view;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Return views by given state status
-     *
-     * @param string $status
-     * @return \Magento\Mview\ViewInterface[]
-     */
-    public function getViewsByStateStatus($status)
-    {
-        $this->load();
-
-        $result = array();
-        foreach ($this as $view) {
-            /** @var \Magento\Mview\ViewInterface $view */
-            if ($view->getState()->getStatus() == $status) {
                 $result[] = $view;
             }
         }

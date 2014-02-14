@@ -39,16 +39,22 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_reviewData = null;
 
     /**
+     * Customer model factory
+     *
      * @var \Magento\Customer\Model\CustomerFactory
      */
     protected $_customerFactory;
 
     /**
+     * Catalog product factory
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Core system store model
+     *
      * @var \Magento\Core\Model\System\Store
      */
     protected $_systemStore;
@@ -81,6 +87,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Prepare edit review form
+     *
      * @return $this
      */
     protected function _prepareForm()
@@ -118,12 +126,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 $this->escapeHtml($customer->getFirstname()),
                 $this->escapeHtml($customer->getLastname()),
                 $this->escapeHtml($customer->getEmail()));
+        } elseif ($review->getStoreId() == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
+            $customerText = __('Administrator');
         } else {
-            if (is_null($review->getCustomerId())) {
-                $customerText = __('Guest');
-            } elseif ($review->getCustomerId() == 0) {
-                $customerText = __('Administrator');
-            }
+            $customerText = __('Guest');
         }
 
         $fieldset->addField('customer', 'note', array(

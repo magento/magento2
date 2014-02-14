@@ -31,8 +31,8 @@ namespace Magento\Backend\Model\Config\Backend\Log;
 
 class Cron extends \Magento\Core\Model\Config\Value
 {
-    const CRON_STRING_PATH  = 'crontab/jobs/log_clean/schedule/cron_expr';
-    const CRON_MODEL_PATH   = 'crontab/jobs/log_clean/run/model';
+    const CRON_STRING_PATH  = 'crontab/default/jobs/log_clean/schedule/cron_expr';
+    const CRON_MODEL_PATH   = 'crontab/default/jobs/log_clean/run/model';
 
     /**
      * @var \Magento\Core\Model\Config\ValueFactory
@@ -74,7 +74,7 @@ class Cron extends \Magento\Core\Model\Config\Value
     /**
      * Cron settings after save
      *
-     * @return \Magento\Backend\Model\Config\Backend\Log\Cron
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _afterSave()

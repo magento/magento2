@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model;
 
 /**
  * Catalog Custom Category design Model
@@ -32,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model;
-
 class Design extends \Magento\Core\Model\AbstractModel
 {
     const APPLY_FOR_PRODUCT     = 1;
@@ -81,7 +79,6 @@ class Design extends \Magento\Core\Model\AbstractModel
      *
      * @param string $design
      * @return $this
-     * @return \Magento\Catalog\Model\Design
      */
     public function applyCustomDesign($design)
     {

@@ -75,7 +75,7 @@ class Countryofmanufacture
     /**
      * Get list of all available countries
      *
-     * @return mixed
+     * @return array
      */
     public function getAllOptions()
     {

@@ -90,7 +90,7 @@ class Translate extends \Magento\Core\Model\Config\Value
     /**
      * Set status 'invalidate' for blocks and other output caches
      *
-     * @return \Magento\Backend\Model\Config\Backend\Translate
+     * @return $this
      */
     protected function _afterSave()
     {

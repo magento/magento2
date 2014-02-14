@@ -258,7 +258,7 @@ class Installer extends \Magento\Object
      * Set data model to store data between installation steps
      *
      * @param \Magento\Object $model
-     * @return \Magento\Install\Model\Installer
+     * @return $this
      */
     public function setDataModel($model)
     {
@@ -318,7 +318,7 @@ class Installer extends \Magento\Object
      * Installation config data
      *
      * @param   array $data
-     * @return  \Magento\Install\Model\Installer
+     * @return  $this
      */
     public function installConfig($data)
     {
@@ -341,7 +341,7 @@ class Installer extends \Magento\Object
     /**
      * Database installation
      *
-     * @return \Magento\Install\Model\Installer
+     * @return $this
      */
     public function installDb()
     {
@@ -417,6 +417,7 @@ class Installer extends \Magento\Object
      *
      * @param \Magento\Core\Model\Resource\Setup $setupModel
      * @param string $orderIncrementPrefix
+     * @return void
      */
     protected function _setOrderIncrementPrefix(\Magento\Core\Model\Resource\Setup $setupModel, $orderIncrementPrefix)
     {
@@ -435,6 +436,7 @@ class Installer extends \Magento\Object
      * Create an admin user
      *
      * @param array $data
+     * @return void
      */
     public function createAdministrator($data)
     {
@@ -456,7 +458,7 @@ class Installer extends \Magento\Object
      * Install encryption key into the application, generate and return a random one, if no value is specified
      *
      * @param string $key
-     * @return \Magento\Install\Model\Installer
+     * @return $this
      */
     public function installEncryptionKey($key)
     {
@@ -499,6 +501,8 @@ class Installer extends \Magento\Object
 
     /**
      * Store install date and set application into installed state
+     *
+     * @return void
      */
     protected function _setAppInstalled()
     {
@@ -509,6 +513,8 @@ class Installer extends \Magento\Object
 
     /**
      * Ensure changes in the configuration, if any, take effect
+     *
+     * @return void
      */
     protected function _refreshConfig()
     {

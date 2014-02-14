@@ -58,8 +58,8 @@ abstract class AbstractFilter extends \Magento\View\Element\Template
     /**
      * Initialize filter template
      *
+     * @var string
      */
-
     protected $_template = 'Magento_Catalog::layer/filter.phtml';
 
     /**

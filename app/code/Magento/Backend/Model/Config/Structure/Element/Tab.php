@@ -26,8 +26,7 @@
 
 namespace Magento\Backend\Model\Config\Structure\Element;
 
-class Tab
-    extends \Magento\Backend\Model\Config\Structure\Element\AbstractComposite
+class Tab extends AbstractComposite
 {
 
     /**

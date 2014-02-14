@@ -169,6 +169,8 @@ class Visitor extends \Magento\Core\Model\AbstractModel
 
     /**
      * Object initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -194,7 +196,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize visitor information from server data
      *
-     * @return \Magento\Log\Model\Visitor
+     * @return $this
      */
     public function initServerData()
     {

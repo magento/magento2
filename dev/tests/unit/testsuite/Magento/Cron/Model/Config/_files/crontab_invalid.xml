@@ -24,7 +24,9 @@
  */
 -->
 <config>
-    <job wrongName="job1" wrongInstance="Model1" wrongMethod="method1">
-        <wrongSchedule>30 2 * * *</wrongSchedule>
-    </job>
+    <group id="default">
+        <job wrongName="job1" wrongInstance="Model1" wrongMethod="method1">
+            <wrongSchedule>30 2 * * *</wrongSchedule>
+        </job>
+    </group>
 </config>

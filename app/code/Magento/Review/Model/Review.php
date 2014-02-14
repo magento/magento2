@@ -57,7 +57,6 @@ class Review extends \Magento\Core\Model\AbstractModel
 
     /**
      * Review entity codes
-     *
      */
     const ENTITY_PRODUCT_CODE   = 'product';
     const ENTITY_CUSTOMER_CODE  = 'customer';
@@ -68,36 +67,50 @@ class Review extends \Magento\Core\Model\AbstractModel
     const STATUS_NOT_APPROVED   = 3;
 
     /**
+     * Review product collection factory
+     *
      * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
      */
     protected $_productFactory;
 
     /**
+     * Review status collection factory
+     *
      * @var \Magento\Review\Model\Resource\Review\Status\CollectionFactory
      */
     protected $_statusFactory;
 
     /**
+     * Review model summary factory
+     *
      * @var \Magento\Review\Model\Review\SummaryFactory
      */
     protected $_summaryFactory;
 
     /**
+     * Review model summary factory
+     *
      * @var \Magento\Review\Model\Review\SummaryFactory
      */
     protected $_summaryModFactory;
 
     /**
+     * Review model summary
+     *
      * @var \Magento\Review\Model\Review\Summary
      */
     protected $_reviewSummary;
 
     /**
+     * Core model store manager interface
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * Url interface
+     *
      * @var \Magento\UrlInterface
      */
     protected $_urlModel;
@@ -140,12 +153,19 @@ class Review extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * Initialization
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Review\Model\Resource\Review');
     }
 
     /**
+     * Get product collection
+     *
      * @return ProductCollection
      */
     public function getProductCollection()
@@ -154,6 +174,8 @@ class Review extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Get status collection
+     *
      * @return StatusCollection
      */
     public function getStatusCollection()
@@ -162,8 +184,10 @@ class Review extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Get total reviews
+     *
      * @param int $entityPkValue
-     * @param bool approvedOnly
+     * @param bool $approvedOnly
      * @param int $storeId
      * @return int
      */
@@ -173,6 +197,8 @@ class Review extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Aggregate reviews
+     *
      * @return $this
      */
     public function aggregate()
@@ -182,6 +208,8 @@ class Review extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Get entity summary
+     *
      * @param Product $product
      * @param int $storeId
      * @return void
@@ -197,6 +225,8 @@ class Review extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Get pending status
+     *
      * @return int
      */
     public function getPendingStatus()
@@ -205,6 +235,8 @@ class Review extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Get review product view url
+     *
      * @return string
      */
     public function getReviewUrl()
@@ -213,6 +245,8 @@ class Review extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Validate review summary fields
+     *
      * @return bool|string[]
      */
     public function validate()
@@ -282,6 +316,8 @@ class Review extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Validate user before delete
+     *
      * @return $this
      */
     protected function _beforeDelete()

@@ -49,14 +49,14 @@
         <label class="label"><span><?php echo __('Resources') ?></span></label>
 
         <div class="control">
-            <div class="tree x-tree" data-role="resource-tree" data-mage-init="<?php
+            <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?php
             echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode(array(
-                "rolesTree" => array(
+                'rolesTree' => array(
                     "treeInitData" => $this->getTree(),
                     "treeInitSelectedData" => $this->getSelectedResources(),
                 )
             )));
-            ?>"></div>
+            ?>'></div>
         </div>
     </div>
 </fieldset>

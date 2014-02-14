@@ -33,6 +33,8 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+use Magento\Data\Form;
+
 class Weight extends \Magento\Data\Form\Element\Text
 {
     const VIRTUAL_FIELD_HTML_ID = 'weight_and_type_switcher';
@@ -100,8 +102,8 @@ class Weight extends \Magento\Data\Form\Element\Text
     /**
      * Set form for both fields
      *
-     * @param \Magento\Data\Form $form
-     * @return \Magento\Data\Form
+     * @param Form $form
+     * @return $this
      */
     public function setForm($form)
     {

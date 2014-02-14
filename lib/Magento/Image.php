@@ -91,8 +91,8 @@ class Image
     /**
      * Save handled image into file
      *
-     * @param string $destination. Default value is NULL
-     * @param string $newFileName. Default value is NULL
+     * @param null|string $destination Default value is NULL
+     * @param null|string $newFileName Default value is NULL
      * @access public
      * @return void
      */
@@ -116,10 +116,10 @@ class Image
     /**
      * Crop an image.
      *
-     * @param int $top. Default value is 0
-     * @param int $left. Default value is 0
-     * @param int $right. Default value is 0
-     * @param int $bottom. Default value is 0
+     * @param int $top  Default value is 0
+     * @param int $left Default value is 0
+     * @param int $right Default value is 0
+     * @param int $bottom Default value is 0
      * @access public
      * @return void
      */
@@ -210,12 +210,13 @@ class Image
     /**
      * Adds watermark to our image.
      *
-     * @param string $watermarkImage. Absolute path to watermark image.
-     * @param int $positionX. Watermark X position.
-     * @param int $positionY. Watermark Y position.
-     * @param int $watermarkImageOpacity. Watermark image opacity.
-     * @param bool $repeat. Enable or disable watermark brick.
+     * @param string $watermarkImage Absolute path to watermark image.
+     * @param int $positionX Watermark X position.
+     * @param int $positionY Watermark Y position.
+     * @param int $watermarkImageOpacity Watermark image opacity.
+     * @param bool $repeat Enable or disable watermark brick.
      * @access public
+     * @throws \Exception
      * @return void
      */
     public function watermark($watermarkImage, $positionX=0, $positionY=0, $watermarkImageOpacity=30, $repeat=false)
@@ -238,7 +239,7 @@ class Image
     }
 
     /**
-     * process
+     * Process
      *
      * @access public
      * @return void
@@ -249,7 +250,7 @@ class Image
     }
 
     /**
-     * instruction
+     * Instruction
      *
      * @access public
      * @return void
@@ -275,7 +276,7 @@ class Image
      * Set watermark position
      *
      * @param string $position
-     * @return \Magento\Image
+     * @return $this
      */
     public function setWatermarkPosition($position)
     {
@@ -287,7 +288,7 @@ class Image
      * Set watermark image opacity
      *
      * @param int $imageOpacity
-     * @return \Magento\Image
+     * @return $this
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -299,7 +300,7 @@ class Image
      * Set watermark width
      *
      * @param int $width
-     * @return \Magento\Image
+     * @return $this
      */
     public function setWatermarkWidth($width)
     {
@@ -311,7 +312,7 @@ class Image
      * Set watermark height
      *
      * @param int $height
-     * @return \Magento\Image
+     * @return $this
      */
     public function setWatermarkHeight($height)
     {
@@ -345,7 +346,7 @@ class Image
      *
      * @param string $text
      * @param string $font Path to font file
-     * @return \Magento\Image
+     * @return $this
      */
     public function createPngFromString($text, $font = '')
     {

@@ -97,6 +97,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -140,9 +141,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * $iso can be either array containing 'iso2', 'iso3' values or string with containing one of that values directly.
      * The collection will contain countries where at least one of contry $iso fields matches $countryCode.
      *
-     * @param string|array $countryCode
-     * @param string|array $iso
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @param string|string[] $countryCode
+     * @param string|string[] $iso
+     * @return $this
      */
     public function addCountryCodeFilter($countryCode, $iso = array('iso3', 'iso2'))
     {
@@ -175,8 +176,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add filter by country code(s) to collection
      *
-     * @param string|array $countryId
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @param string|string[] $countryId
+     * @return $this
      */
     public function addCountryIdFilter($countryId)
     {
@@ -232,7 +233,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set foreground countries array
      *
      * @param string|array $foregroundCountries
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @return $this
      */
     public function setForegroundCountries($foregroundCountries)
     {

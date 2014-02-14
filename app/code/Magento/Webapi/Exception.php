@@ -64,8 +64,8 @@ class Exception extends \RuntimeException
      * Initialize exception with HTTP code.
      *
      * @param string $message
-     * @param int $httpCode
      * @param int $code Error code
+     * @param int $httpCode
      * @param array $details Additional exception details
      * @param string $name Exception name
      * @throws \InvalidArgumentException

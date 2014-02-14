@@ -57,25 +57,21 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_catalogCategory = $this->getMock('Magento\Catalog\Helper\Category', array(), array(), '', false);
-        $this->_catalogData = $this->getMock('Magento\Catalog\Helper\Data', array(), array(), '', false);
+        $catalogCategory = $this->getMock('Magento\Catalog\Helper\Category', array(), array(), '', false);
+        $catalogData = $this->getMock('Magento\Catalog\Helper\Data', array(), array(), '', false);
         $urlFactoryMock = $this->getMock('Magento\Catalog\Model\UrlFactory', array(), array(), '', false);
-        $catFlatFactoryMock = $this->getMock('Magento\Catalog\Model\Resource\Category\FlatFactory', array(),
-            array(), '', false);
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\Resource\ProductFactory', array(),
             array(), '', false);
-        $this->_catalogCategoryFlat = $this->getMock(
-            'Magento\Catalog\Helper\Category\Flat', array(), array(), '', false
-        );
+        $categoryFlatState = $this->getMock('Magento\Catalog\Model\Indexer\Category\Flat\State', array(),
+            array(), '', false);
         $coreConfig = $this->getMock('Magento\App\ReinitableConfigInterface', array(), array(), '', false);
         $this->_model = $this->_objectHelper->getObject('Magento\Catalog\Model\Observer', array(
-            'catalogCategory' => $this->_catalogCategory,
-            'catalogData' => $this->_catalogData,
-            'catalogCategoryFlat' => $this->_catalogCategoryFlat,
+            'catalogCategory' => $catalogCategory,
+            'catalogData' => $catalogData,
             'coreConfig' => $coreConfig,
             'urlFactory' => $urlFactoryMock,
-            'flatResourceFactory' => $catFlatFactoryMock,
             'productResourceFactory' => $productFactoryMock,
+            'categoryFlatState' => $categoryFlatState,
         ));
         $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
     }

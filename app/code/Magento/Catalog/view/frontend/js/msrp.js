@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-/*jshint evil:true browser:true jquery:true*/
+/*jshint browser:true jquery:true*/
 (function($) {
     $.widget('mage.addToCart', {
         options: {

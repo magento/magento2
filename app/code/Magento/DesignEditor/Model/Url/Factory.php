@@ -50,7 +50,7 @@ class Factory
      * Replace name of url model
      *
      * @param string $className
-     * @return \Magento\DesignEditor\Model\Url\Factory
+     * @return $this
      */
     public function replaceClassName($className)
     {

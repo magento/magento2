@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\File\Storage;
 
 /**
@@ -88,7 +87,7 @@ class File
      * Clear files and directories in storage
      *
      * @param string $dir
-     * @return \Magento\Core\Model\Resource\File\Storage\File
+     * @return $this
      */
     public function clear($dir = '')
     {

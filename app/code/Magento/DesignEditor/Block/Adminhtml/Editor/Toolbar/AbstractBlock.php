@@ -52,7 +52,7 @@ abstract class AbstractBlock extends \Magento\Backend\Block\Template
      * Get current VDE mode
      *
      * @param int $mode
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\AbstractBlock
+     * @return $this
      */
     public function setMode($mode)
     {

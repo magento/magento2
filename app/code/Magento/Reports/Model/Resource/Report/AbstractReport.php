@@ -355,8 +355,8 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Check range dates and transforms it to strings
      *
-     * @param mixed $dateFrom
-     * @param mixed $dateTo
+     * @param mixed &$dateFrom
+     * @param mixed &$dateTo
      * @return $this
      */
     protected function _checkDates(&$dateFrom, &$dateTo)

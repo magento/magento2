@@ -82,8 +82,7 @@
                 </field>
                 <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Flat Catalog Category</label>
-                    <frontend_model>Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatcatalog</frontend_model>
-                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Category\Flat</backend_model>
+                    <backend_model>Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="flat_catalog_product" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">

@@ -574,4 +574,27 @@ return array(
     array('GENERATION', '\Magento\Filesystem', '\Magento\App\Filesystem::GENERATION_DIR'),
     array('UPLOAD', '\Magento\Filesystem', '\Magento\App\Filesystem::UPLOAD_DIR'),
     array('SYS_TMP', '\Magento\Filesystem', '\Magento\App\Filesystem::SYS_TMP_DIR'),
+    ['PERIOD_UNIT_DAY', '\Magento\Payment\Model\Recurring\Profile', '\Magento\RecurringProfile\Model\PeriodUnits::DAY'],
+    [
+        'PERIOD_UNIT_WEEK',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringProfile\Model\PeriodUnits::WEEK'
+    ],
+    [
+        'PERIOD_UNIT_SEMI_MONTH',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringProfile\Model\PeriodUnits::SEMI_MONTH'
+    ],
+    [
+        'PERIOD_UNIT_MONTH',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringProfile\Model\PeriodUnits::MONTH'
+    ],
+    [
+        'PERIOD_UNIT_YEAR',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringProfile\Model\PeriodUnits::YEAR'
+    ],
+    array('XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY', '\Magento\Catalog\Helper\Category\Flat',
+        '\Magento\Catalog\Model\Indexer\Category\Flat\Config::XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY'),
 );

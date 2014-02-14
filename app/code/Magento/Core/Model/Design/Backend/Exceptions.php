@@ -62,6 +62,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
     /**
      * Validate value
      *
+     * @return $this
      * @throws \Magento\Core\Exception
      * if there is no field value, search value is empty or regular expression is not valid
      */

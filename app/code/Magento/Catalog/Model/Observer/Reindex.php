@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Observer;
 
 /**
  * Catalog Observer Reindex
@@ -31,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Observer;
-
 class Reindex
 {
     /**
@@ -56,7 +55,7 @@ class Reindex
      * Reindex fulltext
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Catalog\Model\Observer\Reindex
+     * @return $this
      */
     public function fulltextReindex(\Magento\Event\Observer $observer)
     {

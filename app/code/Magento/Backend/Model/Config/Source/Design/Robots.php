@@ -29,6 +29,9 @@ namespace Magento\Backend\Model\Config\Source\Design;
 
 class Robots implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

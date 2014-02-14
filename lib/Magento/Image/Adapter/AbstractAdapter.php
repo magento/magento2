@@ -55,62 +55,104 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     const DEFAULT_FONT_SIZE = 15;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_fileType;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_fileName ;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_fileMimeType;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_fileSrcName;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_fileSrcPath;
 
+    /**
+     * @var resource
+     */
     protected $_imageHandler;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_imageSrcWidth;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_imageSrcHeight;
 
+    /**
+     * @var array
+     */
     protected $_requiredExtensions;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_watermarkPosition;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_watermarkWidth;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_watermarkHeight;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_watermarkImageOpacity;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_quality;
 
-    /** @var int int */
+    /**
+     * @var int
+     */
     protected $_fontSize = self::DEFAULT_FONT_SIZE;
 
-    /** @var  bool */
+    /**
+     * @var  bool
+     */
     protected $_keepAspectRatio;
 
-    /** @var  bool */
+    /**
+     * @var  bool
+     */
     protected $_keepFrame;
 
-    /** @var  bool */
+    /**
+     * @var  bool
+     */
     protected $_keepTransparency;
 
-    /** @var  array */
+    /**
+     * @var  array
+     */
     protected $_backgroundColor;
 
-    /** @var  bool */
+    /**
+     * @var  bool
+     */
     protected $_constrainOnly;
 
     /**
@@ -145,7 +187,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param null|string $destination
      * @param null|string $newName
      * @return void
-     * @throws \Exception  if destination path is not writable
+     * @throws \Exception  If destination path is not writable
      */
     abstract public function save($destination = null, $newName = null);
 
@@ -200,7 +242,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Checks required dependencies
      *
      * @return void
-     * @throws \Exception if some of dependencies are missing
+     * @throws \Exception If some of dependencies are missing
      */
     abstract public function checkDependencies();
 
@@ -232,7 +274,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initialize default values
      *
-     * @param \Magento\App\Filesystem $filesystem,
+     * @param \Magento\App\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(\Magento\App\Filesystem $filesystem, array $data = array()) {
@@ -616,10 +658,10 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Create destination folder if not exists and return full file path
      *
-     * @throws \Exception
      * @param string $destination
      * @param string $newName
      * @return string
+     * @throws \Exception
      */
     protected function _prepareDestination($destination = null, $newName = null)
     {

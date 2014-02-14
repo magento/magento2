@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Text grid column filter
@@ -31,10 +32,11 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getHtml()
     {
         $html = '<div class="field-100"><input type="text" name="'

@@ -25,7 +25,7 @@
 -->
 <config>
     <router id="admin">
-        <route id="adminhtml">
+        <route id="paypal" frontName="paypal">
             <module name="Magento_Paypal" before="Magento_Adminhtml" />
         </route>
     </router>

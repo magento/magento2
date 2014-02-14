@@ -27,7 +27,7 @@ namespace Magento\Customer\Service\V1\Dto;
  * Class Customer
  * Uses array to hold data, setters return $this so they can be chained.
  *
- * @package Magento\Customer\Service\Entity\V1
+ * @package Magento\Customer\Service\V1\Dto
  */
 class Customer extends \Magento\Service\Entity\AbstractDto implements Eav\EntityInterface
 {
@@ -65,7 +65,7 @@ class Customer extends \Magento\Service\Entity\AbstractDto implements Eav\Entity
     const DEFAULT_SHIPPING = 'default_shipping';
 
     /**
-     * Retrieve array of all attributes, in the form of 'attribute code' => <attribute value'
+     * Retrieve array of all attributes, in the form of 'attribute code' => 'attribute value'
      *
      * @return array|\ArrayAccess|\string[]
      */
@@ -115,15 +115,6 @@ class Customer extends \Magento\Service\Entity\AbstractDto implements Eav\Entity
     public function getConfirmation()
     {
         return $this->_get(self::CONFIRMATION);
-    }
-
-    /**
-     * @param string $confirmation
-     * @return Customer
-     */
-    public function setConfirmation($confirmation)
-    {
-        return $this->_set(self::CONFIRMATION, $confirmation);
     }
 
     /**

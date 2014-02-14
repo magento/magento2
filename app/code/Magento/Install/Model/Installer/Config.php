@@ -46,6 +46,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     protected $_request;
 
+    /**
+     * @var array
+     */
     protected $_configData = array();
 
     /**
@@ -98,6 +101,10 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->messageManager = $messageManager;
     }
 
+    /**
+     * @param array $data
+     * @return $this
+     */
     public function setConfigData($data)
     {
         if (is_array($data)) {
@@ -106,6 +113,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getConfigData()
     {
         return $this->_configData;
@@ -113,6 +123,8 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
 
     /**
      * Generate installation data and record them into local.xml using local.xml.template
+     *
+     * @return void
      */
     public function install()
     {
@@ -168,6 +180,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_configDirectory->changePermissions($this->_localConfigFile, 0777);
     }
 
+    /**
+     * @return \Magento\Object
+     */
     public function getFormData()
     {
         $uri = \Zend_Uri::factory($this->_storeManager->getStore()->getBaseUrl('web'));
@@ -198,6 +213,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      * Check validity of a base URL
      *
      * @param string $baseUrl
+     * @return void
      * @throws \Magento\Core\Exception
      * @throws \Exception
      */
@@ -251,6 +267,10 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         return null;
     }
 
+    /**
+     * @param string $date
+     * @return $this
+     */
     public function replaceTmpInstallDate($date = 'now')
     {
         $stamp    = strtotime((string) $date);
@@ -261,6 +281,10 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @return $this
+     */
     public function replaceTmpEncryptKey($key)
     {
         $localXml = $this->_configDirectory->readFile($this->_localConfigFile);

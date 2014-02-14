@@ -163,7 +163,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * Retrieve validated installation options
      *
      * @param array $options
-     * @return array|boolean
+     * @return array|false
      */
     protected function _getInstallOptions(array $options)
     {
@@ -202,7 +202,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * Add error
      *
      * @param string $error
-     * @return \Magento\Install\Model\Installer\Console
+     * @return $this
      */
     public function addError($error)
     {
@@ -246,7 +246,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * Install Magento
      *
      * @param array $options
-     * @return string|boolean
+     * @return string|false
      */
     public function install(array $options)
     {
@@ -379,6 +379,8 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
 
     /**
      * Cleanup database use system configuration
+     *
+     * @return void
      */
     protected function _cleanUpDatabase()
     {

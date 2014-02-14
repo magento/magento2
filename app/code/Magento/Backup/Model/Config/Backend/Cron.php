@@ -29,8 +29,8 @@ namespace Magento\Backup\Model\Config\Backend;
 
 class Cron extends \Magento\Core\Model\Config\Value
 {
-    const CRON_STRING_PATH  = 'crontab/jobs/system_backup/schedule/cron_expr';
-    const CRON_MODEL_PATH   = 'crontab/jobs/system_backup/run/model';
+    const CRON_STRING_PATH  = 'crontab/default/jobs/system_backup/schedule/cron_expr';
+    const CRON_MODEL_PATH   = 'crontab/default/jobs/system_backup/run/model';
 
     const XML_PATH_BACKUP_ENABLED       = 'groups/backup/fields/enabled/value';
     const XML_PATH_BACKUP_TIME          = 'groups/backup/fields/time/value';

@@ -76,10 +76,12 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('testme.php', $result);
         $this->assertNotContains('Usage:', $result);
 
-        /** @var \Magento\Indexer\Model\Config $config */
-        $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Indexer\Model\Config');
-        foreach ($config->getAll() as $indexerData) {
-            $this->assertContains($indexerData['title'], $result);
+        /** @var \Magento\Indexer\Model\Indexer\Collection $indexerCollection */
+        $indexerCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Indexer\Model\Indexer\Collection');
+        foreach ($indexerCollection->getItems() as $indexer) {
+            /** @var \Magento\Indexer\Model\IndexerInterface $indexer */
+            $this->assertContains($indexer->getTitle(), $result);
         }
     }
 

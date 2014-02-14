@@ -75,7 +75,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Create a form element with necessary controls
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js
+     * @return $this
      */
     protected function _prepareForm()
     {

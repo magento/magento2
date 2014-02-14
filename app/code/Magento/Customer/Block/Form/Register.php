@@ -32,13 +32,6 @@ namespace Magento\Customer\Block\Form;
 class Register extends \Magento\Directory\Block\Data
 {
     /**
-     * Address instance with data
-     *
-     * @var \Magento\Customer\Model\Address
-     */
-    protected $_address;
-
-    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -62,7 +55,6 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      * 
@@ -77,14 +69,12 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {
         $this->_customerHelper = $customerHelper;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
-        $this->_addressFactory = $addressFactory;
         parent::__construct(
             $context,
             $coreData,
@@ -178,13 +168,13 @@ class Register extends \Magento\Directory\Block\Data
     /**
      * Retrieve customer region identifier
      *
-     * @return int
+     * @return mixed
      */
     public function getRegion()
     {
-        if (false !== ($region = $this->getFormData()->getRegion())) {
+        if (null !== ($region = $this->getFormData()->getRegion())) {
             return $region;
-        } else if (false !== ($region = $this->getFormData()->getRegionId())) {
+        } else if (null !== ($region = $this->getFormData()->getRegionId())) {
             return $region;
         }
         return null;
@@ -201,28 +191,14 @@ class Register extends \Magento\Directory\Block\Data
     }
 
     /**
-     * Return customer address instance
-     *
-     * @return \Magento\Customer\Model\Address
-     */
-    public function getAddress()
-    {
-        if (is_null($this->_address)) {
-            $this->_address = $this->_createAddress();
-        }
-
-        return $this->_address;
-    }
-
-    /**
      * Restore entity data from session
      * Entity and form code must be defined for the form
      *
-     * @param \Magento\Customer\Model\Form $form
+     * @param \Magento\Customer\Model\Metadata\Form $form
      * @param null $scope
      * @return \Magento\Customer\Block\Form\Register
      */
-    public function restoreSessionData(\Magento\Customer\Model\Form $form, $scope = null)
+    public function restoreSessionData(\Magento\Customer\Model\Metadata\Form $form, $scope = null)
     {
         if ($this->getFormData()->getCustomerData()) {
             $request = $form->prepareRequest($this->getFormData()->getData());
@@ -231,13 +207,5 @@ class Register extends \Magento\Directory\Block\Data
         }
 
         return $this;
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Address
-     */
-    protected function _createAddress()
-    {
-        return $this->_addressFactory->create();
     }
 }

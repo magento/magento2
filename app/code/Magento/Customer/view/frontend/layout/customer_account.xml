@@ -51,6 +51,6 @@
                 </arguments>
             </block>
         </block>
-        <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
     </referenceContainer>
+    <move element="catalog.compare.sidebar" destination="left"/>
 </layout>

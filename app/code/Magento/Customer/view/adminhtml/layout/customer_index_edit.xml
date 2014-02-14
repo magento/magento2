@@ -62,12 +62,8 @@
     </referenceContainer>
     <referenceBlock name="customer_edit_tabs">
         <action method="addTab">
-            <argument name="name" xsi:type="string">customer_edit_tab_agreements</argument>
-            <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Customer\Edit\Tab\Agreement</argument>
-        </action>
-        <action method="addTab">
             <argument name="name" xsi:type="string">customer_edit_tab_recurring_profile</argument>
-            <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Customer\Edit\Tab\Recurring\Profile</argument>
+            <argument name="block" xsi:type="string">Magento\RecurringProfile\Block\Adminhtml\Customer\Edit\Tab\RecurringProfile</argument>
         </action>
     </referenceBlock>
 </layout>

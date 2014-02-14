@@ -55,7 +55,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
      * @param \Magento\Wishlist\Model\Resource\Item $resource
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\Registry $registry
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -106,7 +106,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
     /**
      * Initialize db select
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -141,10 +141,9 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
     /**
      * Add field filter to collection
      *
-     * @see self::_getConditionSql for $condition
-     *
      * @param string|array $field
      * @param null|string|array $condition
+     * @see self::_getConditionSql for $condition
      * @return \Magento\Data\Collection\Db
      */
     public function addFieldToFilter($field, $condition = null)

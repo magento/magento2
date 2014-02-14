@@ -40,7 +40,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->with(
                 $this->equalTo('url_prefix/authenticationstart'),
-                $this->equalTo(array('_secure' => true, '_current' => false, 'isIframe' => true))
+                $this->equalTo(array('_secure' => true, '_current' => false, 'form_key' => false, 'isIframe' => true))
             )
             ->will($this->returnValue('some value'));
 

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Range grid column filter
@@ -31,10 +32,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  *
- */
-namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
-/**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
@@ -105,7 +102,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Retrieve display currency select
      *
-     * @return bool|mixed
+     * @return true|mixed
      */
     public function getDisplayCurrencySelect()
     {
@@ -119,7 +116,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Retrieve currency affect
      *
-     * @return bool|mixed
+     * @return true|mixed
      */
     public function getCurrencyAffect()
     {
@@ -169,7 +166,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Retrieve filter value
      *
      * @param null $index
-     * @return mixed|null
+     * @return array|null
      */
     public function getValue($index=null)
     {
@@ -188,7 +185,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Retrieve filter condition
      *
-     * @return array|mixed|null
+     * @return array
      */
     public function getCondition()
     {
@@ -227,8 +224,8 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Get currency rate
      *
-     * @param $fromRate
-     * @param $toRate
+     * @param string $fromRate
+     * @param string $toRate
      * @return float
      */
     protected function _getRate($fromRate, $toRate)
@@ -239,7 +236,8 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Prepare currency rates
      *
-     * @param $displayCurrency
+     * @param string $displayCurrency
+     * @return void
      */
     public function prepareRates($displayCurrency)
     {

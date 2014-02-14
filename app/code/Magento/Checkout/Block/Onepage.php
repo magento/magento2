@@ -56,8 +56,14 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         array $data = array()
     ) {
         parent::__construct(
-            $context, $coreData, $configCacheType, $customerSession, $resourceSession,
-            $countryCollectionFactory, $regionCollectionFactory, $data
+            $context,
+            $coreData,
+            $configCacheType,
+            $customerSession,
+            $resourceSession,
+            $countryCollectionFactory,
+            $regionCollectionFactory,
+            $data
         );
         $this->_isScopePrivate = true;
     }

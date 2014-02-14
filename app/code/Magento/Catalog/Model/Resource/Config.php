@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource;
 
 /**
  * Catalog Config Resource Model
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource;
-
 class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -82,6 +80,7 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -92,7 +91,7 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Set store id
      *
      * @param integer $storeId
-     * @return \Magento\Catalog\Model\Resource\Config
+     * @return $this
      */
     public function setStoreId($storeId)
     {

@@ -46,6 +46,10 @@ class Sorting
         return $data;
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     protected function _processConfig($data)
     {
         foreach ($data as &$item) {

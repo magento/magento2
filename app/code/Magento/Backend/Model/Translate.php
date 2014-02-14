@@ -28,7 +28,7 @@ namespace Magento\Backend\Model;
 class Translate extends \Magento\Translate implements \Magento\TranslateInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init($area = null, $initParams = null, $forceReload = false)
     {

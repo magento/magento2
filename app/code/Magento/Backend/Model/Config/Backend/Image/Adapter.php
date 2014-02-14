@@ -76,7 +76,7 @@ class Adapter extends \Magento\Core\Model\Config\Value
     /**
      * Checks if chosen image adapter available
      *
-     * @throws \Magento\Core\Exception if some of adapter dipendencies was not loaded
+     * @throws \Magento\Core\Exception If some of adapter dependencies was not loaded
      * @return \Magento\Backend\Model\Config\Backend\File
      */
     protected function _beforeSave()

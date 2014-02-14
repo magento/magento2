@@ -172,7 +172,7 @@ class Request
     /**
      * Retrieve protocol parameters from query string
      *
-     * @param array $protocolParams
+     * @param array &$protocolParams
      * @param array $queryString
      * @return void
      */
@@ -200,7 +200,7 @@ class Request
      * Process header parameters for Oauth
      *
      * @param string $authHeaderValue
-     * @param array $protocolParams
+     * @param array &$protocolParams
      * @return void
      */
     protected function _processHeader($authHeaderValue, &$protocolParams)
@@ -224,7 +224,7 @@ class Request
     /**
      * Process query string for Oauth
      *
-     * @param array $protocolParams
+     * @param array &$protocolParams
      * @param string $queryString
      * @return void
      */

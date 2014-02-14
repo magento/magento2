@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model;
 
 /**
  * Backend config model
@@ -32,9 +33,6 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Model;
-
 class Config extends \Magento\Object
 {
     /**
@@ -133,7 +131,7 @@ class Config extends \Magento\Object
      * Require set: section, website, store and groups
      *
      * @throws \Exception
-     * @return \Magento\Backend\Model\Config
+     * @return $this
      */
     public function save()
     {
@@ -193,10 +191,11 @@ class Config extends \Magento\Object
      * @param array $groupData
      * @param array $groups
      * @param string $sectionPath
-     * @param array $extraOldGroups
-     * @param array $oldConfig
+     * @param array &$extraOldGroups
+     * @param array &$oldConfig
      * @param \Magento\Core\Model\Resource\Transaction $saveTransaction
      * @param \Magento\Core\Model\Resource\Transaction $deleteTransaction
+     * @return void
      */
     protected function _processGroup(
         $groupId,
@@ -355,8 +354,9 @@ class Config extends \Magento\Object
     }
 
     /**
-     * Validate isset required parametrs
+     * Validate isset required parameters
      *
+     * @return void
      */
     protected function _validate()
     {
@@ -374,6 +374,7 @@ class Config extends \Magento\Object
     /**
      * Get scope name and scopeId
      *
+     * @return void
      */
     protected function _getScope()
     {
@@ -415,6 +416,7 @@ class Config extends \Magento\Object
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Field $fieldConfig
      * @param \Magento\App\Config\ValueInterface $dataObject
+     * @return void
      */
     protected function _checkSingleStoreMode(
         \Magento\Backend\Model\Config\Structure\Element\Field $fieldConfig,
@@ -437,7 +439,7 @@ class Config extends \Magento\Object
      * Get config data value
      *
      * @param string $path
-     * @param null|bool $inherit
+     * @param null|bool &$inherit
      * @param null|array $configData
      * @return \Magento\Simplexml\Element
      */

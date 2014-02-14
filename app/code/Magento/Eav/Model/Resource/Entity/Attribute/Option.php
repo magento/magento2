@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Resource\Entity\Attribute;
 
 /**
  * Entity attribute option resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Entity\Attribute;
-
 class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -52,7 +50,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @param \Zend_Db_Expr $valueExpr
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Option
+     * @return $this
      */
     public function addOptionValueToCollection($collection, $attribute, $valueExpr)
     {

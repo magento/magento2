@@ -44,7 +44,7 @@ class Code extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $entityId
      * @param string $entityType
      * @param int $storeId
-     * @return \Magento\GoogleOptimizer\Model\Resource\Code
+     * @return $this
      */
     public function loadByEntityType($object, $entityId, $entityType, $storeId)
     {

@@ -24,10 +24,12 @@
  */
 -->
 <config>
-    <job name="captcha_delete_old_attempts" instance="Magento\Captcha\Model\Cron" method="deleteOldAttempts">
-        <schedule>*/30 * * * *</schedule>
-    </job>
-    <job name="captcha_delete_expired_images" instance="Magento\Captcha\Model\Cron" method="deleteExpiredImages">
-        <schedule>*/10 * * * *</schedule>
-    </job>
+    <group id="default">
+        <job name="captcha_delete_old_attempts" instance="Magento\Captcha\Model\Cron" method="deleteOldAttempts">
+            <schedule>*/30 * * * *</schedule>
+        </job>
+        <job name="captcha_delete_expired_images" instance="Magento\Captcha\Model\Cron" method="deleteExpiredImages">
+            <schedule>*/10 * * * *</schedule>
+        </job>
+    </group>
 </config>

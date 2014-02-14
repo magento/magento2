@@ -120,7 +120,7 @@ abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare data storage
      *
-     * @return \Magento\Core\Model\File\Storage\Database
+     * @return $this
      */
     public function prepareStorage()
     {
@@ -132,8 +132,8 @@ abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
     /**
      * Specify connection name
      *
-     * @param  $connectionName
-     * @return \Magento\Core\Model\File\Storage\Database
+     * @param  string $connectionName
+     * @return $this
      */
     public function setConnectionName($connectionName)
     {

@@ -42,7 +42,7 @@ $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
 </div>
 <script type="text/javascript">
     head.js("<?php echo $this->getViewFileUrl('Magento_Wishlist::js/add-to-wishlist.js') ?>", function () {
-        jQuery('.product.info.main').addToWishlist(
+        jQuery('body').addToWishlist(
             <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(array('productType' => $_product->getTypeId()))?>
         );
     });

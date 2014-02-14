@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 /**
  * Catalog Category Attribute Default and Available Sort By Backend Model
@@ -31,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Category\Attribute\Backend;
-
 class Sortby
     extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -122,7 +121,7 @@ class Sortby
      * Before Attribute Save Process
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Category\Attribute\Backend\Sortby
+     * @return $this
      */
     public function beforeSave($object)
     {
@@ -140,6 +139,12 @@ class Sortby
         return $this;
     }
 
+    /**
+     * After Load Attribute Process
+     *
+     * @param \Magento\Object $object
+     * @return $this
+     */
     public function afterLoad($object)
     {
         $attributeCode = $this->getAttribute()->getName();

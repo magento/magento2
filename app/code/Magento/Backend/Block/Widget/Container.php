@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget;
 
 /**
  * Backend container block
@@ -31,8 +32,6 @@
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget;
-
 class Container extends \Magento\Backend\Block\Template
 {
     /**#@+
@@ -52,7 +51,6 @@ class Container extends \Magento\Backend\Block\Template
     /**
      * Array of buttons
      *
-     *
      * @var array
      */
     protected $_buttons = array(
@@ -70,6 +68,8 @@ class Container extends \Magento\Backend\Block\Template
 
     /**
      * Initialize "controller" and "header text"
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -89,8 +89,8 @@ class Container extends \Magento\Backend\Block\Template
      * @param array $data
      * @param integer $level
      * @param integer $sortOrder
-     * @param string|null $region, that button should be displayed in ('header', 'footer', null)
-     * @return \Magento\Backend\Block\Widget\Container
+     * @param string|null $region That button should be displayed in ('header', 'footer', null)
+     * @return $this
      */
     protected function _addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'header')
     {
@@ -120,8 +120,8 @@ class Container extends \Magento\Backend\Block\Template
      * @param array $data
      * @param integer $level
      * @param integer $sortOrder
-     * @param string|null $region, that button should be displayed in ('header', 'footer', null)
-     * @return \Magento\Backend\Block\Widget\Container
+     * @param string|null $region That button should be displayed in ('header', 'footer', null)
+     * @return $this
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'header')
     {
@@ -132,7 +132,7 @@ class Container extends \Magento\Backend\Block\Template
      * Remove existing button
      *
      * @param string $buttonId
-     * @return \Magento\Backend\Block\Widget\Container
+     * @return $this
      */
     protected function _removeButton($buttonId)
     {
@@ -148,7 +148,7 @@ class Container extends \Magento\Backend\Block\Template
      * Public wrapper for the _removeButton() method
      *
      * @param string $buttonId
-     * @return \Magento\Backend\Block\Widget\Container
+     * @return $this
      */
     public function removeButton($buttonId)
     {
@@ -160,8 +160,8 @@ class Container extends \Magento\Backend\Block\Template
      *
      * @param string $buttonId
      * @param string|null $key
-     * @param mixed $data
-     * @return \Magento\Backend\Block\Widget\Container
+     * @param string $data
+     * @return $this
      */
     protected function _updateButton($buttonId, $key, $data)
     {
@@ -191,8 +191,8 @@ class Container extends \Magento\Backend\Block\Template
      *
      * @param string $buttonId
      * @param string|null $key
-     * @param mixed $data
-     * @return \Magento\Backend\Block\Widget\Container
+     * @param string $data
+     * @return $this
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -202,7 +202,7 @@ class Container extends \Magento\Backend\Block\Template
     /**
      * Preparing child blocks for each added button
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return $this
      */
     protected function _prepareLayout()
     {

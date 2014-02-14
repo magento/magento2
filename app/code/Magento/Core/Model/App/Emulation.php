@@ -121,7 +121,6 @@ class Emulation extends \Magento\Object
      * @param integer $storeId
      * @param string $area
      * @param bool $emulateStoreInlineTranslation emulate inline translation of the specified store or just disable it
-     *
      * @return \Magento\Object information about environment of the initial store
      */
     public function startEnvironmentEmulation($storeId, $area = \Magento\Core\Model\App\Area::AREA_FRONTEND,
@@ -152,7 +151,6 @@ class Emulation extends \Magento\Object
      * Function restores initial store environment
      *
      * @param \Magento\Object $initialEnvironmentInfo information about environment of the initial store
-     *
      * @return \Magento\Core\Model\App\Emulation
      */
     public function stopEnvironmentEmulation(\Magento\Object $initialEnvironmentInfo)
@@ -172,7 +170,6 @@ class Emulation extends \Magento\Object
      * Function disables inline translation if $storeId is null
      *
      * @param integer|null $storeId
-     *
      * @return boolean initial inline translation state
      */
     protected function _emulateInlineTranslation($storeId = null)
@@ -192,7 +189,6 @@ class Emulation extends \Magento\Object
      *
      * @param integer $storeId
      * @param string $area
-     *
      * @return array initial design parameters(package, store, area)
      */
     protected function _emulateDesign($storeId, $area = \Magento\Core\Model\App\Area::AREA_FRONTEND)
@@ -222,7 +218,6 @@ class Emulation extends \Magento\Object
      *
      * @param integer $storeId
      * @param string $area
-     *
      * @return string initial locale code
      */
     protected function _emulateLocale($storeId, $area = \Magento\Core\Model\App\Area::AREA_FRONTEND)
@@ -241,8 +236,7 @@ class Emulation extends \Magento\Object
      * Restore initial inline translation state
      *
      * @param bool $initialTranslate
-     *
-     * @return \Magento\Core\Model\App\Emulation
+     * @return $this
      */
     protected function _restoreInitialInlineTranslation($initialTranslate)
     {
@@ -254,8 +248,7 @@ class Emulation extends \Magento\Object
      * Restore design of the initial store
      *
      * @param array $initialDesign
-     *
-     * @return \Magento\Core\Model\App\Emulation
+     * @return $this
      */
     protected function _restoreInitialDesign(array $initialDesign)
     {
@@ -268,8 +261,7 @@ class Emulation extends \Magento\Object
      *
      * @param string $initialLocaleCode
      * @param string $initialArea
-     *
-     * @return \Magento\Core\Model\App\Emulation
+     * @return $this
      */
     protected function _restoreInitialLocale($initialLocaleCode, $initialArea = \Magento\Core\Model\App\Area::AREA_ADMIN)
     {

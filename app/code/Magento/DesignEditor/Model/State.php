@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Model;
 
 /**
@@ -185,6 +184,7 @@ class State
     /**
      * Create url model instance that will be used instead of \Magento\UrlInterface in navigation mode
      *
+     * @param string $mode
      * @return void
      */
     protected function _injectUrlModel($mode)

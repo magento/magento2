@@ -44,7 +44,7 @@ class Data extends \Magento\Object
      * Add error
      *
      * @param string $error
-     * @return \Magento\Install\Model\Installer\Data
+     * @return $this
      */
     public function addError($error)
     {

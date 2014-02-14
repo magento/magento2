@@ -33,12 +33,14 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
+use Magento\Data\Collection;
+
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
      * Retrieve list of gallery images
      *
-     * @return array|\Magento\Data\Collection
+     * @return array|Collection
      */
     public function getGalleryImages()
     {

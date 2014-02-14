@@ -67,7 +67,7 @@ class File
     /**
      * Collect errors during sync process
      *
-     * @var array
+     * @var string[]
      */
     protected $_errors = array();
 
@@ -97,7 +97,7 @@ class File
     /**
      * Initialization
      *
-     * @return \Magento\Core\Model\File\Storage\File
+     * @return $this
      */
     public function init()
     {
@@ -137,7 +137,7 @@ class File
     /**
      * Clear files and directories in storage
      *
-     * @return \Magento\Core\Model\File\Storage\File
+     * @return $this
      */
     public function clear()
     {
@@ -230,7 +230,7 @@ class File
      *
      * @param  array $data
      * @param  string $callback
-     * @return \Magento\Core\Model\File\Storage\File
+     * @return $this
      */
     public function import($data, $callback)
     {
@@ -254,7 +254,7 @@ class File
      * Import directories to storage
      *
      * @param  array $dirs
-     * @return \Magento\Core\Model\File\Storage\File
+     * @return $this
      */
     public function importDirectories($dirs)
     {
@@ -265,7 +265,7 @@ class File
      * Import files list
      *
      * @param  array $files
-     * @return \Magento\Core\Model\File\Storage\File
+     * @return $this
      */
     public function importFiles($files)
     {
@@ -286,10 +286,10 @@ class File
     /**
      * Save file to storage
      *
-     * @param  array|\Magento\Core\Model\File\Storage\Database $file
+     * @param  array $file
      * @param  bool $overwrite
      * @throws \Magento\Core\Exception
-     * @return bool|int
+     * @return bool
      */
     public function saveFile($file, $overwrite = true)
     {

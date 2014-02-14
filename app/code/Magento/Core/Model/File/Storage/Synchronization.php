@@ -64,6 +64,7 @@ class Synchronization
      *
      * @param string $relativeFileName
      * @param string $filePath
+     * @return void
      * @throws \LogicException
      */
     public function synchronize($relativeFileName, $filePath)

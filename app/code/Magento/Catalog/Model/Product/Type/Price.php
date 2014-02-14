@@ -33,10 +33,16 @@
  */
 namespace Magento\Catalog\Model\Product\Type;
 
+use Magento\Catalog\Model\Product;
+use Magento\Core\Model\Store;
+
 class Price
 {
     const CACHE_TAG = 'PRODUCT_PRICE';
 
+    /**
+     * @var array
+     */
     static $attributeCache = array();
 
     /**
@@ -100,7 +106,8 @@ class Price
     /**
      * Default action to get price of product
      *
-     * @return decimal
+     * @param Product $product
+     * @return float
      */
     public function getPrice($product)
     {
@@ -110,7 +117,7 @@ class Price
     /**
      * Get base price with apply Group, Tier, Special prises
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param float|null $qty
      *
      * @return float
@@ -128,7 +135,7 @@ class Price
      * Retrieve product final price
      *
      * @param float|null $qty
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return float
      */
     public function getFinalPrice($qty, $product)
@@ -150,6 +157,13 @@ class Price
         return $finalPrice;
     }
 
+    /**
+     * @param Product $product
+     * @param float $productQty
+     * @param Product $childProduct
+     * @param float $childProductQty
+     * @return float
+     */
     public function getChildFinalPrice($product, $productQty, $childProduct, $childProductQty)
     {
         return $this->getFinalPrice($childProductQty, $childProduct);
@@ -158,7 +172,7 @@ class Price
     /**
      * Apply group price for product
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param float $finalPrice
      * @return float
      */
@@ -174,7 +188,7 @@ class Price
     /**
      * Get product group price
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return float
      */
     public function getGroupPrice($product)
@@ -210,7 +224,7 @@ class Price
     /**
      * Apply tier price for product if not return price that was before
      *
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param   Product $product
      * @param   float $qty
      * @param   float $finalPrice
      * @return  float
@@ -232,8 +246,8 @@ class Price
      * Get product tier price by qty
      *
      * @param   float $qty
-     * @param   \Magento\Catalog\Model\Product $product
-     * @return  float
+     * @param   Product $product
+     * @return  float|array
      */
     public function getTierPrice($qty, $product)
     {
@@ -312,6 +326,10 @@ class Price
         return ($prices) ? $prices : array();
     }
 
+    /**
+     * @param Product $product
+     * @return int
+     */
     protected function _getCustomerGroupId($product)
     {
         if ($product->getCustomerGroupId()) {
@@ -323,7 +341,7 @@ class Price
     /**
      * Apply special price for product if not return price that was before
      *
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param   Product $product
      * @param   float $finalPrice
      * @return  float
      */
@@ -337,7 +355,7 @@ class Price
     /**
      * Count how many tier prices we have for the product
      *
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param   Product $product
      * @return  int
      */
     public function getTierPriceCount($product)
@@ -350,8 +368,8 @@ class Price
      * Get formatted by currency tier price
      *
      * @param   float $qty
-     * @param   \Magento\Catalog\Model\Product $product
-     * @return  array || float
+     * @param   Product $product
+     * @return  array|float
      */
     public function getFormatedTierPrice($qty, $product)
     {
@@ -373,7 +391,7 @@ class Price
     /**
      * Get formatted by currency product price
      *
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param   Product $product
      * @return  array || float
      */
     public function getFormatedPrice($product)
@@ -384,7 +402,7 @@ class Price
     /**
      * Apply options price
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param int $qty
      * @param float $finalPrice
      * @return float
@@ -416,16 +434,16 @@ class Price
      * @param   string $specialPriceFrom
      * @param   string $specialPriceTo
      * @param   float|null|false $rulePrice
-     * @param   mixed $wId
-     * @param   mixed $gId
-     * @param   null|int $productId
+     * @param   mixed|null $wId
+     * @param   mixed|null $gId
+     * @param   int|null $productId
      * @return  float
      */
     public function calculatePrice($basePrice, $specialPrice, $specialPriceFrom, $specialPriceTo,
             $rulePrice = false, $wId = null, $gId = null, $productId = null)
     {
         \Magento\Profiler::start('__PRODUCT_CALCULATE_PRICE__');
-        if ($wId instanceof \Magento\Core\Model\Store) {
+        if ($wId instanceof Store) {
             $sId = $wId->getId();
             $wId = $wId->getWebsiteId();
         } else {
@@ -461,7 +479,7 @@ class Price
      * @param float $specialPrice
      * @param string $specialPriceFrom
      * @param string $specialPriceTo
-     * @param mixed $store
+     * @param int|string|Store $store
      * @return float
      */
     public function calculateSpecialPrice($finalPrice, $specialPrice, $specialPriceFrom, $specialPriceTo,

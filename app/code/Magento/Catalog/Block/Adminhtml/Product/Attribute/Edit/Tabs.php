@@ -35,7 +35,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit;
 
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
-
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -44,6 +46,9 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         $this->setTitle(__('Attribute Information'));
     }
 
+    /**
+     * @return $this
+     */
     protected function _beforeToHtml()
     {
         $this->addTab(
@@ -74,5 +79,4 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
         return parent::_beforeToHtml();
     }
-
 }

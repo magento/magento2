@@ -35,8 +35,14 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 class Websites extends \Magento\Backend\Block\Store\Switcher
 {
+    /**
+     * @var string
+     */
     protected $_storeFromHtml;
 
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/edit/websites.phtml';
 
     /**

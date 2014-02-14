@@ -34,6 +34,9 @@
  */
 namespace Magento\Catalog\Block\Product\Compare;
 
+use Magento\App\Action\Action;
+use Magento\Catalog\Model\Product;
+
 class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
 {
     /**
@@ -178,13 +181,13 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     /**
      * Get add to wishlist params
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return array
+     * @param Product $product
+     * @return string
      */
     public function getAddToWishlistParams($product)
     {
         $continueUrl    = $this->_coreData->urlEncode($this->getUrl('customer/account'));
-        $urlParamName   = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $urlParamName   = Action::PARAM_NAME_URL_ENCODED;
 
         $continueUrlParams = array($urlParamName => $continueUrl);
 
@@ -255,7 +258,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     /**
      * Retrieve Product Attribute Value
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @return string
      */

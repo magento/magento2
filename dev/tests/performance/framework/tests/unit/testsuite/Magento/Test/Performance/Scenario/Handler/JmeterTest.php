@@ -67,7 +67,7 @@ class JmeterTest extends \PHPUnit_Framework_TestCase
             $scenarioArgs, array(), array());
 
         $this->_reportFile = realpath(__DIR__ . '/../../_files') . '/scenario.jtl';
-        $this->_shell = $this->getMock('Magento\Shell', array('execute'));
+        $this->_shell = $this->getMock('Magento\Shell', array('execute'), array(), '', false);
         $this->_object = new \Magento\TestFramework\Performance\Scenario\Handler\Jmeter($this->_shell, false);
     }
 

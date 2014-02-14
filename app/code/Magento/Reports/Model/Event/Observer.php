@@ -60,6 +60,14 @@ class Observer
      */
     protected $_logVisitor;
 
+    /**
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Reports\Model\EventFactory $event
+     * @param \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory
+     * @param \Magento\Reports\Model\Product\Index\ViewedFactory $productIndxFactory
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Log\Model\Visitor $logVisitor
+     */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Reports\Model\EventFactory $event,
@@ -76,7 +84,7 @@ class Observer
         $this->_logVisitor = $logVisitor;
     }
     /**
-     * Abstract Event obeserver logic
+     * Abstract Event observer logic
      *
      * Save event
      *
@@ -84,7 +92,7 @@ class Observer
      * @param int $objectId
      * @param int $subjectId
      * @param int $subtype
-     * @return \Magento\Reports\Model\Event\Observer
+     * @return $this
      */
     protected function _event($eventTypeId, $objectId, $subjectId = null, $subtype = 0)
     {

@@ -75,6 +75,7 @@ class Cache
      * Set cache lifetime
      *
      * @param int $lifetime
+     * @return void
      */
     public function setCacheLifetime($lifetime)
     {
@@ -109,6 +110,7 @@ class Cache
      * Save config cache
      *
      * @param \Magento\Core\Model\Config\Base $config
+     * @return void
      */
     public function save(\Magento\Core\Model\Config\Base $config)
     {

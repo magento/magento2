@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * Adminhtml entity sets controller
@@ -31,9 +32,6 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Catalog\Controller\Adminhtml\Product;
-
 class Set extends \Magento\Backend\App\Action
 {
     /**
@@ -55,6 +53,9 @@ class Set extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Product Templates'));
@@ -72,6 +73,9 @@ class Set extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $this->_title->add(__('Product Templates'));
@@ -105,6 +109,9 @@ class Set extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function setGridAction()
     {
         $this->_setTypeId();
@@ -118,6 +125,7 @@ class Set extends \Magento\Backend\App\Action
      * [POST] Create attribute set from another set and redirect to edit page
      * [AJAX] Save attribute set data
      *
+     * @return void
      */
     public function saveAction()
     {
@@ -203,6 +211,9 @@ class Set extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * @return void
+     */
     public function addAction()
     {
         $this->_title->add(__('New Product Template'));
@@ -220,6 +231,9 @@ class Set extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $setId = $this->getRequest()->getParam('id');
@@ -239,6 +253,7 @@ class Set extends \Magento\Backend\App\Action
     /**
      * Define in register catalog_product entity type code as entityType
      *
+     * @return void
      */
     protected function _setTypeId()
     {
@@ -246,6 +261,9 @@ class Set extends \Magento\Backend\App\Action
             $this->_objectManager->create('Magento\Catalog\Model\Product')->getResource()->getTypeId());
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Catalog::sets');

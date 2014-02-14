@@ -23,8 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\PageCache\Model;
+
+use Magento\App\Request\Http;
+use Magento\Stdlib\Cookie;
 
 /**
  * Class Version
@@ -45,20 +47,24 @@ class Version
     /**
      * Cookie
      *
-     * @var \Magento\Stdlib\Cookie
+     * @var Cookie
      */
     private $cookie;
 
     /**
      * Request
      *
-     * @var \Magento\App\Request\Http
+     * @var Http
      */
     private $request;
 
+    /**
+     * @param Cookie $cookie
+     * @param Http $request
+     */
     public function __construct(
-        \Magento\Stdlib\Cookie $cookie,
-        \Magento\App\Request\Http $request
+        Cookie $cookie,
+        Http $request
     ) {
         $this->cookie = $cookie;
         $this->request = $request;
@@ -66,6 +72,8 @@ class Version
 
     /**
      * Increment private content version cookie (for user to pull new private content)
+     *
+     * @return void
      */
     private function set()
     {
@@ -87,6 +95,8 @@ class Version
      * Set cookie if it is not set.
      * Increment version on post requests.
      * In all other cases do nothing.
+     *
+     * @return void
      */
     public function process()
     {
