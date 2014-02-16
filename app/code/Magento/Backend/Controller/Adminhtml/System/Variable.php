@@ -218,9 +218,9 @@ class Variable extends Action
      */
     public function wysiwygPluginAction()
     {
-        $variables = $this->_objectManager->create('Magento\Core\Model\Variable');
-        $customVariables = $variables->getVariablesOptionArray(true);
-        $translateVariables = $variables->getTranslateVariablesOptionArray(true);
+        $variablesModel = $this->_objectManager->create('Magento\Core\Model\Variable');
+        $customVariables = $variablesModel->getVariablesOptionArray(true);
+        $translateVariables = $variablesModel->getTranslateVariablesOptionArray(true);
         $storeContactVariabls = $this->_objectManager->create('Magento\Email\Model\Source\Variables')->toOptionArray(true);
         
         $variables = array($storeContactVariabls, $translateVariables, $customVariables);
