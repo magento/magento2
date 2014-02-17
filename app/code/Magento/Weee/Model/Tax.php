@@ -47,6 +47,7 @@ class Tax extends \Magento\Core\Model\AbstractModel
 
     protected $_allAttributes = null;
     protected $_productDiscounts = array();
+    protected $_weeeAttributes = null;
 
     /**
      * Weee data
@@ -209,54 +210,57 @@ class Tax extends \Magento\Core\Model\AbstractModel
             $discountPercent = $this->_getDiscountPercentForProduct($product);
         }
 
-        $productAttributes = $product->getTypeInstance()->getSetAttributes($product);
-        foreach ($productAttributes as $code => $attribute) {
-            if (in_array($code, $allWeee)) {
+        if($this->_weeeAttributes === null) {
+            $this->_weeeAttributes = $this->_attributeFactory->create()
+                                        ->getResourceCollection()
+                                        ->addFieldToFilter('attribute_code', array('in' => $allWeee))
+                                        ;
+        }
 
-                $attributeSelect = $this->getResource()->getReadConnection()->select();
-                $attributeSelect
-                    ->from($this->getResource()->getTable('weee_tax'), 'value')
-                    ->where('attribute_id = ?', (int)$attribute->getId())
-                    ->where('website_id IN(?)', array($websiteId, 0))
-                    ->where('country = ?', $rateRequest->getCountryId())
-                    ->where('state IN(?)', array($rateRequest->getRegionId(), '*'))
-                    ->where('entity_id = ?', (int)$product->getId())
-                    ->limit(1);
+        foreach ($this->_weeeAttributes as $attribute) {
+            $attributeSelect = $this->getResource()->getReadConnection()->select();
+            $attributeSelect
+                ->from($this->getResource()->getTable('weee_tax'), 'value')
+                ->where('attribute_id = ?', (int)$attribute->getId())
+                ->where('website_id IN(?)', array($websiteId, 0))
+                ->where('country = ?', $rateRequest->getCountryId())
+                ->where('state IN(?)', array($rateRequest->getRegionId(), '*'))
+                ->where('entity_id = ?', (int)$product->getId())
+                ->limit(1);
 
-                $order = array('state ' . \Magento\DB\Select::SQL_DESC, 'website_id ' . \Magento\DB\Select::SQL_DESC);
-                $attributeSelect->order($order);
+            $order = array('state ' . \Magento\DB\Select::SQL_DESC, 'website_id ' . \Magento\DB\Select::SQL_DESC);
+            $attributeSelect->order($order);
 
-                $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
-                if ($value) {
-                    if ($discountPercent) {
-                        $value = $this->_storeManager->getStore()->roundPrice($value-($value*$discountPercent/100));
-                    }
-
-                    $taxAmount = $amount = 0;
-                    $amount    = $value;
-                    if ($calculateTax && $this->_weeeData->isTaxable($store)) {
-                        /** @var \Magento\Tax\Model\Calculation $calculator */
-                        $defaultPercent = $this->_calculationFactory->create()
-                            ->getRate(
-                                $defaultRateRequest->setProductClassId($product->getTaxClassId())
-                            );
-                        $currentPercent = $product->getTaxPercent();
-                        if ($this->_taxData->priceIncludesTax($store)) {
-                            $taxAmount = $this->_storeManager->getStore()
-                                ->roundPrice($value/(100+$defaultPercent)*$currentPercent);
-                        } else {
-                            $taxAmount = $this->_storeManager->getStore()->roundPrice($value*$defaultPercent/100);
-                        }
-                    }
-
-                    $one = new \Magento\Object();
-                    $one->setName(__($attribute->getFrontend()->getLabel()))
-                        ->setAmount($amount)
-                        ->setTaxAmount($taxAmount)
-                        ->setCode($attribute->getAttributeCode());
-
-                    $result[] = $one;
+            $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
+            if ($value) {
+                if ($discountPercent) {
+                    $value = $this->_storeManager->getStore()->roundPrice($value-($value*$discountPercent/100));
                 }
+
+                $taxAmount = $amount = 0;
+                $amount    = $value;
+                if ($calculateTax && $this->_weeeData->isTaxable($store)) {
+                    /** @var \Magento\Tax\Model\Calculation $calculator */
+                    $defaultPercent = $this->_calculationFactory->create()
+                        ->getRate(
+                            $defaultRateRequest->setProductClassId($product->getTaxClassId())
+                        );
+                    $currentPercent = $product->getTaxPercent();
+                    if ($this->_taxData->priceIncludesTax($store)) {
+                        $taxAmount = $this->_storeManager->getStore()
+                            ->roundPrice($value/(100+$defaultPercent)*$currentPercent);
+                    } else {
+                        $taxAmount = $this->_storeManager->getStore()->roundPrice($value*$defaultPercent/100);
+                    }
+                }
+
+                $one = new \Magento\Object();
+                $one->setName(__($attribute->getFrontend()->getLabel()))
+                    ->setAmount($amount)
+                    ->setTaxAmount($taxAmount)
+                    ->setCode($attribute->getAttributeCode());
+
+                $result[] = $one;
             }
         }
         return $result;
