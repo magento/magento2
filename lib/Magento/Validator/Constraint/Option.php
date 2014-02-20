@@ -20,20 +20,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Validator_Constraint_Option implements  Magento_Validator_Constraint_OptionInterface
+namespace Magento\Validator\Constraint;
+
+class Option implements  \Magento\Validator\Constraint\OptionInterface
 {
     /**
-     * @var mixed
+     * @var int|string|array
      */
     protected $_value;
 
     /**
      * Set value
      *
-     * @param mixed $value
+     * @param int|string|array $value
      */
     public function __construct($value)
     {
@@ -43,7 +45,7 @@ class Magento_Validator_Constraint_Option implements  Magento_Validator_Constrai
     /**
      * Get value
      *
-     * @return mixed
+     * @return int|string|array
      */
     public function getValue()
     {

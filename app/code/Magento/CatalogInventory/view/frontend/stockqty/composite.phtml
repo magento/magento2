@@ -1,0 +1,61 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * @var $this \Magento\CatalogInventory\Block\Stockqty\Composite
+ */
+?>
+<?php if($this->isMsgVisible()): ?>
+    <div class="availability only">
+        <a href="#"
+           data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?php echo $this->getDetailsPlaceholderId() ?>"}}'
+           id="<?php echo $this->getPlaceholderId() ?>"
+           title="<?php echo __('Only %1 left', ($this->getStockQty())) ?>"
+           class="action show">
+            <?php echo __('Only %1 left', "<strong>{$this->getStockQty()}</strong>") ?>
+        </a>
+    </div>
+    <div class="availability only detailed" id="<?php echo $this->getDetailsPlaceholderId() ?>">
+        <table class="data table">
+            <thead>
+                <tr>
+                    <th class="col item"><?php echo __('Product Name') ?></th>
+                    <th class="col qty"><?php echo __('Qty') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($this->getChildProducts() as $childProduct) : ?>
+                <?php $childProductStockQty = $this->getProductStockQty($childProduct); ?>
+                <?php if ($childProductStockQty > 0) : ?>
+                    <tr>
+                        <td class="col item"><?php echo $childProduct->getName() ?></td>
+                        <td class="col qty"><?php echo $childProductStockQty ?></td>
+                    </tr>
+                <?php endif ?>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif ?>

@@ -90,7 +90,7 @@ class Zend_Search_Lucene_TermStreamsPriorityQueue implements Zend_Search_Lucene_
     }
 
     /**
-     * Skip terms stream up to the specified term preffix.
+     * Skip terms stream up to the specified term prefix.
      *
      * Prefix contains fully specified field info and portion of searched term
      *

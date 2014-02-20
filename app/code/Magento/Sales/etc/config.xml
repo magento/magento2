@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_Sales
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <default>
+        <sales>
+            <totals_sort>
+                <discount>20</discount>
+                <grand_total>100</grand_total>
+                <shipping>30</shipping>
+                <subtotal>10</subtotal>
+                <tax>40</tax>
+            </totals_sort>
+            <reorder>
+                <allow>1</allow>
+            </reorder>
+        </sales>
+        <sales_email>
+            <order>
+                <enabled>1</enabled>
+                <template>sales_email_order_template</template>
+                <guest_template>sales_email_order_guest_template</guest_template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </order>
+            <order_comment>
+                <enabled>1</enabled>
+                <template>sales_email_order_comment_template</template>
+                <guest_template>sales_email_order_comment_guest_template</guest_template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </order_comment>
+            <invoice>
+                <enabled>1</enabled>
+                <template>sales_email_invoice_template</template>
+                <guest_template>sales_email_invoice_guest_template</guest_template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </invoice>
+            <invoice_comment>
+                <enabled>1</enabled>
+                <template>sales_email_invoice_comment_template</template>
+                <guest_template>sales_email_invoice_comment_guest_template</guest_template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </invoice_comment>
+            <shipment>
+                <enabled>1</enabled>
+                <template>sales_email_shipment_template</template>
+                <guest_template>sales_email_shipment_guest_template</guest_template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </shipment>
+            <shipment_comment>
+                <enabled>1</enabled>
+                <template>sales_email_shipment_comment_template</template>
+                <guest_template>sales_email_shipment_comment_guest_template</guest_template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </shipment_comment>
+            <creditmemo>
+                <enabled>1</enabled>
+                <template>sales_email_creditmemo_template</template>
+                <guest_template>sales_email_creditmemo_guest_template</guest_template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </creditmemo>
+            <creditmemo_comment>
+                <enabled>1</enabled>
+                <template>sales_email_creditmemo_comment_template</template>
+                <guest_template>sales_email_creditmemo_comment_guest_template</guest_template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </creditmemo_comment>
+        </sales_email>
+        <sales_pdf>
+            <invoice>
+                <put_order_id>1</put_order_id>
+            </invoice>
+            <shipment>
+                <put_order_id>1</put_order_id>
+            </shipment>
+            <creditmemo>
+                <put_order_id>1</put_order_id>
+            </creditmemo>
+        </sales_pdf>
+        <dashboard>
+            <use_aggregated_data>0</use_aggregated_data>
+        </dashboard>
+    </default>
+</config>

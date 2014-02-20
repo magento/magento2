@@ -18,40 +18,50 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Minifier
+namespace Magento\Code;
+
+use Magento\Filesystem\Directory\Read;
+
+class Minifier
 {
     /**
-     * @var Magento_Code_Minifier_StrategyInterface
+     * @var \Magento\Code\Minifier\StrategyInterface
      */
     private $_strategy;
 
     /**
-     * @var Magento_Filesystem
+     * @var Read
      */
-    private $_filesystem;
+    private $rootDirectory;
 
     /**
-     * @var string directory where minified files are saved
+     * @var string directory name where minified files are saved
      */
-    private $_baseDir;
+    private $directoryName;
 
     /**
-     * @param Magento_Code_Minifier_StrategyInterface $strategy
-     * @param Magento_Filesystem $filesystem
-     * @param string $baseDir
+     * @var Read
+     */
+    private $pubViewCacheDir;
+
+    /**
+     * @param \Magento\Code\Minifier\StrategyInterface $strategy
+     * @param \Magento\App\Filesystem $filesystem
+     * @param string $directoryName
      */
     public function __construct(
-        Magento_Code_Minifier_StrategyInterface $strategy,
-        Magento_Filesystem $filesystem,
-        $baseDir
+        \Magento\Code\Minifier\StrategyInterface $strategy,
+        \Magento\App\Filesystem $filesystem,
+        $directoryName
     ) {
         $this->_strategy = $strategy;
-        $this->_filesystem = $filesystem;
-        $this->_baseDir = $baseDir;
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->pubViewCacheDir = $filesystem->getDirectoryRead(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR);
+        $this->directoryName = $directoryName;
     }
 
     /**
@@ -65,13 +75,15 @@ class Magento_Code_Minifier
         if ($this->_isFileMinified($originalFile)) {
             return $originalFile;
         }
-        $minifiedFile = $this->_findOriginalMinifiedFile($originalFile);
+        $originalFileRelative = $this->rootDirectory->getRelativePath($originalFile);
+        $minifiedFile = $this->_findOriginalMinifiedFile($originalFileRelative);
         if (!$minifiedFile) {
-            $minifiedFile = $this->_baseDir . '/' . $this->_generateMinifiedFileName($originalFile);
-            $this->_strategy->minifyFile($originalFile, $minifiedFile);
+            $minifiedFile = $this->directoryName . '/' . $this->_generateMinifiedFileName($originalFile);
+            $this->_strategy->minifyFile($originalFileRelative, $minifiedFile);
         }
 
-        return $minifiedFile;
+        $minifiedFile = $this->pubViewCacheDir->getRelativePath($minifiedFile);
+        return $this->pubViewCacheDir->getAbsolutePath($minifiedFile);
     }
 
     /**
@@ -109,7 +121,7 @@ class Magento_Code_Minifier
     {
         $fileInfo = pathinfo($originalFile);
         $minifiedFile = $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.min.' . $fileInfo['extension'];
-        if ($this->_filesystem->has($minifiedFile)) {
+        if ($this->rootDirectory->isExist($minifiedFile)) {
             return $minifiedFile;
         }
         return false;

@@ -1,0 +1,82 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php if( $this->getCollection() && $this->count()): ?>
+    <div class="toolbar reviews">
+        <?php echo $this->getToolbarHtml() ?>
+    </div>
+    <div class="wrapper table reviews">
+        <table class="data table reviews" id="my-reviews-table">
+            <thead>
+                <tr>
+                    <th class="col date"><?php echo __('Created') ?></th>
+                    <th class="col item"><?php echo __('Product Name') ?></th>
+                    <th class="col summary"><?php echo __('Summary') ?></th>
+                    <th class="col description"><?php echo __('Description') ?></th>
+                    <th class="col actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->getCollection() as $_review): ?>
+                <tr>
+                    <td class="col date"><?php echo $this->dateFormat($_review->getReviewCreatedAt()); ?></td>
+                    <td class="col item">
+                        <strong class="product name">
+                            <a href="<?php echo $this->getProductLink() ?>id/<?php echo $_review->getEntityPkValue() ?>"><?php echo $this->escapeHtml($_review->getName()) ?></a>
+                        </strong>
+                    </td>
+                    <td class="col summary">
+                    <?php if($_review->getSum()): ?>
+                        <div class="rating">
+                            <span style="width:<?php echo ( $_review->getSum() / $_review->getCount() ) ?>%;"></span>
+                        </div>
+                    <?php endif; ?>
+                    </td>
+                    <td class="col description">
+                        <?php echo $this->helper('Magento\Review\Helper\Data')->getDetailHtml($_review->getDetail()) ?>
+                    </td>
+                    <td class="col actions">
+                        <a href="<?php echo $this->getReviewLink() ?>id/<?php echo $_review->getReviewId() ?>" class="action more">
+                            <span><?php echo __('View Details') ?></span>
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="toolbar reviews bottom">
+        <?php echo $this->getToolbarHtml() ?>
+    </div>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have submitted no reviews.') ?></span></div>
+<?php endif; ?>
+<div class="actions">
+    <div class="secondary">
+        <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>">
+            <span><?php echo __('Back') ?></span>
+        </a>
+    </div>
+</div>

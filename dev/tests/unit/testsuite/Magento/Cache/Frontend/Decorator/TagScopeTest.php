@@ -18,25 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Cache_Frontend_Decorator_TagScopeTest extends PHPUnit_Framework_TestCase
+namespace Magento\Cache\Frontend\Decorator;
+
+class TagScopeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Cache_Frontend_Decorator_TagScope
+     * @var \Magento\Cache\Frontend\Decorator\TagScope
      */
     protected $_object;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_frontend;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_frontend = $this->getMock('Magento_Cache_FrontendInterface');
-        $this->_object = new Magento_Cache_Frontend_Decorator_TagScope($this->_frontend, 'enforced_tag');
+        $this->_frontend = $this->getMock('Magento\Cache\FrontendInterface');
+        $this->_object = new \Magento\Cache\Frontend\Decorator\TagScope($this->_frontend, 'enforced_tag');
     }
 
     protected function tearDown()
@@ -52,7 +54,7 @@ class Magento_Cache_Frontend_Decorator_TagScopeTest extends PHPUnit_Framework_Te
 
     public function testSave()
     {
-        $expectedResult = new stdClass();
+        $expectedResult = new \stdClass();
         $this->_frontend
             ->expects($this->once())
             ->method('save')
@@ -65,30 +67,30 @@ class Magento_Cache_Frontend_Decorator_TagScopeTest extends PHPUnit_Framework_Te
 
     public function testCleanModeAll()
     {
-        $expectedResult = new stdClass();
+        $expectedResult = new \stdClass();
         $this->_frontend
             ->expects($this->once())
             ->method('clean')
-            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('enforced_tag'))
+            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('enforced_tag'))
             ->will($this->returnValue($expectedResult))
         ;
         $actualResult = $this->_object->clean(
-            Zend_Cache::CLEANING_MODE_ALL, array('ignored_tag_one', 'ignored_tag_two')
+            \Zend_Cache::CLEANING_MODE_ALL, array('ignored_tag_one', 'ignored_tag_two')
         );
         $this->assertSame($expectedResult, $actualResult);
     }
 
     public function testCleanModeMatchingTag()
     {
-        $expectedResult = new stdClass();
+        $expectedResult = new \stdClass();
         $this->_frontend
             ->expects($this->once())
             ->method('clean')
-            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'test_tag_two', 'enforced_tag'))
+            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'test_tag_two', 'enforced_tag'))
             ->will($this->returnValue($expectedResult))
         ;
         $actualResult = $this->_object->clean(
-            Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'test_tag_two')
+            \Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'test_tag_two')
         );
         $this->assertSame($expectedResult, $actualResult);
     }
@@ -104,17 +106,17 @@ class Magento_Cache_Frontend_Decorator_TagScopeTest extends PHPUnit_Framework_Te
         $this->_frontend
             ->expects($this->at(0))
             ->method('clean')
-            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'enforced_tag'))
+            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_one', 'enforced_tag'))
             ->will($this->returnValue($fixtureResultOne))
         ;
         $this->_frontend
             ->expects($this->at(1))
             ->method('clean')
-            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_two', 'enforced_tag'))
+            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('test_tag_two', 'enforced_tag'))
             ->will($this->returnValue($fixtureResultTwo))
         ;
         $actualResult = $this->_object->clean(
-            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('test_tag_one', 'test_tag_two')
+            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('test_tag_one', 'test_tag_two')
         );
         $this->assertEquals($expectedResult, $actualResult);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit Test for Magento_Profiler
+ * Unit Test for \Magento\Profiler
  *
  * Magento
  *
@@ -20,78 +20,80 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
+namespace Magento;
+
+class ProfilerTest extends \PHPUnit_Framework_TestCase
 {
     protected function tearDown()
     {
-        Magento_Profiler::reset();
+        \Magento\Profiler::reset();
     }
 
     public function testEnable()
     {
-        Magento_Profiler::enable();
-        $this->assertTrue(Magento_Profiler::isEnabled());
+        \Magento\Profiler::enable();
+        $this->assertTrue(\Magento\Profiler::isEnabled());
     }
 
     public function testDisable()
     {
-        Magento_Profiler::disable();
-        $this->assertFalse(Magento_Profiler::isEnabled());
+        \Magento\Profiler::disable();
+        $this->assertFalse(\Magento\Profiler::isEnabled());
     }
 
     public function testSetDefaultTags()
     {
         $expected = array('some_key' => 'some_value');
-        Magento_Profiler::setDefaultTags($expected);
-        $this->assertAttributeEquals($expected, '_defaultTags', 'Magento_Profiler');
+        \Magento\Profiler::setDefaultTags($expected);
+        $this->assertAttributeEquals($expected, '_defaultTags', 'Magento\Profiler');
     }
 
     public function testAddTagFilter()
     {
-        Magento_Profiler::addTagFilter('tag1', 'value_1.1');
-        Magento_Profiler::addTagFilter('tag2', 'value_2.1');
-        Magento_Profiler::addTagFilter('tag1', 'value_1.2');
+        \Magento\Profiler::addTagFilter('tag1', 'value_1.1');
+        \Magento\Profiler::addTagFilter('tag2', 'value_2.1');
+        \Magento\Profiler::addTagFilter('tag1', 'value_1.2');
 
         $expected = array(
             'tag1' => array('value_1.1', 'value_1.2'),
             'tag2' => array('value_2.1'),
         );
-        $this->assertAttributeEquals($expected, '_tagFilters', 'Magento_Profiler');
-        $this->assertAttributeEquals(true, '_hasTagFilters', 'Magento_Profiler');
+        $this->assertAttributeEquals($expected, '_tagFilters', 'Magento\Profiler');
+        $this->assertAttributeEquals(true, '_hasTagFilters', 'Magento\Profiler');
     }
 
     public function testAdd()
     {
         $mock = $this->_getDriverMock();
-        Magento_Profiler::add($mock);
+        \Magento\Profiler::add($mock);
 
-        $this->assertTrue(Magento_Profiler::isEnabled());
+        $this->assertTrue(\Magento\Profiler::isEnabled());
 
         $expected = array($mock);
-        $this->assertAttributeEquals($expected, '_drivers', 'Magento_Profiler');
+        $this->assertAttributeEquals($expected, '_drivers', 'Magento\Profiler');
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getDriverMock()
     {
-        return $this->getMockBuilder('Magento_Profiler_DriverInterface')
+        return $this->getMockBuilder('Magento\Profiler\DriverInterface')
             ->setMethods(array('start', 'stop', 'clear'))
             ->getMockForAbstractClass();
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Timer name must not contain a nesting separator.
      */
     public function testStartException()
     {
-        Magento_Profiler::enable();
-        Magento_Profiler::start('timer ' . Magento_Profiler::NESTING_SEPARATOR . ' name');
+        \Magento\Profiler::enable();
+        \Magento\Profiler::start('timer ' . \Magento\Profiler::NESTING_SEPARATOR . ' name');
     }
 
     public function testDisabledProfiler()
@@ -102,10 +104,10 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
         $driver->expects($this->never())
             ->method('stop');
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::disable();
-        Magento_Profiler::start('test');
-        Magento_Profiler::stop('test');
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::disable();
+        \Magento\Profiler::start('test');
+        \Magento\Profiler::stop('test');
     }
 
     public function testStartStopSimple()
@@ -118,9 +120,9 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->method('stop')
             ->with('root_level_timer');
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::start('root_level_timer');
-        Magento_Profiler::stop('root_level_timer');
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::start('root_level_timer');
+        \Magento\Profiler::stop('root_level_timer');
     }
 
     public function testStartNested()
@@ -140,22 +142,22 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->method('stop')
             ->with('root_level_timer');
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::start('root_level_timer');
-        Magento_Profiler::start('some_other_timer');
-        Magento_Profiler::stop('some_other_timer');
-        Magento_Profiler::stop('root_level_timer');
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::start('root_level_timer');
+        \Magento\Profiler::start('some_other_timer');
+        \Magento\Profiler::stop('some_other_timer');
+        \Magento\Profiler::stop('root_level_timer');
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Timer "unknown" has not been started.
      */
     public function testStopExceptionUnknown()
     {
-        Magento_Profiler::enable();
-        Magento_Profiler::start('timer');
-        Magento_Profiler::stop('unknown');
+        \Magento\Profiler::enable();
+        \Magento\Profiler::start('timer');
+        \Magento\Profiler::stop('unknown');
     }
 
     public function testStopOrder()
@@ -186,12 +188,12 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
         $driver->expects($this->exactly(2))
             ->method('stop');
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::start('timer1');
-        Magento_Profiler::start('timer2');
-        Magento_Profiler::start('timer1');
-        Magento_Profiler::start('timer3');
-        Magento_Profiler::stop('timer1');
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::start('timer1');
+        \Magento\Profiler::start('timer2');
+        \Magento\Profiler::start('timer1');
+        \Magento\Profiler::start('timer3');
+        \Magento\Profiler::stop('timer1');
     }
 
     public function testStopSameName()
@@ -211,11 +213,11 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->method('stop')
             ->with('timer1');
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::start('timer1');
-        Magento_Profiler::start('timer1');
-        Magento_Profiler::stop('timer1');
-        Magento_Profiler::stop('timer1');
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::start('timer1');
+        \Magento\Profiler::start('timer1');
+        \Magento\Profiler::stop('timer1');
+        \Magento\Profiler::stop('timer1');
     }
 
     public function testStopLatest()
@@ -229,9 +231,9 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->method('stop')
             ->with('root_level_timer');
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::start('root_level_timer');
-        Magento_Profiler::stop();
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::start('root_level_timer');
+        \Magento\Profiler::stop();
     }
 
     public function testTags()
@@ -244,10 +246,10 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->method('start')
             ->with('root_level_timer->some_other_timer', array('default_tag' => 'default', 'type' => 'test'));
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::setDefaultTags(array('default_tag' => 'default'));
-        Magento_Profiler::start('root_level_timer');
-        Magento_Profiler::start('some_other_timer', array('type' => 'test'));
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::setDefaultTags(array('default_tag' => 'default'));
+        \Magento\Profiler::start('root_level_timer');
+        \Magento\Profiler::start('some_other_timer', array('type' => 'test'));
     }
 
     public function testClearTimer()
@@ -257,18 +259,18 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->method('clear')
             ->with('timer');
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::clear('timer');
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::clear('timer');
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Timer name must not contain a nesting separator.
      */
     public function testClearException()
     {
-        Magento_Profiler::enable();
-        Magento_Profiler::clear('timer ' . Magento_Profiler::NESTING_SEPARATOR . ' name');
+        \Magento\Profiler::enable();
+        \Magento\Profiler::clear('timer ' . \Magento\Profiler::NESTING_SEPARATOR . ' name');
     }
 
     public function testResetProfiler()
@@ -278,16 +280,16 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->method('clear')
             ->with(null);
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::reset();
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::reset();
 
-        $this->assertAttributeEquals(array(), '_currentPath', 'Magento_Profiler');
-        $this->assertAttributeEquals(array(), '_tagFilters', 'Magento_Profiler');
-        $this->assertAttributeEquals(array(), '_defaultTags', 'Magento_Profiler');
-        $this->assertAttributeEquals(array(), '_drivers', 'Magento_Profiler');
-        $this->assertAttributeEquals(false, '_hasTagFilters', 'Magento_Profiler');
-        $this->assertAttributeEquals(0, '_pathCount', 'Magento_Profiler');
-        $this->assertAttributeEquals(array(), '_pathIndex', 'Magento_Profiler');
+        $this->assertAttributeEquals(array(), '_currentPath', 'Magento\Profiler');
+        $this->assertAttributeEquals(array(), '_tagFilters', 'Magento\Profiler');
+        $this->assertAttributeEquals(array(), '_defaultTags', 'Magento\Profiler');
+        $this->assertAttributeEquals(array(), '_drivers', 'Magento\Profiler');
+        $this->assertAttributeEquals(false, '_hasTagFilters', 'Magento\Profiler');
+        $this->assertAttributeEquals(0, '_pathCount', 'Magento\Profiler');
+        $this->assertAttributeEquals(array(), '_pathIndex', 'Magento\Profiler');
     }
 
     /**
@@ -301,9 +303,9 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
         $driver->expects($this->never())
             ->method('start');
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::addTagFilter('type', 'test');
-        Magento_Profiler::start($timerName, $tags);
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::addTagFilter('type', 'test');
+        \Magento\Profiler::start($timerName, $tags);
     }
 
     /**
@@ -330,9 +332,9 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->method('start')
             ->with($timerName, $tags);
 
-        Magento_Profiler::add($driver);
-        Magento_Profiler::addTagFilter('type', 'test');
-        Magento_Profiler::start($timerName, $tags);
+        \Magento\Profiler::add($driver);
+        \Magento\Profiler::addTagFilter('type', 'test');
+        \Magento\Profiler::start($timerName, $tags);
     }
 
     /**
@@ -348,11 +350,11 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
 
     public function testApplyConfig()
     {
-        $mockDriver = $this->getMock('Magento_Profiler_DriverInterface');
+        $mockDriver = $this->getMock('Magento\Profiler\DriverInterface');
         $driverConfig = array(
             'type' => 'foo'
         );
-        $mockDriverFactory = $this->getMockBuilder('Magento_Profiler_Driver_Factory')
+        $mockDriverFactory = $this->getMockBuilder('Magento\Profiler\Driver\Factory')
             ->disableOriginalConstructor()
             ->getMock();
         $config = array(
@@ -368,16 +370,16 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
             ->with($driverConfig)
             ->will($this->returnValue($mockDriver));
 
-        Magento_Profiler::applyConfig($config, '');
+        \Magento\Profiler::applyConfig($config, '');
         $this->assertAttributeEquals(array(
             $mockDriver
-        ), '_drivers', 'Magento_Profiler');
+        ), '_drivers', 'Magento\Profiler');
         $this->assertAttributeEquals(array(
             'tagName' => array(
                 'tagValue'
             )
-        ), '_tagFilters', 'Magento_Profiler');
-        $this->assertAttributeEquals(true, '_enabled', 'Magento_Profiler');
+        ), '_tagFilters', 'Magento\Profiler');
+        $this->assertAttributeEquals(true, '_enabled', 'Magento\Profiler');
     }
 
     /**
@@ -388,7 +390,7 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
      */
     public function testParseConfig($data, $isAjax, $expected)
     {
-        $method = new ReflectionMethod('Magento_Profiler', '_parseConfig');
+        $method = new \ReflectionMethod('Magento\Profiler', '_parseConfig');
         $method->setAccessible(true);
         $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
     }
@@ -399,8 +401,8 @@ class Magento_ProfilerTest extends PHPUnit_Framework_TestCase
      */
     public function parseConfigDataProvider()
     {
-        $driverFactory = new Magento_Profiler_Driver_Factory();
-        $otherDriverFactory = $this->getMock('Magento_Profiler_Driver_Factory');
+        $driverFactory = new \Magento\Profiler\Driver\Factory();
+        $otherDriverFactory = $this->getMock('Magento\Profiler\Driver\Factory');
         return array(
             'Empty configuration' => array(
                 array(),

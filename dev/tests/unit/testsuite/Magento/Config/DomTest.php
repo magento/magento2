@@ -21,11 +21,13 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Config_DomTest extends PHPUnit_Framework_TestCase
+namespace Magento\Config;
+
+class DomTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $xmlFile
@@ -38,10 +40,9 @@ class Magento_Config_DomTest extends PHPUnit_Framework_TestCase
     {
         $xml = file_get_contents(__DIR__ . "/_files/dom/{$xmlFile}");
         $newXml = file_get_contents(__DIR__ . "/_files/dom/{$newXmlFile}");
-        $expectedXml = file_get_contents(__DIR__ . "/_files/dom/{$expectedXmlFile}");
-        $config = new Magento_Config_Dom($xml, $ids);
+        $config = new \Magento\Config\Dom($xml, $ids);
         $config->merge($newXml);
-        $this->assertXmlStringEqualsXmlString($expectedXml, $config->getDom()->saveXML());
+        $this->assertXmlStringEqualsXmlFile(__DIR__ . "/_files/dom/{$expectedXmlFile}", $config->getDom()->saveXML());
     }
 
     /**
@@ -60,49 +61,48 @@ class Magento_Config_DomTest extends PHPUnit_Framework_TestCase
             ),
             array('no_ids.xml', 'no_ids_new.xml', array(), 'no_ids_merged.xml'),
             array('ambiguous_one.xml', 'ambiguous_new_two.xml', array(), 'ambiguous_merged.xml'),
+            array('namespaced.xml', 'namespaced_new.xml', array('/root/node' => 'id'), 'namespaced_merged.xml'),
+            array('override_node.xml', 'override_node_new.xml', array(), 'override_node_merged.xml'),
+            array('override_node_new.xml', 'override_node.xml', array(), 'override_node_merged.xml'),
+            array('text_node.xml', 'text_node_new.xml', array(), 'text_node_merged.xml'),
+            array(
+                'recursive.xml', 'recursive_new.xml', array(
+                    '/root/(node|another_node)(/param)?' => 'name',
+                    '/root/node/param(/complex/item)+' => 'key',
+                ),
+               'recursive_merged.xml',
+            ),
+            array(
+                'recursive_deep.xml', 'recursive_deep_new.xml',
+                array('/root(/node)+' => 'name'),
+                'recursive_deep_merged.xml',
+            ),
         );
     }
 
     /**
-     * @param string $xmlFile
-     * @param string $newXmlFile
-     * @dataProvider mergeExceptionDataProvider
-     * @expectedException Magento_Exception
+     * @expectedException \Magento\Exception
+     * @expectedExceptionMessage More than one node matching the query: /root/node/subnode
      */
-    public function testMergeException($xmlFile, $newXmlFile)
+    public function testMergeException()
     {
-        $xml = file_get_contents(__DIR__ . "/_files/dom/{$xmlFile}");
-        $newXml = file_get_contents(__DIR__ . "/_files/dom/{$newXmlFile}");
-        $config = new Magento_Config_Dom($xml, array());
+        $xml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_two.xml");
+        $newXml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_new_one.xml");
+        $config = new \Magento\Config\Dom($xml);
         $config->merge($newXml);
     }
 
     /**
-     * @return array
-     */
-    public function mergeExceptionDataProvider()
-    {
-        return array(
-            array('ambiguous_two.xml', 'ambiguous_new_one.xml')
-        );
-    }
-
-    /**
      * @param string $xml
-     * @param bool $isExpectedValid
+     * @param array $expectedErrors
      * @dataProvider validateDataProvider
      */
-    public function testValidate($xml, $isExpectedValid)
+    public function testValidate($xml, array $expectedErrors)
     {
-        $config = new Magento_Config_Dom($xml);
-        $schema = __DIR__ . '/_files/sample.xsd';
-        if ($isExpectedValid) {
-            $this->assertTrue($config->validate($schema));
-        } else {
-            $errors = array();
-            $this->assertFalse($config->validate($schema, $errors));
-            $this->assertNotEmpty($errors);
-        }
+        $dom = new \Magento\Config\Dom($xml);
+        $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
+        $this->assertEquals(empty($expectedErrors), $actualResult);
+        $this->assertEquals($expectedErrors, $actualErrors);
     }
 
     /**
@@ -110,23 +110,38 @@ class Magento_Config_DomTest extends PHPUnit_Framework_TestCase
      */
     public function validateDataProvider()
     {
-        $validXml = <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<root>
-    <node id="id1"/>
-    <node id="id2"/>
-</root>
-XML;
-        $invalidXml = <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<root>
-    <node id="id1"/>
-    <unknown_node/>
-</root>
-XML;
         return array(
-            array($validXml, true),
-            array($invalidXml, false),
+            'valid' => array(
+                '<root><node id="id1"/><node id="id2"/></root>',
+                array()
+            ),
+            'invalid' => array(
+                '<root><node id="id1"/><unknown_node/></root>',
+                array("Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n")
+            ),
         );
+    }
+
+    public function testValidateCustomErrorFormat()
+    {
+        $xml = '<root><unknown_node/></root>';
+        $errorFormat = 'Error: `%message%`';
+        $expectedErrors = array("Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`");
+        $dom = new \Magento\Config\Dom($xml, array(), null, $errorFormat);
+        $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
+        $this->assertFalse($actualResult);
+        $this->assertEquals($expectedErrors, $actualErrors);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Error format '%message%,%unknown%' contains unsupported placeholders
+     */
+    public function testValidateCustomErrorFormatInvalid()
+    {
+        $xml = '<root><unknown_node/></root>';
+        $errorFormat = '%message%,%unknown%';
+        $dom = new \Magento\Config\Dom($xml, array(), null, $errorFormat);
+        $dom->validate(__DIR__ . '/_files/sample.xsd');
     }
 }

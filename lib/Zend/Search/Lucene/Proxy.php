@@ -447,7 +447,7 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
     }
 
     /**
-     * Retrive similarity used by index reader
+     * Retrieve similarity used by index reader
      *
      * @return Zend_Search_Lucene_Search_Similarity
      */
@@ -538,7 +538,7 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
     }
 
     /**
-     * Skip terms stream up to specified term preffix.
+     * Skip terms stream up to specified term prefix.
      *
      * Prefix contains fully specified field info and portion of searched term
      *

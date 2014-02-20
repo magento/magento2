@@ -22,10 +22,18 @@
  *
  * @category    Magento
  * @package     Magento_Outbound
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Outbound_Transport_Http implements Magento_Outbound_TransportInterface
+namespace Magento\Outbound\Transport;
+
+use Magento\HTTP\Adapter\Curl;
+use Magento\Outbound\Message;
+use Magento\Outbound\MessageInterface;
+use Magento\Outbound\TransportInterface;
+use Magento\Outbound\Transport\Http\Response;
+
+class Http implements TransportInterface
 {
     /**
      * Http version used by Magento
@@ -33,14 +41,14 @@ class Magento_Outbound_Transport_Http implements Magento_Outbound_TransportInter
     const HTTP_VERSION = '1.1';
 
     /**
-     * @var Varien_Http_Adapter_Curl
+     * @var Curl
      */
     protected $_curl;
 
     /**
-     * @param Varien_Http_Adapter_Curl $curl
+     * @param Curl $curl
      */
-    public function __construct(Varien_Http_Adapter_Curl $curl)
+    public function __construct(Curl $curl)
     {
         $this->_curl = $curl;
     }
@@ -48,10 +56,10 @@ class Magento_Outbound_Transport_Http implements Magento_Outbound_TransportInter
     /**
      * Dispatch message and return response
      *
-     * @param Magento_Outbound_MessageInterface $message
-     * @return Magento_Outbound_Transport_Http_Response
+     * @param MessageInterface $message
+     * @return Response
      */
-    public function dispatch(Magento_Outbound_MessageInterface $message)
+    public function dispatch(MessageInterface $message)
     {
         $config = array(
             'verifypeer' => TRUE,
@@ -62,25 +70,25 @@ class Magento_Outbound_Transport_Http implements Magento_Outbound_TransportInter
         if (!is_null($timeout) && $timeout > 0) {
             $config['timeout'] = $timeout;
         } else {
-            $config['timeout'] = Magento_Outbound_Message::DEFAULT_TIMEOUT;
+            $config['timeout'] = Message::DEFAULT_TIMEOUT;
         }
         $this->_curl->setConfig($config);
 
-        $this->_curl->write(Zend_Http_Client::POST,
+        $this->_curl->write(\Zend_Http_Client::POST,
             $message->getEndpointUrl(),
             self::HTTP_VERSION,
             $this->_prepareHeaders($message->getHeaders()),
             $message->getBody()
         );
 
-        return new Magento_Outbound_Transport_Http_Response(Zend_Http_Response::fromString($this->_curl->read()));
+        return new Response($this->_curl->read());
     }
 
     /**
      * Prepare headers for dispatch
      *
      * @param string[] $headers
-     * @return array
+     * @return string[]
      */
     protected function _prepareHeaders($headers)
     {

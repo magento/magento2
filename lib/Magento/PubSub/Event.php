@@ -22,26 +22,36 @@
  *
  * @category    Magento
  * @package     Magento_PubSub
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_Event implements Magento_PubSub_EventInterface
-{
-    /** @var int */
-    protected $_status = Magento_PubSub_EventInterface::PREPARING;
+namespace Magento\PubSub;
 
-    /** @var array */
+class Event implements EventInterface
+{
+    /**
+     * @var int
+     */
+    protected $_status = EventInterface::STATUS_READY_TO_SEND;
+
+    /**
+     * @var array
+     */
     protected $_bodyData;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $_headers = array();
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_topic;
 
     /**
-     * @param $topic
-     * @param $bodyData
+     * @param string $topic
+     * @param array $bodyData
      */
     public function __construct($topic, $bodyData)
     {
@@ -91,22 +101,24 @@ class Magento_PubSub_Event implements Magento_PubSub_EventInterface
     }
 
     /**
-     * Mark event as ready to send
+     * Mark event as processed
      *
-     * @return Magento_PubSub_EventInterface
+     * @return $this
      */
-    public function markAsReadyToSend()
+    public function complete()
     {
-        $this->_status = Magento_PubSub_EventInterface::READY_TO_SEND;
+        $this->_status = EventInterface::STATUS_PROCESSED;
+        return $this;
     }
 
     /**
      * Mark event as processed
      *
-     * @return Magento_PubSub_EventInterface
+     * @return $this
      */
-    public function markAsProcessed()
+    public function markAsInProgress()
     {
-        $this->_status = Magento_PubSub_EventInterface::PROCESSED;
+        $this->_status = EventInterface::STATUS_IN_PROGRESS;
+        return $this;
     }
 }

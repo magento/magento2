@@ -23,7 +23,7 @@
 
 
 /**
- * List of posts retrived from the del.icio.us web service
+ * List of posts retrieved from the del.icio.us web service
  *
  * @category   Zend
  * @package    Zend_Service

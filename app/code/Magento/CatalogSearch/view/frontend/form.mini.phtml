@@ -1,0 +1,72 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/** @var $this \Magento\View\Element\Template */
+/** @var $helper \Magento\CatalogSearch\Helper\Data */
+$helper = $this->helper('Magento\CatalogSearch\Helper\Data');
+?>
+<div class="block search">
+    <div class="title"><strong><?php echo __('Search'); ?></strong></div>
+    <div class="content search">
+        <form class="form minisearch" id="search_mini_form" action="<?php echo $helper->getResultUrl() ?>" method="get">
+            <div class="field search">
+                <label class="label" for="search"><?php echo __('Search'); ?></label>
+                <div class="control">
+                    <input id="search"
+                           type="text"
+                           name="<?php echo $helper->getQueryParamName() ?>"
+                           value="<?php echo $helper->getEscapedQueryText() ?>"
+                           placeholder="<?php echo __('Search entire store here...'); ?>"
+                           class="input-text"
+                           autocomplete="off"/>
+                    <div id="search_autocomplete" class="search autocomplete"></div>
+                    <a class="action advanced" href="<?php echo $helper->getAdvancedSearchUrl(); ?>">
+                        <?php echo __('Advanced Search'); ?>
+                    </a>
+                </div>
+            </div>
+            <div class="actions">
+                <button type="submit"
+                        title="<?php echo __('Search'); ?>"
+                        class="action search">
+                    <span><?php echo __('Search'); ?></span>
+                </button>
+            </div>
+            <script type="text/javascript">
+            //<![CDATA[
+            (function($) {
+                head.js("<?php echo $this->getViewFileUrl('Magento_CatalogSearch::form-mini.js')?>", function() {
+                    $('#search').catalogSearch({
+                        formSelector: '#search_mini_form',
+                        url: '<?php echo $helper->getSuggestUrl() ?>',
+                        destinationSelector: '#search_autocomplete'
+                    });
+                });
+            })(jQuery);
+            //]]>
+            </script>
+        </form>
+    </div>
+</div>

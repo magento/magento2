@@ -1,0 +1,69 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for \Magento\Theme\Block\Html
+ */
+$bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
+?>
+<!doctype html>
+<html lang="<?php echo $this->getLang() ?>" class="no-js">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <?php echo $this->getChildHtml('head') ?>
+</head>
+<body class="col2-right-layout<?php echo $bodyCss ?>"
+      data-container="body"
+      <?php echo $this->getAddAttribute() ?>
+      data-mage-init='{"loaderAjax": {}, "loader": {}}'>
+    <?php echo $this->getChildHtml('after_body_start') ?>
+    <div class="page wrapper">
+        <?php echo $this->getChildHtml('global_notices') ?>
+        <?php echo $this->getChildHtml('header-container') ?>
+        <?php echo $this->getChildHtml('page_top') ?>
+        <section class="page main">
+            <?php echo $this->getChildHtml('columns_top') ?>
+            <div class="columns">
+                <?php
+                    echo $this->getChildHtml('main');
+                    // Inside of <php> to avoid spaces between tags
+                    echo '<div class="column right sidebar">';
+                    echo $this->getChildHtml('right');
+                    echo '</div>';
+                ?>
+            </div>
+        </section>
+        <?php echo $this->getChildHtml('page_bottom') ?>
+
+        <?php echo $this->getChildHtml('footer') ?>
+
+        <?php echo $this->getChildHtml('before_body_end') ?>
+    </div>
+    <?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>

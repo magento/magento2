@@ -21,32 +21,36 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Test_Helper_FactoryTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Helper;
+
+class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetHelper()
     {
-        $helper = Magento_Test_Helper_Factory::getHelper('config');
+        $helper = \Magento\TestFramework\Helper\Factory
+            ::getHelper('Magento\TestFramework\Helper\Config');
         $this->assertNotEmpty($helper);
 
-        $helperNew = Magento_Test_Helper_Factory::getHelper('config');
+        $helperNew = \Magento\TestFramework\Helper\Factory::getHelper('Magento\TestFramework\Helper\Config');
         $this->assertSame($helper, $helperNew, 'Factory must cache instances of helpers.');
     }
 
     public function testSetHelper()
     {
-        $helper = new stdClass();
-        Magento_Test_Helper_Factory::setHelper('config', $helper);
-        $helperGot = Magento_Test_Helper_Factory::getHelper('config');
+        $helper = new \stdClass();
+        \Magento\TestFramework\Helper\Factory::setHelper('Magento\TestFramework\Helper\Config', $helper);
+        $helperGot = \Magento\TestFramework\Helper\Factory::getHelper('Magento\TestFramework\Helper\Config');
         $this->assertSame($helper, $helperGot, 'The helper must be used, when requested again');
 
-        $helperNew = new stdClass();
-        Magento_Test_Helper_Factory::setHelper('config', $helperNew);
-        $helperGot = Magento_Test_Helper_Factory::getHelper('config');
+        $helperNew = new \stdClass();
+        \Magento\TestFramework\Helper\Factory::setHelper('Magento\TestFramework\Helper\Config', $helperNew);
+        $helperGot = \Magento\TestFramework\Helper\Factory::getHelper('Magento\TestFramework\Helper\Config');
         $this->assertSame($helperNew, $helperGot, 'The helper must be changed upon new setHelper() method');
     }
 }
+
 

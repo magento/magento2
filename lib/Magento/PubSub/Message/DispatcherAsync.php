@@ -22,24 +22,29 @@
  *
  * @category    Magento
  * @package     Magento_PubSub
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_Message_DispatcherAsync implements Magento_PubSub_Message_DispatcherAsyncInterface
+namespace Magento\PubSub\Message;
+
+use Magento\PubSub\Event\FactoryInterface;
+use Magento\PubSub\Event\QueueWriterInterface;
+
+class DispatcherAsync implements DispatcherAsyncInterface
 {
-    /** @var Magento_PubSub_Event_FactoryInterface */
+    /** @var FactoryInterface */
     protected $_eventFactory;
 
-    /** @var Magento_PubSub_Event_QueueWriterInterface  */
+    /** @var QueueWriterInterface  */
     protected $_eventQueue;
 
     /**
-     * @param Magento_PubSub_Event_FactoryInterface $eventFactory
-     * @param Magento_PubSub_Event_QueueWriterInterface $eventQueue
+     * @param FactoryInterface $eventFactory
+     * @param QueueWriterInterface $eventQueue
      */
     public function __construct(
-        Magento_PubSub_Event_FactoryInterface $eventFactory,
-        Magento_PubSub_Event_QueueWriterInterface $eventQueue
+        FactoryInterface $eventFactory,
+        QueueWriterInterface $eventQueue
     ) {
         $this->_eventFactory = $eventFactory;
         $this->_eventQueue = $eventQueue;
@@ -50,6 +55,7 @@ class Magento_PubSub_Message_DispatcherAsync implements Magento_PubSub_Message_D
      *
      * @param string $topic
      * @param array $data should only contain primitives, no objects.
+     * @return void
      */
     public function dispatch($topic, $data)
     {

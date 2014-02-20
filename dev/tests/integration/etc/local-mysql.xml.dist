@@ -22,51 +22,34 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
-    <global>
-        <install>
-            <!-- Important: validity of installation date indicates whether an application is installed or not -->
-            <date><![CDATA[d-d-d-d-d]]></date>
-        </install>
-        <crypt>
-            <key><![CDATA[k-k-k-k-k]]></key>
-        </crypt>
-        <resources>
-            <db>
-                <table_prefix><![CDATA[]]></table_prefix>
-            </db>
-            <default_setup>
-                <connection>
-                    <host><![CDATA[localhost]]></host>
-                    <username><![CDATA[root]]></username>
-                    <password><![CDATA[]]></password>
-                    <dbname><![CDATA[magento_integration_tests]]></dbname>
-                    <initStatements><![CDATA[SET NAMES utf8]]></initStatements>
-                    <model><![CDATA[mysql4]]></model>
-                    <type><![CDATA[pdo_mysql]]></type>
-                    <pdoType><![CDATA[]]></pdoType>
-                    <active>1</active>
-                </connection>
-            </default_setup>
-        </resources>
-        <session_save><![CDATA[files]]></session_save>
-        <resource>
-            <connection>
-                <types>
-                    <pdo_mysql>
-                        <adapter><![CDATA[Magento_Test_Db_Adapter_Mysql]]></adapter>
-                    </pdo_mysql>
-                </types>
-            </connection>
-        </resource>
-        <areas>
-            <adminhtml>
-                <frontName><![CDATA[backend]]></frontName>
-            </adminhtml>
-        </areas>
-    </global>
+    <install>
+        <!-- Important: validity of installation date indicates whether an application is installed or not -->
+        <date><![CDATA[d-d-d-d-d]]></date>
+    </install>
+    <crypt>
+        <key><![CDATA[k-k-k-k-k]]></key>
+    </crypt>
+    <db>
+        <table_prefix><![CDATA[]]></table_prefix>
+    </db>
+    <connection name="default">
+        <host><![CDATA[localhost]]></host>
+        <username><![CDATA[root]]></username>
+        <password><![CDATA[]]></password>
+        <dbName><![CDATA[magento_integration_tests]]></dbName>
+        <initStatements><![CDATA[SET NAMES utf8]]></initStatements>
+        <model><![CDATA[mysql4]]></model>
+        <adapter>Magento\TestFramework\Db\ConnectionAdapter</adapter>
+        <active>1</active>
+    </connection>
+    <resource name="default_setup" connection="default"/>
+    <session_save><![CDATA[files]]></session_save>
+    <backend>
+        <frontName><![CDATA[backend]]></frontName>
+    </backend>
 </config>

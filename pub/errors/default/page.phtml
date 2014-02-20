@@ -20,7 +20,7 @@
  *
  * @category    Mage
  * @package     Errors
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -52,7 +52,9 @@
             </div>
             <div class="footer-container">
                 <div class="footer">
-                    <address class="copyright">Magento&reg is a trademark of X.commerce, Inc. Copyright &copy; 2012 X.commerce, Inc.</address>
+                    <address class="copyright">
+                        <?php echo sprintf('Magento is an eBay Inc. company. Copyright&copy; %s Magento, Inc. All rights reserved.', date('Y'));?>
+                    </address>
                 </div>
             </div>
         </div>

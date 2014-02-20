@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_PubSub_Event_QueueWriter
+ * \Magento\PubSub\Event\QueueWriter
  *
  * Magento
  *
@@ -20,17 +20,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_Event_QueueWriterTest extends PHPUnit_Framework_TestCase
+namespace Magento\PubSub\Event;
+
+class QueueWriterTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $event = $this->getMockBuilder('Magento_PubSub_EventInterface')
+        $event = $this->getMockBuilder('Magento\PubSub\EventInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $queue = new Magento_PubSub_Event_QueueWriter();
+        $queue = new \Magento\PubSub\Event\QueueWriter();
         $result = $queue->offer($event);
 
         $this->assertNull($result);

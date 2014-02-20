@@ -20,10 +20,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Validator_Builder
+namespace Magento\Validator;
+
+use Magento\Validator\Constraint\OptionInterface;
+
+class Builder
 {
     /**
      * @var array
@@ -31,19 +35,42 @@ class Magento_Validator_Builder
     protected $_constraints;
 
     /**
-     * Set constraints
-     *
+     * @var \Magento\Validator\ConstraintFactory
+     */
+    protected $_constraintFactory;
+
+    /**
+     * @var \Magento\ValidatorFactory
+     */
+    protected $_validatorFactory;
+
+    /**
+     * @var \Magento\Validator\UniversalFactory
+     */
+    protected $_oneValidatorFactory;
+
+    /**
+     * @param \Magento\Validator\ConstraintFactory $constraintFactory
+     * @param \Magento\ValidatorFactory $validatorFactory
+     * @param \Magento\Validator\UniversalFactory $oneValidatorFactory
      * @param array $constraints
      */
-    public function __construct(array $constraints)
-    {
+    public function __construct(
+        \Magento\Validator\ConstraintFactory $constraintFactory,
+        \Magento\ValidatorFactory $validatorFactory,
+        \Magento\Validator\UniversalFactory $oneValidatorFactory,
+        array $constraints
+    ) {
         foreach ($constraints as $constraint) {
-            if (array_key_exists('options', $constraint) && is_array($constraint['options'])) {
+            if (isset($constraint['options']) && is_array($constraint['options'])) {
                 $this->_checkConfigurationArguments($constraint['options'], true);
                 $this->_checkConfigurationCallback($constraint['options'], true);
             }
         }
         $this->_constraints = $constraints;
+        $this->_constraintFactory = $constraintFactory;
+        $this->_validatorFactory = $validatorFactory;
+        $this->_oneValidatorFactory = $oneValidatorFactory;
     }
 
     /**
@@ -51,14 +78,15 @@ class Magento_Validator_Builder
      *
      * @param array $configuration
      * @param bool $argumentsIsArray
-     * @throws InvalidArgumentException
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function _checkConfigurationArguments(array $configuration, $argumentsIsArray)
     {
         // https://jira.corp.x.com/browse/MAGETWO-10439
         $allowedKeys = array('arguments', 'callback', 'method', 'methods', 'breakChainOnFailure');
         if (!array_intersect($allowedKeys, array_keys($configuration))) {
-            throw new InvalidArgumentException('Configuration has incorrect format');
+            throw new \InvalidArgumentException('Configuration has incorrect format');
         }
         // Check method arguments
         if ($argumentsIsArray) {
@@ -73,7 +101,7 @@ class Magento_Validator_Builder
 
         // Check constructor arguments
         if (array_key_exists('arguments', $configuration) && !is_array($configuration['arguments'])) {
-            throw new InvalidArgumentException('Arguments must be an array');
+            throw new \InvalidArgumentException('Arguments must be an array');
         }
     }
 
@@ -81,15 +109,16 @@ class Magento_Validator_Builder
      * Check configuration method arguments
      *
      * @param array $configuration
-     * @throws InvalidArgumentException
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function _checkMethodArguments(array $configuration)
     {
         if (!is_string($configuration['method'])) {
-            throw new InvalidArgumentException('Method has to be passed as string');
+            throw new \InvalidArgumentException('Method has to be passed as string');
         }
         if (array_key_exists('arguments', $configuration) && !is_array($configuration['arguments'])) {
-            throw new InvalidArgumentException('Method arguments must be an array');
+            throw new \InvalidArgumentException('Method arguments must be an array');
         }
     }
 
@@ -98,7 +127,8 @@ class Magento_Validator_Builder
      *
      * @param array $configuration
      * @param bool $callbackIsArray
-     * @throws InvalidArgumentException
+     * @return void
+     * @throws \InvalidArgumentException
      */
     protected function _checkConfigurationCallback(array $configuration, $callbackIsArray)
     {
@@ -109,9 +139,10 @@ class Magento_Validator_Builder
                 $callbacks = array($configuration['callback']);
             }
             foreach ($callbacks as $callback) {
-                if (!($callback instanceof Magento_Validator_Constraint_Option_Callback)) {
-                    throw new InvalidArgumentException(
-                        'Callback must be instance of Magento_Validator_Constraint_Option_Callback');
+                if (!($callback instanceof \Magento\Validator\Constraint\Option\Callback)) {
+                    throw new \InvalidArgumentException(
+                        'Callback must be instance of \Magento\Validator\Constraint\Option\Callback'
+                    );
                 }
             }
         }
@@ -120,7 +151,7 @@ class Magento_Validator_Builder
     /**
      * Create validator instance and configure it
      *
-     * @return Magento_Validator
+     * @return \Magento\Validator
      */
     public function createValidator()
     {
@@ -130,15 +161,14 @@ class Magento_Validator_Builder
     /**
      * Get validator instance
      *
-     * @return Magento_Validator
+     * @return \Magento\Validator
      */
     protected function _createValidatorInstance()
     {
-        $validator = new Magento_Validator();
+        $validator = $this->_validatorFactory->create();
         foreach ($this->_constraints as $constraintData) {
             // https://jira.corp.x.com/browse/MAGETWO-10439
-            $breakChainOnFailure = isset($constraintData['options']['breakChainOnFailure'])
-                ? $constraintData['options']['breakChainOnFailure'] : false;
+            $breakChainOnFailure = !empty($constraintData['options']['breakChainOnFailure']);
             $validator->addValidator($this->_createConstraint($constraintData), $breakChainOnFailure);
         }
         return $validator;
@@ -149,8 +179,8 @@ class Magento_Validator_Builder
      *
      * @param string $alias
      * @param array $configuration
-     * @throws InvalidArgumentException
-     * @return Magento_Validator_Builder
+     * @return $this
+     * @throws \InvalidArgumentException
      */
     public function addConfiguration($alias, array $configuration)
     {
@@ -181,10 +211,10 @@ class Magento_Validator_Builder
      * Add callback to constraint configuration
      *
      * @param array $constraint
-     * @param Magento_Validator_Constraint_Option_Callback $callback
+     * @param \Magento\Validator\Constraint\Option\Callback $callback
      * @return array
      */
-    protected function _addConstraintCallback(array $constraint, Magento_Validator_Constraint_Option_Callback $callback)
+    protected function _addConstraintCallback(array $constraint, \Magento\Validator\Constraint\Option\Callback $callback)
     {
         if (!array_key_exists('callback', $constraint['options'])) {
             $constraint['options']['callback'] = array();
@@ -213,7 +243,7 @@ class Magento_Validator_Builder
      * Add constraints configuration
      *
      * @param array $configurations
-     * @return Magento_Validator_Builder
+     * @return $this
      */
     public function addConfigurations(array $configurations)
     {
@@ -229,20 +259,20 @@ class Magento_Validator_Builder
      * Create constraint from data
      *
      * @param array $data
-     * @return Magento_Validator_Constraint
+     * @return \Magento\Validator\Constraint
      */
     protected function _createConstraint(array $data)
     {
         // Create validator instance
         $validator = $this->_createConstraintValidator($data);
-        if (array_key_exists('options', $data) && is_array($data['options'])) {
+        if (isset($data['options']) && is_array($data['options'])) {
             $this->_configureConstraintValidator($validator, $data['options']);
         }
 
-        if (Magento_Validator_Config::CONSTRAINT_TYPE_PROPERTY == $data['type']) {
-            $result = new Magento_Validator_Constraint_Property($validator, $data['property'], $data['alias']);
+        if (\Magento\Validator\Config::CONSTRAINT_TYPE_PROPERTY == $data['type']) {
+            $result = new \Magento\Validator\Constraint\Property($validator, $data['property'], $data['alias']);
         } else {
-            $result = new Magento_Validator_Constraint($validator, $data['alias']);
+            $result = $this->_constraintFactory->create(array('validator' => $validator, 'alias' => $data['alias']));
         }
 
         return $result;
@@ -252,25 +282,23 @@ class Magento_Validator_Builder
      * Create constraint validator instance
      *
      * @param array $data
-     * @throws InvalidArgumentException
-     * @return Magento_Validator_ValidatorInterface
+     * @return \Magento\Validator\ValidatorInterface
+     * @throws \InvalidArgumentException
      */
     protected function _createConstraintValidator(array $data)
     {
-        if (array_key_exists('options', $data)
-            && is_array($data['options']) && array_key_exists('arguments', $data['options'])
-        ) {
-            $arguments = $this->_applyArgumentsCallback($data['options']['arguments']);
-            $class = new ReflectionClass($data['class']);
-            $validator = $class->newInstanceArgs($arguments);
-        } else {
-            $validator = new $data['class'];
-        }
+        $validator = $this->_oneValidatorFactory->create(
+            $data['class'],
+            array('options' => isset($data['options']['arguments'])
+                ? $this->_applyArgumentsCallback($data['options']['arguments'])
+                : array()
+            )
+        );
 
         // Check validator type
-        if (!($validator instanceof Magento_Validator_ValidatorInterface)) {
-            throw new InvalidArgumentException(sprintf(
-                'Constraint class "%s" must implement Magento_Validator_ValidatorInterface', $data['class']
+        if (!$validator instanceof \Magento\Validator\ValidatorInterface) {
+            throw new \InvalidArgumentException(sprintf(
+                'Constraint class "%s" must implement \Magento\Validator\ValidatorInterface', $data['class']
             ));
         }
 
@@ -280,13 +308,14 @@ class Magento_Validator_Builder
     /**
      * Configure validator
      *
-     * @param Magento_Validator_ValidatorInterface $validator
+     * @param \Magento\Validator\ValidatorInterface $validator
      * @param array $options
+     * @return void
      */
-    protected function _configureConstraintValidator(Magento_Validator_ValidatorInterface $validator, array $options)
+    protected function _configureConstraintValidator(\Magento\Validator\ValidatorInterface $validator, array $options)
     {
         // Call all validator methods according to configuration
-        if (array_key_exists('methods', $options)) {
+        if (isset($options['methods'])) {
             foreach ($options['methods'] as $methodData) {
                 $methodName = $methodData['method'];
                 if (method_exists($validator, $methodName)) {
@@ -301,8 +330,8 @@ class Magento_Validator_Builder
         }
 
         // Call validator configurators if any
-        if (array_key_exists('callback', $options)) {
-            /** @var $callback Magento_Validator_Constraint_Option_Callback */
+        if (isset($options['callback'])) {
+            /** @var $callback \Magento\Validator\Constraint\Option\Callback */
             foreach ($options['callback'] as $callback) {
                 $callback->setArguments($validator);
                 $callback->getValue();
@@ -313,14 +342,13 @@ class Magento_Validator_Builder
     /**
      * Apply all argument callback
      *
-     * @param array $arguments
-     * @return array
+     * @param OptionInterface[] $arguments
+     * @return OptionInterface[]
      */
     protected function _applyArgumentsCallback(array $arguments)
     {
         foreach ($arguments as &$argument) {
-            if ($argument instanceof Magento_Validator_Constraint_OptionInterface) {
-                /** @var $argument Magento_Validator_Constraint_OptionInterface */
+            if ($argument instanceof OptionInterface) {
                 $argument = $argument->getValue();
             }
         }

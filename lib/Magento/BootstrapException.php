@@ -20,15 +20,17 @@
  *
  * @category    Magento
  * @package     Magento_Exception
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Error of not fulfilling basic requirements necessary for the application bootstrap.
- * Exception handling should not rely on any part of the application because it has not been initialized yet.
+ * \Exception handling should not rely on any part of the application because it has not been initialized yet.
  */
-class Magento_BootstrapException extends Magento_Exception
+namespace Magento;
+
+class BootstrapException extends \Magento\Exception
 {
 
 }

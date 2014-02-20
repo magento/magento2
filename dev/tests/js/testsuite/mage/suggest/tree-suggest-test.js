@@ -19,7 +19,7 @@
  *
  * @category    mage.js
  * @package     test
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -62,33 +62,6 @@ TreeSuggestTest.prototype.testInit = function() {
     var treeSuggestInstance = this.treeSuggestCreate();
     assertTrue(this.suggestElement.is(':mage-treeSuggest'));
     assertEquals(treeSuggestInstance.widgetEventPrefix, 'suggest');
-};
-
-TreeSuggestTest.prototype.testBind = function() {
-    return; // test is broken, see https://jira.corp.x.com/browse/MAGETWO-9269
-    var event = jQuery.Event('keydown'),
-        proxyEventsExecuted = false,
-        treeSuggestInstance = this.treeSuggestCreate();
-
-    treeSuggestInstance.dropdown.show();
-
-    event.keyCode = jQuery.ui.keyCode.LEFT;
-    this.stub(treeSuggestInstance, '_proxyEvents').done(function() {
-        proxyEventsExecuted = true
-    });
-
-    treeSuggestInstance.element.trigger(event);
-    assertTrue(proxyEventsExecuted);
-
-    event.keyCode = $.ui.keyCode.RIGHT;
-    proxyEventsExecuted = false;
-    this.stub(treeSuggestInstance, '_proxyEvents').done(function() {
-        proxyEventsExecuted = true
-    });
-
-    treeSuggestInstance.dropdown.show();
-    treeSuggestInstance.element.trigger(event);
-    assertTrue(proxyEventsExecuted);
 };
 
 TreeSuggestTest.prototype.testClose = function() {

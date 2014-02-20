@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_CatalogInventory
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <default>
+        <cataloginventory>
+            <options>
+                <can_subtract>1</can_subtract>
+                <can_back_in_stock>1</can_back_in_stock>
+                <show_out_of_stock>0</show_out_of_stock>
+                <stock_threshold_qty>0</stock_threshold_qty>
+                <display_product_stock_status>1</display_product_stock_status>
+            </options>
+            <item_options>
+                <manage_stock>1</manage_stock>
+                <backorders>0</backorders>
+                <max_sale_qty>10000</max_sale_qty>
+                <min_sale_qty>1</min_sale_qty>
+                <min_qty>0</min_qty>
+                <notify_stock_qty>1</notify_stock_qty>
+                <enable_qty_increments>0</enable_qty_increments>
+                <qty_increments>1</qty_increments>
+            </item_options>
+        </cataloginventory>
+    </default>
+</config>

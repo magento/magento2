@@ -18,48 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_ObjectManager_Factory_Factory implements Magento_ObjectManager_Factory
+namespace Magento\ObjectManager\Factory;
+
+class Factory implements \Magento\ObjectManager\Factory
 {
     /**
-     * @var Magento_ObjectManager_ObjectManager
+     * @var \Magento\ObjectManager\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var Magento_ObjectManager_Config
+     * @var \Magento\ObjectManager\Config
      */
     protected $_config;
 
     /**
      * Definition list
      *
-     * @var Magento_ObjectManager_Definition
+     * @var \Magento\ObjectManager\Definition
      */
     protected $_definitions;
-
-    /**
-     * List of configured arguments
-     *
-     * @var array
-     */
-    protected $_arguments = array();
-
-    /**
-     * List of non-shared types
-     *
-     * @var array
-     */
-    protected $_nonShared = array();
-
-    /**
-     * List of virtual types
-     *
-     * @var array
-     */
-    protected $_virtualTypes = array();
 
     /**
      * List of classes being created
@@ -76,43 +57,22 @@ class Magento_ObjectManager_Factory_Factory implements Magento_ObjectManager_Fac
     protected $_globalArguments = array();
 
     /**
-     * @param Magento_ObjectManager_Config $config
-     * @param Magento_ObjectManager_ObjectManager $objectManager
-     * @param Magento_ObjectManager_Definition $definitions
+     * @param \Magento\ObjectManager\Config $config
+     * @param \Magento\ObjectManager\ObjectManager $objectManager
+     * @param \Magento\ObjectManager\Definition $definitions
      * @param array $globalArguments
      */
     public function __construct(
-        Magento_ObjectManager_Config $config,
-        Magento_ObjectManager_ObjectManager $objectManager = null,
-        Magento_ObjectManager_Definition $definitions = null,
+        \Magento\ObjectManager\Config $config,
+        \Magento\ObjectManager\ObjectManager $objectManager = null,
+        \Magento\ObjectManager\Definition $definitions = null,
         $globalArguments = array()
     ) {
         $this->_objectManager = $objectManager;
         $this->_config = $config;
-        $this->_definitions = $definitions ?: new Magento_ObjectManager_Definition_Runtime();
+        $this->_definitions = $definitions ? : new \Magento\ObjectManager\Definition\Runtime();
         $this->_globalArguments = $globalArguments;
     }
-
-    /**
-     * Retrieve class definitions
-     *
-     * @return Magento_ObjectManager_Definition
-     */
-    public function getDefinitions()
-    {
-        return $this->_definitions;
-    }
-
-    /**
-     * Set Object manager config
-     *
-     * @param Magento_ObjectManager_Config $config
-     */
-    public function setConfig(Magento_ObjectManager_Config $config)
-    {
-        $this->_config = $config;
-    }
-
 
     /**
      * Resolve constructor arguments
@@ -121,8 +81,9 @@ class Magento_ObjectManager_Factory_Factory implements Magento_ObjectManager_Fac
      * @param array $parameters
      * @param array $arguments
      * @return array
-     * @throws LogicException
-     * @throws BadMethodCallException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -136,39 +97,44 @@ class Magento_ObjectManager_Factory_Factory implements Magento_ObjectManager_Fac
             $argument = null;
             if (array_key_exists($paramName, $arguments)) {
                 $argument = $arguments[$paramName];
-            } else if ($paramRequired) {
+            } elseif (array_key_exists('options', $arguments) && array_key_exists($paramName, $arguments['options'])) {
+                // The parameter name doesn't exist in the arguments, but it is contained in the 'options' argument.
+                $argument = $arguments['options'][$paramName];
+            } elseif ($paramRequired) {
                 if ($paramType) {
                     $argument = array('instance' => $paramType);
                 } else {
-                    throw new BadMethodCallException(
+                    $this->_creationStack = array();
+                    throw new \BadMethodCallException(
                         'Missing required argument $' . $paramName . ' for ' . $requestedType . '.'
                     );
                 }
             } else {
                 $argument = $paramDefault;
             }
-            if ($paramRequired && $paramType && !is_object($argument)) {
+            if ($paramType && !is_object($argument) && $argument !== $paramDefault) {
                 if (!is_array($argument) || !isset($argument['instance'])) {
-                    throw new InvalidArgumentException(
+                    $this->_creationStack = array();
+                    throw new \InvalidArgumentException(
                         'Invalid parameter configuration provided for $' . $paramName . ' argument in ' . $requestedType
                     );
                 }
                 $argumentType = $argument['instance'];
                 if (isset($this->_creationStack[$argumentType])) {
-                    throw new LogicException(
+                    $this->_creationStack = array();
+                    throw new \LogicException(
                         'Circular dependency: ' . $argumentType . ' depends on ' . $requestedType . ' and viceversa.'
                     );
                 }
                 $this->_creationStack[$requestedType] = 1;
-
                 $isShared = (!isset($argument['shared']) && $this->_config->isShared($argumentType))
-                    || (isset($argument['shared']) && $argument['shared'] && $argument['shared'] != 'false');
+                    || (isset($argument['shared']) && $argument['shared']);
                 $argument = $isShared
                     ? $this->_objectManager->get($argumentType)
                     : $this->_objectManager->create($argumentType);
                 unset($this->_creationStack[$requestedType]);
-            } else if (is_array($argument) && isset($argument['argument'])) {
-                $argKey = constant($argument['argument']);
+            } elseif (is_array($argument) && isset($argument['argument'])) {
+                $argKey = $argument['argument'];
                 $argument = isset($this->_globalArguments[$argKey]) ? $this->_globalArguments[$argKey] : $paramDefault;
             }
             $resolvedArguments[] = $argument;
@@ -179,9 +145,10 @@ class Magento_ObjectManager_Factory_Factory implements Magento_ObjectManager_Fac
     /**
      * Set object manager
      *
-     * @param Magento_ObjectManager $objectManager
+     * @param \Magento\ObjectManager $objectManager
+     * @return void
      */
-    public function setObjectManager(Magento_ObjectManager $objectManager)
+    public function setObjectManager(\Magento\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -192,8 +159,8 @@ class Magento_ObjectManager_Factory_Factory implements Magento_ObjectManager_Fac
      * @param string $requestedType
      * @param array $arguments
      * @return object
-     * @throws LogicException
-     * @throws BadMethodCallException
+     * @throws \LogicException
+     * @throws \BadMethodCallException
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -205,35 +172,37 @@ class Magento_ObjectManager_Factory_Factory implements Magento_ObjectManager_Fac
             return new $type();
         }
         $args = $this->_resolveArguments($requestedType, $parameters, $arguments);
-
-        switch(count($args)) {
+        switch (count($args)) {
             case 1:
                 return new $type($args[0]);
-
             case 2:
                 return new $type($args[0], $args[1]);
-
             case 3:
                 return new $type($args[0], $args[1], $args[2]);
-
             case 4:
                 return new $type($args[0], $args[1], $args[2], $args[3]);
-
             case 5:
                 return new $type($args[0], $args[1], $args[2], $args[3], $args[4]);
-
             case 6:
                 return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
-
             case 7:
                 return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
-
             case 8:
                 return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
-
             default:
                 $reflection = new \ReflectionClass($type);
                 return $reflection->newInstanceArgs($args);
         }
+    }
+
+    /**
+     * Set application arguments
+     *
+     * @param array $arguments
+     * @return void
+     */
+    public function setArguments($arguments)
+    {
+        $this->_globalArguments = $arguments;
     }
 }

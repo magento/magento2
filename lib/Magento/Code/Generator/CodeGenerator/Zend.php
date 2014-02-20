@@ -20,12 +20,17 @@
  *
  * @category    Magento
  * @package     Magento_Code
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Generator_CodeGenerator_Zend extends Zend\Code\Generator\ClassGenerator
-    implements Magento_Code_Generator_CodeGenerator_Interface
+namespace Magento\Code\Generator\CodeGenerator;
+
+use \Zend\Code\Generator\MethodGenerator;
+use \Zend\Code\Generator\PropertyGenerator;
+
+class Zend extends \Zend\Code\Generator\ClassGenerator
+    implements \Magento\Code\Generator\CodeGenerator\CodeGeneratorInterface
 {
     /**
      * Possible doc block options
@@ -96,11 +101,11 @@ class Magento_Code_Generator_CodeGenerator_Zend extends Zend\Code\Generator\Clas
      * Set class dock block
      *
      * @param array $docBlock
-     * @return Magento_Code_Generator_CodeGenerator_Zend
+     * @return $this
      */
     public function setClassDocBlock(array $docBlock)
     {
-        $docBlockObject = new Zend\Code\Generator\DocBlockGenerator();
+        $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
         $this->_setDataToObject($docBlockObject, $docBlock, $this->_docBlockOptions);
 
         return parent::setDocBlock($docBlockObject);
@@ -110,12 +115,12 @@ class Magento_Code_Generator_CodeGenerator_Zend extends Zend\Code\Generator\Clas
      * addMethods()
      *
      * @param array $methods
-     * @return Magento_Code_Generator_CodeGenerator_Zend
+     * @return $this
      */
     public function addMethods(array $methods)
     {
         foreach ($methods as $methodOptions) {
-            $methodObject = new Zend\Code\Generator\MethodGenerator();
+            $methodObject = new MethodGenerator();
             $this->_setDataToObject($methodObject, $methodOptions, $this->_methodOptions);
 
             if (isset($methodOptions['parameters']) && is_array($methodOptions['parameters'])
@@ -123,7 +128,7 @@ class Magento_Code_Generator_CodeGenerator_Zend extends Zend\Code\Generator\Clas
             ) {
                 $parametersArray = array();
                 foreach ($methodOptions['parameters'] as $parameterOptions) {
-                    $parameterObject = new Zend\Code\Generator\ParameterGenerator();
+                    $parameterObject = new \Zend\Code\Generator\ParameterGenerator();
                     $this->_setDataToObject($parameterObject, $parameterOptions, $this->_parameterOptions);
                     $parametersArray[] = $parameterObject;
                 }
@@ -132,7 +137,7 @@ class Magento_Code_Generator_CodeGenerator_Zend extends Zend\Code\Generator\Clas
             }
 
             if (isset($methodOptions['docblock']) && is_array($methodOptions['docblock'])) {
-                $docBlockObject = new Zend\Code\Generator\DocBlockGenerator();
+                $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
                 $this->_setDataToObject($docBlockObject, $methodOptions['docblock'], $this->_docBlockOptions);
 
                 $methodObject->setDocBlock($docBlockObject);
@@ -146,14 +151,14 @@ class Magento_Code_Generator_CodeGenerator_Zend extends Zend\Code\Generator\Clas
     /**
      * Add method from MethodGenerator
      *
-     * @param  Zend\Code\Generator\MethodGenerator $method
-     * @return Magento_Code_Generator_CodeGenerator_Zend
-     * @throws InvalidArgumentException
+     * @param  MethodGenerator $method
+     * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function addMethodFromGenerator(Zend\Code\Generator\MethodGenerator $method)
+    public function addMethodFromGenerator(MethodGenerator $method)
     {
         if (!is_string($method->getName())) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'addMethodFromGenerator() expects string for name'
             );
         }
@@ -165,19 +170,19 @@ class Magento_Code_Generator_CodeGenerator_Zend extends Zend\Code\Generator\Clas
      * addProperties()
      *
      * @param array $properties
-     * @return Magento_Code_Generator_CodeGenerator_Zend
-     * @throws InvalidArgumentException
+     * @return $this
+     * @throws \InvalidArgumentException
      */
     public function addProperties(array $properties)
     {
         foreach ($properties as $propertyOptions) {
-            $propertyObject = new Zend\Code\Generator\PropertyGenerator();
+            $propertyObject = new PropertyGenerator();
             $this->_setDataToObject($propertyObject, $propertyOptions, $this->_propertyOptions);
 
             if (isset($propertyOptions['docblock'])) {
                 $docBlock = $propertyOptions['docblock'];
                 if (is_array($docBlock)) {
-                    $docBlockObject = new Zend\Code\Generator\DocBlockGenerator();
+                    $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
                     $this->_setDataToObject($docBlockObject, $docBlock, $this->_docBlockOptions);
                     $propertyObject->setDocBlock($docBlockObject);
                 }
@@ -192,14 +197,14 @@ class Magento_Code_Generator_CodeGenerator_Zend extends Zend\Code\Generator\Clas
     /**
      * Add property from PropertyGenerator
      *
-     * @param  Zend\Code\Generator\PropertyGenerator $property
-     * @throws InvalidArgumentException
-     * @return Magento_Code_Generator_CodeGenerator_Zend
+     * @param  PropertyGenerator $property
+     * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function addPropertyFromGenerator(Zend\Code\Generator\PropertyGenerator $property)
+    public function addPropertyFromGenerator(PropertyGenerator $property)
     {
         if (!is_string($property->getName())) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'addPropertyFromGenerator() expects string for name'
             );
         }

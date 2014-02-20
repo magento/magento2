@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -36,12 +36,13 @@
     <div class="footer-container">
         <div class="footer">
         <p class="legality">
-            Help Us to Keep Magento Healthy - <a href="http://www.magentocommerce.com/bug-tracking" id="bug_tracking_link"><strong>Report All Bugs</strong></a> (Downloader ver. <?php echo Maged_Controller::getVersion();?>)<br/>
+            Help Us to Keep Magento Healthy - <a href="http://www.magentocommerce.com/bug-tracking" id="bug_tracking_link"><strong>Report All Bugs</strong></a> (Downloader ver. <?php echo \Magento\Downloader\Controller::getVersion();?>)<br/>
 
 <script type="text/javascript">
     $('bug_tracking_link').target = "varien_external";
 </script>
-            Magento&reg is a trademark of X.commerce, Inc. Copyright &copy; 2012 X.commerce, Inc.</p>
+            <?php echo $this->template('copyright.phtml'); ?>
+         </p>
         </div>
     </div>
         <!-- [end] footer -->

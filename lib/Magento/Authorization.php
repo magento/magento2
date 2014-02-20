@@ -20,32 +20,34 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Authorization implements Magento_AuthorizationInterface
+namespace Magento;
+
+class Authorization implements \Magento\AuthorizationInterface
 {
     /**
      * ACL policy
      *
-     * @var Magento_Authorization_Policy
+     * @var \Magento\Authorization\Policy
      */
     protected $_aclPolicy;
 
     /**
      * ACL role locator
      *
-     * @var Magento_Authorization_RoleLocator
+     * @var \Magento\Authorization\RoleLocator
      */
     protected $_aclRoleLocator;
 
     /**
-     * @param Magento_Authorization_Policy $aclPolicy
-     * @param Magento_Authorization_RoleLocator $roleLocator
+     * @param \Magento\Authorization\Policy $aclPolicy
+     * @param \Magento\Authorization\RoleLocator $roleLocator
      */
     public function __construct(
-        Magento_Authorization_Policy $aclPolicy,
-        Magento_Authorization_RoleLocator $roleLocator
+        \Magento\Authorization\Policy $aclPolicy,
+        \Magento\Authorization\RoleLocator $roleLocator
     ) {
         $this->_aclPolicy = $aclPolicy;
         $this->_aclRoleLocator = $roleLocator;

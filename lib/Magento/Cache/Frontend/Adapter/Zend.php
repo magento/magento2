@@ -18,24 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Adapter for Magento -> Zend cache frontend interfaces
  */
-class Magento_Cache_Frontend_Adapter_Zend implements Magento_Cache_FrontendInterface
+namespace Magento\Cache\Frontend\Adapter;
+
+class Zend implements \Magento\Cache\FrontendInterface
 {
     /**
-     * @var Zend_Cache_Core
+     * @var \Zend_Cache_Core
      */
     protected $_frontend;
 
     /**
-     * @param Zend_Cache_Core $frontend
+     * @param \Zend_Cache_Core $frontend
      */
-    public function __construct(Zend_Cache_Core $frontend)
+    public function __construct(\Zend_Cache_Core $frontend)
     {
         $this->_frontend = $frontend;
     }
@@ -75,17 +77,17 @@ class Magento_Cache_Frontend_Adapter_Zend implements Magento_Cache_FrontendInter
     /**
      * {@inheritdoc}
      *
-     * @throws InvalidArgumentException Exception is thrown when non-supported cleaning mode is specified
+     * @throws \InvalidArgumentException \Exception is thrown when non-supported cleaning mode is specified
      */
-    public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, array $tags = array())
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = array())
     {
         // Cleaning modes 'old' and 'notMatchingTag' are prohibited as a trade off for decoration reliability
         if (!in_array($mode, array(
-            Zend_Cache::CLEANING_MODE_ALL,
-            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            \Zend_Cache::CLEANING_MODE_ALL,
+            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
         ))) {
-            throw new InvalidArgumentException("Magento cache frontend does not support the cleaning mode '$mode'.");
+            throw new \InvalidArgumentException("Magento cache frontend does not support the cleaning mode '$mode'.");
         }
         return $this->_frontend->clean($mode, $this->_unifyIds($tags));
     }

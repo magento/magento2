@@ -19,20 +19,51 @@
  *
  * @category    Mage
  * @package     js
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-.trnslate-inline-area [data-translate], .trnslate-inline-area .translate-inline { /* background:black; font-weight:bold; color:red; */ outline: dotted 1px red!important;}
+.trnslate-inline-area [data-translate],
+.trnslate-inline-area .translate-inline {
+	outline:  dotted 1px red!important;
+}
 * html .translate-inline,
-*+html .translate-inline{ border: dotted 1px red !important;}
-.translate-inline-script, .translate-inline-title { background:yellow; color:black; font-weight:bold; }
-#translate-inline-trig { position:absolute;left:-1000px; opacity:.8; filter:alpha(opacity=80); cursor:pointer; margin-top:10px; z-index:2000;}
+*+html .translate-inline{
+	border:  dotted 1px red !important;
+}
+.translate-inline-script, .translate-inline-title {
+	background: yellow;
+	color: black;
+	font-weight: bold;
+}
+#translate-inline-trig {
+	position: absolute;
+	left: -1000px; 
+	opacity: .8;
+	filter: alpha(opacity=80);
+	cursor: pointer; 
+	margin-top: 10px;
+	z-index: 2000;
+}
 
-.magento_table_container { background:#e7efef; margin:10px; padding:10px; }
-.magento_table_container table { width:100%; }
-.magento_table_container td { padding:2px 0 !important; text-align:left; }
-.magento_table_container th.label { width:150px; padding:2px 9px 2px 0 !important; font-weight:bold; }
-.magento_table_container td.value .input-text { width:98%; }
-.magento_table_container td.value textarea.input-text { height:8em; }
-p.accent { color:#d12c01; }
+.data.table.translate table {
+	width: 100%;
+}
+.data.table.translate td {
+	background: none;
+	padding: 5px 5px 5px 0;
+	text-align: left;
+}
+.data.table.translate th.label {
+	border: none;
+	font-weight: bold;
+	text-align: left;
+	padding: 5px 5px 5px 0;
+	width: 150px;
+}
+.data.table.translate td.value .input-text {
+	width: 98%;
+}
+p.accent {
+	color: #d12c01;
+}

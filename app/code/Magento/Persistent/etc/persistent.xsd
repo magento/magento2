@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:annotation>
+            <xs:documentation>
+                Specifies a configuration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="instances" type="instancesType" minOccurs="1" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="instancesType">
+        <xs:annotation>
+            <xs:documentation>
+                The definition of the current instances.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="blocks" type="blocksType" minOccurs="1" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="blocksType">
+        <xs:annotation>
+            <xs:documentation>
+                Contains the set of block references
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="reference" type="referenceType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="referenceType">
+        <xs:annotation>
+            <xs:documentation>
+                The definition of the block references
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="name_in_layout" type="xs:token" />
+            <xs:element name="class" type="xs:string" />
+            <xs:element name="method" type="xs:token" />
+            <xs:element name="block_type" type="xs:string" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:ID" use="required" />
+    </xs:complexType>
+
+</xs:schema>

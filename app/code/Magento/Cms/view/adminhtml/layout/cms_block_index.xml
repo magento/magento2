@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceContainer name="content">
+        <block class="Magento\Cms\Block\Adminhtml\Block" name="cms_block">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.cms.block.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">cmsBlockGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Cms\Model\Resource\Block\Grid\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">block_identifier</argument>
+                    <argument name="default_dir" xsi:type="string">ASC</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.cms.block.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="id" xsi:type="string">cmsBlockGrid</argument>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">*/*/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="block_id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Title</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="index" xsi:type="string">title</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="identifier">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Identifier</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="index" xsi:type="string">identifier</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Store View</argument>
+                            <argument name="index" xsi:type="string">store_id</argument>
+                            <argument name="type" xsi:type="string">store</argument>
+                            <argument name="store_all" xsi:type="string">1</argument>
+                            <argument name="store_view" xsi:type="string">1</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_active">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Status</argument>
+                            <argument name="index" xsi:type="string">is_active</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="array">
+                                <item name="disable" xsi:type="array">
+                                    <item name="value" xsi:type="string">0</item>
+                                    <item name="label" xsi:type="string" translate="true">Disabled</item>
+                                </item>
+                                <item name="enable" xsi:type="array">
+                                    <item name="value" xsi:type="string">1</item>
+                                    <item name="label" xsi:type="string" translate="true">Enabled</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="creation_time">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Created</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="index" xsi:type="string">creation_time</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="update_time">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Modified</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="index" xsi:type="string">update_time</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </block>
+    </referenceContainer>
+</layout>

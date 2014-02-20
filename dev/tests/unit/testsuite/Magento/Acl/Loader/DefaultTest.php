@@ -20,25 +20,27 @@
  *
  * @category    Magento
  * @package     unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Acl_Loader_DefaultTest extends PHPUnit_Framework_TestCase
+namespace Magento\Acl\Loader;
+
+class DefaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Acl_Loader_Default
+     * @var \Magento\Acl\Loader\DefaultLoader
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_model = new Magento_Acl_Loader_Default();
+        $this->_model = new \Magento\Acl\Loader\DefaultLoader();
     }
 
     public function testPopulateAclDoesntChangeAclObject()
     {
-        $aclMock = $this->getMock('Magento_Acl');
+        $aclMock = $this->getMock('Magento\Acl');
         $aclMock->expects($this->never())->method('addRole');
         $aclMock->expects($this->never())->method('addResource');
         $aclMock->expects($this->never())->method('allow');

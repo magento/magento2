@@ -18,8 +18,8 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Mage
- * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @package     Magento_Adminhtml
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
@@ -175,7 +175,7 @@
         insertSelectedFiles: function(event) {
             this.element.find('[data-row=file].selected').trigger('dblclick');
         },
-        
+
         selectFile: function(event) {
             var fileRow = $(event.currentTarget);
             fileRow.toggleClass('selected');
@@ -203,7 +203,7 @@
                 throw "Target element not found for content update";
             }
 
-            $.ajax({
+            return $.ajax({
                 url: this.options.onInsertUrl,
                 data: {
                     filename: fileRow.attr('id'),
@@ -212,7 +212,7 @@
                     as_is: targetEl.is('textarea') ? 1 : 0,
                     form_key: FORM_KEY
                 },
-                context: this.element,
+                context: this,
                 showLoader: true
             }).done($.proxy(function(data) {
                 if (targetEl.is('textarea')) {
@@ -291,7 +291,7 @@
                 return false;
             }
 
-            $.ajax({
+            return $.ajax({
                 url: this.options.deleteFolderUrl,
                 dataType: 'json',
                 data: {
@@ -315,7 +315,7 @@
                 return $(this).attr('id');
             }).toArray();
 
-            $.ajax({
+            return $.ajax({
                 url: this.options.deleteFilesUrl,
                 data: {
                     files: ids,

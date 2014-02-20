@@ -1,0 +1,72 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php /* @var $this \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select */ ?>
+<?php $_option      = $this->getOption(); ?>
+<?php $_selections  = $_option->getSelections(); ?>
+<?php $_default     = $_option->getDefaultSelection(); ?>
+<?php list($_defaultQty, $_canChangeQty) = $this->getDefaultValues(); ?>
+<div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
+    <label class="label" for="bundle-option-<?php echo $_option->getId() ?>">
+        <span><?php echo $this->escapeHtml($_option->getTitle()) ?></span>
+    </label>
+    <div class="control">
+        <?php if ($this->showSingle()): ?>
+            <?php echo $this->getSelectionTitlePrice($_selections[0]) ?>
+            <input type="hidden"
+                   name="bundle_option[<?php echo $_option->getId() ?>]"
+                   value="<?php echo $_selections[0]->getSelectionId() ?>"/>
+        <?php else:?>
+            <select id="bundle-option-<?php echo $_option->getId() ?>"
+                    name="bundle_option[<?php echo $_option->getId() ?>]"
+                    class="bundle-option-<?php echo $_option->getId() ?> product bundle option bundle-option-select change-container-classname"
+                <?php if ($_option->getRequired()) echo 'data-validate = {required:true}' ?>>
+                <option value=""><?php echo __('Choose a selection...') ?></option>
+                <?php foreach ($_selections as $_selection): ?>
+                    <option value="<?php echo $_selection->getSelectionId() ?>"
+                        <?php if ($this->isSelected($_selection)) echo ' selected="selected"' ?>
+                        <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
+                        <?php echo $this->getSelectionTitlePrice($_selection, false) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        <?php endif; ?>
+        <div class="nested">
+            <div class="field qty qty-holder">
+                <label class="label" for="bundle-option-<?php echo $_option->getId() ?>-qty-input">
+                    <span><?php echo __('Qty') ?></span>
+                </label>
+                <div class="control">
+                    <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
+                           id="bundle-option-<?php echo $_option->getId() ?>-qty-input"
+                           class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
+                           type="number"
+                           name="bundle_option_qty[<?php echo $_option->getId() ?>]"
+                           value="<?php echo $_defaultQty ?>"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

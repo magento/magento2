@@ -21,34 +21,36 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Acl
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Acl role registry. Contains list of roles and their relations.
  */
-class Magento_Acl_Role_Registry extends Zend_Acl_Role_Registry
+namespace Magento\Acl\Role;
+
+class Registry extends \Zend_Acl_Role_Registry
 {
     /**
      * Add parent to the $role node
      *
-     * @param Zend_Acl_Role_Interface|string $role
+     * @param \Zend_Acl_Role_Interface|string $role
      * @param array|Zend_Acl_Role_Interface|string $parents
-     * @return Magento_Acl_Role_Registry
-     * @throws Zend_Acl_Role_Registry_Exception
+     * @return $this
+     * @throws \Zend_Acl_Role_Registry_Exception
      */
     public function addParent($role, $parents)
     {
         try {
-            if ($role instanceof Zend_Acl_Role_Interface) {
+            if ($role instanceof \Zend_Acl_Role_Interface) {
                 $roleId = $role->getRoleId();
             } else {
                 $roleId = $role;
                 $role = $this->get($role);
             }
-        } catch (Zend_Acl_Role_Registry_Exception $e) {
-            throw new Zend_Acl_Role_Registry_Exception("Child Role id '$roleId' does not exist");
+        } catch (\Zend_Acl_Role_Registry_Exception $e) {
+            throw new \Zend_Acl_Role_Registry_Exception("Child Role id '$roleId' does not exist");
         }
 
         if (!is_array($parents)) {
@@ -56,14 +58,14 @@ class Magento_Acl_Role_Registry extends Zend_Acl_Role_Registry
         }
         foreach ($parents as $parent) {
             try {
-                if ($parent instanceof Zend_Acl_Role_Interface) {
+                if ($parent instanceof \Zend_Acl_Role_Interface) {
                     $roleParentId = $parent->getRoleId();
                 } else {
                     $roleParentId = $parent;
                 }
                 $roleParent = $this->get($roleParentId);
-            } catch (Zend_Acl_Role_Registry_Exception $e) {
-                throw new Zend_Acl_Role_Registry_Exception("Parent Role id '$roleParentId' does not exist");
+            } catch (\Zend_Acl_Role_Registry_Exception $e) {
+                throw new \Zend_Acl_Role_Registry_Exception("Parent Role id '$roleParentId' does not exist");
             }
             $this->_roles[$roleId]['parents'][$roleParentId] = $roleParent;
             $this->_roles[$roleParentId]['children'][$roleId] = $role;

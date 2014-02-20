@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_Outbound_Formatter_Factory
+ * \Magento\Outbound\Formatter\Factory
  *
  * Magento
  *
@@ -20,29 +20,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright          Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright          Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license            http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Outbound_Formatter_FactoryTest extends PHPUnit_Framework_TestCase
+
+namespace Magento\Outbound\Formatter;
+
+use Magento\Outbound\Formatter\Factory as FormatterFactory;
+use Magento\Outbound\EndpointInterface;
+
+class FactoryTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Magento_Outbound_Formatter_Factory */
+    /** @var FormatterFactory */
     protected $_formatterFactory;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_formatterFactory = Mage::getObjectManager()->get('Magento_Outbound_Formatter_Factory');
+        $this->_formatterFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Outbound\Formatter\Factory', array(
+                    'formatterMap' => array(
+                        EndpointInterface::FORMAT_JSON => 'Magento\Outbound\Formatter\Json'
+                    )
+                ));
     }
 
     public function testGetFormatter()
     {
-        $formatter = $this->_formatterFactory->getFormatter(Magento_Outbound_EndpointInterface::FORMAT_JSON);
-        $this->assertInstanceOf('Magento_Outbound_Formatter_Json', $formatter);
+        $formatter = $this->_formatterFactory->getFormatter(EndpointInterface::FORMAT_JSON);
+        $this->assertInstanceOf('Magento\Outbound\Formatter\Json', $formatter);
     }
 
     public function testGetFormatterIsCached()
     {
-        $formatter = $this->_formatterFactory->getFormatter(Magento_Outbound_EndpointInterface::FORMAT_JSON);
-        $formatter2 = $this->_formatterFactory->getFormatter(Magento_Outbound_EndpointInterface::FORMAT_JSON);
+        $formatter = $this->_formatterFactory->getFormatter(EndpointInterface::FORMAT_JSON);
+        $formatter2 = $this->_formatterFactory->getFormatter(EndpointInterface::FORMAT_JSON);
         $this->assertSame($formatter, $formatter2);
     }
 }

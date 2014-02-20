@@ -22,13 +22,13 @@
  *
  * @category    tests
  * @package     js
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 define('RELATIVE_APP_ROOT', '../../..');
 require __DIR__ . '/../../../app/autoload.php';
-Magento_Autoload_IncludePath::addIncludePath(realpath(RELATIVE_APP_ROOT . '/lib'));
+\Magento\Autoload\IncludePath::addIncludePath(realpath(RELATIVE_APP_ROOT . '/lib'));
 
 $userConfig = normalize('jsTestDriver.php');
 $defaultConfig = normalize('jsTestDriver.php.dist');
@@ -134,7 +134,11 @@ if (count($serveFiles) > 0) {
 fclose($fh);
 
 $testOutput = __DIR__ . '/test-output';
-Varien_Io_File::rmdirRecursive($testOutput);
+
+$filesystemAdapter = new \Magento\Filesystem\Driver\File();
+if ($filesystemAdapter->isExists($testOutput)) {
+    $filesystemAdapter->deleteDirectory($testOutput);
+}
 mkdir($testOutput);
 
 $command

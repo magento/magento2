@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
+    <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Backend\Model\Locale" />
+    <preference for="Magento\App\Action\Context" type="Magento\Backend\App\Action\Context" />
+    <preference for="Magento\UrlInterface" type="Magento\Backend\Model\UrlInterface" />
+    <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
+    <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
+    <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
+    <preference for="Magento\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
+    <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
+    <preference for="Magento\Translate\Inline\ConfigFactory" type="Magento\Backend\Model\Translate\Inline\ConfigFactory" />
+    <preference for="Magento\Translate\InlineInterface" type="Magento\Backend\Model\Translate\Inline" />
+    <preference for="Magento\Core\Model\Resource\Translate\String" type="Magento\Backend\Model\Resource\Translate\String" />
+    <preference for="Magento\Core\Model\Resource\Translate" type="Magento\Backend\Model\Resource\Translate" />
+    <preference for="Magento\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
+    <preference for="Magento\App\View" type="Magento\Backend\Model\View" />
+    <type name="Magento\Backend\Model\Translate\Inline">
+        <param name="url">
+            <instance type="Magento\Backend\Model\UrlInterface" />
+        </param>
+        <param name="templateFileName">
+            <value>Magento_Core::translate_inline.phtml</value>
+        </param>
+    </type>
+    <type name="Magento\Backend\App\Action\Context">
+        <param name="helper">
+            <instance type="Magento\Backend\Helper\Data" />
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Auth\Session">
+        <param name="backendUrl">
+            <instance type="Magento\Backend\Model\UrlInterface\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Core\Model\Session">
+        <param name="sessionName">
+            <value>adminhtml</value>
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Data">
+        <param name="cacheId">
+            <value>backend_system_configuration_structure</value>
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Tab" shared="false" />
+    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Section" shared="false" />
+    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Group" shared="false" />
+    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Field" shared="false">
+        <param name="groupFlyweight">
+            <instance type="Magento\Backend\Model\Config\Structure\Element\Group\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper" shared="false">
+        <param name="fieldLocator">
+            <instance type="Magento\Backend\Model\Config\Structure\Search\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Tab" shared="false">
+        <param name="childrenIterator">
+            <instance type="Magento\Backend\Model\Config\Structure\Element\Iterator\Section" />
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Section" shared="false">
+        <param name="childrenIterator">
+            <instance type="Magento\Backend\Model\Config\Structure\Element\Iterator\Group" />
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Group" shared="false">
+        <param name="childrenIterator">
+            <instance type="Magento\Backend\Model\Config\Structure\Element\Iterator\Field" />
+        </param>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Element\Group\Proxy" shared="false" />
+    <type name="Magento\Core\Model\Layout">
+        <param name="area">
+            <value>adminhtml</value>
+        </param>
+    </type>
+    <type name="Magento\App\RouterList">
+        <param name="routerList">
+            <array>
+                <item key="admin">
+                    <array>
+                        <item key="instance"><value>Magento\Backend\App\Router\DefaultRouter</value></item>
+                        <item key="disable"><value type="bool">false</value></item>
+                        <item key="sortOrder"><value>10</value></item>
+                    </array>
+                </item>
+                <item key="default">
+                    <array>
+                        <item key="instance"><value>Magento\App\Router\DefaultRouter</value></item>
+                        <item key="disable"><value type="bool">false</value></item>
+                        <item key="sortOrder"><value>100</value></item>
+                    </array>
+                </item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\Core\App\Action\Plugin\Session">
+        <param name="sessionNamespace">
+            <value type="const">Magento\Backend\App\AbstractAction::SESSION_NAMESPACE</value>
+        </param>
+    </type>
+    <type name="Magento\Backend\App\AbstractAction">
+        <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100" />
+        <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11" />
+    </type>
+    <type name="Magento\Core\App\Response\Redirect">
+        <param name="canUseSessionIdInParam">
+            <value type="bool">false</value>
+        </param>
+    </type>
+    <type name="Magento\App\Action\Action">
+        <plugin name="storeCheck" disabled="true" />
+    </type>
+    <type name="Magento\Message\Manager">
+        <param name="defaultGroup">
+            <value>backend</value>
+        </param>
+    </type>
+</config>

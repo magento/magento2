@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     {license_link
  */
-abstract class Magento_ObjectManager_Definition_Compiled implements Magento_ObjectManager_Definition
+namespace Magento\ObjectManager\Definition;
+
+abstract class Compiled implements \Magento\ObjectManager\Definition
 {
     /**
      * Class definitions

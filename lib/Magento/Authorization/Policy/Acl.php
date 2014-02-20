@@ -21,20 +21,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Authorization_Policy_Acl implements Magento_Authorization_Policy
+namespace Magento\Authorization\Policy;
+
+use Magento\Acl\Builder;
+use Magento\Authorization\Policy;
+
+class Acl implements Policy
 {
     /**
-     * @var Magento_Acl_Builder
+     * @var \Magento\Acl\Builder
      */
     protected $_aclBuilder;
 
     /**
-     * @param Magento_Acl_Builder $aclBuilder
+     * @param Builder $aclBuilder
      */
-    public function __construct(Magento_Acl_Builder $aclBuilder)
+    public function __construct(Builder $aclBuilder)
     {
         $this->_aclBuilder = $aclBuilder;
     }
@@ -44,19 +49,19 @@ class Magento_Authorization_Policy_Acl implements Magento_Authorization_Policy
      *
      * @param string $roleId
      * @param string $resourceId
-     * @param mixed $privilege
+     * @param string $privilege
      * @return bool
      */
     public function isAllowed($roleId, $resourceId, $privilege = null)
     {
         try {
             return $this->_aclBuilder->getAcl()->isAllowed($roleId, $resourceId, $privilege);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             try {
                 if (!$this->_aclBuilder->getAcl()->has($resourceId)) {
                     return $this->_aclBuilder->getAcl()->isAllowed($roleId, null, $privilege);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
             }
         }
         return false;

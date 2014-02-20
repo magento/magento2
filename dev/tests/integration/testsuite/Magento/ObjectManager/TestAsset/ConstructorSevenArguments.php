@@ -21,40 +21,42 @@
  * @category    Magento
  * @package     Magento_ObjectManager
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\ObjectManager\TestAsset;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Magento_ObjectManager_TestAsset_ConstructorSevenArguments
-    extends Magento_ObjectManager_TestAsset_ConstructorSixArguments
+class ConstructorSevenArguments
+    extends \Magento\ObjectManager\TestAsset\ConstructorSixArguments
 {
     /**
-     * @var Magento_ObjectManager_TestAsset_Basic
+     * @var \Magento\ObjectManager\TestAsset\Basic
      */
     protected $_seven;
 
     /**
      * Seven arguments
      *
-     * @param Magento_ObjectManager_TestAsset_Basic $one
-     * @param Magento_ObjectManager_TestAsset_Basic $two
-     * @param Magento_ObjectManager_TestAsset_Basic $three
-     * @param Magento_ObjectManager_TestAsset_Basic $four
-     * @param Magento_ObjectManager_TestAsset_Basic $five
-     * @param Magento_ObjectManager_TestAsset_Basic $six
-     * @param Magento_ObjectManager_TestAsset_Basic $seven
+     * @param \Magento\ObjectManager\TestAsset\Basic $one
+     * @param \Magento\ObjectManager\TestAsset\Basic $two
+     * @param \Magento\ObjectManager\TestAsset\Basic $three
+     * @param \Magento\ObjectManager\TestAsset\Basic $four
+     * @param \Magento\ObjectManager\TestAsset\Basic $five
+     * @param \Magento\ObjectManager\TestAsset\Basic $six
+     * @param \Magento\ObjectManager\TestAsset\Basic $seven
      */
     public function __construct(
-        Magento_ObjectManager_TestAsset_Basic $one,
-        Magento_ObjectManager_TestAsset_Basic $two,
-        Magento_ObjectManager_TestAsset_Basic $three,
-        Magento_ObjectManager_TestAsset_Basic $four,
-        Magento_ObjectManager_TestAsset_Basic $five,
-        Magento_ObjectManager_TestAsset_Basic $six,
-        Magento_ObjectManager_TestAsset_Basic $seven
+        \Magento\ObjectManager\TestAsset\Basic $one,
+        \Magento\ObjectManager\TestAsset\Basic $two,
+        \Magento\ObjectManager\TestAsset\Basic $three,
+        \Magento\ObjectManager\TestAsset\Basic $four,
+        \Magento\ObjectManager\TestAsset\Basic $five,
+        \Magento\ObjectManager\TestAsset\Basic $six,
+        \Magento\ObjectManager\TestAsset\Basic $seven
     ) {
         parent::__construct($one, $two, $three, $four, $five, $six);
         $this->_seven = $seven;

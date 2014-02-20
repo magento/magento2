@@ -18,20 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Interface for minification strategies
  */
-interface Magento_Code_Minifier_StrategyInterface
+namespace Magento\Code\Minifier;
+
+interface StrategyInterface
 {
     /**
      * Generates minified file
      *
-     * @param string $originalFile
-     * @param string $targetFile
+     * @param string $originalFile path relative to pub/view_cache
+     * @param string $targetFile path relative to pub/view_cache
+     *
+     * @return void
      */
     public function minifyFile($originalFile, $targetFile);
 }

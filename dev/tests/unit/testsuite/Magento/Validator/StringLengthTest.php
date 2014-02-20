@@ -21,23 +21,25 @@
  * @category    Magento
  * @package     Magento_Validator
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test case for Magento_Validator_StringLength
+ * Test case for \Magento\Validator\StringLength
  */
-class Magento_Validator_StringLengthTest extends PHPUnit_Framework_TestCase
+namespace Magento\Validator;
+
+class StringLengthTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Validator_StringLength
+     * @var \Magento\Validator\StringLength
      */
     protected $_validator;
 
     protected function setUp()
     {
-        $this->_validator = new Magento_Validator_StringLength();
+        $this->_validator = new \Magento\Validator\StringLength();
     }
 
     public function testDefaultEncoding()

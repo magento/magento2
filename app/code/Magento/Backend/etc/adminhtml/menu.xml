@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_Backend
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <menu>
+        <add id="Magento_Backend::system_design_schedule" title="Schedule" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::system_design" action="adminhtml/system_design" resource="Magento_Adminhtml::schedule"/>
+        <add id="Magento_Backend::system_currency" title="Currency" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::stores" action="adminhtml/system_currency" resource="Magento_CurrencySymbol::system_currency"/>
+        <add id="Magento_Backend::system_variable" title="Custom Variables" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::system_other_settings" action="adminhtml/system_variable" resource="Magento_Adminhtml::variable"/>
+        <add id="Magento_Backend::system_store" title="All Stores" module="Magento_Core" sortOrder="10" parent="Magento_Backend::stores_settings" action="adminhtml/system_store/" resource="Magento_Adminhtml::store"/>
+        <add id="Magento_Backend::system_config" title="Configuration" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::stores_settings" action="adminhtml/system_config" resource="Magento_Adminhtml::config"/>
+        <add id="Magento_Backend::dashboard" title="Dashboard" module="Magento_Backend" sortOrder="10" action="adminhtml/dashboard" resource="Magento_Adminhtml::dashboard"/>
+        <add id="Magento_Backend::system" title="System" module="Magento_Backend" sortOrder="80" resource="Magento_Adminhtml::system"/>
+        <add id="Magento_Backend::system_tools" title="Tools" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::system" resource="Magento_Adminhtml::tools"/>
+        <add id="Magento_Backend::system_design" title="Design" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::content" resource="Magento_Adminhtml::design"/>
+        <add id="Magento_Backend::system_convert" title="Data Transfer" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system" resource="Magento_Adminhtml::convert"/>
+        <add id="Magento_Backend::system_cache" title="Cache Management" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system_tools" action="adminhtml/cache" resource="Magento_Adminhtml::cache"/>
+        <add id="Magento_Backend::marketing" title="Marketing" module="Magento_Backend" sortOrder="40" resource="Magento_Adminhtml::marketing"/>
+        <add id="Magento_Backend::marketing_communications" title="Communications" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::marketing"  resource="Magento_Adminhtml::marketing_communications"/>
+        <add id="Magento_Backend::marketing_seo" title="SEO &amp; Search" module="Magento_Backend" sortOrder="40" parent="Magento_Backend::marketing"  resource="Magento_Adminhtml::marketing_seo"/>
+        <add id="Magento_Backend::marketing_user_content" title="User Content" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::marketing"  resource="Magento_Adminhtml::marketing_user_content"/>
+        <add id="Magento_Backend::content" title="Content" module="Magento_Backend" sortOrder="50" resource="Magento_Adminhtml::content"/>
+        <add id="Magento_Backend::content_elements" title="Elements" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::content" resource="Magento_Adminhtml::content_elements"/>
+        <add id="Magento_Backend::stores" title="Stores" module="Magento_Backend" sortOrder="70" resource="Magento_Adminhtml::stores"/>
+        <add id="Magento_Backend::stores_settings" title="Settings" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::stores" resource="Magento_Adminhtml::stores_settings"/>
+        <add id="Magento_Backend::stores_attributes" title="Attributes" module="Magento_Backend" sortOrder="40" parent="Magento_Backend::stores" resource="Magento_Adminhtml::stores_attributes"/>
+        <add id="Magento_Backend::other_settings" title="Other Settings" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::stores" resource="Magento_Adminhtml::stores_other_settings"/>
+        <add id="Magento_Backend::system_other_settings" title="Other Settings" module="Magento_Backend" sortOrder="80" parent="Magento_Backend::system" resource="Magento_Adminhtml::system_other_settings"/>
+    </menu>
+</config>

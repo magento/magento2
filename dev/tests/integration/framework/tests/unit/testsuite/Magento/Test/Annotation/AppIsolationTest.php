@@ -21,29 +21,32 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test class for Magento_Test_Annotation_AppIsolation.
+ * Test class for \Magento\TestFramework\Annotation\AppIsolation.
  */
-class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Annotation;
+
+class AppIsolationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Annotation_AppIsolation
+     * @var \Magento\TestFramework\Annotation\AppIsolation
      */
     protected $_object;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_application;
 
     protected function setUp()
     {
-        $this->_application = $this->getMock('Magento_Test_Application', array('reinitialize'), array(), '', false);
-        $this->_object = new Magento_Test_Annotation_AppIsolation($this->_application);
+        $this->_application = $this->getMock(
+            'Magento\TestFramework\Application', array('reinitialize'), array(), '', false);
+        $this->_object = new \Magento\TestFramework\Annotation\AppIsolation($this->_application);
     }
 
     protected function tearDown()
@@ -60,7 +63,7 @@ class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCas
 
     /**
      * @magentoAppIsolation invalid
-     * @expectedException Magento_Exception
+     * @expectedException \Magento\Exception
      */
     public function testEndTestIsolationInvalid()
     {
@@ -70,7 +73,7 @@ class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCas
     /**
      * @magentoAppIsolation enabled
      * @magentoAppIsolation disabled
-     * @expectedException Magento_Exception
+     * @expectedException \Magento\Exception
      */
     public function testEndTestIsolationAmbiguous()
     {
@@ -85,8 +88,8 @@ class Magento_Test_Annotation_AppIsolationTest extends PHPUnit_Framework_TestCas
 
     public function testEndTestIsolationController()
     {
-        /** @var $controllerTest Magento_Test_TestCase_ControllerAbstract */
-        $controllerTest = $this->getMockForAbstractClass('Magento_Test_TestCase_ControllerAbstract');
+        /** @var $controllerTest \Magento\TestFramework\TestCase\AbstractController */
+        $controllerTest = $this->getMockForAbstractClass('Magento\TestFramework\TestCase\AbstractController');
         $this->_application->expects($this->once())->method('reinitialize');
         $this->_object->endTest($controllerTest);
     }

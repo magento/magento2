@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_ImportExport
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <default>
+        <general>
+            <file>
+                <importexport_local_valid_paths>
+                    <available>
+                        <export_xml>var/export/*/*.xml</export_xml>
+                        <export_csv>var/export/*/*.csv</export_csv>
+                        <import_xml>var/import/*/*.xml</import_xml>
+                        <import_csv>var/import/*/*.csv</import_csv>
+                    </available>
+                </importexport_local_valid_paths>
+                <bunch_size>100</bunch_size>
+            </file>
+        </general>
+        <export>
+            <customer_page_size>
+                <customer>10000</customer>
+                <address>5000</address>
+            </customer_page_size>
+        </export>
+        <import>
+            <format_v1>
+                <page_size>5000</page_size>
+            </format_v1>
+            <format_v2>
+                <page_size>10000</page_size>
+                <bunch_size>100</bunch_size>
+            </format_v2>
+        </import>
+    </default>
+</config>

@@ -21,14 +21,16 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Translate
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Magento translate adapter
  */
-class Magento_Translate_Adapter extends Magento_Translate_AdapterAbstract
+namespace Magento\Translate;
+
+class Adapter extends AbstractAdapter
 {
     /**
      * Translate message string.

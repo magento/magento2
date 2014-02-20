@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     mage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true */
@@ -105,7 +105,7 @@
                 url: this.options.ajaxUrl,
                 type: 'POST',
                 data: parameters,
-                context: this.element,
+                loaderContext: this.element,
                 showLoader: true
             }).complete($.proxy(this._formSubmitComplete, this));
         },

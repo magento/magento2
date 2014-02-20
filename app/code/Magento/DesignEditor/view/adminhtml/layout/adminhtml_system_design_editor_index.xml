@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="head">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-dialog-js">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_DesignEditor::js/dialog.js</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-infinitescroll-js">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_DesignEditor::js/infinitescroll.js</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-theme-selector-js">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_DesignEditor::js/theme-selector.js</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-theme-assign-js">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_DesignEditor::js/theme-assign.js</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-theme-delete-js">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_DesignEditor::js/theme-delete.js</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-theme-edit-js">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_DesignEditor::js/theme-edit.js</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-designeditor-css-styles-css">
+            <arguments>
+                <argument name="file" xsi:type="string">Magento_DesignEditor::css/styles.css</argument>
+            </arguments>
+        </block>
+    </referenceBlock>
+    <referenceContainer name="content">
+        <block class="Magento\DesignEditor\Block\Adminhtml\Theme\Selector\Tabs" name="theme.selector.tabs">
+            <action method="addTab">
+                <argument name="name" xsi:type="string">available_themes</argument>
+                <argument name="block" xsi:type="string">available.themes.tab</argument>
+            </action>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">customizations</argument>
+                <argument name="block" xsi:type="string">customizations.themes.tab</argument>
+            </action>
+            <block class="Magento\DesignEditor\Block\Adminhtml\Theme\Selector\Tab\Available" name="available.themes.tab">
+                <block class="Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available" name="available.theme.list" template="Magento_DesignEditor::theme/list/available.phtml">
+                    <block class="Magento\DesignEditor\Block\Adminhtml\Theme" name="available.theme.item" as="item" template="Magento_DesignEditor::theme/available.phtml"/>
+                </block>
+            </block>
+            <block class="Magento\DesignEditor\Block\Adminhtml\Theme\Selector\Tab\Customizations" name="customizations.themes.tab" template="Magento_DesignEditor::theme/selector/my_customizations_tab.phtml">
+                <block class="Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Assigned" name="assigned.theme.list" template="Magento_DesignEditor::theme/list/customized.phtml">
+                    <block class="Magento\DesignEditor\Block\Adminhtml\Theme" name="assigned.theme" as="theme" template="Magento_DesignEditor::theme/customized.phtml"/>
+                </block>
+                <block class="Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Unassigned" name="unassigned.theme.list" template="Magento_DesignEditor::theme/list/customized.phtml">
+                    <block class="Magento\DesignEditor\Block\Adminhtml\Theme" name="unassigned.theme" as="theme" template="Magento_DesignEditor::theme/customized.phtml"/>
+                </block>
+            </block>
+        </block>
+        <block class="Magento\Backend\Block\Template" name="theme.dialog" template="Magento_DesignEditor::dialog.phtml"/>
+        <block class="Magento\Backend\Block\Template" name="theme.dialog.edit" template="Magento_DesignEditor::theme/selector/theme_edit.phtml"/>
+        <block class="Magento\DesignEditor\Block\Adminhtml\Theme\Selector\StoreView" name="theme.selector.storeview" template="Magento_DesignEditor::theme/selector/storeview.phtml"/>
+    </referenceContainer>
+</layout>

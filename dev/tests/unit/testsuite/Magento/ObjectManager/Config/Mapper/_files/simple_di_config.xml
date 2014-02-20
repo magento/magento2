@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <!-- Comment within root node -->
+    <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updaterter" />
+    <preference for="Magento\AppInterface" type="Magento\Core\Model\App\Proxy" />
+    <type name="Magento\App\State">
+        <param name="mode">
+            <value type="argument">Magento\App\State::PARAM_MODE</value>
+        </param>
+    </type>
+    <type name="Magento\Core\Model\Config\Modules">
+        <!-- Comment within type node -->
+        <param name="storage">
+            <!-- Comment within param node -->
+            <instance type="Magento\Core\Model\Config\Storage\Modules" shared="false" />
+        </param>
+        <plugin name="simple_modules_plugin" type="Magento\Core\Model\Config\Modules\Plugin" disabled="true" sortOrder="10" />
+        <plugin name="simple_modules_plugin_advanced" type="Magento\Core\Model\Config\Modules\PluginAdvanced" />
+        <plugin name="overridden_plugin" sortOrder="30" disabled="true" />
+    </type>
+    <type name="Magento\Http\Handler\Composite" shared="false">
+        <param name="factory">
+            <instance type="Magento\Http\HandlerFactory" />
+        </param>
+        <param name="handlers">
+            <array>
+                <!-- Comment within value node -->
+                <item key="custom_handler">
+                    <array>
+                        <item key="sortOrder"><value>25</value></item>
+                        <item key="class"><value>Custom_Cache_Model_Http_Handler</value></item>
+                    </array>
+                </item>
+                <item key="other_handler">
+                    <array>
+                        <!-- Comment within child node of the value node that represents an assoc array -->
+                        <item key="sortOrder"><value>10</value></item>
+                        <item key="class"><value><![CDATA[Other_Cache_Model_Http_Handler]]></value></item>
+                    </array>
+                </item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\Data\Collection\Db\FetchStrategy\Cache">
+        <param name="cacheIdPrefix"><value><![CDATA[collection_]]></value></param>
+        <param name="cacheLifetime"><value>86400</value></param>
+        <param name="cacheTags">
+            <array>
+                <item key="const"><value type="const">Magento\Core\Model\Website::CACHE_TAG</value></item>
+                <item key="boolFalse"><value type="bool">false</value></item>
+                <item key="boolTrue"><value type="bool">true</value></item>
+                <item key="boolOne"><value type="bool">1</value></item>
+                <item key="boolZero"><value type="bool">0</value></item>
+                <item key="intValue"><value type="int">100500</value></item>
+                <item key="nullValue"><value type="null"/>
+                </item>
+                <item key="stringPattern"><value type="string" pattern="[a-z\-]*">az-value</value></item>
+            </array>
+        </param>
+        <param name="constParam">
+            <value type='const'>Magento\Core\Model\Website::CACHE_TAG</value>
+        </param>
+        <param name="boolFalseParam">
+            <value type='bool'>false</value>
+        </param>
+        <param name="boolTrueParam">
+            <value type='bool'>true</value>
+        </param>
+        <param name="boolOneParam">
+            <value type='bool'>1</value>
+        </param>
+        <param name="boolZeroParam">
+            <value type='bool'>0</value>
+        </param>
+        <param name="intValueParam">
+            <value type='int'>100500</value>
+        </param>
+        <param name="nullValueParam">
+            <value type='null' />
+        </param>
+        <param name="stringPatternParam">
+            <value type='string' pattern="[a-z\-]*">az-value</value>
+        </param>
+    </type>
+    <virtualType name="customCacheInstance" type="Magento\App\Cache" shared="true" />
+    <virtualType name="customOverriddenInstance" shared="false" />
+</config>

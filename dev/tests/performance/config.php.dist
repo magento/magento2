@@ -20,14 +20,14 @@
  *
  * @category    Magento
  * @package     performance_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 return array(
     'application' => array(
         'url_host' => '127.0.0.1',
-        'url_path' => '/magento/',
+        'url_path' => '/',
         'admin' => array(
             'frontname' => 'backend',
             'username' => 'admin',
@@ -37,7 +37,7 @@ return array(
         'installation' => array(
             /**
              * Console installer options
-             * @see Mage_Install_Model_Installer_Console::_installOptions
+             * @see \Magento\Install\Model\Installer\Console::_installOptions
              */
             'options' => array(
                 'license_agreement_accepted' => 'yes',

@@ -20,15 +20,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Webhook
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  */
-class Magento_Outbound_Authentication_Factory
+namespace Magento\Outbound\Authentication;
+
+use Magento\ObjectManager;
+use Magento\Outbound\AuthenticationInterface;
+
+class Factory
 {
-    /** @var Mage_Core_Model_ObjectManager  */
+    /**
+     * @var ObjectManager
+     */
     private $_objectManager;
 
     /**
@@ -38,11 +43,11 @@ class Magento_Outbound_Authentication_Factory
 
     /**
      * @param array $authenticationMap
-     * @param Magento_ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
     public function __construct(
         array $authenticationMap,
-        Magento_ObjectManager $objectManager
+        ObjectManager $objectManager
     ) {
         $this->_authenticationMap = $authenticationMap;
         $this->_objectManager = $objectManager;
@@ -52,18 +57,18 @@ class Magento_Outbound_Authentication_Factory
      * Returns an Authentication that matches the type specified within Endpoint
      *
      * @param string $authenticationType
-     * @throws LogicException
-     * @return Magento_Outbound_AuthenticationInterface
+     * @return AuthenticationInterface
+     * @throws \LogicException
      */
     public function getAuthentication($authenticationType)
     {
         if (!isset($this->_authenticationMap[$authenticationType])) {
-            throw new LogicException("There is no authentication for the type given: {$authenticationType}");
+            throw new \LogicException("There is no authentication for the type given: {$authenticationType}");
         }
 
         $authentication =  $this->_objectManager->get($this->_authenticationMap[$authenticationType]);
-        if (!$authentication instanceof Magento_Outbound_AuthenticationInterface) {
-            throw new LogicException(
+        if (!$authentication instanceof AuthenticationInterface) {
+            throw new \LogicException(
                 "Authentication class for {$authenticationType} does not implement authentication interface"
             );
         }

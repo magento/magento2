@@ -18,13 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_ObjectManager_Relations_Runtime implements Magento_ObjectManager_Relations
+namespace Magento\ObjectManager\Relations;
+
+class Runtime implements \Magento\ObjectManager\Relations
 {
     /**
-     * @var Magento_Code_Reader_ClassReader
+     * @var \Magento\Code\Reader\ClassReader
      */
     protected $_classReader;
 
@@ -36,11 +38,22 @@ class Magento_ObjectManager_Relations_Runtime implements Magento_ObjectManager_R
     protected $_default = array();
 
     /**
-     * @param Magento_Code_Reader_ClassReader $classReader
+     * @param \Magento\Code\Reader\ClassReader $classReader
      */
-    public function __construct(Magento_Code_Reader_ClassReader $classReader = null)
+    public function __construct(\Magento\Code\Reader\ClassReader $classReader = null)
     {
-        $this->_classReader = $classReader ?: new Magento_Code_Reader_ClassReader();
+        $this->_classReader = $classReader ?: new \Magento\Code\Reader\ClassReader();
+    }
+
+    /**
+     * Check whether requested type is available for read
+     *
+     * @param string $type
+     * @return bool
+     */
+    public function has($type)
+    {
+        return class_exists($type) || interface_exists($type);
     }
 
     /**

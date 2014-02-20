@@ -19,7 +19,7 @@
  *
  * @category    mage.validation
  * @package     test
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 MageValidationTest = TestCase('MageValidationTest');
@@ -320,7 +320,7 @@ MageValidationTest.prototype.testValidateOneRequiredByName = function () {
 };
 
 MageValidationTest.prototype.testLessThanEqualsTo = function () {
-    /*:DOC += <input type="text" value=6  id="element1" />*/
+    /*:DOC += <input type="text" value=6 id="element1" />*/
     /*:DOC += <input type="text" value=5 id="element2" />*/
     var element1 = document.getElementById('element1');
     assertFalse($.validator.methods['less-than-equals-to'].call(this, element1.value,
@@ -335,15 +335,21 @@ MageValidationTest.prototype.testLessThanEqualsTo = function () {
     assertTrue($.validator.methods['less-than-equals-to'].call(this, element3.value,
         element3, '#element4'));
 
-    /*:DOC += <input type="text" value=6  id="element5" />*/
+    /*:DOC += <input type="text" value=6 id="element5" />*/
     /*:DOC += <input type="text" id="element6" />*/
     var element5 = document.getElementById('element5');
     assertTrue($.validator.methods['less-than-equals-to'].call(this, element5.value,
         element5, '#element6'));
+
+    /*:DOC += <input type="text" value=20  id="element7" />*/
+    /*:DOC += <input type="text" value=100 id="element8" />*/
+    var element7 = document.getElementById('element7');
+    assertTrue($.validator.methods['less-than-equals-to'].call(this, element7.value,
+        element7, '#element8'));
 };
 
 MageValidationTest.prototype.testGreaterThanEqualsTo = function () {
-    /*:DOC += <input type="text" value=6  id="element1" />*/
+    /*:DOC += <input type="text" value=6 id="element1" />*/
     /*:DOC += <input type="text" value=7 id="element2" />*/
     var element1 = document.getElementById('element1');
     assertFalse($.validator.methods['greater-than-equals-to'].call(this, element1.value,
@@ -358,11 +364,17 @@ MageValidationTest.prototype.testGreaterThanEqualsTo = function () {
     assertTrue($.validator.methods['greater-than-equals-to'].call(this, element3.value,
         element3, '#element4'));
 
-    /*:DOC += <input type="text" value=6  id="element5" />*/
+    /*:DOC += <input type="text" value=6 id="element5" />*/
     /*:DOC += <input type="text" id="element6" />*/
     var element5 = document.getElementById('element5');
     assertTrue($.validator.methods['greater-than-equals-to'].call(this, element5.value,
         element5, '#element6'));
+
+    /*:DOC += <input type="text" value=100 id="element7" />*/
+    /*:DOC += <input type="text" value=20  id="element8" />*/
+    var element7 = document.getElementById('element7');
+    assertTrue($.validator.methods['greater-than-equals-to'].call(this, element7.value,
+        element7, '#element8'));
 };
 
 MageValidationTest.prototype.testValidateGroupedQty = function () {

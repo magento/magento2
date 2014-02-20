@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Autoload_ClassMap
+namespace Magento\Autoload;
+
+class ClassMap
 {
     /**
      * Absolute path to base directory that will be prepended as prefix to the included files
@@ -47,13 +49,13 @@ class Magento_Autoload_ClassMap
      * Set base directory absolute path
      *
      * @param string $baseDir
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function __construct($baseDir)
     {
         $this->_baseDir = realpath($baseDir);
         if (!$this->_baseDir || !is_dir($this->_baseDir)) {
-            throw new InvalidArgumentException("Specified path is not a valid directory: '{$baseDir}'");
+            throw new \InvalidArgumentException("Specified path is not a valid directory: '{$baseDir}'");
         }
     }
 
@@ -66,7 +68,7 @@ class Magento_Autoload_ClassMap
     public function getFile($class)
     {
         if (isset($this->_map[$class])) {
-            return $this->_baseDir . DIRECTORY_SEPARATOR . $this->_map[$class];
+            return $this->_baseDir . '/' . $this->_map[$class];
         }
         return false;
     }
@@ -75,7 +77,7 @@ class Magento_Autoload_ClassMap
      * Add classes files declaration to the map. New map will override existing values if such was defined before.
      *
      * @param array $map
-     * @return Magento_Autoload_ClassMap
+     * @return $this
      */
     public function addMap(array $map)
     {
@@ -87,6 +89,7 @@ class Magento_Autoload_ClassMap
      * Resolve a class file and include it
      *
      * @param string $class
+     * @return void
      */
     public function load($class)
     {

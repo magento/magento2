@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <system>
+        <section id="oauth" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>OAuth</label>
+            <tab>service</tab>
+            <resource>Magento_Integration::config_oauth</resource>
+            <group id="cleanup" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Cleanup Settings</label>
+                <field id="cleanup_probability" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Cleanup Probability</label>
+                    <comment>Integer. Launch cleanup in X OAuth requests. 0 (not recommended) - to disable cleanup</comment>
+                </field>
+                <field id="expiration_period" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Expiration Period</label>
+                    <comment>Cleanup entries older than X minutes.</comment>
+                </field>
+            </group>
+            <group id="consumer" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Consumer Settings</label>
+                <field id="expiration_period" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Expiration Period</label>
+                    <comment>Disable consumer key/secret credentials if not used within X seconds.</comment>
+                </field>
+                <field id="post_maxredirects" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>OAuth consumer credentials HTTP Post maxredirects</label>
+                    <comment>Number of maximum redirects for OAuth consumer credentials Post request.</comment>
+                </field>
+                <field id="post_timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>OAuth consumer credentials HTTP Post timeout</label>
+                    <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -21,30 +21,32 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Config_ViewTest extends PHPUnit_Framework_TestCase
+namespace Magento\Config;
+
+class ViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Config_View
+     * @var \Magento\Config\View
      */
     protected $_model = null;
 
     protected function setUp()
     {
-        $this->_model = new Magento_Config_View(array(
-            __DIR__ . '/_files/view_one.xml', __DIR__ . '/_files/view_two.xml'
+        $this->_model = new \Magento\Config\View(array(
+            file_get_contents(__DIR__ . '/_files/view_one.xml'), file_get_contents(__DIR__ . '/_files/view_two.xml')
         ));
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testConstructException()
     {
-        new Magento_Config_View(array());
+        new \Magento\Config\View(array());
     }
 
     public function testGetSchemaFile()
@@ -66,10 +68,10 @@ class Magento_Config_ViewTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Exception
+     * @expectedException \Magento\Exception
      */
     public function testInvalidXml()
     {
-        new Magento_Config_View(array(__DIR__ . '/_files/view_invalid.xml'));
+        new \Magento\Config\View(array(file_get_contents(__DIR__ . '/_files/view_invalid.xml')));
     }
 }

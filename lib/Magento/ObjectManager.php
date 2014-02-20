@@ -20,12 +20,23 @@
  *
  * @category    Magento
  * @package     Magento_ObjectManager
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-interface Magento_ObjectManager
+namespace Magento;
+
+interface ObjectManager
 {
+    /**
+     * Set factory
+     *
+     * @param ObjectManager\Factory $factory
+     *
+     * @return void
+     */
+    public function setFactory(ObjectManager\Factory $factory);
+
     /**
      * Create new object instance
      *
@@ -47,6 +58,7 @@ interface Magento_ObjectManager
      * Configure object manager
      *
      * @param array $configuration
+     * @return void
      */
     public function configure(array $configuration);
 }

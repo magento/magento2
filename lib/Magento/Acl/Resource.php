@@ -21,14 +21,16 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Acl
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Acl resource
  */
-class Magento_Acl_Resource extends Zend_Acl_Resource
+namespace Magento\Acl;
+
+class Resource extends \Zend_Acl_Resource
 {
     
 }

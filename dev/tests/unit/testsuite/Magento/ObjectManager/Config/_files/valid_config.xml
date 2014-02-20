@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <preference for="Some_For_Name" type="Some_Type_Name" />
+    <virtualType name="" type="" shared="true">
+        <param name="single_array">
+            <array>
+                <item key="key1 unique for single array"><value>value</value></item>
+                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
+            </array>
+        </param>
+        <param name="nested_array">
+            <array>
+                <item key="key1 unique for single array">
+                    <array>
+                        <item key="key1 unique for single array"><value>value</value></item>
+                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
+                    </array>
+                </item>
+                <item key="backend2">
+                    <array>
+                        <item key="key1 unique for single array"><value>value</value></item>
+                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?">
+                            <array>
+                                <item key="key1 unique for single array"><value>value</value></item>
+                                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><value>2</value></item>
+                            </array>
+                        </item>
+                    </array>
+                </item>
+            </array>
+        </param>
+    </virtualType>
+    <type name="Some_Type_name">
+        <plugin name="plugin_name" type="Type_Test_Value"/>
+        <param name="text_value">
+            <instance type="Instance_test_name" />
+        </param>
+        <param name="single_array">
+            <array>
+                <item key="key1 unique for single array"><value>value</value></item>
+                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
+            </array>
+        </param>
+        <param name="nested_array">
+            <array>
+                <item key="key1 unique for single array">
+                    <array>
+                        <item key="key1 unique for single array"><value>value</value></item>
+                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
+                    </array>
+                </item>
+                <item key="backend2">
+                    <array>
+                        <item key="key1 unique for single array"><value>value</value></item>
+                        <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?">
+                            <array>
+                                <item key="key1 unique for single array"><value>value</value></item>
+                                <item key="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;>?"><instance type="Instance_test_name" /></item>
+                            </array>
+                        </item>
+                    </array>
+                </item>
+            </array>
+        </param>
+        <param name="baseController">
+            <value>some_value</value>
+        </param>
+    </type>
+</config>

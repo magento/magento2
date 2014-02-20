@@ -20,14 +20,16 @@
  *
  * @category    Magento
  * @package     unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Magento_Convert Test Case for Magento_Convert_Excel Export
+ * Magento_Convert Test Case for \Magento\Convert\Excel Export
  */
-class Magento_Convert_ExcelTest extends PHPUnit_Framework_TestCase
+namespace Magento\Convert;
+
+class ExcelTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test data
@@ -46,7 +48,7 @@ class Magento_Convert_ExcelTest extends PHPUnit_Framework_TestCase
      */
     protected function _getSampleOutputFile()
     {
-        return dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'output.txt';
+        return __DIR__ . '/_files/output.txt';
     }
 
     /**
@@ -65,27 +67,27 @@ class Magento_Convert_ExcelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Magento_Convert_Excel->convert()
-     * Magento_Convert_Excel($iterator)
+     * Test \Magento\Convert\Excel->convert()
+     * \Magento\Convert\Excel($iterator)
      *
      * @return void
      */
     public function testConvert()
     {
-        $convert = new Magento_Convert_Excel(new ArrayIterator($this->_testData));
+        $convert = new \Magento\Convert\Excel(new \ArrayIterator($this->_testData));
         $isEqual = (file_get_contents($this->_getSampleOutputFile()) == $convert->convert());
         $this->assertTrue($isEqual, 'Failed asserting that data is the same.');
     }
 
     /**
-     * Test Magento_Convert_Excel->convert()
-     * Magento_Convert_Excel($iterator, $callbackMethod)
+     * Test \Magento\Convert\Excel->convert()
+     * \Magento\Convert\Excel($iterator, $callbackMethod)
      *
      * @return void
      */
     public function testConvertCallback()
     {
-        $convert = new Magento_Convert_Excel(new ArrayIterator($this->_testData), array($this, 'callbackMethod'));
+        $convert = new \Magento\Convert\Excel(new \ArrayIterator($this->_testData), array($this, 'callbackMethod'));
         $this->assertContains('_TRUE_', $convert->convert(), 'Failed asserting that callback method is called.');
     }
 
@@ -97,19 +99,16 @@ class Magento_Convert_ExcelTest extends PHPUnit_Framework_TestCase
      */
     protected function _writeFile($callback = false)
     {
-        $adapter = new Magento_Filesystem_Adapter_Local();
-        $filesystem = new Magento_Filesystem($adapter);
-
         $name = md5(microtime());
-        $file = TESTS_TEMP_DIR . DIRECTORY_SEPARATOR . $name . '.xml';
+        $file = TESTS_TEMP_DIR . '/' . $name . '.xml';
 
-        $stream = $filesystem->createAndOpenStream($file, 'w+', TESTS_TEMP_DIR);
-        $stream->lock(true);
+        $stream = new \Magento\Filesystem\File\Write($file, new \Magento\Filesystem\Driver\File(), 'w+');
+        $stream->lock();
 
         if (!$callback) {
-            $convert = new Magento_Convert_Excel(new ArrayIterator($this->_testData));
+            $convert = new \Magento\Convert\Excel(new \ArrayIterator($this->_testData));
         } else {
-            $convert = new Magento_Convert_Excel(new ArrayIterator($this->_testData), array($this, 'callbackMethod'));
+            $convert = new \Magento\Convert\Excel(new \ArrayIterator($this->_testData), array($this, 'callbackMethod'));
         }
 
         $convert->write($stream);
@@ -120,8 +119,8 @@ class Magento_Convert_ExcelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Magento_Convert_Excel->write()
-     * Magento_Convert_Excel($iterator)
+     * Test \Magento\Convert\Excel->write()
+     * \Magento\Convert\Excel($iterator)
      *
      * @return void
      */
@@ -133,8 +132,8 @@ class Magento_Convert_ExcelTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Magento_Convert_Excel->write()
-     * Magento_Convert_Excel($iterator, $callbackMethod)
+     * Test \Magento\Convert\Excel->write()
+     * \Magento\Convert\Excel($iterator, $callbackMethod)
      *
      * @return void
      */

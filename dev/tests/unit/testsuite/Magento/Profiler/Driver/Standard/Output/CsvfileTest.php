@@ -1,6 +1,6 @@
 <?php
 /**
- * Test class for Magento_Profiler_Driver_Standard_Output_Csvfile
+ * Test class for \Magento\Profiler\Driver\Standard\Output\Csvfile
  *
  * Magento
  *
@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler_Driver_Standard_Output_CsvfileTest extends PHPUnit_Framework_TestCase
+namespace Magento\Profiler\Driver\Standard\Output;
+
+class CsvfileTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider constructorProvider
@@ -34,7 +36,7 @@ class Magento_Profiler_Driver_Standard_Output_CsvfileTest extends PHPUnit_Framew
      */
     public function testConstructor($config, $expectedFilePath, $expectedDelimiter, $expectedEnclosure)
     {
-        $output = new Magento_Profiler_Driver_Standard_Output_Csvfile($config);
+        $output = new \Magento\Profiler\Driver\Standard\Output\Csvfile($config);
         $this->assertAttributeEquals($expectedFilePath, '_filePath', $output);
         $this->assertAttributeEquals($expectedDelimiter, '_delimiter', $output);
         $this->assertAttributeEquals($expectedEnclosure, '_enclosure', $output);

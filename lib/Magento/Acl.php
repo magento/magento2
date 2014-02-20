@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Acl extends Zend_Acl
+namespace Magento;
+
+class Acl extends \Zend_Acl
 {
     /**
      * Permission level to deny access
@@ -42,15 +44,15 @@ class Magento_Acl extends Zend_Acl
 
     public function __construct()
     {
-        $this->_roleRegistry = new Magento_Acl_Role_Registry();
+        $this->_roleRegistry = new \Magento\Acl\Role\Registry();
     }
     
     /**
      * Add parent to role object
      *
-     * @param Zend_Acl_Role $role
-     * @param Zend_Acl_Role $parent
-     * @return Magento_Acl
+     * @param \Zend_Acl_Role $role
+     * @param \Zend_Acl_Role $parent
+     * @return \Magento\Acl
      */
     public function addRoleParent($role, $parent)
     {

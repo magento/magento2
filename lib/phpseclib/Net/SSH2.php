@@ -112,7 +112,7 @@ define('NET_SSH2_MASK_LOGIN',       0x00000002);
  * RFC4254 refers not to client and server channels but rather to sender and recipient channels.  we don't refer
  * to them in that way because RFC4254 toggles the meaning. the client sends a SSH_MSG_CHANNEL_OPEN message with
  * a sender channel and the server sends a SSH_MSG_CHANNEL_OPEN_CONFIRMATION in response, with a sender and a
- * recepient channel.  at first glance, you might conclude that SSH_MSG_CHANNEL_OPEN_CONFIRMATION's sender channel
+ * recipient channel.  at first glance, you might conclude that SSH_MSG_CHANNEL_OPEN_CONFIRMATION's sender channel
  * would be the same thing as SSH_MSG_CHANNEL_OPEN's sender channel, but it's not, per this snipet:
  *     The 'recipient channel' is the channel number given in the original
  *     open request, and 'sender channel' is the channel number allocated by
@@ -926,25 +926,25 @@ class Net_SSH2 {
         }
 
         switch ($kex_algorithms[$i]) {
-            // see http://tools.ietf.org/html/rfc2409#section-6.2 and 
+            // see http://tools.ietf.org/html/rfc2409#section-6.2 and
             // http://tools.ietf.org/html/rfc2412, appendex E
             case 'diffie-hellman-group1-sha1':
-                $p = pack('H256', 'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74' . 
-                                  '020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F1437' . 
-                                  '4FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED' . 
+                $p = pack('H256', 'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74' .
+                                  '020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F1437' .
+                                  '4FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED' .
                                   'EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE65381FFFFFFFFFFFFFFFF');
                 $keyLength = $keyLength < 160 ? $keyLength : 160;
                 $hash = 'sha1';
                 break;
             // see http://tools.ietf.org/html/rfc3526#section-3
             case 'diffie-hellman-group14-sha1':
-                $p = pack('H512', 'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74' . 
-                                  '020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F1437' . 
-                                  '4FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED' . 
-                                  'EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF05' . 
-                                  '98DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB' . 
-                                  '9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3B' . 
-                                  'E39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF695581718' . 
+                $p = pack('H512', 'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74' .
+                                  '020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F1437' .
+                                  '4FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED' .
+                                  'EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF05' .
+                                  '98DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB' .
+                                  '9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3B' .
+                                  'E39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF695581718' .
                                   '3995497CEA956AE515D2261898FA051015728E5A8AACAA68FFFFFFFFFFFFFFFF');
                 $keyLength = $keyLength < 160 ? $keyLength : 160;
                 $hash = 'sha1';
@@ -1438,7 +1438,7 @@ class Net_SSH2 {
         }
 
         // RFC4254 defines the (client) window size as "bytes the other party can send before it must wait for the window to
-        // be adjusted".  0x7FFFFFFF is, at 4GB, the max size.  technically, it should probably be decremented, but, 
+        // be adjusted".  0x7FFFFFFF is, at 4GB, the max size.  technically, it should probably be decremented, but,
         // honestly, if you're transfering more than 4GB, you probably shouldn't be using phpseclib, anyway.
         // see http://tools.ietf.org/html/rfc4254#section-5.2 for more info
         $this->window_size_client_to_server[NET_SSH2_CHANNEL_EXEC] = 0x7FFFFFFF;
@@ -1467,7 +1467,7 @@ class Net_SSH2 {
         // neither will your script.
 
         // although, in theory, the size of SSH_MSG_CHANNEL_REQUEST could exceed the maximum packet size established by
-        // SSH_MSG_CHANNEL_OPEN_CONFIRMATION, RFC4254#section-5.1 states that the "maximum packet size" refers to the 
+        // SSH_MSG_CHANNEL_OPEN_CONFIRMATION, RFC4254#section-5.1 states that the "maximum packet size" refers to the
         // "maximum size of an individual data packet". ie. SSH_MSG_CHANNEL_DATA.  RFC4254#section-5.2 corroborates.
         $packet = pack('CNNa*CNa*',
             NET_SSH2_MSG_CHANNEL_REQUEST, $this->server_channels[NET_SSH2_CHANNEL_EXEC], strlen('exec'), 'exec', 1, strlen($command), $command);
@@ -1730,7 +1730,7 @@ class Net_SSH2 {
                 case NET_SSH2_MSG_CHANNEL_DATA:
                     if ($client_channel == NET_SSH2_CHANNEL_EXEC) {
                         // SCP requires null packets, such as this, be sent.  further, in the case of the ssh.com SSH server
-                        // this actually seems to make things twice as fast.  more to the point, the message right after 
+                        // this actually seems to make things twice as fast.  more to the point, the message right after
                         // SSH_MSG_CHANNEL_DATA (usually SSH_MSG_IGNORE) won't block for as long as it would have otherwise.
                         // in OpenSSH it slows things down but only by a couple thousandths of a second.
                         $this->_send_channel_packet($client_channel, chr(0));

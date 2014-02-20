@@ -19,7 +19,7 @@
  *
  * @category    mage.event
  * @package     test
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 MageTest = TestCase('MageTest');
@@ -58,7 +58,7 @@ MageTest.prototype.testCustomizeOptions = function() {
 };
 
 MageTest.prototype.testDataAttribute = function() {
-    /*:DOC += <div id="main" data-mage-init="{button: [], tabs: []}"></div>*/
+    /*:DOC += <div id="main" data-mage-init='{"button":[], "tabs":[]}'></div>*/
     jQuery.mage
         .component('button', [])
         .component('tabs', [])
@@ -132,9 +132,12 @@ MageTest.prototype.testContentUpdated = function() {
         .component('button', [])
         .init();
     jQuery('body')
-        .append('<div id="test" data-mage-init="{tabs: []}">' +
-            '<button data-mage-init="{button: []}"></button>' +
-            '</div>');
+        .append(
+            jQuery('<div>')
+                .attr('id', 'test')
+                .attr('data-mage-init', '{"tabs":[]}')
+                .append(jQuery('<button>').attr('data-mage-init', '{"button":[]}'))
+        );
     jQuery('#test').trigger('contentUpdated');
     assertTrue(!!jQuery('#test').data('tabs'));
     assertTrue(!!jQuery('#test button').data('button'));

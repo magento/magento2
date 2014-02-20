@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceContainer name="left">
+        <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher" template="store/switcher.phtml"/>
+        <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tabs" name="attributes_tabs">
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Attributes" name="tab_attributes"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory" name="tab_inventory" template="catalog/product/edit/action/inventory.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Websites" name="tab_websites" template="catalog/product/edit/action/websites.phtml"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">attributes</argument>
+                <argument name="block" xsi:type="string">tab_attributes</argument>
+            </action>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">inventory</argument>
+                <argument name="block" xsi:type="string">tab_inventory</argument>
+            </action>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">websites</argument>
+                <argument name="block" xsi:type="string">tab_websites</argument>
+            </action>
+        </block>
+    </referenceContainer>
+    <referenceContainer name="content">
+        <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute" name="attribute" template="catalog/product/edit/action/attribute.phtml"/>
+    </referenceContainer>
+</layout>

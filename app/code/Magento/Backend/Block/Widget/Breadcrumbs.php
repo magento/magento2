@@ -1,0 +1,87 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_Backend
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+namespace Magento\Backend\Block\Widget;
+
+/**
+ * Magento_Backend page breadcrumbs
+ *
+ * @category   Magento
+ * @package    Magento_Backend
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
+class Breadcrumbs extends \Magento\Backend\Block\Template
+{
+    /**
+     * Breadcrumbs links
+     *
+     * @var array
+     */
+    protected $_links = array();
+
+    /**
+     * @var string
+     */
+    protected $_template = 'Magento_Backend::widget/breadcrumbs.phtml';
+
+    /**
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->addLink(__('Home'),
+            __('Home'), $this->getUrl('*')
+        );
+    }
+
+    /**
+     * @param string $label
+     * @param string|null $title
+     * @param string|null $url
+     * @return $this
+     */
+    public function addLink($label, $title=null, $url=null)
+    {
+        if (empty($title)) {
+            $title = $label;
+        }
+        $this->_links[] = array(
+            'label' => $label,
+            'title' => $title,
+            'url'   => $url
+        );
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _beforeToHtml()
+    {
+        // TODO - Moved to Beta 2, no breadcrumbs displaying in Beta 1
+        // $this->assign('links', $this->_links);
+        return parent::_beforeToHtml();
+    }
+}

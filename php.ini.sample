@@ -7,10 +7,6 @@ memory_limit = 64M
 
 max_execution_time = 18000
 
-; disable magic quotes for php request vars
-
-magic_quotes_gpc = off
-
 ; disable automatic session start
 ; before autoload was initialized
 
@@ -24,11 +20,11 @@ zlib.output_compression = on
 
 suhosin.session.cryptua = off
 
-; turn off compatibility with PHP4 when dealing with objects
-    
-zend.ze1_compatibility_mode = off
-
-; PHP for some reason ignores this setting in system php.ini 
+; PHP for some reason ignores this setting in system php.ini
 ; and disables mcrypt if this line is missing in local php.ini
 
 extension=mcrypt.so
+
+; Disable PHP errors, notices and warnings output in production mode to prevent exposing sensitive information.
+
+display_errors = Off

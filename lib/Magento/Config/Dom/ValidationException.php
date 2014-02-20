@@ -21,13 +21,15 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Config
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Exception that should be thrown by DOM model when incoming xml is not valid.
+ * \Exception that should be thrown by DOM model when incoming xml is not valid.
  */
-class Magento_Config_Dom_ValidationException extends InvalidArgumentException
+namespace Magento\Config\Dom;
+
+class ValidationException extends \InvalidArgumentException
 {
 }

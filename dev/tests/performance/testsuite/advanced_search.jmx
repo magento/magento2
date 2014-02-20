@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     performance_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -106,7 +106,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assertion: Header Presence" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-462078532">&lt;h1&gt;Catalog Advanced Search&lt;/h1&gt;</stringProp>
+              <stringProp name="-462078532">Advanced Search</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -189,11 +189,13 @@
           <hashTree/>
           <XPathAssertion guiclass="XPathAssertionGui" testclass="XPathAssertion" testname="Assertion: Product Found" enabled="true">
             <boolProp name="XPath.negate">false</boolProp>
-            <stringProp name="XPath.xpath">//h2[@class=&quot;product-name&quot;]/a[@title=&quot;${search_parameter1}&quot; and text()=&quot;${search_parameter1}&quot;]</stringProp>
+            <stringProp name="XPath.xpath">//img[@class=&quot;photo image&quot;]</stringProp>
             <boolProp name="XPath.validate">false</boolProp>
             <boolProp name="XPath.whitespace">false</boolProp>
-            <boolProp name="XPath.tolerant">false</boolProp>
+            <boolProp name="XPath.tolerant">true</boolProp>
             <boolProp name="XPath.namespace">false</boolProp>
+            <boolProp name="XPath.show_warnings">true</boolProp>
+            <boolProp name="XPath.report_errors">true</boolProp>
           </XPathAssertion>
           <hashTree/>
         </hashTree>

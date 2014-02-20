@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="adminhtml.tax.rate.container">
+        <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.tax.rate.grid" as="grid">
+            <arguments>
+                <argument name="id" xsi:type="string">tax_rate_grid</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Tax\Model\Resource\Calculation\Grid\Collection</argument>
+                <argument name="default_sort" xsi:type="string">region_name</argument>
+                <argument name="default_dir" xsi:type="string">ASC</argument>
+                <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.tax.rate.grid.export" as="grid.export">
+                <arguments>
+                    <argument name="exportTypes" xsi:type="array">
+                        <item name="csv" xsi:type="array">
+                            <item name="urlPath" xsi:type="string">tax/*/exportCsv</item>
+                            <item name="label" xsi:type="string" translate="true">CSV</item>
+                        </item>
+                        <item name="excel" xsi:type="array">
+                            <item name="urlPath" xsi:type="string">tax/*/exportXml</item>
+                            <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+            <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.catalog.product.set.grid.columnSet" as="grid.columnSet">
+                <arguments>
+                    <argument name="id" xsi:type="string">tax_rate_grid</argument>
+                    <argument name="rowUrl" xsi:type="array">
+                        <item name="path" xsi:type="string">tax/*/edit</item>
+                        <item name="extraParamsTemplate" xsi:type="array">
+                            <item name="rate" xsi:type="string">getTaxCalculationRateId</item>
+                        </item>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Tax Identifier</argument>
+                        <argument name="header_export" xsi:type="string" translate="true">Code</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="filter_index" xsi:type="string">main_table.code</argument>
+                        <argument name="index" xsi:type="string">code</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_country_id">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Country</argument>
+                        <argument name="type" xsi:type="string">country</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="filter_index" xsi:type="string">main_table.tax_country_id</argument>
+                        <argument name="index" xsi:type="string">tax_country_id</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer\Country</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="region_name">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">State/Region</argument>
+                        <argument name="header_export" xsi:type="string" translate="true">State</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="filter_index" xsi:type="string">region_table.code</argument>
+                        <argument name="index" xsi:type="string">region_name</argument>
+                        <argument name="default" xsi:type="string">*</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_postcode">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Zip/Post Code</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="index" xsi:type="string">tax_postcode</argument>
+                        <argument name="default" xsi:type="string">*</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="rate">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Rate</argument>
+                        <argument name="align" xsi:type="string">right</argument>
+                        <argument name="index" xsi:type="string">rate</argument>
+                        <argument name="type" xsi:type="string">number</argument>
+                        <argument name="default" xsi:type="string">0.00</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer\Data</argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </referenceBlock>
+</layout>

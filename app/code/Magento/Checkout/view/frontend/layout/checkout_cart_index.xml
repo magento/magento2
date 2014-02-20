@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <update handle="page_one_column"/>
+    <update handle="checkout_cart_item_renderers" />
+    <referenceContainer name="content">
+        <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml" cacheable="false">
+            <container name="checkout.cart.items" label="invisible" as="with-items">
+                <block class="Magento\Checkout\Block\Cart" name="checkout.cart.form" as="cart-items" template="cart/form.phtml" cacheable="false">
+                    <block class="Magento\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list" />
+                    <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards"/>
+                    <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After"/>
+                </block>
+                <block class="Magento\Checkout\Block\Cart\Shipping" name="checkout.cart.shipping" as="shipping" after="checkout.cart.summary.title" template="cart/shipping.phtml" cacheable="false"/>
+                <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" after="checkout.cart.shipping" template="cart/coupon.phtml" cacheable="false"/>
+                <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" as="totals" template="cart/totals.phtml" cacheable="false"/>
+                <block class="Magento\Checkout\Block\Cart" name="checkout.cart.methods.bottom" template="cart/methods.phtml" cacheable="false">
+                    <container name="checkout.cart.methods" as="methods" label="Payment Methods After Checkout Button">
+                        <block class="Magento\Checkout\Block\QuoteShortcutButtons" name="checkout.cart.shortcut.buttons"/>
+                        <block class="Magento\Checkout\Block\Onepage\Link" name="checkout.cart.methods.onepage.bottom" template="onepage/link.phtml" cacheable="false"/>
+                    </container>
+                </block>
+                <block class="Magento\Checkout\Block\Cart\Crosssell" name="checkout.cart.crosssell" template="Magento_Catalog::product/list/items.phtml" after="-" cacheable="false">
+                    <arguments>
+                        <argument name="type" xsi:type="string">crosssell</argument>
+                    </arguments>
+                </block>
+            </container>
+            <container name="checkout.cart.noitems" label="invisible" as="no-items">
+                <block class="Magento\Checkout\Block\Cart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml" cacheable="false"/>
+                <container name="checkout.cart.empty.widget" as="checkout_cart_empty_widget" label="Empty Shopping Cart Content Before"/>
+            </container>
+        </block>
+    </referenceContainer>
+    <!-- <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/> -->
+</layout>

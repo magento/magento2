@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Autoload_IncludePath
+namespace Magento\Autoload;
+
+class IncludePath
 {
     /**
      * Namespaces separator
@@ -54,7 +56,7 @@ class Magento_Autoload_IncludePath
         if (strpos($class, self::NS_SEPARATOR) !== false) {
             $class = ltrim(str_replace(self::NS_SEPARATOR, '_', $class), '_');
         }
-        return str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+        return str_replace('_', '/', $class) . '.php';
     }
 
     /**
@@ -62,6 +64,7 @@ class Magento_Autoload_IncludePath
      *
      * @param string|array $path
      * @param bool $prepend Whether to prepend paths or to append them
+     * @return void
      */
     public static function addIncludePath($path, $prepend = true)
     {
@@ -79,7 +82,8 @@ class Magento_Autoload_IncludePath
     /**
      * Resolve a class file and include it
      *
-     * @param $class
+     * @param string $class
+     * @return void
      */
     public static function load($class)
     {

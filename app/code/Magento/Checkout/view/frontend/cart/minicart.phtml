@@ -1,0 +1,133 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var $this \Magento\Checkout\Block\Cart\Sidebar */
+?>
+<?php if ($this->getInList()): ?>
+    <li data-block="minicart" class="minicart wrapper">
+<?php else:  ?>
+    <div data-block="minicart" class="minicart wrapper">
+<?php endif; ?>
+<?php $_cartQty = $this->getSummaryCount() ?>
+<?php if (!$this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()): ?>
+    <a <?php if ($this->getIsNeedToDisplaySideBar()): ?>data-toggle="dropdown"<?php endif ?> class="action showcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
+        <span class="text"><?php echo __('My Cart'); ?></span>
+        <span class="counter qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>"><?php echo ($_cartQty == 1) ? __('1 item') : __('%1 items',$_cartQty) ?></span>
+    </a>
+    <?php if ($this->getIsNeedToDisplaySideBar()): ?>
+        <div data-target="dropdown" class="block minicart<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>">
+            <button title="<?php echo __('Close'); ?>" type="button" class="action close" data-toggle="dropdown">
+                <span><?php echo __('Close'); ?></span>
+            </button>
+            <div class="title">
+                <strong>
+                    <span class="text"><?php echo __('My Cart'); ?></span>
+                    <span title="<?php echo __('Items in Cart'); ?>" class="qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>">
+                        <?php echo $_cartQty ?>
+                    </span>
+                </strong>
+            </div>
+            <div class="content">
+                <?php $_items = $this->getRecentItems() ?>
+                <?php if (count($_items)): ?>
+                    <strong class="subtitle"><?php echo __('Recently added item(s)') ?></strong>
+                    <div data-action="scroll" class="products minilist">
+                        <ol id="mini-cart" class="minilist items">
+                            <?php foreach ($_items as $_item): ?>
+                            <?php echo $this->getItemHtml($_item) ?>
+                            <?php endforeach; ?>
+                        </ol>
+                    </div>
+                <?php else: ?>
+                    <strong class="subtitle empty">
+                        <?php echo __('You have no items in your shopping cart.') ?>
+                    </strong>
+                    <?php if ($this->getCartEmptyMessage()): ?>
+                        <p class="minicart empty text"><?php echo $this->getCartEmptyMessage(); ?></p>
+                    <?php endif; ?>
+                <?php endif ?>
+
+                <?php if ($_cartQty || $this->getAllowCartLink()): ?>
+                    <?php $isPossibleOnepageCheckout = $_cartQty && $this->isPossibleOnepageCheckout() ?>
+                    <?php if ($isPossibleOnepageCheckout): ?>
+                        <div class="subtotal">
+                            <?php if ($this->canApplyMsrp()): ?>
+                            <span class="mark msrp">
+                                <?php echo __('Order total will be displayed before you submit the order'); ?>
+                            </span>
+                            <?php else: ?>
+                                <span class="mark">
+                                    <?php echo __('Cart Subtotal') ?>
+                                </span>
+                                <div class="amount">
+                                    <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getSubtotal()) ?>
+                                    <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?>
+                                        <span class="amount incl tax">
+                                            <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_subtotalInclTax) ?>
+                                            <?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcText(true) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif ?>
+                    <?php echo $this->getChildHtml('minicart_info') ?>
+                    <div class="actions">
+                        <div class="primary">
+                            <?php if ($isPossibleOnepageCheckout): ?>
+                                <?php echo $this->getChildHtml('extra_actions') ?>
+                                <button id="top-cart-btn-checkout" type="button" class="action checkout" title="<?php echo __('Checkout') ?>">
+                                    <span><?php echo __('Checkout') ?></span>
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="secondary">
+                            <a class="action viewcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
+                                <span><?php echo __('View cart') ?></span>
+                            </a>
+                        </div>
+                    </div>
+                <?php endif ?>
+            </div>
+        </div>
+    <?php endif ?>
+<?php endif; ?>
+<script type="text/javascript">
+    (function($) {
+        head.js("<?php echo $this->getViewFileUrl('Magento_Checkout::js/sidebar.js') ?>", function() {
+                $('[data-block="minicart"]').sidebar({
+                    checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
+                    checkoutButton: '#top-cart-btn-checkout',
+                    removeButton: '#mini-cart a.action.delete',
+                    confirmMessage: '<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>'
+                });
+            });
+    })(jQuery);
+</script>
+<?php if ($this->getInList()): ?>
+    </li>
+<?php else:  ?>
+    </div>
+<?php endif; ?>

@@ -18,10 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Cache_Frontend_Adapter_ZendTest extends PHPUnit_Framework_TestCase
+namespace Magento\Cache\Frontend\Adapter;
+
+class ZendTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $method
@@ -33,8 +35,8 @@ class Magento_Cache_Frontend_Adapter_ZendTest extends PHPUnit_Framework_TestCase
     public function testProxyMethod($method, $params, $expectedParams, $expectedResult)
     {
         $frontendMock = $this->getMock('Zend_Cache_Core');
-        $object = new Magento_Cache_Frontend_Adapter_Zend($frontendMock);
-        $helper = new Magento_Test_Helper_ProxyTesting();
+        $object = new \Magento\Cache\Frontend\Adapter\Zend($frontendMock);
+        $helper = new \Magento\TestFramework\Helper\ProxyTesting();
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $expectedResult, $method,
             $expectedParams);
         $this->assertSame($expectedResult, $result);
@@ -57,27 +59,27 @@ class Magento_Cache_Frontend_Adapter_ZendTest extends PHPUnit_Framework_TestCase
             'remove' => array('remove', array('record_id'), array('RECORD_ID'), true),
             'clean mode "all"' => array(
                 'clean',
-                array(Zend_Cache::CLEANING_MODE_ALL, array()),
-                array(Zend_Cache::CLEANING_MODE_ALL, array()),
+                array(\Zend_Cache::CLEANING_MODE_ALL, array()),
+                array(\Zend_Cache::CLEANING_MODE_ALL, array()),
                 true,
             ),
             'clean mode "matching tag"' => array(
                 'clean',
-                array(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('tag1', 'tag2')),
-                array(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('TAG1', 'TAG2')),
+                array(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('tag1', 'tag2')),
+                array(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('TAG1', 'TAG2')),
                 true,
             ),
             'clean mode "matching any tag"' => array(
                 'clean',
-                array(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag1', 'tag2')),
-                array(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('TAG1', 'TAG2')),
+                array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag1', 'tag2')),
+                array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('TAG1', 'TAG2')),
                 true,
             ),
             'getBackend' => array(
                 'getBackend',
                 array(),
                 array(),
-                PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Backend'),
+                \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Backend'),
             ),
         );
     }
@@ -90,7 +92,7 @@ class Magento_Cache_Frontend_Adapter_ZendTest extends PHPUnit_Framework_TestCase
     public function testCleanException($cleaningMode, $expectedErrorMessage)
     {
         $this->setExpectedException('InvalidArgumentException', $expectedErrorMessage);
-        $object = new Magento_Cache_Frontend_Adapter_Zend($this->getMock('Zend_Cache_Core'));
+        $object = new \Magento\Cache\Frontend\Adapter\Zend($this->getMock('Zend_Cache_Core'));
         $object->clean($cleaningMode);
     }
 
@@ -98,11 +100,11 @@ class Magento_Cache_Frontend_Adapter_ZendTest extends PHPUnit_Framework_TestCase
     {
         return array(
             'cleaning mode "expired"' => array(
-                Zend_Cache::CLEANING_MODE_OLD,
+                \Zend_Cache::CLEANING_MODE_OLD,
                 "Magento cache frontend does not support the cleaning mode 'old'.",
             ),
             'cleaning mode "not matching tag"' => array(
-                Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
+                \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
                 "Magento cache frontend does not support the cleaning mode 'notMatchingTag'.",
             ),
             'non-existing cleaning mode' => array(
@@ -115,7 +117,7 @@ class Magento_Cache_Frontend_Adapter_ZendTest extends PHPUnit_Framework_TestCase
     public function testGetLowLevelFrontend()
     {
         $frontendMock = $this->getMock('Zend_Cache_Core');
-        $object = new Magento_Cache_Frontend_Adapter_Zend($frontendMock);
+        $object = new \Magento\Cache\Frontend\Adapter\Zend($frontendMock);
         $this->assertSame($frontendMock, $object->getLowLevelFrontend());
     }
 }

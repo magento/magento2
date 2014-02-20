@@ -20,20 +20,22 @@
  *
  * @category    Magento
  * @package     Magento_Code
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Generator_Io
+namespace Magento\Code\Generator;
+
+class Io
 {
     /**
      * Default code generation directory
-     * Should correspond the value from Mage_Core_Model_Dir
+     * Should correspond the value from \Magento\Filesystem
      */
     const DEFAULT_DIRECTORY = 'var/generation';
 
     /**
-     * Directory permission for created directories
+     * \Directory permission for created directories
      */
     const DIRECTORY_PERMISSION = 0777;
 
@@ -45,41 +47,43 @@ class Magento_Code_Generator_Io
     private $_generationDirectory;
 
     /**
-     * @var Varien_Io_Interface
-     */
-    private $_ioObject;
-
-    /**
      * Autoloader instance
      *
-     * @var Magento_Autoload_IncludePath
+     * @var \Magento\Autoload\IncludePath
      */
     private $_autoloader;
 
     /**
-     * @var string
+     * @var \Magento\Filesystem\Driver\File
      */
-    private $_directorySeparator;
-
+    private $filesystemDriver;
     /**
-     * @param Varien_Io_Interface $ioObject
-     * @param Magento_Autoload_IncludePath $autoLoader
-     * @param string $generationDirectory
+     * @param \Magento\Filesystem\Driver\File   $filesystemDriver
+     * @param \Magento\Autoload\IncludePath     $autoLoader
+     * @param null $generationDirectory
      */
-    public function __construct(Varien_Io_Interface $ioObject = null, Magento_Autoload_IncludePath $autoLoader = null,
+    public function __construct(
+        \Magento\Filesystem\Driver\File $filesystemDriver,
+        \Magento\Autoload\IncludePath   $autoLoader = null,
         $generationDirectory = null
     ) {
-        $this->_ioObject           = $ioObject ? : new Varien_Io_File();
-        $this->_autoloader         = $autoLoader ? : new Magento_Autoload_IncludePath();
-        $this->_directorySeparator = $this->_ioObject->dirsep();
+        $this->_autoloader          = $autoLoader ? : new \Magento\Autoload\IncludePath();
+        $this->filesystemDriver     = $filesystemDriver;
+        $this->initGeneratorDirectory($generationDirectory);
+    }
 
-        if ($generationDirectory) {
-            $this->_generationDirectory
-                = rtrim($generationDirectory, $this->_directorySeparator) . $this->_directorySeparator;
+    /**
+     * Get path to generation directory
+     *
+     * @param null|string $directory
+     * @return string
+     */
+    protected function initGeneratorDirectory($directory = null)
+    {
+        if ($directory) {
+            $this->_generationDirectory = rtrim($directory, '/') . '/';
         } else {
-            $this->_generationDirectory
-                = realpath(__DIR__ . str_replace('/', $this->_directorySeparator, '/../../../../'))
-                . $this->_directorySeparator . self::DEFAULT_DIRECTORY . $this->_directorySeparator;
+            $this->_generationDirectory = realpath(__DIR__ . '/../../../../') . '/' . self::DEFAULT_DIRECTORY . '/';
         }
     }
 
@@ -90,10 +94,10 @@ class Magento_Code_Generator_Io
     public function getResultFileDirectory($className)
     {
         $fileName = $this->getResultFileName($className);
-        $pathParts = explode($this->_directorySeparator, $fileName);
+        $pathParts = explode('/', $fileName);
         unset($pathParts[count($pathParts) - 1]);
 
-        return implode($this->_directorySeparator, $pathParts) . $this->_directorySeparator;
+        return implode('/', $pathParts) . '/';
     }
 
     /**
@@ -115,7 +119,7 @@ class Magento_Code_Generator_Io
     public function writeResultFile($fileName, $content)
     {
         $content = "<?php\n" . $content;
-        return $this->_ioObject->write($fileName, $content);
+        return $this->filesystemDriver->filePutContents($fileName, $content);
     }
 
     /**
@@ -149,7 +153,7 @@ class Magento_Code_Generator_Io
      */
     public function fileExists($fileName)
     {
-        return $this->_ioObject->fileExists($fileName, true);
+        return $this->filesystemDriver->isExists($fileName);
     }
 
     /**
@@ -158,9 +162,14 @@ class Magento_Code_Generator_Io
      */
     private function _makeDirectory($directory)
     {
-        if ($this->_ioObject->isWriteable($directory)) {
+        if ($this->filesystemDriver->isWritable($directory)) {
             return true;
         }
-        return $this->_ioObject->mkdir($directory, self::DIRECTORY_PERMISSION, true);
+        try {
+            $this->filesystemDriver->createDirectory($directory, self::DIRECTORY_PERMISSION);
+            return true;
+        } catch (\Magento\Filesystem\FilesystemException $e) {
+            return false;
+        }
     }
 }

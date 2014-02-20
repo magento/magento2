@@ -21,48 +21,50 @@
  * @category    Magento
  * @package     Magento_ObjectManager
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\ObjectManager\TestAsset;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Magento_ObjectManager_TestAsset_ConstructorTenArguments
-    extends Magento_ObjectManager_TestAsset_ConstructorNineArguments
+class ConstructorTenArguments
+    extends \Magento\ObjectManager\TestAsset\ConstructorNineArguments
 {
     /**
-     * @var Magento_ObjectManager_TestAsset_Basic
+     * @var \Magento\ObjectManager\TestAsset\Basic
      */
     protected $_ten;
 
     /**
      * Ten arguments
      *
-     * @param Magento_ObjectManager_TestAsset_Basic $one
-     * @param Magento_ObjectManager_TestAsset_Basic $two
-     * @param Magento_ObjectManager_TestAsset_Basic $three
-     * @param Magento_ObjectManager_TestAsset_Basic $four
-     * @param Magento_ObjectManager_TestAsset_Basic $five
-     * @param Magento_ObjectManager_TestAsset_Basic $six
-     * @param Magento_ObjectManager_TestAsset_Basic $seven
-     * @param Magento_ObjectManager_TestAsset_Basic $eight
-     * @param Magento_ObjectManager_TestAsset_Basic $nine
-     * @param Magento_ObjectManager_TestAsset_Basic $ten
+     * @param \Magento\ObjectManager\TestAsset\Basic $one
+     * @param \Magento\ObjectManager\TestAsset\Basic $two
+     * @param \Magento\ObjectManager\TestAsset\Basic $three
+     * @param \Magento\ObjectManager\TestAsset\Basic $four
+     * @param \Magento\ObjectManager\TestAsset\Basic $five
+     * @param \Magento\ObjectManager\TestAsset\Basic $six
+     * @param \Magento\ObjectManager\TestAsset\Basic $seven
+     * @param \Magento\ObjectManager\TestAsset\Basic $eight
+     * @param \Magento\ObjectManager\TestAsset\Basic $nine
+     * @param \Magento\ObjectManager\TestAsset\Basic $ten
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Magento_ObjectManager_TestAsset_Basic $one,
-        Magento_ObjectManager_TestAsset_Basic $two,
-        Magento_ObjectManager_TestAsset_Basic $three,
-        Magento_ObjectManager_TestAsset_Basic $four,
-        Magento_ObjectManager_TestAsset_Basic $five,
-        Magento_ObjectManager_TestAsset_Basic $six,
-        Magento_ObjectManager_TestAsset_Basic $seven,
-        Magento_ObjectManager_TestAsset_Basic $eight,
-        Magento_ObjectManager_TestAsset_Basic $nine,
-        Magento_ObjectManager_TestAsset_Basic $ten
+        \Magento\ObjectManager\TestAsset\Basic $one,
+        \Magento\ObjectManager\TestAsset\Basic $two,
+        \Magento\ObjectManager\TestAsset\Basic $three,
+        \Magento\ObjectManager\TestAsset\Basic $four,
+        \Magento\ObjectManager\TestAsset\Basic $five,
+        \Magento\ObjectManager\TestAsset\Basic $six,
+        \Magento\ObjectManager\TestAsset\Basic $seven,
+        \Magento\ObjectManager\TestAsset\Basic $eight,
+        \Magento\ObjectManager\TestAsset\Basic $nine,
+        \Magento\ObjectManager\TestAsset\Basic $ten
     ) {
         parent::__construct($one, $two, $three, $four, $five, $six, $seven, $eight, $nine);
         $this->_ten = $ten;

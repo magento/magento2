@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory for classes that implement Magento_PubSub_EventInterface
+ * Factory for classes that implement \Magento\PubSub\EventInterface
  *
  * Magento
  *
@@ -22,17 +22,19 @@
  *
  * @category    Magento
  * @package     Magento_PubSub
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_PubSub_Event_FactoryInterface
+namespace Magento\PubSub\Event;
+
+interface FactoryInterface
 {
     /**
      * Create new event
      *
      * @param string $topic Topic on which to publish data
      * @param array $data Data to be published.  Should only contain primitives
-     * @return Magento_PubSub_EventInterface
+     * @return \Magento\PubSub\EventInterface
      */
     public function create($topic, $data);
 }

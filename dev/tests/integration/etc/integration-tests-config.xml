@@ -22,63 +22,9 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
-    <global>
-        <events>
-            <core_app_init_current_store_after>
-                <observers>
-                    <integration_tests>
-                        <class>Magento_Test_Event_Magento</class>
-                        <method>initStoreAfter</method>
-                    </integration_tests>
-                </observers>
-            </core_app_init_current_store_after>
-        </events>
-        <di>
-            <preferences>
-                <Mage_Core_Model_Cookie>Magento_Test_Cookie</Mage_Core_Model_Cookie>
-            </preferences>
-        </di>
-        <dev>
-            <design_fallback>
-                <allow_map_update>0</allow_map_update>
-            </design_fallback>
-        </dev>
-        <search>
-            <solr>
-                <servers>
-                    <masters>
-                        <server1>
-                            <host>127.0.0.1</host>
-                            <port>8983</port>
-                            <timeout>15</timeout>
-                        </server1>
-                    </masters>
-                    <slaves>
-                        <server1>
-                            <host>127.0.0.1</host>
-                            <port>8888</port>
-                            <timeout>15</timeout>
-                        </server1>
-                    </slaves>
-                </servers>
-            </solr>
-        </search>
-    </global>
-    <frontend>
-        <translate>
-            <modules>
-                <Mage_Core>
-                    <files>
-                        <!-- Translation files are relative to app/code/<Namespace>/<Module>/locale/<locale> -->
-                        <fixture>../../../../../../dev/tests/integration/testsuite/Mage/Core/_files/fixture.csv</fixture>
-                    </files>
-                </Mage_Core>
-            </modules>
-        </translate>
-    </frontend>
 </config>

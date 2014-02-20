@@ -22,18 +22,20 @@
  *
  * @category    Magento
  * @package     Magento_PubSub
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_Event_QueueWriter implements Magento_PubSub_Event_QueueWriterInterface
+namespace Magento\PubSub\Event;
+
+class QueueWriter implements \Magento\PubSub\Event\QueueWriterInterface
 {
     /**
      * Stub that doesn't do anything
      *
-     * @param Magento_PubSub_EventInterface $event
+     * @param \Magento\PubSub\EventInterface $event
      * @return null
      */
-    public function offer(Magento_PubSub_EventInterface $event)
+    public function offer(\Magento\PubSub\EventInterface $event)
     {
         return null;
     }

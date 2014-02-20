@@ -23,7 +23,7 @@
  *
  * @category    tests
  * @package     js
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  * @return array
@@ -32,17 +32,19 @@ return array(
     'server' => 'http://localhost:9876',
     'load' => array(
         '/pub/lib/mage/translate.js',
+        '/pub/lib/mage/webapi.js',
         '/pub/lib/jquery/jquery-ui-timepicker-addon.js',
         '/pub/lib/jquery/jquery.tmpl.min.js',
-        '/app/code/Mage/DesignEditor/view/adminhtml/js/base.js',
-        '/app/code/Mage/DesignEditor/view/adminhtml/js/design_editor.js',
-        '/app/code/Mage/DesignEditor/view/frontend/js/change/layout.js',
-        '/app/code/Mage/DesignEditor/view/frontend/js/design_editor.js',
-        '/app/code/Mage/DesignEditor/view/frontend/js/form_deactivation.js',
-        '/app/code/Mage/DesignEditor/view/adminhtml/js/infinitescroll.js',
+        '/dev/tests/js/framework/stub.js',
+        '/app/code/Magento/DesignEditor/view/adminhtml/js/base.js',
+        '/app/code/Magento/DesignEditor/view/adminhtml/js/design_editor.js',
+        '/app/code/Magento/DesignEditor/view/frontend/js/change/layout.js',
+        '/app/code/Magento/DesignEditor/view/frontend/js/design_editor.js',
+        '/app/code/Magento/DesignEditor/view/frontend/js/form_deactivation.js',
+        '/app/code/Magento/DesignEditor/view/adminhtml/js/infinitescroll.js',
         '/pub/lib/jquery/jstree/jquery.jstree.js',
         '/pub/lib/jquery/slimScroll/slimScroll.min.js',
-        '/app/code/Mage/DesignEditor/view/frontend/css/styles.css',
+        '/app/code/Magento/DesignEditor/view/frontend/css/styles.css',
         '/pub/lib/mage/cookies.js',
         '/pub/lib/mage/calendar.js',
         '/pub/lib/mage/loader.js',
@@ -56,7 +58,10 @@ return array(
         '/pub/lib/mage/validation/validation.js',
         '/pub/lib/mage/backend/menu.js',
         '/pub/lib/mage/backend/suggest.js',
-        '/pub/lib/mage/backend/tree-suggest.js'
+        '/pub/lib/mage/backend/tree-suggest.js',
+        '/pub/lib/mage/gallery.js',
+        '/pub/lib/mage/gallery-fullscreen.js',
+        '/pub/lib/mage/zoom.js'
     ),
     'test' => array('/dev/tests/js/testsuite'),
     'JsTestDriver' => '{{path_to_jstestdriver_jar}}'

@@ -176,7 +176,7 @@ class Zend_Gdata_Photos extends Zend_Gdata
     }
 
     /**
-     * Retreive AlbumFeed object containing multiple PhotoEntry or TagEntry
+     * Retrieve AlbumFeed object containing multiple PhotoEntry or TagEntry
      * objects.
      *
      * @param mixed $location (optional) The location for the feed, as a URL or Query.
@@ -202,7 +202,7 @@ class Zend_Gdata_Photos extends Zend_Gdata
     }
 
     /**
-     * Retreive PhotoFeed object containing comments and tags associated
+     * Retrieve PhotoFeed object containing comments and tags associated
      * with a given photo.
      *
      * @param mixed $location (optional) The location for the feed, as a URL
@@ -230,7 +230,7 @@ class Zend_Gdata_Photos extends Zend_Gdata
     }
 
     /**
-     * Retreive a single UserEntry object.
+     * Retrieve a single UserEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Photos_UserEntry
@@ -255,7 +255,7 @@ class Zend_Gdata_Photos extends Zend_Gdata
     }
 
     /**
-     * Retreive a single AlbumEntry object.
+     * Retrieve a single AlbumEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Photos_AlbumEntry
@@ -280,7 +280,7 @@ class Zend_Gdata_Photos extends Zend_Gdata
     }
 
     /**
-     * Retreive a single PhotoEntry object.
+     * Retrieve a single PhotoEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Photos_PhotoEntry
@@ -305,7 +305,7 @@ class Zend_Gdata_Photos extends Zend_Gdata
     }
 
     /**
-     * Retreive a single TagEntry object.
+     * Retrieve a single TagEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Photos_TagEntry
@@ -330,7 +330,7 @@ class Zend_Gdata_Photos extends Zend_Gdata
     }
 
     /**
-     * Retreive a single CommentEntry object.
+     * Retrieve a single CommentEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Photos_CommentEntry

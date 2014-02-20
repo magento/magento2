@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_Outbound_Authentication_Factory
+ * \Magento\Outbound\Authentication\Factory
  *
  * Magento
  *
@@ -20,29 +20,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright          Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright          Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license            http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Outbound_Authentication_FactoryTest extends PHPUnit_Framework_TestCase
+
+namespace Magento\Outbound\Authentication;
+
+use Magento\Outbound\Authentication\Factory as AuthenticationFactory;
+use Magento\Outbound\EndpointInterface;
+
+class FactoryTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Magento_Outbound_Authentication_Factory */
+    /** @var AuthenticationFactory */
     protected $_authFactory;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_authFactory = Mage::getObjectManager()->get('Magento_Outbound_Authentication_Factory');
+        $this->_authFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Outbound\Authentication\Factory', array(
+                    'authenticationMap' => array(
+                        EndpointInterface::AUTH_TYPE_HMAC => 'Magento\Outbound\Authentication\Hmac'
+                    )
+                ));
     }
 
     public function testGetFormatter()
     {
-        $authObject = $this->_authFactory->getAuthentication(Magento_Outbound_EndpointInterface::AUTH_TYPE_HMAC);
-        $this->assertInstanceOf('Magento_Outbound_Authentication_Hmac', $authObject);
+        $authObject = $this->_authFactory->getAuthentication(EndpointInterface::AUTH_TYPE_HMAC);
+        $this->assertInstanceOf('Magento\Outbound\Authentication\Hmac', $authObject);
     }
 
     public function testGetFormatterIsCached()
     {
-        $authObject = $this->_authFactory->getAuthentication(Magento_Outbound_EndpointInterface::AUTH_TYPE_HMAC);
-        $authObject2 = $this->_authFactory->getAuthentication(Magento_Outbound_EndpointInterface::AUTH_TYPE_HMAC);
+        $authObject = $this->_authFactory->getAuthentication(EndpointInterface::AUTH_TYPE_HMAC);
+        $authObject2 = $this->_authFactory->getAuthentication(EndpointInterface::AUTH_TYPE_HMAC);
         $this->assertSame($authObject, $authObject2);
     }
 }

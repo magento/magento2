@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -26,19 +26,21 @@
  * Cache frontend decorator that attaches no additional responsibility to a decorated instance.
  * To be used as an ancestor for concrete decorators to conveniently override only methods of interest.
  */
-class Magento_Cache_Frontend_Decorator_Bare implements Magento_Cache_FrontendInterface
+namespace Magento\Cache\Frontend\Decorator;
+
+class Bare implements \Magento\Cache\FrontendInterface
 {
     /**
      * Cache frontend instance to delegate actual cache operations to
      *
-     * @var Magento_Cache_FrontendInterface
+     * @var \Magento\Cache\FrontendInterface
      */
     private $_frontend;
 
     /**
-     * @param Magento_Cache_FrontendInterface $frontend
+     * @param \Magento\Cache\FrontendInterface $frontend
      */
-    public function __construct(Magento_Cache_FrontendInterface $frontend)
+    public function __construct(\Magento\Cache\FrontendInterface $frontend)
     {
         $this->_frontend = $frontend;
     }
@@ -46,7 +48,7 @@ class Magento_Cache_Frontend_Decorator_Bare implements Magento_Cache_FrontendInt
     /**
      * Retrieve cache frontend instance being decorated
      *
-     * @return Magento_Cache_FrontendInterface
+     * @return \Magento\Cache\FrontendInterface
      */
     protected function _getFrontend()
     {
@@ -90,7 +92,7 @@ class Magento_Cache_Frontend_Decorator_Bare implements Magento_Cache_FrontendInt
     /**
      * {@inheritdoc}
      */
-    public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, array $tags = array())
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = array())
     {
         return $this->_frontend->clean($mode, $tags);
     }

@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_Paypal
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <default>
+        <paypal>
+            <style>
+                <logo>nowAccepting_150x60</logo>
+            </style>
+            <wpp>
+                <api_password backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <api_signature backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <api_username backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <button_flavor>dynamic</button_flavor>
+            </wpp>
+            <wpuk>
+                <user backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <pwd backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+            </wpuk>
+            <fetch_reports>
+                <ftp_login backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <ftp_password backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <schedule>1</schedule>
+                <time>00,00,00</time>
+            </fetch_reports>
+        </paypal>
+        <payment>
+            <paypal_express>
+                <model>Magento\Paypal\Model\Express</model>
+                <title>PayPal Express Checkout</title>
+                <payment_action>Authorization</payment_action>
+                <solution_type>Mark</solution_type>
+                <line_items_enabled>1</line_items_enabled>
+                <visible_on_cart>1</visible_on_cart>
+                <visible_on_product>1</visible_on_product>
+                <allow_ba_signup>never</allow_ba_signup>
+                <group>paypal</group>
+                <authorization_honor_period>3</authorization_honor_period>
+                <order_valid_period>29</order_valid_period>
+                <child_authorization_number>1</child_authorization_number>
+                <verify_peer>1</verify_peer>
+            </paypal_express>
+            <paypal_direct>
+                <model>Magento\Paypal\Model\Direct</model>
+                <title>PayPal Payments Pro</title>
+                <payment_action>Authorization</payment_action>
+                <cctypes>VI,MC</cctypes>
+                <useccv>1</useccv>
+                <group>paypal</group>
+                <verify_peer>1</verify_peer>
+            </paypal_direct>
+            <paypal_standard>
+                <model>Magento\Paypal\Model\Standard</model>
+                <title>PayPal Website Payments Standard</title>
+                <payment_action>Sale</payment_action>
+                <line_items_enabled>1</line_items_enabled>
+                <group>paypal</group>
+                <verify_peer>1</verify_peer>
+            </paypal_standard>
+            <payflow_express>
+                <title>PayPal Express Checkout Payflow Edition</title>
+                <payment_action>Authorization</payment_action>
+                <line_items_enabled>1</line_items_enabled>
+                <visible_on_cart>1</visible_on_cart>
+                <visible_on_product>1</visible_on_product>
+                <group>paypal</group>
+                <verify_peer>1</verify_peer>
+                <model>Magento\Paypal\Model\PayflowExpress</model>
+            </payflow_express>
+            <payflow_direct>
+                <title>PayPal Direct Payment Payflow Edition</title>
+                <payment_action>Authorization</payment_action>
+                <cctypes>VI,MC,AE</cctypes>
+                <useccv>1</useccv>
+                <group>paypal</group>
+                <verify_peer>1</verify_peer>
+                <model>Magento\Paypal\Model\PayflowDirect</model>
+            </payflow_direct>
+            <payflowpro>
+                <model>Magento\Paypal\Model\Payflowpro</model>
+                <title>Payflow Pro</title>
+                <payment_action>Authorization</payment_action>
+                <cctypes>AE,VI</cctypes>
+                <useccv>1</useccv>
+                <tender>C</tender>
+                <verbosity>MEDIUM</verbosity>
+                <user backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <pwd backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <group>paypal</group>
+                <verify_peer>1</verify_peer>
+            </payflowpro>
+            <paypal_billing_agreement>
+                <active>1</active>
+                <allow_billing_agreement_wizard>1</allow_billing_agreement_wizard>
+                <model>Magento\Paypal\Model\Method\Agreement</model>
+                <title>PayPal Billing Agreement</title>
+                <group>paypal</group>
+                <verify_peer>1</verify_peer>
+            </paypal_billing_agreement>
+            <payflow_link>
+                <model>Magento\Paypal\Model\Payflowlink</model>
+                <payment_action>Authorization</payment_action>
+                <verbosity>HIGH</verbosity>
+                <pwd backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <group>paypal</group>
+                <title>Credit Card</title>
+                <partner>PayPal</partner>
+                <csc_required>1</csc_required>
+                <csc_editable>1</csc_editable>
+                <url_method>GET</url_method>
+                <email_confirmation>0</email_confirmation>
+                <verify_peer>1</verify_peer>
+            </payflow_link>
+            <payflow_advanced>
+                <model>Magento\Paypal\Model\Payflowadvanced</model>
+                <payment_action>Authorization</payment_action>
+                <verbosity>HIGH</verbosity>
+                <pwd backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <group>paypal</group>
+                <title>Credit Card</title>
+                <partner>PayPal</partner>
+                <vendor>PayPal</vendor>
+                <user>PayPal</user>
+                <csc_required>1</csc_required>
+                <csc_editable>1</csc_editable>
+                <url_method>GET</url_method>
+                <email_confirmation>0</email_confirmation>
+                <verify_peer>1</verify_peer>
+            </payflow_advanced>
+            <hosted_pro>
+                <model>Magento\Paypal\Model\Hostedpro</model>
+                <title>Payment by cards or by PayPal account</title>
+                <payment_action>Authorization</payment_action>
+                <group>paypal</group>
+                <display_ec>0</display_ec>
+                <verify_peer>1</verify_peer>
+            </hosted_pro>
+        </payment>
+    </default>
+</config>

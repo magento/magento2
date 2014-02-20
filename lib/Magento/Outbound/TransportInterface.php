@@ -22,17 +22,19 @@
  *
  * @category    Magento
  * @package     Magento_Outbound
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-interface Magento_Outbound_TransportInterface
+namespace Magento\Outbound;
+
+interface TransportInterface
 {
     /**
      * Dispatch message and return response
      *
-     * @param Magento_Outbound_MessageInterface $message
-     * @return Magento_Outbound_Transport_Http_Response
+     * @param \Magento\Outbound\MessageInterface $message
+     * @return \Magento\Outbound\Transport\Http\Response
      */
-    public function dispatch(Magento_Outbound_MessageInterface $message);
+    public function dispatch(\Magento\Outbound\MessageInterface $message);
 }

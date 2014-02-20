@@ -22,7 +22,7 @@
  * @category    Magento
  * @package     Magento_Validator
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -32,7 +32,7 @@
             <rule name="rules_for_builder">
                 <property_constraints>
                     <property name="int">
-                        <constraint class="Magento_Validator_Test_NotEmpty"/>
+                        <constraint class="Magento\Validator\Test\NotEmpty"/>
                         <constraint class="Validator_Stub" alias="stub">
                             <argument>
                                 test_string_argument
@@ -44,7 +44,7 @@
                                 <option name="option2">value2</option>
                             </argument>
                             <argument>
-                                <callback class="Magento_Validator_Test_Callback" method="getId"/>
+                                <callback class="Magento\Validator\Test\Callback" method="getId"/>
                             </argument>
 
                             <method name="setOptionThree">
@@ -52,20 +52,20 @@
                                     <option name="argOption">argOptionValue</option>
                                 </argument>
                                 <argument>
-                                    <callback class="Magento_Validator_Test_Callback" method="getId"/>
+                                    <callback class="Magento\Validator\Test\Callback" method="getId"/>
                                 </argument>
                                 <argument>10</argument>
                             </method>
                             <method name="enableOptionFour"/>
 
-                            <callback class="Magento_Validator_Test_Callback" method="configureValidator"/>
+                            <callback class="Magento\Validator\Test\Callback" method="configureValidator"/>
                         </constraint>
                     </property>
                 </property_constraints>
             </rule>
         </rules>
         <groups>
-            <group name="check_builder" builder="Magento_Validator_Test_Builder">
+            <group name="check_builder" builder="Magento\Validator\Builder">
                 <uses>
                     <use rule="rules_for_builder"/>
                 </uses>

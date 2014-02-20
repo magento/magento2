@@ -22,33 +22,12 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<design>
-    <package code="default">
-        <title>Default</title>
-        <theme version="2.0.0.0" code="default">
-            <title>Default</title>
-            <requirements>
-                <magento_version from="2.0.0.0-dev1" to="*"/>
-            </requirements>
-        </theme>
-        <theme version="2.0.0.0" code="default"><!-- duplicate theme code -->
-            <title>Default</title>
-            <requirements>
-                <magento_version from="2.0.0.0-dev1" to="*"/>
-            </requirements>
-        </theme>
-    </package>
-    <package code="default"><!-- duplicate package code -->
-        <title>Default</title>
-        <theme version="2.0.0.0" code="default">
-            <title>Default</title>
-            <requirements>
-                <magento_version from="2.0.0.0-dev1" to="*"/>
-            </requirements>
-        </theme>
-    </package>
-</design>
+<theme>
+    <title>Default</title>
+    <version>2.0.0.0</version>
+    <parent>some_theme</parent>
+</theme>

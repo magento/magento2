@@ -21,23 +21,25 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test class for Magento_Test_Isolation_WorkingDirectory.
+ * Test class for \Magento\TestFramework\Isolation\WorkingDirectory.
  */
-class Magento_Test_Isolation_WorkingDirectoryTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Isolation;
+
+class WorkingDirectoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Isolation_WorkingDirectory
+     * @var \Magento\TestFramework\Isolation\WorkingDirectory
      */
     protected $_object;
 
     protected function setUp()
     {
-        $this->_object = new Magento_Test_Isolation_WorkingDirectory();
+        $this->_object = new \Magento\TestFramework\Isolation\WorkingDirectory();
     }
 
     protected function tearDown()

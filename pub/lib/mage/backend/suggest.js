@@ -19,7 +19,7 @@
  *
  * @category    mage
  * @package     mage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true browser:true*/
@@ -35,13 +35,13 @@
             template: '{{if items.length}}{{if !term && !$data.allShown() && $data.recentShown()}}' +
                 '<h5 class="title">${recentTitle}</h5>' +
                 '{{/if}}' +
-                '<ul data-mage-init="{&quot;menu&quot;:[]}">' +
+                '<ul data-mage-init=\'{"menu":[]}\'>' +
                 '{{each items}}' +
                 '{{if !$data.itemSelected($value)}}<li {{html optionData($value)}}>' +
                 '<a href="#">${$value.label}</a></li>{{/if}}' +
                 '{{/each}}' +
                 '{{if !term && !$data.allShown() && $data.recentShown()}}' +
-                '<li data-mage-init="{actionLink:{event:&quot;showAll&quot;}}" class="show-all">' +
+                '<li data-mage-init=\'{"actionLink":{"event":"showAll"}}\' class="show-all">' +
                 '<a href="#">${showAllTitle}</a></li>' +
                 '{{/if}}' +
                 '</ul>{{else}}<span class="mage-suggest-no-records">${noRecordsText}</span>{{/if}}',
@@ -447,9 +447,17 @@
                     this._search(e, term, {});
                 } else {
                     this._selectedItem = this._nonSelectedItem;
-                    this.valueField.val(this._selectedItem.id);
+                    this._resetSuggestValue();
                 }
             }
+        },
+
+        /*
+         * Clear suggest hidden input
+         * @private
+         */
+        _resetSuggestValue: function() {
+            this.valueField.val(this._nonSelectedItem.id);
         },
 
         /**
@@ -773,7 +781,7 @@
                 '<li class="mage-suggest-search-field"></li></ul>',
             choiceTemplate: '<li class="mage-suggest-choice button"><div>${text}</div>' +
                 '<span class="mage-suggest-choice-close" tabindex="-1" ' +
-                'data-mage-init="{&quot;actionLink&quot;:{&quot;event&quot;:&quot;removeOption&quot;}}"></span></li>',
+                'data-mage-init=\'{"actionLink":{"event":"removeOption"}}\'></span></li>',
             selectedClass: 'mage-suggest-selected'
         },
 
@@ -875,6 +883,17 @@
                 $.each(this.options.selectedItems, $.proxy(function(i, item) {
                     this._addOption(item);
                 }, this));
+            }
+        },
+
+        /**
+         * If "multiselect" option is set, then do not need to clear value for hidden select, to avoid losing of
+         *      previously selected items
+         * @override
+         */
+        _resetSuggestValue: function() {
+            if (!this.options.multiselect) {
+                this._super();
             }
         },
 

@@ -2,10 +2,12 @@
 /**
  * Graph data structure
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Data_Graph
+namespace Magento\Data;
+
+class Graph
 {
     /**#@+
      * Search modes
@@ -59,13 +61,13 @@ class Magento_Data_Graph
      *
      * @param string|int $fromNode
      * @param string|int $toNode
-     * @return Magento_Data_Graph
-     * @throws InvalidArgumentException
+     * @return $this
+     * @throws \InvalidArgumentException
      */
     public function addRelation($fromNode, $toNode)
     {
         if ($fromNode == $toNode) {
-            throw new InvalidArgumentException("Graph node '{$fromNode}' is linked to itself.");
+            throw new \InvalidArgumentException("Graph node '{$fromNode}' is linked to itself.");
         }
         $this->_assertNode($fromNode, true);
         $this->_assertNode($toNode, true);
@@ -79,7 +81,7 @@ class Magento_Data_Graph
      *
      * @param int $mode
      * @return array
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function getRelations($mode = self::DIRECTIONAL)
     {
@@ -97,30 +99,35 @@ class Magento_Data_Graph
                 }
                 return $graph;
             default:
-                throw new InvalidArgumentException("Unknown search mode: '{$mode}'");
+                throw new \InvalidArgumentException("Unknown search mode: '{$mode}'");
         }
     }
 
     /**
      * Find a cycle in the graph
      *
-     * Returns first found cycle
+     * Returns first/all found cycle
      * Optionally may specify a node to return a cycle if it is in any
      *
      * @param string|int $node
+     * @param boolean $firstOnly found only first cycle
      * @return array
      */
-    public function findCycle($node = null)
+    public function findCycle($node = null, $firstOnly = true)
     {
         $nodes = (null === $node) ? $this->_nodes : array($node);
-        $result = array();
+        $results = array();
         foreach ($nodes as $node) {
             $result = $this->dfs($node, $node);
             if ($result) {
-                break;
+                if ($firstOnly) {
+                    return $result;
+                } else {
+                    $results[] = $result;
+                }
             }
         }
-        return $result;
+        return $results;
     }
 
     /**
@@ -178,17 +185,18 @@ class Magento_Data_Graph
      *
      * @param string|int $node
      * @param bool $mustExist
-     * @throws InvalidArgumentException according to assertion rules
+     * @return void
+     * @throws \InvalidArgumentException according to assertion rules
      */
     protected function _assertNode($node, $mustExist)
     {
         if (isset($this->_nodes[$node])) {
             if (!$mustExist) {
-                throw new InvalidArgumentException("Graph node '{$node}' already exists'.");
+                throw new \InvalidArgumentException("Graph node '{$node}' already exists'.");
             }
         } else {
             if ($mustExist) {
-                throw new InvalidArgumentException("Graph node '{$node}' does not exist.");
+                throw new \InvalidArgumentException("Graph node '{$node}' does not exist.");
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_Outbound_Formatter_Json
+ * \Magento\Outbound\Formatter\Json
  *
  * Magento
  *
@@ -20,22 +20,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Webhook
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-require_once __DIR__ . '/_files/Data.php';
-class Magento_Webhook_Model_Formatter_JsonTest extends PHPUnit_Framework_TestCase
+namespace Magento\Outbound\Formatter;
+
+require_once __DIR__ . '/JsonTest/Data.php';
+class JsonTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Outbound_Formatter_Json
+     * @var \Magento\Outbound\Formatter\Json
      */
     protected $_formatter;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_formatter = new Magento_Outbound_Formatter_Json();
+        $this->_formatter = new \Magento\Outbound\Formatter\Json();
     }
 
     /**
@@ -51,7 +51,7 @@ class Magento_Webhook_Model_Formatter_JsonTest extends PHPUnit_Framework_TestCas
 
     public function testGetContentType()
     {
-        $this->assertSame(Magento_Outbound_Formatter_Json::CONTENT_TYPE, $this->_formatter->getContentType());
+        $this->assertSame(\Magento\Outbound\Formatter\Json::CONTENT_TYPE, $this->_formatter->getContentType());
     }
 
     /**
@@ -74,7 +74,7 @@ class Magento_Webhook_Model_Formatter_JsonTest extends PHPUnit_Framework_TestCas
             array(array(1), '[1]'),
             array(array(2.4), '[2.4]'),
             array(array(2.0), '[2]'),
-            array(array(new Data('public', 'protected')), '[{"dataA":"public"}]')
+            array(array(new \Magento\Outbound\Formatter\JsonTest\Data('public', 'protected')), '[{"dataA":"public"}]')
         );
     }
 }

@@ -1,0 +1,58 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Category left navigation
+ *
+ * @var $this \Magento\Catalog\Block\Navigation
+ */
+?>
+<?php if (!$this->getCategory()) return ?>
+<?php $_categories = $this->getCurrentChildCategories() ?>
+<?php $_count = is_array($_categories)?count($_categories):$_categories->count(); ?>
+<?php if($_count): ?>
+    <div class="block filter">
+        <div class="title">
+            <strong><?php echo __('Shop By') ?></strong>
+        </div>
+        <div class="content">
+            <strong class="subtitle"><?php echo __('Shopping Options') ?></strong>
+            <dl class="options" id="narrow-by-list2">
+                <dt><?php echo __('Category') ?></dt>
+                <dd>
+                    <ol class="items">
+                        <?php foreach ($_categories as $_category): ?>
+                            <?php if($_category->getIsActive()): ?>
+                                <li class="item">
+                                    <a href="<?php echo $this->getCategoryUrl($_category) ?>"<?php if ($this->isCategoryActive($_category)): ?> class="current"<?php endif; ?>><?php echo $this->escapeHtml($_category->getName()) ?></a>
+                                    <span class="count"><?php echo $_category->getProductCount() ?></span>
+                                </li>
+                            <?php endif; ?>
+                        <?php endforeach ?>
+                    </ol>
+                </dd>
+            </dl>
+        </div>
+    </div>
+<?php endif; ?>

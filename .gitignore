@@ -14,7 +14,7 @@ atlassian*
 /app/config_sandbox
 /app/etc/local.xml
 /app/etc/local.xml.*
-/app/etc/modules/*.xml
+/app/etc/*/module.xml
 /downloader/.cache
 /downloader/cache.cfg
 /downloader/connect.cfg
@@ -33,3 +33,4 @@ atlassian*
 /pub/static/*
 !/pub/static/.htaccess
 /var/*
+/app/code/Magento/TestModule*

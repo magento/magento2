@@ -19,7 +19,7 @@
  *
  * @category    validation
  * @package     mage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint regexdash:true eqnull:true browser:true jquery:true*/
@@ -890,7 +890,7 @@
             function(value, element, params) {
                 if ($.isNumeric($(params).val()) && $.isNumeric(value)) {
                     this.lteToVal = $(params).val();
-                    return value <= $(params).val();
+                    return parseFloat(value) <= parseFloat($(params).val());
                 }
                 return true;
             },
@@ -902,7 +902,7 @@
             function(value, element, params) {
                 if ($.isNumeric($(params).val()) && $.isNumeric(value)) {
                     this.gteToVal = $(params).val();
-                    return value >= $(params).val();
+                    return parseFloat(value) >= parseFloat($(params).val());
                 }
                 return true;
             },
@@ -936,7 +936,7 @@
              */
                 function(value, element, params) {
                 if (value && params && creditCartTypes[value]) {
-                    return creditCartTypes[value][0].test($(params).val());
+                    return creditCartTypes[value][0].test($(params).val().replace(/\s+/g, ''));
                 }
                 return false;
             }, 'Card type does not match credit card number.'
@@ -956,7 +956,7 @@
         ],
         "validate-cc-type": [
             /**
-             * Validate credit card number is for the currect credit card type
+             * Validate credit card number is for the correct credit card type
              * @param value - credit card number
              * @param element - element contains credit card number
              * @param params - selector for credit card type
@@ -1099,6 +1099,69 @@
                 return true;
             },
             'Please enter 6 or more characters. Leading or trailing spaces will be ignored.'
+        ],
+        'required-if-not-specified': [
+            function (value, element, params) {
+                var valid = false;
+
+                // if there is an alternate, determine its validity
+                var alternate = $(params);
+                if (alternate.length > 0) {
+                    valid = this.check(alternate);
+                    // if valid, it may be blank, so check for that
+                    if (valid) {
+                        var alternateValue = alternate.val();
+                        if (typeof alternateValue == 'undefined' || alternateValue.length === 0) {
+                            valid = false;
+                        }
+                    }
+                }
+
+                if (!valid)
+                    valid = !this.optional(element);
+
+                return valid;
+            },
+            'This is a required field.'
+        ],
+        'required-if-specified': [
+            function (value, element, params) {
+                var valid = true;
+
+                // if there is an dependent, determine its validity
+                var dependent = $(params);
+                if (dependent.length > 0) {
+                    valid = this.check(dependent);
+                    // if valid, it may be blank, so check for that
+                    if (valid) {
+                        var dependentValue = dependent.val();
+                        valid = typeof dependentValue != 'undefined' && dependentValue.length > 0;
+                    }
+                }
+
+                if (valid) {
+                    valid = !this.optional(element);
+                } else {
+                    valid = true; // dependent was not valid, so don't even check
+                }
+
+                return valid;
+            },
+            'This is a required field.'
+        ],
+        'validate-item-quantity': [
+            function (value, element, params) {
+                // obtain values for validation
+                var qty = $.mage.parseNumber(value);
+
+                // validate quantity
+                var isMinAllowedValid = typeof params.minAllowed === 'undefined' || (qty >= $.mage.parseNumber(params.minAllowed));
+                var isMaxAllowedValid = typeof params.maxAllowed === 'undefined'  || (qty <= $.mage.parseNumber(params.maxAllowed));
+                var isQtyIncrementsValid = typeof params.qtyIncrements === 'undefined'  || (qty % $.mage.parseNumber(params.qtyIncrements) === 0);
+
+                return isMaxAllowedValid && isMinAllowedValid && isQtyIncrementsValid && qty > 0;
+            },
+            ''
         ]
     };
 

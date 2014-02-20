@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <preference for="Magento\Customer\Service\V1\CustomerServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerService" />
+    <preference for="Magento\Customer\Service\V1\CustomerAddressServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerAddressService" />
+    <preference for="Magento\Customer\Service\V1\CustomerGroupServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerGroupService" />
+    <preference for="Magento\Customer\Service\V1\CustomerAccountServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerAccountService" />
+    <preference for="Magento\Customer\Service\V1\CustomerMetadataServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerMetadataService" />
+    <type name="Magento\Customer\Model\Session">
+        <param name="configShare">
+            <instance type="Magento\Customer\Model\Config\Share\Proxy" />
+        </param>
+        <param name="customerData">
+            <instance type="Magento\Customer\Helper\Data\Proxy" />
+        </param>
+        <param name="customerResource">
+            <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
+        </param>
+        <param name="storage">
+            <instance type="Magento\Customer\Model\Session\Storage" />
+        </param>
+    </type>
+    <type name="Magento\Module\Updater\SetupFactory">
+        <param name="resourceTypes">
+            <array>
+                <item key="customer_setup"><value>Magento\Customer\Model\Resource\Setup</value></item>
+            </array>
+        </param>
+    </type>
+    <type name="Magento\Customer\Helper\Address">
+        <param name="addressConfig">
+            <instance type="Magento\Customer\Model\Address\Config\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Customer\Model\Config\Share">
+        <param name="customerResource">
+            <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Customer\Model\Customer">
+        <param name="customerData">
+            <instance type="Magento\Customer\Helper\Data\Proxy" />
+        </param>
+    </type>
+    <type name="Magento\Customer\Service\V1\Dto\AddressBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\CustomerBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\CustomerGroupBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\Eav\AttributeBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\Eav\AttributeMetadataBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\Eav\OptionBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\FilterBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\RegionBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\Response\CreateCustomerAccountResponseBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\SearchCriteriaBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Dto\SearchResultsBuilder" shared="false" />
+</config>

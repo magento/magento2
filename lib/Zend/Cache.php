@@ -133,7 +133,7 @@ abstract class Zend_Cache
             #require_once str_replace('_', DIRECTORY_SEPARATOR, $backendClass) . '.php';
         } else {
             // we use a custom backend
-            if (!preg_match('~^[\w]+$~D', $backend)) {
+            if (!preg_match('~^[\w\\\\]+$~D', $backend)) {
                 Zend_Cache::throwException("Invalid backend name [$backend]");
             }
             if (!$customBackendNaming) {
@@ -175,7 +175,7 @@ abstract class Zend_Cache
             #require_once str_replace('_', DIRECTORY_SEPARATOR, $frontendClass) . '.php';
         } else {
             // we use a custom frontend
-            if (!preg_match('~^[\w]+$~D', $frontend)) {
+            if (!preg_match('~^[\w\\\\]+$~D', $frontend)) {
                 Zend_Cache::throwException("Invalid frontend name [$frontend]");
             }
             if (!$customFrontendNaming) {

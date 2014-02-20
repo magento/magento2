@@ -21,23 +21,25 @@
  * @category    Magento
  * @package     Magento_Validator
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test for Magento_Validator_Entity_Properties
+ * Test for \Magento\Validator\Entity\Properties
  */
-class Magento_Validator_Entity_PropertiesTest extends PHPUnit_Framework_TestCase
+namespace Magento\Validator\Entity;
+
+class PropertiesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Varien_Object
+     * @var \Magento\Object
      */
     protected $_object;
 
     protected function setUp()
     {
-        $this->_object = $this->getMock('Varien_Object', array('hasDataChanges', 'getData', 'getOrigData'));
+        $this->_object = $this->getMock('Magento\Object', array('hasDataChanges', 'getData', 'getOrigData'));
     }
 
     protected function tearDown()
@@ -46,19 +48,19 @@ class Magento_Validator_Entity_PropertiesTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Testing Magento_Validator_Entity_Properties::isValid on invalid argument passed
+     * Testing \Magento\Validator\Entity\Properties::isValid on invalid argument passed
      *
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Instance of Varien_Object is expected.
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Instance of \Magento\Object is expected.
      */
     public function testIsValidException()
     {
-        $validator = new Magento_Validator_Entity_Properties();
+        $validator = new \Magento\Validator\Entity\Properties();
         $validator->isValid(array());
     }
 
     /**
-     * Testing Magento_Validator_Entity_Properties::isValid with hasDataChanges and invoked setter
+     * Testing \Magento\Validator\Entity\Properties::isValid with hasDataChanges and invoked setter
      */
     public function testIsValidSuccessWithInvokedSetter()
     {
@@ -66,33 +68,33 @@ class Magento_Validator_Entity_PropertiesTest extends PHPUnit_Framework_TestCase
         $this->_object->expects($this->once())->method('getData')->with('attr1')->will($this->returnValue(1));
         $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->will($this->returnValue(1));
 
-        $validator = new Magento_Validator_Entity_Properties();
+        $validator = new \Magento\Validator\Entity\Properties();
         $validator->setReadOnlyProperties(array('attr1'));
         $this->assertTrue($validator->isValid($this->_object));
     }
 
     /**
-     * Testing Magento_Validator_Entity_Properties::isValid without invoked setter
+     * Testing \Magento\Validator\Entity\Properties::isValid without invoked setter
      */
     public function testIsValidSuccessWithoutInvokedSetter()
     {
-        $validator = new Magento_Validator_Entity_Properties();
+        $validator = new \Magento\Validator\Entity\Properties();
         $this->assertTrue($validator->isValid($this->_object));
     }
 
     /**
-     * Testing Magento_Validator_Entity_Properties::isValid with unchanged data
+     * Testing \Magento\Validator\Entity\Properties::isValid with unchanged data
      */
     public function testIsValidSuccessWithoutHasDataChanges()
     {
         $this->_object->expects($this->once())->method('hasDataChanges')->will($this->returnValue(false));
-        $validator = new Magento_Validator_Entity_Properties();
+        $validator = new \Magento\Validator\Entity\Properties();
         $validator->setReadOnlyProperties(array('attr1'));
         $this->assertTrue($validator->isValid($this->_object));
     }
 
     /**
-     * Testing Magento_Validator_Entity_Properties::isValid with changed data and invoked setter
+     * Testing \Magento\Validator\Entity\Properties::isValid with changed data and invoked setter
      */
     public function testIsValidFailed()
     {
@@ -100,7 +102,7 @@ class Magento_Validator_Entity_PropertiesTest extends PHPUnit_Framework_TestCase
         $this->_object->expects($this->once())->method('getData')->with('attr1')->will($this->returnValue(1));
         $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->will($this->returnValue(2));
 
-        $validator = new Magento_Validator_Entity_Properties();
+        $validator = new \Magento\Validator\Entity\Properties();
         $validator->setReadOnlyProperties(array('attr1'));
         $this->assertFalse($validator->isValid($this->_object));
     }

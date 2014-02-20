@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Code
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Code_Plugin_InvocationChain
+namespace Magento\Code\Plugin;
+
+class InvocationChain
 {
     /**
      * Original instance whose behavior is decorated by plugins
@@ -40,7 +42,7 @@ class Magento_Code_Plugin_InvocationChain
     protected $_methodName;
 
     /**
-     * @var \Magento_ObjectManager
+     * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 
@@ -54,10 +56,10 @@ class Magento_Code_Plugin_InvocationChain
     /**
      * @param mixed $subject
      * @param string $methodName
-     * @param \Magento_ObjectManager $objectManager
+     * @param \Magento\ObjectManager $objectManager
      * @param array $pluginList
      */
-    public function __construct($subject, $methodName, \Magento_ObjectManager $objectManager, array $pluginList)
+    public function __construct($subject, $methodName, \Magento\ObjectManager $objectManager, array $pluginList)
     {
         $this->_subject = $subject;
         $this->_methodName = $methodName;
@@ -73,10 +75,9 @@ class Magento_Code_Plugin_InvocationChain
      */
     public function proceed(array $arguments)
     {
-        $pluginClassName = array_shift($this->_pluginList);
-        $aroundMethodName = $this->_methodName . 'Around';
-        if (!is_null($pluginClassName)) {
-            return $this->_objectManager->get($pluginClassName)->$aroundMethodName($arguments, $this);
+        if (count($this->_pluginList)) {
+            $aroundMethodName = 'around' . ucfirst($this->_methodName);
+            return $this->_objectManager->get(array_shift($this->_pluginList))->$aroundMethodName($arguments, $this);
         }
         return call_user_func_array(array($this->_subject, $this->_methodName), $arguments);
     }

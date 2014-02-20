@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="option" type="optionDeclaration" minOccurs="1" maxOccurs="unbounded">
+                    <xs:unique name="uniqueInputTypeName">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Input type name must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="inputType" />
+                        <xs:field xpath="@name" />
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueOptionName">
+            <xs:annotation>
+                <xs:documentation>
+                    Option name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="option" />
+            <xs:field xpath="@name" />
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="optionDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Option declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="inputType" type="inputTypeDeclaration" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="label" type="xs:string" use="optional" />
+        <xs:attribute name="renderer" type="modelName" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="inputTypeDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Input type declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="label" type="xs:string" use="optional" />
+        <xs:attribute name="disabled" type="xs:boolean" use="optional" />
+    </xs:complexType>
+
+    <xs:simpleType name="modelName">
+        <xs:annotation>
+            <xs:documentation>
+                Model name can contain only [a-zA-Z_\\\\].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z_\\\\]+" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

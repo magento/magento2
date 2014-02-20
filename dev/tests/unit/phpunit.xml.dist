@@ -22,7 +22,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -34,6 +34,24 @@
         <ini name="date.timezone" value="America/Los_Angeles"/>
     </php>
     <listeners>
-        <listener class="Magento_Test_Listener_GarbageCleanup" file="framework/Magento/Test/Listener/GarbageCleanup.php"/>
+        <listener class="Magento\TestFramework\Listener\GarbageCleanup" file="framework/Magento/TestFramework/Listener/GarbageCleanup.php"/>
     </listeners>
+    <filter>
+        <whitelist addUncoveredFilesFromWhiteList="true">
+            <directory suffix=".php">../../../app/code/Magento</directory>
+            <directory suffix=".php">../../../lib/Magento</directory>
+            <exclude>
+                <directory suffix=".php">../../../app/code/Magento/*/sql</directory>
+                <directory suffix=".php">../../../app/code/Magento/*/data</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <!--coverage_html_placeholder
+            <log type="coverage-html" target="{{coverage_dir}}/test-reports/coverage" charset="UTF-8" yui="true" highlight="true"/>
+        coverage_html_placeholder-->
+        <!--coverage_clover_placeholder
+            <log type="coverage-clover" target="{{coverage_dir}}/test-reports/phpunit.coverage.xml"/>
+        coverage_clover_placeholder-->
+    </logging>
 </phpunit>

@@ -21,23 +21,25 @@
  * @category    Magento
  * @package     Magento_Code
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Generator_TestAsset_TestGenerationClass
+namespace Magento\Code\Generator\TestAsset;
+
+class TestGenerationClass
 {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @param Magento\Code\Generator\TestAsset\ParentClass $parentClass
-     * @param Magento\Code\Generator\TestAsset\SourceClass $sourceClass
-     * @param Not_Existing_Class $notExistingClass
+     * @param \Magento\Code\Generator\TestAsset\ParentClass $parentClass
+     * @param \Magento\Code\Generator\TestAsset\SourceClass $sourceClass
+     * @param \Not_Existing_Class $notExistingClass
      */
     public function __construct(
-        Magento\Code\Generator\TestAsset\ParentClass $parentClass,
-        Magento\Code\Generator\TestAsset\SourceClass $sourceClass,
-        Not_Existing_Class $notExistingClass
+        \Magento\Code\Generator\TestAsset\ParentClass $parentClass,
+        \Magento\Code\Generator\TestAsset\SourceClass $sourceClass,
+        \Not_Existing_Class $notExistingClass
     ) {
     }
 }

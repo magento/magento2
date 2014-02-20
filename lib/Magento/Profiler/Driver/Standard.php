@@ -20,22 +20,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterface
+namespace Magento\Profiler\Driver;
+
+use Magento\Profiler\Driver\Standard\Output\Factory as OutputFactory;
+use Magento\Profiler\Driver\Standard\OutputInterface;
+use Magento\Profiler\Driver\Standard\Stat;
+use Magento\Profiler\DriverInterface;
+
+class Standard implements DriverInterface
 {
     /**
      * Storage for timers statistics
      *
-     * @var Magento_Profiler_Driver_Standard_Stat
+     * @var Stat
      */
     protected $_stat;
 
     /**
      * List of profiler driver outputs
      *
-     * @var Magento_Profiler_Driver_Standard_OutputInterface[]
+     * @var OutputInterface[]
      */
     protected $_outputs = array();
 
@@ -55,6 +62,7 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
      * Init outputs by configuration
      *
      * @param array|null $config
+     * @return void
      */
     protected function _initOutputs(array $config = null)
     {
@@ -122,16 +130,16 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
      * Gets output factory from configuration or create new one
      *
      * @param array|null $config
-     * @return Magento_Profiler_Driver_Standard_Output_Factory
+     * @return OutputFactory
      */
     protected function _getOutputFactory(array $config = null)
     {
         if (isset($config['outputFactory'])
-            && $config['outputFactory'] instanceof Magento_Profiler_Driver_Standard_Output_Factory
+            && $config['outputFactory'] instanceof OutputFactory
         ) {
             $result = $config['outputFactory'];
         } else {
-            $result = new Magento_Profiler_Driver_Standard_Output_Factory();
+            $result = new OutputFactory();
         }
         return $result;
     }
@@ -140,15 +148,16 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
      * Init timers statistics object from configuration or create new one
      *
      * @param array $config|null
+     * @return void
      */
     protected function _initStat(array $config = null)
     {
         if (isset($config['stat'])
-            && $config['stat'] instanceof Magento_Profiler_Driver_Standard_Stat
+            && $config['stat'] instanceof Stat
         ) {
             $this->_stat = $config['stat'];
         } else {
-            $this->_stat = new Magento_Profiler_Driver_Standard_Stat();
+            $this->_stat = new Stat();
         }
     }
 
@@ -156,6 +165,7 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
      * Clear collected statistics for specified timer or for whole profiler if timer id is omitted
      *
      * @param string|null $timerId
+     * @return void
      */
     public function clear($timerId = null)
     {
@@ -167,6 +177,7 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
      *
      * @param string $timerId
      * @param array|null $tags
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function start($timerId, array $tags = null)
@@ -178,6 +189,7 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
      * Stop recording statistics for specified timer.
      *
      * @param string $timerId
+     * @return void
      */
     public function stop($timerId)
     {
@@ -187,19 +199,22 @@ class Magento_Profiler_Driver_Standard implements Magento_Profiler_DriverInterfa
     /**
      * Register profiler output instance to display profiling result at the end of execution
      *
-     * @param Magento_Profiler_Driver_Standard_OutputInterface $output
+     * @param OutputInterface $output
+     * @return void
      */
-    public function registerOutput(Magento_Profiler_Driver_Standard_OutputInterface $output)
+    public function registerOutput(OutputInterface $output)
     {
         $this->_outputs[] = $output;
     }
 
     /**
      * Display collected statistics with registered outputs
+     *
+     * @return void
      */
     public function display()
     {
-        if (Magento_Profiler::isEnabled()) {
+        if (\Magento\Profiler::isEnabled()) {
             foreach ($this->_outputs as $output) {
                 $output->display($this->_stat);
             }

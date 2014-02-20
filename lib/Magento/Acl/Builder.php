@@ -22,45 +22,47 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Acl_Builder
+namespace Magento\Acl;
+
+class Builder
 {
     /**
      * Acl object
      *
-     * @var Magento_Acl
+     * @var \Magento\Acl
      */
     protected $_acl;
 
     /**
      * Acl loader list
      *
-     * @var Magento_Acl_LoaderInterface[]
+     * @var \Magento\Acl\LoaderInterface[]
      */
     protected $_loaderPool;
 
     /**
      * ACL cache
      *
-     * @var Magento_Acl_CacheInterface
+     * @var \Magento\Acl\CacheInterface
      */
     protected $_cache;
 
     /**
-     * @param Magento_AclFactory $aclFactory
-     * @param Magento_Acl_CacheInterface $cache
-     * @param Magento_Acl_LoaderInterface $roleLoader
-     * @param Magento_Acl_LoaderInterface $resourceLoader
-     * @param Magento_Acl_LoaderInterface $ruleLoader
+     * @param \Magento\AclFactory $aclFactory
+     * @param \Magento\Acl\CacheInterface $cache
+     * @param \Magento\Acl\LoaderInterface $roleLoader
+     * @param \Magento\Acl\LoaderInterface $resourceLoader
+     * @param \Magento\Acl\LoaderInterface $ruleLoader
      */
     public function __construct(
-        Magento_AclFactory $aclFactory,
-        Magento_Acl_CacheInterface $cache,
-        Magento_Acl_LoaderInterface $roleLoader,
-        Magento_Acl_LoaderInterface $resourceLoader,
-        Magento_Acl_LoaderInterface $ruleLoader
+        \Magento\AclFactory $aclFactory,
+        \Magento\Acl\CacheInterface $cache,
+        \Magento\Acl\LoaderInterface $roleLoader,
+        \Magento\Acl\LoaderInterface $resourceLoader,
+        \Magento\Acl\LoaderInterface $ruleLoader
     ) {
         $this->_aclFactory = $aclFactory;
         $this->_cache = $cache;
@@ -70,8 +72,8 @@ class Magento_Acl_Builder
     /**
      * Build Access Control List
      *
-     * @return Magento_Acl
-     * @throws LogicException
+     * @return \Magento\Acl
+     * @throws \LogicException
      */
     public function getAcl()
     {
@@ -85,8 +87,8 @@ class Magento_Acl_Builder
                 }
                 $this->_cache->save($this->_acl);
             }
-        } catch (Exception $e) {
-            throw new LogicException('Could not create acl object: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new \LogicException('Could not create acl object: ' . $e->getMessage());
         }
 
         return $this->_acl;

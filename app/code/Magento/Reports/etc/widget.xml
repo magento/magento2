@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../Magento/Widget/etc/widget.xsd">
+    <widget id="recently_viewed" class="Magento\Reports\Block\Product\Widget\Viewed"
+            placeholder_image="Magento_Reports::images/product_widget_viewed.gif">
+        <label translate="true">Recently Viewed Products</label>
+        <description translate="true">List of Products Recently Viewed by Visitor</description>
+        <parameters>
+            <parameter name="page_size" xsi:type="text" required="true" visible="true">
+                <label translate="true">Number of Products to display</label>
+                <value>5</value>
+            </parameter>
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="default" value="widget/viewed/content/viewed_grid.phtml" selected="true">
+                        <label translate="true">Viewed Products Grid Template</label>
+                    </option>
+                    <option name="list" value="widget/viewed/content/viewed_list.phtml">
+                        <label translate="true">Viewed Products List Template</label>
+                    </option>
+                    <option name="list_default" value="widget/viewed/column/viewed_default_list.phtml">
+                        <label translate="true">Viewed Products Images and Names Template</label>
+                    </option>
+                    <option name="list_names" value="widget/viewed/column/viewed_names_list.phtml">
+                        <label translate="true">Viewed Products Names Only Template</label>
+                    </option>
+                    <option name="list_images" value="widget/viewed/column/viewed_images_list.phtml">
+                        <label translate="true">Viewed Products Images Only Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <containers>
+            <container name="left">
+                <template name="default" value="list_default" />
+                <template name="names_only" value="list_names" />
+                <template name="images_only" value="list_images" />
+            </container>
+            <container name="content">
+                <template name="grid" value="default" />
+                <template name="list" value="list" />
+            </container>
+            <container name="right">
+                <template name="default" value="list_default" />
+                <template name="names_only" value="list_names" />
+                <template name="images_only" value="list_images" />
+            </container>
+        </containers>
+    </widget>
+    <widget id="recently_compared" class="Magento\Reports\Block\Product\Widget\Compared"
+            placeholder_image="Magento_Reports::images/product_widget_compared.gif">
+        <label translate="true">Recently Compared Products</label>
+        <description translate="true">List of Products Recently Compared and Removed from the Compare List by Visitor</description>
+        <parameters>
+            <parameter name="page_size" xsi:type="text" required="true" visible="true">
+                <label translate="true">Number of Products to display</label>
+                <value>5</value>
+            </parameter>
+            <parameter name="template" xsi:type="select" visible="true" required="true">
+                <label>Template</label>
+                <options>
+                    <option name="default" selected="true" value="widget/compared/content/compared_grid.phtml">
+                        <label translate="true">Compared Products Grid Template</label>
+                    </option>
+                    <option name="list" value="widget/compared/content/compared_list.phtml">
+                        <label translate="true">Compared Products List Template</label>
+                    </option>
+                    <option name="list_default" value="widget/compared/column/compared_default_list.phtml">
+                        <label translate="true">Compared Products Images and Names Template</label>
+                    </option>
+                    <option name="list_names" value="widget/compared/column/compared_names_list.phtml">
+                        <label translate="true">Compared Product Names Only Template</label>
+                    </option>
+                    <option name="list_images" value="widget/compared/column/compared_images_list.phtml">
+                        <label translate="true">Compared Product Images Only Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <containers>
+            <container name="left">
+                <template name="default" value="list_default" />
+                <template name="names_only" value="list_names" />
+                <template name="images_only" value="list_images" />
+            </container>
+            <container name="content">
+                <template name="grid" value="default" />
+                <template name="list" value="list" />
+            </container>
+            <container name="right">
+                <template name="default" value="list_default" />
+                <template name="names_only" value="list_names" />
+                <template name="images_only" value="list_images" />
+            </container>
+        </containers>
+    </widget>
+</widgets>

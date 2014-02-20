@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <update handle="page_two_columns_left"/>
+    <referenceContainer name="left">
+        <container name="checkout.progress.wrapper" label="Checkout Progress Wrapper" htmlTag="div" htmlId="checkout-progress-wrapper">
+            <block class="Magento\Checkout\Block\Onepage\Progress" name="checkout.progress" before="-" template="onepage/progress.phtml"/>
+        </container>
+    </referenceContainer>
+    <referenceContainer name="content">
+        <block class="Magento\Checkout\Block\Onepage" name="checkout.onepage" template="onepage.phtml" cacheable="false">
+            <block class="Magento\Checkout\Block\Onepage\Login" name="checkout.onepage.login" as="login" template="onepage/login.phtml" cacheable="false">
+                <container name="checkout.onepage.login.before" as="login_before" label="Login/Registration Before" htmlTag="div"/>
+                <container name="form.login.additional.info" label="invisible" as="form_additional_info"/>
+            </block>
+            <block class="Magento\Checkout\Block\Onepage\Billing" name="checkout.onepage.billing" as="billing" template="onepage/billing.phtml" cacheable="false">
+                <container name="form.billing.additional.info" label="invisible" as="form_additional_info"/>
+            </block>
+            <block class="Magento\Checkout\Block\Onepage\Shipping" name="checkout.onepage.shipping" as="shipping" template="onepage/shipping.phtml" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Onepage\Shipping\Method" name="checkout.onepage.shipping_method" as="shipping_method" template="onepage/shipping_method.phtml" cacheable="false">
+                <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Available" name="checkout.onepage.shipping_method.available" as="available" template="onepage/shipping_method/available.phtml" cacheable="false"/>
+                <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Additional" name="checkout.onepage.shipping_method.additional" as="additional" template="onepage/shipping_method/additional.phtml"/>
+            </block>
+            <block class="Magento\Checkout\Block\Onepage\Payment" name="checkout.onepage.payment" as="payment" template="onepage/payment.phtml" cacheable="false">
+                <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="checkout.payment.methods" as="methods" template="onepage/payment/methods.phtml" cacheable="false">
+                    <action method="setMethodFormTemplate">
+                        <argument name="method" xsi:type="string">purchaseorder</argument>
+                        <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
+                    </action>
+                </block>
+                <block class="Magento\View\Element\Template" name="checkout.onepage.payment.additional" as="additional"/>
+                <block class="Magento\View\Element\Template" name="checkout.onepage.payment.methods_additional" as="methods_additional"/>
+            </block>
+            <block class="Magento\Checkout\Block\Onepage\Review" name="checkout.onepage.review" as="review" template="onepage/review.phtml" cacheable="false"/>
+        </block>
+    </referenceContainer>
+    <update handle="customer_form_template_handle"/>
+</layout>

@@ -20,20 +20,23 @@
  *
  * @category    Magento
  * @package     Magento_Convert
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Convert;
+
+use Magento\Filesystem\File\WriteInterface;
 
 /**
  * Convert the data to XML Excel
  */
-
-class Magento_Convert_Excel
+class Excel
 {
     /**
-     * ArrayIterator Object
+     * \ArrayIterator Object
      *
-     * @var Iterator|null
+     * @var \Iterator|null
      */
     protected $_iterator = null;
 
@@ -61,10 +64,10 @@ class Magento_Convert_Excel
     /**
      * Class Constructor
      *
-     * @param Iterator $iterator
+     * @param \Iterator $iterator
      * @param array $rowCallback
      */
-    public function __construct(Iterator $iterator, $rowCallback = array())
+    public function __construct(\Iterator $iterator, $rowCallback = array())
     {
         $this->_iterator    = $iterator;
         $this->_rowCallback = $rowCallback;
@@ -162,6 +165,7 @@ class Magento_Convert_Excel
      * Set Data Header
      *
      * @param array $data
+     * @return void
      */
     public function setDataHeader($data)
     {
@@ -172,6 +176,7 @@ class Magento_Convert_Excel
      * Set Data Footer
      *
      * @param array $data
+     * @return void
      */
     public function setDataFooter($data)
     {
@@ -199,10 +204,11 @@ class Magento_Convert_Excel
     /**
      * Write Converted XML Data to Temporary File
      *
-     * @param Magento_Filesystem_StreamInterface $stream
+     * @param WriteInterface $stream
      * @param string $sheetName
+     * @return void
      */
-    public function write(Magento_Filesystem_StreamInterface $stream, $sheetName = '')
+    public function write(WriteInterface $stream, $sheetName = '')
     {
         $stream->write($this->_getXmlHeader($sheetName));
 

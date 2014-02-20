@@ -22,43 +22,49 @@
  *
  * @category    Magento
  * @package     Magento_PubSub
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_Event_QueueHandler
+namespace Magento\PubSub\Event;
+
+use Magento\PubSub\Job\FactoryInterface as JobFactoryInterface;
+use Magento\PubSub\Job\QueueWriterInterface as JobQueueWriterInterface;
+use Magento\PubSub\Subscription\CollectionInterface;
+
+class QueueHandler
 {
     /**
-     * @var Magento_PubSub_Event_QueueReaderInterface
+     * @var QueueReaderInterface
      */
     protected $_eventQueue;
 
     /**
-     * @var Magento_PubSub_Job_QueueWriterInterface
+     * @var JobQueueWriterInterface
      */
     protected $_jobQueue;
 
     /**
-     * @var Magento_PubSub_Job_FactoryInterface
+     * @var JobFactoryInterface
      */
     protected $_jobFactory;
 
     /**
-     * @var Magento_PubSub_Subscription_CollectionInterface
+     * @var CollectionInterface
      */
     protected $_subscriptionSet;
 
     /**
      * Initialize the class
      *
-     * @param Magento_PubSub_Event_QueueReaderInterface $eventQueue
-     * @param Magento_PubSub_Job_QueueWriterInterface $jobQueue
-     * @param Magento_PubSub_Job_FactoryInterface $jobFactory
-     * @param Magento_PubSub_Subscription_CollectionInterface $subscriptionSet
+     * @param QueueReaderInterface $eventQueue
+     * @param JobQueueWriterInterface $jobQueue
+     * @param JobFactoryInterface $jobFactory
+     * @param CollectionInterface $subscriptionSet
      */
-    public function __construct(Magento_PubSub_Event_QueueReaderInterface $eventQueue,
-        Magento_PubSub_Job_QueueWriterInterface $jobQueue,
-        Magento_PubSub_Job_FactoryInterface $jobFactory,
-        Magento_PubSub_Subscription_CollectionInterface $subscriptionSet
+    public function __construct(QueueReaderInterface $eventQueue,
+        JobQueueWriterInterface $jobQueue,
+        JobFactoryInterface $jobFactory,
+        CollectionInterface $subscriptionSet
     ) {
         $this->_eventQueue = $eventQueue;
         $this->_jobQueue = $jobQueue;
@@ -68,6 +74,8 @@ class Magento_PubSub_Event_QueueHandler
 
     /**
      * Build job queue from event queue
+     *
+     * @return void
      */
     public function handle()
     {
@@ -75,10 +83,11 @@ class Magento_PubSub_Event_QueueHandler
         while (!is_null($event)) {
             $subscriptions = $this->_subscriptionSet->getSubscriptionsByTopic($event->getTopic());
             foreach ($subscriptions as $subscription) {
-                /** @var $job Magento_PubSub_JobInterface */
+                /** @var $job \Magento\PubSub\JobInterface */
                 $job = $this->_jobFactory->create($subscription, $event);
                 $this->_jobQueue->offer($job);
             }
+            $event->complete();
             $event = $this->_eventQueue->poll();
         }
     }

@@ -18,8 +18,8 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    Mage
- * @package     Mage_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @package     Magento_Adminhtml
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -197,10 +197,10 @@ varienLoaderHandler.handler = {
         request.options.loaderArea = $$('#html-body .wrapper')[0]; // Blocks all page
 
         if(request && request.options.loaderArea){
-            Element.clonePosition($('loading-mask'), $(request.options.loaderArea), {offsetLeft:-2})
+            //Element.clonePosition($('loading-mask'), $(request.options.loaderArea), {offsetLeft:-2});
             toggleSelectsUnderBlock($('loading-mask'), false);
             Element.show('loading-mask');
-            setLoaderPosition();
+            //setLoaderPosition();
             if(request.options.loaderArea=='html-body'){
                 //Element.show('loading-process');
             }

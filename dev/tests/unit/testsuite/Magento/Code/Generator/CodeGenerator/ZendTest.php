@@ -21,11 +21,13 @@
  * @category    Magento
  * @package     Magento_Code
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_TestCase
+namespace Magento\Code\Generator\CodeGenerator;
+
+class ZendTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
      * Possible flags for assertion
@@ -38,7 +40,7 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
     /**#@-*/
 
     /**
-     * @var Magento_Code_Generator_CodeGenerator_Zend
+     * @var \Magento\Code\Generator\CodeGenerator\Zend
      */
     protected $_model;
 
@@ -141,7 +143,7 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->_model = new Magento_Code_Generator_CodeGenerator_Zend();
+        $this->_model = new \Magento\Code\Generator\CodeGenerator\Zend();
     }
 
     protected function tearDown()
@@ -159,11 +161,11 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
 
     /**
      * @param array $expectedDocBlock
-     * @param Zend\Code\Generator\DocBlockGenerator $actualDocBlock
+     * @param \Zend\Code\Generator\DocBlockGenerator $actualDocBlock
      */
     protected function _assertDocBlockData(
         array $expectedDocBlock,
-        Zend\Code\Generator\DocBlockGenerator $actualDocBlock
+        \Zend\Code\Generator\DocBlockGenerator $actualDocBlock
     ) {
         // assert plain string data
         foreach ($expectedDocBlock as $propertyName => $propertyData) {
@@ -177,7 +179,7 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
             $expectedTagsData = $expectedDocBlock['tags'];
             $actualTags = $actualDocBlock->getTags();
             $this->assertSameSize($expectedTagsData, $actualTags);
-            /** @var $actualTag Zend\Code\Generator\DocBlock\Tag */
+            /** @var $actualTag \Zend\Code\Generator\DocBlock\Tag */
             foreach ($actualTags as $actualTag) {
                 $tagName = $actualTag->getName();
                 $this->assertArrayHasKey($tagName, $expectedTagsData);
@@ -194,7 +196,7 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
 
         $this->assertSameSize($this->_methodData, $actualMethods);
 
-        /** @var $method Zend\Code\Generator\MethodGenerator */
+        /** @var $method \Zend\Code\Generator\MethodGenerator */
         foreach ($actualMethods as $methodName => $method) {
             $this->assertArrayHasKey($methodName, $this->_methodData);
             $expectedMethodData = $this->_methodData[$methodName];
@@ -217,7 +219,7 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
                 foreach ($expectedMethodData['parameters'] as $parameterData) {
                     $parameterName = $parameterData['name'];
                     $this->assertArrayHasKey($parameterName, $actualParameters);
-                    /** @var $actualParameter Zend\Code\Generator\ParameterGenerator */
+                    /** @var $actualParameter \Zend\Code\Generator\ParameterGenerator */
                     $actualParameter = $actualParameters[$parameterName];
                     $this->assertEquals($parameterName, $actualParameter->getName());
 
@@ -231,7 +233,7 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
 
                     // assert default value
                     if (isset($parameterData['defaultValue'])) {
-                        /** @var $actualDefaultValue Zend\Code\Generator\ValueGenerator */
+                        /** @var $actualDefaultValue \Zend\Code\Generator\ValueGenerator */
                         $actualDefaultValue = $actualParameter->getDefaultValue();
                         $this->assertEquals($parameterData['defaultValue'], $actualDefaultValue->getValue());
                     }
@@ -260,10 +262,11 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
 
     /**
      * @param array $expectedData
-     * @param Zend\Code\Generator\AbstractMemberGenerator $actualObject
+     * @param \Zend\Code\Generator\AbstractMemberGenerator $actualObject
      */
-    protected function _assertVisibility(array $expectedData, Zend\Code\Generator\AbstractMemberGenerator $actualObject)
-    {
+    protected function _assertVisibility(array $expectedData,
+        \Zend\Code\Generator\AbstractMemberGenerator $actualObject
+    ) {
         $expectedVisibility = isset($expectedData['visibility']) ? $expectedData['visibility'] : 'public';
         $this->assertEquals($expectedVisibility, $actualObject->getVisibility());
     }
@@ -271,12 +274,12 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
     /**
      * Correct behaviour of addMethodFromGenerator is already tested in testAddMethods
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage addMethodFromGenerator() expects string for name
      */
     public function testAddMethodFromGenerator()
     {
-        $invalidMethod = new Zend\Code\Generator\MethodGenerator();
+        $invalidMethod = new \Zend\Code\Generator\MethodGenerator();
         $this->_model->addMethodFromGenerator($invalidMethod);
     }
 
@@ -287,7 +290,7 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
 
         $this->assertSameSize($this->_propertyData, $actualProperties);
 
-        /** @var $property Zend\Code\Generator\PropertyGenerator */
+        /** @var $property \Zend\Code\Generator\PropertyGenerator */
         foreach ($actualProperties as $propertyName => $property) {
             $this->assertArrayHasKey($propertyName, $this->_propertyData);
             $expectedPropertyData = $this->_propertyData[$propertyName];
@@ -303,7 +306,7 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
 
             // assert default value
             if (isset($expectedPropertyData['defaultValue'])) {
-                /** @var $actualDefaultValue Zend\Code\Generator\ValueGenerator */
+                /** @var $actualDefaultValue \Zend\Code\Generator\ValueGenerator */
                 $actualDefaultValue = $property->getDefaultValue();
                 $this->assertEquals($expectedPropertyData['defaultValue'], $actualDefaultValue->getValue());
             }
@@ -319,12 +322,12 @@ class Magento_Code_Generator_CodeGenerator_ZendTest extends PHPUnit_Framework_Te
     /**
      * Correct behaviour of addPropertyFromGenerator is already tested in testAddProperties
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage addPropertyFromGenerator() expects string for name
      */
     public function testAddPropertyFromGenerator()
     {
-        $invalidProperty = new Zend\Code\Generator\PropertyGenerator();
+        $invalidProperty = new \Zend\Code\Generator\PropertyGenerator();
         $this->_model->addPropertyFromGenerator($invalidProperty);
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <template id="sales_email_order_template" label="New Order" file="order_new.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_order_guest_template" label="New Order for Guest" file="order_new_guest.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_order_comment_template" label="Order Update" file="order_update.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_order_comment_guest_template" label="Order Update for Guest" file="order_update_guest.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_invoice_template" label="New Invoice" file="invoice_new.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_invoice_guest_template" label="New Invoice for Guest" file="invoice_new_guest.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_invoice_comment_template" label="Invoice Update" file="invoice_update.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_invoice_comment_guest_template" label="Invoice Update for Guest" file="invoice_update_guest.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_creditmemo_template" label="New Credit Memo" file="creditmemo_new.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_creditmemo_guest_template" label="New Credit Memo for Guest" file="creditmemo_new_guest.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_creditmemo_comment_template" label="Credit Memo Update" file="creditmemo_update.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_creditmemo_comment_guest_template" label="Credit Memo Update for Guest" file="creditmemo_update_guest.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_shipment_template" label="New Shipment" file="shipment_new.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_shipment_guest_template" label="New Shipment for Guest" file="shipment_new_guest.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_shipment_comment_template" label="Shipment Update" file="shipment_update.html" type="html" module="Magento_Sales"/>
+    <template id="sales_email_shipment_comment_guest_template" label="Shipment Update for Guest" file="shipment_update_guest.html" type="html" module="Magento_Sales"/>
+</config>

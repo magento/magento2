@@ -23,23 +23,20 @@
  *
  * @category    tests
  * @package     static
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <phpunit bootstrap="./framework/bootstrap.php">
     <testsuites>
         <testsuite name="Javascript Static Code Analysis">
-            <file>testsuite/Js/LiveCodeTest.php</file>
+            <file>testsuite/Magento/Test/Js/LiveCodeTest.php</file>
         </testsuite>
         <testsuite name="PHP Coding Standard Verification">
-            <file>testsuite/Php/LiveCodeTest.php</file>
+            <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
         </testsuite>
         <testsuite name="Code Integrity Tests">
-            <directory>testsuite/Integrity</directory>
-        </testsuite>
-        <testsuite name="Twig Syntax Checker">
-            <directory>testsuite/Twig/TwigExtensionTest.php</directory>
+            <directory>testsuite/Magento/Test/Integrity</directory>
         </testsuite>
     </testsuites>
     <php>

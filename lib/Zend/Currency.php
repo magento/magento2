@@ -533,7 +533,7 @@ class Zend_Currency
     }
 
     /**
-     * Sets a new locale for data retreivement
+     * Sets a new locale for data retrievement
      * Example: 'de_XX' will be set to 'de' because 'de_XX' does not exist
      * 'xx_YY' will be set to 'root' because 'xx' does not exist
      *

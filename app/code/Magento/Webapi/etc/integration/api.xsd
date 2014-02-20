@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Schema for API integration configuration.
+ *
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="integrations" type="integrationsType"/>
+    <xs:complexType name="integrationsType">
+        <xs:sequence>
+            <xs:element name="integration" type="integrationType" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="integrationType">
+        <xs:sequence>
+            <xs:element name="resources" type="resourcesType"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="integrationNameType" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="resourcesType">
+        <xs:sequence>
+            <xs:element name="resource" type="resourceType" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="resourceType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="resourceNameType" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="resourceNameType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value=".+_.+::.+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="integrationNameType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <section name="quote">
+        <group name="totals">
+            <item name="tax_subtotal" instance="Magento\Tax\Model\Sales\Total\Quote\Subtotal" sort_order="200"/>
+            <item name="tax_shipping" instance="Magento\Tax\Model\Sales\Total\Quote\Shipping" sort_order="300"/>
+            <item name="tax" instance="Magento\Tax\Model\Sales\Total\Quote\Tax" sort_order="450">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Tax"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Tax"/>
+            </item>
+            <item name="subtotal">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Subtotal"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Subtotal"/>
+            </item>
+            <item name="shipping">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Shipping"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Shipping"/>
+            </item>
+            <item name="discount">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Discount"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Discount"/>
+            </item>
+            <item name="grand_total">
+                <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Grandtotal"/>
+                <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Grandtotal"/>
+            </item>
+        </group>
+        <group name="nominal_totals">
+            <item name="nominal_tax_subtotal" instance="Magento\Tax\Model\Sales\Total\Quote\Nominal\Subtotal" sort_order="500"/>
+            <item name="nominal_tax" instance="Magento\Tax\Model\Sales\Total\Quote\Nominal\Tax" sort_order="750"/>
+        </group>
+    </section>
+</config>

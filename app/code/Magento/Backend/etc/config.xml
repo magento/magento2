@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_Backend
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <default>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <email_folder>email</email_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+            <emails>
+                <forgot_email_template>system_emails_forgot_email_template</forgot_email_template>
+                <forgot_email_identity>general</forgot_email_identity>
+            </emails>
+            <dashboard>
+                <enable_charts>1</enable_charts>
+            </dashboard>
+        </system>
+        <general>
+            <file>
+                <sitemap_generate_valid_paths>
+                    <available>
+                        <any_path>/*/sitemap.xml</any_path>
+                    </available>
+                </sitemap_generate_valid_paths>
+            </file>
+            <validator_data>
+                <input_types>
+                    <price>price</price>
+                    <media_image>media_image</media_image>
+                    <gallery>gallery</gallery>
+                </input_types>
+            </validator_data>
+        </general>
+    </default>
+    <stores>
+        <admin>
+            <design>
+                <package>
+                    <name>default</name>
+                </package>
+                <theme>
+                    <default>default</default>
+                </theme>
+            </design>
+        </admin>
+    </stores>
+    <websites>
+        <admin>
+            <web>
+                <routers>
+                    <frontend>
+                        <disabled>true</disabled>
+                    </frontend>
+                </routers>
+                <default>
+                    <no_route>admin/noroute/index</no_route>
+                </default>
+            </web>
+        </admin>
+    </websites>
+</config>

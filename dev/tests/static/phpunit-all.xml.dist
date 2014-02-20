@@ -23,14 +23,14 @@
  *
  * @category    tests
  * @package     static
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <phpunit bootstrap="./framework/bootstrap.php">
     <testsuites>
         <testsuite name="All Static Code Analysis Tests">
-            <directory>testsuite</directory>
+            <directory>testsuite/Magento/Test/</directory>
         </testsuite>
     </testsuites>
     <php>

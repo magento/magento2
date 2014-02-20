@@ -19,7 +19,7 @@
  *
  * @category    mage.js
  * @package     test
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 SuggestTest = TestCase('SuggestTest');
@@ -457,6 +457,27 @@ SuggestTest.prototype.testSelectItemMultiselect = function() {
     assertFalse(suggestInstance._getOption(suggestInstance._focused).length > 0);
     assertFalse(selectedElement.hasClass(suggestInstance.options.selectedClass));
     assertTrue(suggestInstance.dropdown.is(':hidden'));
+};
+SuggestTest.prototype.testResetSuggestValue = function() {
+    var suggestInstance = this.suggestCreate();
+    suggestInstance.valueField.val('test');
+    suggestInstance._resetSuggestValue();
+    assertEquals(suggestInstance.valueField.val(), suggestInstance._nonSelectedItem.id);
+};
+SuggestTest.prototype.testResetSuggestValueMultiselect = function() {
+    var suggestInstance = this.suggestCreate({multiselect: true});
+    suggestInstance._focused = this.uiHash.item;
+    var selectedElement = jQuery('<div></div>');
+    var event = $.Event('select');
+    event.target = selectedElement[0];
+
+    suggestInstance._selectItem(event);
+    suggestInstance._resetSuggestValue();
+
+    var suggestValue = suggestInstance.valueField.val();
+    assertArray(suggestValue);
+    assertNotUndefined(suggestValue[0]);
+    assertEquals(suggestValue[0], this.uiHash.item.id);
 };
 SuggestTest.prototype.testReadItemData = function() {
     var testElement = jQuery('<div></div>'),

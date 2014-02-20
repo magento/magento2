@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="adminhtml.report.grid.container">
+        <block class="Magento\Reports\Block\Adminhtml\Grid" name="adminhtml.report.grid" as="grid">
+            <arguments>
+                <argument name="use_ajax" xsi:type="string">0</argument>
+                <argument name="pager_visibility" xsi:type="string">0</argument>
+                <argument name="id" xsi:type="string">gridReport</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Reports\Model\Resource\Report\Collection</argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Store\Switcher" name="adminhtml.report.grid.store_switcher" as="store_switcher" template="Magento_Reports::store/switcher.phtml">
+                <arguments>
+                    <argument name="use_confirm" xsi:type="string">0</argument>
+                    <argument name="switch_url" xsi:type="url" path="*/*/*">
+                        <param name="store">null</param>
+                    </argument>
+                </arguments>
+            </block>
+            <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.report.grid.export" as="grid.export">
+                <arguments>
+                    <argument name="exportTypes" xsi:type="array">
+                        <item name="csv" xsi:type="array">
+                            <item name="urlPath" xsi:type="string">*/*/exportCsv</item>
+                            <item name="label" xsi:type="string" translate="true">CSV</item>
+                        </item>
+                        <item name="excel" xsi:type="array">
+                            <item name="urlPath" xsi:type="string">*/*/exportExcel</item>
+                            <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+            <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.report.grid.columnSet">
+                <arguments>
+                    <argument name="filter_visibility" xsi:type="string">0</argument>
+                    <argument name="empty_text" xsi:type="string" translate="true">We couldn't find records for this period.</argument>
+                    <argument name="empty_cell_label" xsi:type="string" translate="true">We couldn't find records for this period.</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="period">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Interval</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="type" xsi:type="string">text</argument>
+                        <argument name="id" xsi:type="string">period</argument>
+                        <argument name="index" xsi:type="string">period</argument>
+                        <argument name="grouped" xsi:type="string">1</argument>
+                        <argument name="totals_label" xsi:type="string" translate="true">Total</argument>
+                        <argument name="column_css_class" xsi:type="string">col-period</argument>
+                        <argument name="header_css_class" xsi:type="string">col-period</argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </referenceBlock>
+</layout>

@@ -856,7 +856,7 @@ Validation.addAllThese([
          $(prefix + '_cc_issue').advaiceContainer
            = $(prefix + '_start_month').advaiceContainer
            = $(prefix + '_start_year').advaiceContainer
-           = $(prefix + '_cc_type_ss_div').down('ul li.adv-container');
+           = $(prefix + '_cc_type_ss_div').down('.adv-container');
 
          var ccIssue   =  $(prefix + '_cc_issue').value;
          var ccSMonth  =  $(prefix + '_start_month').value;

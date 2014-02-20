@@ -402,7 +402,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
         $this->_tiiFile->writeInt(self::$maxSkipLevels);
 
         /** Dump dictionary header */
-        $this->_tiiFile->writeVInt(0);                    // preffix length
+        $this->_tiiFile->writeVInt(0);                    // prefix length
         $this->_tiiFile->writeString('');                 // suffix
         $this->_tiiFile->writeInt((int)0xFFFFFFFF);       // field number
         $this->_tiiFile->writeByte((int)0x0F);
@@ -548,12 +548,12 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
                 $prefixBytes += $charBytes;
             }
 
-            // Write preffix length
+            // Write prefix length
             $dicFile->writeVInt($prefixChars);
             // Write suffix
             $dicFile->writeString(substr($term->text, $prefixBytes));
         } else {
-            // Write preffix length
+            // Write prefix length
             $dicFile->writeVInt(0);
             // Write suffix
             $dicFile->writeString($term->text);

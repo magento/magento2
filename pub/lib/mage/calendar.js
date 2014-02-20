@@ -17,7 +17,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true */
@@ -196,10 +196,16 @@
                     to[this._picker()]('option', 'minDate', selectedDate);
                 }, this);
                 $.mage.calendar.prototype._initPicker.call(this, from);
+                from.on('change', $.proxy(function() {
+                    to[this._picker()]('option', 'minDate', from[this._picker()]('getDate'));
+                }, this));
                 this.options.onSelect = $.proxy(function(selectedDate) {
                     from[this._picker()]('option', 'maxDate', selectedDate);
                 }, this);
                 $.mage.calendar.prototype._initPicker.call(this, to);
+                to.on('change', $.proxy(function() {
+                    from[this._picker()]('option', 'maxDate', to[this._picker()]('getDate'));
+                }, this));
             }
         },
 

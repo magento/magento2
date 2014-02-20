@@ -18,12 +18,70 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Code_Minifier_Strategy_GenerateTest extends PHPUnit_Framework_TestCase
+namespace Magento\Code\Minifier\Strategy;
+
+use Magento\App\Filesystem,
+    Magento\Filesystem\Directory\Write,
+    Magento\Filesystem\Directory\Read;
+
+class GenerateTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystem;
+
+    /**
+     * @var Read | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $rootDirectory;
+
+    /**
+     * @var Write | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pubViewCacheDir;
+
+    /**
+     * @var \Magento\Code\Minifier\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $adapter;
+
+    /**
+     * Set up before each test
+     */
+    public function setUp()
+    {
+        $this->rootDirectory = $this->getMock(
+            'Magento\Filesystem\Directory\Read',
+            array(), array(), '', false
+        );
+        $this->pubViewCacheDir = $this->getMock(
+            'Magento\Filesystem\Directory\Write',
+            array(), array(), '', false
+        );
+        $this->filesystem = $this->getMock(
+            'Magento\App\Filesystem',
+            array('getDirectoryWrite', 'getDirectoryRead', '__wakeup'),
+            array(), '', false
+        );
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\App\Filesystem::ROOT_DIR)
+            ->will($this->returnValue($this->rootDirectory));
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
+            ->will($this->returnValue($this->pubViewCacheDir));
+        $this->adapter = $this->getMockForAbstractClass('Magento\Code\Minifier\AdapterInterface', array(), '', false);
+    }
+
+    /**
+     * Test for minifyFile if case update is needed
+     */
     public function testGetMinifiedFile()
     {
         $originalFile = __DIR__ . '/original/some.js';
@@ -31,52 +89,58 @@ class Magento_Code_Minifier_Strategy_GenerateTest extends PHPUnit_Framework_Test
         $content = 'content';
         $minifiedContent = 'minified content';
 
-        $filesystem = $this->getMock('Magento_Filesystem', array(), array(), '', false);
-        $filesystem->expects($this->once())
-            ->method('read')
+        $this->rootDirectory->expects($this->once())
+            ->method('readFile')
             ->with($originalFile)
             ->will($this->returnValue($content));
-        $filesystem->expects($this->once())
-            ->method('write')
+        $this->pubViewCacheDir->expects($this->once())
+            ->method('getRelativePath')
+            ->will($this->returnArgument(0));
+        $this->pubViewCacheDir->expects($this->once())
+            ->method('writeFile')
             ->with($minifiedFile, $minifiedContent);
 
-        $adapter = $this->getMockForAbstractClass('Magento_Code_Minifier_AdapterInterface', array(), '', false);
-        $adapter->expects($this->once())
+        $this->adapter->expects($this->once())
             ->method('minify')
             ->with($content)
             ->will($this->returnValue($minifiedContent));
 
-        $strategy = new Magento_Code_Minifier_Strategy_Generate($adapter, $filesystem);
+        $strategy = new Generate($this->adapter, $this->filesystem);
         $strategy->minifyFile($originalFile, $minifiedFile);
     }
 
+    /**
+     * Test for minifyFile if case update is NOT needed
+     */
     public function testGetMinifiedFileNoUpdateNeeded()
     {
         $originalFile = __DIR__ . '/original/some.js';
         $minifiedFile = __DIR__ . '/some.min.js';
 
-        $filesystem = $this->getMock('Magento_Filesystem', array(), array(), '', false);
-        $filesystem->expects($this->once())
-            ->method('has')
+        $mTimeMap = array(
+            array($originalFile, null, array('mtime' => 1)),
+            array($minifiedFile, null, array('mtime' => 1)),
+        );
+
+        $this->pubViewCacheDir->expects($this->once())
+            ->method('isExist')
             ->with($minifiedFile)
             ->will($this->returnValue(true));
-        $mTimeMap = array(
-            array($originalFile, null, 1),
-            array($minifiedFile, null, 1),
-        );
-        $filesystem->expects($this->exactly(2))
-            ->method('getMTime')
+        $this->rootDirectory->expects($this->once())
+            ->method('stat')
             ->will($this->returnValueMap($mTimeMap));
-        $filesystem->expects($this->never())
-            ->method('read');
-        $filesystem->expects($this->never())
-            ->method('write');
+        $this->pubViewCacheDir->expects($this->once())
+            ->method('stat')
+            ->will($this->returnValueMap($mTimeMap));
 
-        $adapter = $this->getMockForAbstractClass('Magento_Code_Minifier_AdapterInterface', array(), '', false);
-        $adapter->expects($this->never())
-            ->method('minify');
+        $this->rootDirectory->expects($this->never())
+            ->method('readFile');
+        $this->pubViewCacheDir->expects($this->never())
+            ->method('writeFile');
 
-        $strategy = new Magento_Code_Minifier_Strategy_Generate($adapter, $filesystem);
+        $this->adapter->expects($this->never())->method('minify');
+
+        $strategy = new Generate($this->adapter, $this->filesystem);
         $strategy->minifyFile($originalFile, $minifiedFile);
     }
 }

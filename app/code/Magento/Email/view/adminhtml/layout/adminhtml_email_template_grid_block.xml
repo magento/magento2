@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="adminhtml.system.email.template.container">
+        <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.email.template.grid" as="grid">
+            <arguments>
+                <argument name="id" xsi:type="string">systemEmailTemplateGrid</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Email\Model\Resource\Template\Collection</argument>
+                <argument name="use_ajax" xsi:type="string">1</argument>
+                <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                <argument name="grid_url" xsi:type="url" path="*/*/grid">
+                    <param name="_current">1</param>
+                </argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.system.email.template.grid.columnSet" as="grid.columnSet">
+                <arguments>
+                    <argument name="rowUrl" xsi:type="array">
+                        <item name="path" xsi:type="string">adminhtml/*/edit</item>
+                        <item name="extraParamsTemplate" xsi:type="array">
+                            <item name="id" xsi:type="string">getId</item>
+                        </item>
+                    </argument>
+                    <argument name="empty_text" xsi:type="string" translate="true">No Templates Found</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="template_id">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">ID</argument>
+                        <argument name="index" xsi:type="string">template_id</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Template</argument>
+                        <argument name="index" xsi:type="string">template_code</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="added_at">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Added</argument>
+                        <argument name="index" xsi:type="string">added_at</argument>
+                        <argument name="gmtoffset" xsi:type="string">1</argument>
+                        <argument name="type" xsi:type="string">datetime</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="modified_at">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Updated</argument>
+                        <argument name="index" xsi:type="string">modified_at</argument>
+                        <argument name="gmtoffset" xsi:type="string">1</argument>
+                        <argument name="type" xsi:type="string">datetime</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="subject">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Subject</argument>
+                        <argument name="index" xsi:type="string">template_subject</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="type">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Template Type</argument>
+                        <argument name="index" xsi:type="string">template_type</argument>
+                        <argument name="filter" xsi:type="string">Magento\Email\Block\Adminhtml\Template\Grid\Filter\Type</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Action</argument>
+                        <argument name="index" xsi:type="string">template_id</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="filter" xsi:type="string">0</argument>
+                        <argument name="width" xsi:type="string">100px</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action</argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </referenceBlock>
+</layout>

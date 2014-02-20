@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <event name="controller_action_predispatch_customer_account_loginPost">
+        <observer name="captcha" instance="Magento\Captcha\Model\Observer" method="checkUserLogin" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_createpost">
+        <observer name="captcha" instance="Magento\Captcha\Model\Observer" method="checkUserCreate" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_forgotpasswordpost">
+        <observer name="captcha" instance="Magento\Captcha\Model\Observer" method="checkForgotpassword"/>
+    </event>
+    <event name="admin_user_authenticate_before">
+        <observer name="captcha" instance="Magento\Captcha\Model\Observer" method="checkUserLoginBackend" />
+    </event>
+    <event name="controller_action_predispatch_checkout_onepage_saveBilling">
+        <observer name="captcha_guest" instance="Magento\Captcha\Model\Observer" method="checkGuestCheckout" />
+        <observer name="captcha_register" instance="Magento\Captcha\Model\Observer" method="checkRegisterCheckout" />
+    </event>
+    <event name="customer_customer_authenticated">
+        <observer name="captcha_reset_attempt" instance="Magento\Captcha\Model\Observer" method="resetAttemptForFrontend" />
+    </event>
+    <event name="backend_auth_user_login_success">
+        <observer name="captcha_reset_attempt" instance="Magento\Captcha\Model\Observer" method="resetAttemptForBackend" />
+    </event>
+</config>

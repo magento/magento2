@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     performance_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -110,7 +110,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract &quot;product_name&quot;" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">product_name</stringProp>
-            <stringProp name="RegexExtractor.regex">&lt;h1&gt;(.+?)&lt;/h1&gt;</stringProp>
+            <stringProp name="RegexExtractor.regex">&lt;h1.*&gt;(.+?)&lt;/span&gt;&lt;/h1&gt;</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">FAIL</stringProp>
             <stringProp name="RegexExtractor.match_number"></stringProp>

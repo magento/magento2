@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_Authorization_Policy
+namespace Magento\Authorization;
+
+interface Policy
 {
     /**
      * Check whether given role has access to given resource
@@ -31,7 +33,7 @@ interface Magento_Authorization_Policy
      * @abstract
      * @param string $roleId
      * @param string $resourceId
-     * @param mixed $privilege
+     * @param string|null $privilege
      * @return bool
      */
     public function isAllowed($roleId, $resourceId, $privilege = null);

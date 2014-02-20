@@ -1,0 +1,817 @@
+// /**
+//  * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//  # Navigation
+//
+//
+//  ```html
+//<div class="header"></div>
+//<nav class="navigation" data-role="navigation" data-mage-init='{ "navigationMenu": { "submenuContiniumEffect": false } }'>
+//    <ul>
+//        <li class="level0 nav-1 first level-top parent"><a href="http://m2.loc/index.php/ewr.html" class="level-top"><span> First level 1 </span></a>
+//            <div class="submenu">
+//                <ul class="level0">
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-1-1 first parent"><a href="http://m2.loc/index.php/ewr/subcategory-1.html"><span> Subcategory 1 </span></a>
+//                                <div class="submenu">
+//                                    <ul class="level1">
+//                                        <li class="level2 nav-1-1-1 first"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-1.html"><span> Third level 1 </span></a></li>
+//                                        <li class="level2 nav-1-1-2 parent"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-2.html"><span> Third level 2 </span></a>
+//                                            <div class="submenu">
+//                                                <ul class="level2">
+//                                                    <li class="level3 nav-1-1-2-1 first"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-2/fourth-level-1.html"><span> Fourth level 1 </span></a></li>
+//                                                    <li class="level3 nav-1-1-2-2"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-2/fourth-level-2.html"><span> Fourth level 2 </span></a></li>
+//                                                    <li class="level3 nav-1-1-2-3"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-2/fourth-level-3.html"><span> Fourth level 3 </span></a></li>
+//                                                    <li class="level3 nav-1-1-2-4 last"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-2/fourth-level-4.html"><span> Fourth level 4 </span></a></li>
+//                                                </ul>
+//                                            </div>
+//                                        </li>
+//                                        <li class="level2 nav-1-1-3 parent"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-3.html"><span> Third level 3 </span></a>
+//                                            <div class="submenu">
+//                                                <ul class="level2">
+//                                                    <li class="level3 nav-1-1-3-1 first"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-3/fourth-level-1.html"><span> Fourth level 1 </span></a></li>
+//                                                    <li class="level3 nav-1-1-3-2 last"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-3/fourth-level-2.html"><span> Fourth level 2 </span></a></li>
+//                                                </ul>
+//                                            </div>
+//                                        </li>
+//                                        <li class="level2 nav-1-1-4"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-4.html"><span> Third level 4 </span></a></li>
+//                                        <li class="level2 nav-1-1-5"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-5.html"><span> Third level 5 </span></a></li>
+//                                        <li class="level2 nav-1-1-6"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-6.html"><span> Third level 6 </span></a></li>
+//                                        <li class="level2 nav-1-1-7"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-7.html"><span> Third level 7 </span></a></li>
+//                                        <li class="level2 nav-1-1-8"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-8.html"><span> Third level 8 </span></a></li>
+//                                        <li class="level2 nav-1-1-9"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-9.html"><span> Third level 9 </span></a></li>
+//                                        <li class="level2 nav-1-1-10"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-10.html"><span> Third level 10 </span></a></li>
+//                                        <li class="level2 nav-1-1-11 last"><a href="http://m2.loc/index.php/ewr/subcategory-1/third-level-11.html"><span> Third level 11 </span></a></li>
+//                                    </ul>
+//                                </div>
+//                            </li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-1-2 parent"><a href="http://m2.loc/index.php/ewr/subcategory-2.html"><span> Subcategory 2 </span></a>
+//                                <div class="submenu">
+//                                    <ul class="level1">
+//                                        <li class="level2 nav-1-2-1 first"><a href="http://m2.loc/index.php/ewr/subcategory-2/third-level-1.html"><span> Third level 1 </span></a></li>
+//                                        <li class="level2 nav-1-2-2"><a href="http://m2.loc/index.php/ewr/subcategory-2/third-level-2.html"><span> Third level 2 </span></a></li>
+//                                        <li class="level2 nav-1-2-3"><a href="http://m2.loc/index.php/ewr/subcategory-2/third-level-3.html"><span> Third level 3 </span></a></li>
+//                                        <li class="level2 nav-1-2-4"><a href="http://m2.loc/index.php/ewr/subcategory-2/third-level-4.html"><span> Third level 4 </span></a></li>
+//                                        <li class="level2 nav-1-2-5 last"><a href="http://m2.loc/index.php/ewr/subcategory-2/third-level-5.html"><span> Third level 5 </span></a></li>
+//                                    </ul>
+//                                </div>
+//                            </li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-1-3"><a href="http://m2.loc/index.php/ewr/subcategory-3.html"><span> Subcategory 3 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-1-4"><a href="http://m2.loc/index.php/ewr/subcategory-4.html"><span> Subcategory 4 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-1-5"><a href="http://m2.loc/index.php/ewr/subcategory-5.html"><span> Subcategory 5 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-1-6 last parent"><a href="http://m2.loc/index.php/ewr/subcategory-6.html"><span> Subcategory 6 </span></a>
+//                                <div class="submenu">
+//                                    <ul class="level1">
+//                                        <li class="level2 nav-1-6-1 first"><a href="http://m2.loc/index.php/ewr/subcategory-6/third-level-1.html"><span> Third level 1 </span></a></li>
+//                                        <li class="level2 nav-1-6-2"><a href="http://m2.loc/index.php/ewr/subcategory-6/third-level-2.html"><span> Third level 2 </span></a></li>
+//                                        <li class="level2 nav-1-6-3"><a href="http://m2.loc/index.php/ewr/subcategory-6/third-level-3.html"><span> Third level 3 </span></a></li>
+//                                        <li class="level2 nav-1-6-4"><a href="http://m2.loc/index.php/ewr/subcategory-6/third-level-4.html"><span> Third level 4 </span></a></li>
+//                                        <li class="level2 nav-1-6-5"><a href="http://m2.loc/index.php/ewr/subcategory-6/third-level-5.html"><span> Third level 5 </span></a></li>
+//                                        <li class="level2 nav-1-6-6"><a href="http://m2.loc/index.php/ewr/subcategory-6/third-level-6.html"><span> Third level 6 </span></a></li>
+//                                        <li class="level2 nav-1-6-7 last"><a href="http://m2.loc/index.php/ewr/subcategory-6/third-level-7.html"><span> Third level 7 </span></a></li>
+//                                    </ul>
+//                                </div>
+//                            </li>
+//                        </ul>
+//                    </li>
+//                </ul>
+//            </div>
+//        </li>
+//        <li class="level0 nav-2 level-top parent"><a href="http://m2.loc/index.php/123456.html" class="level-top"><span> First level 2 </span></a>
+//            <div class="submenu">
+//                <ul class="level0">
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-2-1 first"><a href="http://m2.loc/index.php/123456/subcategory-1.html"><span> Subcategory 1 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-2-2"><a href="http://m2.loc/index.php/123456/subcategory-2.html"><span> Subcategory 2 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-2-3 last"><a href="http://m2.loc/index.php/123456/subcategory-3.html"><span> Subcategory 3 </span></a></li>
+//                        </ul>
+//                    </li>
+//                </ul>
+//            </div>
+//        </li>
+//        <li class="level0 nav-3 level-top parent"><a href="http://m2.loc/index.php/first-level-3.html" class="level-top"><span> First level 3 </span></a>
+//            <div class="submenu">
+//                <ul class="level0">
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-3-1 first"><a href="http://m2.loc/index.php/first-level-3/subcategory-1.html"><span> Subcategory 1 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-3-2"><a href="http://m2.loc/index.php/first-level-3/subcategory-2.html"><span> Subcategory 2 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-3-3"><a href="http://m2.loc/index.php/first-level-3/subcategory-3.html"><span> Subcategory 3 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-3-4"><a href="http://m2.loc/index.php/first-level-3/subcategory-4.html"><span> Subcategory 4 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-3-5 last"><a href="http://m2.loc/index.php/first-level-3/subcategory-5.html"><span> Subcategory 5 </span></a></li>
+//                        </ul>
+//                    </li>
+//                </ul>
+//            </div>
+//        </li>
+//        <li class="level0 nav-4 level-top"><a href="http://m2.loc/index.php/first-level-4.html" class="level-top"><span> First level 4 </span></a></li>
+//        <li class="level0 nav-5 level-top"><a href="http://m2.loc/index.php/first-level-5.html" class="level-top"><span> First level 5 </span></a></li>
+//        <li class="level0 nav-6 level-top"><a href="http://m2.loc/index.php/first-level-6.html" class="level-top"><span> First level 6 </span></a></li>
+//        <li class="level0 nav-7 level-top"><a href="http://m2.loc/index.php/first-level-7.html" class="level-top"><span> First level 7 </span></a></li>
+//        <li class="level0 nav-8 level-top"><a href="http://m2.loc/index.php/first-level-8.html" class="level-top"><span> First level 8 </span></a></li>
+//        <li class="level0 nav-9 level-top parent"><a href="http://m2.loc/index.php/first-level-4-1.html" class="level-top"><span> First level 9 </span></a>
+//            <div class="submenu">
+//                <ul class="level0">
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-9-1 first parent"><a href="http://m2.loc/index.php/first-level-4-1/subcategory-1.html"><span> Subcategory 1 </span></a>
+//                                <div class="submenu">
+//                                    <ul class="level1">
+//                                        <li class="level2 nav-9-1-1 first"><a href="http://m2.loc/index.php/first-level-4-1/subcategory-1/third-level-1.html"><span> Third level 1 </span></a></li>
+//                                        <li class="level2 nav-9-1-2 parent"><a href="http://m2.loc/index.php/first-level-4-1/subcategory-1/third-level-2.html"><span> Third level 2 </span></a>
+//                                            <div class="submenu">
+//                                                <ul class="level2">
+//                                                    <li class="level3 nav-9-1-2-1 first"><a href="http://m2.loc/index.php/first-level-4-1/subcategory-1/third-level-2/fourth-level-1.html"><span> Fourth level 1 </span></a></li>
+//                                                    <li class="level3 nav-9-1-2-2 last"><a href="http://m2.loc/index.php/first-level-4-1/subcategory-1/third-level-2/fourth-level-2.html"><span> Fourth level 2 </span></a></li>
+//                                                </ul>
+//                                            </div>
+//                                        </li>
+//                                        <li class="level2 nav-9-1-3 last"><a href="http://m2.loc/index.php/first-level-4-1/subcategory-1/third-level-3.html"><span> Third level 3 </span></a></li>
+//                                    </ul>
+//                                </div>
+//                            </li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-9-2"><a href="http://m2.loc/index.php/first-level-4-1/subcategory-2.html"><span> Subcategory 2 </span></a></li>
+//                        </ul>
+//                    </li>
+//                    <li class="column">
+//                        <ul>
+//                            <li class="level1 nav-9-3 last"><a href="http://m2.loc/index.php/first-level-4-1/subcategory-3.html"><span> Subcategory 3 </span></a></li>
+//                        </ul>
+//                    </li>
+//                </ul>
+//            </div>
+//        </li>
+//        <li class="level0 nav-10 level-top"><a href="http://m2.loc/index.php/first-level-10.html" class="level-top"><span> First level 10 </span></a></li>
+//        <li class="level0 nav-11 level-top"><a href="http://m2.loc/index.php/first-level-11.html" class="level-top"><span> First level 11 </span></a></li>
+//        <li class="level0 nav-12 level-top"><a href="http://m2.loc/index.php/first-level-12.html" class="level-top"><span> First level 12 </span></a></li>
+//        <li class="level0 nav-13 level-top"><a href="http://m2.loc/index.php/first-level-13.html" class="level-top"><span> First level 13 </span></a></li>
+//        <li class="level0 nav-14 level-top"><a href="http://m2.loc/index.php/first-level-14.html" class="level-top"><span> First level 14 </span></a></li>
+//        <li class="level0 nav-15 level-top"><a href="http://m2.loc/index.php/first-level-15.html" class="level-top"><span> First level 15 </span></a></li>
+//        <li class="level0 nav-16 level-top"><a href="http://m2.loc/index.php/first-level-16.html" class="level-top"><span> First level 16 </span></a></li>
+//        <li class="level0 nav-17 level-top"><a href="http://m2.loc/index.php/first-level-17.html" class="level-top"><span> First level 17 </span></a></li>
+//    </ul>
+//</nav>
+//  ```
+//
+
+@subNavHeight: auto;
+@subNavPadding: 45px;
+
+@navBg : @headerBg;
+@navBgImage : @headerBgImage;
+
+.navigation {
+    background-color: @navBg;
+    background-image: @navBgImage;
+    background-repeat: repeat;
+    background-position: 0 0;
+    border-top: 1px solid;
+    .borderColorI(@navBg);
+    position: relative;
+    z-index: 2;
+    .clearfix();
+
+    &:empty {
+        display: none;
+    }
+
+    > ul > .level-top {
+        display: inline-block;
+        line-height: 1.2;
+        vertical-align: top;
+        padding-right: 40px;
+
+        &:last-child {
+            padding-right: 0;
+        }
+
+        &.active {
+            > a:after {
+                opacity: 1;
+                border-bottom-color: @primary7;
+            }
+        }
+
+        &.hover {
+            > a:after {
+                border-bottom-color: @primary1;
+            }
+            > .submenu {
+                border-bottom: 1px solid @primary3;
+            }
+        }
+
+        &.hover,
+        &:hover {
+            > .submenu {
+                z-index: 2;
+            }
+            &:hover > a span,
+            &.parent.hover > a span,
+            &.parent > a span {
+                color: @primary6;
+            }
+            &:hover > a:after,
+            &.hover > a:after,
+            &.parent > a:after {
+                opacity: 1;
+            }
+        }
+
+        &.more {
+            &:after {
+                cursor: pointer;
+                content: "\e010";
+                font-family: "icons";
+                font-size: 16px;
+                display: inline-block;
+                padding: .6em .7em 1em;
+                margin-top: 0.4em;
+                border-radius: 4px 4px 0 0;
+                position: relative;
+                z-index: 1;
+            }
+
+            &.hover:after {
+                background: @primary1;
+            }
+
+            li.level-top {
+                width: 200px;
+                margin: 0 0 0 -10px !important;
+                padding: 7px 10px 7px 30px;
+                > a {
+                    font-size: 16px;
+                }
+                &.hover,
+                &:hover {
+                    background: @primary1;
+                    > a span {
+                        color: @primary6;
+                    }
+                    &.parent {
+                        .iconBefore(@content: @icon-arrow-right-thick, @margin: 0 8px 0 0, @font: "icons");
+                        &:before {
+                            float: right;
+                            color: @secondary1;
+                        }
+                    }
+                    .submenu {
+                        display: block !important;
+                    }
+                }
+                > a span {
+                    color: @primary5;
+                }
+                .submenu {
+                    display: none;
+                }
+                > .submenu {
+                    position: absolute;
+                    right: 0;
+                    padding: 0;
+                    left: 0;
+                    top: 0;
+                    margin-left: 230px;
+                    min-height: 100%;
+                    background: @primary1;
+                    .box-sizing();
+                    .box-shadow(0 10px 8px rgba(0,0,0,0.3));
+                    .no-boxshadow & {
+                        border: 2px solid @primary3;
+                        border-width: 0 2px 2px;
+                    }
+                    > ul {
+                        background: @primary1;
+                        position: relative;
+                        z-index: 1;
+                        padding: 10px;
+                    }
+                }
+            }
+            > .submenu {
+                background: none;
+                border-width: 0;
+                > ul {
+                    position: relative;
+                }
+            }
+        }
+
+        > a {
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            padding: 1em 0;
+            font-size: 16px;
+            text-align: center;
+            color: @primary5;
+            &:after {
+                opacity: 0;
+                content: '';
+                overflow: hidden;
+                display: block;
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                zoom: 1;
+                z-index: 2;
+                color: @primary6;
+                .arrow(top, 10px, @primary1);
+            }
+            > span {
+                color: @primary5;
+            }
+            &:active span,
+            &:focus span {
+                color: @primary6;
+            }
+            &:active:after,
+            &:focus:after {
+                opacity: 1;
+            }
+        }
+
+        > .submenu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: @primary1;
+            width: 100%;
+            z-index: 1;
+            > ul {
+                height: @subNavHeight;
+                padding-top: @subNavPadding;
+                padding-bottom: @subNavPadding;
+                li.column {
+                    .box-sizing( border-box );
+                    width: 25%;
+                    display: inline-block;
+                    padding-right: 30px;
+                    vertical-align: top;
+                }
+                .level1 > a {
+                    text-transform: uppercase;
+                }
+                .parent ul {
+                    padding-left: 10px;
+                }
+                li {
+                    margin: 8px 0;
+                    &:fist-child {
+                        margin-top: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    html.opened {
+        overflow: hidden;
+    }
+
+    body {
+        width: 100%;
+        height: 100%;
+        &.opened {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+
+            .navigation {
+                left: 0;
+                -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+                box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+                .transition(left .3s ease-out 0);
+            }
+            .page.wrapper {
+                margin-right: -86%;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .page.wrapper {
+        position: relative;
+        width: 100%;
+        float: right;
+        margin: 0;
+        .transition(margin .3s ease-out 0);
+    }
+
+    .navigationLink() {
+        & > a {
+            display: block;
+            padding: 10px 20px;
+            text-transform: none;
+            font-size: 20px;
+            font-weight: 600;
+            border-bottom: 1px solid @primary2;
+            color: @primary6;
+            text-align: left;
+            &:hover,
+            &:visited {
+                color: @primary6;
+            }
+            &:active {
+                background: #dbdcd7;
+            }
+            &:after {
+                border: 0;
+            }
+        }
+    }
+
+    .navigationSubmenu() {
+        position: absolute;
+        display: block;
+        left: 100%;
+        top: 0;
+        width: 100%;
+        overflow-x: hidden;
+        background: @primary7;
+        .transition(left .3s ease-out 0);
+        &.opened {
+            left: 0;
+            z-index: 3;
+        }
+        > ul {
+            padding-top: 0;
+            padding-bottom: 0;
+            li {
+                margin: 0;
+                .navigationLink();
+            }
+            li.column {
+                width: 100%;
+                display: block;
+                padding-right: 0;
+            }
+            .parent ul {
+                padding-left: 0;
+            }
+        }
+    }
+
+    .navigation {
+        display: block;
+        position: absolute;
+        width: 86%;
+        left: -86%;
+        height: 100%;
+        background: @primary7;
+        overflow: auto;
+        border-right: #b6b8af 1px solid;
+        .box-sizing();
+        .transition(left .3s ease-out 0);
+
+        ul {
+            margin: 0;
+            padding: 0;
+            li.hidden {
+                display: none;
+            }
+        }
+
+        .nav {
+            .transition(left .3s linear 0);
+            position: relative;
+            overflow: hidden;
+            > .level-top {
+                display: block;
+                padding: 0;
+                background: @primary7;
+                .navigationLink();
+                > a span {
+                    color: @primary6;
+                }
+                &.parent {
+                    &:after {
+                        display: none;
+                    }
+                    > a {
+                        position: relative;
+                        .iconAfter(@content: @icon-arrow-right-thick, @size: 14px, @font: 'icons');
+                        text-transform: none !important;
+                        &:after {
+                            position: absolute;
+                            width: 18px;
+                            top: 15px;
+                            right: 17px;
+                            left: auto;
+                            opacity: 1;
+                            z-index: auto;
+                        }
+                    }
+                    > .submenu {
+                        .navigationSubmenu();
+                    }
+                }
+
+            }
+
+            .action.back {
+                a {
+                    background: @primary6;
+                    position: relative;
+                    color: @primary7 !important;
+                    border-bottom-color: transparent !important;
+                    cursor: pointer;
+                    .iconBefore(@icon-arrow-left-thick, 14px, 0, "icons");
+                    &:hover,
+                    &:active,
+                    &:visited {
+                        color: @primary7 !important;
+                        background: @primary6 !important;
+                    }
+                    &:before {
+                        position: absolute;
+                        top: 15px;
+                        left: 3px;
+                    }
+                    span:before {
+                        content: "";
+                    }
+                }
+                &.fixed {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 86%;
+                    z-index: 1;
+                    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.6);
+                    box-shadow: 0 1px 5px rgba(0,0,0,0.6);
+                }
+            }
+
+            .parent {
+                &:after {
+                    display: none;
+                }
+                > a {
+                    position: relative;
+                    .iconAfter(@icon-arrow-right-thick, 14px, 0, "icons");
+                    &:after {
+                        position: absolute;
+                        top: 15px;
+                        right: 17px;
+                    }
+                }
+                .submenu {
+                    .navigationSubmenu();
+                }
+            }
+        }
+
+        .account.links {
+            .resetList();
+            > li > a {
+                background: @primary1;
+                padding: 10px 20px;
+                font-weight: 600;
+            }
+            a {
+                text-transform: capitalize;
+                position: relative;
+                display: block;
+                padding: 10px;
+                cursor: pointer;
+                font-size: 18px;
+                border-bottom: 1px solid @primary2;
+                font-weight: 400;
+                color: @primary6;
+                &:hover,
+                &:visited {
+                    color: @primary6 !important;
+                }
+                &:active {
+                    background: #dbdcd7 ;
+                }
+            }
+            .link.compare {
+                display: none;
+            }
+            .customer.welcome {
+                display: block  !important;
+                background: @primary1;
+                padding: 0 10px;
+                border-bottom: 1px solid @primary2;
+                .customer.name {
+                    position: relative;
+                    display: block;
+                    padding: 10px;
+                    cursor: pointer;
+                    font-size: 18px;
+                    font-weight: 600;
+                    .iconAfter(@icon-expand, 16px, 0, "icons");
+                    &:after {
+                        position: absolute;
+                        top: 10px;
+                        right: 7px;
+                    }
+                    &.active:after {
+                        content: "\e011";
+                    }
+                }
+                .menu {
+                    margin: 0;
+                    padding: 0;
+                    display: none;
+                    > ul {
+                        margin: 0;
+                        padding: 0;
+                        position: relative;
+                        float: none;
+                        border: none;
+                        background: @primary7;
+                        li {
+                            margin: 0;
+                        }
+                    }
+                }
+                &.active {
+                    border-bottom-color: transparent;
+                    .menu {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .settings.panel {
+            border-bottom: 1px solid @primary2;
+            background: @primary1;
+            > .title {
+                font-weight: 600;
+                position: relative;
+                padding: 10px 20px;
+                cursor: pointer;
+                font-size: 18px;
+                .iconAfter(@icon-expand, 16px, 0, "icons");
+                &:after {
+                    position: absolute;
+                    top: 10px;
+                    right: 17px;
+                }
+            }
+            > .content {
+                display: none;
+                margin: 0 10px 10px;
+                background: @primary7;
+                border-bottom: 1px solid @primary2;
+
+                .switcher {
+                    padding: 10px 10px 15px;
+                    display: block;
+
+                    &:first-child {
+                        padding-bottom: 0;
+                    }
+                    .label {
+                        font-weight: 400;
+                        color: @primary6;
+                        font-size: 16px;
+                        display: block;
+                        padding-bottom: 5px;
+                    }
+                    .options {
+                        display: block;
+
+                        strong {
+                            color: @primary6;
+                            display: block;
+                            position: relative;
+                            padding: 10px 40px 10px 20px;
+                            cursor: pointer;
+                            font-size: 16px;
+                            .iconAfter(@icon-expand, 16px, 0, "icons");
+                            &:after {
+                                position: absolute;
+                                top: 10px;
+                                right: 17px;
+                            }
+                        }
+                        button {
+                            display: none;
+                        }
+                        ul {
+                            display: none;
+                            position: static;
+                            margin: 0 10px 10px;
+                            padding: 0;
+                            border: 0;
+                            min-width: 0;
+                            float: none;
+                            background: none;
+                            color: @primary6;
+                            font-size: 16px;
+
+                            li {
+                                margin: 0;
+                                padding: 10px 20px;
+                                border-bottom: 1px solid @primary2;
+
+                                a {
+                                    color: @primary6;
+                                }
+                            }
+                        }
+                        &.active {
+                            ul {
+                                display: block;
+                            }
+                            strong:after {
+                                content: "\e011";
+                            }
+                        }
+                    }
+                }
+            }
+            &.active {
+                > .content {
+                    display: block;
+                }
+                > .title:after {
+                    content: "\e011";
+                }
+            }
+        }
+    }
+}

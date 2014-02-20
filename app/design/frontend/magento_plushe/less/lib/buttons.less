@@ -1,0 +1,136 @@
+// /**
+//  * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//  # Primary buttons
+//
+//  Buttons that performs primary action ([read design and usability article](http://linktousabilityarticle.com/))
+//
+//  ```html
+//  <p>Some text here</p>
+//  <button class="action myPrimary" type="button"><span>Primary action</span></button>
+//  <button class="action myPrimary :hover" type="button"><span>Primary hover</span></button>
+//  <button class="action myPrimary :active" type="button"><span>Primary active</span></button>
+//  ```
+//
+
+.action.myPrimary {
+    &:extend(.primary.action all);
+}
+
+.primary.action {
+    &:extend(.button.action all);
+    background-color: @primaryActionBg;
+    color: @primaryActionColor;
+    &:focus,
+    &:active,
+    &:hover {
+        background-color: @primaryActionBgH;
+    }
+}
+
+//  # Secondary buttons
+//
+//  Buttons that performs secondary action ([read design and usability article](http://linktousabilityarticle.com/))
+//
+//  ```html
+//  <button class="action mySecondary" type="button"><span>Secondary action</span></button>
+//  <button class="action mySecondary :hover" type="button"><span>Secondary hover</span></button>
+//  <button class="action mySecondary :active" type="button"><span>Secondary active</span></button>
+//  ```
+//
+
+.action.mySecondary {
+    &:extend(.secondary.action all);
+}
+
+.secondary.action {
+    &:extend(.button.action all);
+    background-color: @secondaryActionBg;
+    color: @secondaryActionColor;
+    &:focus,
+    &:active,
+    &:hover {
+        background-color: @secondaryActionBgH;
+    }
+}
+
+//  # Buttons displayed as links
+//  Buttons that are displayed as links
+//
+//  ```html
+//  <button class="action myLink" type="button"><span>Button as a link</span></button>
+//  <button class="action myLink :hover" type="button"><span>Button as a link hover</span></button>
+//  <button class="action myLink :active" type="button"><span>Button as a link active</span></button>
+//  ```
+//
+
+.action.myLink {
+    &:extend(.button.link all);
+}
+
+.button.link {
+    background: none;
+    border: 0;
+    display: inline;
+    color: @link;
+    margin: 0;
+    padding: 0;
+    text-decoration: underline;
+    &:focus,
+    &:active,
+    &:hover {
+        color: @linkHover;
+        text-decoration: none;
+    }
+}
+
+// # Initial styling for button
+
+.button.action {
+    border: none;
+    border-radius: 0;
+    font: @actionFont;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 9px 11px 9px;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
+    text-decoration: none;
+}
+
+// Buttons Initial Variables
+
+//@primaryActionBg:;
+//@primaryActionBgH:;
+//@primaryActionColor:;
+//@secondaryActionBg:;
+//@secondaryActionBgH:;
+//@secondaryActionColor:;
+//@actionFont:;
+
+.action + .action {
+    margin-left: 5px;
+}

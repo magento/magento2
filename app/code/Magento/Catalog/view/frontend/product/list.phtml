@@ -1,0 +1,141 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @var $this \Magento\Catalog\Block\Product\ListProduct
+ */
+?>
+<?php
+$_productCollection = $this->getLoadedProductCollection();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+$imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+?>
+<?php if (!$_productCollection->count()): ?>
+    <div class="message notice"><span><?php echo __('There are no products matching the selection.') ?></span></div>
+<?php else: ?>
+    <?php echo $this->getToolbarHtml() ?>
+    <?php echo $this->getAdditionalHtml() ?>
+    <?php if ($this->getMode() == 'grid') {
+        $viewMode ='grid';
+        $image = 'category_page_grid';
+        $showDescription = false;
+        $rating = 'short';
+    } else {
+        $viewMode ='list';
+        $image = 'category_page_list';
+        $showDescription = true;
+        $rating = 'full';
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $this->getPositioned();
+    $position = '';
+    if ($pos != null) {
+        $position = ' style="left:' . $this->getVar("{$image}:width") . 'px;'
+            .'top:' . $this->getVar("{$image}:height") . 'px;"';
+    }
+    ?>
+    <div class="products wrapper <?php echo $viewMode; ?>">
+        <?php $iterator = 1; ?>
+        <ol class="products list items">
+            <?php foreach ($_productCollection as $_product): ?>
+                <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
+                <div class="product">
+                    <?php // Product Image ?>
+                    <a href="<?php echo $_product->getProductUrl() ?>" class="product photo">
+                        <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
+                    </a>
+                    <div class="product details">
+                        <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                        <strong class="product name">
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped; ?>">
+                                <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                            </a>
+                        </strong>
+                        <?php echo $this->getPriceHtml($_product, true) ?>
+                        <?php if ($_product->getRatingSummary()): ?>
+                            <?php echo $this->getReviewsSummaryHtml($_product,$rating) ?>
+                        <?php endif; ?>
+                        <?php if ($showDescription):?>
+                            <div class="product description">
+                                <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>"
+                                   class="action more"><?php echo __('Learn More') ?></a>
+                            </div>
+                        <?php endif; ?>
+                        <div class="product actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
+                            <div class="primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position: ''; ?>>
+                                <?php if ($_product->isSaleable()): ?>
+                                    <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
+                                        <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart"
+                                                data-mage-init='{"redirectUrl":{"url":"<?php echo $this->getAddToCartUrl($_product) ?>"}}'>
+                                            <span><?php echo __('Add to Cart') ?></span>
+                                        </button>
+                                    <?php else: ?>
+                                        <?php
+                                            $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                            $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
+                                        ?>
+                                        <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart"
+                                                data-post='<?php echo $postData; ?>'>
+                                            <span><?php echo __('Add to Cart') ?></span>
+                                        </button>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <?php if ($_product->getIsSalable()): ?>
+                                        <p class="stock available"><span><?php echo __('In stock') ?></span></p>
+                                    <?php else: ?>
+                                        <p class="stock unavailable"><span><?php echo __('Out of stock') ?></span></p>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+                            <div data-role="add-to-links" class="secondary"<?php echo strpos($pos, $viewMode . '-secondary') ? $position : ''; ?>>
+                                <a href="#"
+                                   data-post='<?php echo $this->getAddToWishlistParams($_product); ?>'
+                                   class="action towishlist" data-action="add-to-wishlist">
+                                    <span><?php echo __('Add to Wishlist') ?></span>
+                                </a>
+                                <?php
+                                $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
+                                ?>
+                                <a href="#" class="action tocompare"
+                                   data-post='<?php echo $compareHelper->getPostDataParams($_product); ?>'>
+                                    <span><?php echo __('Add to Compare') ?></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php echo ($iterator==count($_productCollection)+1) ? '</li>' : '' ?>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+    <div class="toolbar bottom">
+        <?php echo $this->getToolbarHtml() ?>
+    </div>
+<?php endif; ?>

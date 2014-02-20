@@ -18,17 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Magento_Cache_Backend_Decorator_Compression test case
+ * \Magento\Cache\Backend\Decorator\Compression test case
  */
-class Magento_Cache_Backend_Decorator_CompressionTest extends PHPUnit_Framework_TestCase
+namespace Magento\Cache\Backend\Decorator;
+
+class CompressionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Cache_Backend_Decorator_Compression
+     * @var \Magento\Cache\Backend\Decorator\Compression
      */
     protected $_decorator;
 
@@ -48,7 +50,7 @@ class Magento_Cache_Backend_Decorator_CompressionTest extends PHPUnit_Framework_
             'concrete_backend' => $this->getMock('Zend_Cache_Backend_File'),
             'compression_threshold' => strlen($this->_testString)
         );
-        $this->_decorator = new Magento_Cache_Backend_Decorator_Compression($options);
+        $this->_decorator = new \Magento\Cache\Backend\Decorator\Compression($options);
     }
 
     protected function tearDown()
@@ -59,7 +61,7 @@ class Magento_Cache_Backend_Decorator_CompressionTest extends PHPUnit_Framework_
 
     public function testCompressData()
     {
-        $method = new ReflectionMethod('Magento_Cache_Backend_Decorator_Compression', '_compressData');
+        $method = new \ReflectionMethod('Magento\Cache\Backend\Decorator\Compression', '_compressData');
         $method->setAccessible(true);
 
         $this->assertStringStartsWith('CACHE_COMPRESSION', $method->invoke($this->_decorator, $this->_testString));
@@ -67,10 +69,10 @@ class Magento_Cache_Backend_Decorator_CompressionTest extends PHPUnit_Framework_
 
     public function testDecompressData()
     {
-        $methodCompress = new ReflectionMethod('Magento_Cache_Backend_Decorator_Compression', '_compressData');
+        $methodCompress = new \ReflectionMethod('Magento\Cache\Backend\Decorator\Compression', '_compressData');
         $methodCompress->setAccessible(true);
 
-        $methodDecompress = new ReflectionMethod('Magento_Cache_Backend_Decorator_Compression', '_decompressData');
+        $methodDecompress = new \ReflectionMethod('Magento\Cache\Backend\Decorator\Compression', '_decompressData');
         $methodDecompress->setAccessible(true);
 
         $this->assertEquals(
@@ -81,7 +83,7 @@ class Magento_Cache_Backend_Decorator_CompressionTest extends PHPUnit_Framework_
 
     public function testIsCompressionNeeded()
     {
-        $method = new ReflectionMethod('Magento_Cache_Backend_Decorator_Compression', '_isCompressionNeeded');
+        $method = new \ReflectionMethod('Magento\Cache\Backend\Decorator\Compression', '_isCompressionNeeded');
         $method->setAccessible(true);
 
         $this->assertFalse($method->invoke($this->_decorator, $this->_testString));
@@ -93,7 +95,7 @@ class Magento_Cache_Backend_Decorator_CompressionTest extends PHPUnit_Framework_
     {
         $prefix = 'CACHE_COMPRESSION';
 
-        $method = new ReflectionMethod('Magento_Cache_Backend_Decorator_Compression', '_isDecompressionNeeded');
+        $method = new \ReflectionMethod('Magento\Cache\Backend\Decorator\Compression', '_isDecompressionNeeded');
         $method->setAccessible(true);
 
         $this->assertFalse($method->invoke($this->_decorator, $this->_testString));
@@ -119,7 +121,7 @@ class Magento_Cache_Backend_Decorator_CompressionTest extends PHPUnit_Framework_
             'compression_threshold' => strlen($this->_testString)
         );
 
-        $decorator = new Magento_Cache_Backend_Decorator_Compression($options);
+        $decorator = new \Magento\Cache\Backend\Decorator\Compression($options);
 
         $decorator->setOption('write_control', false);
         $decorator->setOption('automatic_cleaning_factor', 0);

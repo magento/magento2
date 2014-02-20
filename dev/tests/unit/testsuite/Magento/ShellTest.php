@@ -21,21 +21,33 @@
  * @category    Magento
  * @package     Magento_Shell
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_ShellTest extends PHPUnit_Framework_TestCase
+namespace Magento;
+
+class ShellTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\OSInfo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $osInfo;
+
+    public function setUp()
+    {
+        $this->osInfo = $this->getMockBuilder('Magento\OSInfo')->disableOriginalConstructor()->getMock();
+    }
+
     /**
      * Test that a command with input arguments returns an expected result
      *
-     * @param Magento_Shell $shell
+     * @param \Magento\Shell $shell
      * @param string $command
      * @param array $commandArgs
      * @param string $expectedResult
      */
-    protected function _testExecuteCommand(Magento_Shell $shell, $command, $commandArgs, $expectedResult)
+    protected function _testExecuteCommand(\Magento\Shell $shell, $command, $commandArgs, $expectedResult)
     {
         $this->expectOutputString(''); // nothing is expected to be ever printed to the standard output
         $actualResult = $shell->execute($command, $commandArgs);
@@ -50,7 +62,7 @@ class Magento_ShellTest extends PHPUnit_Framework_TestCase
      */
     public function testExecute($command, $commandArgs, $expectedResult)
     {
-        $this->_testExecuteCommand(new Magento_Shell(), $command, $commandArgs, $expectedResult);
+        $this->_testExecuteCommand(new \Magento\Shell($this->osInfo), $command, $commandArgs, $expectedResult);
     }
 
     /**
@@ -69,10 +81,10 @@ class Magento_ShellTest extends PHPUnit_Framework_TestCase
             $logger
                 ->expects($this->at($logRecordIndex))
                 ->method('log')
-                ->with($expectedLogMessage, Zend_Log::INFO)
+                ->with($expectedLogMessage, \Zend_Log::INFO)
             ;
         }
-        $this->_testExecuteCommand(new Magento_Shell($logger), $command, $commandArgs, $expectedResult);
+        $this->_testExecuteCommand(new \Magento\Shell($this->osInfo, $logger), $command, $commandArgs, $expectedResult);
     }
 
     public function executeDataProvider()
@@ -100,13 +112,13 @@ class Magento_ShellTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento_Exception
+     * @expectedException \Magento\Exception
      * @expectedExceptionMessage Command `non_existing_command 2>&1` returned non-zero exit code
      * @expectedExceptionCode 0
      */
     public function testExecuteFailure()
     {
-        $shell = new Magento_Shell();
+        $shell = new \Magento\Shell($this->osInfo);
         $shell->execute('non_existing_command');
     }
 
@@ -122,7 +134,7 @@ class Magento_ShellTest extends PHPUnit_Framework_TestCase
             /* Force command to return non-zero exit code */
             $commandArgs[count($commandArgs) - 1] .= ' exit(42);';
             $this->testExecute($command, $commandArgs, ''); // no result is expected in a case of a command failure
-        } catch (Magento_Exception $e) {
+        } catch (\Magento\Exception $e) {
             $this->assertInstanceOf('Exception', $e->getPrevious());
             $this->assertEquals($expectedError, $e->getPrevious()->getMessage());
             $this->assertEquals(42, $e->getPrevious()->getCode());

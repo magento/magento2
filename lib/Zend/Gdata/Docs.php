@@ -113,7 +113,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
     }
 
     /**
-     * Retreive feed object containing entries for the user's documents.
+     * Retrieve feed object containing entries for the user's documents.
      *
      * @param mixed $location The location for the feed, as a URL or Query
      * @return Zend_Gdata_Docs_DocumentListFeed
@@ -131,7 +131,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
     }
 
     /**
-     * Retreive entry object representing a single document.
+     * Retrieve entry object representing a single document.
      *
      * @param mixed $location The location for the entry, as a URL or Query
      * @return Zend_Gdata_Docs_DocumentListEntry
@@ -151,7 +151,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
     }
 
     /**
-     * Retreive entry object representing a single document.
+     * Retrieve entry object representing a single document.
      *
      * This method builds the URL where this item is stored using the type
      * and the id of the document.
@@ -168,7 +168,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
     }
 
     /**
-     * Retreive entry object for the desired word processing document.
+     * Retrieve entry object for the desired word processing document.
      *
      * @param string $id The URL id for the document. Example:
      *     dcmg89gw_62hfjj8m
@@ -178,7 +178,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
     }
 
     /**
-     * Retreive entry object for the desired spreadsheet.
+     * Retrieve entry object for the desired spreadsheet.
      *
      * @param string $id The URL id for the document. Example:
      *     pKq0CzjiF3YmGd0AIlHKqeg
@@ -188,7 +188,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
     }
 
     /**
-     * Retreive entry object for the desired presentation.
+     * Retrieve entry object for the desired presentation.
      *
      * @param string $id The URL id for the document. Example:
      *     dcmg89gw_21gtrjcn
@@ -265,7 +265,7 @@ class Zend_Gdata_Docs extends Zend_Gdata
      *       the appropriate type doesn't exist yet.
      */
     public function createFolder($folderName, $folderResourceId=null) {
-        $category = new Zend_Gdata_App_Extension_Category(self::DOCUMENTS_CATEGORY_TERM, 
+        $category = new Zend_Gdata_App_Extension_Category(self::DOCUMENTS_CATEGORY_TERM,
                                                           self::DOCUMENTS_CATEGORY_SCHEMA);
         $title = new Zend_Gdata_App_Extension_Title($folderName);
         $entry = new Zend_Gdata_Entry();

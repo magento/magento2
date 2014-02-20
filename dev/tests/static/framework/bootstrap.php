@@ -21,15 +21,31 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  static_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$baseDir = realpath(__DIR__ . '/../../../../');
-require $baseDir . '/app/autoload.php';
-Magento_Autoload_IncludePath::addIncludePath(array(
+define('BP', realpath(__DIR__ . '/../../../../'));
+require BP . '/app/autoload.php';
+\Magento\Autoload\IncludePath::addIncludePath(array(
     __DIR__,
     dirname(__DIR__) . '/testsuite',
-    $baseDir . '/lib',
+    BP . '/lib',
 ));
-Utility_Files::init(new Utility_Files($baseDir));
+\Magento\TestFramework\Utility\Files::setInstance(new \Magento\TestFramework\Utility\Files(BP));
+
+function tool_autoloader($className)
+{
+    if (strpos($className, 'Magento\\Tools\\') === false) {
+        return false;
+    }
+    $filePath = str_replace('\\', '/', $className);
+    $filePath = BP . '/dev/tools/' . $filePath . '.php';
+
+    if (file_exists($filePath)) {
+        include_once($filePath);
+    } else {
+        return false;
+    }
+}
+spl_autoload_register('tool_autoloader');

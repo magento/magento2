@@ -21,27 +21,29 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test class for Magento_Test_EventManager.
+ * Test class for \Magento\TestFramework\EventManager.
  */
-class Magento_Test_EventManagerTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test;
+
+class EventManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_EventManager
+     * @var \Magento\TestFramework\EventManager
      */
     protected $_eventManager;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_subscriberOne;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_subscriberTwo;
 
@@ -49,7 +51,8 @@ class Magento_Test_EventManagerTest extends PHPUnit_Framework_TestCase
     {
         $this->_subscriberOne = $this->getMock('stdClass', array('testEvent'));
         $this->_subscriberTwo = $this->getMock('stdClass', array('testEvent'));
-        $this->_eventManager = new Magento_Test_EventManager(array($this->_subscriberOne, $this->_subscriberTwo));
+        $this->_eventManager = new \Magento\TestFramework\EventManager(
+            array($this->_subscriberOne, $this->_subscriberTwo));
     }
 
     /**

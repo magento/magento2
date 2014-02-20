@@ -22,10 +22,12 @@
  *
  * @category    Magento
  * @package     Magento_Outbound
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Outbound_Message implements Magento_Outbound_MessageInterface
+namespace Magento\Outbound;
+
+class Message implements MessageInterface
 {
     /** default timeout value in seconds */
     const DEFAULT_TIMEOUT = 20;
@@ -45,14 +47,16 @@ class Magento_Outbound_Message implements Magento_Outbound_MessageInterface
      */
     protected $_timeout;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_endpointUrl;
 
 
     /**
      * @param string $endpointUrl
      * @param array $headers
-     * @param null $body
+     * @param string|null $body
      * @param int $timeout in seconds
      */
     public function __construct($endpointUrl, $headers = array(), $body = null, $timeout = self::DEFAULT_TIMEOUT)

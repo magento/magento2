@@ -19,7 +19,7 @@
  *
  * @category    mage
  * @package     mage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint eqnull:true browser:true jquery:true*/
@@ -66,7 +66,7 @@
     $.fn.mage = function(name) {
         var args = Array.prototype.slice.call(arguments, 1);
         return this.each(function(){
-            var inits = _getInitData(this);
+            var inits = $(this).data('mage-init') || {};
             if (name) {
                 inits[name] = args;
             }
@@ -145,27 +145,6 @@
             }
         }, $(this));
         _onload(init.resources, handler);
-    }
-
-    /**
-     * Define init-data from an element,
-     *     if JSON is not well-formed then evaluate init-data by manually
-     * @param {Element} elem
-     * @return {Object}
-     * @private
-     */
-    function _getInitData(elem) {
-        /*jshint evil:true*/
-        var inits = $(elem).data('mage-init') || {};
-        // in case it's not well-formed JSON inside data attribute, evaluate it manually
-        if (typeof inits === 'string') {
-            try {
-                inits = eval('(' + inits + ')');
-            } catch (e) {
-                inits = {};
-            }
-        }
-        return inits;
     }
 
     /**

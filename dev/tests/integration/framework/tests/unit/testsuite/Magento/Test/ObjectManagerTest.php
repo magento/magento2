@@ -21,14 +21,16 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test class for Magento_ObjectManager_Test
+ * Test class for \Magento\ObjectManager\Test
  */
-class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test;
+
+class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Expected instance manager parametrized cache after clear
@@ -42,19 +44,46 @@ class Magento_Test_ObjectManagerTest extends PHPUnit_Framework_TestCase
 
     public function testClearCache()
     {
-        $resource = new stdClass;
-        $instanceConfig = new Magento_Test_ObjectManager_Config();
-        $primaryConfig = $this->getMock('Mage_Core_Model_Config_Primary', array(), array(), '', false);
-        $dirs = $this->getMock('Mage_Core_Model_Dir', array(), array(), '', false);
-        $primaryConfig->expects($this->any())->method('getDirectories')->will($this->returnValue($dirs));
-        $model = new Magento_Test_ObjectManager($primaryConfig, $instanceConfig);
-        $model->addSharedInstance($resource, 'Mage_Core_Model_Resource');
-        $instance1 = $model->get('Magento_Test_Request');
+        $resource = new \stdClass;
+        $instanceConfig = new \Magento\TestFramework\ObjectManager\Config();
+        $verification = $this->getMock(
+            'Magento\App\Filesystem\DirectoryList\Verification', array(), array(), '', false
+        );
+        $cache = $this->getMock('Magento\App\CacheInterface');
+        $configLoader = $this->getMock('Magento\App\ObjectManager\ConfigLoader', array(), array(), '', false);
+        $configCache = $this->getMock('Magento\App\ObjectManager\ConfigCache', array(), array(), '', false);
+        $primaryLoaderMock = $this->getMock(
+            'Magento\App\ObjectManager\ConfigLoader\Primary', array(), array(), '', false
+        );
 
-        $this->assertSame($instance1, $model->get('Magento_Test_Request'));
+        $model = new \Magento\TestFramework\ObjectManager(
+            null, $instanceConfig,
+            array(
+                'Magento\App\Filesystem\DirectoryList\Verification' => $verification,
+                'Magento\App\Cache\Type\Config' => $cache,
+                'Magento\App\ObjectManager\ConfigLoader' => $configLoader,
+                'Magento\App\ObjectManager\ConfigCache' => $configCache,
+                'Magento\Config\ReaderInterface' => $this->getMock('Magento\Config\ReaderInterface'),
+                'Magento\Config\ScopeInterface' => $this->getMock('Magento\Config\ScopeInterface'),
+                'Magento\Config\CacheInterface' => $this->getMock('Magento\Config\CacheInterface'),
+                'Magento\Cache\FrontendInterface' => $this->getMock('Magento\Cache\FrontendInterface'),
+                'Magento\App\Resource' => $this->getMock(
+                    'Magento\App\Resource', array(), array(), '', false
+                ),
+                'Magento\App\Resource\Config' => $this->getMock(
+                    'Magento\App\Resource\Config', array(), array(), '', false
+                ),
+            ),
+            $primaryLoaderMock
+        );
+
+        $model->addSharedInstance($resource, 'Magento\App\Resource');
+        $instance1 = $model->get('Magento\Object');
+
+        $this->assertSame($instance1, $model->get('Magento\Object'));
         $this->assertSame($model, $model->clearCache());
-        $this->assertSame($model, $model->get('Magento_ObjectManager'));
-        $this->assertSame($resource, $model->get('Mage_Core_Model_Resource'));
-        $this->assertNotSame($instance1, $model->get('Magento_Test_Request'));
+        $this->assertSame($model, $model->get('Magento\ObjectManager'));
+        $this->assertSame($resource, $model->get('Magento\App\Resource'));
+        $this->assertNotSame($instance1, $model->get('Magento\Object'));
     }
 }

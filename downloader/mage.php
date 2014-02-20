@@ -18,18 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @category    Magento
+ * @package     Magento_Connect
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-define('DS', DIRECTORY_SEPARATOR);
 define('PS', PATH_SEPARATOR);
-define('BP', dirname(dirname(__FILE__)));
-define('MAGENTO_ROOT', dirname(dirname(__FILE__)));
+define('BP', dirname(__DIR__));
+define('MAGENTO_ROOT', dirname(__DIR__));
 
-class __cli_Mage_Connect
+class __cli_Magento_Connect
 {
     private static $_instance;
     protected $argv;
@@ -46,19 +45,19 @@ class __cli_Mage_Connect
                 $this->argv = $argv;
         $this->setIncludes();
         require_once("Mage/Autoload/Simple.php");
-        Mage_Autoload_Simple::register();
-        chdir(BP . DS . 'downloader' . DS);
+        \Magento\Autoload\Simple::register();
+        chdir(BP . '/downloader/');
         return $this;
     }
 
     public function setIncludes()
     {
         if (defined('DEVELOPMENT_MODE')) {
-            $libPath = PS . dirname(BP) . DS . 'lib';
+            $libPath = PS . dirname(BP) . '/lib';
         } else {
-            $libPath = PS . BP . DS . 'downloader' . DS . 'lib';
+            $libPath = PS . BP . '/downloader/lib';
         }
-        $includePath = BP . DS . 'app'
+        $includePath = BP . '/app'
         . $libPath
         . PS . get_include_path();
         set_include_path($includePath);
@@ -68,13 +67,13 @@ class __cli_Mage_Connect
 
     public function getCommands()
     {
-        return Mage_Connect_Command::getCommands();
+        return \Magento\Connect\Command::getCommands();
     }
 
     public function getFrontend()
     {
-        $frontend = Mage_Connect_Frontend::getInstance('CLI');
-        Mage_Connect_Command::setFrontendObject($frontend);
+        $frontend = \Magento\Connect\Frontend::getInstance('CLI');
+        \Magento\Connect\Command::setFrontendObject($frontend);
         return $frontend;
     }
 
@@ -83,11 +82,11 @@ class __cli_Mage_Connect
         if (isset($this->config)) {
             return $this->config;
         }
-        $config = new Mage_Connect_Config($fileName);
+        $config = new \Magento\Connect\Config($fileName);
         if (empty($config->magento_root)) {
-           $config->magento_root = dirname(dirname(__FILE__));
+           $config->magento_root = dirname(__DIR__);
         }
-        Mage_Connect_Command::setConfigObject($config);
+        \Magento\Connect\Command::setConfigObject($config);
         $this->config = $config;
         return $config;
     }
@@ -107,7 +106,7 @@ class __cli_Mage_Connect
 
     public function parseCommandArgs($argv)
     {
-        $a = new Mage_System_Args();
+        $a = new \Magento\System\Args();
         $args = $a->getFiltered();
         array_shift($args);
         return array($a->getFlags(), $args);
@@ -115,7 +114,7 @@ class __cli_Mage_Connect
 
     public function runCommand($cmd, $options, $params)
     {
-        $c = Mage_Connect_Command::getInstance($cmd);
+        $c = \Magento\Connect\Command::getInstance($cmd);
         $c->run($cmd, $options, $params);
     }
 
@@ -123,13 +122,13 @@ class __cli_Mage_Connect
     public function getSingleConfig()
     {
         if(!$this->_sconfig) {
-            $this->_sconfig = new Mage_Connect_Singleconfig(
-                    $this->getConfig()->magento_root . DS .
-                    $this->getConfig()->downloader_path . DS .
-                    Mage_Connect_Singleconfig::DEFAULT_SCONFIG_FILENAME
+            $this->_sconfig = new \Magento\Connect\Singleconfig(
+                    $this->getConfig()->magento_root . '/' .
+                    $this->getConfig()->downloader_path . '/' .
+                    \Magento\Connect\Singleconfig::DEFAULT_SCONFIG_FILENAME
             );
         }
-        Mage_Connect_Command::setSconfig($this->_sconfig);
+        \Magento\Connect\Command::setSconfig($this->_sconfig);
         return $this->_sconfig;
     }
 
@@ -152,5 +151,5 @@ class __cli_Mage_Connect
 }
 
 if (defined('STDIN') && defined('STDOUT') && (defined('STDERR'))) {
-    __cli_Mage_Connect::instance()->init($argv)->run();
+    __cli_Magento_Connect::instance()->init($argv)->run();
 }

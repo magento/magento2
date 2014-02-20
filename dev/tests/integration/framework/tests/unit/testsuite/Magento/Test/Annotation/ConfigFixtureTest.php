@@ -21,30 +21,32 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test class for Magento_Test_Annotation_ConfigFixture.
+ * Test class for \Magento\TestFramework\Annotation\ConfigFixture.
  */
-class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Annotation;
+
+class ConfigFixtureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Annotation_ConfigFixture|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Annotation\ConfigFixture|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_object;
 
     protected function setUp()
     {
         $this->_object = $this->getMock(
-            'Magento_Test_Annotation_ConfigFixture',
+            'Magento\TestFramework\Annotation\ConfigFixture',
             array('_getConfigValue', '_setConfigValue')
         );
     }
 
     /**
-     * @magentoConfigFixture web/unsecure/base_url http://example.com/
+     * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
      */
     public function testGlobalConfig()
     {
@@ -52,20 +54,17 @@ class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCa
             ->expects($this->at(0))
             ->method('_getConfigValue')
             ->with('web/unsecure/base_url')
-            ->will($this->returnValue('http://localhost/'))
-        ;
+            ->will($this->returnValue('http://localhost/'));
         $this->_object
             ->expects($this->at(1))
             ->method('_setConfigValue')
-            ->with('web/unsecure/base_url', 'http://example.com/')
-        ;
+            ->with('web/unsecure/base_url', 'http://example.com/');
         $this->_object->startTest($this);
 
         $this->_object
             ->expects($this->once())
             ->method('_setConfigValue')
-            ->with('web/unsecure/base_url', 'http://localhost/')
-        ;
+            ->with('web/unsecure/base_url', 'http://localhost/');
         $this->_object->endTest($this);
     }
 
@@ -78,20 +77,17 @@ class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCa
             ->expects($this->at(0))
             ->method('_getConfigValue')
             ->with('dev/restrict/allow_ips', '')
-            ->will($this->returnValue('127.0.0.1'))
-        ;
+            ->will($this->returnValue('127.0.0.1'));
         $this->_object
             ->expects($this->at(1))
             ->method('_setConfigValue')
-            ->with('dev/restrict/allow_ips', '192.168.0.1', '')
-        ;
+            ->with('dev/restrict/allow_ips', '192.168.0.1', '');
         $this->_object->startTest($this);
 
         $this->_object
             ->expects($this->once())
             ->method('_setConfigValue')
-            ->with('dev/restrict/allow_ips', '127.0.0.1', '')
-        ;
+            ->with('dev/restrict/allow_ips', '127.0.0.1', '');
         $this->_object->endTest($this);
     }
 
@@ -104,41 +100,33 @@ class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCa
             ->expects($this->at(0))
             ->method('_getConfigValue')
             ->with('dev/restrict/allow_ips', 'admin')
-            ->will($this->returnValue('192.168.0.1'))
-        ;
+            ->will($this->returnValue('192.168.0.1'));
         $this->_object
             ->expects($this->at(1))
             ->method('_setConfigValue')
-            ->with('dev/restrict/allow_ips', '192.168.0.2', 'admin')
-        ;
+            ->with('dev/restrict/allow_ips', '192.168.0.2', 'admin');
         $this->_object->startTest($this);
 
         $this->_object
             ->expects($this->once())
             ->method('_setConfigValue')
-            ->with('dev/restrict/allow_ips', '192.168.0.1', 'admin')
-        ;
+            ->with('dev/restrict/allow_ips', '192.168.0.1', 'admin');
         $this->_object->endTest($this);
     }
 
-    /**
-     * @magentoConfigFixture some/config/path some_config_value
-     */
     public function testInitStoreAfterOfScope()
     {
         $this->_object
             ->expects($this->never())
-            ->method('_getConfigValue')
-        ;
+            ->method('_getConfigValue');
         $this->_object
             ->expects($this->never())
-            ->method('_setConfigValue')
-        ;
+            ->method('_setConfigValue');
         $this->_object->initStoreAfter();
     }
 
     /**
-     * @magentoConfigFixture web/unsecure/base_url http://example.com/
+     * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
      */
     public function testInitStoreAfter()
     {
@@ -147,13 +135,11 @@ class Magento_Test_Annotation_ConfigFixtureTest extends PHPUnit_Framework_TestCa
             ->expects($this->at(0))
             ->method('_getConfigValue')
             ->with('web/unsecure/base_url')
-            ->will($this->returnValue('http://localhost/'))
-        ;
+            ->will($this->returnValue('http://localhost/'));
         $this->_object
             ->expects($this->at(1))
             ->method('_setConfigValue')
-            ->with('web/unsecure/base_url', 'http://example.com/')
-        ;
+            ->with('web/unsecure/base_url', 'http://example.com/');
         $this->_object->initStoreAfter();
     }
 }

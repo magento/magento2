@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_Outbound_Message
+ * \Magento\Outbound\Message
  * 
  * Magento
  *
@@ -23,15 +23,17 @@
  * @category    Magento
  * @package     Magento_Outbound
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Magento_Outbound_MessageTest extends PHPUnit_Framework_TestCase
+namespace Magento\Outbound;
+
+class MessageTest extends \PHPUnit_Framework_TestCase
 {
     public function test() 
     {
-        $uut = new Magento_Outbound_Message('http://localhost', array('key1'=>'val1', 'key2' => 'val2'), "Body");
+        $uut = new \Magento\Outbound\Message('http://localhost', array('key1'=>'val1', 'key2' => 'val2'), "Body");
         // check endpoint url
         $this->assertSame('http://localhost', $uut->getEndpointUrl());
         // check headers

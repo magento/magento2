@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <event name="customer_login">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="synchronizePersistentOnLogin" />
+    </event>
+    <event name="customer_logout">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="synchronizePersistentOnLogout" />
+    </event>
+    <event name="controller_front_send_response_after">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="synchronizePersistentInfo" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_loginPost">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
+    </event>
+    <event name="controller_action_predispatch_customer_account_createpost">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
+        <observer name="persistent_authenticate" instance="Magento\Persistent\Model\Observer" method="customerAuthenticatedEvent" />
+    </event>
+    <event name="controller_action_layout_generate_blocks_after">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="applyPersistentData" />
+    </event>
+    <event name="controller_action_predispatch">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="emulateQuote" />
+        <observer name="persistent_session" instance="Magento\Persistent\Model\Observer\Session" method="renewCookie" />
+        <observer name="persistent_quote" instance="Magento\Persistent\Model\Observer" method="checkExpirePersistentQuote" />
+        <observer name="persistent_customer" instance="Magento\Persistent\Model\Observer" method="emulateCustomer" />
+    </event>
+    <event name="checkout_allow_guest">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="disableGuestCheckout" />
+    </event>
+    <event name="customer_customer_authenticated">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="customerAuthenticatedEvent" />
+    </event>
+    <event name="controller_action_predispatch_persistent_index_unsetCookie">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventClearCheckoutSession" />
+    </event>
+    <event name="controller_action_postdispatch_persistent_index_unsetCookie">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="makePersistentQuoteGuest" />
+    </event>
+    <event name="sales_quote_save_before">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="setQuotePersistentData" />
+    </event>
+    <event name="custom_quote_process">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="setLoadPersistentQuote" />
+    </event>
+    <event name="controller_action_postdispatch_checkout_onepage_saveBilling">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
+    </event>
+    <event name="customer_register_success">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="removePersistentCookie" />
+    </event>
+    <event name="controller_action_predispatch_paypal_express_start">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
+    </event>
+    <event name="controller_action_predispatch_paypal_payflowexpress_start">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
+    </event>
+    <event name="controller_action_predispatch_googlecheckout_redirect_checkout">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
+    </event>
+    <event name="controller_action_predispatch_multishipping_checkout_index">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
+    </event>
+    <event name="render_block">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="applyBlockPersistentData" />
+    </event>
+    <event name="update_customer_cookies">
+        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="updateCustomerCookies" />
+    </event>
+</config>

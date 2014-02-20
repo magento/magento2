@@ -21,23 +21,25 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Test class for Magento_Test_Event_Param_Transaction.
+ * Test class for \Magento\TestFramework\Event\Param\Transaction.
  */
-class Magento_Test_Event_Param_TransactionTest extends PHPUnit_Framework_TestCase
+namespace Magento\Test\Event\Param;
+
+class TransactionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Test_Event_Param_Transaction
+     * @var \Magento\TestFramework\Event\Param\Transaction
      */
     protected $_object;
 
     protected function setUp()
     {
-        $this->_object = new Magento_Test_Event_Param_Transaction();
+        $this->_object = new \Magento\TestFramework\Event\Param\Transaction();
     }
 
     public function testConstructor()

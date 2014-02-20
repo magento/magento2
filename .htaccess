@@ -32,13 +32,8 @@
 ## adjust memory limit
 
 #    php_value memory_limit 64M
-    php_value memory_limit 256M
+    php_value memory_limit 2048M
     php_value max_execution_time 18000
-
-############################################
-## disable magic quotes for php request vars
-
-    php_flag magic_quotes_gpc off
 
 ############################################
 ## disable automatic session start
@@ -55,11 +50,6 @@
 # disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
-
-###########################################
-# turn off compatibility with PHP4 when dealing with objects
-
-    php_flag zend.ze1_compatibility_mode Off
 
 </IfModule>
 
@@ -186,7 +176,6 @@
         order allow,deny
         deny from all
     </Files>
-
 ############################################
 ## If running in cluster environment, uncomment this
 ## http://developer.yahoo.com/performance/rules.html#etags

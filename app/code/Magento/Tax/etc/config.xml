@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Magento
+ * @package     Magento_Tax
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <default>
+        <tax>
+            <classes>
+                <shipping_tax_class />
+            </classes>
+            <calculation>
+                <algorithm>TOTAL_BASE_CALCULATION</algorithm>
+                <apply_after_discount>0</apply_after_discount>
+                <discount_tax>0</discount_tax>
+                <based_on>shipping</based_on>
+                <price_includes_tax>0</price_includes_tax>
+                <shipping_includes_tax>0</shipping_includes_tax>
+                <discount_tax>0</discount_tax>
+                <apply_tax_on>0</apply_tax_on>
+            </calculation>
+            <defaults>
+                <country>US</country>
+                <region>0</region>
+                <postcode>*</postcode>
+            </defaults>
+            <display>
+                <type>1</type>
+                <shipping>1</shipping>
+            </display>
+            <cart_display>
+                <price>1</price>
+                <subtotal>1</subtotal>
+                <shipping>1</shipping>
+                <discount>1</discount>
+                <grandtotal>0</grandtotal>
+                <full_summary>0</full_summary>
+                <zero_tax>0</zero_tax>
+            </cart_display>
+            <sales_display>
+                <price>1</price>
+                <subtotal>1</subtotal>
+                <shipping>1</shipping>
+                <discount>1</discount>
+                <grandtotal>0</grandtotal>
+                <full_summary>0</full_summary>
+                <zero_tax>0</zero_tax>
+            </sales_display>
+        </tax>
+    </default>
+</config>

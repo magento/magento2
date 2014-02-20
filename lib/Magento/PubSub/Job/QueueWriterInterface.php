@@ -22,16 +22,18 @@
  *
  * @category    Magento
  * @package     Magento_PubSub
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_PubSub_Job_QueueWriterInterface
+namespace Magento\PubSub\Job;
+
+interface QueueWriterInterface
 {
     /**
      * Adds the job to the queue.
      *
-     * @param Magento_PubSub_JobInterface $job
+     * @param \Magento\PubSub\JobInterface $job
      * @return null
      */
-    public function offer(Magento_PubSub_JobInterface $job);
+    public function offer(\Magento\PubSub\JobInterface $job);
 }

@@ -1,0 +1,228 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php
+/**
+ * @var $this \Magento\Catalog\Block\Product\View
+ */
+$_product = $this->getProduct();
+$_tierPrices = $this->getTierPrices();
+$_finalPriceInclTax = $this->helper('Magento\Tax\Helper\Data')->getPrice($_product, $_product->getFinalPrice(), true);
+
+/** @var $_catalogHelper \Magento\Catalog\Helper\Data */
+$_catalogHelper = $this->helper('Magento\Catalog\Helper\Data');
+
+$_weeeTaxAmount = $this->helper('Magento\Weee\Helper\Data')->getAmountForDisplay($_product);
+if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,2,4))) {
+    $_weeeTaxAttributes = $this->helper('Magento\Weee\Helper\Data')->getProductWeeeAttributesForDisplay($_product);
+}
+
+?>
+<?php if (count($_tierPrices) > 0): ?>
+    <ul class="<?php echo ($this->hasListClass() ? $this->getListClass() : 'prices tier items'); ?>">
+        <?php $this->helper('Magento\Weee\Helper\Data')->processTierPrices($_product, $_tierPrices); ?>
+        <?php foreach ($_tierPrices as $_index => $_price): ?>
+            <li class="item">
+                <?php if ($_catalogHelper->canApplyMsrp($_product)): ?>
+                    <?php if ($this->getShowDetailedPrice() === false): ?>
+                        <?php echo __('Buy %1 for', $_price['price_qty']) ?>:
+                    <?php else: ?>
+                        <?php echo __('Buy %1', $_price['price_qty']) ?>
+                    <?php endif; ?>
+                <?php else: ?>
+
+                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayBothPrices()): ?>
+                        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 0)): ?>
+                            <?php echo __('Buy %1 for %2 (%3 incl. tax) each', $_price['price_qty'], $_price['formated_price_incl_weee_only'], $_price['formated_price_incl_weee']) ?>
+                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 1)): ?>
+                            <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
+                            <?php if ($_weeeTaxAttributes): ?>
+                                (<small>
+                                    <?php echo __('%1 incl tax.', $_price['formated_price_incl_weee']); ?>
+                                    <?php $separator = ' + '; foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                        <?php echo $separator; ?>
+                                        <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()); ?>
+                                    <?php endforeach; ?>
+                                </small>)
+                            <?php endif; ?>
+                            <?php echo __('each') ?>
+                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 4)): ?>
+                            <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
+                            <?php if ($_weeeTaxAttributes): ?>
+                                (<small>
+                                    <?php echo __('%1 incl tax.', $_price['formated_price_incl_weee']); ?>
+                                    <?php $separator = ' + '; foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                        <?php echo $separator; ?>
+                                        <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()+$_attribute->getTaxAmount()); ?>
+                                    <?php endforeach; ?>
+                                </small>)
+                            <?php endif; ?>
+                            <?php echo __('each') ?>
+                        <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 2)): ?>
+                            <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price']); ?>
+                            <?php if ($_weeeTaxAttributes): ?>
+                                (<small>
+                                    <?php foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                        <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()); ?>
+                                    <?php endforeach; ?>
+                                    <?php echo __('Total incl. Tax: %1', $_price['formated_price_incl_weee']); ?>
+                                </small>)
+                            <?php endif; ?>
+                            <?php echo __('each') ?>
+                        <?php else: ?>
+                            <?php echo __('Buy %1 for %2 (%3 incl. tax) each', $_price['price_qty'], $_price['formated_price'], $_price['formated_price_incl_tax']) ?>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayPriceIncludingTax()): ?>
+                            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 0)): ?>
+                                <?php echo __('Buy %1 for %2 each', $_price['price_qty'], $_price['formated_price_incl_weee']) ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 1)): ?>
+                                <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee']); ?>
+                                <?php if ($_weeeTaxAttributes): ?>
+                                    (<small>
+                                        <?php $separator = ''; foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                            <?php echo $separator; ?>
+                                            <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()); ?>
+                                            <?php $separator = ' + '; endforeach; ?>
+                                    </small>)
+                                <?php endif; ?>
+                                <?php echo __('each') ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 4)): ?>
+                                <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee']); ?>
+                                <?php if ($_weeeTaxAttributes): ?>
+                                    (<small>
+                                        <?php $separator = ''; foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                            <?php echo $separator; ?>
+                                            <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()+$_attribute->getTaxAmount()); ?>
+                                            <?php $separator = ' + '; endforeach; ?>
+                                    </small>)
+                                <?php endif; ?>
+                                <?php echo __('each') ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 2)): ?>
+                                <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_tax']); ?>
+                                <?php if ($_weeeTaxAttributes): ?>
+                                    (<small>
+                                        <?php foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                            <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()); ?>
+                                        <?php endforeach; ?>
+                                        <?php echo __('Total incl. Tax: %1', $_price['formated_price_incl_weee']); ?>
+                                    </small>)
+                                <?php endif; ?>
+                                <?php echo __('each') ?>
+                            <?php else: ?>
+                                <?php echo __('Buy %1 for %2 each', $_price['price_qty'], $_price['formated_price_incl_tax']) ?>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 0)): ?>
+                                <?php echo __('Buy %1 for %2 each', $_price['price_qty'], $_price['formated_price_incl_weee_only']) ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 1)): ?>
+                                <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
+                                <?php if ($_weeeTaxAttributes): ?>
+                                    (<small>
+                                        <?php $separator = ''; foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                            <?php echo $separator; ?>
+                                            <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()); ?>
+                                            <?php $separator = ' + '; endforeach; ?>
+                                    </small>)
+                                <?php endif; ?>
+                                <?php echo __('each') ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 4)): ?>
+                                <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price_incl_weee_only']); ?>
+                                <?php if ($_weeeTaxAttributes): ?>
+                                    (<small>
+                                        <?php $separator = ''; foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                            <?php echo $separator; ?>
+                                            <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()+$_attribute->getTaxAmount()); ?>
+                                            <?php $separator = ' + '; endforeach; ?>
+                                    </small>)
+                                <?php endif; ?>
+                                <?php echo __('each') ?>
+                            <?php elseif($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, 2)): ?>
+                                <?php echo __('Buy %1 for %2', $_price['price_qty'], $_price['formated_price']); ?>
+                                <?php if ($_weeeTaxAttributes): ?>
+                                    (<small>
+                                        <?php foreach ($_weeeTaxAttributes as $_attribute): ?>
+                                            <?php echo $_attribute->getName(); ?>: <?php echo $this->helper('Magento\Core\Helper\Data')->currency($_attribute->getAmount()); ?>
+                                        <?php endforeach; ?>
+                                        <?php echo __('Total incl. Tax: %1', $_price['formated_price_incl_weee_only']); ?>
+                                    </small>)
+                                <?php endif; ?>
+                                <?php echo __('each') ?>
+                            <?php else: ?>
+                                <?php echo __('Buy %1 for %2 each', $_price['price_qty'], $_price['formated_price']) ?>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                <?php endif; // Can apply MSRP ?>
+
+                <?php if ($this->getShowDetailedPrice() !== false): ?>
+                    <?php if(($_product->getPrice() == $_product->getFinalPrice() && $_product->getPrice() > $_price['price'])
+                        || ($_product->getPrice() != $_product->getFinalPrice() &&  $_product->getFinalPrice() > $_price['price'])): ?>
+                        <?php echo __('and') ?>&nbsp;<strong class="benefit"><?php echo __('save')?>&nbsp;<span class="percent tier-<?php echo $_index;?>"><?php echo $_price['savePercent']?></span>%
+                    <?php endif ?></strong>
+                <?php endif; ?>
+
+        <?php if ($_catalogHelper->isShowPriceOnGesture($_product)):?>
+            <?php $popupId = 'msrp-popup-' . $_product->getId() . $this->getRandomString(20); ?>
+            <?php
+            $tierPriceData = [
+                'addToCartUrl' => $this->getProduct()->isSalable()
+                        ? $this->getAddToCartUrl($_product, array('qty' => $_price['price_qty']))
+                        : '',
+                'name' => $_product->getName(),
+                'price' => $_price['real_price_html'],
+                'msrp' => $this->helper('Magento\Core\Helper\Data')->currency($_product->getMsrp(), true, false),
+            ];
+            if ($this->getCanDisplayQty() !== false) {
+                $tierPriceData['qty'] = $_price['price_qty'];
+            }
+            ?>
+            <a href="#"
+               id="<?php echo($popupId);?>"
+               data-tier-price="<?php $this->escapeHtml(
+                   $this->helper('Magento\Core\Helper\Data')->jsonEncode($tierPriceData)
+               )?>"
+            ><?php echo __('Click for price'); ?></a>
+        <?php else: ?>
+            <span class="msrp-price-hide-message">
+                <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
+            </span>
+                <?php endif; ?>
+            </li>
+        <?php endforeach ?>
+    </ul>
+    <?php if ($_catalogHelper->isShowPriceOnGesture($_product)):?>
+        <script type="text/javascript">
+            (function($) {
+                head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/tier-price.js') ?>", function () {
+                    $('#product_addtocart_form').tierPrice({
+                        inputQty: '#qty'
+                    });
+                });
+            })(jQuery);
+        </script>
+    <?php endif;?>
+<?php endif;?>

@@ -20,23 +20,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Mage
- * @package    Mage
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @category   Magento
+ * @package    Magento
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 require dirname(__DIR__) . '/app/bootstrap.php';
-Magento_Profiler::start('mage');
-Mage::register('custom_entry_point', true);
 umask(0);
-
-try {
-    $params = array(Mage::PARAM_RUN_CODE => 'admin');
-    $config = new Mage_Core_Model_Config_Primary(BP, $params);
-    $entryPoint = new Mage_Core_Model_EntryPoint_Cron($config);
-    $entryPoint->processRequest();
-} catch (Exception $e) {
-    Mage::printException($e);
-}
-Magento_Profiler::stop('mage');
+$params = array(
+    \Magento\Core\Model\App::PARAM_RUN_CODE => 'admin',
+    \Magento\Core\Model\Store::CUSTOM_ENTRY_POINT_PARAM => true
+);
+$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
+$entryPoint->run('Magento\App\Cron', array('parameters' => array('group::')));

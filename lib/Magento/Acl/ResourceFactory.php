@@ -20,22 +20,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Acl_ResourceFactory
+namespace Magento\Acl;
+
+use Magento\ObjectManager;
+
+class ResourceFactory
 {
-    const RESOURCE_CLASS_NAME = 'Magento_Acl_Resource';
+    const RESOURCE_CLASS_NAME = 'Magento\Acl\Resource';
 
     /**
-     * @var Magento_ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param Magento_ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function __construct(Magento_ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -44,7 +48,7 @@ class Magento_Acl_ResourceFactory
      * Return new ACL resource model
      *
      * @param array $arguments
-     * @return Magento_Acl_Resource
+     * @return Resource
      */
     public function createResource(array $arguments = array())
     {

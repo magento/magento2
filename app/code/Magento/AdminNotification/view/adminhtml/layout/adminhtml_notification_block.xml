@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="adminhtml.notification.container">
+        <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.notification.container.grid" as="grid">
+            <arguments>
+                <argument name="id" xsi:type="string">notificationGrid</argument>
+                <argument name="dataSource" xsi:type="object">Magento\AdminNotification\Model\Resource\Grid\Collection</argument>
+                <argument name="default_dir" xsi:type="string">DESC</argument>
+                <argument name="default_sort" xsi:type="string">date_added</argument>
+                <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.notification.container.grid.columnSet" as="grid.columnSet">
+                <arguments>
+                    <argument name="filter_visibility" xsi:type="string">0</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="severity">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Severity</argument>
+                        <argument name="width" xsi:type="string">60px</argument>
+                        <argument name="index" xsi:type="string">severity</argument>
+                        <argument name="renderer" xsi:type="string">Magento\AdminNotification\Block\Grid\Renderer\Severity</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="date_added">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Date Added</argument>
+                        <argument name="id" xsi:type="string">date_added</argument>
+                        <argument name="index" xsi:type="string">date_added</argument>
+                        <argument name="width" xsi:type="string">150px</argument>
+                        <argument name="type" xsi:type="string">datetime</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Message</argument>
+                        <argument name="index" xsi:type="string">title</argument>
+                        <argument name="renderer" xsi:type="string">Magento\AdminNotification\Block\Grid\Renderer\Notice</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="actions">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Actions</argument>
+                        <argument name="width" xsi:type="string">250px</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="renderer" xsi:type="string">Magento\AdminNotification\Block\Grid\Renderer\Actions</argument>
+                    </arguments>
+                </block>
+            </block>
+            <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.block.notification.massactions" as="grid.massaction">
+                <arguments>
+                    <argument name="massaction_id_field" xsi:type="string">notification_id</argument>
+                    <argument name="form_field_name" xsi:type="string">notification</argument>
+                    <argument name="use_select_all" xsi:type="string">1</argument>
+                    <argument name="options" xsi:type="array">
+                        <item name="mark_as_read" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Mark as Read</item>
+                            <item name="url" xsi:type="string">*/*/massMarkAsRead</item>
+                        </item>
+                        <item name="remove" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Remove</item>
+                            <item name="url" xsi:type="string">*/*/massRemove</item>
+                            <item name="confirm" xsi:type="string" translate="true">Are you sure?</item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </block>
+    </referenceBlock>
+</layout>

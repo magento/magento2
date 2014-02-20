@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Validator_Constraint_Property extends Magento_Validator_Constraint
+namespace Magento\Validator\Constraint;
+
+class Property extends \Magento\Validator\Constraint
 {
     /**
      * Property name
@@ -35,18 +37,18 @@ class Magento_Validator_Constraint_Property extends Magento_Validator_Constraint
     /**
      * Constructor
      *
-     * @param Magento_Validator_ValidatorInterface $validator
+     * @param \Magento\Validator\ValidatorInterface $validator
      * @param string $property
      * @param string $alias
      */
-    public function __construct(Magento_Validator_ValidatorInterface $validator, $property, $alias = null)
+    public function __construct(\Magento\Validator\ValidatorInterface $validator, $property, $alias = null)
     {
         parent::__construct($validator, $alias);
         $this->_property = $property;
     }
 
     /**
-     * Get value that should be validated. Tries to extract value's property if Varien_Object or ArrayAccess or array
+     * Get value that should be validated. Tries to extract value's property if \Magento\Object or \ArrayAccess or array
      * is passed
      *
      * @param mixed $value
@@ -56,9 +58,9 @@ class Magento_Validator_Constraint_Property extends Magento_Validator_Constraint
     {
         $result = null;
 
-        if ($value instanceof Varien_Object) {
+        if ($value instanceof \Magento\Object) {
             $result = $value->getDataUsingMethod($this->_property);
-        } elseif ((is_array($value) || $value instanceof ArrayAccess) && isset($value[$this->_property])) {
+        } elseif ((is_array($value) || $value instanceof \ArrayAccess) && isset($value[$this->_property])) {
             $result = $value[$this->_property];
         }
 

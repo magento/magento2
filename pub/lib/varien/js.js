@@ -19,7 +19,7 @@
  *
  * @category    Varien
  * @package     js
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 function popWin(url,win,para) {
@@ -372,7 +372,7 @@ Varien.searchForm.prototype = {
 }
 /* Varien.Tabs is depricated.
    IK: 12/17/12
-   Only one usage left in /app/code/Mage/Install/view/install/download.phtml - Questionable becuase that page does not have the markup using CSS class "tabs"
+   Only one usage left in /app/code/Magento/Install/view/install/download.phtml - Questionable becuase that page does not have the markup using CSS class "tabs"
    Need further investigation
  */
 Varien.Tabs = Class.create();

@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
+ * @category    Magento
  * @package     Errors
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -139,9 +139,17 @@ class Error_Processor
     */
     protected $_config;
 
-    public function __construct()
+    /**
+     * Http response
+     *
+     * @var Magento\App\Response\Http
+     */
+    protected $_response;
+
+    public function __construct(\Magento\App\Response\Http $response)
     {
-        $this->_errorDir  = dirname(__FILE__) . '/';
+        $this->_response = $response;
+        $this->_errorDir  = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
@@ -169,40 +177,52 @@ class Error_Processor
 
     /**
      * Process no cache error
+     *
+     * @return \Magento\App\Response\Http
      */
     public function processNoCache()
     {
         $this->pageTitle = 'Error : cached config data is unavailable';
-        $this->_renderPage('nocache.phtml');
+        $this->_response->setBody($this->_renderPage('nocache.phtml'));
+        return $this->_response;
     }
 
     /**
      * Process 404 error
-    */
+     *
+     * @return \Magento\App\Response\Http
+     */
     public function process404()
     {
         $this->pageTitle = 'Error 404: Not Found';
-        $this->_sendHeaders(404);
-        $this->_renderPage('404.phtml');
+        $this->_response->setHttpResponseCode(404);
+        $this->_response->setBody($this->_renderPage('404.phtml'));
+        return $this->_response;
+
     }
 
     /**
      * Process 503 error
-    */
+     *
+     * @return \Magento\App\Response\Http
+     */
     public function process503()
     {
         $this->pageTitle = 'Error 503: Service Unavailable';
-        $this->_sendHeaders(503);
-        $this->_renderPage('503.phtml');
+        $this->_response->setHttpResponseCode(503);
+        $this->_response->setBody($this->_renderPage('503.phtml'));
+        return $this->_response;
     }
 
     /**
      * Process report
-    */
+     *
+     * @return \Magento\App\Response\Http
+     */
     public function processReport()
     {
         $this->pageTitle = 'There has been an error processing your request';
-        $this->_sendHeaders(503);
+        $this->_response->setHttpResponseCode(503);
 
         $this->showErrorMsg = false;
         $this->showSentMsg  = false;
@@ -214,7 +234,8 @@ class Error_Processor
             $this->showSendForm = true;
             $this->sendReport();
         }
-        $this->_renderPage('report.phtml');
+        $this->_response->setBody($this->_renderPage('report.phtml'));
+        return $this->_response;
     }
 
     /**
@@ -342,8 +363,8 @@ class Error_Processor
     /**
      * Load xml file
      *
-     * @param string $config
-     * return SimpleXMLElement
+     * @param string $xmlFile
+     * @return SimpleXMLElement
      */
     protected function _loadXml($xmlFile)
     {
@@ -352,40 +373,21 @@ class Error_Processor
     }
 
     /**
-     * Send error headers
-     *
-     * @param int $statusCode
-     */
-    protected function _sendHeaders($statusCode)
-    {
-        $serverProtocol = !empty($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
-        switch ($statusCode) {
-            case 404:
-                $description = 'Not Found';
-                break;
-            case 503:
-                $description = 'Service Unavailable';
-                break;
-            default:
-                $description = '';
-                break;
-        }
-
-        header(sprintf('%s %s %s', $serverProtocol, $statusCode, $description), true, $statusCode);
-        header(sprintf('Status: %s %s', $statusCode, $description), true, $statusCode);
-    }
-
-    /**
-     * Render page
+     * @param string $template
+     * @return string
      */
     protected function _renderPage($template)
     {
         $baseTemplate = $this->_getTemplatePath('page.phtml');
         $contentTemplate = $this->_getTemplatePath($template);
 
+        $html = '';
         if ($baseTemplate && $contentTemplate) {
+            ob_start();
             require_once $baseTemplate;
+            $html = ob_get_clean();
         }
+        return $html;
     }
 
     /**

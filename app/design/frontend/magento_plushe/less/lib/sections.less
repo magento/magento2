@@ -1,0 +1,203 @@
+// /**
+//  * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.data-tabs() {
+    .clearfix();
+    position: relative;
+    z-index: 1;
+    > .item.title {
+        float: left;
+        > .switch {
+            display: block;
+            position: relative;
+            top: 1px;
+            z-index: 2;
+        }
+    }
+    > .item.content {
+        width: 100%;
+        float: right;
+        margin-left: -100%;
+        display: none;
+        .box-sizing();
+        &.active {
+            display: block;
+        }
+    }
+
+    .tabs > .term-content.active {
+        border: 1px solid #BFBFBF;
+        color: hsl(0, 0%, 50%);
+        display: block;
+    }
+}
+
+.data-tabs-styling() {
+    > .item.title {
+        margin-right: 1px;
+        min-height: 35px;
+        > .switch {
+            font-size: 14px;
+            line-height: 1;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 11px 11px 8px;
+            border: 2px solid #e5e5e5;
+            background: rgba(0, 0, 0, 0.03);
+            border-bottom: none;
+            text-transform: uppercase;
+            border-radius: 4px 4px 0 0;
+        }
+        &:not(.disabled) > .switch:active,
+        &:not(.disabled) > .switch:focus,
+        &:not(.disabled) > .switch:hover,
+        &.active > .switch {
+            background: #fff;
+            border-width: 3px;
+            padding: 10px 10px 8px;
+            outline: none;
+        }
+        &.active > .switch {
+            padding: 10px 20px 11px !important;
+        }
+    }
+    > .item.content {
+        .clearfix;
+        margin-top: 36px;
+        padding: 20px;
+        &:before {
+            content: '';
+            border-top: 3px solid #e5e5e5;
+            width: 100%;
+            display: block;
+            position: absolute;
+            left: 0;
+            .box-sizing();
+            margin: -20px 0 20px;
+        }
+    }
+}
+
+.data-accordion() {
+    > .item.title {
+        .box-sizing();
+        width: 100%;
+        > .item.switch {
+            display: block;
+        }
+    }
+    > .item.content {
+        .clearfix();
+        .box-sizing();
+        display: none;
+        &.active {
+            display: block;
+        }
+    }
+}
+
+.data-accordion-styling() {
+    margin: 0;
+    padding: 0;
+    > .item.title {
+        margin: 3px 0 0;
+        > .switch {
+            display: block;
+            font-size: 14px;
+            line-height: 1;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 11px;
+            border: 2px solid #e5e5e5;
+            background: #f8f8f8;
+            text-transform: uppercase;
+            border-radius: 4px;
+        }
+        &:not(.disabled) > .switch:active,
+        &:not(.disabled) > .switch:focus,
+        &:not(.disabled) > .switch:hover,
+        &.active > .switch {
+            background: #fff;
+            border-width: 3px;
+            padding: 10px;
+            outline: none;
+        }
+        &.active > .switch {
+            border-radius: 4px 4px 0 0;
+        }
+    }
+    > .item.content {
+        margin: 0;
+        padding: 20px;
+        background: #fff;
+    }
+}
+
+//  # Sections
+//
+//  ```html
+//  <dl class="product data items" data-sections="tabs">
+//    <dt class="data item title active" data-section="title">
+//        <a class="data switch" data-toggle="switch" href="#product.info.description">Details</a>
+//    </dt>
+//    <dd class="data item content active" id="product.info.description" data-section="content">
+//        <p>Fit to be tied. Get the perfect level of lift in our Tie-front Tankini. Featuring removable padding and cup-specific sizes for support and shaping. From our Forever Sexy Swim collection of push-up tops and bottoms in sun-loving colors and prints.</p>
+//        <p>- Removable push-up padding<br>- Lined hidden underwire cups<br>- Front tie<br>- Adjustable straps can be worn classic or cross-back<br>- Available in two lengths: 17 3/4" and 18 3/4"<br>- Imported Italian nylon/Lycra® spandex</p>
+//    </dd>
+//
+//    <dt class="data item title" data-section="title">
+//        <a class="data switch" data-toggle="switch" href="#product_tags">Tags</a>
+//    </dt>
+//    <dd class="data item content" id="product_tags" data-section="content">
+//        <p>A playful little push-up. Bring the lightweight lift and custom comfort of the Fabulous by Victoria’s Secret bra to the beach. This triangle top is finished with pretty ruching and a sweet center bow. From our fun, flirty Beach Sexy Swim Collection.</p>
+//        <p>- Ruched cups with center bow<br>- Push-up padding for extreme lift<br>- Underwire<br>- Ties at neck; looped back tie for adjustability and extra support<br>- Imported nylon/spandex</p>
+//    </dd>
+//
+//    <dt class="data item title" data-section="title">
+//        <a class="data switch" data-toggle="switch" href="#product_reviews">Reviews</a>
+//    </dt>
+//    <dd class="data item content" id="product_reviews" data-section="content">
+//        <p>Relaxed elegance. The flowy fit of this halter tankini makes beach style a breeze. The built in bra top provides just the right amount of support. Look slimmer in seconds® in this figure-loving top designed exclusively for Victoria’s Secret.</p>
+//        <p>- Built-in bra with molded foam padding<br>- Halter straps tie at neck<br>- Imported nylon/spandex</p>
+//    </dd>
+//  </dl>
+//  ```
+//
+
+@media only screen
+and (max-width : 99999px) {
+    .product.data {
+        .data-tabs();
+        .data-tabs-styling();
+    }
+}
+
+@media only screen
+and (max-width : 768px) {
+    .product.data {
+        .data-accordion();
+        .data-accordion-styling();
+    }
+}

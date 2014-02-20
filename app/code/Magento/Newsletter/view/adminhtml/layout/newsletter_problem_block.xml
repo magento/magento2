@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="adminhtml.newsletter.problem.container">
+        <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.newslettrer.problem.grid" as="grid">
+            <arguments>
+                <argument name="id" xsi:type="string">problemGrid</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Newsletter\Model\Resource\Grid\Collection</argument>
+                <argument name="message_block_visibility" xsi:type="string">true</argument>
+                <argument name="use_ajax" xsi:type="string">true</argument>
+                <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.newslettrer.problem.grid.columnSet" as="grid.columnSet">
+                <arguments>
+                    <argument name="id" xsi:type="string">problemGrid</argument>
+                    <argument name="empty_text" xsi:type="string" translate="true">We found no problems.</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="checkbox">
+                    <arguments>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="filter" xsi:type="string">Magento\Newsletter\Block\Adminhtml\Problem\Grid\Filter\Checkbox</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Newsletter\Block\Adminhtml\Problem\Grid\Renderer\Checkbox</argument>
+                        <argument name="header_css_class" xsi:type="string">col-select</argument>
+                        <argument name="column_css_class" xsi:type="string">col-select</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="problem_id">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">ID</argument>
+                        <argument name="index" xsi:type="string">problem_id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-id</argument>
+                        <argument name="column_css_class" xsi:type="string">col-id</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="subscriber">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Subscriber</argument>
+                        <argument name="format" xsi:type="string">#$subscriber_id $customer_name ($subscriber_email)</argument>
+                        <argument name="index" xsi:type="string">subscriber_id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-subscriber</argument>
+                        <argument name="column_css_class" xsi:type="string">col-subscriber</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="queue_start">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Queue Start Date</argument>
+                        <argument name="index" xsi:type="string">queue_start_at</argument>
+                        <argument name="gmtoffset" xsi:type="string">true</argument>
+                        <argument name="type" xsi:type="string">datetime</argument>
+                        <argument name="header_css_class" xsi:type="string">col-start</argument>
+                        <argument name="column_css_class" xsi:type="string">col-start</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="queue">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Queue Subject</argument>
+                        <argument name="index" xsi:type="string">template_subject</argument>
+                        <argument name="header_css_class" xsi:type="string">col-subject</argument>
+                        <argument name="column_css_class" xsi:type="string">col-subject</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="problem_code">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Error Code</argument>
+                        <argument name="index" xsi:type="string">problem_error_code</argument>
+                        <argument name="type" xsi:type="string">number</argument>
+                        <argument name="header_css_class" xsi:type="string">col-error-code</argument>
+                        <argument name="column_css_class" xsi:type="string">col-error-code</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="problem_text">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Error Text</argument>
+                        <argument name="index" xsi:type="string">problem_error_text</argument>
+                        <argument name="header_css_class" xsi:type="string">col-error</argument>
+                        <argument name="column_css_class" xsi:type="string">col-error</argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </referenceBlock>
+</layout>

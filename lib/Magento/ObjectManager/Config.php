@@ -18,17 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  * 
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-interface Magento_ObjectManager_Config
+namespace Magento\ObjectManager;
+
+interface Config
 {
     /**
      * Set class relations
      *
-     * @param Magento_ObjectManager_Relations $relations
+     * @param Relations $relations
+     *
+     * @return void
      */
-    public function setRelations(Magento_ObjectManager_Relations $relations);
+    public function setRelations(Relations $relations);
+
+    /**
+     * Set configuration cache instance
+     *
+     * @param ConfigCache $cache
+     *
+     * @return void
+     */
+    public function setCache(ConfigCache $cache);
 
     /**
      * Retrieve list of arguments per type
@@ -60,25 +73,9 @@ interface Magento_ObjectManager_Config
      *
      * @param string $type
      * @return string
-     * @throws LogicException
+     * @throws \LogicException
      */
     public function getPreference($type);
-
-    /**
-     * Check whether type has configured plugins
-     *
-     * @param string $type
-     * @return bool
-     */
-    public function hasPlugins($type);
-
-    /**
-     * Retrieve list of plugins
-     *
-     * @param string $type
-     * @return array
-     */
-    public function getPlugins($type);
 
     /**
      * Extend configuration

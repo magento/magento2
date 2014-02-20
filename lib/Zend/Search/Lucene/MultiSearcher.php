@@ -691,7 +691,7 @@ class Zend_Search_Lucene_Interface_MultiSearcher implements Zend_Search_Lucene_I
     }
 
     /**
-     * Retrive similarity used by index reader
+     * Retrieve similarity used by index reader
      *
      * @return Zend_Search_Lucene_Search_Similarity
      * @throws Zend_Search_Lucene_Exception
@@ -895,7 +895,7 @@ class Zend_Search_Lucene_Interface_MultiSearcher implements Zend_Search_Lucene_I
     }
 
     /**
-     * Skip terms stream up to specified term preffix.
+     * Skip terms stream up to specified term prefix.
      *
      * Prefix contains fully specified field info and portion of searched term
      *

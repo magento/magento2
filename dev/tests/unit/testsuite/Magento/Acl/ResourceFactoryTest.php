@@ -1,6 +1,6 @@
 <?php
 /**
- * Test class for Magento_Acl_ResourceFactory
+ * Test class for \Magento\Acl\ResourceFactory
  *
  * Magento
  *
@@ -20,36 +20,38 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Acl_ResourceFactoryTest extends PHPUnit_Framework_TestCase
+namespace Magento\Acl;
+
+class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento_Acl_ResourceFactory
+     * @var \Magento\Acl\ResourceFactory
      */
     protected $_model;
 
     /**
-     * @var Magento_ObjectManager
+     * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var Magento_Acl_Resource
+     * @var \Magento\Acl\Resource
      */
     protected $_expectedObject;
 
     protected function setUp()
     {
-        $helper = new Magento_Test_Helper_ObjectManager($this);
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_objectManager = $this->getMockForAbstractClass('Magento_ObjectManager', array(), '', true, true, true,
+        $this->_objectManager = $this->getMockForAbstractClass('Magento\ObjectManager', array(), '', true, true, true,
             array('create'));
 
-        $this->_expectedObject = $this->getMock('Magento_Acl_Resource', array(), array(), '', false);
+        $this->_expectedObject = $this->getMock('Magento\Acl\Resource', array(), array(), '', false);
 
-        $this->_model = $helper->getObject('Magento_Acl_ResourceFactory', array(
+        $this->_model = $helper->getObject('Magento\Acl\ResourceFactory', array(
             'objectManager' => $this->_objectManager,
         ));
     }
@@ -59,7 +61,7 @@ class Magento_Acl_ResourceFactoryTest extends PHPUnit_Framework_TestCase
         $arguments = array('5', '6');
         $this->_objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento_Acl_Resource', $arguments)
+            ->with('Magento\Acl\Resource', $arguments)
             ->will($this->returnValue($this->_expectedObject));
         $this->assertEquals($this->_expectedObject, $this->_model->createResource($arguments));
     }

@@ -18,14 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
  */
-interface Magento_Cache_FrontendInterface
+namespace Magento\Cache;
+
+interface FrontendInterface
 {
     /**
      * Test if a cache is available for the given id
@@ -69,19 +71,19 @@ interface Magento_Cache_FrontendInterface
      * @param array $tags
      * @return bool
      */
-    public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, array $tags = array());
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = array());
 
     /**
      * Retrieve backend instance
      *
-     * @return Zend_Cache_Backend_Interface
+     * @return \Zend_Cache_Backend_Interface
      */
     public function getBackend();
 
     /**
-     * Retrieve frontend instance compatible with Zend_Locale_Data::setCache() to be used as a workaround
+     * Retrieve frontend instance compatible with \Zend_Locale_Data::setCache() to be used as a workaround
      *
-     * @return Zend_Cache_Core
+     * @return \Zend_Cache_Core
      */
     public function getLowLevelFrontend();
 }

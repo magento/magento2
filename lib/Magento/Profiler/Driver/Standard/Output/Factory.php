@@ -20,10 +20,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Profiler_Driver_Standard_Output_Factory
+namespace Magento\Profiler\Driver\Standard\Output;
+
+use Magento\Profiler\Driver\Standard\OutputInterface;
+
+class Factory
 {
     /**
      * Default output type
@@ -46,7 +50,7 @@ class Magento_Profiler_Driver_Standard_Output_Factory
      * @param string $defaultOutputType
      */
     public function __construct(
-        $defaultOutputPrefix = 'Magento_Profiler_Driver_Standard_Output_',
+        $defaultOutputPrefix = 'Magento\Profiler\Driver\Standard\Output\\',
         $defaultOutputType = 'html'
     ) {
         $this->_defaultOutputPrefix = $defaultOutputPrefix;
@@ -57,8 +61,8 @@ class Magento_Profiler_Driver_Standard_Output_Factory
      * Create instance of standard profiler driver output
      *
      * @param array $config
-     * @return Magento_Profiler_Driver_Standard_OutputInterface
-     * @throws InvalidArgumentException If driver cannot be created
+     * @return OutputInterface
+     * @throws \InvalidArgumentException If driver cannot be created
      */
     public function create(array $config)
     {
@@ -68,15 +72,15 @@ class Magento_Profiler_Driver_Standard_Output_Factory
         } else {
             $class = $this->_defaultOutputPrefix . ucfirst($type);
             if (!class_exists($class)) {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     sprintf("Cannot create standard driver output, class \"%s\" doesn't exist.", $class
                 ));
             }
         }
         $output = new $class($config);
-        if (!$output instanceof Magento_Profiler_Driver_Standard_OutputInterface) {
-            throw new InvalidArgumentException(sprintf(
-                "Output class \"%s\" must implement Magento_Profiler_Driver_Standard_OutputInterface.",
+        if (!$output instanceof OutputInterface) {
+            throw new \InvalidArgumentException(sprintf(
+                "Output class \"%s\" must implement \Magento\Profiler\Driver\Standard\OutputInterface.",
                 get_class($output)
             ));
         }

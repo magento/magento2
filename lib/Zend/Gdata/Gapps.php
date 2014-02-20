@@ -370,7 +370,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive NicknameFeed object containing multiple NicknameEntry objects.
+     * Retrieve NicknameFeed object containing multiple NicknameEntry objects.
      *
      * @param mixed $location (optional) The location for the feed, as a URL
      *          or Query.
@@ -392,7 +392,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive GroupFeed object containing multiple GroupEntry
+     * Retrieve GroupFeed object containing multiple GroupEntry
      * objects.
      *
      * @param mixed $location (optional) The location for the feed, as a URL
@@ -416,7 +416,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive MemberFeed object containing multiple MemberEntry
+     * Retrieve MemberFeed object containing multiple MemberEntry
      * objects.
      *
      * @param mixed $location (optional) The location for the feed, as a URL
@@ -441,7 +441,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive OwnerFeed object containing multiple OwnerEntry
+     * Retrieve OwnerFeed object containing multiple OwnerEntry
      * objects.
      *
      * @param mixed $location (optional) The location for the feed, as a URL
@@ -466,7 +466,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive EmailListFeed object containing multiple EmailListEntry
+     * Retrieve EmailListFeed object containing multiple EmailListEntry
      * objects.
      *
      * @param mixed $location (optional) The location for the feed, as a URL
@@ -489,7 +489,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive EmailListRecipientFeed object containing multiple
+     * Retrieve EmailListRecipientFeed object containing multiple
      * EmailListRecipientEntry objects.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
@@ -513,7 +513,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive a single UserEntry object.
+     * Retrieve a single UserEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Gapps_UserEntry
@@ -536,7 +536,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive a single NicknameEntry object.
+     * Retrieve a single NicknameEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Gapps_NicknameEntry
@@ -559,7 +559,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive a single GroupEntry object.
+     * Retrieve a single GroupEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Gapps_GroupEntry
@@ -582,7 +582,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive a single MemberEntry object.
+     * Retrieve a single MemberEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Gapps_MemberEntry
@@ -605,7 +605,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive a single OwnerEntry object.
+     * Retrieve a single OwnerEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Gapps_OwnerEntry
@@ -628,7 +628,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive a single EmailListEntry object.
+     * Retrieve a single EmailListEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Gapps_EmailListEntry
@@ -651,7 +651,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     }
 
     /**
-     * Retreive a single EmailListRecipientEntry object.
+     * Retrieve a single EmailListRecipientEntry object.
      *
      * @param mixed $location The location for the feed, as a URL or Query.
      * @return Zend_Gdata_Gapps_EmailListRecipientEntry
@@ -1178,7 +1178,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     {
         $i = 0;
         $group = $this->newGroupEntry();
-        
+
         $properties[$i] = $this->newProperty();
         $properties[$i]->name = 'groupId';
         $properties[$i]->value = $groupId;
@@ -1200,8 +1200,8 @@ class Zend_Gdata_Gapps extends Zend_Gdata
             $properties[$i]->name = 'emailPermission';
             $properties[$i]->value = $emailPermission;
             $i++;
-        }        
-        
+        }
+
         $group->property = $properties;
 
         return $this->insertGroup($group);
@@ -1240,7 +1240,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
      * @return Zend_Gdata_Gapps_GroupFeed Collection of Zend_Gdata_GroupEntry objects
      *              representing all groups apart of the domain.
      */
-    public function retrieveAllGroups() 
+    public function retrieveAllGroups()
     {
         return $this->retrieveAllEntriesForFeed($this->retrievePageOfGroups());
     }
@@ -1257,7 +1257,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
 
         $this->delete($uri);
     }
-    
+
     /**
      * Check to see if a member id or group id is a member of group
      *
@@ -1269,7 +1269,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     {
         $uri  = self::APPS_BASE_FEED_URI . self::APPS_GROUP_PATH . '/';
         $uri .= $this->getDomain() . '/' . $groupId . '/member/' . $memberId;
-        
+
         //if the enitiy is not a member, an exception is thrown
         try {
             $results = $this->get($uri);
@@ -1353,7 +1353,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
 
         $uri  = self::APPS_BASE_FEED_URI . self::APPS_GROUP_PATH . '/';
         $uri .= $this->getDomain() . '/' . $groupId . '/owner';
-        
+
         return $this->insertOwner($owner, $uri);
     }
 
@@ -1383,9 +1383,9 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     {
         $uri  = self::APPS_BASE_FEED_URI . self::APPS_GROUP_PATH . '/';
         $uri .= $this->getDomain() . '/' . $groupId . '/owner/' . $email;
-        
+
         //if the enitiy is not an owner of the group, an exception is thrown
-        try {            
+        try {
             $results = $this->get($uri);
         } catch (Exception $e) {
             $results = false;
@@ -1427,7 +1427,7 @@ class Zend_Gdata_Gapps extends Zend_Gdata
     {
         $i = 0;
         $group = $this->newGroupEntry();
-        
+
         $properties[$i] = $this->newProperty();
         $properties[$i]->name = 'groupId';
         $properties[$i]->value = $groupId;
@@ -1453,20 +1453,20 @@ class Zend_Gdata_Gapps extends Zend_Gdata
             $properties[$i]->value = $emailPermission;
             $i++;
         }
-        
+
         $group->property = $properties;
 
         $uri  = self::APPS_BASE_FEED_URI . self::APPS_GROUP_PATH . '/';
         $uri .= $this->getDomain() . '/' . $groupId;
 
-        return $this->updateEntry($group, $uri, 'Zend_Gdata_Gapps_GroupEntry');        
+        return $this->updateEntry($group, $uri, 'Zend_Gdata_Gapps_GroupEntry');
     }
 
     /**
      * Retrieve all of the groups that a user is a member of
      *
      * @param string $memberId Member username
-     * @param bool $directOnly (Optional) If true, members with direct association 
+     * @param bool $directOnly (Optional) If true, members with direct association
      *             only will be considered
      * @return Zend_Gdata_Gapps_GroupFeed Collection of Zend_Gdata_GroupEntry
      *              objects representing all groups member is apart of in the domain.

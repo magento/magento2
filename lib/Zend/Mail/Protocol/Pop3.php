@@ -416,7 +416,7 @@ class Zend_Mail_Protocol_Pop3
      * @return string message
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function retrive($msgno)
+    public function retrieve($msgno)
     {
         return $this->retrieve($msgno);
     }

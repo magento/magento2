@@ -20,15 +20,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
+ * @category    Magento
  * @package     Magento_Outbound
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_Outbound_Formatter_Factory
+namespace Magento\Outbound\Formatter;
+
+use Magento\ObjectManager;
+use Magento\Outbound\FormatterInterface;
+
+class Factory
 {
     /**
-     * @var Magento_ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
@@ -39,11 +44,11 @@ class Magento_Outbound_Formatter_Factory
 
     /**
      * @param array $formatterMap
-     * @param Magento_ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
     public function __construct(
         array $formatterMap,
-        Magento_ObjectManager $objectManager
+        ObjectManager $objectManager
     ) {
         $this->_formatterMap = $formatterMap;
         $this->_objectManager = $objectManager;
@@ -53,19 +58,19 @@ class Magento_Outbound_Formatter_Factory
      * Get formatter for specified format
      *
      * @param string $format
-     * @return Magento_Outbound_FormatterInterface
-     * @throws LogicException
+     * @return FormatterInterface
+     * @throws \LogicException
      */
     public function getFormatter($format)
     {
         if (!isset($this->_formatterMap[$format])) {
-            throw new LogicException("There is no formatter for the format given: {$format}");
+            throw new \LogicException("There is no formatter for the format given: {$format}");
         }
         $formatterClassName = $this->_formatterMap[$format];
 
         $formatter =  $this->_objectManager->get($formatterClassName);
-        if (!$formatter instanceof Magento_Outbound_FormatterInterface) {
-            throw new LogicException("Formatter class for {$format} does not implement FormatterInterface.");
+        if (!$formatter instanceof FormatterInterface) {
+            throw new \LogicException("Formatter class for {$format} does not implement FormatterInterface.");
         }
         return $formatter;
     }

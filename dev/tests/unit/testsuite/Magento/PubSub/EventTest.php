@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento_PubSub_Event
+ * \Magento\PubSub\Event
  *
  * Magento
  *
@@ -20,43 +20,34 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Magento_PubSub_EventTest extends PHPUnit_Framework_TestCase
+namespace Magento\PubSub;
+
+class EventTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetters()
     {
         $bodyData = array('some' => 'body');
         $topic = 'topic';
 
-        $event = new Magento_PubSub_Event($topic, $bodyData);
+        $event = new \Magento\PubSub\Event($topic, $bodyData);
 
         $this->assertEquals(array(), $event->getHeaders());
         $this->assertEquals($bodyData, $event->getBodyData());
         $this->assertEquals($topic, $event->getTopic());
-        $this->assertEquals(Magento_PubSub_Event::PREPARING, $event->getStatus());
+        $this->assertEquals(\Magento\PubSub\Event::STATUS_READY_TO_SEND, $event->getStatus());
     }
 
-    public function testMarkProcessed()
+    public function testComplete()
     {
         $bodyData = array('some' => 'body');
         $topic = 'topic';
-        $event = new Magento_PubSub_Event($topic, $bodyData);
+        $event = new \Magento\PubSub\Event($topic, $bodyData);
 
-        $event->markAsProcessed();
+        $event->complete();
 
-        $this->assertEquals(Magento_PubSub_Event::PROCESSED, $event->getStatus());
-    }
-
-    public function testMarkReadyToSend()
-    {
-        $bodyData = array('some' => 'body');
-        $topic = 'topic';
-        $event = new Magento_PubSub_Event($topic, $bodyData);
-
-        $event->markAsReadyToSend();
-
-        $this->assertEquals(Magento_PubSub_Event::READY_TO_SEND, $event->getStatus());
+        $this->assertEquals(\Magento\PubSub\Event::STATUS_PROCESSED, $event->getStatus());
     }
 }
