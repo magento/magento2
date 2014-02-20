@@ -196,7 +196,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected function _getItemsData()
     {
         $categoty   = $this->getCategory();
-        /** @var $category \Magento\Catalog\Model\Categeory */
+        /** @var $category \Magento\Catalog\Model\Category */
         $categories = $categoty->getChildrenCategories();
 
         $this->getLayer()->getProductCollection()
