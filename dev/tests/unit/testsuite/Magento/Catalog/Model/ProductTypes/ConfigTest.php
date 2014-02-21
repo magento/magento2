@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Model\ProductTypes;
@@ -28,23 +28,23 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_readerMock;
+    protected $readerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cacheMock;
+    protected $cacheMock;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\Config
      */
-    protected $_model;
+    protected $model;
 
     protected function setUp()
     {
-        $this->_readerMock = $this->getMock(
+        $this->readerMock = $this->getMock(
             'Magento\Catalog\Model\ProductTypes\Config\Reader', array(), array(), '', false);
-        $this->_cacheMock = $this->getMock('Magento\Config\CacheInterface');
+        $this->cacheMock = $this->getMock('Magento\Config\CacheInterface');
     }
 
     /**
@@ -55,29 +55,45 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetType($value, $expected)
     {
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize($value)));
-        $this->_model = new \Magento\Catalog\Model\ProductTypes\Config($this->_readerMock,
-            $this->_cacheMock, 'cache_id');
-        $this->assertEquals($expected, $this->_model->getType('global'));
+        $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize($value)));
+        $this->model = new \Magento\Catalog\Model\ProductTypes\Config($this->readerMock,
+            $this->cacheMock, 'cache_id');
+        $this->assertEquals($expected, $this->model->getType('global'));
     }
 
     public function getTypeDataProvider()
     {
         return array(
-            'global_key_exist' => array(array('global' => 'value'), 'value'),
-            'return_default_value' => array(array('some_key' => 'value'), array())
+            'global_key_exist' => array(array('types' => array('global' => 'value')), 'value'),
+            'return_default_value' => array(array('types' => array('some_key' => 'value')), array())
         );
     }
 
     public function testGetAll()
     {
         $expected = array('Expected Data');
-        $this->_cacheMock->expects($this->once())->method('load')->will($this->returnValue(serialize($expected)));
-        $this->_model = new \Magento\Catalog\Model\ProductTypes\Config(
-            $this->_readerMock,
-            $this->_cacheMock,
+        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(
+            serialize(array('types' => $expected)))
+        );
+        $this->model = new \Magento\Catalog\Model\ProductTypes\Config(
+            $this->readerMock,
+            $this->cacheMock,
             'cache_id'
         );
-        $this->assertEquals($expected, $this->_model->getAll());
+        $this->assertEquals($expected, $this->model->getAll());
     }
+
+    public function testIsProductSet()
+    {
+        $this->cacheMock->expects($this->once())->method('load')->will($this->returnValue(serialize(array())));
+        $this->model = new \Magento\Catalog\Model\ProductTypes\Config(
+            $this->readerMock,
+            $this->cacheMock,
+            'cache_id'
+        );
+
+        $this->assertEquals(false, $this->model->isProductSet('typeId'));
+
+    }
+
 }

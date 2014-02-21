@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,7 +63,9 @@ class Rewrite extends \Magento\App\Helper\AbstractHelper
      * If something is wrong with a path it throws localized error message and error code,
      * that can be checked to by wrapper func to alternate error message
      *
+     * @param string $requestPath
      * @return bool
+     * @throws \Exception
      */
     protected function _validateRequestPath($requestPath)
     {
@@ -80,7 +82,7 @@ class Rewrite extends \Magento\App\Helper\AbstractHelper
      * Validates request path
      * Either returns TRUE (success) or throws error (validation failed)
      *
-     * @param $requestPath
+     * @param string $requestPath
      * @throws \Magento\Core\Exception
      * @return bool
      */
@@ -98,7 +100,7 @@ class Rewrite extends \Magento\App\Helper\AbstractHelper
      * Validates suffix for url rewrites to inform user about errors in it
      * Either returns TRUE (success) or throws error (validation failed)
      *
-     * @param $suffix
+     * @param string $suffix
      * @throws \Magento\Core\Exception
      * @return bool
      */

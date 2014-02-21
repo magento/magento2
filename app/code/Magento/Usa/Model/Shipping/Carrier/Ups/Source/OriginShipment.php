@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,11 +41,14 @@ class OriginShipment extends \Magento\Usa\Model\Shipping\Carrier\Ups\Source\Gene
      */
     protected $_code = 'originShipment';
 
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         $orShipArr = $this->_shippingUps->getCode($this->_code);
         $returnArr = array();
-        foreach ($orShipArr as $key => $val){
+        foreach ($orShipArr as $key => $val) {
             $returnArr[] = array('value' => $key,'label' => $key);
         }
         return $returnArr;

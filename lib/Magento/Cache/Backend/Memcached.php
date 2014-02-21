@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Cache
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,8 +43,8 @@ class Memcached
     /**
      * Constructor
      *
-     * @throws \Magento\Exception
      * @param array $options @see \Zend_Cache_Backend_Memcached::__construct()
+     * @throws \Magento\Exception
      */
     public function __construct(array $options = array())
     {
@@ -94,8 +94,8 @@ class Memcached
      *
      * @param string $data             @see \Zend_Cache_Backend_Memcached::save()
      * @param string $id               @see \Zend_Cache_Backend_Memcached::save()
-     * @param array  $tags             @see \Zend_Cache_Backend_Memcached::save()
-     * @param bool   $specificLifetime @see \Zend_Cache_Backend_Memcached::save()
+     * @param string[] $tags           @see \Zend_Cache_Backend_Memcached::save()
+     * @param bool $specificLifetime   @see \Zend_Cache_Backend_Memcached::save()
      * @return bool
      */
     public function save($data, $id, $tags = array(), $specificLifetime = false)

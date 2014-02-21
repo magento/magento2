@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,6 +74,8 @@ class Widget extends \Magento\Backend\App\Action
 
     /**
      * Wisywyg widget plugin main page
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -88,6 +90,8 @@ class Widget extends \Magento\Backend\App\Action
 
     /**
      * Ajax responder for loading plugin options form
+     *
+     * @return void
      */
     public function loadOptionsAction()
     {
@@ -114,6 +118,8 @@ class Widget extends \Magento\Backend\App\Action
 
     /**
      * Format widget pseudo-code for inserting into wysiwyg editor
+     *
+     * @return void
      */
     public function buildWidgetAction()
     {

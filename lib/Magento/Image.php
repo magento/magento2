@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Image
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -91,8 +91,8 @@ class Image
     /**
      * Save handled image into file
      *
-     * @param string $destination. Default value is NULL
-     * @param string $newFileName. Default value is NULL
+     * @param null|string $destination Default value is NULL
+     * @param null|string $newFileName Default value is NULL
      * @access public
      * @return void
      */
@@ -116,10 +116,10 @@ class Image
     /**
      * Crop an image.
      *
-     * @param int $top. Default value is 0
-     * @param int $left. Default value is 0
-     * @param int $right. Default value is 0
-     * @param int $bottom. Default value is 0
+     * @param int $top  Default value is 0
+     * @param int $left Default value is 0
+     * @param int $right Default value is 0
+     * @param int $bottom Default value is 0
      * @access public
      * @return void
      */
@@ -141,26 +141,56 @@ class Image
         $this->_adapter->resize($width, $height);
     }
 
+    /**
+     * Get/set keepAspectRatio
+     *
+     * @param bool $value
+     * @return bool
+     */
     public function keepAspectRatio($value)
     {
         return $this->_adapter->keepAspectRatio($value);
     }
 
+    /**
+     * Get/set keepFrame
+     *
+     * @param bool $value
+     * @return bool
+     */
     public function keepFrame($value)
     {
         return $this->_adapter->keepFrame($value);
     }
 
+    /**
+     * Get/set keepTransparency
+     *
+     * @param bool $value
+     * @return bool
+     */
     public function keepTransparency($value)
     {
         return $this->_adapter->keepTransparency($value);
     }
 
+    /**
+     * Get/set constrainOnly
+     *
+     * @param bool $value
+     * @return bool
+     */
     public function constrainOnly($value)
     {
         return $this->_adapter->constrainOnly($value);
     }
 
+    /**
+     * Get/set backgroundColor
+     *
+     * @param null|array $value
+     * @return array|null
+     */
     public function backgroundColor($value)
     {
         return $this->_adapter->backgroundColor($value);
@@ -180,12 +210,13 @@ class Image
     /**
      * Adds watermark to our image.
      *
-     * @param string $watermarkImage. Absolute path to watermark image.
-     * @param int $positionX. Watermark X position.
-     * @param int $positionY. Watermark Y position.
-     * @param int $watermarkImageOpacity. Watermark image opacity.
-     * @param bool $repeat. Enable or disable watermark brick.
+     * @param string $watermarkImage Absolute path to watermark image.
+     * @param int $positionX Watermark X position.
+     * @param int $positionY Watermark Y position.
+     * @param int $watermarkImageOpacity Watermark image opacity.
+     * @param bool $repeat Enable or disable watermark brick.
      * @access public
+     * @throws \Exception
      * @return void
      */
     public function watermark($watermarkImage, $positionX=0, $positionY=0, $watermarkImageOpacity=30, $repeat=false)
@@ -208,7 +239,7 @@ class Image
     }
 
     /**
-     * process
+     * Process
      *
      * @access public
      * @return void
@@ -219,7 +250,7 @@ class Image
     }
 
     /**
-     * instruction
+     * Instruction
      *
      * @access public
      * @return void
@@ -245,7 +276,7 @@ class Image
      * Set watermark position
      *
      * @param string $position
-     * @return \Magento\Image
+     * @return $this
      */
     public function setWatermarkPosition($position)
     {
@@ -257,7 +288,7 @@ class Image
      * Set watermark image opacity
      *
      * @param int $imageOpacity
-     * @return \Magento\Image
+     * @return $this
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -269,7 +300,7 @@ class Image
      * Set watermark width
      *
      * @param int $width
-     * @return \Magento\Image
+     * @return $this
      */
     public function setWatermarkWidth($width)
     {
@@ -281,7 +312,7 @@ class Image
      * Set watermark height
      *
      * @param int $height
-     * @return \Magento\Image
+     * @return $this
      */
     public function setWatermarkHeight($height)
     {
@@ -315,7 +346,7 @@ class Image
      *
      * @param string $text
      * @param string $font Path to font file
-     * @return \Magento\Image
+     * @return $this
      */
     public function createPngFromString($text, $font = '')
     {

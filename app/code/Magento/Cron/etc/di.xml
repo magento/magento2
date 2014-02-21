@@ -19,26 +19,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config" />
     <type name="Magento\Cron\Model\Config\Reader\Db">
-        <param name="converter">
-            <instance type="Magento\Cron\Model\Config\Converter\Db" />
-        </param>
-    </type>
-    <type name="Magento\Cron\Model\Config\Reader\Xml">
-        <param name="converter">
-            <instance type="Magento\Cron\Model\Config\Converter\Xml" />
-        </param>
-        <param name="schemaLocator">
-            <instance type="Magento\Cron\Model\Config\SchemaLocator" />
-        </param>
+        <arguments>
+            <argument name="defaultReader" xsi:type="object">Magento\Core\Model\Config\Scope\Reader\DefaultReader</argument>
+        </arguments>
     </type>
     <type name="Magento\App\Cron">
         <plugin name="application_initializer" type="Magento\Cron\App\Cron\Plugin\ApplicationInitializer" sortOrder="10"/>
+    </type>
+    <type name="Magento\Backend\Model\Config\Structure\Converter">
+        <plugin name="cron_backend_config_structure_converter_plugin" type="Magento\Cron\Model\Backend\Config\Structure\Converter" />
+    </type>
+    <type name="Magento\App\Config\Initial\Converter">
+        <plugin name="cron_system_config_initial_converter_plugin" type="Magento\Cron\Model\System\Config\Initial\Converter" />
     </type>
 </config>

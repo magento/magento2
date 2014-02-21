@@ -20,11 +20,13 @@
  *
  * @category    Magento
  * @package     Errors
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+require_once __DIR__ . '/../../app/bootstrap.php';
 require_once 'processor.php';
 
-$processor = new Error_Processor();
-$processor->process404();
+$processor = new Error_Processor(new \Magento\App\Response\Http());
+$response = $processor->process404();
+$response->sendResponse();

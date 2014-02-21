@@ -1,7 +1,5 @@
 <?php
 /**
- * Primary configuration loader for application object manager
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -19,12 +17,15 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- * 
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ *
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App\ObjectManager\ConfigLoader;
 
+/**
+ * Primary configuration loader for application object manager
+ */
 class Primary
 {
     /**
@@ -35,19 +36,19 @@ class Primary
     protected $_appMode;
 
     /**
-     * @var string
+     * @var \Magento\App\Filesystem\DirectoryList
      */
-    protected $_configDirectoryPath;
+    protected $_directoryList;
 
     /**
-     * @param string $configDirectoryPath
+     * @param \Magento\App\Filesystem\DirectoryList $directoryList
      * @param string $appMode
      */
     public function __construct(
-        $configDirectoryPath,
+        \Magento\App\Filesystem\DirectoryList $directoryList,
         $appMode = \Magento\App\State::MODE_DEFAULT
     ) {
-        $this->_configDirectoryPath = $configDirectoryPath;
+        $this->_directoryList = $directoryList;
         $this->_appMode = $appMode;
     }
 
@@ -59,17 +60,20 @@ class Primary
     public function load()
     {
         $reader = new \Magento\ObjectManager\Config\Reader\Dom(
-            new \Magento\App\Config\FileResolver\Primary(
-                new \Magento\Filesystem(
-                    new \Magento\Filesystem\DirectoryList($this->_configDirectoryPath),
+            new \Magento\App\Arguments\FileResolver\Primary(
+                new \Magento\App\Filesystem(
+                    $this->_directoryList,
                     new \Magento\Filesystem\Directory\ReadFactory(),
                     new \Magento\Filesystem\Directory\WriteFactory()
                 ),
                 new \Magento\Config\FileIteratorFactory()
             ),
-            new \Magento\ObjectManager\Config\Mapper\Dom(),
+            new \Magento\ObjectManager\Config\Mapper\Dom(
+                new \Magento\Stdlib\BooleanUtils(),
+                new \Magento\ObjectManager\Config\Mapper\ArgumentParser()
+            ),
             new \Magento\ObjectManager\Config\SchemaLocator(),
-            new \Magento\App\Config\ValidationState($this->_appMode)
+            new \Magento\App\Arguments\ValidationState($this->_appMode)
         );
 
         return $reader->read('primary');

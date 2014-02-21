@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -94,7 +94,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
     {
         return $this->getUrl('downloadable/download/link', array(
             'id'        => $item->getLinkHash(),
-            '_store'    => $this->getOrder()->getStore(),
+            '_scope'    => $this->getOrder()->getStore(),
             '_secure'   => true,
             '_nosid'    => true
         ));

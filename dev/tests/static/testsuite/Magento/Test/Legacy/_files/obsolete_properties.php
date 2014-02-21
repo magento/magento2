@@ -22,7 +22,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
@@ -33,6 +33,7 @@ return array(
     array('_appMode', 'Magento\App\ObjectManager\ConfigLoader'),
     array('_baseDirCache', 'Magento\Core\Model\Config'),
     array('_cacheConf'),
+    array('_cachedItemPriceBlocks'),
     array('_canUseLocalModules'),
     array('_checkedProductsQty', 'Magento\CatalogInventory\Model\Observer'),
     array('_children', 'Magento\Core\Block\AbstractBlock'),
@@ -49,6 +50,9 @@ return array(
     array('_currency', 'Magento\GoogleCheckout\Model\Api\Xml\Checkout'),
     array('_currencyNameTable'),
     array('_customEtcDir', 'Magento\Core\Model\Config'),
+    array('_customerFactory ', '\Magento\Sales\Block\Adminhtml\Billing\Agreement\View\Tab\Info'),
+    array('_customerFactory ', '\Magento\Sales\Block\Adminhtml\Order\Create\Form\Account'),
+    array('_customerFormFactory', '\Magento\Sales\Block\Adminhtml\Order\Create\Form\Account'),
     array('_defaultTemplates', 'Magento\Email\Model\Template'),
     array('_designProductSettingsApplied'),
     array('_directOutput', 'Magento\Core\Model\Layout'),
@@ -62,6 +66,7 @@ return array(
     array('_isAnonymous'),
     array('_isFirstTimeProcessRun', 'Magento\SalesRule\Model\Validator'),
     array('_isRuntimeValidated', 'Magento\ObjectManager\Config\Reader\Dom'),
+    array('_itemPriceBlockTypes'),
     array('_loadDefault', 'Magento\Core\Model\Resource\Store\Collection'),
     array('_loadDefault', 'Magento\Core\Model\Resource\Store\Group\Collection'),
     array('_loadDefault', 'Magento\Core\Model\Resource\Website\Collection'),
@@ -71,7 +76,7 @@ return array(
     array('_moduleReader', 'Magento\Backend\Model\Menu\Config'),
     array('_option', 'Magento\Captcha\Helper\Data', '_dirs'),
     array('_options', 'Magento\Core\Model\Config', 'Magento\Filesystem'),
-    array('_optionsMapping', null, '\Magento\Filesystem::getPath($nodeKey)'),
+    array('_optionsMapping', null, '\Magento\App\Filesystem::getPath($nodeKey)'),
     array('_order', 'Magento\Checkout\Block\Onepage\Success'),
     array('_order_id'),
     array('_parent', 'Magento\Core\Block\AbstractBlock'),
@@ -103,6 +108,8 @@ return array(
     array('decoratedIsOdd', null, 'getDecoratedIsOdd'),
     array('decoratedIsLast', null, 'getDecoratedIsLast'),
     array('static', 'Magento\Email\Model\Template\Filter'),
+    array('_addressForm', 'Magento\Sales\Block\Adminhtml\Order\Create\Form\Address'),
+    array('_adminhtmlAddresses', 'Magento\Sales\Block\Adminhtml\Order\Create\Form\Address'),
     array('_useAnalyticFunction'),
     array('_defaultIndexer', 'Magento\CatalogInventory\Model\Resource\Indexer\Stock'),
     array('_engine', 'Magento\CatalogSearch\Model\Resource\Fulltext'),
@@ -252,6 +259,7 @@ return array(
     array('_appState', 'Magento\View\Asset\MinifyService', 'appState'),
     array('_properties', 'Magento\View\Asset\PropertyGroup', 'properties'),
     array('_viewUrl', 'Magento\View\Asset\PublicFile', 'viewUrl'),
+    array('_productThumbnail', 'Magento\Checkout\Block\Cart\Item\Renderer'),
     array('_file', 'Magento\View\Asset\PublicFile', 'file'),
     array('_contentType', 'Magento\View\Asset\PublicFile', 'contentType'),
     array('_url', 'Magento\View\Asset\Remote', 'url'),
@@ -264,4 +272,18 @@ return array(
     array('_messagesBlock', 'Magento\View\Element\AbstractBlock'),
     array('_messagesBlock', 'Magento\Connect\Helper\Data'),
     array('escapeMessageFlag', 'Magento\View\Block\Messages'),
+    array('fileIteratorFactory', 'Magento\Core\Model\Theme\Collection'),
+    array('_handlerFactory', 'Magento\Backend\Block\Widget\Grid\Massaction\Additional'),
+    array('_flatResourceFactory', 'Magento\Catalog\Model\Observer'),
+    array('_catalogCategoryFlat', 'Magento\Catalog\Model\Observer'),
+    array('_catalogCategoryFlat', 'Magento\Catalog\Block\Navigation'),
+    array('_catalogCategoryFlat', 'Magento\Catalog\Model\Category'),
+    array('_storesRootCategories', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_resourceHelper', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_catalogCategory', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_isRebuilt', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_isBuilt', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_attributeCodes', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_columnsSql', 'Magento\Catalog\Model\Resource\Category\Flat'),
+    array('_columns', 'Magento\Catalog\Model\Resource\Category\Flat'),
 );

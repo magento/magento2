@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -126,21 +126,23 @@
                         <argument name="header" xsi:type="string" translate="true">Status</argument>
                         <argument name="index" xsi:type="string">subscriber_status</argument>
                         <argument name="type" xsi:type="string">options</argument>
-                        <argument name="status_not_active" xsi:type="array">
-                            <item name="value" xsi:type="string">2</item>
-                            <item name="label" xsi:type="string" translate="true">Not Activated</item>
-                        </argument>
-                        <argument name="status_subscribed" xsi:type="array">
-                            <item name="value" xsi:type="string">1</item>
-                            <item name="label" xsi:type="string" translate="true">Subscribed</item>
-                        </argument>
-                        <argument name="status_unsubscribed" xsi:type="array">
-                            <item name="value" xsi:type="string">3</item>
-                            <item name="label" xsi:type="string" translate="true">Unsubscribed</item>
-                        </argument>
-                        <argument name="status_unconfirmed" xsi:type="array">
-                            <item name="value" xsi:type="string">4</item>
-                            <item name="label" xsi:type="string" translate="true">Unconfirmed</item>
+                        <argument name="options" xsi:type="array">
+                            <item name="status_not_active" xsi:type="array">
+                                <item name="value" xsi:type="string">2</item>
+                                <item name="label" xsi:type="string" translate="true">Not Activated</item>
+                            </item>
+                            <item name="status_subscribed" xsi:type="array">
+                                <item name="value" xsi:type="string">1</item>
+                                <item name="label" xsi:type="string" translate="true">Subscribed</item>
+                            </item>
+                            <item name="status_unsubscribed" xsi:type="array">
+                                <item name="value" xsi:type="string">3</item>
+                                <item name="label" xsi:type="string" translate="true">Unsubscribed</item>
+                            </item>
+                            <item name="status_unconfirmed" xsi:type="array">
+                                <item name="value" xsi:type="string">4</item>
+                                <item name="label" xsi:type="string" translate="true">Unconfirmed</item>
+                            </item>
                         </argument>
                         <argument name="header_css_class" xsi:type="string">col-status</argument>
                         <argument name="column_css_class" xsi:type="string">col-status</argument>

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Install\Model\Installer;
@@ -37,9 +37,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
-        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        /** @var \Magento\App\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
+        self::$_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         self::$_tmpDir = self::$_varDirectory->getAbsolutePath('ConfigTest');
         self::$_varDirectory->create(self::$_varDirectory->getRelativePath(self::$_tmpDir));
     }
@@ -69,15 +69,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directoryList = $objectManager->create(
-            'Magento\Filesystem\DirectoryList',
+            'Magento\App\Filesystem\DirectoryList',
             array(
                 'root' => self::$_tmpDir,
                 'directories' => array(
-                    \Magento\Filesystem::CONFIG => array('path' => self::$_tmpDir)
+                    \Magento\App\Filesystem::CONFIG_DIR => array('path' => self::$_tmpDir)
                 ),
             )
         );
-        $filesystem = $objectManager->create('Magento\Filesystem', array('directoryList' => $directoryList));
+        $objectManager->get('\Magento\App\Filesystem\DirectoryList\Configuration')->configure($directoryList);
+        $filesystem = $objectManager->create('Magento\App\Filesystem', array('directoryList' => $directoryList));
         $model = $objectManager->create(
             'Magento\Install\Model\Installer\Config',
             array('request' => $request, 'filesystem' => $filesystem)

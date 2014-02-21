@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,6 +45,9 @@ namespace Magento\Directory\Model;
 
 class Region extends \Magento\Core\Model\AbstractModel
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Directory\Model\Resource\Region');
@@ -66,6 +69,11 @@ class Region extends \Magento\Core\Model\AbstractModel
         return $name;
     }
 
+    /**
+     * @param string $code
+     * @param string $countryId
+     * @return $this
+     */
     public function loadByCode($code, $countryId)
     {
         if ($code) {
@@ -74,10 +82,14 @@ class Region extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param string $countryId
+     * @return $this
+     */
     public function loadByName($name, $countryId)
     {
         $this->_getResource()->loadByName($this, $name, $countryId);
         return $this;
     }
-
 }

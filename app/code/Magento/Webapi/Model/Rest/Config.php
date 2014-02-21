@@ -18,12 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Model\Rest;
 
+use Magento\Webapi\Controller\Rest\Router\Route;
 use \Magento\Webapi\Model\Config\Converter;
+use Magento\Webapi\Model\Config as ModelConfig;
 
 /**
  * Webapi Config Model for Rest.
@@ -49,18 +51,18 @@ class Config
     const KEY_ACL_RESOURCES = 'resources';
     /*#@-*/
 
-    /** @var \Magento\Webapi\Model\Config  */
+    /** @var ModelConfig */
     protected $_config;
 
     /** @var \Magento\Controller\Router\Route\Factory */
     protected $_routeFactory;
 
     /**
-     * @param \Magento\Webapi\Model\Config
+     * @param ModelConfig $config
      * @param \Magento\Controller\Router\Route\Factory $routeFactory
      */
     public function __construct(
-        \Magento\Webapi\Model\Config $config,
+        ModelConfig $config,
         \Magento\Controller\Router\Route\Factory $routeFactory
     ) {
         $this->_config = $config;
@@ -109,10 +111,12 @@ class Config
     }
 
     /**
+     * TODO: Refactor $this->_config->getServices() to return array with baseUrl as the key since its unique and
+     *       needs to be used directly instead of looping each key
      * Generate the list of available REST routes. Current HTTP method is taken into account.
      *
      * @param \Magento\Webapi\Controller\Rest\Request $request
-     * @return array
+     * @return Route[]
      * @throws \Magento\Webapi\Exception
      */
     public function getRestRoutes(\Magento\Webapi\Controller\Rest\Request $request)

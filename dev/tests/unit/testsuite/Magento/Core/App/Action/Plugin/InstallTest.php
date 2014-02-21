@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\App\Action\Plugin;
@@ -54,7 +54,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     {
         $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->_response = $this->getMock('Magento\App\ResponseInterface', array('setRedirect', 'sendResponse'));
-        $this->_urlMock = $this->getMock('Magento\Core\Model\Url', array(), array(), '', false);
+        $this->_urlMock = $this->getMock('Magento\Url', array(), array(), '', false);
         $this->_invocationChainMock =
             $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
         $this->_plugin = new \Magento\Core\App\Action\Plugin\Install(

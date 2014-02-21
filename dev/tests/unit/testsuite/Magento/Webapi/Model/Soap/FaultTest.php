@@ -1,7 +1,5 @@
 <?php
 /**
- * Test SOAP fault model.
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -20,11 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Webapi\Model\Soap;
 
+use Magento\Webapi\Model\Soap\Fault;
+
+/**
+ * Test SOAP fault model.
+ */
 class FaultTest extends \PHPUnit_Framework_TestCase
 {
     const WSDL_URL = 'http://host.com/?wsdl&services=customerV1';
@@ -91,13 +95,19 @@ class FaultTest extends \PHPUnit_Framework_TestCase
                 <env:Text xml:lang="en">Soap fault reason.</env:Text>
             </env:Reason>
             <env:Detail>
-                <m:DefaultFault>
+                <m:GenericFault>
                     <m:Parameters>
-                        <m:param1>value1</m:param1>
-                        <m:param2>2</m:param2>
+                        <m:GenericFaultParameter>
+                            <m:key>param1</m:key>
+                            <m:value>value1</m:value>
+                        </m:GenericFaultParameter>
+                        <m:GenericFaultParameter>
+                            <m:key>param2</m:key>
+                            <m:value>2</m:value>
+                        </m:GenericFaultParameter>
                     </m:Parameters>
                     <m:Code>111</m:Code>
-                </m:DefaultFault>
+                </m:GenericFault>
             </env:Detail>
         </env:Fault>
     </env:Body>
@@ -155,38 +165,43 @@ XML;
         $expectedXmls = include __DIR__ . '/../../_files/soap_fault/soap_fault_expected_xmls.php';
         return array(
             //Each array contains data for SOAP Fault Message, Expected XML, and Assert Message.
-            array(
+            'ArrayDataDetails' => array(
                 'Fault reason',
                 'Sender',
-                array('key1' => 'value1', 'key2' => 'value2'),
+                array(
+                    Fault::NODE_DETAIL_PARAMETERS => array('key1' => 'value1', 'key2' => 'value2', 'value3'),
+                    Fault::NODE_DETAIL_CODE => 333,
+                    Fault::NODE_DETAIL_TRACE => 'Trace',
+                    'Invalid' => 'This node should be skipped'
+                ),
                 $expectedXmls['expectedResultArrayDataDetails'],
                 'SOAP fault message with associated array data details is invalid.'
             ),
-            array(
+            'IndexArrayDetails' => array(
                 'Fault reason',
                 'Sender',
                 array('value1', 'value2'),
                 $expectedXmls['expectedResultIndexArrayDetails'],
                 'SOAP fault message with index array data details is invalid.'
             ),
-            array(
+            'EmptyArrayDetails' => array(
                 'Fault reason',
                 'Sender',
                 array(),
                 $expectedXmls['expectedResultEmptyArrayDetails'],
                 'SOAP fault message with empty array data details is invalid.'
             ),
-            array(
+            'ObjectDetails' => array(
                 'Fault reason',
                 'Sender',
                 (object)array('key' => 'value'),
                 $expectedXmls['expectedResultObjectDetails'],
                 'SOAP fault message with object data details is invalid.'
             ),
-            array(
+            'ComplexDataDetails' => array(
                 'Fault reason',
                 'Sender',
-                array('key' => array('sub_key' => 'value')),
+                array(Fault::NODE_DETAIL_PARAMETERS => array('key' => array('sub_key' => 'value'))),
                 $expectedXmls['expectedResultComplexDataDetails'],
                 'SOAP fault message with complex data details is invalid.'
             ),
@@ -223,13 +238,19 @@ XML;
                 <env:Text xml:lang="en">{$message}</env:Text>
             </env:Reason>
             <env:Detail>
-                <m:DefaultFault>
+                <m:GenericFault>
                     <m:Parameters>
-                        <m:param1>value1</m:param1>
-                        <m:param2>2</m:param2>
+                        <m:GenericFaultParameter>
+                            <m:key>param1</m:key>
+                            <m:value>value1</m:value>
+                        </m:GenericFaultParameter>
+                        <m:GenericFaultParameter>
+                            <m:key>param2</m:key>
+                            <m:value>2</m:value>
+                        </m:GenericFaultParameter>
                     </m:Parameters>
                     <m:Code>{$code}</m:Code>
-                </m:DefaultFault>
+                </m:GenericFault>
             </env:Detail>
         </env:Fault>
     </env:Body>

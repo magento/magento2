@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,8 +45,8 @@ class Robots extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -55,8 +55,8 @@ class Robots extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\ConfigInterface $config,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -70,7 +70,7 @@ class Robots extends \Magento\Core\Model\Config\Value
             $resourceCollection,
             $data
         );
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
         $this->_file = 'robots.txt';
     }
 
@@ -90,7 +90,7 @@ class Robots extends \Magento\Core\Model\Config\Value
     /**
      * Load default content from robots.txt if customer does not define own
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Robots
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -104,7 +104,7 @@ class Robots extends \Magento\Core\Model\Config\Value
     /**
      * Check and process robots file
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Robots
+     * @return $this
      */
     protected function _afterSave()
     {

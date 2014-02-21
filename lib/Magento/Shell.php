@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Shell
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,13 +39,20 @@ class Shell
     protected $_logger;
 
     /**
-     * Constructor
+     * Operation system info
      *
+     * @var OSInfo
+     */
+    protected $_osInfo;
+
+    /**
+     * @param OSInfo $osInfo
      * @param \Zend_Log $logger Logger instance to be used to log commands and their output
      */
-    public function __construct(\Zend_Log $logger = null)
+    public function __construct(OSInfo $osInfo, \Zend_Log $logger = null)
     {
         $this->_logger = $logger;
+        $this->_osInfo = $osInfo;
     }
 
     /**
@@ -70,6 +77,22 @@ class Shell
             throw new \Magento\Exception("Command `$command` returned non-zero exit code.", 0, $commandError);
         }
         return $output;
+    }
+
+    /**
+     * Run external command in background
+     *
+     * @param string $command
+     * @throws \Magento\Exception
+     */
+    public function executeInBackground($command)
+    {
+        if ($this->_osInfo->isWindows()) {
+            $command = 'start /B "magento background task" ' . $command;
+        } else {
+            $command .=  ' > /dev/null 2>1 &';
+        }
+        pclose(popen($command, 'r'));
     }
 
     /**

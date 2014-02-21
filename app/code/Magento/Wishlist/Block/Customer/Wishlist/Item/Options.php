@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Wishlist
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,6 +41,16 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
     protected $_helperPool;
 
     /**
+     * List of product options rendering configurations by product type
+     *
+     * @var array
+     */
+    protected $_optionsCfg = array('default' => array(
+        'helper' => 'Magento\Catalog\Helper\Product\Configuration',
+        'template' => 'Magento_Wishlist::options_list.phtml'
+    ));
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
@@ -56,6 +66,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -74,7 +85,8 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_helperPool = $helperPool;
         parent::__construct(
@@ -91,22 +103,15 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
             $imageHelper,
             $customerSession,
             $productFactory,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
 
     /**
-     * List of product options rendering configurations by product type
-     *
-     * @var array
-     */
-    protected $_optionsCfg = array('default' => array(
-        'helper' => 'Magento\Catalog\Helper\Product\Configuration',
-        'template' => 'Magento_Wishlist::options_list.phtml'
-    ));
-
-    /**
      * Initialize block
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -114,13 +119,13 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
         $this->_eventManager->dispatch('product_option_renderer_init', array('block' => $this));
     }
 
-    /*
+    /**
      * Adds config for rendering product type options
      *
      * @param string $productType
      * @param string $helperName
      * @param null|string $template
-     * @return \Magento\Wishlist\Block\Customer\Wishlist\Item\Options
+     * @return $this
      */
     public function addOptionsRenderCfg($productType, $helperName, $template = null)
     {

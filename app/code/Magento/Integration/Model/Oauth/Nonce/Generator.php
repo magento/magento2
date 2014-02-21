@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Model\Oauth\Nonce;
 
 use Magento\Oauth\OauthInterface;
@@ -30,16 +29,24 @@ use Magento\Oauth\NonceGeneratorInterface;
 
 class Generator implements NonceGeneratorInterface
 {
-    /** @var \Magento\Oauth\Helper\Oauth */
+    /**
+     * @var \Magento\Oauth\Helper\Oauth
+     */
     protected $_oauthHelper;
 
-    /** @var  \Magento\Integration\Model\Oauth\Nonce\Factory */
+    /**
+     * @var  \Magento\Integration\Model\Oauth\Nonce\Factory
+     */
     protected $_nonceFactory;
 
-    /** @var  int */
+    /**
+     * @var  int
+     */
     protected $_nonceLength;
 
-    /** @var \Magento\Core\Model\Date */
+    /**
+     * @var \Magento\Core\Model\Date
+     */
     protected $_date;
 
     /**

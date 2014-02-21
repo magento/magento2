@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,13 +55,24 @@ class Subscribe extends \Magento\View\Element\Template
     ) {
         parent::__construct($context, $data);
         $this->_newsletterSession = $newsletterSession;
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * Get success message
+     *
+     * @return string
+     */
     public function getSuccessMessage()
     {
         return $this->_newsletterSession->getSuccess();
     }
 
+    /**
+     * Get error message
+     *
+     * @return string
+     */
     public function getErrorMessage()
     {
         return $this->_newsletterSession->getError();

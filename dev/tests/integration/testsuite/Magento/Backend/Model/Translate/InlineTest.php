@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,14 +35,14 @@ namespace Magento\Backend\Model\Translate;
 class InlineTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Translate\InlineInterface
+     * @var \Magento\Translate\InlineInterface
      */
-    protected $_translate;
+    protected $_translateInline;
 
     protected function setUp()
     {
-        $this->_translate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Translate\InlineInterface');
+        $this->_translateInline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Translate\InlineInterface');
     }
 
     /**
@@ -52,11 +52,11 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     public function testAjaxUrl()
     {
         $body = '<html><body>some body</body></html>';
-        /** @var \Magento\Backend\Model\Url $url */
+        /** @var \Magento\Backend\Model\UrlInterface $url */
         $url = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\UrlInterface');
         $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate');
-        $this->_translate->processResponseBody($body, true);
+        $this->_translateInline->processResponseBody($body, true);
         $this->assertContains(
             $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate'),
             $body

@@ -21,13 +21,14 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\TestFramework;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem,
+    Magento\App\Filesystem\DirectoryList;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -142,12 +143,12 @@ class Application
         $generationDir = "$installDir/generation";
         $this->_initParams = array(
             Filesystem::PARAM_APP_DIRS => array(
-                Filesystem::CONFIG      => array('path' => $this->_installEtcDir),
+                Filesystem::CONFIG_DIR      => array('path' => $this->_installEtcDir),
                 Filesystem::VAR_DIR     => array('path' => $installDir),
-                Filesystem::MEDIA       => array('path' => "$installDir/media"),
-                Filesystem::STATIC_VIEW => array('path' => "$installDir/pub_static"),
-                Filesystem::PUB_VIEW_CACHE => array('path' => "$installDir/pub_cache"),
-                Filesystem::GENERATION => array('path' => $generationDir)
+                Filesystem::MEDIA_DIR       => array('path' => "$installDir/media"),
+                Filesystem::STATIC_VIEW_DIR => array('path' => "$installDir/pub_static"),
+                Filesystem::PUB_VIEW_CACHE_DIR => array('path' => "$installDir/pub_cache"),
+                Filesystem::GENERATION_DIR => array('path' => $generationDir)
             ),
             \Magento\App\State::PARAM_MODE => $appMode
         );
@@ -211,6 +212,16 @@ class Application
             $objectManager = $this->_factory->restore($objectManager, BP, $overriddenParams);
         }
 
+        $directories = isset($overriddenParams[Filesystem::PARAM_APP_DIRS])
+            ? $overriddenParams[Filesystem::PARAM_APP_DIRS]
+            : array();
+        $directoryList = new \Magento\TestFramework\App\Filesystem\DirectoryList(BP, $directories);
+
+        $objectManager->addSharedInstance($directoryList, 'Magento\App\Filesystem\DirectoryList');
+        $objectManager->addSharedInstance($directoryList, 'Magento\Filesystem\DirectoryList');
+        $objectManager->removeSharedInstance('Magento\App\Filesystem');
+        $objectManager->removeSharedInstance('Magento\App\Filesystem\DirectoryList\Verification');
+
         Helper\Bootstrap::setObjectManager($objectManager);
 
         $objectManager->configure(array(
@@ -238,16 +249,16 @@ class Application
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
         \Magento\Phrase::setRenderer($objectManager->get('Magento\Phrase\Renderer\Placeholder'));
 
-        /** @var \Magento\Filesystem\DirectoryList\Verification $verification */
-        $verification = $objectManager->get('Magento\Filesystem\DirectoryList\Verification');
+        /** @var \Magento\App\Filesystem\DirectoryList\Verification $verification */
+        $verification = $objectManager->get('Magento\App\Filesystem\DirectoryList\Verification');
         $verification->createAndVerifyDirectories();
 
-        $directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
-        $directoryListConfig = $objectManager->get('Magento\Filesystem\DirectoryList\Configuration');
+        $directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
+        $directoryListConfig = $objectManager->get('Magento\App\Filesystem\DirectoryList\Configuration');
         $directoryListConfig->configure($directoryList);
 
-        $directories = isset($overriddenParams[\Magento\Filesystem::PARAM_APP_DIRS])
-            ? $overriddenParams[\Magento\Filesystem::PARAM_APP_DIRS]
+        $directories = isset($overriddenParams[\Magento\App\Filesystem::PARAM_APP_DIRS])
+            ? $overriddenParams[\Magento\App\Filesystem::PARAM_APP_DIRS]
             : array();
         foreach ($directories as $code => $configOverrides) {
             $config = array_merge($directoryList->getConfig($code), $configOverrides);
@@ -274,7 +285,8 @@ class Application
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\App\Http $app */
         $app = $objectManager->get('Magento\App\Http');
-        $app->execute();
+        $response = $app->launch();
+        $response->sendResponse();
     }
 
     /**

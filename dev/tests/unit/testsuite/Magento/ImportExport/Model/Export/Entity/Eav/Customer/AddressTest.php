@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -99,10 +99,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+
+        $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $storeManager->expects($this->once())
+            ->method('getWebsites')
+            ->will($this->returnCallback(array($this, 'getWebsites')));
+
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = new \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address(
             $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\App', array(), array(), '', false),
+            $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', array(), array(), '', false),
             $this->getMock(
                 'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory', array(), array(), '', false
@@ -129,11 +135,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $websiteManager = $this->getMock('stdClass', array('getWebsites'));
-        $websiteManager->expects($this->once())
-            ->method('getWebsites')
-            ->will($this->returnCallback(array($this, 'getWebsites')));
-
         $translator = $this->getMock('stdClass');
 
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
@@ -176,8 +177,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $data = array(
-            'website_manager'              => $websiteManager,
-            'store_manager'                => 'not_used',
             'translator'                   => $translator,
             'attribute_collection'         => $attributeCollection,
             'page_size'                    => 1,

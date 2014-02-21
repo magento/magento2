@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App;
@@ -45,20 +45,35 @@ class CronTest extends \PHPUnit_Framework_TestCase
      */
     protected $_stateMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_request;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_responseMock;
+
     protected function setUp()
     {
         $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface');
         $this->_stateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $this->_request = $this->getMock('Magento\App\Console\Request', array(), array(), '', false);
+        $this->_responseMock = $this->getMock('Magento\App\Console\Response', array(), array(), '', false);
         $this->_model = new Cron(
             $this->_eventManagerMock,
-            $this->_stateMock
+            $this->_stateMock,
+            $this->_request,
+            $this->_responseMock
         );
     }
 
-    public function testExecuteDispatchesCronEvent()
+    public function testLaunchDispatchesCronEvent()
     {
         $this->_stateMock->expects($this->once())->method('setAreaCode')->with('crontab');
         $this->_eventManagerMock->expects($this->once())->method('dispatch')->with('default');
-        $this->assertEquals(0, $this->_model->execute());
+        $this->_responseMock->expects($this->once())->method('setCode')->with(0);
+        $this->assertEquals($this->_responseMock, $this->_model->launch());
     }
 }

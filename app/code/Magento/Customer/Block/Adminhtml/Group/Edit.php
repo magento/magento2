@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,16 +39,24 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     */
+    protected $_groupService = null;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
+        $this->_groupService = $groupService;
         parent::__construct($context, $data);
     }
 
@@ -63,8 +71,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('save', 'label', __('Save Customer Group'));
         $this->_updateButton('delete', 'label', __('Delete Customer Group'));
 
+        /** @var \Magento\Customer\Service\V1\Dto\CustomerGroup $group */
         $group = $this->_coreRegistry->registry('current_group');
-        if (!$group || !$group->getId() || $group->usesAsDefault()) {
+        if (!$group || !$group->getId() || !$this->_groupService->canDelete($group->getId())) {
             $this->_removeButton('delete');
         }
     }

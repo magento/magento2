@@ -20,11 +20,12 @@
  *
  * @category    Magento
  * @package     \Magento\Escaper
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento;
+
 /**
  * Magento escape methods
  */
@@ -44,7 +45,7 @@ class Escaper
             foreach ($data as $item) {
                 $result[] = $this->escapeHtml($item);
             }
-        } else if(strlen($data)) {
+        } elseif (strlen($data)) {
             if (is_array($allowedTags) and !empty($allowedTags)) {
                 $allowed = implode('|', $allowedTags);
                 $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);

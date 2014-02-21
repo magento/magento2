@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Model\Soap;
@@ -47,6 +47,9 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Webapi\Model\Soap\Server\Factory */
     protected $_soapServerFactory;
+
+    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_typeProcessor;
 
     protected function setUp()
     {
@@ -75,6 +78,14 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $this->_soapServerFactory = $this->getMockBuilder('Magento\Webapi\Model\Soap\Server\Factory')
             ->disableOriginalConstructor()->getMock();
 
+        $this->_typeProcessor = $this->getMock(
+            'Magento\Webapi\Model\Config\ClassReflector\TypeProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+
         /** Init SUT. */
         $this->_soapServer = new \Magento\Webapi\Model\Soap\Server(
             $areaListMock,
@@ -82,7 +93,8 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             $this->_requestMock,
             $this->_domDocumentFactory,
             $this->_storeManagerMock,
-            $this->_soapServerFactory
+            $this->_soapServerFactory,
+            $this->_typeProcessor
         );
 
         parent::setUp();

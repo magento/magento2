@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,6 +29,13 @@ namespace Magento\Wishlist\Block;
 
 class Link extends \Magento\View\Element\Html\Link
 {
+    /**
+     * Template name
+     *
+     * @var string
+     */
+    protected $_template = 'Magento_Wishlist::link.phtml';
+
     /**
      * @var \Magento\Wishlist\Helper\Data
      */
@@ -72,7 +79,7 @@ class Link extends \Magento\View\Element\Html\Link
      */
     public function getLabel()
     {
-        return $this->_createLabel($this->_getItemCount());
+        return __('My Wish List');
     }
 
     /**
@@ -80,7 +87,15 @@ class Link extends \Magento\View\Element\Html\Link
      */
     public function getTitle()
     {
-        return $this->_createLabel($this->_getItemCount());
+        return $this->getLabel();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCounter()
+    {
+        return $this->_createCounter($this->_getItemCount());
     }
 
     /**
@@ -97,16 +112,16 @@ class Link extends \Magento\View\Element\Html\Link
      * Create button label based on wishlist item quantity
      *
      * @param int $count
-     * @return string
+     * @return string|void
      */
-    protected function _createLabel($count)
+    protected function _createCounter($count)
     {
         if ($count > 1) {
-            return __('My Wish List (%1 items)', $count);
+            return __('%1 items', $count);
         } else if ($count == 1) {
-            return __('My Wish List (%1 item)', $count);
+            return __('1 item');
         } else {
-            return __('My Wish List');
+            return;
         }
     }
 }

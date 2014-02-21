@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Install
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -70,20 +70,26 @@ abstract class AbstractDb
      */
     protected $_configData;
 
+    /**
+     * Configuration arguments
+     *
+     * @var \Magento\App\Arguments
+     */
+    protected $_arguments;
 
     /**
      * @param \Magento\Core\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory
-     * @param \Magento\App\Config $localConfig
+     * @param \Magento\App\Arguments $arguments
      * @param array $dbExtensions
      */
     public function __construct(
         \Magento\Core\Model\Resource\Type\Db\Pdo\MysqlFactory $adapterFactory,
-        \Magento\App\Config $localConfig,
+        \Magento\App\Arguments $arguments,
         array $dbExtensions = array()
     ) {
         $this->_adapterFactory = $adapterFactory;
         $this->_dbExtensions = $dbExtensions;
-        $this->_localConfig = $localConfig;
+        $this->_arguments = $arguments;
     }
 
     /**
@@ -111,6 +117,7 @@ abstract class AbstractDb
      * Set configuration data
      *
      * @param array $config the connection configuration
+     * @return void
      */
     public function setConfig($config)
     {
@@ -134,7 +141,7 @@ abstract class AbstractDb
                     'pdoType' => $this->getPdoType()
                 );
             } else {
-                $default = $this->_localConfig->getConnection('default');
+                $default = $this->_arguments->getConnection('default');
                 $connectionData = array(
                     'host' => $default['host'],
                     'username' => $default['username'],

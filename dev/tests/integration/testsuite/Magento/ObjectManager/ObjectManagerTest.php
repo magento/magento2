@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ObjectManager
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -88,13 +88,24 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_objectManager = new \Magento\ObjectManager\ObjectManager();
+        $config = new \Magento\ObjectManager\Config\Config();
+
+        $dirList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\App\Filesystem\DirectoryList');
+        $loader = new \Magento\App\Arguments\Loader($dirList);
+        $arguments = new \Magento\App\Arguments(array(), $loader);
+        $const = new \Magento\Data\Argument\Interpreter\Constant();
+        $argInterpreter = new \Magento\App\Arguments\ArgumentInterpreter($arguments, $const);
+        $argObjectFactory = new \Magento\ObjectManager\Config\Argument\ObjectFactory($config);
+        $factory = new \Magento\ObjectManager\Factory\Factory($config, $argInterpreter, $argObjectFactory);
+
+        self::$_objectManager = new \Magento\ObjectManager\ObjectManager($factory, $config);
         self::$_objectManager->configure(array(
             'preferences' => array(
                 self::TEST_INTERFACE => self::TEST_INTERFACE_IMPLEMENTATION
             )
         ));
-
+        $argObjectFactory->setObjectManager(self::$_objectManager);
     }
 
     public static function tearDownAfterClass()

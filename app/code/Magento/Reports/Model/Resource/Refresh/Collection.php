@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,6 @@ namespace Magento\Reports\Model\Resource\Refresh;
 
 class Collection extends \Magento\Data\Collection
 {
-
     /**
      * @var \Magento\Core\Model\LocaleInterface
      */
@@ -65,8 +64,8 @@ class Collection extends \Magento\Data\Collection
     /**
      * Get if updated
      *
-     * @param $reportCode
-     * @return string|Zend_Date
+     * @param string $reportCode
+     * @return string|\Zend_Date
      */
     protected function _getUpdatedAt($reportCode)
     {
@@ -82,7 +81,10 @@ class Collection extends \Magento\Data\Collection
 
     /**
      * Load data
-     * @return \Magento\Reports\Model\Resource\Refresh\Collection|\Magento\Data\Collection
+     *
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return $this
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

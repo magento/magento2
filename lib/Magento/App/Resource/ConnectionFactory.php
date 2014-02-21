@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App\Resource;
@@ -33,15 +33,15 @@ class ConnectionFactory
     protected $_objectManager;
 
     /**
-     * @var \Magento\App\Config
+     * @var \Magento\App\Arguments
      */
     protected $_localConfig;
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\App\Config $localConfig
+     * @param \Magento\App\Arguments $localConfig
      */
-    public function __construct(\Magento\ObjectManager $objectManager, \Magento\App\Config $localConfig)
+    public function __construct(\Magento\ObjectManager $objectManager, \Magento\App\Arguments $localConfig)
     {
         $this->_objectManager = $objectManager;
         $this->_localConfig = $localConfig;

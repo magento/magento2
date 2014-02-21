@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Theme
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -83,7 +83,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * Magento filesystem
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -104,13 +104,13 @@ class Storage extends \Magento\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory
     ) {
@@ -118,7 +118,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
         $this->filesystem = $filesystem;
         $this->_session = $session;
         $this->_themeFactory = $themeFactory;
-        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $this->mediaDirectoryWrite->create($this->getStorageRoot());
     }
 
@@ -269,7 +269,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * Get thumbnail path in current directory by image name
      *
-     * @param $imageName
+     * @param string $imageName
      * @return string
      * @throws \InvalidArgumentException
      */
@@ -305,7 +305,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * Get allowed extensions by type
      *
-     * @return array
+     * @return string[]
      * @throws \Magento\Exception
      */
     public function getAllowedExtensionsByType()

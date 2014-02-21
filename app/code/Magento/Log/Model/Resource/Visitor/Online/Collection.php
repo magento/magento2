@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Log
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Log\Model\Resource\Visitor\Online;
 
 /**
  * Log Online visitors collection
@@ -32,12 +32,10 @@
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model\Resource\Visitor\Online;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
-     * joined fields array
+     * Joined fields array
      *
      * @var array
      */
@@ -73,6 +71,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Initialize collection model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -82,7 +81,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add Customer data to collection
      *
-     * @return \Magento\Log\Model\Resource\Visitor\Online\Collection
+     * @return $this
      */
     public function addCustomerData()
     {
@@ -134,8 +133,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter collection by specified website(s)
      *
-     * @param int|array $websiteIds
-     * @return \Magento\Log\Model\Resource\Visitor\Online\Collection
+     * @param int|int[] $websiteIds
+     * @return $this
      */
     public function addWebsiteFilter($websiteIds)
     {
@@ -154,11 +153,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *     array('attribute'=>'lastname', 'like'=>'test%'),
      * )
      *
-     * @see self::_getConditionSql for $condition
-     *
      * @param string $field
      * @param null|string|array $condition
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     *
+     * @see self::_getConditionSql for $condition
      */
     public function addFieldToFilter($field, $condition = null)
     {

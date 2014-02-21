@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,8 +43,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\AbstractMessage::getText
-     * @cover \Magento\Message\AbstractMessage::setText
+     * @covers \Magento\Message\AbstractMessage::getText
+     * @covers \Magento\Message\AbstractMessage::setText
      * @dataProvider setTextGetTextProvider
      */
     public function testSetTextGetText($text)
@@ -65,8 +65,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\AbstractMessage::getIdentifier
-     * @cover \Magento\Message\AbstractMessage::setIdentifier
+     * @covers \Magento\Message\AbstractMessage::getIdentifier
+     * @covers \Magento\Message\AbstractMessage::setIdentifier
      * @dataProvider setIdentifierGetIdentifierProvider
      */
     public function testSetIdentifierGetIdentifier($identifier)
@@ -87,8 +87,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\AbstractMessage::getIsSticky
-     * @cover \Magento\Message\AbstractMessage::setIsSticky
+     * @covers \Magento\Message\AbstractMessage::getIsSticky
+     * @covers \Magento\Message\AbstractMessage::setIsSticky
      */
     public function testSetIsStickyGetIsSticky()
     {
@@ -98,7 +98,7 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @cover \Magento\Message\AbstractMessage::toString
+     * @covers \Magento\Message\AbstractMessage::toString
      */
     public function testToString()
     {

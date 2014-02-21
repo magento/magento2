@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,19 +32,19 @@ abstract class AbstractComposite
     /**
      * Child elements iterator
      *
-     * @var \Magento\Backend\Model\Config\Structure\Element\Iterator
+     * @var Iterator
      */
     protected $_childrenIterator;
 
     /**
-     * @param \Magento\Core\Model\App $application
-     * @param \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param Iterator $childrenIterator
      */
     public function __construct(
-        \Magento\Core\Model\App $application,
-        \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        Iterator $childrenIterator
     ) {
-        parent::__construct($application);
+        parent::__construct($storeManager);
         $this->_childrenIterator = $childrenIterator;
     }
 
@@ -53,6 +53,7 @@ abstract class AbstractComposite
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {

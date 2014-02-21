@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,6 +57,33 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
     protected $_pluginList = null;
 
     /**
+     * Proxy over arguments instance, used by the application and all the DI stuff
+     *
+     * @var App\Arguments\Proxy
+     */
+    protected $appArgumentsProxy;
+
+    /**
+     * Override the parent method and return proxied instance instead, so that we can reset the actual app arguments
+     * instance for all its clients at any time
+     *
+     * @param \Magento\App\Filesystem\DirectoryList $directoryList
+     * @param array $arguments
+     * @return App\Arguments\Proxy
+     * @throws \Magento\Exception
+     */
+    protected function createAppArguments(\Magento\App\Filesystem\DirectoryList $directoryList, array $arguments)
+    {
+        if ($this->appArgumentsProxy) {
+            // Framework constraint: this is ambiguous situation, because it is not clear what to do with older instance
+            throw new \Magento\Exception('Only one creation of application arguments is supported');
+        }
+        $appArguments = parent::createAppArguments($directoryList, $arguments);
+        $this->appArgumentsProxy = new App\Arguments\Proxy($appArguments);
+        return $this->appArgumentsProxy;
+    }
+
+    /**
      * Restore locator instance
      *
      * @param ObjectManager $objectManager
@@ -66,20 +93,26 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
      */
     public function restore(ObjectManager $objectManager, $rootDir, array $arguments)
     {
-        $directories = isset($arguments[\Magento\Filesystem::PARAM_APP_DIRS])
-            ? $arguments[\Magento\Filesystem::PARAM_APP_DIRS]
+        $directories = isset($arguments[\Magento\App\Filesystem::PARAM_APP_DIRS])
+            ? $arguments[\Magento\App\Filesystem::PARAM_APP_DIRS]
             : array();
-        $directoryList = new \Magento\Filesystem\DirectoryList($rootDir, $directories);
+        $directoryList = new \Magento\TestFramework\App\Filesystem\DirectoryList($rootDir, $directories);
 
         \Magento\TestFramework\ObjectManager::setInstance($objectManager);
 
         $this->_pluginList->reset();
 
         $objectManager->configure($this->_primaryConfigData);
+        $objectManager->addSharedInstance($directoryList, 'Magento\App\Filesystem\DirectoryList');
         $objectManager->addSharedInstance($directoryList, 'Magento\Filesystem\DirectoryList');
         $objectManager->configure(array(
             'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
-                'parameters' => array('canSaveMap' => false)
+                'arguments' => array(
+                    'canSaveMap' => array(
+                        \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'boolean',
+                        'value' => false
+                    ),
+                )
             ),
             'default_setup' => array(
                 'type' => 'Magento\TestFramework\Db\ConnectionAdapter'
@@ -87,17 +120,16 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
             'preferences' => array(
                 'Magento\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
                 'Magento\App\RequestInterface' => 'Magento\TestFramework\Request',
+                'Magento\App\Request\Http' => 'Magento\TestFramework\Request',
                 'Magento\App\ResponseInterface' => 'Magento\TestFramework\Response',
+                'Magento\App\Response\Http' => 'Magento\TestFramework\Response',
             ),
         ));
 
-        $options = new \Magento\App\Config(
-            $arguments,
-            new \Magento\App\Config\Loader($directoryList)
-        );
+        $appArguments = parent::createAppArguments($directoryList, $arguments);
+        $this->appArgumentsProxy->setSubject($appArguments);
+        $objectManager->addSharedInstance($appArguments, 'Magento\App\Arguments');
 
-        $objectManager->addSharedInstance($options, 'Magento\App\Config');
-        $objectManager->getFactory()->setArguments($options->get());
         $objectManager->configure(
             $objectManager->get('Magento\App\ObjectManager\ConfigLoader')->load('global')
         );
@@ -147,4 +179,12 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
         return $this->_pluginList;
     }
 
+    /**
+     * Override method in while running integration tests to prevent getting Exception
+     *
+     * @param \Magento\ObjectManager $objectManager
+     */
+    protected function configureDirectories(\Magento\ObjectManager $objectManager)
+    {
+    }
 }

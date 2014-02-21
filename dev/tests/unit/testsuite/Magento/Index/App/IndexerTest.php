@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Index
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Index\App;
@@ -43,9 +43,14 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_filesystem;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_responseMock;
+
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $directoryMock->expects($this->any())
             ->method('getRelativePath')
@@ -53,12 +58,19 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->_filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($directoryMock));
-        $this->_indexFactoryMock = $this->getMock('Magento\Index\Model\IndexerFactory',
-            array('create'), array(), '', false);
+        $this->_indexFactoryMock = $this->getMock(
+            'Magento\Index\Model\IndexerFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
+        $this->_responseMock = $this->getMock('Magento\App\Console\Response', array(), array(), '', false);
         $this->_entryPoint = new \Magento\Index\App\Indexer(
             'reportDir',
             $this->_filesystem,
-            $this->_indexFactoryMock
+            $this->_indexFactoryMock,
+            $this->_responseMock
         );
     }
 
@@ -66,7 +78,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      * @param bool $value
      * @dataProvider executeDataProvider
      */
-    public function testExecute($value)
+    public function testLaunch($value)
     {
         $process = $this->getMock(
             'Magento\Index\Model\Process',
@@ -89,7 +101,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $indexerInterface->expects($this->once())->method('isVisible')->will($this->returnValue(false));
             $process->expects($this->never())->method('reindexEverything');
         }
-        $this->assertEquals('0', $this->_entryPoint->execute());
+        $this->assertEquals($this->_responseMock, $this->_entryPoint->launch());
     }
 
     /**

@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Resource;
 
+use \Magento\Catalog\Model\Attribute\LockValidatorInterface;
 
 /**
  * Catalog attribute resource model
@@ -32,7 +34,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource;
 
 class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
 {
@@ -44,40 +45,34 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     protected $_eavConfig;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var LockValidatorInterface
      */
-    protected $_storeManager;
+    protected $attrLockValidator;
 
     /**
-     * Class constructor
-     *
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param array $arguments
+     * @param LockValidatorInterface $lockValidator
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\App $app,
-        \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
-        array $arguments = array()
+        LockValidatorInterface $lockValidator
     ) {
-        $this->_storeManager = $storeManager;
+        $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
-        parent::__construct($resource, $app, $eavEntityType, $arguments);
+        parent::__construct($resource, $storeManager, $eavEntityType);
     }
 
     /**
      * Perform actions before object save
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @return $this
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -91,8 +86,8 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     /**
      * Perform actions after object save
      *
-     * @param  \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @param \Magento\Core\Model\AbstractModel $object
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -104,7 +99,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      * Clear useless attribute values
      *
      * @param  \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @return $this
      */
     protected function _clearUselessAttributeValues(\Magento\Core\Model\AbstractModel $object)
     {
@@ -132,7 +127,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      * Delete entity
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Catalog\Model\Resource\Attribute
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function deleteEntity(\Magento\Core\Model\AbstractModel $object)
@@ -150,10 +145,14 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
             $attribute = $this->_eavConfig
                 ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $result['attribute_id']);
 
-            if ($this->isUsedBySuperProducts($attribute, $result['attribute_set_id'])) {
-                throw new \Magento\Core\Exception(__("Attribute '%1' used in configurable products",
-                    $attribute->getAttributeCode()));
+            try {
+                $this->attrLockValidator->validate($attribute, $result['attribute_set_id']);
+            } catch (\Magento\Core\Exception $exception) {
+                throw new \Magento\Core\Exception(
+                    __("Attribute '%1' is locked. ", $attribute->getAttributeCode()) . $exception->getMessage()
+                );
             }
+
             $backendTable = $attribute->getBackend()->getTable();
             if ($backendTable) {
                 $select = $this->_getWriteAdapter()->select()
@@ -173,35 +172,5 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
         $this->_getWriteAdapter()->delete($this->getTable('eav_entity_attribute'), $condition);
 
         return $this;
-    }
-
-    /**
-     * Defines is Attribute used by super products
-     *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @param int $attributeSet
-     * @return int
-     */
-    public function isUsedBySuperProducts(\Magento\Core\Model\AbstractModel $object, $attributeSet = null)
-    {
-        $adapter      = $this->_getReadAdapter();
-        $attrTable    = $this->getTable('catalog_product_super_attribute');
-        $productTable = $this->getTable('catalog_product_entity');
-
-        $bind = array('attribute_id' => $object->getAttributeId());
-        $select = clone $adapter->select();
-        $select->reset()
-            ->from(array('main_table' => $attrTable), array('psa_count' => 'COUNT(product_super_attribute_id)'))
-            ->join(array('entity' => $productTable), 'main_table.product_id = entity.entity_id')
-            ->where('main_table.attribute_id = :attribute_id')
-            ->group('main_table.attribute_id')
-            ->limit(1);
-
-        if ($attributeSet !== null) {
-            $bind['attribute_set_id'] = $attributeSet;
-            $select->where('entity.attribute_set_id = :attribute_set_id');
-        }
-
-        return $adapter->fetchOne($select, $bind);
     }
 }

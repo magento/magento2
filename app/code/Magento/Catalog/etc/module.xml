@@ -19,22 +19,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
-    <module name="Magento_Catalog" version="1.6.0.0.24" active="true">
+    <module name="Magento_Catalog" version="1.6.0.0.26" active="true">
         <sequence>
             <module name="Magento_Eav"/>
             <module name="Magento_Cms"/>
             <module name="Magento_Index"/>
+            <module name="Magento_Indexer"/>
             <module name="Magento_Customer"/>
         </sequence>
         <depends>
             <module name="Magento_Eav"/>
             <module name="Magento_Cms"/>
             <module name="Magento_Index"/>
+            <module name="Magento_Indexer"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Core"/>
             <module name="Magento_Theme"/>
@@ -53,6 +55,8 @@
             <module name="Magento_Sales"/>
             <module name="Magento_CatalogSearch"/>
             <module name="Magento_Weee"/>
+            <module name="Magento_ProductAlert"/>
+            <module name="Magento_Rating"/>
         </depends>
     </module>
 </config>

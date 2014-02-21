@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,7 +39,7 @@ class Observer
     private $_cacheFrontendPool;
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var Theme
      */
     private $_currentTheme;
 
@@ -49,7 +49,7 @@ class Observer
     private $_pageAssets;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ReinitableConfigInterface
      */
     protected $_config;
 
@@ -72,7 +72,7 @@ class Observer
      * @param \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Asset\GroupedCollection $assets
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\App\ReinitableConfigInterface $config
      * @param \Magento\View\Asset\PublicFileFactory $assetFileFactory
      * @param \Magento\Core\Model\Theme\Registration $registration
      * @param \Magento\Logger $logger
@@ -81,7 +81,7 @@ class Observer
         \Magento\App\Cache\Frontend\Pool $cacheFrontendPool,
         \Magento\View\DesignInterface $design,
         \Magento\View\Asset\GroupedCollection $assets,
-        \Magento\Core\Model\ConfigInterface $config,
+        \Magento\App\ReinitableConfigInterface $config,
         \Magento\View\Asset\PublicFileFactory $assetFileFactory,
         \Magento\Core\Model\Theme\Registration $registration,
         \Magento\Logger $logger
@@ -99,6 +99,7 @@ class Observer
      * Cron job method to clean old cache resources
      *
      * @param \Magento\Cron\Model\Schedule $schedule
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cleanCache(\Magento\Cron\Model\Schedule $schedule)
@@ -114,7 +115,7 @@ class Observer
      * Theme registration
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Core\Model\Observer
+     * @return $this
      */
     public function themeRegistration(\Magento\Event\Observer $observer)
     {
@@ -131,6 +132,7 @@ class Observer
      * Apply customized static files to frontend
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function applyThemeCustomization(\Magento\Event\Observer $observer)
@@ -156,7 +158,7 @@ class Observer
      * Rebuild whole config and save to fast storage
      *
      * @param  \Magento\Event\Observer $observer
-     * @return \Magento\Core\Model\Observer
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processReinitConfig(\Magento\Event\Observer $observer)

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_DesignEditor
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -75,7 +75,7 @@ class CustomTest extends \PHPUnit_Framework_TestCase
         $this->_model = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Custom',
             array(
-                'config'       => $this->getMock('Magento\Core\Model\Config', array(), array(), '', false),
+                'config'       => $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false),
                 'formFactory'  => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
                 'urlBuilder'   => $this->_urlBuilder,
                 'themeContext' => $this->_themeContext

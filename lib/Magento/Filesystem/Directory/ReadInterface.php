@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Filesystem\Directory;
@@ -29,7 +29,7 @@ interface ReadInterface
      * Get absolute path
      *
      * @param string $path [optional]
-     * @return string mixed
+     * @return string
      */
     public function getAbsolutePath($path = null);
 
@@ -53,9 +53,10 @@ interface ReadInterface
      * Search all entries for given regex pattern
      *
      * @param string $pattern
+     * @param string $path [optional]
      * @return array
      */
-    public function search($pattern);
+    public function search($pattern, $path = null);
 
     /**
      * Check a file or directory exists
@@ -115,13 +116,4 @@ interface ReadInterface
      * @throws \Magento\Filesystem\FilesystemException
      */
     public function readFile($path, $flag = null, $context = null);
-
-    /**
-     * Checks is directory contains path
-     *
-     * @param string $path
-     * @param string $directory
-     * @return bool
-     */
-    public function isPathInDirectory($path, $directory);
 }

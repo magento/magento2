@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Contacts
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,12 +60,14 @@ class Index extends \Magento\App\Action\Action
 
     /**
      * Show Contact Us page
+     *
+     * @return void
      */
     public function indexAction()
     {
         $this->_view->loadLayout();
         $this->_view->getLayout()->getBlock('contactForm')
-            ->setFormAction($this->_objectManager->create('Magento\Core\Model\Url')->getUrl('*/*/post'));
+            ->setFormAction($this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*/post'));
 
         $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
@@ -74,6 +76,7 @@ class Index extends \Magento\App\Action\Action
     /**
      * Post user question
      *
+     * @return void
      * @throws \Exception
      */
     public function postAction()
@@ -84,8 +87,8 @@ class Index extends \Magento\App\Action\Action
         }
         $post = $this->getRequest()->getPost();
         if ($post) {
-            $translate = $this->_objectManager->get('Magento\Core\Model\Translate');
-            /* @var $translate \Magento\Core\Model\Translate */
+            $translate = $this->_objectManager->get('Magento\TranslateInterface');
+            /* @var $translate \Magento\TranslateInterface */
             $translate->setTranslateInline(false);
             try {
                 $postObject = new \Magento\Object();
@@ -142,7 +145,7 @@ class Index extends \Magento\App\Action\Action
                 return;
             } catch (\Exception $e) {
                 $translate->setTranslateInline(true);
-                $this->messageManager->addError(__('Something went wrong submitting your request.'));
+                $this->messageManager->addError(__('We can\'t process your request right now. Sorry, that\'s all we know.'));
                 $this->_redirect('*/*/');
                 return;
             }

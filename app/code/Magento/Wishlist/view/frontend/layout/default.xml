@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -28,6 +28,6 @@
         <block class="Magento\Wishlist\Block\Link" name="wish-list-link" after="my-account-link"/>
     </referenceBlock>
     <referenceContainer name="right">
-        <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" after="cart_sidebar" template="sidebar.phtml"/>
+        <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

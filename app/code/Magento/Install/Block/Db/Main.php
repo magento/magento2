@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Install
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -75,7 +75,7 @@ class Main extends \Magento\View\Element\Template
      * @param  string $type database type
      * @param  string $block database block type
      * @param  string $template
-     * @return \Magento\Install\Block\Db\Main
+     * @return $this
      */
     public function addDatabaseBlock($type, $block, $template)
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,6 +56,8 @@ class Queue extends \Magento\Backend\App\Action
 
     /**
      * Queue list action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -78,6 +80,8 @@ class Queue extends \Magento\Backend\App\Action
 
     /**
      * Drop Newsletter queue template
+     *
+     * @return void
      */
     public function dropAction()
     {
@@ -87,6 +91,8 @@ class Queue extends \Magento\Backend\App\Action
 
     /**
      * Preview Newsletter queue template
+     *
+     * @return void
      */
     public function previewAction()
     {
@@ -107,6 +113,8 @@ class Queue extends \Magento\Backend\App\Action
 
     /**
      * Queue list Ajax action
+     *
+     * @return void
      */
     public function gridAction()
     {
@@ -114,6 +122,11 @@ class Queue extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Start Newsletter queue
+     *
+     * @return void
+     */
     public function startAction()
     {
         $queue = $this->_objectManager->create('Magento\Newsletter\Model\Queue')
@@ -134,6 +147,11 @@ class Queue extends \Magento\Backend\App\Action
         $this->_redirect('*/*');
     }
 
+    /**
+     * Pause Newsletter queue
+     *
+     * @return void
+     */
     public function pauseAction()
     {
         $queue = $this->_objectManager->get('Magento\Newsletter\Model\Queue')
@@ -151,6 +169,11 @@ class Queue extends \Magento\Backend\App\Action
         $this->_redirect('*/*');
     }
 
+    /**
+     * Resume Newsletter queue
+     *
+     * @return void
+     */
     public function resumeAction()
     {
         $queue = $this->_objectManager->get('Magento\Newsletter\Model\Queue')
@@ -168,6 +191,11 @@ class Queue extends \Magento\Backend\App\Action
         $this->_redirect('*/*');
     }
 
+    /**
+     * Cancel Newsletter queue
+     *
+     * @return void
+     */
     public function cancelAction()
     {
         $queue = $this->_objectManager->get('Magento\Newsletter\Model\Queue')
@@ -185,6 +213,11 @@ class Queue extends \Magento\Backend\App\Action
         $this->_redirect('*/*');
     }
 
+    /**
+     * Send Newsletter queue
+     *
+     * @return void
+     */
     public function sendingAction()
     {
         // Todo: put it somewhere in config!
@@ -200,6 +233,11 @@ class Queue extends \Magento\Backend\App\Action
         $collection->walk('sendPerSubscriber', array($countOfSubscritions));
     }
 
+    /**
+     * Edit Newsletter queue
+     *
+     * @return void
+     */
     public function editAction()
     {
         $this->_title->add(__('Newsletter Queue'));
@@ -232,6 +270,12 @@ class Queue extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Save Newsletter queue
+     *
+     * @throws \Magento\Core\Exception
+     * @return void
+     */
     public function saveAction()
     {
         try {
@@ -294,6 +338,11 @@ class Queue extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * Check if user has enough privileges
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Newsletter::queue');

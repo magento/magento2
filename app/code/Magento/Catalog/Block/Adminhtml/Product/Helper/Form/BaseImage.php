@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,7 +38,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Model Url instance
      *
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
@@ -119,7 +119,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
         /** @var $product \Magento\Catalog\Model\Product */
         $html = <<<HTML
 <div id="{$htmlId}-container" class="images"
-    data-mage-init="{baseImage:{}}"
+    data-mage-init='{"baseImage":{}}'
     data-max-file-size="{$this->_getFileMaxSize()}"
     >
     <div class="image image-placeholder">

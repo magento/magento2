@@ -20,11 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Catalog\Block\Product\ProductList;
+
+use Magento\Catalog\Model\Resource\Product\Collection;
+use Magento\View\Element\AbstractBlock;
 
 /**
  * Catalog product related items block
@@ -40,12 +43,24 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     protected $_mapRenderer = 'msrp_noform';
 
+    /**
+     * @var int
+     */
     protected $_columnCount = 4;
 
+    /**
+     * @var  \Magento\Object[]
+     */
     protected $_items;
 
+    /**
+     * @var Collection
+     */
     protected $_itemCollection;
 
+    /**
+     * @var array
+     */
     protected $_itemLimits = array();
 
     /**
@@ -85,6 +100,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -103,7 +119,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Checkout\Model\Resource\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_checkoutCart = $checkoutCart;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -120,10 +137,15 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareData()
     {
         $product = $this->_coreRegistry->registry('product');
@@ -165,17 +187,26 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _beforeToHtml()
     {
         $this->_prepareData();
         return parent::_beforeToHtml();
     }
 
+    /**
+     * @return Collection
+     */
     public function getItemCollection()
     {
         return $this->_itemCollection;
     }
 
+    /**
+     * @return \Magento\Object[]
+     */
     public function getItems()
     {
         if (is_null($this->_items)) {
@@ -184,11 +215,18 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this->_items;
     }
 
+    /**
+     * @return float
+     */
     public function getRowCount()
     {
         return ceil(count($this->getItemCollection()->getItems())/$this->getColumnCount());
     }
 
+    /**
+     * @param string $columns
+     * @return $this
+     */
     public function setColumnCount($columns)
     {
         if (intval($columns) > 0) {
@@ -197,17 +235,26 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getColumnCount()
     {
         return $this->_columnCount;
     }
 
+    /**
+     * @return void
+     */
     public function resetItemsIterator()
     {
         $this->getItems();
         reset($this->_items);
     }
 
+    /**
+     * @return mixed
+     */
     public function getIterableItem()
     {
         $item = current($this->_items);
@@ -231,6 +278,10 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this;
     }
 
+    /**
+     * @param string $type
+     * @return array|int
+     */
     public function getItemLimit($type = '')
     {
         if ($type == '') {

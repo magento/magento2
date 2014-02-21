@@ -20,50 +20,54 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Connect;
 
 class Frontend
 {
-
     /**
      * Silent flag. If set no output is produced to view.
      * Should be used in derived classes.
+     *
      * @var bool
      */
     protected $_silent = false;
 
     /**
      * Capture mode. If set command output should be collected
-     * by derived class impplementation
+     * by derived class implementation
+     *
      * @var bool
      */
     protected $_capture = false;
 
 
     /**
-     * push/pop variable for capture
+     * Push/pop variable for capture
+     *
      * @var array
      */
     protected $_captureSaved = array();
 
     /**
-     * push/pop variable for silent
+     * Push/pop variable for silent
+     *
      * @var array
      */
     protected $_silentSaved = array();
 
     /**
      * Errors list
+     *
      * @var array
      */
     protected $_errors = array();
 
     /**
      * Add error to errors list
+     *
      * @param mixed $data
      * @return void
      */
@@ -74,6 +78,7 @@ class Frontend
 
     /**
      * Get errors, clear errors list with first param
+     *
      * @param bool $clear
      * @return array
      */
@@ -89,6 +94,7 @@ class Frontend
 
     /**
      * Clear errors array
+     *
      * @return void
      */
     public function clearErrors()
@@ -97,7 +103,8 @@ class Frontend
     }
 
     /**
-     * Are there any errros?
+     * Are there any errors?
+     *
      * @return bool
      */
     public function hasErrors()
@@ -107,8 +114,9 @@ class Frontend
 
     /**
      * Error processing
+     *
      * @param string $command
-     * @param stting $message
+     * @param string $message
      * @return void
      */
     public function doError($command, $message)
@@ -118,7 +126,8 @@ class Frontend
 
     /**
      * Save capture state
-     * @return \Magento\Connect\Frontend
+     *
+     * @return $this
      */
     public function pushCapture()
     {
@@ -128,7 +137,8 @@ class Frontend
 
     /**
      * Restore capture state
-     * @return \Magento\Connect\Frontend
+     *
+     * @return $this
      */
     public function popCapture()
     {
@@ -138,8 +148,9 @@ class Frontend
 
     /**
      * Set capture mode
+     *
      * @param bool $arg true by default
-     * @return \Magento\Connect\Frontend
+     * @return $this
      */
     public function setCapture($arg = true)
     {
@@ -149,6 +160,7 @@ class Frontend
 
     /**
      * Getter for capture mode
+     *
      * @return bool
      */
     public function isCapture()
@@ -158,8 +170,9 @@ class Frontend
 
     /**
      * Log stub
-     * @param $msg
-     * @return
+     *
+     * @param string $msg
+     * @return void
      */
     public function log($msg)
     {
@@ -168,6 +181,7 @@ class Frontend
 
     /**
      * Ouptut method
+     *
      * @param array $data
      * @return void
      */
@@ -179,7 +193,7 @@ class Frontend
     /**
      * Get instance of derived class
      *
-     * @param $class CLI for example will produce \Magento\Connect\Frontend\CLI
+     * @param string $class CLI for example will produce \Magento\Connect\Frontend\CLI
      * @return object
      */
     public static function getInstance($class)
@@ -191,6 +205,7 @@ class Frontend
     /**
      * Get output if capture mode set
      * Clear prevoius if needed
+     *
      * @param bool $clearPrevious
      * @return mixed
      */
@@ -202,7 +217,8 @@ class Frontend
 
     /**
      * Save silent mode
-     * @return \Magento\Connect\Frontend
+     *
+     * @return $this
      */
     public function pushSilent()
     {
@@ -212,7 +228,8 @@ class Frontend
 
     /**
      * Restore silent mode
-     * @return \Magento\Connect\Frontend
+     *
+     * @return $this
      */
     public function popSilent()
     {
@@ -222,8 +239,9 @@ class Frontend
 
     /**
      * Set silent mode
+     *
      * @param bool $value
-     * @return \Magento\Connect\Frontend
+     * @return $this
      */
     public function setSilent($value = true)
     {
@@ -233,6 +251,7 @@ class Frontend
 
     /**
      * Is silent mode?
+     *
      * @return bool
      */
     public function isSilent()
@@ -241,13 +260,14 @@ class Frontend
     }
 
     /**
-    * Method for ask client about rewrite all files.
-    *
-    * @param $string
-    */
+     * Method for ask client about rewrite all files.
+     *
+     * @param string $string
+     * @return void
+     */
     public function confirm($string)
     {
-        
+
     }
 }
 

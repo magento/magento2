@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Config\Reader;
@@ -61,7 +61,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $model = new \Magento\Config\Reader\Filesystem(
+        $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,
             $this->_schemaLocatorMock,
@@ -88,7 +88,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->method('getSchema')
             ->will($this->returnValue(__DIR__ . "/../_files/reader/schema.xsd"));
         $this->_validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
-        $model = new \Magento\Config\Reader\Filesystem(
+        $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,
             $this->_schemaLocatorMock,
@@ -113,7 +113,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(__DIR__ . "/../_files/reader/schema.xsd"));
         $this->_validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
 
-        $model = new \Magento\Config\Reader\Filesystem(
+        $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,
             $this->_schemaLocatorMock,
@@ -124,5 +124,24 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->_fileResolverMock
             ->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
         $model->read('scope');
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Instance of the DOM config merger is expected, got StdClass instead.
+     */
+    public function testReadException()
+    {
+        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
+        $model = new Filesystem(
+            $this->_fileResolverMock,
+            $this->_converterMock,
+            $this->_schemaLocatorMock,
+            $this->_validationStateMock,
+            'fileName',
+            array(),
+            'StdClass'
+        );
+        $model->read();
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -412,11 +412,6 @@ abstract class AbstractExpress extends \Magento\App\Action\Action
             if ($order) {
                 $this->_getCheckoutSession()->setLastOrderId($order->getId())
                     ->setLastRealOrderId($order->getIncrementId());
-                // as well a billing agreement can be created
-                $agreement = $this->_checkout->getBillingAgreement();
-                if ($agreement) {
-                    $this->_getCheckoutSession()->setLastBillingAgreementId($agreement->getId());
-                }
             }
 
             // recurring profiles may be created along with the order or without it

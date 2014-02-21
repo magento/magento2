@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 /**
  * Category url key attribute backend
@@ -32,16 +32,14 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Category\Attribute\Backend;
-
 class Urlkey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
 
     /**
-     * Enter description here...
+     * TODO: Enter description here...
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Category\Attribute\Backend\Urlkey
+     * @return $this
      */
     public function beforeSave($object)
     {

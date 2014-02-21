@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -64,6 +64,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Catalog\Model\LayerFactory $layerFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -83,7 +84,8 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Catalog\Model\LayerFactory $layerFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_layerFactory = $layerFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -101,10 +103,14 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
             $imageHelper,
             $categoryFactory,
             $catalogLayer,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
 
+    /**
+     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     */
     protected function _getProductCollection()
     {
         if (is_null($this->_productCollection)) {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -168,7 +168,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
             /*
              * Filtering items by allowed product type
              */
-            foreach($items as $key => $item) {
+            foreach ($items as $key => $item) {
                 if ($item instanceof \Magento\Catalog\Model\Product) {
                     $type = $item->getTypeId();
                 } else if ($item instanceof \Magento\Sales\Model\Order\Item) {
@@ -209,4 +209,25 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
         return true;
     }
 
+    /**
+     * Get item qty
+     *
+     * @param \Magento\Object $item
+     * @return int
+     */
+    public function getItemQty(\Magento\Object $item)
+    {
+        return $item->getQty()*1 ? $item->getQty()*1 : 1;
+    }
+
+    /**
+     * Check whether product configuration is required before adding to order
+     *
+     * @param $productType
+     * @return bool
+     */
+    public function isConfigurationRequired($productType)
+    {
+        return false;
+    }
 }

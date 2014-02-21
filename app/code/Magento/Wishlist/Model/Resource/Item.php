@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Wishlist
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,6 +39,7 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection and define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -52,7 +53,7 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $wishlistId
      * @param int $productId
      * @param array $sharedStores
-     * @return \Magento\Wishlist\Model\Resource\Item
+     * @return $this
      */
     public function loadByProductWishlist($object, $wishlistId, $productId, $sharedStores)
     {

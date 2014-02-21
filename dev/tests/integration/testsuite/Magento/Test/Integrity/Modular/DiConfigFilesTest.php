@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Test\Integrity\Modular;
@@ -47,11 +47,14 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         //init primary configs
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $filesystem \Magento\Filesystem */
-        $filesystem = $objectManager->get('Magento\Filesystem');
-        $configDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
+        /** @var $filesystem \Magento\App\Filesystem */
+        $filesystem = $objectManager->get('Magento\App\Filesystem');
+        $configDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::CONFIG_DIR);
         $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
-        self::$_primaryFiles = $fileIteratorFactory->create($configDirectory, $configDirectory->search('#di\.xml$#'));
+        self::$_primaryFiles = $fileIteratorFactory->create(
+            $configDirectory,
+            $configDirectory->search('{*/di.xml,di.xml}')
+        );
         //init module global configs
         /** @var $modulesReader \Magento\Module\Dir\Reader */
         $modulesReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

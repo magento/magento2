@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Session\AbstractSession;
@@ -49,8 +49,8 @@ class VarienTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped("Can't  set '$iniValue' as session save handler");
         }
         ini_set('session.save_handler', $origSessionHandler);
-        /** @var $configModel \Magento\Core\Model\Config */
-        $configModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config');
+        /** @var $configModel \Magento\App\ConfigInterface */
+        $configModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\ConfigInterface');
         $configModel->setNode(\Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_METHOD, $saveMethod);
         /**
          * @var \Magento\Session\SessionManagerInterface $model

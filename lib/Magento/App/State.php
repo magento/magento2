@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App;
@@ -129,6 +129,7 @@ class State
      * Set update mode flag
      *
      * @param bool $value
+     * @return void
      */
     public function setUpdateMode($value)
     {
@@ -150,6 +151,7 @@ class State
      * Set is downloader flag
      *
      * @param bool $flag
+     * @return void
      */
     public function setIsDownloader($flag = true)
     {
@@ -160,6 +162,7 @@ class State
      * Set install date
      *
      * @param string $date
+     * @return void
      */
     public function setInstallDate($date)
     {
@@ -170,6 +173,7 @@ class State
      * Set area code
      *
      * @param string $code
+     * @return void
      * @throws \Magento\Exception
      */
     public function setAreaCode($code)

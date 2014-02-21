@@ -19,31 +19,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Authz\Model\UserLocatorInterface" type="Magento\Webapi\Model\Authz\UserLocator"/>
     <type name="Magento\Webapi\Model\Authz\UserLocator">
-        <param name="request">
-            <instance type="Magento\Webapi\Controller\Soap\Request"/>
-        </param>
+        <arguments>
+            <argument name="request" xsi:type="object">Magento\Webapi\Controller\Soap\Request</argument>
+        </arguments>
     </type>
     <preference for="Magento\App\FrontControllerInterface" type="Magento\Webapi\Controller\Soap" />
     <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
     <type name="Magento\Webapi\Controller\Soap">
-        <param name="soapServer">
-            <instance type="Magento\Webapi\Model\Soap\Server\Proxy"/>
-        </param>
-        <param name="errorProcessor">
-            <instance type="Magento\Webapi\Controller\ErrorProcessor\Proxy"/>
-        </param>
+        <arguments>
+            <argument name="soapServer" xsi:type="object">Magento\Webapi\Model\Soap\Server\Proxy</argument>
+            <argument name="errorProcessor" xsi:type="object">Magento\Webapi\Controller\ErrorProcessor\Proxy</argument>
+        </arguments>
     </type>
-    <type name="Magento\Webapi\Controller\Soap\Handler">
-        <param name="authorizationService">
-            <instance type="Magento\Authz\Service\AuthorizationV1Interface\Proxy" />
-        </param>
+    <type name="Magento\Webapi\Controller\Soap\Request\Handler">
+        <arguments>
+            <argument name="authorizationService" xsi:type="object">Magento\Authz\Service\AuthorizationV1Interface\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Authz\Service\AuthorizationV1">
         <plugin name="webapiSoapAuthorizationV1" type="Magento\Webapi\Model\Plugin\AuthorizationServiceV1" />

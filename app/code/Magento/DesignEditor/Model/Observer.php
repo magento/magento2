@@ -20,15 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model;
+
+use Magento\Event\Observer as EventObserver;
 
 /**
  * Observer for design editor module
  */
-namespace Magento\DesignEditor\Model;
-
 class Observer
 {
     /**
@@ -57,9 +58,10 @@ class Observer
      * Remove non-VDE JavaScript assets in design mode
      * Applicable in combination with enabled 'vde_design_mode' flag for 'head' block
      *
-     * @param \Magento\Event\Observer $event
+     * @param EventObserver $event
+     * @return void
      */
-    public function clearJs(\Magento\Event\Observer $event)
+    public function clearJs(EventObserver $event)
     {
         /** @var $layout \Magento\View\LayoutInterface */
         $layout = $event->getEvent()->getLayout();
@@ -91,7 +93,8 @@ class Observer
     /**
      * Save quick styles
      *
-     * @param \Magento\Event\Observer $event
+     * @param EventObserver $event
+     * @return void
      */
     public function saveQuickStyles($event)
     {
@@ -117,7 +120,8 @@ class Observer
     /**
      * Save time stamp of last change
      *
-     * @param \Magento\Event\Observer $event
+     * @param EventObserver $event
+     * @return void
      */
     public function saveChangeTime($event)
     {
@@ -135,10 +139,10 @@ class Observer
     /**
      * Determine if the vde specific translation class should be used.
      *
-     * @param  \Magento\Event\Observer $observer
-     * @return \Magento\DesignEditor\Model\Observer
+     * @param  EventObserver $observer
+     * @return $this
      */
-    public function initializeTranslation(\Magento\Event\Observer $observer)
+    public function initializeTranslation(EventObserver $observer)
     {
         if ($this->_helper->isVdeRequest()) {
             // Request is for vde.  Override the translation class.

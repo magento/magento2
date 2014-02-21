@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogSearch\Model\Resource\Advanced;
 
+use Magento\Core\Exception;
 
 /**
  * Collection Advanced
@@ -32,8 +34,6 @@
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource\Advanced;
-
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
@@ -63,7 +63,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Date $date
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -117,8 +117,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Add not indexable fields to search
      *
      * @param array $fields
-     * @return \Magento\CatalogSearch\Model\Resource\Advanced\Collection
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws Exception
      */
     public function addFieldsToFilter($fields)
     {
@@ -174,7 +174,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                             $invalidDateMessage = __('Please specify correct data.');
                             if ($conditionValue['from']) {
                                 if (!\Zend_Date::isDate($conditionValue['from'])) {
-                                    throw new \Magento\Core\Exception($invalidDateMessage);
+                                    throw new Exception($invalidDateMessage);
                                 }
                                 if (!is_numeric($conditionValue['from'])){
                                     $conditionValue['from'] = $this->_date->gmtDate(null, $conditionValue['from']);
@@ -186,7 +186,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                             }
                             if ($conditionValue['to']) {
                                 if (!\Zend_Date::isDate($conditionValue['to'])) {
-                                    throw new \Magento\Core\Exception($invalidDateMessage);
+                                    throw new Exception($invalidDateMessage);
                                 }
                                 if (!is_numeric($conditionValue['to'])){
                                     $conditionValue['to'] = $this->_date->gmtDate(null, $conditionValue['to']);

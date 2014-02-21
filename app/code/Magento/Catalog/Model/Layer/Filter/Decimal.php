@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -81,7 +81,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param \Zend_Controller_Request_Abstract $request
      * @param \Magento\Catalog\Block\Layer\Filter\Decimal $filterBlock
-     * @return \Magento\Catalog\Model\Layer\Filter\Decimal
+     * @return $this
      */
     public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
     {

@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Object\Copy\Config;
@@ -42,14 +42,14 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     protected $_perFileSchema;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $schema
      * @param string $perFileSchema
      */
-    public function __construct(\Magento\Filesystem $filesystem, $schema, $perFileSchema)
+    public function __construct(\Magento\App\Filesystem $filesystem, $schema, $perFileSchema)
     {
-        $this->_schema = $filesystem->getPath(\Magento\Filesystem::ROOT) . '/' . $schema;
-        $this->_perFileSchemaschema = $filesystem->getPath(\Magento\Filesystem::ROOT) . '/' . $perFileSchema;
+        $this->_schema = $filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/' . $schema;
+        $this->_perFileSchemaschema = $filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/' . $perFileSchema;
     }
 
     /**

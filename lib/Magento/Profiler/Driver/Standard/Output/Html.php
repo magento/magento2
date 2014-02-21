@@ -20,19 +20,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Profiler\Driver\Standard\Output;
 
-class Html extends \Magento\Profiler\Driver\Standard\AbstractOutput
+use Magento\Profiler;
+use Magento\Profiler\Driver\Standard\AbstractOutput;
+use Magento\Profiler\Driver\Standard\Stat;
+
+class Html extends AbstractOutput
 {
     /**
      * Display profiling results
      *
-     * @param \Magento\Profiler\Driver\Standard\Stat $stat
+     * @param Stat $stat
+     * @return void
      */
-    public function display(\Magento\Profiler\Driver\Standard\Stat $stat)
+    public function display(Stat $stat)
     {
         $out = array();
         $out[] = '<table border="1" cellspacing="0" cellpadding="2">';
@@ -65,7 +70,7 @@ class Html extends \Magento\Profiler\Driver\Standard\AbstractOutput
      */
     protected function _renderTimerId($timerId)
     {
-        $nestingSep = preg_quote(\Magento\Profiler::NESTING_SEPARATOR, '/');
+        $nestingSep = preg_quote(Profiler::NESTING_SEPARATOR, '/');
         return preg_replace('/.+?' . $nestingSep . '/', '&middot;&nbsp;&nbsp;', $timerId);
     }
 }

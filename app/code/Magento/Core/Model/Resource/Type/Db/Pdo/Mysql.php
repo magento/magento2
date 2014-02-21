@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Resource\Type\Db\Pdo;
@@ -29,7 +29,7 @@ class Mysql extends \Magento\Core\Model\Resource\Type\Db
     /**
      * Filesystem class
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -59,7 +59,7 @@ class Mysql extends \Magento\Core\Model\Resource\Type\Db
     protected $_isActive;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param string $host
@@ -72,7 +72,7 @@ class Mysql extends \Magento\Core\Model\Resource\Type\Db
      * @param bool $active
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Stdlib\String $string,
         \Magento\Stdlib\DateTime $dateTime,
         $host,

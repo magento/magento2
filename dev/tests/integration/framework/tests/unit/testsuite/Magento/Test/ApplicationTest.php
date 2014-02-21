@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,8 +41,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $dbInstance = $this->getMockForAbstractClass('Magento\TestFramework\Db\AbstractDb', array(), '', false);
         $installDir = '/install/dir';
         $appMode = \Magento\App\State::MODE_DEVELOPER;
-        $directoryList = new \Magento\Filesystem\DirectoryList(BP);
-        $filesystem = new \Magento\Filesystem(
+        $directoryList = new \Magento\App\Filesystem\DirectoryList(BP);
+        $filesystem = new \Magento\App\Filesystem(
             $directoryList,
             new \Magento\Filesystem\Directory\ReadFactory(),
             new \Magento\Filesystem\Directory\WriteFactory(),
@@ -69,7 +69,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $initParams = $object->getInitParams();
         $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
-        $this->assertArrayHasKey(\Magento\Filesystem::PARAM_APP_DIRS, $initParams,
+        $this->assertArrayHasKey(\Magento\App\Filesystem::PARAM_APP_DIRS, $initParams,
             'Directories are not configured');
         $this->assertArrayHasKey(State::PARAM_MODE, $initParams,
             'Application mode is not configured');

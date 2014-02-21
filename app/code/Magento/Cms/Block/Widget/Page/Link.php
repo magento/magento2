@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Widget\Page;
 
 /**
  * Widget to display link to CMS page
@@ -31,9 +32,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Cms\Block\Widget\Page;
-
 class Link
     extends \Magento\View\Element\Html\Link
     implements \Magento\Widget\Block\BlockInterface
@@ -139,7 +137,7 @@ class Link
      *
      * @return string
      */
-    public function getLable()
+    public function getLabel()
     {
         if ($this->getData('anchor_text')) {
             $this->_anchorText = $this->getData('anchor_text');

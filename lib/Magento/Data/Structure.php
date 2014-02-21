@@ -4,10 +4,12 @@
  *
  * @category    Magento
  * @package     Magento_Data
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Data;
+
+use Magento\Exception;
 
 class Structure
 {
@@ -39,14 +41,15 @@ class Structure
      * Set elements from external source
      *
      * @param array $elements
-     * @throws \Magento\Exception if any format issues identified
+     * @return void
+     * @throws Exception if any format issues identified
      */
     public function importElements(array $elements)
     {
         $this->_elements = $elements;
         foreach ($elements as $elementId => $element) {
             if (is_numeric($elementId)) {
-                throw new \Magento\Exception("Element ID must not be numeric: '{$elementId}'.");
+                throw new Exception("Element ID must not be numeric: '{$elementId}'.");
             }
             $this->_assertParentRelation($elementId);
             if (isset($element[self::GROUPS])) {
@@ -55,7 +58,7 @@ class Structure
                 foreach ($groups as $groupName => $group) {
                     $this->_assertArray($group);
                     if ($group !== array_flip($group)) {
-                        throw new \Magento\Exception(
+                        throw new Exception(
                             "Invalid format of group '{$groupName}': " . var_export($group, 1)
                         );
                     }
@@ -71,7 +74,8 @@ class Structure
      * Verify relations of parent-child
      *
      * @param string $elementId
-     * @throws \Magento\Exception
+     * @return void
+     * @throws Exception
      */
     protected function _assertParentRelation($elementId)
     {
@@ -82,7 +86,7 @@ class Structure
             $parentId = $element[self::PARENT];
             $this->_assertElementExists($parentId);
             if (empty($this->_elements[$parentId][self::CHILDREN][$elementId])) {
-                throw new \Magento\Exception(
+                throw new Exception(
                     "Broken parent-child relation: the '{$elementId}' is not in the nested set of '{$parentId}'."
                 );
             }
@@ -93,14 +97,14 @@ class Structure
             $children = $element[self::CHILDREN];
             $this->_assertArray($children);
             if ($children !== array_flip(array_flip($children))) {
-                throw new \Magento\Exception('Invalid format of children: ' . var_export($children, 1));
+                throw new Exception('Invalid format of children: ' . var_export($children, 1));
             }
             foreach (array_keys($children) as $childId) {
                 $this->_assertElementExists($childId);
                 if (!isset($this->_elements[$childId][self::PARENT])
                     || $elementId !== $this->_elements[$childId][self::PARENT]
                 ) {
-                    throw new \Magento\Exception(
+                    throw new Exception(
                         "Broken parent-child relation: the '{$childId}' is supposed to have '{$elementId}' as parent."
                     );
                 }
@@ -123,12 +127,13 @@ class Structure
      *
      * @param string $elementId
      * @param array $data
-     * @throws \Magento\Exception if an element with this id already exists
+     * @return void
+     * @throws Exception if an element with this id already exists
      */
     public function createElement($elementId, array $data)
     {
         if (isset($this->_elements[$elementId])) {
-            throw new \Magento\Exception("Element with ID '{$elementId}' already exists.");
+            throw new Exception("Element with ID '{$elementId}' already exists.");
         }
         $this->_elements[$elementId] = array();
         foreach ($data as $key => $value) {
@@ -192,7 +197,7 @@ class Structure
      * @param string $attribute
      * @param mixed $value
      * @throws \InvalidArgumentException
-     * @return \Magento\Data\Structure
+     * @return $this
      */
     public function setAttribute($elementId, $attribute, $value)
     {
@@ -213,7 +218,7 @@ class Structure
      *
      * @param string $elementId
      * @param string $attribute
-     * @return bool|mixed
+     * @return mixed
      */
     public function getAttribute($elementId, $attribute)
     {
@@ -229,14 +234,14 @@ class Structure
      *
      * @param string $oldId
      * @param string $newId
-     * @return \Magento\Data\Structure
-     * @throws \Magento\Exception if trying to overwrite another element
+     * @return $this
+     * @throws Exception if trying to overwrite another element
      */
     public function renameElement($oldId, $newId)
     {
         $this->_assertElementExists($oldId);
         if (!$newId || isset($this->_elements[$newId])) {
-            throw new \Magento\Exception("Element with ID '{$newId}' is already defined.");
+            throw new Exception("Element with ID '{$newId}' is already defined.");
         }
 
         // rename in registry
@@ -270,15 +275,16 @@ class Structure
      * @param string $alias
      * @param int|null $position
      * @see _insertChild() for position explanation
-     * @throws \Magento\Exception if attempting to set parent as child to its child (recursively)
+     * @return void
+     * @throws Exception if attempting to set parent as child to its child (recursively)
      */
     public function setAsChild($elementId, $parentId, $alias = '', $position = null)
     {
         if ($elementId == $parentId) {
-            throw new \Magento\Exception("The '{$elementId}' cannot be set as child to itself.");
+            throw new Exception("The '{$elementId}' cannot be set as child to itself.");
         }
         if ($this->_isParentRecursively($elementId, $parentId)) {
-            throw new \Magento\Exception("The '{$elementId}' is a parent of '{$parentId}' recursively, "
+            throw new Exception("The '{$elementId}' is a parent of '{$parentId}' recursively, "
                 . "therefore '{$elementId}' cannot be set as child to it."
             );
         }
@@ -297,7 +303,7 @@ class Structure
      *
      * @param string $elementId ID of an element or its parent element
      * @param string|null $alias
-     * @return \Magento\Data\Structure
+     * @return $this
      */
     public function unsetChild($elementId, $alias = null)
     {
@@ -503,13 +509,13 @@ class Structure
      * @param string $parentId
      * @param string $childId
      * @return int
-     * @throws \Magento\Exception if specified elements have no parent-child relation
+     * @throws Exception if specified elements have no parent-child relation
      */
     protected function _getChildOffset($parentId, $childId)
     {
         $index = array_search($childId, array_keys($this->getChildren($parentId)));
         if (false === $index) {
-            throw new \Magento\Exception("The '{$childId}' is not a child of '{$parentId}'.");
+            throw new Exception("The '{$childId}' is not a child of '{$parentId}'.");
         }
         return $index;
     }
@@ -549,7 +555,8 @@ class Structure
      * @param string $elementId
      * @param int|null $offset
      * @param string $alias
-     * @throws \Magento\Exception
+     * @return void
+     * @throws Exception
      */
     protected function _insertChild($targetParentId, $elementId, $offset, $alias)
     {
@@ -558,17 +565,17 @@ class Structure
         // validate
         $this->_assertElementExists($elementId);
         if (!empty($this->_elements[$elementId][self::PARENT])) {
-            throw new \Magento\Exception(
+            throw new Exception(
                 "The element '{$elementId}' already has a parent: '{$this->_elements[$elementId][self::PARENT]}'"
             );
         }
         $this->_assertElementExists($targetParentId);
         $children = $this->getChildren($targetParentId);
         if (isset($children[$elementId])) {
-            throw new \Magento\Exception("The element '{$elementId}' already a child of '{$targetParentId}'");
+            throw new Exception("The element '{$elementId}' already a child of '{$targetParentId}'");
         }
         if (false !== array_search($alias, $children)) {
-            throw new \Magento\Exception("The element '{$targetParentId}' already has a child with alias '{$alias}'");
+            throw new Exception("The element '{$targetParentId}' already has a child with alias '{$alias}'");
         }
 
         // insert
@@ -587,12 +594,13 @@ class Structure
      * Check if specified element exists
      *
      * @param string $elementId
-     * @throws \Magento\Exception if doesn't exist
+     * @return void
+     * @throws Exception if doesn't exist
      */
     private function _assertElementExists($elementId)
     {
         if (!isset($this->_elements[$elementId])) {
-            throw new \Magento\Exception("No element found with ID '{$elementId}'.");
+            throw new Exception("No element found with ID '{$elementId}'.");
         }
     }
 
@@ -600,12 +608,13 @@ class Structure
      * Check if it is an array
      *
      * @param array $value
-     * @throws \Magento\Exception
+     * @return void
+     * @throws Exception
      */
     private function _assertArray($value)
     {
         if (!is_array($value)) {
-            throw new \Magento\Exception("An array expected: " . var_export($value, 1));
+            throw new Exception("An array expected: " . var_export($value, 1));
         }
     }
 }

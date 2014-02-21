@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Model\Config\Backend;
@@ -47,7 +47,7 @@ class SecureTest extends \PHPUnit_Framework_TestCase
         $resourceCollection = $this->getMock('Magento\Data\Collection\Db', array(), array(), '', false);
         $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
         $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
-        $coreConfig = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false);
+        $coreConfig = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 
         $model = $this->getMock(

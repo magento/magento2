@@ -20,20 +20,18 @@
  *
  * @category    Magento
  * @package     Magento_Shipping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Model\Config\Backend;
+
+use Magento\Core\Model\AbstractModel;
 
 /**
  * Backend model for shipping table rates CSV importing
  *
- * @category   Magento
- * @package    Magento_Shipping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Shipping\Model\Config\Backend;
-
 class Tablerate extends \Magento\Core\Model\Config\Value
 {
     /**
@@ -45,7 +43,7 @@ class Tablerate extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Shipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -55,7 +53,7 @@ class Tablerate extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Shipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -65,6 +63,9 @@ class Tablerate extends \Magento\Core\Model\Config\Value
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return AbstractModel|void
+     */
     public function _afterSave()
     {
         $this->_tablerateFactory->create()->uploadAndImport($this);

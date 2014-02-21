@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Persistent\Model\Persistent;
@@ -39,16 +39,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(
-                'Magento\Filesystem\DirectoryList',
+                'Magento\App\Filesystem\DirectoryList',
                 array(
-                    'root' => \Magento\Filesystem::ROOT,
+                    'root' => \Magento\App\Filesystem::ROOT_DIR,
                     'directories' => array(
-                        \Magento\Filesystem::MODULES => array('path' => dirname(__DIR__))
+                        \Magento\App\Filesystem::MODULES_DIR => array('path' => dirname(__DIR__))
                     ),
                 )
             );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Filesystem', array('directoryList' => $directoryList));
+            ->create('Magento\App\Filesystem', array('directoryList' => $directoryList));
 
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->create(

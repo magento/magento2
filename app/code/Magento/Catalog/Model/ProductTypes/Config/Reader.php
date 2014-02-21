@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Model\ProductTypes\Config;
@@ -35,14 +35,14 @@ class Reader extends \Magento\Config\Reader\Filesystem
         '/config/type/priceModel' => 'instance',
         '/config/type/indexerModel' => 'instance',
         '/config/type/stockIndexerModel' => 'instance',
-        '/config/type/allowProductTypes/type' => 'name',
         '/config/type/allowedSelectionTypes/type' => 'name',
+        '/config/composableTypes/type' => 'name',
     );
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Catalog\Model\ProductTypes\Config\Converter $converter
-     * @param \Magento\Catalog\Model\ProductTypes\Config\SchemaLocator $schemaLocator
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
@@ -51,8 +51,8 @@ class Reader extends \Magento\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Catalog\Model\ProductTypes\Config\Converter $converter,
-        \Magento\Catalog\Model\ProductTypes\Config\SchemaLocator $schemaLocator,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'product_types.xml',
         $idAttributes = array(),

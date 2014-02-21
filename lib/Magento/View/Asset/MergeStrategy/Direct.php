@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,24 +30,30 @@ namespace Magento\View\Asset\MergeStrategy;
 class Direct implements \Magento\View\Asset\MergeStrategyInterface
 {
     /**
+     * Directory Write
+     *
      * @var \Magento\Filesystem\Directory\Write
      */
     private $_directory;
 
     /**
+     * Css Resolver
+     *
      * @var \Magento\View\Url\CssResolver
      */
     protected $cssUrlResolver;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * Constructor
+     *
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\Url\CssResolver $cssUrlResolver
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\View\Url\CssResolver $cssUrlResolver
     ) {
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::PUB);
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_DIR);
         $this->_cssUrlResolver = $cssUrlResolver;
     }
 

@@ -23,7 +23,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\TestFramework\Helper;
@@ -85,7 +85,11 @@ class Memory
     protected function _getUnixProcessMemoryUsage($pid)
     {
         // RSS - resident set size, the non-swapped physical memory
-        $output = $this->_shell->execute('ps --pid %s --format rss --no-headers', array($pid));
+        $command = 'ps --pid %s --format rss --no-headers';
+        if ($this->isMacOS()) {
+            $command = 'ps -p %s -o rss=';
+        }
+        $output = $this->_shell->execute($command, array($pid));
         $result = $output . 'k'; // kilobytes
         return self::convertToBytes($result);
     }
@@ -164,5 +168,16 @@ class Memory
             );
         }
         return preg_replace('/\D+/', '', $number);
+    }
+
+    /**
+     * Whether the operating system belongs to the Mac family
+     *
+     * @link http://php.net/manual/en/function.php-uname.php
+     * @return boolean
+     */
+    public static function isMacOs()
+    {
+        return (strtoupper(PHP_OS) === 'DARWIN');
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -129,7 +129,7 @@ class Collection extends \Magento\Data\Collection
      * Set period
      *
      * @param int $period
-     * @return \Magento\Reports\Model\Resource\Report\Collection
+     * @return $this
      */
     public function setPeriod($period)
     {
@@ -142,7 +142,7 @@ class Collection extends \Magento\Data\Collection
      *
      * @param int $fromDate
      * @param int $toDate
-     * @return \Magento\Reports\Model\Resource\Report\Collection
+     * @return $this
      */
     public function setInterval($fromDate, $toDate)
     {
@@ -290,7 +290,7 @@ class Collection extends \Magento\Data\Collection
      * Set store ids
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Report\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {
@@ -322,7 +322,7 @@ class Collection extends \Magento\Data\Collection
      * Set page size
      *
      * @param int $size
-     * @return \Magento\Reports\Model\Resource\Report\Collection
+     * @return $this
      */
     public function setPageSize($size)
     {
@@ -401,7 +401,7 @@ class Collection extends \Magento\Data\Collection
      *
      * @param bool $printQuery
      * @param bool $logQuery
-     * @return \Magento\Reports\Model\Resource\Report\Collection|\Magento\Data\Collection
+     * @return $this
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

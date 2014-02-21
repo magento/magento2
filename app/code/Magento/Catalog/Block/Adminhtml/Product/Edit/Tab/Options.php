@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,10 +34,18 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-class Options extends \Magento\Backend\Block\Widget
+use Magento\Backend\Block\Widget;
+
+class Options extends Widget
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/edit/options.phtml';
 
+    /**
+     * @return Widget
+     */
     protected function _prepareLayout()
     {
         $this->addChild('add_button', 'Magento\Backend\Block\Widget\Button', array(
@@ -57,11 +65,17 @@ class Options extends \Magento\Backend\Block\Widget
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getAddButtonHtml()
     {
         return $this->getChildHtml('add_button');
     }
 
+    /**
+     * @return string
+     */
     public function getOptionsBoxHtml()
     {
         return $this->getChildHtml('options_box');

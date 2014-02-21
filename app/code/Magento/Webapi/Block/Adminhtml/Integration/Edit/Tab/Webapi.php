@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,7 +46,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\User\Model\Resource\Rules\CollectionFactory
      */
-    protected $_rulesCollFactory;
+    protected $_rulesCollectionFactory;
 
     /**
      * Acl resource provider
@@ -64,32 +64,32 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize dependencies.
      *
-     * TODO: Fix excessive number of arguments
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\Acl\RootResource $rootResource
-     * @param \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollFactory
+     * @param \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Acl\Resource\ProviderInterface $aclResourceProvider
      * @param \Magento\Webapi\Helper\Data $webapiData
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param array $data
+     *
+     * @todo Fix excessive number of arguments
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\Acl\RootResource $rootResource,
-        \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollFactory,
+        \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Webapi\Helper\Data $webapiData,
         \Magento\Integration\Helper\Data $integrationData,
         array $data = array()
     ) {
         $this->_rootResource = $rootResource;
-        $this->_rulesCollFactory = $rulesCollFactory;
+        $this->_rulesCollectionFactory = $rulesCollectionFactory;
         $this->_aclResourceProvider = $aclResourceProvider;
         $this->_webapiData = $webapiData;
         $this->_integrationData = $integrationData;
@@ -140,6 +140,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Class constructor
+     *
+     * @return void
      */
     protected function _construct()
     {

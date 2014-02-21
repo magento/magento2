@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,7 +50,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddGetClearRss($isUseStoreInUrl)
     {
-        $urlMock = $this->getMock('Magento\Core\Model\Url', array(), array(), '', false);
+        $urlMock = $this->getMock('Magento\Url', array(), array(), '', false);
 
         $storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
         $storeMock->expects($this->any())

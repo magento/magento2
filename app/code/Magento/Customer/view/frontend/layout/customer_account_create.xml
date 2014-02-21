@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -30,7 +30,7 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Form\Register" name="customer_form_register" template="form/register.phtml">
+        <block class="Magento\Customer\Block\Form\Register" name="customer_form_register" template="form/register.phtml" cacheable="false">
             <container name="form.additional.info" label="invisible" as="form_additional_info"/>
             <container name="customer.form.register.fields.before" as="form_fields_before" label="Form Fields Before" htmlTag="div" htmlClass="customer-form-before"/>
         </block>

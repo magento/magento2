@@ -19,16 +19,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="right">
-        <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml"/>
+        <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml" cacheable="false"/>
     </referenceContainer>
     <referenceBlock name="footer_links">
-        <block class="Magento\Sales\Block\Guest\Link" name="sales-guest-form-link">
+        <block class="Magento\Sales\Block\Guest\Link" name="sales-guest-form-link" cacheable="false">
             <arguments>
                 <argument name="label" xsi:type="string">Orders and Returns</argument>
                 <argument name="path" xsi:type="string">sales/guest/form</argument>

@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -28,9 +28,12 @@
 <?php $_order = $_invoice->getOrder() ?>
 <?php echo $this->getChildHtml('order_info') ?>
 
+<?php /* opening div is in app\code\Magento\Sales\view\adminhtml\order\view\info.phtml */?>
+
 <?php if (!$_order->getIsVirtual()): ?>
-<div class="clearfix">
+<div class="clearfix"> <?php /* if opening div from app\code\Magento\Sales\view\adminhtml\order\view\info.phtml was closed there */?>
 <?php endif; ?>
+
     <div class="order-payment-method<?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?>">
         <?php /*Billing Address */ ?>
         <div class="fieldset-wrapper">
@@ -41,6 +44,7 @@
             <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
         </div>
     </div>
+
     <?php if (!$_order->getIsVirtual()): ?>
     <div class="order-shipping-address">
         <?php /*Shipping Address */ ?>
@@ -68,20 +72,22 @@
                 </div>
             </div>
         </div>
-    <?php endif; ?>
     </div>
+    <?php endif; ?>
+
 </div>
 
 <div class="fieldset-wrapper">
     <div class="fieldset-wrapper-title">
         <span class="title"><?php echo __('Items Invoiced') ?></span>
     </div>
+
     <div id="invoice_item_container">
         <?php echo $this->getChildHtml('invoice_items') ?>
     </div>
 </div>
 
-<div class="clear">
+<div class="clearfix">
     <div class="order-comments-history">
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
@@ -92,6 +98,7 @@
             </fieldset>
         </div>
     </div>
+
     <div class="order-totals">
         <div class="fieldset-wrapper" id="history_form">
             <div class="fieldset-wrapper-title">

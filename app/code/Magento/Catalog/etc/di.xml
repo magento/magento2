@@ -19,120 +19,204 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" type="Magento\Catalog\Model\ProductTypes\Config" />
     <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" type="Magento\Catalog\Model\ProductOptions\Config" />
+    <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite" />
+    <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite" />
+    <preference for="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface" type="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper" />
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
+    <type name="Magento\Indexer\Model\Indexer\State">
+        <plugin name="setStatusForIndexer" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState" />
+    </type>
+    <type name="Magento\Mview\View\StateInterface">
+        <plugin name="setStatusForMview" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState" />
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState">
+        <arguments>
+            <argument name="state" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer\State</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState">
+        <arguments>
+            <argument name="state" xsi:type="object" shared="false">Magento\Mview\View\StateInterface</argument>
+            <argument name="changelog" xsi:type="object" shared="false">Magento\Mview\View\ChangelogInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Helper\Product">
-        <param name="typeSwitcherLabel">
-            <value>Virtual</value>
-        </param>
-        <param name="catalogSession">
-            <instance type="Magento\Catalog\Model\Session\Proxy" />
-        </param>
+        <arguments>
+            <argument name="typeSwitcherLabel" xsi:type="string">Virtual</argument>
+            <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <param name="catalogProductStatus">
-            <instance type="Magento\Catalog\Model\Product\Status\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Catalog\Model\Resource\Category\Flat">
-        <param name="catalogCategory">
-            <instance type="Magento\Catalog\Model\Category\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Catalog\Model\Resource\Product\Flat\Indexer">
-        <param name="maxIndexCount">
-            <value type="int">64</value>
-        </param>
-        <param name="flatAttributeGroups">
-            <value>
-                <catalog_product>catalog_product</catalog_product>
-            </value>
-        </param>
+        <arguments>
+            <argument name="catalogProductStatus" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Source\Status\Proxy</argument>
+            <argument name="categoryIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Resource\Product\Collection">
-        <param name="catalogUrl">
-            <instance type="Magento\Catalog\Model\Resource\Url\Proxy" />
-        </param>
-        <param name="customerSession">
-            <instance type="Magento\Customer\Model\Session\Proxy" />
-        </param>
+        <arguments>
+            <argument name="catalogUrl" xsi:type="object">Magento\Catalog\Model\Resource\Url\Proxy</argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Entity\Product\Attribute\Design\Options\Container">
-        <param name="options">
-            <value>
-                <option1>
-                    <value>container1</value>
-                    <label>Product Info Column</label>
-                </option1>
-                <option2>
-                    <value>container2</value>
-                    <label>Block after Info Column</label>
-                </option2>
-            </value>
-        </param>
-    </type>
-    <type name="Magento\Catalog\Helper\Product\Flat">
-        <param name="addFilterableAttrs">
-            <value type="int">0</value>
-        </param>
-        <param name="addChildData">
-            <value type="int">0</value>
-        </param>
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="option1" xsi:type="array">
+                    <item name="value" xsi:type="string">container1</item>
+                    <item name="label" xsi:type="string">Product Info Column</item>
+                </item>
+                <item name="option2" xsi:type="array">
+                    <item name="value" xsi:type="string">container2</item>
+                    <item name="label" xsi:type="string">Block after Info Column</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Data">
-        <param name="templateFilterModel">
-            <value>Magento\Catalog\Model\Template\Filter</value>
-        </param>
-        <param name="catalogSession">
-            <instance type="Magento\Catalog\Model\Session\Proxy" />
-        </param>
+        <arguments>
+            <argument name="templateFilterModel" xsi:type="string">Magento\Catalog\Model\Template\Filter</argument>
+            <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Config\Source\GridPerPage">
-        <param name="perPageValues">
-            <value>9,15,30</value>
-        </param>
+        <arguments>
+            <argument name="perPageValues" xsi:type="string">9,15,30</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Config\Source\ListPerPage">
-        <param name="options">
-            <value>5,10,15,20,25</value>
-        </param>
+        <arguments>
+            <argument name="options" xsi:type="string">5,10,15,20,25</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Block\Layer\View">
-        <param name="catalogLayer">
-            <instance type="Magento\Catalog\Model\Layer\Proxy" />
-        </param>
+        <arguments>
+            <argument name="catalogLayer" xsi:type="object">Magento\Catalog\Model\Layer\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <catalog_setup>Magento\Catalog\Model\Resource\Setup</catalog_setup>
-            </value>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="catalog_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Product\Compare">
-        <param name="customerSession">
-            <instance type="Magento\Customer\Model\Session\Proxy" />
-        </param>
-        <param name="catalogSession">
-            <instance type="Magento\Catalog\Model\Session\Proxy" />
-        </param>
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
+        </arguments>
     </type>
     <virtualType name="Magento\Catalog\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>catalog</value>
-        </param>
+        <arguments>
+            <argument name="namespace" xsi:type="string">catalog</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\System\Config\Source\InputtypeFactory" type="Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\System\Config\Source\Inputtype</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Catalog\Model\Session">
-        <param name="storage">
-            <instance type="Magento\Catalog\Model\Session\Storage" />
-        </param>
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Catalog\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category">
+        <arguments>
+            <argument name="flatIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+            <argument name="productIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode">
+        <arguments>
+            <argument name="flatIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Core\Model\Resource\Store">
+        <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
+        <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store" />
+        <plugin name="categoryStoreAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView"/>
+    </type>
+    <type name="Magento\Core\Model\Resource\Store\Group">
+        <plugin name="storeGroupResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup"/>
+        <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup" />
+        <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>
+    </type>
+    <type name="Magento\Indexer\Model\Config\Data">
+        <plugin name="indexerCategoryFlat" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData"/>
+        <plugin name="indexerProductFlat" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Flat\Processor">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import">
+        <plugin name="catalogProductFlatIndexerImport" type="\Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Import" />
+    </type>
+    <type name="Magento\Catalog\Helper\Product\Flat\Indexer">
+        <arguments>
+            <argument name="flatAttributeGroups" xsi:type="array">
+                <item name="catalog_product" xsi:type="string">catalog_product</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Product">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Category">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\LinkTypeProvider">
+        <arguments>
+            <argument name="linkTypes" xsi:type="array">
+                <item name="links_related" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED</item>
+                <item name="links_crosssell" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL</item>
+                <item name="links_upsell" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\TypeTransitionManager">
+        <arguments>
+            <argument name="compatibleTypes" xsi:type="array">
+                <item name="simple" xsi:type="const">Magento\Catalog\Model\Product\Type::TYPE_SIMPLE</item>
+                <item name="virtual" xsi:type="const">Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
+        <arguments>
+            <argument name="propertyMappers" xsi:type="array">
+                <item name="catalog" xsi:type="string">Magento\Catalog\Model\Resource\Setup\PropertyMapper</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <arguments>
+            <argument name="categoryIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
     </type>
 </config>

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_DB
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,8 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\DB\Statement\Pdo;
+
+use Magento\DB\Statement\Parameter;
 
 class Mysql extends \Zend_Db_Statement_Pdo
 {
@@ -63,7 +65,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
             $length = null;
             $driverOptions = null;
 
-            if ($param instanceof \Magento\DB\Statement\Parameter) {
+            if ($param instanceof Parameter) {
                 if ($param->getIsBlob()) {
                     // Nothing to do there - default options are fine for MySQL driver
                 } else {
@@ -99,7 +101,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
         $specialExecute = false;
         if ($params) {
             foreach ($params as $param) {
-                if ($param instanceof \Magento\DB\Statement\Parameter) {
+                if ($param instanceof Parameter) {
                     $specialExecute = true;
                     break;
                 }

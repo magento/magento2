@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GoogleCheckout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,7 +46,6 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_canVoid                 = true;
     protected $_canUseInternal          = false;
     protected $_canUseCheckout          = false;
-    protected $_canUseForMultishipping  = false;
 
     /**
      * @var \Magento\GoogleCheckout\Model\ApiFactory
@@ -54,7 +53,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
     protected $apiFactory;
 
     /**
-     * @var \Magento\Core\Model\UrlFactory
+     * @var \Magento\UrlFactory
      */
     protected $urlFactory;
 
@@ -69,7 +68,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\DateFactory $dateFactory,
-        \Magento\Core\Model\UrlFactory $urlFactory,
+        \Magento\UrlFactory $urlFactory,
         \Magento\GoogleCheckout\Model\ApiFactory $apiFactory,
         array $data = array()
     ) {

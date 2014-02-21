@@ -20,12 +20,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Profiler\Driver\Standard\Output;
 
-class Csvfile extends \Magento\Profiler\Driver\Standard\AbstractOutput
+use Magento\Profiler\Driver\Standard\AbstractOutput;
+use Magento\Profiler\Driver\Standard\Stat;
+
+class Csvfile extends AbstractOutput
 {
     const DEFAULT_FILEPATH = '/var/log/profiler.csv';
 
@@ -76,10 +79,11 @@ class Csvfile extends \Magento\Profiler\Driver\Standard\AbstractOutput
     /**
      * Write profiling results to CSV-file
      *
-     * @param \Magento\Profiler\Driver\Standard\Stat $stat
+     * @param Stat $stat
+     * @return void
      * @throws \RuntimeException if output file cannot be opened
      */
-    public function display(\Magento\Profiler\Driver\Standard\Stat $stat)
+    public function display(Stat $stat)
     {
         $fileHandle = fopen($this->_filePath, 'w');
         if (!$fileHandle) {
@@ -102,9 +106,10 @@ class Csvfile extends \Magento\Profiler\Driver\Standard\AbstractOutput
      * Write content into an opened file handle
      *
      * @param resource $fileHandle
-     * @param \Magento\Profiler\Driver\Standard\Stat $stat
+     * @param Stat $stat
+     * @return void
      */
-    protected function _writeFileContent($fileHandle, \Magento\Profiler\Driver\Standard\Stat $stat)
+    protected function _writeFileContent($fileHandle, Stat $stat)
     {
         foreach ($this->_getTimerIds($stat) as $timerName) {
             $row = array();

@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\App;
@@ -31,16 +31,16 @@ namespace Magento\Backend\App;
 class Config implements ConfigInterface
 {
     /**
-     * @var \Magento\Core\Model\Config\SectionPool
+     * @var \Magento\App\Config\ScopePool
      */
-    protected $_sectionPool;
+    protected $_scopePool;
 
     /**
-     * @param \Magento\Core\Model\Config\SectionPool $sectionPool
+     * @param \Magento\App\Config\ScopePool $scopePool
      */
-    public function __construct(\Magento\Core\Model\Config\SectionPool $sectionPool)
+    public function __construct(\Magento\App\Config\ScopePool $scopePool)
     {
-        $this->_sectionPool = $sectionPool;
+        $this->_scopePool = $scopePool;
     }
 
     /**
@@ -51,7 +51,7 @@ class Config implements ConfigInterface
      */
     public function getValue($path)
     {
-        return $this->_sectionPool->getSection('default', null)->getValue($path);
+        return $this->_scopePool->getScope('default', null)->getValue($path);
     }
 
     /**
@@ -59,20 +59,21 @@ class Config implements ConfigInterface
      *
      * @param string $path
      * @param mixed $value
+     * @return void
      */
     public function setValue($path, $value)
     {
-        $this->_sectionPool->getSection('default', null)->setValue($path, $value);
+        $this->_scopePool->getScope('default', null)->setValue($path, $value);
     }
 
     /**
      * Reinitialize configuration
      *
-     * @return \Magento\Core\Model\Config
+     * @return void
      */
     public function reinit()
     {
-        $this->_sectionPool->clean();
+        $this->_scopePool->clean();
     }
 
     /**
@@ -81,8 +82,8 @@ class Config implements ConfigInterface
      * @param string $path
      * @return bool
      */
-    public function getFlag($path)
+    public function isSetFlag($path)
     {
-        return !!$this->_sectionPool->getSection('default', null)->getValue($path);
+        return !!$this->_scopePool->getScope('default', null)->getValue($path);
     }
 }

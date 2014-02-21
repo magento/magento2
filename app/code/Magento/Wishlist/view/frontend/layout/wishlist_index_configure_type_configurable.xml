@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -30,10 +30,10 @@
         </action>
     </referenceBlock>
     <referenceContainer name="product.info.type">
-        <block class="Magento\Catalog\Block\Product\View\Type\Configurable" name="product.info.configurable" as="product_type_data" template="product/view/type/default.phtml"/>
+        <block class="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable" name="product.info.configurable" as="product_type_data" template="Magento_Catalog::product/view/type/default.phtml" cacheable="false"/>
         <container name="product.info.configurable.extra" after="product.info.configurable" as="product_type_data_extra" label="Product Extra Info"/>
     </referenceContainer>
     <referenceBlock name="product.info.options.wrapper">
-        <block class="Magento\Catalog\Block\Product\View\Type\Configurable" name="product.info.options.configurable" as="options_configurable" before="-" template="product/view/type/options/configurable.phtml"/>
+        <block class="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable" name="product.info.options.configurable" as="options_configurable" before="-" template="product/view/type/options/configurable.phtml" cacheable="false"/>
     </referenceBlock>
 </layout>

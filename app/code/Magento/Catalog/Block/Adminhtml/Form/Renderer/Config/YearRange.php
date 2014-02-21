@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,10 +33,16 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 
-class YearRange extends \Magento\Backend\Block\System\Config\Form\Field
-{
+use Magento\Backend\Block\System\Config\Form\Field;
+use Magento\Data\Form\Element\AbstractElement;
 
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+class YearRange extends Field
+{
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(AbstractElement $element)
     {
         $element->setStyle('width:70px;')
             ->setName($element->getName() . '[]');

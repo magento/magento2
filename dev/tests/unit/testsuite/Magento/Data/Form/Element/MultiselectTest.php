@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Data
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,5 +52,15 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
         $this->_model->setCanBeEmpty(true);
         $elementHtml = $this->_model->getElementHtml();
         $this->assertContains('<input type="hidden"', $elementHtml);
+    }
+
+    /**
+     * Verify that js element is added
+     */
+    public function testGetAfterElementJs()
+    {
+        $this->_model->setAfterElementJs('<script language="text/javascript">var website = "website1";</script>');
+        $elementHtml = $this->_model->getAfterElementJs();
+        $this->assertContains('var website = "website1";', $elementHtml);
     }
 }

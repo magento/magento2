@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_CatalogInventory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\CatalogInventory\Model\Indexer;
 
 /**
  * CatalogInventory Stock Status Indexer Model
@@ -44,7 +44,6 @@
  * @package     Magento_CatalogInventory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Model\Indexer;
 
 class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
 {
@@ -71,7 +70,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
         \Magento\Core\Model\Store\Group::ENTITY => array(
             \Magento\Index\Model\Event::TYPE_SAVE
         ),
-        \Magento\Core\Model\Config\Value::ENTITY => array(
+        \Magento\App\Config\ValueInterface::ENTITY => array(
             \Magento\Index\Model\Event::TYPE_SAVE
         ),
     );
@@ -79,7 +78,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
     /**
      * Related config settings
      *
-     * @var array
+     * @var string[]
      */
     protected $_relatedConfigSettings = array(
         \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
@@ -125,6 +124,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -192,7 +192,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
             } else {
                 $result = false;
             }
-        } else if ($entity == \Magento\Core\Model\Config\Value::ENTITY) {
+        } else if ($entity == \Magento\App\Config\ValueInterface::ENTITY) {
             $configData = $event->getDataObject();
             if ($configData && in_array($configData->getPath(), $this->_relatedConfigSettings)) {
                 $result = $configData->isValueChanged();
@@ -212,6 +212,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by process in event object
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerEvent(\Magento\Index\Model\Event $event)
     {
@@ -227,12 +228,12 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
 
             case \Magento\Core\Model\Store::ENTITY:
             case \Magento\Core\Model\Store\Group::ENTITY:
-            case \Magento\Core\Model\Config\Value::ENTITY:
+            case \Magento\App\Config\ValueInterface::ENTITY:
                 $event->addNewData('cataloginventory_stock_skip_call_event_handler', true);
                 $process = $event->getProcess();
                 $process->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
 
-                if ($event->getEntity() == \Magento\Core\Model\Config\Value::ENTITY) {
+                if ($event->getEntity() == \Magento\App\Config\ValueInterface::ENTITY) {
                     $configData = $event->getDataObject();
                     if ($configData->getPath() == \Magento\CatalogInventory\Helper\Data::XML_PATH_SHOW_OUT_OF_STOCK) {
                         $this->_indexer->getProcessByCode('catalog_product_price')
@@ -249,6 +250,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by catalog product processes in event object
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCatalogProductEvent(\Magento\Index\Model\Event $event)
     {
@@ -273,6 +275,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by cataloginventory stock item processes in event object
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCatalogInventoryStockItemEvent(\Magento\Index\Model\Event $event)
     {
@@ -287,7 +290,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by stock item save process in event object
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\CatalogInventory\Model\Indexer\Stock
+     * @return $this
      */
     protected function _registerStockItemSaveEvent(\Magento\Index\Model\Event $event)
     {
@@ -315,7 +318,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by product delete process in event object
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\CatalogInventory\Model\Indexer\Stock
+     * @return $this
      */
     protected function _registerCatalogProductDeleteEvent(\Magento\Index\Model\Event $event)
     {
@@ -334,7 +337,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by product mass action process in event object
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\CatalogInventory\Model\Indexer\Stock
+     * @return $this
      */
     protected function _registerCatalogProductMassActionEvent(\Magento\Index\Model\Event $event)
     {
@@ -373,6 +376,7 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Process event
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _processEvent(\Magento\Index\Model\Event $event)
     {

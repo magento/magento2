@@ -19,10 +19,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Model;
+
+use Magento\Webapi\Model\Cache\Type;
+use Magento\Webapi\Model\Config\Reader;
 
 /**
  * Web API Config Model.
@@ -36,7 +39,7 @@ class Config
     /**
      * Pattern for Web API interface name.
      */
-    const SERVICE_CLASS_PATTERN = '/^(.+?)\\\\(.+?)\\\\Service(\\\\.+)+(V\d+)Interface$/';
+    const SERVICE_CLASS_PATTERN = '/^(.+?)\\\\(.+?)\\\\Service\\\\(V\d+)+(\\\\.+)Interface$/';
 
     /**
      * @var \Magento\App\Cache\Type\Config
@@ -44,7 +47,7 @@ class Config
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Webapi\Model\Config\Reader
+     * @var Reader
      */
     protected $_configReader;
 
@@ -61,12 +64,12 @@ class Config
     protected $_services;
 
     /**
-     * @param Cache\Type $configCacheType
-     * @param Config\Reader $configReader
+     * @param Type $configCacheType
+     * @param Reader $configReader
      */
     public function __construct(
-        \Magento\Webapi\Model\Cache\Type $configCacheType,
-        \Magento\Webapi\Model\Config\Reader $configReader
+        Type $configCacheType,
+        Reader $configReader
     ) {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;
@@ -93,6 +96,8 @@ class Config
 
     /**
      * Load services from cache
+     *
+     * @return string|bool
      */
     protected function _loadFromCache()
     {
@@ -103,7 +108,7 @@ class Config
      * Save services into the cache
      *
      * @param string $data serialized version of the webapi registry
-     * @return \Magento\Webapi\Model\Config
+     * @return $this
      */
     protected function _saveToCache($data)
     {

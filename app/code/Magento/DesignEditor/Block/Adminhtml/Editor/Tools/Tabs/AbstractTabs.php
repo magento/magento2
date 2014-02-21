@@ -20,17 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs;
 
 /**
  * Block that renders tabs
  *
  * @method bool getIsActive()
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs;
-
 abstract class AbstractTabs extends \Magento\View\Element\Template
 {
     /**
@@ -44,12 +43,12 @@ abstract class AbstractTabs extends \Magento\View\Element\Template
     const TAB_BODY_BLOCK_ALIAS = 'tab_body';
 
     /**
-     * Tab HTML identifier
+     * @var string Tab HTML identifier
      */
     protected $_htmlId;
 
     /**
-     * Tab HTML title
+     * @var string Tab HTML title
      */
     protected $_title;
 
@@ -76,7 +75,7 @@ abstract class AbstractTabs extends \Magento\View\Element\Template
     /**
      * Get tabs html
      *
-     * @return array
+     * @return string[]
      */
     public function getTabContents()
     {
@@ -95,7 +94,7 @@ abstract class AbstractTabs extends \Magento\View\Element\Template
     /**
      * Get tabs handles
      *
-     * @return array
+     * @return string[]
      */
     public function getTabHandles()
     {

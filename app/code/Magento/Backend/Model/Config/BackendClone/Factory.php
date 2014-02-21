@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,7 @@ class Factory
      * Create new clone model
      *
      * @param string $cloneModel
-     * @return \Magento\Core\Model\Config\Value
+     * @return mixed
      */
     public function create($cloneModel)
     {

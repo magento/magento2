@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,11 +34,6 @@ namespace Magento\Catalog\Helper\Product;
 class Configuration extends \Magento\App\Helper\AbstractHelper
     implements \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
-    /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
-     */
-    protected $_config;
-
     /**
      * Filter manager
      *
@@ -65,19 +60,16 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Filter\FilterManager $filter
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      * @param \Magento\Stdlib\String $string
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Filter\FilterManager $filter,
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
         \Magento\Stdlib\String $string
     ) {
         $this->_productOptionFactory = $productOptionFactory;
         $this->filter = $filter;
-        $this->_config = $config;
         $this->string = $string;
         parent::__construct($context);
     }
@@ -139,70 +131,6 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieves configuration options for configurable product
-     *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-     * @return array
-     * @throws \Magento\Core\Exception
-     */
-    public function getConfigurableOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
-    {
-        $product = $item->getProduct();
-        $typeId = $product->getTypeId();
-        if ($typeId != \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE) {
-             throw new \Magento\Core\Exception(__('The product type to extract configurable options is incorrect.'));
-        }
-        $attributes = $product->getTypeInstance()
-            ->getSelectedAttributesInfo($product);
-        return array_merge($attributes, $this->getCustomOptions($item));
-    }
-
-    /**
-     * Retrieves configuration options for grouped product
-     *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-     * @return array
-     * @throws \Magento\Core\Exception
-     */
-    public function getGroupedOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
-    {
-        $product = $item->getProduct();
-        $typeId = $product->getTypeId();
-        if ($typeId != \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE) {
-             throw new \Magento\Core\Exception(__('The product type to extract configurable options is incorrect.'));
-        }
-
-        $options = array();
-        /**
-         * @var \Magento\Catalog\Model\Product\Type\Grouped
-         */
-        $typeInstance = $product->getTypeInstance();
-        $associatedProducts = $typeInstance->getAssociatedProducts($product);
-
-        if ($associatedProducts) {
-            foreach ($associatedProducts as $associatedProduct) {
-                $qty = $item->getOptionByCode('associated_product_' . $associatedProduct->getId());
-                $option = array(
-                    'label' => $associatedProduct->getName(),
-                    'value' => ($qty && $qty->getValue()) ? $qty->getValue() : 0
-                );
-
-                $options[] = $option;
-            }
-        }
-
-        $options = array_merge($options, $this->getCustomOptions($item));
-        $isUnConfigured = true;
-        foreach ($options as &$option) {
-            if ($option['value']) {
-                $isUnConfigured = false;
-                break;
-            }
-        }
-        return $isUnConfigured ? array() : $options;
-    }
-
-    /**
      * Retrieves product options list
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
@@ -210,22 +138,13 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
      */
     public function getOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
-        $typeId = $item->getProduct()->getTypeId();
-        switch ($typeId) {
-            case \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE:
-                return $this->getConfigurableOptions($item);
-            case \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE:
-                return $this->getGroupedOptions($item);
-            default:
-                break;
-        }
         return $this->getCustomOptions($item);
     }
 
     /**
      * Accept option value and return its formatted view
      *
-     * @param mixed $optionValue
+     * @param string|array $optionValue
      * Method works well with these $optionValue format:
      *      1. String
      *      2. Indexed array e.g. array(val1, val2, ...)
@@ -307,16 +226,5 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
         }
 
         return $result;
-    }
-
-    /**
-     * Get allowed product types for configurable product
-     *
-     * @return \SimpleXMLElement
-     */
-    public function getConfigurableAllowedTypes()
-    {
-        $configData = $this->_config->getType('configurable');
-        return isset($configData['allow_product_types']) ? $configData['allow_product_types'] : array();
     }
 }

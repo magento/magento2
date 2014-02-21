@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,18 +39,18 @@ class BuyerCountry implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
      */
-    protected $_countryCollFactory;
+    protected $_countryCollectionFactory;
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
     ) {
         $this->_configFactory = $configFactory;
-        $this->_countryCollFactory = $countryCollFactory;
+        $this->_countryCollectionFactory = $countryCollectionFactory;
     }
 
     /**
@@ -60,7 +60,7 @@ class BuyerCountry implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray($isMultiselect = false)
     {
         $supported = $this->_configFactory->create()->getSupportedBuyerCountryCodes();
-        $options = $this->_countryCollFactory->create()->addCountryCodeFilter($supported, 'iso2')
+        $options = $this->_countryCollectionFactory->create()->addCountryCodeFilter($supported, 'iso2')
             ->loadData()
             ->toOptionArray($isMultiselect ? false : __('--Please Select--'));
 

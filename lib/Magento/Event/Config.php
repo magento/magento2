@@ -20,24 +20,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Event;
 
-class Config implements \Magento\Event\ConfigInterface
+use \Magento\Event\Config\Data;
+
+class Config implements ConfigInterface
 {
     /**
      * Modules configuration model
      *
-     * @var \Magento\Event\Config\Data
+     * @var Data
      */
     protected $_dataContainer;
 
     /**
-     * @param \Magento\Event\Config\Data $dataContainer
+     * @param Data $dataContainer
      */
-    public function __construct(Config\Data $dataContainer)
+    public function __construct(Data $dataContainer)
     {
         $this->_dataContainer = $dataContainer;
     }
@@ -45,8 +47,8 @@ class Config implements \Magento\Event\ConfigInterface
     /**
      * Get observers by event name
      *
-     * @param $eventName
-     * @return array
+     * @param string $eventName
+     * @return null|array|mixed
      */
     public function getObservers($eventName)
     {

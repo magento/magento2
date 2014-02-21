@@ -20,10 +20,11 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+
 <div class="fieldset-wrapper">
     <div class="fieldset-wrapper-title">
         <?php $_itemsGridLabel = $this->getForcedShipmentCreate()?'Items to Invoice and Ship':'Items to Invoice'; ?>
@@ -63,9 +64,15 @@
         </table>
     </div>
 </div>
+
+<?php $orderTotalBar = $this->getChildHtml('order_totalbar'); ?>
+
+<?php if (!empty($orderTotalBar)): ?>
 <div class="fieldset-wrapper">
-    <?php echo $this->getChildHtml('order_totalbar') ?>
+    <?php echo $orderTotalBar; ?>
 </div>
+<?php endif; ?>
+
 <div class="clearfix">
     <div class="order-comments-history">
         <div class="fieldset-wrapper">
@@ -78,6 +85,7 @@
             </div>
         </div>
     </div>
+
     <div class="order-totals">
         <div class="fieldset-wrapper" id="invoice_totals">
             <div class="fieldset-wrapper-title">

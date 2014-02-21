@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Media;
 
 /**
  * Adminhtml media library uploader
  */
-namespace Magento\Backend\Block\Media;
-
 class Uploader extends \Magento\Backend\Block\Widget
 {
     /**
@@ -60,6 +59,9 @@ class Uploader extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -99,7 +101,7 @@ class Uploader extends \Magento\Backend\Block\Widget
     /**
      * Prepares layout and set element renderer
      *
-     * @return \Magento\Backend\Block\Media\Uploader
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -156,7 +158,6 @@ class Uploader extends \Magento\Backend\Block\Widget
      * Now uploader can be only in the same URL where backend located
      *
      * @param string $url url to uploader in current theme
-     *
      * @return string full URL
      */
     public function getUploaderUrl($url)

@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\App\Router;
@@ -40,7 +40,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * List of required request parameters
      * Order sensitive
-     * @var array
+     * @var string[]
      */
     protected $_requiredParams = array(
         'moduleFrontName',
@@ -56,7 +56,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Url security information.
      *
-     * @var \Magento\Core\Model\Url\SecurityInfoInterface
+     * @var \Magento\Url\SecurityInfoInterface
      */
     protected $_urlSecurityInfo;
 
@@ -66,13 +66,6 @@ class Base extends \Magento\App\Router\AbstractRouter
      * @var \Magento\Core\Model\Store\Config
      */
     protected $_storeConfig;
-
-    /**
-     * Core config
-     *
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_config = null;
 
     /**
      * @var \Magento\UrlInterface
@@ -105,11 +98,11 @@ class Base extends \Magento\App\Router\AbstractRouter
      * @param \Magento\App\ResponseFactory $responseFactory
      * @param \Magento\App\Route\ConfigInterface $routeConfig
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\Url|\Magento\UrlInterface $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface|\Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
-     * @param $routerId
+     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param string $routerId
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -121,7 +114,7 @@ class Base extends \Magento\App\Router\AbstractRouter
         \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId
     ) {
         parent::__construct($actionFactory);
@@ -188,7 +181,7 @@ class Base extends \Magento\App\Router\AbstractRouter
             $moduleFrontName = $param;
         } else {
             $moduleFrontName = $this->_defaultPath->getPart('module');
-            $request->setAlias(\Magento\Core\Model\Url\Rewrite::REWRITE_REQUEST_PATH_ALIAS, '');
+            $request->setAlias(\Magento\Url::REWRITE_REQUEST_PATH_ALIAS, '');
         }
         if (!$moduleFrontName) {
             return null;
@@ -212,7 +205,7 @@ class Base extends \Magento\App\Router\AbstractRouter
         } else {
             $controller = $this->_defaultPath->getPart('controller');
             $request->setAlias(
-                \Magento\Core\Model\Url\Rewrite::REWRITE_REQUEST_PATH_ALIAS,
+                \Magento\Url::REWRITE_REQUEST_PATH_ALIAS,
                 ltrim($request->getOriginalPathInfo(), '/')
             );
         }
@@ -242,7 +235,7 @@ class Base extends \Magento\App\Router\AbstractRouter
     /**
      * Get not found controller instance
      *
-     * @param $currentModuleName
+     * @param string $currentModuleName
      * @param \Magento\App\RequestInterface $request
      * @return \Magento\App\Action\Action|null
      */
@@ -412,7 +405,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      */
     protected function _getCurrentSecureUrl($request)
     {
-        $alias = $request->getAlias(\Magento\Core\Model\Url\Rewrite::REWRITE_REQUEST_PATH_ALIAS);
+        $alias = $request->getAlias(\Magento\Url::REWRITE_REQUEST_PATH_ALIAS);
         if ($alias) {
             return $this->_storeManager->getStore()->getBaseUrl('link', true) . ltrim($alias, '/');
         }

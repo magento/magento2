@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Phrase\Renderer;
@@ -29,13 +29,17 @@ class Placeholder implements \Magento\Phrase\RendererInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @param string $text
+     * @param array $arguments
+     * @return string
      */
     public function render($text, array $arguments)
     {
         if ($arguments) {
-            $placeholders = array();
-            for ($i = 1, $size = count($arguments); $i <= $size; $i++) {
-                $placeholders[] = "%$i";
+            $placeholders = [];
+            foreach (array_keys($arguments) as $key) {
+                $placeholders[] = "%" . (is_int($key) ? strval($key + 1) : $key);
             }
             $text = str_replace($placeholders, $arguments, $text);
         }

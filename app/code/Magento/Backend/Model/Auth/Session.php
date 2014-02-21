@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,13 @@ namespace Magento\Backend\Model\Auth;
 
 /**
  * Backend Auth session model
+ *
+ * @method \Magento\User\Model\User|null getUser()
+ * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
+ * @method \Magento\Acl|null getAcl()
+ * @method \Magento\Backend\Model\Auth\Session setAcl(\Magento\Acl $value)
+ * @method int getUpdatedAt()
+ * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
@@ -53,7 +60,7 @@ class Session
     protected $_aclBuilder;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -70,7 +77,7 @@ class Session
      * @param \Magento\Session\ValidatorInterface $validator
      * @param \Magento\Session\StorageInterface $storage
      * @param \Magento\Acl\Builder $aclBuilder
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\App\ConfigInterface $config
      */
     public function __construct(
@@ -81,7 +88,7 @@ class Session
         \Magento\Session\ValidatorInterface $validator,
         \Magento\Session\StorageInterface $storage,
         \Magento\Acl\Builder $aclBuilder,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\App\ConfigInterface $config
     ) {
         $this->_config = $config;

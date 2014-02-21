@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,7 +68,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
 
         $this->_modelBuilder = $this->getMockBuilder('Magento\View\Design\Theme\Customization\AbstractFile')
             ->setMethods(array('getType', 'getContentType'))
@@ -263,7 +263,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         $directoryMock->expects($this->once())->method('delete')->will($this->returnValue(true));
 
         $this->_filesystem->expects($this->any())->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::ROOT)->will($this->returnValue($directoryMock));
+            ->with(\Magento\App\Filesystem::ROOT_DIR)->will($this->returnValue($directoryMock));
         /** @var $model \Magento\View\Design\Theme\Customization\AbstractFile */
         /** @var $file \Magento\Core\Model\Theme\File */
         $model->save($file);
@@ -290,7 +290,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         $directoryMock->expects($this->once())->method('delete')->will($this->returnValue(true));
 
         $this->_filesystem->expects($this->any())->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::ROOT)->will($this->returnValue($directoryMock));
+            ->with(\Magento\App\Filesystem::ROOT_DIR)->will($this->returnValue($directoryMock));
 
         $model->expects($this->once())->method('getFullPath')->with($file)->will($this->returnValue('test_path'));
         /** @var $model \Magento\View\Design\Theme\Customization\AbstractFile */

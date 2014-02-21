@@ -20,20 +20,17 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model;
 
 /**
  * Application model
  *
  * Application should have: areas, store, locale, translator, design package
  */
-namespace Magento\Core\Model;
-
-use Magento\App\CacheInterface;
-
-class App implements \Magento\Core\Model\AppInterface
+class App implements \Magento\AppInterface
 {
     /**#@+
      * Product edition labels
@@ -53,8 +50,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Magento version
      */
-    const VERSION = '2.0.0.0-dev57';
-
+    const VERSION = '2.0.0.0-dev66';
 
     /**
      * Application run code
@@ -77,9 +73,9 @@ class App implements \Magento\Core\Model\AppInterface
     const PARAM_ALLOWED_MODULES = 'allowed_modules';
 
     /**
-     * Caching params
+     * Caching params, that applied for all cache frontends regardless of type
      */
-    const PARAM_CACHE_OPTIONS = 'cache_options';
+    const PARAM_CACHE_FORCED_OPTIONS = 'cache_options';
 
     /**
      * Application loaded areas array
@@ -91,14 +87,14 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Application location object
      *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var LocaleInterface
      */
     protected $_locale;
 
     /**
      * Application configuration object
      *
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -138,21 +134,6 @@ class App implements \Magento\Core\Model\AppInterface
     protected $_response;
 
     /**
-     * Use session in URL flag
-     *
-     * @see \Magento\Core\Model\Url
-     * @var bool
-     */
-    protected $_useSessionInUrl = true;
-
-    /**
-     * Use session var instead of SID for session in URL
-     *
-     * @var bool
-     */
-    protected $_useSessionVar = false;
-
-    /**
      * Object manager
      *
      * @var \Magento\ObjectManager
@@ -165,13 +146,6 @@ class App implements \Magento\Core\Model\AppInterface
      * @var \Magento\Module\UpdaterInterface
      */
     protected $_dbUpdater;
-
-    /**
-     * Store list manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
 
     /**
      * @var \Magento\App\State
@@ -189,20 +163,18 @@ class App implements \Magento\Core\Model\AppInterface
     protected $_configScope;
 
     /**
-     * @param Config $config
-     * @param CacheInterface $cache
+     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\ObjectManager $objectManager
-     * @param StoreManagerInterface $storeManager
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\App\State $appState
      * @param \Magento\Config\Scope $configScope
      * @param \Magento\App\FrontControllerInterface $frontController
      */
     public function __construct(
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\App\CacheInterface $cache,
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\App\State $appState,
         \Magento\Config\Scope $configScope,
@@ -211,7 +183,6 @@ class App implements \Magento\Core\Model\AppInterface
         $this->_config = $config;
         $this->_cache = $cache;
         $this->_objectManager = $objectManager;
-        $this->_storeManager = $storeManager;
         $this->_appState = $appState;
         $this->_eventManager = $eventManager;
         $this->_configScope = $configScope;
@@ -221,6 +192,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Throw an exception, if the application has not been installed yet
      *
+     * @return void
      * @throws \Magento\Exception
      */
     public function requireInstalledInstance()
@@ -244,7 +216,7 @@ class App implements \Magento\Core\Model\AppInterface
      * Re-declare custom error handler
      *
      * @param   string $handler
-     * @return  \Magento\Core\Model\App
+     * @return  $this
      */
     public function setErrorHandler($handler)
     {
@@ -257,7 +229,7 @@ class App implements \Magento\Core\Model\AppInterface
      *
      * @param   string $area
      * @param   string $part
-     * @return  \Magento\Core\Model\App
+     * @return  $this
      */
     public function loadAreaPart($area, $part)
     {
@@ -295,7 +267,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Retrieve application locale object
      *
-     * @return \Magento\Core\Model\LocaleInterface
+     * @return LocaleInterface
      */
     public function getLocale()
     {
@@ -328,7 +300,7 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Retrieve configuration object
      *
-     * @return \Magento\Core\Model\Config
+     * @return \Magento\App\ConfigInterface
      */
     public function getConfig()
     {
@@ -369,7 +341,7 @@ class App implements \Magento\Core\Model\AppInterface
      * Loading cache data
      *
      * @param   string $cacheId
-     * @return  mixed
+     * @return  string
      */
     public function loadCache($cacheId)
     {
@@ -383,7 +355,7 @@ class App implements \Magento\Core\Model\AppInterface
      * @param string $cacheId
      * @param array $tags
      * @param bool $lifeTime
-     * @return \Magento\Core\Model\App
+     * @return $this
      */
     public function saveCache($data, $cacheId, $tags = array(), $lifeTime = false)
     {
@@ -395,7 +367,7 @@ class App implements \Magento\Core\Model\AppInterface
      * Remove cache
      *
      * @param   string $cacheId
-     * @return  \Magento\Core\Model\App
+     * @return  $this
      */
     public function removeCache($cacheId)
     {
@@ -407,7 +379,7 @@ class App implements \Magento\Core\Model\AppInterface
      * Cleaning cache
      *
      * @param   array $tags
-     * @return  \Magento\Core\Model\App
+     * @return  $this
      */
     public function cleanCache($tags = array())
     {
@@ -418,14 +390,14 @@ class App implements \Magento\Core\Model\AppInterface
     /**
      * Deletes all session files
      *
-     * @return \Magento\Core\Model\App
+     * @return $this
      */
     public function cleanAllSessions()
     {
         if (session_module_name() == 'files') {
-            /** @var \Magento\Filesystem $filesystem */
-            $filesystem = $this->_objectManager->create('Magento\Filesystem');
-            $sessionDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::SESSION);
+            /** @var \Magento\App\Filesystem $filesystem */
+            $filesystem = $this->_objectManager->create('Magento\App\Filesystem');
+            $sessionDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::SESSION_DIR);
             foreach ($sessionDirectory->read() as $path) {
                 $sessionDirectory->delete($path);
             }
@@ -450,7 +422,7 @@ class App implements \Magento\Core\Model\AppInterface
      * Request setter
      *
      * @param \Magento\App\RequestInterface $request
-     * @return \Magento\Core\Model\App
+     * @return $this
      */
     public function setRequest(\Magento\App\RequestInterface $request)
     {
@@ -476,56 +448,12 @@ class App implements \Magento\Core\Model\AppInterface
      * Response setter
      *
      * @param \Magento\App\ResponseInterface $response
-     * @return \Magento\Core\Model\App
+     * @return $this
      */
     public function setResponse(\Magento\App\ResponseInterface $response)
     {
         $this->_response = $response;
         return $this;
-    }
-
-    /**
-     * Set use session var instead of SID for URL
-     *
-     * @param bool $var
-     * @return \Magento\Core\Model\App
-     */
-    public function setUseSessionVar($var)
-    {
-        $this->_useSessionVar = (bool)$var;
-        return $this;
-    }
-
-    /**
-     * Retrieve use flag session var instead of SID for URL
-     *
-     * @return bool
-     */
-    public function getUseSessionVar()
-    {
-        return $this->_useSessionVar;
-    }
-
-    /**
-     * Set Use session in URL flag
-     *
-     * @param bool $flag
-     * @return \Magento\Core\Model\App
-     */
-    public function setUseSessionInUrl($flag = true)
-    {
-        $this->_useSessionInUrl = (bool)$flag;
-        return $this;
-    }
-
-    /**
-     * Retrieve use session in URL flag
-     *
-     * @return bool
-     */
-    public function getUseSessionInUrl()
-    {
-        return $this->_useSessionInUrl;
     }
 
     /**
@@ -536,222 +464,6 @@ class App implements \Magento\Core\Model\AppInterface
     public function isDeveloperMode()
     {
         return $this->_appState->getMode() == \Magento\App\State::MODE_DEVELOPER;
-    }
-
-    /**
-     * Retrieve application store object without Store_Exception
-     *
-     * @param string|int|\Magento\Core\Model\Store $storeId
-     * @return \Magento\Core\Model\Store
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getSafeStore()
-     */
-    public function getSafeStore($storeId = null)
-    {
-        return $this->_storeManager->getSafeStore($storeId);
-    }
-
-    /**
-     * Allow or disallow single store mode
-     *
-     * @param bool $value
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::setIsSingleStoreModeAllowed()
-     */
-    public function setIsSingleStoreModeAllowed($value)
-    {
-        $this->_storeManager->setIsSingleStoreModeAllowed($value);
-    }
-
-    /**
-     * Check if store has only one store view
-     *
-     * @return bool
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::hasSingleStore()
-     */
-    public function hasSingleStore()
-    {
-        return $this->_storeManager->hasSingleStore();
-    }
-
-    /**
-     * Check if system is run in the single store mode
-     *
-     * @return bool
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::isSingleStoreMode()
-     */
-    public function isSingleStoreMode()
-    {
-        return $this->_storeManager->isSingleStoreMode();
-    }
-
-    /**
-     * @throws \Magento\Core\Model\Store\Exception
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::throwStoreException()
-     */
-    public function throwStoreException()
-    {
-        $this->_storeManager->throwStoreException();
-    }
-
-    /**
-     * Retrieve application store object
-     *
-     * @param null|string|bool|int|\Magento\Core\Model\Store $storeId
-     * @return \Magento\Core\Model\Store
-     * @throws \Magento\Core\Model\Store\Exception
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getStore()
-     */
-    public function getStore($storeId = null)
-    {
-        return $this->_storeManager->getStore($storeId);
-    }
-
-    /**
-     * Retrieve stores array
-     *
-     * @param bool $withDefault
-     * @param bool $codeKey
-     * @return \Magento\Core\Model\Store[]
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getStores()
-     */
-    public function getStores($withDefault = false, $codeKey = false)
-    {
-        return $this->_storeManager->getStores($withDefault, $codeKey);
-    }
-
-    /**
-     * Retrieve application website object
-     *
-     * @param null|bool|int|string|\Magento\Core\Model\Website $websiteId
-     * @return \Magento\Core\Model\Website
-     * @throws \Magento\Core\Exception
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getWebsite()
-     */
-    public function getWebsite($websiteId = null)
-    {
-        return $this->_storeManager->getWebsite($websiteId);
-    }
-
-    /**
-     * Get loaded websites
-     *
-     * @param bool $withDefault
-     * @param bool|string $codeKey
-     * @return \Magento\Core\Model\Website[]
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getWebsites()
-     */
-    public function getWebsites($withDefault = false, $codeKey = false)
-    {
-        return $this->_storeManager->getWebsites($withDefault, $codeKey);
-    }
-
-    /**
-     * Reinitialize store list
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::reinitStores()
-     */
-    public function reinitStores()
-    {
-        $this->_storeManager->reinitStores();
-    }
-
-    /**
-     * Set current default store
-     *
-     * @param string $store
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::setCurrentStore()
-     */
-    public function setCurrentStore($store)
-    {
-        $this->_storeManager->setCurrentStore($store);
-    }
-
-    /**
-     * Get current store code
-     *
-     * @return string
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getCurrentStore()
-     */
-    public function getCurrentStore()
-    {
-        return $this->_storeManager->getCurrentStore();
-    }
-
-
-    /**
-     * Retrieve default store for default group and website
-     *
-     * @return \Magento\Core\Model\Store
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getDefaultStoreView()
-     */
-    public function getDefaultStoreView()
-    {
-        return $this->_storeManager->getDefaultStoreView();
-    }
-
-    /**
-     * Retrieve application store group object
-     *
-     * @param null|\Magento\Core\Model\Store\Group|string $groupId
-     * @return \Magento\Core\Model\Store\Group
-     * @throws \Magento\Core\Exception
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getGroup()
-     */
-    public function getGroup($groupId = null)
-    {
-        return $this->_storeManager->getGroup($groupId);
-    }
-
-    /**
-     * Prepare array of store groups
-     * can be filtered to contain default store group or not by $withDefault flag
-     * depending on flag $codeKey array keys can be group id or group code
-     *
-     * @param bool $withDefault
-     * @param bool $codeKey
-     * @return \Magento\Core\Model\Store\Group[]
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getGroups()
-     */
-    public function getGroups($withDefault = false, $codeKey = false)
-    {
-        return $this->_storeManager->getGroups($withDefault, $codeKey);
-    }
-
-    /**
-     *  Unset website by id from app cache
-     *
-     * @param null|bool|int|string|\Magento\Core\Model\Website $websiteId
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::clearWebsiteCache()
-     */
-    public function clearWebsiteCache($websiteId = null)
-    {
-        $this->_storeManager->clearWebsiteCache($websiteId);
-    }
-
-    /**
-     * Get either default or any store view
-     *
-     * @return \Magento\Core\Model\Store|null
-     *
-     * @deprecated use \Magento\Core\Model\StoreManagerInterface::getAnyStoreView()
-     */
-    public function getAnyStoreView()
-    {
-        return $this->_storeManager->getAnyStoreView();
     }
 
     /**
@@ -769,12 +481,12 @@ class App implements \Magento\Core\Model\AppInterface
      * Set edition
      *
      * @param string $edition
+     * @return void
      */
     public function setEdition($edition)
     {
         $this->_currentEdition = $edition;
     }
-
 
     /**
      * Gets the current Magento version string
@@ -804,7 +516,7 @@ class App implements \Magento\Core\Model\AppInterface
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '57',
+            'number'    => '66',
         );
     }
 }

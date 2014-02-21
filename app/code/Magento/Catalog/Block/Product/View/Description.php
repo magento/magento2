@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,8 +34,13 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
+use Magento\Catalog\Model\Product;
+
 class Description extends \Magento\View\Element\Template
 {
+    /**
+     * @var Product
+     */
     protected $_product = null;
 
     /**
@@ -59,6 +64,9 @@ class Description extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return Product
+     */
     public function getProduct()
     {
         if (!$this->_product) {

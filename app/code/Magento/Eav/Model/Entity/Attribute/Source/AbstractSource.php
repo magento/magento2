@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 /**
  * Entity/Attribute/Model - attribute selection source abstract
@@ -32,8 +32,6 @@
  * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity\Attribute\Source;
-
 abstract class AbstractSource
     implements \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface, \Magento\Core\Model\Option\ArrayInterface
 {
@@ -94,6 +92,10 @@ abstract class AbstractSource
         return false;
     }
 
+    /**
+     * @param string $value
+     * @return null|string
+     */
     public function getOptionId($value)
     {
         foreach ($this->getAllOptions() as $option) {
@@ -109,7 +111,7 @@ abstract class AbstractSource
      *
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir direction
-     * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+     * @return $this
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Data\Collection::SORT_ORDER_DESC) {
         return $this;

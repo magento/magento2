@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogInventory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,8 @@
  * HTML select element block
  */
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
+
+use Magento\Data\Form;
 
 class Stock extends \Magento\Data\Form\Element\Select
 {
@@ -41,7 +43,7 @@ class Stock extends \Magento\Data\Form\Element\Select
     protected $_qty;
 
     /**
-     * Is product composite (grouped or configurable)
+     * Is product composite
      *
      * @var bool
      */
@@ -103,8 +105,8 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Set form to quantity element in addition to current element
      *
-     * @param $form
-     * @return \Magento\Data\Form
+     * @param Form $form
+     * @return Form
      */
     public function setForm($form)
     {
@@ -115,8 +117,8 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Set value to quantity element in addition to current element
      *
-     * @param $value
-     * @return \Magento\Data\Form\Element\Select
+     * @param array|string $value
+     * @return $this
      */
     public function setValue($value)
     {
@@ -131,6 +133,7 @@ class Stock extends \Magento\Data\Form\Element\Select
      * Set name to quantity element in addition to current element
      *
      * @param string $name
+     * @return void
      */
     public function setName($name)
     {
@@ -139,7 +142,7 @@ class Stock extends \Magento\Data\Form\Element\Select
     }
 
     /**
-     * Get whether product is configurable or grouped
+     * Get whether product is composite
      *
      * @return bool
      */
@@ -154,15 +157,18 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Disable fields depending on product type
      *
-     * @return \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock
+     * @return $this
      */
     protected function _disableFields()
     {
+        if ($this->getDisabled() || $this->_isProductComposite()) {
+            $this->_qty->setDisabled('disabled');
+        }
         if (!$this->_isProductComposite() && $this->_qty->getValue() === null) {
             $this->setDisabled('disabled');
         }
-        if ($this->_isProductComposite()) {
-            $this->_qty->setDisabled('disabled');
+        if ($this->isLocked()) {
+            $this->_qty->lock();
         }
         return $this;
     }
@@ -170,8 +176,8 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Get js for quantity and in stock synchronisation
      *
-     * @param $quantityFieldId
-     * @param $inStockFieldId
+     * @param string $quantityFieldId
+     * @param string $inStockFieldId
      * @return string
      */
     protected function _getJs($quantityFieldId, $inStockFieldId)
@@ -187,22 +193,18 @@ class Stock extends \Magento\Data\Form\Element\Select
                         useConfigManageStockField = $('#inventory_use_config_manage_stock');
 
                     var disabler = function(event) {
-                        var hasVariation = $('[data-panel=product-variations]').is('.opened');
-                        if ((productType == 'configurable' && hasVariation)
-                            || productType == 'grouped'
-                            || productType == 'bundle'//@TODO move this check to Magento_Bundle after refactoring as widget
-                            || hasVariation
-                        ) {
-                            return;
-                        }
-                        var manageStockValue = (qty.val() === '') ? 0 : 1;
-                        stockAvailabilityField.prop('disabled', !manageStockValue);
-                        if (manageStockField.val() != manageStockValue && !(event && event.type == 'keyup')) {
-                            if (useConfigManageStockField.val() == 1) {
-                                useConfigManageStockField.removeAttr('checked').val(0);
+                        var stockBeforeDisable = $.Event('stockbeforedisable', {productType: productType});
+                        $('#product_info_tabs_product-details_content').trigger(stockBeforeDisable);
+                        if (stockBeforeDisable.result !== false) {
+                            var manageStockValue = (qty.val() === '') ? 0 : 1;
+                            stockAvailabilityField.prop('disabled', !manageStockValue);
+                            if (manageStockField.val() != manageStockValue && !(event && event.type == 'keyup')) {
+                                if (useConfigManageStockField.val() == 1) {
+                                    useConfigManageStockField.removeAttr('checked').val(0);
+                                }
+                                manageStockField.toggleClass('disabled', false).prop('disabled', false);
+                                manageStockField.val(manageStockValue);
                             }
-                            manageStockField.toggleClass('disabled', false).prop('disabled', false);
-                            manageStockField.val(manageStockValue);
                         }
                     };
 

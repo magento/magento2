@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,6 +47,7 @@ class Order extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory $createDatFactory
      * @param \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
      */
@@ -56,10 +57,12 @@ class Order extends \Magento\Sales\Model\Resource\Report\AbstractReport
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory $createDatFactory,
         \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
+
     ) {
-        parent::__construct($resource, $logger, $locale, $reportsFlagFactory, $dateTime);
+        parent::__construct($resource, $logger, $locale, $reportsFlagFactory, $dateTime, $timezoneValidator);
         $this->_createDatFactory = $createDatFactory;
         $this->_updateDatFactory = $updateDatFactory;
     }

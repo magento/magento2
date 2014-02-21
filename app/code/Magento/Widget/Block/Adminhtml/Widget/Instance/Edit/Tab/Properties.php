@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -91,7 +91,7 @@ class Properties
      * Prepare block children and data.
      * Set widget type and widget parameters if available
      *
-     * @return \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties
+     * @return $this
      */
     protected function _preparelayout()
     {

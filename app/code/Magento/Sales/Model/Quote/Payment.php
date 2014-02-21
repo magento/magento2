@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -51,12 +51,6 @@
  * @method \Magento\Sales\Model\Quote\Payment setCcSsStartMonth(int $value)
  * @method int getCcSsStartYear()
  * @method \Magento\Sales\Model\Quote\Payment setCcSsStartYear(int $value)
- * @method string getPaypalCorrelationId()
- * @method \Magento\Sales\Model\Quote\Payment setPaypalCorrelationId(string $value)
- * @method string getPaypalPayerId()
- * @method \Magento\Sales\Model\Quote\Payment setPaypalPayerId(string $value)
- * @method string getPaypalPayerStatus()
- * @method \Magento\Sales\Model\Quote\Payment setPaypalPayerStatus(string $value)
  * @method string getPoNumber()
  * @method \Magento\Sales\Model\Quote\Payment setPoNumber(string $value)
  * @method string getAdditionalData()

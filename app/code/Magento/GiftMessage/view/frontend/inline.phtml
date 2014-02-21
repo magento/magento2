@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -55,7 +55,7 @@
                 <div class="options-order-container" id="options-order-container-<?php echo $this->getEntity()->getId() ?>"></div>
                 <input type="hidden" name="giftoptions[<?php echo $this->getEntity()->getId() ?>][type]" value="quote" />
                 <?php if ($this->isMessagesAvailable()): ?>
-                    <a href="#" class="activate message" data-mage-init='{toggleAdvanced: {selectorsToggleClass:"no-display", toggleContainers:"#allow-gift-messages-for-order-container"}}'><?php echo __('Gift Message') ?></a>
+                    <a href="#" class="activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"no-display", "toggleContainers":"#allow-gift-messages-for-order-container"}}'><?php echo __('Gift Message') ?></a>
                     <div id="allow-gift-messages-for-order-container" class="no-display">
                         <fieldset class="fieldset">
                             <input type="hidden" name="giftmessage[<?php echo $this->getEntity()->getId() ?>][type]"  value="quote" />
@@ -115,7 +115,7 @@
                          <div class="item options">
                              <div class="options-items-container" id="options-items-container-<?php echo $this->getEntity()->getId() ?>-<?php echo $_item->getId() ?>"></div>
                              <?php if ($this->isItemMessagesAvailable($_item)): ?>
-                             <a href="#" class="activate message" data-mage-init='{toggleAdvanced: {selectorsToggleClass:"no-display", toggleContainers:"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
+                             <a href="#" class="activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"no-display", "toggleContainers":"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
                              <div id="gift-messages-for-item-container-<?php echo $_item->getId() ?>" class="block message no-display">
                                  <fieldset class="fieldset">
                                      <p><?php echo __('You can leave a box blank if you don\'t wish to add a gift message for the item.') ?></p>
@@ -162,8 +162,6 @@
         });
     </script>
 <?php break; ?>
-<?php case 'multishipping_adress_checkbox': ?>
-<?php break; ?>
 
 <?php case 'multishipping_address': ?>
     <fieldset id="add-gift-options-<?php echo $this->getEntity()->getId() ?>" class="fieldset gift message">
@@ -188,7 +186,7 @@
                 <input type="hidden" name="giftoptions[<?php echo $this->getEntity()->getId() ?>][type]" value="quote_address" />
                 <?php if ($this->isMessagesAvailable()): ?>
                     <?php $_giftMessage = true; ?>
-                    <a href="#" class="activate message" data-mage-init='{toggleAdvanced: {selectorsToggleClass:"no-display", toggleContainers:"#gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
+                    <a href="#" class="activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"no-display", "toggleContainers":"#gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
                     <div id="gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>" class="block message no-display">
                         <fieldset class="fieldset">
                             <p><?php echo __('You can leave this box blank if you do not wish to add a gift message for this address.') ?></p>
@@ -248,7 +246,7 @@
 
                              <?php if ($this->isItemMessagesAvailable($_item)): ?>
                              <?php $_giftMessage = true; ?>
-                                 <a href="#" class="activate message" data-mage-init='{toggleAdvanced: {selectorsToggleClass:"no-display", toggleContainers:"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
+                                 <a href="#" class="activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"no-display", "toggleContainers":"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
                                  <div id="gift-messages-for-item-container-<?php echo $_item->getId() ?>" class="block message no-display">
                                      <fieldset class="fieldset">
                                         <p><?php echo __('You can leave this box blank if you do not wish to add a gift message for the item.') ?></p>

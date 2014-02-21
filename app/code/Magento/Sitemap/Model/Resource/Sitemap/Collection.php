@@ -20,25 +20,22 @@
  *
  * @category    Magento
  * @package     Magento_Sitemap
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sitemap\Model\Resource\Sitemap;
 
 /**
  * Sitemap resource model collection
  *
- * @category    Magento
- * @package     Magento_Sitemap
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sitemap\Model\Resource\Sitemap;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Init collection
      *
+     * @return void
      */
     public function _construct()
     {
@@ -48,8 +45,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter collection by specified store ids
      *
-     * @param array|int $storeIds
-     * @return \Magento\Sitemap\Model\Resource\Sitemap\Collection
+     * @param array|int[] $storeIds
+     * @return $this
      */
     public function addStoreFilter($storeIds)
     {

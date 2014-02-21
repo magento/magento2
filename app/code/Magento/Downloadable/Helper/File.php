@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,7 +45,7 @@ class File extends \Magento\App\Helper\AbstractHelper
     /**
      * Filesystem object.
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -60,18 +60,18 @@ class File extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param array $mimeTypes
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         array $mimeTypes = array()
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite($filesystem::MEDIA);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite($filesystem::MEDIA_DIR);
         parent::__construct($context);
         if (!empty($mimeTypes)) {
             foreach ($mimeTypes as $key => $value) {

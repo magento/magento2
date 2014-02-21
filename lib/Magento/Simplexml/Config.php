@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Simplexml
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -128,7 +128,7 @@ class Config
      * Sets xml for this configuration
      *
      * @param \Magento\Simplexml\Element $sourceData
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function setXml(\Magento\Simplexml\Element $node)
     {
@@ -141,7 +141,7 @@ class Config
      *
      * @see     \Magento\Simplexml\Element::descend
      * @param   string $path
-     * @return  \Magento\Simplexml\Element
+     * @return  \Magento\Simplexml\Element|bool
      */
     public function getNode($path=null)
     {
@@ -158,7 +158,7 @@ class Config
      * Returns nodes found by xpath expression
      *
      * @param string $xpath
-     * @return array
+     * @return \SimpleXMLElement[]|bool
      */
     public function getXpath($xpath)
     {
@@ -177,7 +177,7 @@ class Config
      * Enter description here...
      *
      * @param \Magento\Simplexml\Config\Cache\AbstractCache $cache
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function setCache($cache)
     {
@@ -199,7 +199,7 @@ class Config
      * Enter description here...
      *
      * @param boolean $flag
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function setCacheSaved($flag)
     {
@@ -221,7 +221,7 @@ class Config
      * Enter description here...
      *
      * @param string $id
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function setCacheId($id)
     {
@@ -243,7 +243,7 @@ class Config
      * Enter description here...
      *
      * @param array $tags
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function setCacheTags($tags)
     {
@@ -265,7 +265,7 @@ class Config
      * Enter description here...
      *
      * @param int $lifetime
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function setCacheLifetime($lifetime)
     {
@@ -287,7 +287,7 @@ class Config
      * Enter description here...
      *
      * @param string $data
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function setCacheChecksum($data)
     {
@@ -305,7 +305,7 @@ class Config
      * Enter description here...
      *
      * @param string $data
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function updateCacheChecksum($data)
     {
@@ -394,7 +394,7 @@ class Config
      * Enter description here...
      *
      * @param array $tags
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function saveCache($tags=null)
     {
@@ -434,7 +434,7 @@ class Config
     /**
      * Enter description here...
      *
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function removeCache()
     {
@@ -520,7 +520,7 @@ class Config
      * Imports DOM node
      *
      * @param \DOMNode $dom
-     * @return \Magento\Simplexml\Element
+     * @return bool
      */
     public function loadDom($dom)
     {
@@ -540,7 +540,7 @@ class Config
      * @param string $path separated by slashes
      * @param string $value
      * @param boolean $overwrite
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function setNode($path, $value, $overwrite=true)
     {
@@ -551,7 +551,7 @@ class Config
     /**
      * Process configuration xml
      *
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function applyExtends()
     {
@@ -590,7 +590,7 @@ class Config
      *
      * @param \Magento\Simplexml\Config $config
      * @param boolean $overwrite
-     * @return \Magento\Simplexml\Config
+     * @return $this
      */
     public function extend(\Magento\Simplexml\Config $config, $overwrite=true)
     {
@@ -603,6 +603,8 @@ class Config
      *
      * Destructor should be called explicitly in order to work around the PHP bug
      * https://bugs.php.net/bug.php?id=62468
+     *
+     * @return void
      */
     public function __destruct()
     {

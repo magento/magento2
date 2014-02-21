@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Page\Widget;
 
 /**
  * CMS page chooser for Wysiwyg CMS widget
@@ -31,8 +32,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Page\Widget;
-
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -57,7 +56,6 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Theme\Model\Layout\Source\Layout $pageLayout
      * @param \Magento\Cms\Model\Page $cmsPage
@@ -67,7 +65,6 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Theme\Model\Layout\Source\Layout $pageLayout,
         \Magento\Cms\Model\Page $cmsPage,
@@ -79,11 +76,13 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_cmsPage = $cmsPage;
         $this->_pageFactory = $pageFactory;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Block construction, prepare grid params
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -162,7 +161,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare columns for pages grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareColumns()
     {
@@ -208,6 +207,11 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * Get grid url
+     *
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('cms/page_widget/chooser', array('_current' => true));

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Theme
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,8 @@
  * Files controller
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg;
+
+use Magento\App\ResponseInterface;
 
 class Files extends \Magento\Backend\App\Action
 {
@@ -50,6 +52,8 @@ class Files extends \Magento\Backend\App\Action
     
     /**
      * Index action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -59,6 +63,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Tree json action
+     *
+     * @return void
      */
     public function treeJsonAction()
     {
@@ -75,6 +81,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * New folder action
+     *
+     * @return void
      */
     public function newFolderAction()
     {
@@ -93,6 +101,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Delete folder action
+     *
+     * @return void
      */
     public function deleteFolderAction()
     {
@@ -107,6 +117,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Contents action
+     *
+     * @return void
      */
     public function contentsAction()
     {
@@ -126,6 +138,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Files upload action
+     *
+     * @return void
      */
     public function uploadAction()
     {
@@ -140,6 +154,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Preview image action
+     *
+     * @return ResponseInterface|void
      */
     public function previewImageAction()
     {
@@ -147,10 +163,14 @@ class Files extends \Magento\Backend\App\Action
         /** @var $helper \Magento\Theme\Helper\Storage */
         $helper = $this->_objectManager->get('Magento\Theme\Helper\Storage');
         try {
-            return $this->_fileFactory->create($file, array(
-                'type'  => 'filename',
-                'value' => $helper->getThumbnailPath($file)
-            ));
+            return $this->_fileFactory->create(
+                $file,
+                array(
+                    'type'  => 'filename',
+                    'value' => $helper->getThumbnailPath($file)
+                ),
+                \Magento\App\Filesystem::MEDIA_DIR
+            );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->_redirect('core/index/notfound');
@@ -159,6 +179,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Delete file from media storage
+     *
+     * @return void
      * @throws \Exception
      */
     public function deleteFilesAction()
@@ -181,6 +203,8 @@ class Files extends \Magento\Backend\App\Action
 
     /**
      * Fire when select image
+     *
+     * @return void
      */
     public function onInsertAction()
     {

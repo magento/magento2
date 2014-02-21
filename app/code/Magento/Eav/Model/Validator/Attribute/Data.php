@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,6 +32,8 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Eav\Model\Validator\Attribute;
+
+use Magento\Eav\Model\Attribute;
 
 class Data extends \Magento\Validator\AbstractValidator
 {
@@ -71,8 +73,8 @@ class Data extends \Magento\Validator\AbstractValidator
     /**
      * Set list of attributes for validation in isValid method.
      *
-     * @param \Magento\Eav\Model\Attribute[] $attributes
-     * @return \Magento\Eav\Model\Validator\Attribute\Data
+     * @param Attribute[] $attributes
+     * @return $this
      */
     public function setAttributes(array $attributes)
     {
@@ -86,7 +88,7 @@ class Data extends \Magento\Validator\AbstractValidator
      * All attributes not in this list 't be involved in validation.
      *
      * @param array $attributesCodes
-     * @return \Magento\Eav\Model\Validator\Attribute\Data
+     * @return $this
      */
     public function setAttributesWhiteList(array $attributesCodes)
     {
@@ -100,7 +102,7 @@ class Data extends \Magento\Validator\AbstractValidator
      * All attributes in this list won't be involved in validation.
      *
      * @param array $attributesCodes
-     * @return \Magento\Eav\Model\Validator\Attribute\Data
+     * @return $this
      */
     public function setAttributesBlackList(array $attributesCodes)
     {
@@ -112,7 +114,7 @@ class Data extends \Magento\Validator\AbstractValidator
      * Set data for validation in isValid method.
      *
      * @param array $data
-     * @return \Magento\Eav\Model\Validator\Attribute\Data
+     * @return $this
      */
     public function setData(array $data)
     {
@@ -128,7 +130,7 @@ class Data extends \Magento\Validator\AbstractValidator
      */
     public function isValid($entity)
     {
-        /** @var $attributes \Magento\Eav\Model\Attribute[] */
+        /** @var $attributes Attribute[] */
         $attributes = $this->_getAttributes($entity);
 
         $data = array();
@@ -206,6 +208,7 @@ class Data extends \Magento\Validator\AbstractValidator
      *
      * @param string $code
      * @param array $messages
+     * @return void
      */
     protected function _addErrorMessages($code, array $messages)
     {

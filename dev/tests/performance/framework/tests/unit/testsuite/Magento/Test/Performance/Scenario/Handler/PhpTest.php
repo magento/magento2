@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     performance_tests
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,7 +66,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
             $scenarioArgs, array(), array());
 
         $this->_reportFile = realpath(__DIR__ . '/../../_files/scenario.jtl');
-        $this->_shell = $this->getMock('Magento\Shell', array('execute'));
+        $this->_shell = $this->getMock('Magento\Shell', array('execute'), array(), '', false);
         $this->_object = new \Magento\TestFramework\Performance\Scenario\Handler\Php($this->_shell, false);
     }
 

@@ -20,18 +20,19 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Core\Model\File;
 
-use \Magento\Filesystem;
+use Magento\App\Filesystem;
+use Magento\Core\Model\AbstractModel;
 
 /**
  * Class Storage
  */
-class Storage extends \Magento\Core\Model\AbstractModel
+class Storage extends AbstractModel
 {
     /**
      * Storage systems ids
@@ -70,7 +71,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_coreConfig;
 
@@ -96,7 +97,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -105,11 +106,11 @@ class Storage extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Helper\File\Storage $coreFileStorage
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Core\Model\File\Storage\Flag $fileFlag
      * @param \Magento\Core\Model\File\Storage\FileFactory $fileFactory
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $databaseFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -119,11 +120,11 @@ class Storage extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Helper\File\Storage $coreFileStorage,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\Core\Model\File\Storage\Flag $fileFlag,
         \Magento\Core\Model\File\Storage\FileFactory $fileFactory,
         \Magento\Core\Model\File\Storage\DatabaseFactory $databaseFactory,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -141,11 +142,12 @@ class Storage extends \Magento\Core\Model\AbstractModel
     /**
      * Show if there were errors while synchronize process
      *
-     * @param $sourceModel
-     * @param $destinationModel
+     * @param AbstractModel $sourceModel
+     * @param AbstractModel $destinationModel
      * @return bool
      */
-    protected function _synchronizeHasErrors($sourceModel, $destinationModel) {
+    protected function _synchronizeHasErrors($sourceModel, $destinationModel)
+    {
         if (!$sourceModel || !$destinationModel) {
             return true;
         }
@@ -174,7 +176,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
      *
      * @param  int|null $storage
      * @param  array $params
-     * @return \Magento\Core\Model\AbstractModel|bool
+     * @return AbstractModel|bool
      */
     public function getStorageModel($storage = null, $params = array())
     {
@@ -209,7 +211,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
      * )
      *
      * @param  array $storage
-     * @return \Magento\Core\Model\File\Storage
+     * @return $this
      */
     public function synchronize($storage)
     {
@@ -242,7 +244,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
                 'source'                        => $sourceModel->getStorageName(),
                 'destination'                   => $destinationModel->getStorageName(),
                 'destination_storage_type'      => $storageDest,
-                'destination_connection_name'   => (string) $destinationModel->getConfigConnectionName(),
+                'destination_connection_name'   => (string) $destinationModel->getConnectionName(),
                 'has_errors'                    => false,
                 'timeout_reached'               => false
             );
@@ -298,7 +300,7 @@ class Storage extends \Magento\Core\Model\AbstractModel
     public function getScriptConfig()
     {
         $config = array();
-        $config['media_directory'] = $this->filesystem->getPath(Filesystem::MEDIA);
+        $config['media_directory'] = $this->filesystem->getPath(Filesystem::MEDIA_DIR);
 
         $allowedResources = $this->_coreConfig->getValue(self::XML_PATH_MEDIA_RESOURCE_WHITELIST, 'default');
         foreach ($allowedResources as $allowedResource) {

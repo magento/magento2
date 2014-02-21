@@ -21,7 +21,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\TestFramework\TestCase;
@@ -54,7 +54,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
         $xmlFiles = $this->getXmlConfigFiles();
         if (!empty($xmlFiles)) {
 
-            $this->_fileResolverMock = $this->getMockBuilder('Magento\App\Config\FileResolver\Primary')
+            $this->_fileResolverMock = $this->getMockBuilder('Magento\App\Arguments\FileResolver\Primary')
                 ->disableOriginalConstructor()->getMock();
 
             /* Enable Validation regardles of MAGE_MODE */
@@ -72,8 +72,8 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
                 )
             );
 
-            $filesystem = $this->_objectManager->get('Magento\Filesystem');
-            $modulesDir = $filesystem->getPath(\Magento\Filesystem::MODULES);
+            $filesystem = $this->_objectManager->get('Magento\App\Filesystem');
+            $modulesDir = $filesystem->getPath(\Magento\App\Filesystem::MODULES_DIR);
             $this->_schemaFile = $modulesDir . $this->_getXsdPath();
         }
     }
@@ -129,6 +129,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     public function xmlConfigFileProvider()
     {
         $fileList = $this->getXmlConfigFiles();
+        $result = array();
         foreach ($fileList as $fileContent) {
             $result[] = array($fileContent);
         }
@@ -143,10 +144,11 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     public function getXmlConfigFiles()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $directory = $objectManager->get('Magento\Filesystem')->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $directory = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         return $objectManager->get('\Magento\Config\FileIteratorFactory')->create(
             $directory,
-            $directory->search($this->_getConfigFilePathRegex())
+            $directory->search($this->_getConfigFilePathGlob())
         );
     }
 
@@ -164,7 +166,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected abstract function _getConfigFilePathRegex();
+    protected abstract function _getConfigFilePathGlob();
 
     /**
      * Returns a path to the per file XSD file, relative to the modules directory.

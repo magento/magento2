@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,7 @@ class Converter implements \Magento\Config\ConverterInterface
     /**
      * Mapper type list
      *
-     * @var array
+     * @var string[]
      */
     protected $_mapperList = array(
         \Magento\Backend\Model\Config\Structure\Mapper\Factory::MAPPER_EXTENDS,
@@ -72,7 +72,7 @@ class Converter implements \Magento\Config\ConverterInterface
     /**
      * Convert dom document
      *
-     * @param mixed $source
+     * @param \DOMNode $source
      * @return array
      */
     public function convert($source)
@@ -80,7 +80,7 @@ class Converter implements \Magento\Config\ConverterInterface
         $result = $this->_convertDOMDocument($source);
 
         foreach ($this->_mapperList as $type) {
-            /** @var $mapper \Magento\Backend\Model\Config\Structure\MapperInterface */
+            /** @var $mapper MapperInterface */
             $mapper = $this->_mapperFactory->create($type);
             $result = $mapper->map($result);
         }
@@ -92,7 +92,7 @@ class Converter implements \Magento\Config\ConverterInterface
      * Retrieve \DOMDocument as array
      *
      * @param \DOMNode $root
-     * @return mixed
+     * @return array|null
      */
     protected function _convertDOMDocument(\DOMNode $root)
     {
@@ -166,8 +166,7 @@ class Converter implements \Magento\Config\ConverterInterface
      * @param array $convertedChild
      * @param array $result
      * @param string $childName
-     *
-     * @return mixed
+     * @return array
      */
     protected function _addProcessedNode($convertedChild, $result, $childName)
     {

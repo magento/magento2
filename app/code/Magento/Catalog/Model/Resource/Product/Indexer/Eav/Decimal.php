@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
 
 /**
  * Catalog Product Eav Decimal Attributes Indexer resource model
@@ -32,14 +32,12 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
-
-class Decimal
-    extends \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+class Decimal extends AbstractEav
 {
     /**
      * Initialize connection and define main index table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,9 +47,9 @@ class Decimal
     /**
      * Prepare data index for indexable attributes
      *
-     * @param array $entityIds      the entity ids limitation
-     * @param int $attributeId      the attribute id limitation
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\Decimal
+     * @param array $entityIds the entity ids limitation
+     * @param int $attributeId the attribute id limitation
+     * @return $this
      */
     protected function _prepareIndex($entityIds = null, $attributeId = null)
     {
@@ -87,7 +85,7 @@ class Decimal
             ->where('pdd.attribute_id IN(?)', $attrIds)
             ->where("{$productValueExpression} IS NOT NULL");
 
-        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'pdd.entity_id', 'cs.store_id', $statusCond);
 
         if (!is_null($entityIds)) {

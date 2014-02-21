@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,7 +61,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $collectionFactory
@@ -71,7 +70,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\Order\Payment\Transaction $transaction,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $collectionFactory,
@@ -83,7 +81,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_paymentData = $paymentData;
         $this->_transaction = $transaction;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**

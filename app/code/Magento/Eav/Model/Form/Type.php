@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Form;
 
 /**
  * Eav Form Type Model
@@ -44,8 +44,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Form;
-
 class Type extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -90,6 +88,8 @@ class Type extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -133,7 +133,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      * Set assigned Eav Entity types
      *
      * @param array $entityTypes
-     * @return \Magento\Eav\Model\Form\Type
+     * @return $this
      */
     public function setEntityTypes(array $entityTypes)
     {
@@ -145,7 +145,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      * Assign Entity Type to Form Type
      *
      * @param int $entityTypeId
-     * @return \Magento\Eav\Model\Form\Type
+     * @return $this
      */
     public function addEntityType($entityTypeId)
     {
@@ -161,7 +161,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      * Copy Form Type properties from skeleton form type
      *
      * @param \Magento\Eav\Model\Form\Type $skeleton
-     * @return \Magento\Eav\Model\Form\Type
+     * @return $this
      */
     public function createFromSkeleton(\Magento\Eav\Model\Form\Type $skeleton)
     {

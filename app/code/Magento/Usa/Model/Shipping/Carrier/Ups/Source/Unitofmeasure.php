@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,11 +36,14 @@ class Unitofmeasure extends \Magento\Usa\Model\Shipping\Carrier\Ups\Source\Gener
      */
     protected $_code = 'unit_of_measure';
 
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         $unitArr = $this->_shippingUps->getCode($this->_code);
         $returnArr = array();
-        foreach ($unitArr as $key => $val){
+        foreach ($unitArr as $key => $val) {
             $returnArr[] = array('value'=>$key,'label'=>$key);
         }
         return $returnArr;

@@ -20,9 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Review\Block;
+
+use Magento\Catalog\Model\Product;
 
 /**
  * Review helper
@@ -31,16 +35,21 @@
  * @package    Magento_Review
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block;
-
 class Helper extends \Magento\View\Element\Template
 {
+    /**
+     * Array of available template name
+     *
+     * @var array
+     */
     protected $_availableTemplates = array(
         'default' => 'helper/summary.phtml',
         'short'   => 'helper/summary_short.phtml'
     );
 
     /**
+     * Review model factory
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
@@ -59,6 +68,14 @@ class Helper extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Get review summary html
+     *
+     * @param Product $product
+     * @param string $templateType
+     * @param bool $displayIfNoReviews
+     * @return string
+     */
     public function getSummaryHtml($product, $templateType, $displayIfNoReviews)
     {
         // pick template among available
@@ -77,16 +94,31 @@ class Helper extends \Magento\View\Element\Template
         return $this->toHtml();
     }
 
+    /**
+     * Get ratings summary
+     *
+     * @return string
+     */
     public function getRatingSummary()
     {
         return $this->getProduct()->getRatingSummary()->getRatingSummary();
     }
 
+    /**
+     * Get count of reviews
+     *
+     * @return int
+     */
     public function getReviewsCount()
     {
         return $this->getProduct()->getRatingSummary()->getReviewsCount();
     }
 
+    /**
+     * Get review product list url
+     *
+     * @return string
+     */
     public function getReviewsUrl()
     {
         return $this->getUrl('review/product/list', array(
@@ -102,6 +134,7 @@ class Helper extends \Magento\View\Element\Template
      *
      * @param string $type
      * @param string $template
+     * @return void
      */
     public function addTemplate($type, $template)
     {

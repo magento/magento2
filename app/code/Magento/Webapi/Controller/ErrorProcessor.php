@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller;
@@ -51,7 +51,7 @@ class ErrorProcessor
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -66,19 +66,19 @@ class ErrorProcessor
      * @param \Magento\Core\Helper\Data $helper
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Logger $logger
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Helper\Data $helper,
         \Magento\Core\Model\App $app,
         \Magento\Logger $logger,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_coreHelper = $helper;
         $this->_app = $app;
         $this->_logger = $logger;
         $this->_filesystem = $filesystem;
-        $this->directoryWrite = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->directoryWrite = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $this->registerShutdownFunction();
     }
 
@@ -137,6 +137,7 @@ class ErrorProcessor
      *
      * @param \Exception $exception
      * @param int $httpCode
+     * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function renderException(\Exception $exception, $httpCode = self::DEFAULT_ERROR_HTTP_CODE)
@@ -179,6 +180,7 @@ class ErrorProcessor
      * @param string $errorMessage
      * @param string $trace
      * @param int $httpCode
+     * @return void
      */
     public function render(
         $errorMessage,
@@ -205,9 +207,9 @@ class ErrorProcessor
      *
      * @param string $errorMessage
      * @param string $trace
-     * @param string $format
      * @param int $httpCode
-     * @return array
+     * @param string $format
+     * @return array|string
      */
     protected function _formatError($errorMessage, $trace, $httpCode, $format)
     {
@@ -242,7 +244,7 @@ class ErrorProcessor
     /**
      * Declare web API-specific shutdown function.
      *
-     * @return \Magento\Webapi\Controller\ErrorProcessor
+     * @return $this
      */
     public function registerShutdownFunction()
     {
@@ -252,6 +254,8 @@ class ErrorProcessor
 
     /**
      * Function to catch errors, that has not been caught by the user error dispatcher function.
+     *
+     * @return void
      */
     public function apiShutdownFunction()
     {

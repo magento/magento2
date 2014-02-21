@@ -20,21 +20,20 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Config\Control;
 
 /**
  * Image Sizing configuration
  */
-namespace Magento\DesignEditor\Model\Config\Control;
-
 class ImageSizing extends \Magento\DesignEditor\Model\Config\Control\AbstractControl
 {
     /**
      * Keys of layout params attributes
      *
-     * @var array
+     * @var string[]
      */
     protected $_controlAttributes = array('title');
 
@@ -44,7 +43,7 @@ class ImageSizing extends \Magento\DesignEditor\Model\Config\Control\AbstractCon
     protected $_moduleReader;
 
     /**
-     * @param $configFiles
+     * @param array $configFiles
      * @param \Magento\Module\Dir\Reader $moduleReader
      */
     public function __construct(

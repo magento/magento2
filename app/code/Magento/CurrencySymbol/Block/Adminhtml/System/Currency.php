@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,8 +36,16 @@ namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
 class Currency extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'system/currency/rates.phtml';
 
+    /**
+     * Prepare layout
+     *
+     * @return \Magento\View\Element\AbstractBlock
+     */
     protected function _prepareLayout()
     {
         $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
@@ -67,36 +75,71 @@ class Currency extends \Magento\Backend\Block\Template
         return parent::_prepareLayout();
     }
 
+    /**
+     * Get header
+     *
+     * @return string
+     */
     public function getHeader()
     {
         return __('Manage Currency Rates');
     }
 
+    /**
+     * Get save button html
+     *
+     * @return string
+     */
     public function getSaveButtonHtml()
     {
         return $this->getChildHtml('save_button');
     }
 
+    /**
+     * Get reset button html
+     *
+     * @return string
+     */
     public function getResetButtonHtml()
     {
         return $this->getChildHtml('reset_button');
     }
 
+    /**
+     * Get import button html
+     *
+     * @return string
+     */
     public function getImportButtonHtml()
     {
         return $this->getChildHtml('import_button');
     }
 
+    /**
+     * Get services html
+     *
+     * @return string
+     */
     public function getServicesHtml()
     {
         return $this->getChildHtml('import_services');
     }
 
+    /**
+     * Get rates matrix html
+     *
+     * @return string
+     */
     public function getRatesMatrixHtml()
     {
         return $this->getChildHtml('rates_matrix');
     }
 
+    /**
+     * Get import form action url
+     *
+     * @return string
+     */
     public function getImportFormAction()
     {
         return $this->getUrl('adminhtml/*/fetchRates');

@@ -19,13 +19,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../../../../app/code/Magento/Widget/etc/widget.xsd">
-    <widget id="new_products" class="Magento\Sales\Block\Widget\Guest\Form" is_email_compatible="true">
+    <widget id="new_products" class="Magento\Sales\Block\Widget\Guest\Form" is_email_compatible="true" >
         <label translate="true">Orders and Returns</label>
         <description translate="true">Orders and Returns Search Form</description>
         <parameters>

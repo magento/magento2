@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,8 +63,7 @@ class Read implements ReadInterface
      * @param \Magento\Filesystem\File\ReadFactory $fileFactory
      * @param \Magento\Filesystem\DriverInterface $driver
      */
-    public function __construct
-    (
+    public function __construct(
         array $config,
         \Magento\Filesystem\File\ReadFactory $fileFactory,
         \Magento\Filesystem\DriverInterface $driver
@@ -114,38 +113,36 @@ class Read implements ReadInterface
     {
         return $this->driver->getRelativePath($this->path, $path);
     }
-    /**
-     * Validate of path existence
-     *
-     * @param string $path
-     * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
-     */
-    protected function assertExist($path)
-    {
-        $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
-        if ($this->driver->isExists($absolutePath) === false) {
-            throw new FilesystemException(sprintf('The path "%s" doesn\'t exist', $absolutePath));
-        }
-        return true;
-    }
 
     /**
      * Retrieve list of all entities in given path
      *
      * @param string|null $path
-     * @return array
+     * @return string[]
      */
     public function read($path = null)
     {
-        $this->assertExist($path);
-
-        $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
-        $iterator = new \FilesystemIterator($this->driver->getAbsolutePath($this->path, $path), $flags);
+        $files = $this->driver->readDirectory($this->driver->getAbsolutePath($this->path, $path));
         $result = array();
+        foreach ($files as $file) {
+            $result[] = $this->getRelativePath($file);
+        }
+        return $result;
+    }
+
+    /**
+     * Read recursively
+     *
+     * @param null $path
+     * @return string[]
+     */
+    public function readRecursively($path = null)
+    {
+        $result = array();
+        $paths = $this->driver->readDirectoryRecursively($this->driver->getAbsolutePath($this->path, $path));
         /** @var \FilesystemIterator $file */
-        foreach ($iterator as $file) {
-            $result[] = $this->getRelativePath($file->getPathname());
+        foreach ($paths as $file) {
+            $result[] = $this->getRelativePath($file);
         }
         sort($result);
         return $result;
@@ -156,30 +153,21 @@ class Read implements ReadInterface
      *
      * @param string $pattern
      * @param string $path [optional]
-     * @return array
+     * @return string[]
      */
     public function search($pattern, $path = null)
     {
-        clearstatcache();
         if ($path) {
             $absolutePath = $this->driver->getAbsolutePath($this->path, $this->getRelativePath($path));
         } else {
             $absolutePath = $this->path;
         }
 
-        $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
-        $iterator = new \RegexIterator(
-            new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($absolutePath, $flags), \RecursiveIteratorIterator::CHILD_FIRST
-            ),
-            $pattern
-        );
+        $files = $this->driver->search($pattern, $absolutePath);
         $result = array();
-        /** @var \FilesystemIterator $file */
-        foreach ($iterator as $file) {
-            $result[] = $this->getRelativePath($file->getPathname());
+        foreach ($files as $file) {
+            $result[] = $this->getRelativePath($file);
         }
-        sort($result);
         return $result;
     }
 
@@ -204,7 +192,6 @@ class Read implements ReadInterface
      */
     public function stat($path)
     {
-        $this->assertExist($path);
         return $this->driver->stat($this->driver->getAbsolutePath($this->path, $path));
     }
 
@@ -272,18 +259,5 @@ class Read implements ReadInterface
     public function isDirectory($path)
     {
         return $this->driver->isDirectory($this->driver->getAbsolutePath($this->path, $path));
-    }
-
-    /**
-     * Checks is directory contains path
-     * Utility method.
-     *
-     * @param string $path
-     * @param string $directory
-     * @return bool
-     */
-    public function isPathInDirectory($path, $directory)
-    {
-        return $this->driver->isPathInDirectory($path, $directory);
     }
 }

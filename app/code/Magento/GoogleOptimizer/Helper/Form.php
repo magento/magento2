@@ -20,22 +20,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\GoogleOptimizer\Helper;
+
+use Magento\GoogleOptimizer\Model\Code as ModelCode;
+use Magento\Data\Form as DataForm;
 
 class Form extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Prepare form
      *
-     * @param \Magento\Data\Form $form
-     * @param \Magento\GoogleOptimizer\Model\Code|null $experimentCodeModel
+     * @param DataForm $form
+     * @param Code|null $experimentCodeModel
+     * @return void
      */
     public function addGoogleoptimizerFields(
-        \Magento\Data\Form $form,
-        \Magento\GoogleOptimizer\Model\Code $experimentCodeModel = null
+        DataForm $form,
+        ModelCode $experimentCodeModel = null
     ) {
         $fieldset = $form->addFieldset('googleoptimizer_fields', array(
             'legend' => __('Google Analytics Content Experiments Code'),
@@ -44,7 +48,7 @@ class Form extends \Magento\App\Helper\AbstractHelper
         $fieldset->addField('experiment_script', 'textarea', array(
             'name' => 'experiment_script',
             'label' => __('Experiment Code'),
-            'value' => $experimentCodeModel ? $experimentCodeModel->getExperimentScript() : array(),
+            'value' => $experimentCodeModel ? $experimentCodeModel->getExperimentScript() : '',
             'class' => 'textarea googleoptimizer',
             'required' => false,
             'note' => __('Note: Experiment code should be added to the original page only.'),

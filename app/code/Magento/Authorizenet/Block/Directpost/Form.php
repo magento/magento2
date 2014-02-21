@@ -20,21 +20,21 @@
  *
  * @category    Magento
  * @package     Magento_Authorizenet
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Authorizenet\Block\Directpost;
 
 /**
  * DirectPost form block
  *
- * @category   Magento
- * @package    Magento_Authorizenet
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Authorizenet\Block\Directpost;
-
 class Form extends \Magento\Payment\Block\Form\Cc
 {
+    /**
+     * @var string
+     */
     protected $_template = 'directpost/info.phtml';
 
     /**
@@ -66,7 +66,6 @@ class Form extends \Magento\Payment\Block\Form\Cc
         $this->_checkoutModel = $checkoutModel;
     }
 
-
     /**
      * Render block HTML
      * If method is not directpost - nothing to return
@@ -81,7 +80,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
     /**
      * Set method info
      *
-     * @return \Magento\Authorizenet\Block\Directpost\Form
+     * @return $this
      */
     public function setMethodInfo()
     {

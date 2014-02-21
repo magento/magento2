@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Index
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,8 +61,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $filesystem = $this->_objectManager->create('Magento\Filesystem');
-        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $filesystem = $this->_objectManager->create('Magento\App\Filesystem');
+        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
 
         $fullFileName = $this->_varDirectory->getAbsolutePath(self::FILE_PATH);
         $this->_testFileHandler = fopen($fullFileName, 'w');

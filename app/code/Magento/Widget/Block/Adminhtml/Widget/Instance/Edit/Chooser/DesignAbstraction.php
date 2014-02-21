@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -118,6 +118,7 @@ class DesignAbstraction extends \Magento\View\Element\Html\Select
      * Add design abstractions information to the options
      *
      * @param array $designAbstractions
+     * @return void
      */
     protected function _addDesignAbstractionOptions(array $designAbstractions)
     {

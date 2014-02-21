@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Helper;
 
 /**
  * ImportExport data helper
@@ -31,8 +32,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Helper;
-
 class Data extends \Magento\Core\Helper\Data
 {
     /**#@+
@@ -95,7 +94,7 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Get valid path masks to files for importing/exporting
      *
-     * @return array
+     * @return string[]
      */
     public function getLocalValidPaths()
     {

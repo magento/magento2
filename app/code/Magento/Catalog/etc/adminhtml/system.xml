@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -82,14 +82,12 @@
                 </field>
                 <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Flat Catalog Category</label>
-                    <frontend_model>Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatcatalog</frontend_model>
-                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Category\Flat</backend_model>
+                    <backend_model>Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="flat_catalog_product" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Flat Catalog Product</label>
-                    <frontend_model>Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatproduct</frontend_model>
-                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Product\Flat</backend_model>
+                    <backend_model>Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">

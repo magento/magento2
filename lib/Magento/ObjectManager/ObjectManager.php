@@ -25,7 +25,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\ObjectManager;
@@ -54,11 +54,10 @@ class ObjectManager implements \Magento\ObjectManager
      * @param Config $config
      * @param array $sharedInstances
      */
-    public function __construct(Factory $factory = null, Config $config = null, array $sharedInstances = array())
+    public function __construct(Factory $factory, Config $config, array $sharedInstances = array())
     {
-        $this->_config = $config ?: new Config\Config();
-        $this->_factory = $factory ?: new Factory\Factory($this->_config, $this);
-        $this->_factory->setObjectManager($this);
+        $this->_config = $config;
+        $this->_factory = $factory;
         $this->_sharedInstances = $sharedInstances;
         $this->_sharedInstances['Magento\ObjectManager'] = $this;
     }
@@ -67,6 +66,7 @@ class ObjectManager implements \Magento\ObjectManager
      * Set creation factory
      *
      * @param Factory $factory
+     * @return void
      */
     public function setFactory(Factory $factory)
     {
@@ -104,6 +104,7 @@ class ObjectManager implements \Magento\ObjectManager
      * Configure di instance
      *
      * @param array $configuration
+     * @return void
      */
     public function configure(array $configuration)
     {

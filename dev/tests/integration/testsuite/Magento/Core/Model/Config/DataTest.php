@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,7 +39,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config\Storage\Writer\Db')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config\Storage\Db')
             ->save(self::SAMPLE_CONFIG_PATH, self::SAMPLE_VALUE);
         self::_refreshConfiguration();
     }
@@ -47,7 +47,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\Config\Storage\Writer\Db')
+            ->get('Magento\Core\Model\Config\Storage\Db')
             ->delete(self::SAMPLE_CONFIG_PATH);
         self::_refreshConfiguration();
     }
@@ -58,7 +58,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected static function _refreshConfiguration()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->cleanCache(array(\Magento\Core\Model\Config::CACHE_TAG));
+            ->cleanCache(array(\Magento\App\Config::CACHE_TAG));
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
     }
 

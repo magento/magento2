@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -113,7 +113,7 @@ $installer->addAttribute('catalog_product', 'group_price', array(
     'required'                   => false,
     'sort_order'                 => 6,
     'global'                     => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
-    'apply_to'                   => 'simple,configurable,virtual',
+    'apply_to'                   => 'simple,virtual',
     'group'                      => 'Prices',
 ));
 

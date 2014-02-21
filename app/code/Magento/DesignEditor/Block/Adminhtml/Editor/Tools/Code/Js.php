@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -75,7 +75,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Create a form element with necessary controls
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js
+     * @return $this
      */
     protected function _prepareForm()
     {

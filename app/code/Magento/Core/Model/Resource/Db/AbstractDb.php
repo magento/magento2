@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Db;
 
 /**
  * Abstract resource model class
@@ -32,8 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Db;
-
 abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
 {
     /**
@@ -95,7 +93,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Use is object new method for save of object
      *
-     * @var boolean
+     * @var bool
      */
     protected $_useIsObjectNew       = false;
 
@@ -162,6 +160,8 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
 
     /**
      * Restore global dependencies
+     *
+     * @return void
      */
     public function __wakeup()
     {
@@ -173,7 +173,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      *
      * @param string $mainTable
      * @param string $idFieldName
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return void
      */
     protected function _init($mainTable, $idFieldName)
     {
@@ -187,7 +187,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      *
      * @param string|array $connections
      * @param string|array|null $tables
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return $this
      */
     protected function _setResource($connections, $tables = null)
     {
@@ -217,7 +217,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      *
      * @param string $mainTable
      * @param string|null $idFieldName
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     protected function _setMainTable($mainTable, $idFieldName = null)
     {
@@ -289,7 +289,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * Get connection by resource name
      *
      * @param string $resourceName
-     * @return \Magento\DB\Adapter\AdapterInterface|bool
+     * @return \Magento\DB\Adapter\AdapterInterface|false
      */
     protected function _getConnection($resourceName)
     {
@@ -308,7 +308,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Retrieve connection for read data
      *
-     * @return \Magento\DB\Adapter\AdapterInterface
+     * @return \Magento\DB\Adapter\AdapterInterface|false
      */
     protected function _getReadAdapter()
     {
@@ -323,7 +323,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Retrieve connection for write data
      *
-     * @return \Magento\DB\Adapter\AdapterInterface
+     * @return \Magento\DB\Adapter\AdapterInterface|false
      */
     protected function _getWriteAdapter()
     {
@@ -333,7 +333,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Temporary resolving collection compatibility
      *
-     * @return \Magento\DB\Adapter\AdapterInterface
+     * @return \Magento\DB\Adapter\AdapterInterface|false
      */
     public function getReadConnection()
     {
@@ -346,7 +346,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * @param \Magento\Core\Model\AbstractModel $object
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     public function load(\Magento\Core\Model\AbstractModel $object, $value, $field = null)
     {
@@ -391,7 +391,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * Save object object data
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     public function save(\Magento\Core\Model\AbstractModel $object)
     {
@@ -449,7 +449,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * Delete the object
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     public function delete(\Magento\Core\Model\AbstractModel $object)
     {
@@ -466,7 +466,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * Add unique field restriction
      *
      * @param array|string $field
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     public function addUniqueField($field)
     {
@@ -482,18 +482,19 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Reset unique fields restrictions
      *
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     public function resetUniqueField()
     {
         $this->_uniqueFields = array();
-         return $this;
+        return $this;
     }
 
     /**
      * Unserialize serializeable object fields
      *
      * @param \Magento\Core\Model\AbstractModel $object
+     * @return void
      */
     public function unserializeFields(\Magento\Core\Model\AbstractModel $object)
     {
@@ -506,7 +507,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Initialize unique fields
      *
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     protected function _initUniqueFields()
     {
@@ -543,7 +544,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * has really changed comparing with origData
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return boolean
+     * @return bool
      */
     public function hasDataChanged($object)
     {
@@ -577,7 +578,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * Check for unique values existence
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _checkUnique(\Magento\Core\Model\AbstractModel $object)
@@ -634,6 +635,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * After load
      *
      * @param \Magento\Core\Model\AbstractModel $object
+     * @return void
      */
     public function afterLoad(\Magento\Core\Model\AbstractModel $object)
     {
@@ -643,8 +645,8 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Core\Model\AbstractModel|\Magento\Object $object
+     * @return $this
      */
     protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
     {
@@ -654,8 +656,8 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Core\Model\AbstractModel|\Magento\Object $object
+     * @return $this
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -665,8 +667,8 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Core\Model\AbstractModel|\Magento\Object $object
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -676,8 +678,8 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Perform actions before object delete
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Core\Model\AbstractModel|\Magento\Object $object
+     * @return $this
      */
     protected function _beforeDelete(\Magento\Core\Model\AbstractModel $object)
     {
@@ -687,8 +689,8 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     /**
      * Perform actions after object delete
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Core\Model\AbstractModel|\Magento\Object $object
+     * @return $this
      */
     protected function _afterDelete(\Magento\Core\Model\AbstractModel $object)
     {
@@ -696,9 +698,10 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
     }
 
     /**
-     * Serialize serializeable fields of the object
+     * Serialize serializable fields of the object
      *
      * @param \Magento\Core\Model\AbstractModel $object
+     * @return void
      */
     protected function _serializeFields(\Magento\Core\Model\AbstractModel $object)
     {
@@ -712,7 +715,7 @@ abstract class AbstractDb extends \Magento\Core\Model\Resource\AbstractResource
      * Retrieve table checksum
      *
      * @param string|array $table
-     * @return int|array
+     * @return int|array|false
      */
     public function getChecksum($table)
     {

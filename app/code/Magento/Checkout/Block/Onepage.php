@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,6 +35,39 @@ namespace Magento\Checkout\Block;
 
 class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $resourceSession
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Core\Helper\Data $coreData,
+        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $resourceSession,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        array $data = array()
+    ) {
+        parent::__construct(
+            $context,
+            $coreData,
+            $configCacheType,
+            $customerSession,
+            $resourceSession,
+            $countryCollectionFactory,
+            $regionCollectionFactory,
+            $data
+        );
+        $this->_isScopePrivate = true;
+    }
+
     /**
      * Get 'one step checkout' step data
      *

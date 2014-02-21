@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,22 +30,28 @@ namespace Magento\View\Asset\MergeStrategy;
 class FileExists implements \Magento\View\Asset\MergeStrategyInterface
 {
     /**
+     * Strategy
+     *
      * @var \Magento\View\Asset\MergeStrategyInterface
      */
     protected $strategy;
 
     /**
-     * @var \Magento\Filesystem
+     * Filesystem
+     *
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Asset\MergeStrategyInterface $strategy
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\View\Asset\MergeStrategyInterface $strategy,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->strategy = $strategy;
         $this->filesystem = $filesystem;
@@ -56,7 +62,8 @@ class FileExists implements \Magento\View\Asset\MergeStrategyInterface
      */
     public function mergeFiles(array $publicFiles, $destinationFile, $contentType)
     {
-        if (!$this->filesystem->getDirectoryRead(\Magento\Filesystem::ROOT)->isExist($destinationFile)) {
+        $directory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::PUB_DIR);
+        if (!$directory->isExist($directory->getRelativePath($destinationFile))) {
             $this->strategy->mergeFiles($publicFiles, $destinationFile, $contentType);
         }
     }

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -101,8 +101,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $productsBeforeImport[] = $product;
         }
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/products_to_import.csv',
@@ -148,8 +148,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $stockItems[$productId] = $stockItem;
         }
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/products_to_import.csv',
             $directory
@@ -192,8 +192,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/product_with_custom_options.csv';
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv($pathToFile, $directory);
         $this->_model->setSource($source)
@@ -254,8 +254,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $productsBeforeImport[$product->getSku()] = $product;
         }
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/products_to_import_with_datetime.csv',
@@ -474,7 +474,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $data .= implode(',', array(
             'test_sku', 'Default', \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE, 'base', 'Product Name', '9.99',
             'Product description', 'Short desc.', '1',
-            \Magento\Catalog\Model\Product\Status::STATUS_ENABLED,
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
             \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH, 0,
             $attribute->getId(), 'magento_image.jpg', 'Image Label', '1', '0'
         )) . "\n";
@@ -524,7 +524,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Filesystem\Directory\Write $mediaDirectory */
         $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+            ->get('Magento\App\Filesystem')->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $mediaDirectory->create('import');
         $dirPath = $mediaDirectory->getAbsolutePath('import');
         copy(__DIR__ . '/../../../../../Magento/Catalog/_files/magento_image.jpg', "{$dirPath}/magento_image.jpg");
@@ -537,7 +537,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Filesystem\Directory\Write $mediaDirectory */
         $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+            ->get('Magento\App\Filesystem')->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $mediaDirectory->delete('import');
         $mediaDirectory->delete('catalog');
     }
@@ -584,8 +584,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/products_to_import_invalid_attribute_set.csv';
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             $pathToFile,
             $directory

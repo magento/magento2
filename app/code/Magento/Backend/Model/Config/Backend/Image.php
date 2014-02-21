@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,12 +29,12 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Image extends \Magento\Backend\Model\Config\Backend\File
+class Image extends File
 {
     /**
      * Getter for allowed extensions of uploaded files
      *
-     * @return array
+     * @return string[]
      */
     protected function _getAllowedExtensions()
     {

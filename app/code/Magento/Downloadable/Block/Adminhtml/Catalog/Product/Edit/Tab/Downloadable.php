@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,6 +46,13 @@ class Downloadable
     protected $_config = null;
 
     protected $_template = 'product/edit/downloadable.phtml';
+
+    /**
+     * Accordion block id
+     *
+     * @var string
+     */
+    protected $accordionBlockId = 'downloadableInfo';
 
     /**
      * Core registry
@@ -137,6 +144,16 @@ class Downloadable
     }
 
     /**
+     * Get downloadable tab content id
+     *
+     * @return string
+     */
+    public function getContentTabId()
+    {
+        return 'tab_content_' . $this->accordionBlockId;
+    }
+
+    /**
      * Render block HTML
      *
      * @return string
@@ -144,8 +161,7 @@ class Downloadable
     protected function _toHtml()
     {
         $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')
-            ->setId('downloadableInfo');
-
+            ->setId($this->accordionBlockId);
         $accordion->addItem('samples', array(
             'title'   => __('Samples'),
             'content' => $this->getLayout()

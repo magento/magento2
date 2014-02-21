@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Rss
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,6 +39,6 @@ class Authenticate extends \Magento\Backend\App\Action
     public function __construct(Action\Context $context)
     {
         parent::__construct($context);
-        $this->_objectManager->get('Magento\Backend\Model\Url')->turnOffSecretKey();
+        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
     }
 }

@@ -18,11 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Model\Resource;
+
+use Magento\Integration\Model\Manager;
 
 /**
  * Resource Setup Model
@@ -30,7 +31,7 @@ namespace Magento\Integration\Model\Resource;
 class Setup extends \Magento\Core\Model\Resource\Setup
 {
     /**
-     * @var  \Magento\Integration\Model\Manager
+     * @var  Manager
      */
     protected $_integrationManager;
 
@@ -38,16 +39,16 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      * Construct resource Setup Model
      *
      * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param \Magento\Integration\Model\Manager $integrationManager
      * @param string $resourceName
-     * @param $moduleName
+     * @param Manager $integrationManager
+     * @param string $moduleName
      * @param string $connectionName
      *
      */
     public function __construct(
         \Magento\Core\Model\Resource\Setup\Context $context,
         $resourceName,
-        \Magento\Integration\Model\Manager $integrationManager,
+        Manager $integrationManager,
         $moduleName = 'Magento_Integration',
         $connectionName = ''
     ) {

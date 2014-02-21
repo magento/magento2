@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -168,20 +168,20 @@ class Config extends \Magento\Config\Data
     {
         $store = $this->getStore();
         $storeId = $store->getId();
-        if (!isset($this->_defaultType[$storeId])) {
-            $this->_defaultType[$storeId] = new \Magento\Object();
-            $this->_defaultType[$storeId]->setCode('default')
+        if (!isset($this->_defaultTypes[$storeId])) {
+            $this->_defaultTypes[$storeId] = new \Magento\Object();
+            $this->_defaultTypes[$storeId]->setCode('default')
                 ->setDefaultFormat('{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}'
                         . '{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}, '
                         . '{{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}');
 
-            $this->_defaultType[$storeId]->setRenderer(
+            $this->_defaultTypes[$storeId]->setRenderer(
                 $this->_addressHelper
                     ->getRenderer(self::DEFAULT_ADDRESS_RENDERER)
-                    ->setType($this->_defaultType[$storeId])
+                    ->setType($this->_defaultTypes[$storeId])
             );
         }
-        return $this->_defaultType[$storeId];
+        return $this->_defaultTypes[$storeId];
     }
 
     /**

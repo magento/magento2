@@ -20,15 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Core\Exception;
 
-class Cache extends \Magento\Backend\App\Action
+class Cache extends Action
 {
     /**
      * @var \Magento\App\Cache\TypeListInterface
@@ -65,18 +66,22 @@ class Cache extends \Magento\Backend\App\Action
 
     /**
      * Display cache management grid
+     *
+     * @return void
      */
     public function indexAction()
     {
         $this->_title->add(__('Cache Management'));
 
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::system_cache');
+        $this->_setActiveMenu('Magento_Backend::system_cache');
         $this->_view->renderLayout();
     }
 
     /**
      * Flush cache storage
+     *
+     * @return void
      */
     public function flushAllAction()
     {
@@ -93,6 +98,8 @@ class Cache extends \Magento\Backend\App\Action
 
     /**
      * Flush all magento cache
+     *
+     * @return void
      */
     public function flushSystemAction()
     {
@@ -107,6 +114,8 @@ class Cache extends \Magento\Backend\App\Action
 
     /**
      * Mass action for cache enabling
+     *
+     * @return void
      */
     public function massEnableAction()
     {
@@ -129,7 +138,7 @@ class Cache extends \Magento\Backend\App\Action
                     __("%1 cache type(s) enabled.", $updatedTypes)
                 );
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
@@ -139,6 +148,8 @@ class Cache extends \Magento\Backend\App\Action
 
     /**
      * Mass action for cache disabling
+     *
+     * @return void
      */
     public function massDisableAction()
     {
@@ -162,7 +173,7 @@ class Cache extends \Magento\Backend\App\Action
                     __("%1 cache type(s) disabled.", $updatedTypes)
                 );
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException(
@@ -175,6 +186,8 @@ class Cache extends \Magento\Backend\App\Action
 
     /**
      * Mass action for cache refresh
+     *
+     * @return void
      */
     public function massRefreshAction()
     {
@@ -193,7 +206,7 @@ class Cache extends \Magento\Backend\App\Action
             if ($updatedTypes > 0) {
                 $this->messageManager->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while refreshing cache.'));
@@ -205,6 +218,8 @@ class Cache extends \Magento\Backend\App\Action
      * Check whether specified cache types exist
      *
      * @param array $types
+     * @return void
+     * @throws Exception
      */
     protected function _validateTypes(array $types)
     {
@@ -214,12 +229,14 @@ class Cache extends \Magento\Backend\App\Action
         $allTypes = array_keys($this->_cacheTypeList->getTypes());
         $invalidTypes = array_diff($types, $allTypes);
         if (count($invalidTypes) > 0) {
-            throw new \Magento\Core\Exception(__("Specified cache type(s) don't exist: " . join(', ', $invalidTypes)));
+            throw new Exception(__("Specified cache type(s) don't exist: " . join(', ', $invalidTypes)));
         }
     }
 
     /**
      * Clean JS/css files cache
+     *
+     * @return void
      */
     public function cleanMediaAction()
     {
@@ -228,7 +245,7 @@ class Cache extends \Magento\Backend\App\Action
                 ->cleanMergedJsCss();
             $this->_eventManager->dispatch('clean_media_cache_after');
             $this->messageManager->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
-        } catch (\Magento\Core\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException(
@@ -241,6 +258,8 @@ class Cache extends \Magento\Backend\App\Action
 
     /**
      * Clean JS/css files cache
+     *
+     * @return void
      */
     public function cleanImagesAction()
     {
@@ -250,7 +269,7 @@ class Cache extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess(
                 __('The image cache was cleaned.')
             );
-        } catch (\Magento\Core\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException(

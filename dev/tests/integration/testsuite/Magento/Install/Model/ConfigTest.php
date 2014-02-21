@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Install\Model;
@@ -53,17 +53,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         }
         $cacheState->persist();
 
-        /** @var \Magento\Filesystem $filesystem */
+        /** @var \Magento\App\Filesystem $filesystem */
         $filesystem = $this->_objectManager->create(
-            'Magento\Filesystem',
+            'Magento\App\Filesystem',
             array(
                 'directoryList' => $this->_objectManager->create(
-                        'Magento\Filesystem\DirectoryList',
+                        'Magento\App\Filesystem\DirectoryList',
                         array(
                             'root' => BP,
                             'directories' => array(
-                                \Magento\Filesystem::MODULES => array('path' => __DIR__ . '/_files'),
-                                \Magento\Filesystem::CONFIG => array('path' => __DIR__ . '/_files'),
+                                \Magento\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files'),
+                                \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files'),
                             )
                         )
                 )

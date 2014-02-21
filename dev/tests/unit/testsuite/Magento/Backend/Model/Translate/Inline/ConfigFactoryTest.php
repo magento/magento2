@@ -18,23 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Model\Translate\Inline;
 
 class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreate()
+    public function testGet()
     {
         $result = 'result';
         $objectManager = $this->getMockForAbstractClass('Magento\ObjectManager');
         $objectManager
             ->expects($this->once())
-            ->method('create')
+            ->method('get')
             ->with($this->equalTo('Magento\Backend\Model\Translate\Inline\Config'))
             ->will($this->returnValue($result));
         $factory = new ConfigFactory($objectManager);
-        $this->assertEquals($result, $factory->create());
+        $this->assertEquals($result, $factory->get());
     }
 }

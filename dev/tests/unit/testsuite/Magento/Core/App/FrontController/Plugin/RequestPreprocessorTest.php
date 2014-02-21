@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\App\FrontController\Plugin;
@@ -73,7 +73,7 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
             = $this->getMock('\Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
         $this->_storeManagerMock = $this->getMock('\Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->_appStateMock = $this->getMock('\Magento\App\State', array(), array(), '', false);
-        $this->_urlMock = $this->getMock('\Magento\Core\Model\Url', array(), array(), '', false);
+        $this->_urlMock = $this->getMock('\Magento\Url', array(), array(), '', false);
         $this->_storeConfigMock = $this->getMock('\Magento\Core\Model\Store\Config', array(), array(), '', false);
 
         $this->_model = new \Magento\Core\App\FrontController\Plugin\RequestPreprocessor(

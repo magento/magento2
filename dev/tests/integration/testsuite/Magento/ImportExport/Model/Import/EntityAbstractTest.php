@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,8 +37,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveValidatedBunches()
     {
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/Entity/Eav/_files/customers_for_validation_test.csv',
             $directory

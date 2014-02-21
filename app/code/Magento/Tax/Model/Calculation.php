@@ -20,11 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Tax
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Tax\Model;
+
+use Magento\Core\Model\Store;
 
 /**
  * Tax Calculation Model
@@ -40,18 +42,39 @@ class Calculation extends \Magento\Core\Model\AbstractModel
     const CALC_ROW_BASE                         = 'ROW_BASE_CALCULATION';
     const CALC_TOTAL_BASE                       = 'TOTAL_BASE_CALCULATION';
 
-    protected $_rates                           = array();
-    protected $_ctc                             = array();
-    protected $_ptc                             = array();
+    /**
+     * @var array
+     */
+    protected $_rates = array();
 
-    protected $_rateCache                       = array();
-    protected $_rateCalculationProcess          = array();
+    /**
+     * @var array
+     */
+    protected $_ctc = array();
+
+    /**
+     * @var array
+     */
+    protected $_ptc = array();
+
+    /**
+     * @var array
+     */
+    protected $_rateCache = array();
+
+    /**
+     * @var array
+     */
+    protected $_rateCalculationProcess = array();
 
     /**
      * @var \Magento\Customer\Model\Customer|bool
      */
     protected $_customer;
 
+    /**
+     * @var mixed
+     */
     protected $_defaultCustomerTaxClass;
 
     /**
@@ -131,6 +154,9 @@ class Calculation extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Tax\Model\Resource\Calculation');
@@ -140,7 +166,7 @@ class Calculation extends \Magento\Core\Model\AbstractModel
      * Specify customer object which can be used for rate calculation
      *
      * @param   \Magento\Customer\Model\Customer $customer
-     * @return  \Magento\Tax\Model\Calculation
+     * @return  $this
      */
     public function setCustomer(\Magento\Customer\Model\Customer $customer)
     {
@@ -148,6 +174,10 @@ class Calculation extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param null|Store|string|int $store
+     * @return mixed
+     */
     public function getDefaultCustomerTaxClass($store = null)
     {
         if ($this->_defaultCustomerTaxClass === null) {
@@ -184,7 +214,7 @@ class Calculation extends \Magento\Core\Model\AbstractModel
      * Delete calculation settings by rule id
      *
      * @param   int $ruleId
-     * @return  \Magento\Tax\Model\Calculation
+     * @return  $this
      */
     public function deleteByRuleId($ruleId)
     {
@@ -289,7 +319,7 @@ class Calculation extends \Magento\Core\Model\AbstractModel
     /**
      * Get cache key value for specific tax rate request
      *
-     * @param   $request
+     * @param   \Magento\Object $request
      * @return  string
      */
     protected function _getRequestCacheKey($request)
@@ -306,7 +336,7 @@ class Calculation extends \Magento\Core\Model\AbstractModel
      * store price excluding tax
      *
      * @param \Magento\Object $request
-     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param null|string|bool|int|Store $store
      * @return float
      */
     public function getStoreRate($request, $store = null)
@@ -319,7 +349,7 @@ class Calculation extends \Magento\Core\Model\AbstractModel
     /**
      * Get request object for getting tax rate based on store shipping original address
      *
-     * @param   null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param   null|string|bool|int|Store $store
      * @return  \Magento\Object
      */
     public function getRateOriginRequest($store = null)
@@ -500,6 +530,12 @@ class Calculation extends \Magento\Core\Model\AbstractModel
         return $identical;
     }
 
+    /**
+     * @param \Magento\Object $request
+     * @param string|array $fieldName
+     * @param string|array $type
+     * @return array
+     */
     protected function _getRates($request, $fieldName, $type)
     {
         $result = array();
@@ -513,11 +549,19 @@ class Calculation extends \Magento\Core\Model\AbstractModel
         return $result;
     }
 
+    /**
+     * @param \Magento\Object $request
+     * @return array
+     */
     public function getRatesForAllProductTaxClasses($request)
     {
         return $this->_getRates($request, 'product_class_id', \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT);
     }
 
+    /**
+     * @param \Magento\Object $request
+     * @return array
+     */
     public function getRatesForAllCustomerTaxClasses($request)
     {
         return $this->_getRates($request, 'customer_class_id', \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER);
@@ -538,16 +582,29 @@ class Calculation extends \Magento\Core\Model\AbstractModel
         return $this->_rateCalculationProcess[$cacheKey];
     }
 
+    /**
+     * @param array $rates
+     * @return array
+     */
     public function reproduceProcess($rates)
     {
         return $this->getResource()->getCalculationProcess(null, $rates);
     }
 
+    /**
+     * @param int $customerTaxClass
+     * @return array
+     */
     public function getRatesByCustomerTaxClass($customerTaxClass)
     {
         return $this->getResource()->getRatesByCustomerTaxClass($customerTaxClass);
     }
 
+    /**
+     * @param int $customerTaxClass
+     * @param int $productTaxClass
+     * @return array
+     */
     public function getRatesByCustomerAndProductTaxClasses($customerTaxClass, $productTaxClass)
     {
         return $this->getResource()->getRatesByCustomerTaxClass($customerTaxClass, $productTaxClass);

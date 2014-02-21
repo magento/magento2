@@ -18,13 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View\Design\FileResolution\Strategy\Fallback;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\View\Design\FileResolution\Strategy\Fallback;
 use Magento\View\Design\FileResolution\Strategy\FileInterface;
 use Magento\View\Design\FileResolution\Strategy\LocaleInterface;
@@ -70,6 +70,8 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     protected $canSaveMap;
 
     /**
+     * Var directory
+     *
      * @var Write
      */
     protected $varDirectory;
@@ -82,6 +84,8 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     protected $sections = array();
 
     /**
+     * Constructor
+     *
      * @param Fallback $fallback
      * @param Filesystem $filesystem
      * @param string $mapDir
@@ -98,7 +102,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
     ) {
         $this->fallback = $fallback;
         $this->varDirectory = $filesystem->getDirectoryWrite(Filesystem::VAR_DIR);
-        $rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT);
+        $rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT_DIR);
         if (!$rootDirectory->isDirectory($rootDirectory->getRelativePath($baseDir))) {
             throw new \InvalidArgumentException("Wrong base directory specified: '{$baseDir}'");
         }
@@ -220,6 +224,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
      * @param string|null $module
      * @param string $file
      * @param string $filePath
+     * @return void
      * @throws \Magento\Exception
      */
     protected function setToMap($fileType, $area, ThemeInterface $theme, $locale, $module, $file, $filePath)
@@ -284,7 +289,7 @@ class CachingProxy implements FileInterface, LocaleInterface, ViewInterface, Not
      * @param string|null $module
      * @param string $file
      * @param string $newFilePath
-     * @return \Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy
+     * @return $this
      */
     public function setViewFilePathToMap($area, ThemeInterface $themeModel, $locale, $module, $file, $newFilePath)
     {

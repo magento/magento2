@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -91,6 +91,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Set the selected resources, which is an array of resource ids. If everything is allowed, the
      * array will contain just the root resource id, which is "Magento_Adminhtml::all".
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -99,7 +101,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -109,7 +111,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -117,7 +119,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -125,7 +127,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isHidden()
     {

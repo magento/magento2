@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Persistent
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,7 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Persistent session
      *
-     * @var \Magento\Persistent\Helper\Session
+     * @var Session
      */
     protected $_persistentSession;
 
@@ -97,7 +97,7 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\App\State $appState,
         \Magento\Core\Helper\Url $coreUrl,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Persistent\Helper\Session $persistentSession,
+        Session $persistentSession,
         \Magento\Module\Dir\Reader $modulesReader,
         \Magento\Escaper $escaper,
         $dbCompatibleMode = true
@@ -228,7 +228,7 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Get create account url depends on checkout
      *
-     * @param  $url string
+     * @param  string $url
      * @return string
      */
     public function getCreateAccountUrl($url)

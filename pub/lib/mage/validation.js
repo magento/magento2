@@ -19,7 +19,7 @@
  *
  * @category    validation
  * @package     mage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint regexdash:true eqnull:true browser:true jquery:true*/
@@ -890,7 +890,7 @@
             function(value, element, params) {
                 if ($.isNumeric($(params).val()) && $.isNumeric(value)) {
                     this.lteToVal = $(params).val();
-                    return value <= $(params).val();
+                    return parseFloat(value) <= parseFloat($(params).val());
                 }
                 return true;
             },
@@ -902,7 +902,7 @@
             function(value, element, params) {
                 if ($.isNumeric($(params).val()) && $.isNumeric(value)) {
                     this.gteToVal = $(params).val();
-                    return value >= $(params).val();
+                    return parseFloat(value) >= parseFloat($(params).val());
                 }
                 return true;
             },

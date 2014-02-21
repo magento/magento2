@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -223,9 +223,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $fileResolverMock = $this->getMockBuilder('Magento\Core\Model\Config\FileResolver')
                                 ->disableOriginalConstructor()
                                 ->getMock();
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
         /** @var $directory  \Magento\Filesystem\Directory\Read */
-        $directory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $fileIteratorFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Config\FileIteratorFactory');
         $fileIterator = $fileIteratorFactory->create($directory, array(
@@ -234,14 +234,17 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($fileIterator));
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
-            'Magento\Backend\Model\Config\Structure\Reader' => array(
-                'parameters' => array('fileResolver' => $fileResolverMock)
-            )
-        ));
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $structureReader = $objectManager->create(
+            'Magento\Backend\Model\Config\Structure\Reader', array('fileResolver' => $fileResolverMock)
+        );
+        $structureData = $objectManager->create(
+            'Magento\Backend\Model\Config\Structure\Data', array('reader' => $structureReader)
+        );
         /** @var \Magento\Backend\Model\Config\Structure $structure  */
-        $structure = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Model\Config\Structure');
+        $structure = $objectManager->create('Magento\Backend\Model\Config\Structure',
+            array('structureData' => $structureData));
 
         $this->_section = $structure->getElement('test_section');
 

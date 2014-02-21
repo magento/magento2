@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -80,40 +80,39 @@ class AbstractCart extends \Magento\View\Element\Template
         $this->_checkoutSession = $checkoutSession;
         $this->_catalogData = $catalogData;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
-     * Initialize default item renderer
-     */
-    protected function _prepareLayout()
-    {
-        if (!$this->getChildBlock(self::DEFAULT_TYPE)) {
-            $this->addChild(
-                self::DEFAULT_TYPE,
-                'Magento\Checkout\Block\Cart\Item\Renderer',
-                array('template' => 'cart/item/default.phtml')
-            );
-        }
-        return parent::_prepareLayout();
-    }
-
-    /**
-     * Get renderer block instance by product type code
+     * Retrieve renderer list
      *
-     * @param  string $type
+     * @return \Magento\View\Element\RendererList
+     */
+    protected function _getRendererList()
+    {
+        return $this->getRendererListName()
+            ? $this->getLayout()->getBlock($this->getRendererListName())
+            : $this->getChildBlock('renderer.list');
+    }
+
+    /**
+     * Retrieve item renderer block
+     *
+     * @param string $type
+     *
+     * @return \Magento\View\Element\Template
      * @throws \RuntimeException
-     * @return \Magento\View\Element\AbstractBlock
      */
     public function getItemRenderer($type)
     {
-        $renderer = $this->getChildBlock($type) ?: $this->getChildBlock(self::DEFAULT_TYPE);
-        if (!$renderer instanceof \Magento\View\Element\BlockInterface) {
-            throw new \RuntimeException('Renderer for type "' . $type . '" does not exist.');
+        $rendererList = $this->_getRendererList();
+        if (!$rendererList) {
+            throw new \RuntimeException('Renderer list for block "' . $this->getNameInLayout() . '" is not defined');
         }
-        $renderer->setRenderedBlock($this);
-        return $renderer;
+        $overriddenTemplates = $this->getOverriddenTemplates() ?: array();
+        $template = isset($overriddenTemplates[$type]) ? $overriddenTemplates[$type] : $this->getRendererTemplate();
+        return $rendererList->getRenderer($type, self::DEFAULT_TYPE, $template);
     }
-
 
     /**
      * Get logged in customer

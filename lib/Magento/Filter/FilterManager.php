@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Filter
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,21 @@ namespace Magento\Filter;
 
 /**
  * Magento Filter Manager
+ *
+ * @method string email(string $value)
+ * @method string money(string $value, $params = array())
+ * @method string simple(string $value, $params = array())
+ * @method string object(string $value, $params = array())
+ * @method string sprintf(string $value, $params = array())
+ * @method string template(string $value, $params = array())
+ * @method string arrayFilter(string $value)
+ * @method string removeAccents(string $value, $params = array())
+ * @method string splitWords(string $value, $params = array())
+ * @method string removeTags(string $value, $params = array())
+ * @method string stripTags(string $value, $params = array())
+ * @method string truncate(string $value, $params = array())
+ * @method string encrypt(string $value, $params = array())
+ * @method string decrypt(string $value, $params = array())
  */
 class FilterManager
 {
@@ -37,17 +52,12 @@ class FilterManager
     protected $objectManager;
 
     /**
-     * @var array
-     */
-    protected $filterInstances = array();
-
-    /**
      * @var FilterManager\Config
      */
     protected $config;
 
     /**
-     * @var array
+     * @var FactoryInterface[]
      */
     protected $factoryInstances;
 
@@ -128,7 +138,7 @@ class FilterManager
      *
      * @param string $filterAlias
      * @param array $arguments
-     * @return mixed
+     * @return \Zend_Filter_Interface
      */
     public function __call($filterAlias, array $arguments = array())
     {

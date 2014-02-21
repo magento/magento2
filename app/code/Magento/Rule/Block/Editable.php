@@ -20,24 +20,24 @@
  *
  * @category    Magento
  * @package     Magento_Rule
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Rule\Block;
 
+use Magento\Data\Form\Element\Renderer\RendererInterface;
 use Magento\View\Element\AbstractBlock;
 
-class Editable
-    extends \Magento\View\Element\AbstractBlock
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Editable extends AbstractBlock implements RendererInterface
 {
     /**
      * Render element
      *
-     * @see \Magento\Data\Form\Element\Renderer\RendererInterface::render()
      * @param \Magento\Data\Form\Element\AbstractElement $element
      * @return string
+     *
+     * @see RendererInterface::render()
      */
     public function render(\Magento\Data\Form\Element\AbstractElement $element)
     {

@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
 /**
  * GoogleShopping Admin Items Controller
@@ -32,14 +33,12 @@
  * @name       \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
-
 class Items extends \Magento\Backend\App\Action
 {
     /**
      * Initialize general settings for action
      *
-     * @return  \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items
+     * @return $this
      */
     protected function _initAction()
     {
@@ -52,6 +51,8 @@ class Items extends \Magento\Backend\App\Action
 
     /**
      * Manage Items page with two item grids: Magento products and Google Content items
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -99,6 +100,8 @@ class Items extends \Magento\Backend\App\Action
 
     /**
      * Grid with Google Content items
+     *
+     * @return void
      */
     public function gridAction()
     {
@@ -123,6 +126,8 @@ class Items extends \Magento\Backend\App\Action
 
     /**
      * Add (export) several products to Google Content
+     *
+     * @return void
      */
     public function massAddAction()
     {
@@ -165,6 +170,8 @@ class Items extends \Magento\Backend\App\Action
 
     /**
      * Delete products from Google Content
+     *
+     * @return void
      */
     public function massDeleteAction()
     {
@@ -205,6 +212,8 @@ class Items extends \Magento\Backend\App\Action
 
     /**
      * Update items statistics and remove the items which are not available in Google Content
+     *
+     * @return void
      */
     public function refreshAction()
     {
@@ -245,6 +254,8 @@ class Items extends \Magento\Backend\App\Action
 
     /**
      * Confirm CAPTCHA
+     *
+     * @return void
      */
     public function confirmCaptchaAction()
     {
@@ -298,6 +309,7 @@ class Items extends \Magento\Backend\App\Action
      * Redirect user to Google Captcha challenge
      *
      * @param \Zend_Gdata_App_CaptchaRequiredException $e
+     * @return void
      */
     protected function _redirectToCaptcha($e)
     {

@@ -20,22 +20,21 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Shopcart;
 
 /**
  * Adminhtml abandoned shopping cart report page content block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Shopcart;
-
 class Abandoned extends \Magento\Backend\Block\Widget\Grid\Container
 {
-
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_blockGroup = 'Magento_Reports';
@@ -45,6 +44,9 @@ class Abandoned extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_removeButton('add');
     }
 
+    /**
+     * @return \Magento\View\Element\AbstractBlock
+     */
     protected function _prepareLayout()
     {
         $this->setChild('store_switcher',
@@ -57,6 +59,9 @@ class Abandoned extends \Magento\Backend\Block\Widget\Grid\Container
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getStoreSwitcherHtml()
     {
         if ($this->_storeManager->isSingleStoreMode()) {
@@ -65,6 +70,9 @@ class Abandoned extends \Magento\Backend\Block\Widget\Grid\Container
         return $this->getChildHtml('store_switcher');
     }
 
+    /**
+     * @return string
+     */
     public function getGridHtml()
     {
         return $this->getStoreSwitcherHtml() . parent::getGridHtml();

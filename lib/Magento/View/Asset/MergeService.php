@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,35 +30,45 @@ namespace Magento\View\Asset;
 class MergeService
 {
     /**
+     * Object Manager
+     *
      * @var \Magento\ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Config
+     *
      * @var ConfigInterface
      */
     protected $config;
 
     /**
-     * @var \Magento\Filesystem
+     * Filesystem
+     *
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * State
+     *
      * @var \Magento\App\State
      */
     protected $state;
 
     /**
+     * Constructor
+     *
      * @param \Magento\ObjectManager $objectManager
      * @param ConfigInterface $config
-     * @param \Magento\Filesystem $filesystem,
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\App\State $state
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         ConfigInterface $config,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\App\State $state
     ) {
         $this->objectManager = $objectManager;
@@ -103,9 +113,12 @@ class MergeService
 
     /**
      * Remove all merged js/css files
+     *
+     * @return void
      */
     public function cleanMergedJsCss()
     {
-        $this->filesystem->getDirectoryWrite(\Magento\Filesystem::PUB_VIEW_CACHE)->delete(Merged::PUBLIC_MERGE_DIR);
+        $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
+            ->delete(Merged::PUBLIC_MERGE_DIR);
     }
 }

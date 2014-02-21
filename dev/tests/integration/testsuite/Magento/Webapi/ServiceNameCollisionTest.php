@@ -24,7 +24,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi;
@@ -34,20 +34,20 @@ class ServiceNameCollisionTest extends \PHPUnit_Framework_TestCase
     /**
      * Test there are no collisions between service names.
      *
-     * @see \Magento\Webapi\Model\Soap\Config::getServiceName()
+     * @see \Magento\Webapi\Helper\Data::getServiceName()
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testServiceNameCollisions()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Webapi\Model\Soap\Config $soapConfig */
-        $soapConfig = $objectManager->get('Magento\Webapi\Model\Soap\Config');
+        /** @var \Magento\Webapi\Helper\Data $helper */
+        $helper = $objectManager->get('Magento\Webapi\Helper\Data');
         /** @var \Magento\Webapi\Model\Config $webapiConfig */
         $webapiConfig = $objectManager->get('Magento\Webapi\Model\Config');
         $serviceNames = array();
 
         foreach ($webapiConfig->getServices() as $serviceClassName => $serviceData) {
-            $newServiceName = $soapConfig->getServiceName($serviceClassName);
+            $newServiceName = $helper->getServiceName($serviceClassName);
             $this->assertFalse(in_array($newServiceName, $serviceNames));
             $serviceNames[] = $newServiceName;
         }

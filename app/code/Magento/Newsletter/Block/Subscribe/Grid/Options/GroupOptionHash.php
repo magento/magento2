@@ -20,24 +20,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Newsletter\Block\Subscribe\Grid\Options;
+
+use Magento\Core\Model\System\Store;
 
 class GroupOptionHash implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
      * System Store Model
      *
-     * @var \Magento\Core\Model\System\Store
+     * @var Store
      */
     protected $_systemStore;
 
     /**
-     * @param \Magento\Core\Model\System\Store
+     * @param Store $systemStore
      */
-    public function __construct(\Magento\Core\Model\System\Store $systemStore)
+    public function __construct(Store $systemStore)
     {
         $this->_systemStore = $systemStore;
     }

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -75,7 +75,20 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                         <div class="product actions">
                             <?php if($_product->isSaleable()): ?>
                             <div class="primary">
-                                <a href="<?php echo $this->getAddToCartUrl($_product) ?>" class="action tocart"><span><?php echo __('Add to Cart') ?></span></a>
+                                <?php if ($_product->getTypeInstance()->hasRequiredOptions($_item)): ?>
+                                    <button class="action tocart"
+                                            data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}'
+                                                            type="button" title="<?php echo __('Add to Cart') ?>">
+                                    <span><?php echo __('Add to Cart') ?></span>
+                                <?php else: ?>
+                                    <?php
+                                        $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                        $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_item), ['product' => $_item->getEntityId()]);
+                                    ?>
+                                    <button type="button" class="action tocart" data-post='<?php echo $postData; ?>'>
+                                        <span><?php echo __('Add to Cart') ?></span>
+                                    </button>
+                                <?php endif; ?>
                             </div>
                             <?php else: ?>
                                 <?php if ($_product->getIsSalable()): ?>

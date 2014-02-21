@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -30,7 +30,7 @@
 <?php if($this->isMsgVisible()): ?>
     <div class="availability only">
         <a href="#"
-           data-mage-init='{toggleAdvanced: {selectorsToggleClass: "active", baseToggleClass: "expanded", toggleContainers: "#<?php echo $this->getDetailsPlaceholderId() ?>"}}'
+           data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?php echo $this->getDetailsPlaceholderId() ?>"}}'
            id="<?php echo $this->getPlaceholderId() ?>"
            title="<?php echo __('Only %1 left', ($this->getStockQty())) ?>"
            class="action show">

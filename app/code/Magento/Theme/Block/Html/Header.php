@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -130,7 +130,7 @@ class Header extends \Magento\View\Element\Template
         $folderName = \Magento\Backend\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
         $storeLogoPath = $this->_storeConfig->getConfig('design/header/logo_src');
         $path = $folderName . '/' . $storeLogoPath;
-        $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\Core\Model\Store::URL_TYPE_MEDIA)) . $path;
+        $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\UrlInterface::URL_TYPE_MEDIA)) . $path;
 
         if (!is_null($storeLogoPath) && $this->_isFile($path)) {
             $url = $logoUrl;

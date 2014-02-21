@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Store\Switcher\Form\Renderer;
 
 /**
  * Form fieldset renderer
  */
-namespace Magento\Backend\Block\Store\Switcher\Form\Renderer;
-
 class Fieldset
     extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
@@ -39,6 +38,9 @@ class Fieldset
      */
     protected $_element;
 
+    /**
+     * @var string
+     */
     protected $_template = 'store/switcher/form/renderer/fieldset.phtml';
 
     /**

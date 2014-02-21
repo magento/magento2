@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller\Rest;
@@ -47,11 +47,11 @@ class Router
      * Route the Request, the only responsibility of the class.
      * Find route that matches current URL, set parameters of the route to Request object.
      *
-     * @param \Magento\Webapi\Controller\Rest\Request $request
+     * @param Request $request
      * @return \Magento\Webapi\Controller\Rest\Router\Route
      * @throws \Magento\Webapi\Exception
      */
-    public function match(\Magento\Webapi\Controller\Rest\Request $request)
+    public function match(Request $request)
     {
         /** @var \Magento\Webapi\Controller\Rest\Router\Route[] $routes */
         $routes = $this->_apiConfig->getRestRoutes($request);

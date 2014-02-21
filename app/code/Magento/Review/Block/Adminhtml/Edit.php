@@ -20,15 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Review\Block\Adminhtml;
 
 /**
  * Review edit form
  */
-namespace Magento\Review\Block\Adminhtml;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -46,6 +46,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
+     * Review model factory
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
@@ -70,6 +72,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * Initialize edit review
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -88,7 +95,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if ($prevId !== false) {
             $this->addButton('previous', array(
                 'label' => __('Previous'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/*', array('id' => $prevId)) . '\')'
+                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('id' => $prevId)) . '\')'
             ), 3, 10);
 
             $this->addButton('save_and_previous', array(
@@ -130,7 +137,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
             $this->addButton('next', array(
                 'label' => __('Next'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/*', array('id' => $nextId)) . '\')'
+                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('id' => $nextId)) . '\')'
             ), 3, 105);
         }
         $this->_updateButton('save', 'label', __('Save Review'));
@@ -164,7 +171,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->getRequest()->getParam('ret', false) == 'pending') {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('adminhtml/*/pending') .'\')' );
+            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('catalog/*/pending') .'\')' );
             $this->_updateButton(
                 'delete',
                 'onclick',
@@ -213,6 +220,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         ';
     }
 
+    /**
+     * Get edit review header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         $reviewData = $this->_coreRegistry->registry('review_data');

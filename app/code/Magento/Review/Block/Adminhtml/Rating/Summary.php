@@ -20,17 +20,24 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Review\Block\Adminhtml\Rating;
+
+use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
 
 /**
  * Adminhtml summary rating stars
  */
-namespace Magento\Review\Block\Adminhtml\Rating;
-
 class Summary extends \Magento\Backend\Block\Template
 {
+    /**
+     * Rating summary template name
+     *
+     * @var string
+     */
     protected $_template = 'Magento_Rating::rating/stars/summary.phtml';
 
     /**
@@ -41,11 +48,15 @@ class Summary extends \Magento\Backend\Block\Template
     protected $_coreRegistry = null;
 
     /**
+     * Rating resource option model
+     *
      * @var \Magento\Rating\Model\Resource\Rating\Option\Vote\CollectionFactory
      */
     protected $_votesFactory;
 
     /**
+     * Rating model
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
@@ -70,6 +81,11 @@ class Summary extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Initialize review data
+     *
+     * @return void
+     */
     protected function _construct()
     {
         if ($this->_coreRegistry->registry('review_data')) {
@@ -77,6 +93,11 @@ class Summary extends \Magento\Backend\Block\Template
         }
     }
 
+    /**
+     * Get collection of ratings
+     *
+     * @return RatingCollection
+     */
     public function getRating()
     {
         if (!$this->getRatingCollection()) {
@@ -89,6 +110,11 @@ class Summary extends \Magento\Backend\Block\Template
         return $this->getRatingCollection();
     }
 
+    /**
+     * Get rating summary
+     *
+     * @return string
+     */
     public function getRatingSummary()
     {
         if (!$this->getRatingSummaryCache()) {

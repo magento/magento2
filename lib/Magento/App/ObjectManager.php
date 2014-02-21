@@ -1,7 +1,5 @@
 <?php
 /**
- * Magento application object manager. Configures and application application
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -20,13 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App;
 use Magento\ObjectManager\Factory;
 
 /**
+ * A wrapper around object manager with workarounds to access it in client code
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManager extends \Magento\ObjectManager\ObjectManager
@@ -37,17 +37,12 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
     protected static $_instance;
 
     /**
-     * @var \Magento\ObjectManager\Relations
-     */
-    protected $_compiledRelations;
-
-    /**
      * Retrieve object manager
      *
      * TODO: Temporary solution for serialization, should be removed when Serialization problem is resolved
      *
      * @deprecated
-     * @return \Magento\ObjectManager
+     * @return \Magento\App\ObjectManager
      * @throws \RuntimeException
      */
     public static function getInstance()
@@ -63,6 +58,7 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
      *
      * @param \Magento\ObjectManager $objectManager
      * @throws \LogicException
+     * @return void
      */
     public static function setInstance(\Magento\ObjectManager $objectManager)
     {
@@ -75,7 +71,7 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
      * @param array $sharedInstances
      */
     public function __construct(
-        Factory $factory = null, \Magento\ObjectManager\Config $config = null, array $sharedInstances = array()
+        Factory $factory, \Magento\ObjectManager\Config $config, array $sharedInstances = array()
     ) {
         parent::__construct($factory, $config, $sharedInstances);
         self::$_instance = $this;

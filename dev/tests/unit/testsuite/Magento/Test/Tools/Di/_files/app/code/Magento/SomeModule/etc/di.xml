@@ -19,20 +19,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <preference for="Magento\Core\Model\AppInterface" type="Magento\Core\Model\App\Proxy" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <preference for="Magento\AppInterface" type="Magento\Core\Model\App\Proxy" />
     <preference for="Magento\Core\Model\Config\InvalidatorInterface" type="Magento\Core\Model\Config\Invalidator\Proxy" />
     <preference for="Magento\App\CacheInterface" type="Magento\App\Cache\Proxy" />
     <virtualType name="custom_cache_instance" type="Magento\App\Cache">
         <plugin name="tag" type="Magento\App\Cache\TagPlugin" />
     </virtualType>
     <type name="Magento\SomeModule\Model\Test">
-        <param name="proxy">
-            <instance type="\Magento\SomeModule\Model\Element\Proxy" />
-        </param>
+        <arguments>
+            <argument name="proxy" xsi:type="object">\Magento\SomeModule\Model\Element\Proxy</argument>
+            <argument name="array" xsi:type="array">
+                <item xsi:type="object">\Magento\SomeModule\Model\Nested\Element\Proxy</item>
+            </argument>
+        </arguments>
     </type>
 </config>

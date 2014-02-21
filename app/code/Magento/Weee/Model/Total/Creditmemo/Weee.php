@@ -20,12 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Weee
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 
 namespace Magento\Weee\Model\Total\Creditmemo;
+
+use Magento\Sales\Model\Order\Creditmemo;
 
 class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 {
@@ -53,7 +55,11 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
         parent::__construct($data);
     }
 
-    public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+    /**
+     * @param Creditmemo $creditmemo
+     * @return $this
+     */
+    public function collect(Creditmemo $creditmemo)
     {
         $store = $creditmemo->getStore();
 

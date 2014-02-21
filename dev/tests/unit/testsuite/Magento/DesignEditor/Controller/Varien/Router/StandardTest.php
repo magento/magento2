@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_DesignEditor
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -236,7 +236,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\UrlInterface'),
             $this->getMock('Magento\Core\Model\StoreManagerInterface'),
             $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Url\SecurityInfoInterface'),
+            $this->getMock('Magento\Url\SecurityInfoInterface'),
             'frontend',
             $routerListMock,
             $objectManager,

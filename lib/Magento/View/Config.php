@@ -18,19 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View;
 
+use Magento\Filesystem\Directory\ReadInterface;
+
 /**
  * Handles theme view.xml files
  */
-namespace Magento\View;
-
-use Magento\Filesystem\Directory\ReadInterface;
-
 class Config implements \Magento\View\ConfigInterface
 {
     /**
@@ -48,11 +46,15 @@ class Config implements \Magento\View\ConfigInterface
     protected $moduleReader;
 
     /**
+     * Root directory
+     *
      * @var ReadInterface
      */
     protected $rootDirectory;
 
     /**
+     * View service
+     *
      * @var \Magento\View\Service
      */
     protected $viewService;
@@ -65,33 +67,39 @@ class Config implements \Magento\View\ConfigInterface
     protected $viewFileSystem;
 
     /**
+     * File name
+     *
      * @var string
      */
     protected $filename;
 
     /**
+     * File iterator factory
+     *
      * @var \Magento\Config\FileIteratorFactory
      */
     protected $fileIteratorFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\Filesystem $filesystem
-     * @param Service $viewService
-     * @param FileSystem $viewFileSystem
+     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\View\Service  $viewService
+     * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Config\FileIteratorFactory $fileIteratorFactory
-     * @param $filename
+     * @param string $filename
      */
     public function __construct(
         \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\View\Service $viewService,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\Config\FileIteratorFactory $fileIteratorFactory,
         $filename = self::CONFIG_FILE_NAME
     ) {
         $this->moduleReader = $moduleReader;
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $this->viewService = $viewService;
         $this->viewFileSystem = $viewFileSystem;
         $this->filename = $filename;

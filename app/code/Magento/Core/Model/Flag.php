@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model;
 
 /**
  * Core Flag model
@@ -41,9 +41,7 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model;
-
-class Flag extends \Magento\Core\Model\AbstractModel
+class Flag extends AbstractModel
 {
     /**
      * Flag code
@@ -56,6 +54,7 @@ class Flag extends \Magento\Core\Model\AbstractModel
      * Init resource model
      * Set flag_code if it is specified in arguments
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -69,7 +68,7 @@ class Flag extends \Magento\Core\Model\AbstractModel
      * Processing object before save data
      *
      * @throws \Magento\Core\Exception
-     * @return \Magento\Core\Model\Flag
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -101,7 +100,7 @@ class Flag extends \Magento\Core\Model\AbstractModel
      * Set flag data
      *
      * @param mixed $value
-     * @return \Magento\Core\Model\Flag
+     * @return $this
      */
     public function setFlagData($value)
     {
@@ -112,7 +111,7 @@ class Flag extends \Magento\Core\Model\AbstractModel
      * load self (load by flag code)
      *
      * @throws \Magento\Core\Exception
-     * @return \Magento\Core\Model\Flag
+     * @return $this
      */
     public function loadSelf()
     {

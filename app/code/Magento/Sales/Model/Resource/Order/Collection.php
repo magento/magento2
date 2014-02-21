@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -231,24 +231,6 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     }
 
     /**
-     * Add filter by specified billing agreements
-     *
-     * @param int|array $agreements
-     * @return \Magento\Sales\Model\Resource\Order\Collection
-     */
-    public function addBillingAgreementsFilter($agreements)
-    {
-        $agreements = (is_array($agreements)) ? $agreements : array($agreements);
-        $this->getSelect()
-            ->joinInner(
-                array('sbao' => $this->getTable('sales_billing_agreement_order')),
-                'main_table.entity_id = sbao.order_id',
-                array())
-            ->where('sbao.agreement_id IN(?)', $agreements);
-        return $this;
-    }
-
-    /**
      * Add filter by specified recurring profile id(s)
      *
      * @param array|int $ids
@@ -259,7 +241,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
         $ids = (is_array($ids)) ? $ids : array($ids);
         $this->getSelect()
             ->joinInner(
-                array('srpo' => $this->getTable('sales_recurring_profile_order')),
+                array('srpo' => $this->getTable('recurring_profile_order')),
                 'main_table.entity_id = srpo.order_id',
                 array())
             ->where('srpo.profile_id IN(?)', $ids);

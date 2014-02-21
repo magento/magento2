@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -137,8 +137,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     $this->assertContains('::', $action->getAttribute('helper'));
                 }
 
-                if (false
-                    !== strpos($layoutFile, 'app/code/Magento/Sales/view/adminhtml/layout/sales_order')
+                if (false !== strpos($layoutFile, 'app/code/Magento/Sales/view/adminhtml/layout/sales_order')
+                    || false !== strpos($layoutFile, 'app/code/Magento/Shipping/view/adminhtml/layout/adminhtml_order')
                 ) {
                     $this->markTestIncomplete("The file {$layoutFile} has to use \\Magento\\Core\\Block\\Text\\List, \n"
                             . 'there is no solution to get rid of it right now.'
@@ -300,10 +300,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setIsEnabled',
             'setIsGuestNote',
             'setIsHandle',
-            'setIsInCatalogProduct',
             'setIsLinkMode',
             'setIsPlaneMode',
-            'setIsQuoteAllowed',
             'setIsTitleHidden',
             'setIsViewCurrent',
             'setItemLimit',
@@ -321,13 +319,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setPageLayout',
             'setPageTitle',
             'setParentType',
-            'setPaypalActionPrefix',
+            'setControllerPath',
             'setPosition',
             'setPositioned',
             'setRewardMessage',
             'setRewardQtyLimitationMessage',
             'setShouldPrepareInfoTabs',
-            'setShowOrPosition',
             'setShowPart',
             'setSignupLabel',
             'setSourceField',

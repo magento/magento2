@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,8 +38,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $expected = 'http://example.com/public_dir/a/t/m/file.js';
 
         // 1. Get fileSystem model
-        /** @var $filesystem \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        /** @var $filesystem \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->never())
             ->method('isFile');
         $filesystem->expects($this->never())
@@ -94,6 +94,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $dFManager = $this->getMock('Magento\View\DeployedFilesManager', array(), array(), '',
             false
         );
+        $viewFilesystem = $this->getMock('Magento\View\Filesystem', array(), array(), '', false);
 
         // 8. Get default fake url map
         $urlMap = array('fake' => array('key' => "some_key", 'value' => "some_value"));
@@ -101,7 +102,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         // Create model to be tested
         /** @var $model \Magento\View\Url|\PHPUnit_Framework_MockObject_MockObject */
         $model = new \Magento\View\Url(
-            $filesystem, $urlBuilder, $urlConfig, $viewService, $publisher, $dFManager, $urlMap
+            $filesystem, $urlBuilder, $urlConfig, $viewService, $publisher, $dFManager, $viewFilesystem, $urlMap
         );
 
         // Test

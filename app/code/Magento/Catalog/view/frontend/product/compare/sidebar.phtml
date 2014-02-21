@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this \Magento\Catalog\Block\Product\Compare\Sidebar */
@@ -26,13 +26,14 @@
 <?php
 $_helper = $this->helper('Magento\Catalog\Helper\Product\Compare');
 $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
+$count = $_helper->getItemCount();
 ?>
 <div class="block compare">
     <div class="title">
         <strong>
             <span class="text"><?php echo __('Compare Products') ?></span>
-            <?php if($_helper->getItemCount() > 0): ?>
-                <span class="qty"><?php echo __('%1', $_helper->getItemCount()) ?></span>
+            <?php if($count > 0): ?>
+                <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
             <?php endif; ?>
         </strong>
     </div>
@@ -47,8 +48,11 @@ $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
                         <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_item, $_item->getName(), 'name') ?>
                     </a>
                 </strong>
-                <a href="<?php echo $_helper->getRemoveUrl($_item) ?>" title="<?php echo __('Remove This Item') ?>"
-                   class="action delete"><span><?php echo __('Remove This Item') ?></span></a>
+                <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+                <a href="#" data-post='<?php echo $compareHelper->getPostDataRemove($_item); ?>'
+                   title="<?php echo __('Remove This Item') ?>"
+                   class="action delete">
+                    <span><?php echo __('Remove This Item') ?></span></a>
             </li>
         <?php endforeach; ?>
     </ol>
@@ -63,17 +67,17 @@ $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
         </div>
     </div>
     <script type="text/javascript">
-        (function($) {
+        (function ($) {
             head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/compare.js') ?>", function () {
-                    $('#compare-items').compareItems({
-                        removeConfirmMessage: '<?php echo __('Are you sure you would like to remove this item from the compare products?') ?>',
-                        removeSelector: '#compare-items a.action.delete',
-                        clearAllConfirmMessage: '<?php echo __('Are you sure you would like to remove all products from your comparison?') ?>',
-                        clearAllSelector: '#compare-clear-all'
-                    });
+                $('#compare-items').compareItems({
+                    removeConfirmMessage: '<?php echo __('Are you sure you would like to remove this item from the compare products?') ?>',
+                    removeSelector: '#compare-items a.action.delete',
+                    clearAllConfirmMessage: '<?php echo __('Are you sure you would like to remove all products from your comparison?') ?>',
+                    clearAllSelector: '#compare-clear-all'
                 });
-            })(jQuery);
-        </script>
+            });
+        })(jQuery);
+    </script>
     <?php else: ?>
         <p class="empty"><?php echo __('You have no items to compare.') ?></p>
         <?php endif; ?>

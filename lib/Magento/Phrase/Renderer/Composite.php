@@ -20,60 +20,45 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Phrase\Renderer;
 
-class Composite implements \Magento\Phrase\RendererInterface
+use Magento\Phrase\RendererInterface;
+
+class Composite implements RendererInterface
 {
     /**
-     * Renderer factory
-     *
-     * @var \Magento\Phrase\Renderer\Factory
+     * @var RendererInterface[]
      */
-    protected $_rendererFactory;
+    protected $_renderers;
 
     /**
-     * List of \Magento\Phrase\RendererInterface
-     *
-     * @var array
+     * @param RendererInterface[] $renderers
+     * @throws \InvalidArgumentException
      */
-    protected $_renderers = array();
-
-    /**
-     * Renderer construct
-     *
-     * @param \Magento\Phrase\Renderer\Factory $rendererFactory
-     * @param array $renderers
-     */
-    public function __construct(
-        \Magento\Phrase\Renderer\Factory $rendererFactory,
-        array $renderers = array()
-    ) {
-        $this->_rendererFactory = $rendererFactory;
-
-        foreach ($renderers as $render) {
-            $this->_append($render);
-        }
-    }
-
-    /**
-     * Add renderer to the end of the chain
-     *
-     * @param string $render
-     */
-    protected function _append($render)
+    public function __construct(array $renderers)
     {
-        $this->_renderers[] = $this->_rendererFactory->create($render);
+        foreach ($renderers as $renderer) {
+            if (!($renderer instanceof RendererInterface)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Instance of the phrase renderer is expected, got %s instead.', get_class($renderer)
+                ));
+            }
+        }
+        $this->_renderers = $renderers;
     }
 
     /**
-     * {@inheritdoc}
+     * Render result text
+     *
+     * @param string $text
+     * @param array $arguments
+     * @return string
      */
     public function render($text, array $arguments = array())
     {
-        /** @var \Magento\Phrase\Renderer\Composite $render */
         foreach ($this->_renderers as $render) {
             $text = $render->render($text, $arguments);
         }

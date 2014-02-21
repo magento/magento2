@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,8 +36,23 @@ namespace Magento\Customer\Block;
 
 class Newsletter extends \Magento\Customer\Block\Account\Dashboard
 {
-
     protected $_template = 'form/newsletter.phtml';
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        array $data = array()
+    ) {
+        parent::__construct($context, $customerSession, $subscriberFactory, $data);
+        $this->_isScopePrivate = true;
+    }
 
     public function getIsSubscribed()
     {

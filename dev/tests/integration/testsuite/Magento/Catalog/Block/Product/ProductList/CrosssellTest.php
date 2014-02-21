@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,7 +56,7 @@ class CrosssellTest extends \PHPUnit_Framework_TestCase
         $html = $block->toHtml();
         $this->assertNotEmpty($html);
         $this->assertContains('Simple Cross Sell', $html); /* name */
-        $this->assertContains('product/1/', $html);  /* part of url */
+        $this->assertContains('product\/1\/', $html);  /* part of url */
         $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Link\Product\Collection', $block->getItems());
     }
 }

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -26,7 +26,7 @@ namespace Magento\View\Layout\File\Source\Override;
 
 use Magento\View\Layout\File\SourceInterface;
 use Magento\View\Design\ThemeInterface;
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\Filesystem\Directory\ReadInterface;
 use Magento\View\Layout\File\Factory;
 
@@ -36,16 +36,22 @@ use Magento\View\Layout\File\Factory;
 class Base implements SourceInterface
 {
     /**
+     * File factory
+     *
      * @var Factory
      */
     private $fileFactory;
 
     /**
+     * Themes directory
+     *
      * @var ReadInterface
      */
     protected $themesDirectory;
 
     /**
+     * Constructor
+     *
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      */
@@ -53,7 +59,7 @@ class Base implements SourceInterface
         Filesystem $filesystem,
         Factory $fileFactory
     ) {
-        $this->themesDirectory = $filesystem->getDirectoryRead(Filesystem::THEMES);
+        $this->themesDirectory = $filesystem->getDirectoryRead(Filesystem::THEMES_DIR);
         $this->fileFactory = $fileFactory;
     }
 
@@ -68,21 +74,14 @@ class Base implements SourceInterface
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
-        $patternForSearch = str_replace(
-            array('/', '\*'),
-            array('\/', '[\S]+'),
-            preg_quote("~{$themePath}/{$namespace}_{$module}/layout/override/base/{$filePath}.xml~")
-        );
-        $files = $this->themesDirectory
-            ->search($patternForSearch);
-        foreach ($files as $key => $file) {
-            $files[$key] = $this->themesDirectory->getAbsolutePath($file);
-        }
+        $searchPattern = "{$themePath}/{$namespace}_{$module}/layout/override/base/{$filePath}.xml";
+        $files = $this->themesDirectory->search($searchPattern);
         $result = array();
-        $pattern = "#/(?<moduleName>[^/]+)/layout/override/base/"
-            . preg_quote(rtrim($filePath, '*'))
-            . "[^/]*\.xml$#i";
-        foreach ($files as $filename) {
+        $pattern = "#(?<moduleName>[^/]+)/layout/override/base/"
+            . strtr(preg_quote($filePath), array('\*' => '[^/]+'))
+            . "\.xml$#i";
+        foreach ($files as $file) {
+            $filename = $this->themesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;
             }

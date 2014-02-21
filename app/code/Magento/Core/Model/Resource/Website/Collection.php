@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Website;
 
 /**
  * Websites collection
@@ -32,8 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Website;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -55,6 +53,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * Apply custom filtering
+     *
+     * @return void
      */
     protected function _renderFiltersBefore()
     {
@@ -67,8 +67,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Set flag for load default (admin) website
      *
-     * @param boolean $loadDefault
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @param bool $loadDefault
+     * @return $this
      */
     public function setLoadDefault($loadDefault)
     {
@@ -79,7 +79,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Is load default (admin) website
      *
-     * @return boolean
+     * @return bool
      */
     public function getLoadDefault()
     {
@@ -89,7 +89,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Convert items array to array for select options
      *
-     * @return Array
+     * @return array
      */
     public function toOptionArray()
     {
@@ -99,7 +99,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Convert items array to hash for select options
      *
-     * @return Array
+     * @return array
      */
     public function toOptionHash()
     {
@@ -111,7 +111,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add website filter to collection
      *
      * @param int $ids|array
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return $this
      */
     public function addIdFilter($ids)
     {
@@ -132,7 +132,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param boolean $printQuery
      * @param boolean $logQuery
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -149,7 +149,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Sets extra combined ordering by group's name, defined
      * sort ordering and store's name.
      *
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return $this
      */
     public function joinGroupAndStore()
     {
@@ -179,7 +179,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * tables with appropriate information were joined before.
      *
      * @param int|array $groupIds
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return $this
      */
     public function addFilterByGroupIds($groupIds)
     {

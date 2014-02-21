@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -51,7 +51,7 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
                         <?php foreach ($_options as $_option) : ?>
                             <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
                             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
-                            <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated" data-mage-init="{truncateOptions:[]}"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
+                            <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated" data-mage-init='{"truncateOptions":[]}'<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
                                 <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                     <div class="truncated_full_value">
                                         <dl class="item options">
@@ -64,17 +64,6 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
                         <?php endforeach; ?>
                     </dl>
                 <?php endif;?>
-                <?php /* downloadable */ ?>
-                <?php if ($links = $this->getLinks()): ?>
-                    <dl class="cart item options">
-                        <dt><?php echo $this->getLinksTitle() ?></dt>
-                        <?php foreach ($links as $link): ?>
-                            <dd><?php echo $this->escapeHtml($link->getTitle()) ?></dd>
-                        <?php endforeach; ?>
-                    </dl>
-                <?php endif; ?>
-                <?php echo $this->getChildHtml('item_extra'); ?>
-                <?php /* EOF downloadable */ ?>
                 <?php if ($messages = $this->getMessages()): ?>
                     <?php foreach ($messages as $message): ?>
                         <p class="cart item message <?php echo $message['type'] ?>">* <?php echo $this->escapeHtml($message['text']) ?></p>
@@ -187,7 +176,7 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
     <?php endif; ?>
         <td class="col qty">
             <div class="control qty">
-                <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" type="text" size="4" title="<?php echo __('Qty') ?>" class="input-text qty" maxlength="12" data-validate="{required:true,'validate-greater-than-zero':true}"/>
+                <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" type="number" size="4" title="<?php echo __('Qty') ?>" class="input-text qty" maxlength="12" data-validate="{required:true,'validate-greater-than-zero':true}"/>
             </div>
             <?php $cols++; ?>
         </td>
@@ -292,7 +281,7 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
             <div class="actions">
                 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllowInCart()) : ?>
                     <?php if ($isVisibleProduct): ?>
-                        <a href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getMoveFromCartUrl($_item->getId()); ?>" class="use-ajax action towishlist">
+                        <a href="#" data-post='<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getMoveFromCartParams($_item->getId()); ?>' class="use-ajax action towishlist">
                             <span><?php echo __('Move to Wishlist'); ?></span>
                         </a>
                     <?php endif ?>

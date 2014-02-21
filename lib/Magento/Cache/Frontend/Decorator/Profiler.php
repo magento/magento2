@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,13 +34,13 @@ class Profiler extends \Magento\Cache\Frontend\Decorator\Bare
     /**
      * Backend class prefixes to be striped from profiler tags
      *
-     * @var array
+     * @var string[]
      */
     private $_backendPrefixes = array();
 
     /**
      * @param \Magento\Cache\FrontendInterface $frontend
-     * @param array $backendPrefixes Backend class prefixes to be striped for profiling informativeness
+     * @param string[] $backendPrefixes Backend class prefixes to be striped for profiling informativeness
      */
     public function __construct(\Magento\Cache\FrontendInterface $frontend, $backendPrefixes = array())
     {

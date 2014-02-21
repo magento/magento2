@@ -20,11 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Newsletter\Controller\Adminhtml;
+
+use Magento\App\ResponseInterface;
 
 /**
  * Newsletter subscribers controller
@@ -48,6 +49,11 @@ class Subscriber extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * Newsletter subscribers page
+     *
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Newsletter Subscribers'));
@@ -67,6 +73,11 @@ class Subscriber extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Managing newsletter grid
+     *
+     * @return void
+     */
     public function gridAction()
     {
         $this->_view->loadLayout(false);
@@ -75,6 +86,8 @@ class Subscriber extends \Magento\Backend\App\Action
 
     /**
      * Export subscribers grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportCsvAction()
     {
@@ -82,20 +95,35 @@ class Subscriber extends \Magento\Backend\App\Action
         $fileName = 'subscribers.csv';
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
 
-        return $this->_fileFactory->create($fileName, $content->getCsvFile($fileName));
+        return $this->_fileFactory->create(
+            $fileName,
+            $content->getCsvFile($fileName),
+            \Magento\App\Filesystem::VAR_DIR
+        );
     }
 
     /**
      * Export subscribers grid to XML format
+     *
+     * @return ResponseInterface
      */
     public function exportXmlAction()
     {
         $this->_view->loadLayout();
         $fileName = 'subscribers.xml';
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
-        return $this->_fileFactory->create($fileName, $content->getExcelFile($fileName));
+        return $this->_fileFactory->create(
+            $fileName,
+            $content->getExcelFile($fileName),
+            \Magento\App\Filesystem::VAR_DIR
+        );
     }
 
+    /**
+     * Unsubscribe one or more subscribers action
+     *
+     * @return void
+     */
     public function massUnsubscribeAction()
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
@@ -119,6 +147,11 @@ class Subscriber extends \Magento\Backend\App\Action
         $this->_redirect('*/*/index');
     }
 
+    /**
+     * Delete one or more subscribers action
+     *
+     * @return void
+     */
     public function massDeleteAction()
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
@@ -140,6 +173,11 @@ class Subscriber extends \Magento\Backend\App\Action
         $this->_redirect('*/*/index');
     }
 
+    /**
+     * Check if user has enough privileges
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Newsletter::subscriber');

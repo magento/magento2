@@ -18,14 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View\Layout\File\Source;
 
-use Magento\Filesystem,
-    Magento\Filesystem\Directory\Read,
+use Magento\Filesystem\Directory\Read,
     Magento\View\Layout\File\Factory;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
@@ -52,11 +51,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             array('getAbsolutePath', 'search'), array(), '', false
         );
         $filesystem = $this->getMock(
-            'Magento\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false
+            'Magento\App\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false
         );
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::THEMES)
+            ->with(\Magento\App\Filesystem::THEMES_DIR)
             ->will($this->returnValue($this->directory));
         $this->fileFactory = $this->getMock('Magento\View\Layout\File\Factory', array(), array(), '', false);
         $this->model = new \Magento\View\Layout\File\Source\Theme(

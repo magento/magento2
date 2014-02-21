@@ -18,10 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogInventory\Model\Stock;
 
+use Magento\Catalog\Model\Product;
 
 /**
  * Catalog Inventory Stock Model
@@ -68,7 +70,6 @@
  * @package     Magento_CatalogInventory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Model\Stock;
 
 class Item extends \Magento\Core\Model\AbstractModel
 {
@@ -117,7 +118,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Associated product instance
      *
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $_productInstance = null;
 
@@ -171,7 +172,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_locale;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock\Status
+     * @var Status
      */
     protected $_stockStatus;
 
@@ -195,7 +196,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Index\Model\Indexer $indexer
-     * @param \Magento\CatalogInventory\Model\Stock\Status $stockStatus
+     * @param Status $stockStatus
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
@@ -211,7 +212,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Index\Model\Indexer $indexer,
-        \Magento\CatalogInventory\Model\Stock\Status $stockStatus,
+        Status $stockStatus,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
@@ -238,6 +239,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -268,12 +270,12 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Load item data by product
      *
-     * @param   mixed $product
-     * @return  \Magento\CatalogInventory\Model\Stock\Item
+     * @param int|Product $product
+     * @return $this
      */
     public function loadByProduct($product)
     {
-        if ($product instanceof \Magento\Catalog\Model\Product) {
+        if ($product instanceof Product) {
             $product = $product->getId();
         }
         $this->_getResource()->loadByProductId($this, $product);
@@ -284,8 +286,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Subtract quote item quantity
      *
-     * @param   decimal $qty
-     * @return  \Magento\CatalogInventory\Model\Stock\Item
+     * @param int|float $qty
+     * @return $this
      */
     public function subtractQty($qty)
     {
@@ -309,7 +311,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * Add quantity process
      *
      * @param float $qty
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @return $this
      */
     public function addQty($qty)
     {
@@ -343,10 +345,10 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Adding stock data to product
      *
-     * @param   \Magento\Catalog\Model\Product $product
-     * @return  \Magento\CatalogInventory\Model\Stock\Item
+     * @param Product $product
+     * @return $this
      */
-    public function assignProduct(\Magento\Catalog\Model\Product $product)
+    public function assignProduct(Product $product)
     {
         if (!$this->getId() || !$this->getProductId()) {
             $this->_getResource()->loadByProductId($this, $product->getId());
@@ -390,8 +392,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Setter for customer group id
      *
-     * @param int Value of customer group id
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @param int $value Value of customer group id
+     * @return $this
      */
     public function setCustomerGroupId($value)
     {
@@ -478,11 +480,11 @@ class Item extends \Magento\Core\Model\AbstractModel
     }
 
      /**
-     * Retrieve Default Quantity Increments data wrapper
-     *
-     * @deprecated since 1.7.0.0
-     * @return int|false
-     */
+      * Retrieve Default Quantity Increments data wrapper
+      *
+      * @deprecated since 1.7.0.0
+      * @return int|false
+      */
     public function getDefaultQtyIncrements()
     {
         return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_ENABLE_QTY_INCREMENTS)
@@ -529,9 +531,9 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Check quantity
      *
-     * @param   decimal $qty
+     * @param int|float $qty
      * @exception \Magento\Core\Exception
-     * @return  bool
+     * @return bool
      */
     public function checkQty($qty)
     {
@@ -596,9 +598,9 @@ class Item extends \Magento\Core\Model\AbstractModel
      * Second parameter of this method specifies quantity of this product in whole shopping cart
      * which should be checked for stock availability
      *
-     * @param mixed $qty quantity of this item (item qty x parent item qty)
-     * @param mixed $summaryQty quantity of this product
-     * @param mixed $origQty original qty of item (not multiplied on parent item qty)
+     * @param int|float $qty quantity of this item (item qty x parent item qty)
+     * @param int|float $summaryQty quantity of this product
+     * @param int|float $origQty original qty of item (not multiplied on parent item qty)
      * @return \Magento\Object
      */
     public function checkQuoteItemQty($qty, $summaryQty, $origQty = 0)
@@ -739,9 +741,6 @@ class Item extends \Magento\Core\Model\AbstractModel
         }
 
         $qtyIncrements = $this->getQtyIncrements();
-        if (!$qtyIncrements){
-            $qtyIncrements = $this->getDefaultQtyIncrements();
-        }
 
         if ($qtyIncrements && ($this->mathDivision->getExactDivision($qty, $qtyIncrements) != 0)) {
             $result->setHasError(true)
@@ -752,7 +751,7 @@ class Item extends \Magento\Core\Model\AbstractModel
                 ->setQuoteMessageIndex('qty');
             if ($this->getIsChildItem()) {
                 $result->setMessage(
-                    __('You can buy %1 only in increments of %2.',$this->getProductName(), $qtyIncrements * 1)
+                    __('You can buy %1 only in increments of %2.', $this->getProductName(), $qtyIncrements * 1)
                 );
             } else {
                 $result->setMessage(
@@ -767,8 +766,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Add join for catalog in stock field to product collection
      *
-     * @param \Magento\Catalog\Model\Entity\Product\Collection $productCollection
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
+     * @return $this
      */
     public function addCatalogInventoryToProductCollection($productCollection)
     {
@@ -783,7 +782,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * @param string $itemError
      * @param string $quoteError
      * @param string $errorIndex
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @return $this
      */
     protected function _addQuoteItemError(\Magento\Sales\Model\Quote\Item $item, $itemError,
         $quoteError, $errorIndex='error'
@@ -798,7 +797,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Before save prepare process
      *
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -858,7 +857,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Check if item qty require stock status notification
      *
-     * @param float | null $qty
+     * @param float|null $qty
      * @return bool (true - if require, false - if not require)
      */
     public function verifyNotification($qty = null)
@@ -872,7 +871,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Reindex CatalogInventory save event
      *
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -903,8 +902,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Add product data to stock item
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @param Product $product
+     * @return $this
      */
     public function setProduct($product)
     {
@@ -924,7 +923,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Returns product instance
      *
-     * @return \Magento\Catalog\Model\Product|null
+     * @return Product|null
      */
     public function getProduct()
     {
@@ -971,7 +970,7 @@ class Item extends \Magento\Core\Model\AbstractModel
 
     /**
      * Reset model data
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @return $this
      */
     public function reset()
     {
@@ -985,7 +984,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * Set whether index events should be processed immediately
      *
      * @param bool $process
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @return $this
      */
     public function setProcessIndexEvents($process = true)
     {

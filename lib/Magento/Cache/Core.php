@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Cache
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -64,8 +64,8 @@ class Core extends \Zend_Cache_Core
     /**
      * Prepare tags
      *
-     * @param array $tags
-     * @return array
+     * @param string[] $tags
+     * @return string[]
      */
     protected function _tags($tags)
     {
@@ -81,12 +81,12 @@ class Core extends \Zend_Cache_Core
      * @param  mixed $data                  Data to put in cache (can be another type than string if
      *                                      automatic_serialization is on)
      * @param  null|string $cacheId         Cache id (if not set, the last cache id will be used)
-     * @param  array $tags                  Cache tags
+     * @param  string[] $tags               Cache tags
      * @param  bool|int $specificLifetime   If != false, set a specific lifetime for this cache record
      *                                      (null => infinite lifetime)
      * @param  int $priority                integer between 0 (very low priority) and 10 (maximum priority) used by
      *                                      some particular backends
-     * @return boolean                      True if no problem
+     * @return bool                         True if no problem
      */
     public function save($data, $cacheId = null, $tags = array(), $specificLifetime = false, $priority = 8)
     {
@@ -110,10 +110,10 @@ class Core extends \Zend_Cache_Core
      * 'matchingAnyTag' => remove cache entries matching any given tags
      *                     ($tags can be an array of strings or a single string)
      *
-     * @param  string       $mode
-     * @param  array|string $tags
+     * @param string $mode
+     * @param string[] $tags
      * @throws \Zend_Cache_Exception
-     * @return boolean True if ok
+     * @return bool True if ok
      */
     public function clean($mode = 'all', $tags = array())
     {
@@ -126,8 +126,8 @@ class Core extends \Zend_Cache_Core
      *
      * In case of multiple tags, a logical AND is made between tags
      *
-     * @param array $tags array of tags
-     * @return array array of matching cache ids (string)
+     * @param string[] $tags array of tags
+     * @return string[] array of matching cache ids (string)
      */
     public function getIdsMatchingTags($tags = array())
     {
@@ -140,8 +140,8 @@ class Core extends \Zend_Cache_Core
      *
      * In case of multiple tags, a logical OR is made between tags
      *
-     * @param array $tags array of tags
-     * @return array array of not matching cache ids (string)
+     * @param string[] $tags array of tags
+     * @return string[] array of not matching cache ids (string)
      */
     public function getIdsNotMatchingTags($tags = array())
     {
@@ -164,7 +164,7 @@ class Core extends \Zend_Cache_Core
     /**
      * Decorate cache backend with additional functionality
      *
-     * @param \Zend_Cache_Backend
+     * @param \Zend_Cache_Backend $backendObject
      * @return \Zend_Cache_Backend
      */
     protected function _decorateBackend(\Zend_Cache_Backend $backendObject)

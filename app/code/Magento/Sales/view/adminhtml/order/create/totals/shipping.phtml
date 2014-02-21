@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /**
@@ -29,7 +29,7 @@
  */
 ?>
 <?php if ($this->displayBoth()):?>
-<tr>
+<tr class="row-totals">
     <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
         <?php echo $this->getExcludeTaxLabel() ?>
     </td>
@@ -37,7 +37,7 @@
         <?php echo $this->formatPrice($this->getShippingExcludeTax()) ?>
     </td>
 </tr>
-<tr>
+<tr class="row-totals">
     <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
         <?php echo $this->getIncludeTaxLabel() ?>
     </td>
@@ -55,7 +55,7 @@
     </td>
 </tr>
 <?php else:?>
-<tr>
+<tr class="row-totals">
     <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
         <?php echo $this->escapeHtml($this->getTotal()->getTitle()) ?>
     </td>

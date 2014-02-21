@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,7 +32,7 @@ namespace Magento\Sales\Model\Resource;
 class Setup extends \Magento\Eav\Model\Entity\Setup
 {
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -42,26 +42,26 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     protected $_encryptor;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param string $resourceName
+     * @param \Magento\Eav\Model\Entity\Setup\Context $context
+     * @param $resourceName
      * @param \Magento\App\CacheInterface $cache
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
+     * @param \Magento\App\ConfigInterface $config
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
         \Magento\App\CacheInterface $cache,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
-        \Magento\Core\Model\Config $config,
+        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
+        \Magento\App\ConfigInterface $config,
         $moduleName = 'Magento_Sales',
         $connectionName = ''
     ) {
         $this->_config = $config;
         $this->_encryptor = $context->getEncryptor();
-        parent::__construct($context, $resourceName, $cache, $attrGrCollFactory, $moduleName, $connectionName);
+        parent::__construct($context, $resourceName, $cache, $attrGroupCollectionFactory, $moduleName, $connectionName);
     }
 
     /**
@@ -260,7 +260,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     /**
      * Get config model
      *
-     * @return \Magento\Core\Model\Config
+     * @return \Magento\App\ConfigInterface
      */
     public function getConfigModel()
     {

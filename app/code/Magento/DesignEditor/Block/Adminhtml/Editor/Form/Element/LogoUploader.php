@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,7 +40,7 @@ class LogoUploader
     const CONTROL_TYPE = 'logo-uploader';
 
     /**
-     * Ability to upload multiple files by default is disabled for logo
+     * @var bool Ability to upload multiple files by default is disabled for logo
      */
     protected $_multipleFiles = false;
 }

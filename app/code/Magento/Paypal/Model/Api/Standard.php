@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,8 @@
  * PayPal Standard checkout request API
  */
 namespace Magento\Paypal\Model\Api;
+
+use Magento\Payment\Model\Cart;
 
 class Standard extends \Magento\Paypal\Model\Api\AbstractApi
 {
@@ -91,10 +93,10 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
      * @var array
      */
     protected $_lineItemTotalExportMap = array(
-        \Magento\Paypal\Model\Cart::TOTAL_SUBTOTAL => 'amount',
-        \Magento\Paypal\Model\Cart::TOTAL_DISCOUNT => 'discount_amount',
-        \Magento\Paypal\Model\Cart::TOTAL_TAX      => 'tax',
-        \Magento\Paypal\Model\Cart::TOTAL_SHIPPING => 'shipping',
+        Cart::AMOUNT_SUBTOTAL => 'amount',
+        Cart::AMOUNT_DISCOUNT => 'discount_amount',
+        Cart::AMOUNT_TAX      => 'tax',
+        Cart::AMOUNT_SHIPPING => 'shipping',
     );
 
     /**
@@ -198,7 +200,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
             return;
         }
         if ($this->getIsLineItemsEnabled()) {
-            $this->_cart->isShippingAsItem(true);
+            $this->_cart->setTransferShippingAsItem();
         }
         return parent::_exportLineItems($request, $i);
     }

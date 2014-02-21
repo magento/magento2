@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,22 +49,25 @@ class Cart
     protected $_storeManager;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Core\App\Action\FormKeyValidator
      */
-    protected $messageManager;
+    protected $_formKeyValidator;
 
     /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
+        $this->_formKeyValidator = $formKeyValidator;
         $this->_storeConfig = $storeConfig;
         $this->_checkoutSession = $checkoutSession;
         $this->_storeManager = $storeManager;
@@ -418,6 +421,11 @@ class Cart
      */
     public function updatePostAction()
     {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            $this->_redirect('*/*/');
+            return;
+        }
+
         $updateAction = (string)$this->getRequest()->getParam('update_cart_action');
 
         switch ($updateAction) {
@@ -613,7 +621,7 @@ class Cart
         /** @var $store \Magento\Core\Model\Store */
         $store = $this->_storeManager->getStore();
         $unsecure = (strpos($url, $store->getBaseUrl()) === 0);
-        $secure = (strpos($url, $store->getBaseUrl($store::URL_TYPE_LINK, true)) === 0);
+        $secure = (strpos($url, $store->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)) === 0);
         return $unsecure || $secure;
     }
 }

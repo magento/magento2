@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Log
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Log\Model;
 
 /**
  * Shell model, used to work with logs via command line
@@ -31,8 +32,6 @@
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model;
-
 class Shell extends \Magento\Core\Model\AbstractShell
 {
     /**
@@ -41,12 +40,12 @@ class Shell extends \Magento\Core\Model\AbstractShell
     protected $_commandFactory;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $entryPoint
-     * @param Shell\Command\Factory $commandFactory
+     * @param \Magento\Log\Model\Shell\Command\Factory $commandFactory
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $entryPoint,
         \Magento\Log\Model\Shell\Command\Factory $commandFactory
     ) {
@@ -57,7 +56,7 @@ class Shell extends \Magento\Core\Model\AbstractShell
     /**
      * Runs script
      *
-     * @return \Magento\Log\Model\Shell
+     * @return $this
      */
     public function run()
     {

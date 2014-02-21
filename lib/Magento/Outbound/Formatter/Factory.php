@@ -22,15 +22,18 @@
  *
  * @category    Magento
  * @package     Magento_Outbound
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Outbound\Formatter;
 
+use Magento\ObjectManager;
+use Magento\Outbound\FormatterInterface;
+
 class Factory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
@@ -41,11 +44,11 @@ class Factory
 
     /**
      * @param array $formatterMap
-     * @param \Magento\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
     public function __construct(
         array $formatterMap,
-        \Magento\ObjectManager $objectManager
+        ObjectManager $objectManager
     ) {
         $this->_formatterMap = $formatterMap;
         $this->_objectManager = $objectManager;
@@ -55,7 +58,7 @@ class Factory
      * Get formatter for specified format
      *
      * @param string $format
-     * @return \Magento\Outbound\FormatterInterface
+     * @return FormatterInterface
      * @throws \LogicException
      */
     public function getFormatter($format)
@@ -66,7 +69,7 @@ class Factory
         $formatterClassName = $this->_formatterMap[$format];
 
         $formatter =  $this->_objectManager->get($formatterClassName);
-        if (!$formatter instanceof \Magento\Outbound\FormatterInterface) {
+        if (!$formatter instanceof FormatterInterface) {
             throw new \LogicException("Formatter class for {$format} does not implement FormatterInterface.");
         }
         return $formatter;

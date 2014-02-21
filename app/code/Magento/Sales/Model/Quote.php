@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -220,7 +220,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -242,7 +242,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory
      */
-    protected $_quoteItemCollFactory;
+    protected $_quoteItemCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\Quote\ItemFactory
@@ -272,10 +272,10 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory
      */
-    protected $_quotePaymentCollFactory;
+    protected $_quotePaymentCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Recurring\ProfileFactory
+     * @var \Magento\RecurringProfile\Model\Profile
      */
     protected $_recurringProfileFactory;
 
@@ -291,18 +291,18 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\GroupFactory $customerGroupFactory
-     * @param \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollFactory
+     * @param \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory
      * @param \Magento\Message\Factory $messageFactory
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory
-     * @param \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollFactory
-     * @param \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfileFactory
+     * @param \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
+     * @param \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory
      * @param \Magento\Object\Copy $objectCopyService
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -315,18 +315,18 @@ class Quote extends \Magento\Core\Model\AbstractModel
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\GroupFactory $customerGroupFactory,
-        \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollFactory,
+        \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
         \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory,
         \Magento\Message\Factory $messageFactory,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory,
-        \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollFactory,
-        \Magento\Sales\Model\Recurring\ProfileFactory $recurringProfileFactory,
+        \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
+        \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory,
         \Magento\Object\Copy $objectCopyService,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -340,13 +340,13 @@ class Quote extends \Magento\Core\Model\AbstractModel
         $this->_quoteAddressFactory = $quoteAddressFactory;
         $this->_customerFactory = $customerFactory;
         $this->_customerGroupFactory = $customerGroupFactory;
-        $this->_quoteItemCollFactory = $quoteItemCollFactory;
+        $this->_quoteItemCollectionFactory = $quoteItemCollectionFactory;
         $this->_quoteItemFactory = $quoteItemFactory;
         $this->messageFactory = $messageFactory;
         $this->_statusListFactory = $statusListFactory;
         $this->_productFactory = $productFactory;
         $this->_quotePaymentFactory = $quotePaymentFactory;
-        $this->_quotePaymentCollFactory = $quotePaymentCollFactory;
+        $this->_quotePaymentCollectionFactory = $quotePaymentCollectionFactory;
         $this->_recurringProfileFactory = $recurringProfileFactory;
         $this->_objectCopyService = $objectCopyService;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -911,7 +911,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
             return $this->getData('items_collection');
         }
         if (null === $this->_items) {
-            $this->_items = $this->_quoteItemCollFactory->create();
+            $this->_items = $this->_quoteItemCollectionFactory->create();
             $this->_items->setQuote($this);
         }
         return $this->_items;
@@ -1417,7 +1417,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     public function getPaymentsCollection()
     {
         if (null === $this->_payments) {
-            $this->_payments = $this->_quotePaymentCollFactory->create()
+            $this->_payments = $this->_quotePaymentCollectionFactory->create()
                 ->setQuoteFilter($this->getId());
 
             if ($this->getId()) {
@@ -2161,5 +2161,15 @@ class Quote extends \Magento\Core\Model\AbstractModel
             return $this;
         }
         return parent::save();
+    }
+
+    /**
+     * Check if there are more than one shipping address
+     *
+     * @return bool
+     */
+    public function isMultipleShippingAddresses()
+    {
+        return \count($this->getAllShippingAddresses()) > 1;
     }
 }

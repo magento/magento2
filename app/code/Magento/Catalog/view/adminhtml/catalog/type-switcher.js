@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 (function ($) {
@@ -76,17 +76,48 @@
                 if ($(this).is(':checked')) {
                     $type.val(self.baseType.virtual).trigger('change');
                     if ($type.val() != 'bundle') { // @TODO move this check to Magento_Bundle after refactoring as widget
-                        self.$weight.addClass('ignore-validate').prop('disabled', true);
+                        self.disableElement(self.$weight);
                     }
                     self.$tab.show().closest('li').removeClass('removed');
                 } else {
                     $type.val(self.baseType.real).trigger('change');
                     if ($type.val() != 'bundle') { // @TODO move this check to Magento_Bundle after refactoring as widget
-                        self.$weight.removeClass('ignore-validate').prop('disabled', false);
+                        self.enableElement(self.$weight);
                     }
                     self.$tab.hide();
                 }
             }).trigger('change');
+        },
+
+        /**
+         * Disable element
+         * @param {jQuery|HTMLElement} element
+         */
+        disableElement: function (element) {
+            if (!this._isLocked(element)) {
+                element.addClass('ignore-validate').prop('disabled', true);
+            }
+        },
+
+        /**
+         * Enable element
+         * @param {jQuery|HTMLElement} element
+         */
+        enableElement: function (element) {
+            if (!this._isLocked(element)) {
+                element.removeClass('ignore-validate').prop('disabled', false);
+            }
+        },
+
+        /**
+         * Is element locked
+         *
+         * @param {jQuery|HTMLElement} element
+         * @returns {Boolean}
+         * @private
+         */
+        _isLocked: function (element) {
+            return element.is('[data-locked]');
         },
 
         /**

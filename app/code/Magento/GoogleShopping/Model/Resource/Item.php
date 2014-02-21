@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,7 +44,7 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Load Item model by product
      *
      * @param \Magento\GoogleShopping\Model\Item $model
-     * @return \Magento\GoogleShopping\Model\Resource\Item
+     * @return $this
      */
     public function loadByProduct($model)
     {

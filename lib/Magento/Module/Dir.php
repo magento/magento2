@@ -20,19 +20,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Module;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
+use Magento\Filesystem\Directory\ReadInterface;
 
 class Dir
 {
     /**
      * Modules root directory
      *
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $_modulesDirectory;
 
@@ -42,12 +43,12 @@ class Dir
     protected $_string;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param Filesystem $filesystem
      * @param \Magento\Stdlib\String $string
      */
     public function __construct(Filesystem $filesystem, \Magento\Stdlib\String $string)
     {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES);
+        $this->_modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES_DIR);
         $this->_string = $string;
     }
 

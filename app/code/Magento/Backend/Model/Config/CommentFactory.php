@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,13 +48,13 @@ class CommentFactory
      * Create new config object
      *
      * @param string $type
-     * @return \Magento\Backend\Model\Config\CommentInterface
+     * @return CommentInterface
      * @throws \InvalidArgumentException
      */
     public function create($type)
     {
         $commentModel = $this->_objectManager->create($type);
-        if (!$commentModel instanceof \Magento\Backend\Model\Config\CommentInterface) {
+        if (!$commentModel instanceof CommentInterface) {
             throw new \InvalidArgumentException('Incorrect comment model provided');
         }
         return $commentModel;

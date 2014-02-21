@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require_once __DIR__ . '/../../../../app/bootstrap.php';
@@ -64,14 +64,14 @@ $bootstrap = new \Magento\TestFramework\Bootstrap(
     new \Magento\TestFramework\Bootstrap\Environment(),
     new \Magento\TestFramework\Bootstrap\DocBlock("$testsBaseDir/testsuite"),
     new \Magento\TestFramework\Bootstrap\Profiler(new \Magento\Profiler\Driver\Standard()),
-    new \Magento\Shell(),
+    new \Magento\Shell(new \Magento\OSInfo()),
     $testsTmpDir
 );
 $bootstrap->runBootstrap();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
-Magento\TestFramework\Utility\Files::init(new Magento\TestFramework\Utility\Files($magentoBaseDir));
+Magento\TestFramework\Utility\Files::setInstance(new Magento\TestFramework\Utility\Files($magentoBaseDir));
 
 /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
 unset($bootstrap);

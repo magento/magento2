@@ -20,24 +20,26 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Customer;
 
 /**
  * Backend customers by totals report content block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Reports\Block\Adminhtml\Customer;
-
 class Totals extends \Magento\Backend\Block\Widget\Grid\Container
 {
+    /**
+     * @var string
+     */
     protected $_blockGroup = 'Magento_Reports';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_blockGroup = 'Magento_Reports';

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,6 +30,8 @@ namespace Magento\View\Element\Html;
 class Select extends \Magento\View\Element\AbstractBlock
 {
     /**
+     * Options
+     *
      * @var array
      */
     protected $_options = array();
@@ -48,7 +50,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * Set options for the HTML select
      *
      * @param array $options
-     * @return Select
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -62,7 +64,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * @param string $value  HTML value
      * @param string $label  HTML label
      * @param array  $params HTML attributes
-     * @return Select
+     * @return $this
      */
     public function addOption($value, $label, $params = array())
     {
@@ -74,7 +76,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * Set element's HTML ID
      *
      * @param string $elementId ID
-     * @return Select
+     * @return $this
      */
     public function setId($elementId)
     {
@@ -86,7 +88,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * Set element's CSS class
      *
      * @param string $class Class
-     * @return Select
+     * @return $this
      */
     public function setClass($class)
     {
@@ -98,7 +100,7 @@ class Select extends \Magento\View\Element\AbstractBlock
      * Set element's HTML title
      *
      * @param string $title Title
-     * @return Select
+     * @return $this
      */
     public function setTitle($title)
     {

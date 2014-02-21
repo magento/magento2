@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,7 +41,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Products count
      *
-     * @var null
+     * @var int
      */
     protected $_productsCount;
 
@@ -82,6 +82,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -100,7 +101,8 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Customer\Model\Session $customerSession,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -117,8 +119,10 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -215,8 +219,8 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Set how much product should be displayed at once.
      *
-     * @param $count
-     * @return \Magento\Catalog\Block\Product\NewProduct
+     * @param int $count
+     * @return $this
      */
     public function setProductsCount($count)
     {

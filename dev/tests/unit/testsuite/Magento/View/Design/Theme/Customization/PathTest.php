@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -64,7 +64,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $appStateProperty = new \ReflectionProperty('\Magento\Core\Model\Theme', '_appState');
         $appStateProperty->setAccessible(true);
         $appStateProperty->setValue($this->_theme, $this->_appState);
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
         $filesystem->expects($this->any())
             ->method('getDirectoryRead')

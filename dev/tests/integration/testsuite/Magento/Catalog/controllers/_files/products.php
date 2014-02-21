@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,7 @@ $obectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
 $config = $obectManager->get('Magento\Catalog\Model\Product\Media\Config');
 /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-$mediaDirectory = $obectManager->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+$mediaDirectory = $obectManager->get('Magento\App\Filesystem')->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
 
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
 $mediaDirectory->create($baseTmpMediaPath);
@@ -63,7 +63,7 @@ $productOne->setId(1)
     ->setMetaDescription('Simple Product 1 Meta Description')
 
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
 
     ->addImageToMediaGallery($baseTmpMediaPath . '/product_image.png', null, false, false)
 
@@ -91,6 +91,6 @@ $productTwo->setId(2)
     ))
 
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
 
     ->save();

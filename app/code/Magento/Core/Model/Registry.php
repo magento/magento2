@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model;
 
 /**
  * Registry model. Used to manage values in registry
  */
-namespace Magento\Core\Model;
-
 class Registry
 {
     /**
@@ -58,6 +57,7 @@ class Registry
      * @param string $key
      * @param mixed $value
      * @param bool $graceful
+     * @return void
      * @throws \RuntimeException
      */
     public function register($key, $value, $graceful = false)
@@ -75,6 +75,7 @@ class Registry
      * Unregister a variable from register by key
      *
      * @param string $key
+     * @return void
      */
     public function unregister($key)
     {

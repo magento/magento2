@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -36,14 +36,11 @@
     <event name="catalog_product_save_after">
         <observer name="sales_quote" instance="Magento\Sales\Model\Observer\Backend\CatalogProductQuote" method="catalogProductSaveAfter" />
     </event>
-    <event name="catalog_product_status_update">
-        <observer name="sales_quote" instance="Magento\Sales\Model\Observer\Backend\CatalogProductQuote" method="catalogProductStatusUpdate" />
-    </event>
-    <event name="catalog_product_edit_form_render_recurring">
-        <observer name="payment" instance="Magento\Sales\Model\Observer\Backend\RecurringProfile\FormRenderer" method="render" />
-    </event>
     <event name="payment_method_is_active">
         <observer name="sales_billing_agreement" instance="Magento\Sales\Model\Observer\Backend\BillingAgreement" method="dispatch" />
+    </event>
+    <event name="catalog_product_status_update">
+        <observer name="sales_quote" instance="Magento\Sales\Model\Observer\Backend\CatalogProductQuote" method="catalogProductStatusUpdate" />
     </event>
     <event name="customer_save_after">
         <observer name="customer" instance="Magento\Sales\Model\Observer\Backend\CustomerQuote" method="dispatch" />

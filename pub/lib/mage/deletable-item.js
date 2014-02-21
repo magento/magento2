@@ -19,7 +19,7 @@
  *
  * @category    order by sku
  * @package     mage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
@@ -31,7 +31,8 @@
     $.widget('mage.deletableItem', {
         options: {
             deleteEvent: 'click',
-            deleteSelector: '[data-role="delete"]'
+            deleteSelector: '[data-role="delete"]',
+            hiddenClass: 'hidden'
         },
 
         /**
@@ -77,7 +78,7 @@
          * @private
          */
         _onHideDelete: function () {
-            this.element.find(this.options.deleteSelector).hide();
+            this.element.find(this.options.deleteSelector).addClass(this.options.hiddenClass);
         },
 
         /**
@@ -85,7 +86,7 @@
          * @private
          */
         _onShowDelete: function () {
-            this.element.find(this.options.deleteSelector).show();
+            this.element.find(this.options.deleteSelector).removeClass(this.options.hiddenClass);
         }
     });
 })(jQuery);

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -106,7 +106,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->_fieldFactoryMock = $this->getMock('Magento\Backend\Block\System\Config\Form\Field\Factory',
             array(), array(), '', false, false
         );
-        $this->_coreConfigMock = $this->getMock('Magento\Core\Model\Config',
+        $this->_coreConfigMock = $this->getMock('Magento\App\ConfigInterface',
             array(), array(), '', false, false
         );
 

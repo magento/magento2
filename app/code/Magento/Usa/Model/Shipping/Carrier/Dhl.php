@@ -20,17 +20,19 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Usa\Model\Shipping\Carrier;
+
+use Magento\Shipping\Model\Rate\Result;
+use Magento\Usa\Model\Simplexml\Element;
 
 /**
  * DHL shipping implementation
  */
 class Dhl
-    extends \Magento\Usa\Model\Shipping\Carrier\AbstractCarrier
+    extends \Magento\Usa\Model\Shipping\Carrier\Dhl\AbstractDhl
     implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
 
@@ -51,7 +53,7 @@ class Dhl
     /**
      * Rate request data
      *
-     * @var \Magento\Shipping\Model\Rate\Request|null
+     * @var \Magento\Sales\Model\Quote\Address\RateRequest|null
      */
     protected $_request = null;
 
@@ -65,14 +67,14 @@ class Dhl
     /**
      * Rate result data
      *
-     * @var \Magento\Shipping\Model\Rate\Result|null
+     * @var Result|null
      */
     protected $_result = null;
 
     /**
      * Errors placeholder
      *
-     * @var array
+     * @var string[]
      */
     protected $_errors = array();
 
@@ -93,22 +95,78 @@ class Dhl
     /**
      * Container types that could be customized
      *
-     * @var array
+     * @var string[]
      */
     protected $_customizableContainerTypes = array('P');
 
+    /**
+     * Success code
+     *
+     * @var int
+     */
     const SUCCESS_CODE = 203;
+
+    /**
+     * Success label code
+     *
+     * @var int
+     */
     const SUCCESS_LABEL_CODE = 100;
 
+    /**
+     * Code for required additional protection
+     *
+     * @var string
+     */
     const ADDITIONAL_PROTECTION_ASSET = 'AP';
+
+    /**
+     * Code for not required additional protection
+     *
+     * @var string
+     */
     const ADDITIONAL_PROTECTION_NOT_REQUIRED = 'NR';
 
+    /**
+     * Config code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_VALUE_CONFIG = 0;
+
+    /**
+     * Subtotal code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_VALUE_SUBTOTAL = 1;
+
+    /**
+     * Subtotal with discount code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_VALUE_SUBTOTAL_WITH_DISCOUNT = 2;
 
+    /**
+     * Round to floor(lowest) code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_ROUNDING_FLOOR = 0;
+
+    /**
+     * Round to ceil(highest) code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_ROUNDING_CEIL = 1;
+
+    /**
+     * Round to precision code of additional protection
+     *
+     * @var int
+     */
     const ADDITIONAL_PROTECTION_ROUNDING_ROUND = 2;
 
     /**
@@ -126,12 +184,17 @@ class Dhl
     protected $string;
 
     /**
+     * @var \Zend_Http_ClientFactory
+     */
+    protected $_httpClientFactory;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
-     * @param \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory
      * @param \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory
      * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory
@@ -141,17 +204,18 @@ class Dhl
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Usa\Helper\Data $usaData
      * @param \Magento\Stdlib\String $string
+     * @param \Zend_Http_ClientFactory $httpClientFactory
      * @param array $data
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
-        \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory,
         \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory,
         \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory,
@@ -161,10 +225,12 @@ class Dhl
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Usa\Helper\Data $usaData,
         \Magento\Stdlib\String $string,
+        \Zend_Http_ClientFactory $httpClientFactory,
         array $data = array()
     ) {
         $this->string = $string;
         $this->_usaData = $usaData;
+        $this->_httpClientFactory = $httpClientFactory;
         parent::__construct(
             $coreStoreConfig,
             $rateErrorFactory,
@@ -186,10 +252,10 @@ class Dhl
     /**
      * Collect and get rates
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return bool|\Magento\Shipping\Model\Rate\Result|null
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @return bool|Result|null
      */
-    public function collectRates(\Magento\Shipping\Model\Rate\Request $request)
+    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -207,21 +273,21 @@ class Dhl
         $origCountryId = $requestDhl->getOrigCountryId();
         if (!$origCountryId) {
             $origCountryId = $this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
                 $requestDhl->getStoreId()
             );
         }
         $origState = $requestDhl->getOrigState();
         if (!$origState) {
             $origState = $this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_REGION_ID,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_REGION_ID,
                 $requestDhl->getStoreId()
             );
         }
         $origCity = $requestDhl->getOrigCity();
         if (!$origCity) {
             $origCity = $this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_CITY,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_CITY,
                 $requestDhl->getStoreId()
             );
         }
@@ -229,7 +295,7 @@ class Dhl
         $origPostcode = $requestDhl->getOrigPostcode();
         if (!$origPostcode) {
             $origPostcode = $this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_ZIP,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
                 $requestDhl->getStoreId()
             );
         }
@@ -249,7 +315,7 @@ class Dhl
      * Prepare and set request in property of current instance
      *
      * @param \Magento\Object $request
-     * @return \Magento\Usa\Model\Shipping\Carrier\Dhl
+     * @return $this
      */
     public function setRequest(\Magento\Object $request)
     {
@@ -341,7 +407,7 @@ class Dhl
             $origCountry = $request->getOrigCountry();
         } else {
             $origCountry = $this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
                 $r->getStoreId()
             );
         }
@@ -351,7 +417,7 @@ class Dhl
             $origCountryId = $request->getOrigCountryId();
         } else {
             $origCountryId = $this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
                 $r->getStoreId()
             );
         }
@@ -410,9 +476,9 @@ class Dhl
         $r->setOrigCity($request->getOrigCity());
         $r->setOrigPostal($request->getOrigPostal());
         $originStreet1 = $this->_coreStoreConfig
-            ->getConfig(\Magento\Shipping\Model\Shipping::XML_PATH_STORE_ADDRESS1, $r->getStoreId());
+            ->getConfig(\Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ADDRESS1, $r->getStoreId());
         $originStreet2 = $this->_coreStoreConfig
-            ->getConfig(\Magento\Shipping\Model\Shipping::XML_PATH_STORE_ADDRESS2, $r->getStoreId());
+            ->getConfig(\Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ADDRESS2, $r->getStoreId());
         $r->setOrigStreet($request->getOrigStreet() ? $request->getOrigStreet() : $originStreet2);
         $r->setOrigStreetLine2($request->getOrigStreetLine2());
         $r->setDestPhoneNumber($request->getDestPhoneNumber());
@@ -461,7 +527,7 @@ class Dhl
     /**
      * Get result of request
      *
-     * @return mixed
+     * @return Result|null
      */
     public function getResult()
     {
@@ -471,7 +537,7 @@ class Dhl
     /**
      * Get quotes
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result
      */
     protected function _getQuotes()
     {
@@ -481,7 +547,7 @@ class Dhl
     /**
      * Set free method request
      *
-     * @param  $freeMethod
+     * @param string $freeMethod
      * @return void
      */
     protected function _setFreeMethodRequest($freeMethod)
@@ -493,34 +559,6 @@ class Dhl
         $freeWeight = round(max(1, $weight), 0);
         $r->setWeight($freeWeight);
         $r->setService($freeMethod);
-    }
-
-    /**
-     * Get shipping date
-     *
-     * @param bool $domestic
-     * @return string
-     */
-    protected function _getShipDate($domestic = true)
-    {
-        if ($domestic) {
-            $days = explode(',', $this->getConfigData('shipment_days'));
-        } else {
-            $days = explode(',', $this->getConfigData('intl_shipment_days'));
-        }
-
-        if (!$days) {
-            return date('Y-m-d');
-        }
-
-        $i = 0;
-        $weekday = date('w');
-        while (!in_array($weekday, $days) && $i < 10) {
-            $i++;
-            $weekday = date('w', strtotime("+$i day"));
-        }
-
-        return date('Y-m-d', strtotime("+$i day"));
     }
 
     /**
@@ -536,7 +574,7 @@ class Dhl
     /**
      * Do rate request and handle errors
      *
-     * @return \Magento\Shipping\Model\Rate\Result|\Magento\Object
+     * @return Result|\Magento\Object
      */
     protected function _doRequest()
     {
@@ -612,6 +650,7 @@ class Dhl
                     $shippingDuty->addChild('CustomsValue', $customsValue);
                     $shippingDuty->addChild('IsSEDReqd', 'N');
                 }
+
                 if ($shipment !== false) {
                     $hasShipCode = true;
                     $this->_createShipmentXml($shipment, $shipKey);
@@ -621,7 +660,7 @@ class Dhl
 
         if (!$hasShipCode) {
             $this->_errors[] = __('We don\'t have a way to ship to the selected shipping address. Please choose another address or edit the current address.');
-            return;
+            return null;
         }
 
         $request = $xml->asXML();
@@ -634,14 +673,21 @@ class Dhl
                 if (!$url) {
                     $url = $this->_defaultGatewayUrl;
                 }
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-                $responseBody = curl_exec($ch);
-                curl_close($ch);
+                $config = array(
+                    'adapter' => 'Zend_Http_Client_Adapter_Curl',
+                    'curloptions' => array(
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_URL => $url,
+                        CURLOPT_SSL_VERIFYPEER => true,
+                        CURLOPT_SSL_VERIFYHOST => false,
+                        CURLOPT_POSTFIELDS => $request
+                    )
+                );
+                $client = $this->_httpClientFactory->create(
+                    array('data' => $config)
+                );
+                $response = $client->request();
+                $responseBody = $response->getBody();
 
                 $debugData['result'] = $responseBody;
                 $this->_setCachedQuotes($request, $responseBody);
@@ -659,8 +705,8 @@ class Dhl
     /**
      * Create shipment xml
      *
-     * @param  $shipment
-     * @param  $shipKey
+     * @param Element $shipment
+     * @param string $shipKey
      * @return void
      */
     protected function _createShipmentXml($shipment, $shipKey)
@@ -780,7 +826,6 @@ class Dhl
             $extendedService->addChild('Code', $r->getExtendedService());
         }
 
-
         /*
         * R = Receiver (if receiver, need AccountNbr)
         * S = Sender
@@ -840,7 +885,7 @@ class Dhl
      * Parse xml response and return result
      *
      * @param string $response
-     * @return \Magento\Shipping\Model\Rate\Result|\Magento\Object
+     * @return Result|\Magento\Object
      */
     protected function _parseXmlResponse($response)
     {
@@ -848,10 +893,6 @@ class Dhl
         $costArr = array();
         $priceArr = array();
         $errorTitle = 'Unable to retrieve quotes';
-
-        $tr = get_html_translation_table(HTML_ENTITIES);
-        unset($tr['<'], $tr['>'], $tr['"']);
-        $response = str_replace(array_keys($tr), array_values($tr), $response);
 
         if (strlen(trim($response)) > 0) {
             if (strpos(trim($response), '<?xml') === 0) {
@@ -939,8 +980,8 @@ class Dhl
     /**
      * Parse xml object
      *
-     * @param mixed $shipXml
-     * @return \Magento\Usa\Model\Shipping\Carrier\Dhl
+     * @param \SimpleXMLElement $shipXml
+     * @return $this
      */
     protected function _parseXmlObject($shipXml)
     {
@@ -975,7 +1016,7 @@ class Dhl
      *
      * @param string $type
      * @param string $code
-     * @return array|bool
+     * @return array|false
      */
     public function getCode($type, $code = '')
     {
@@ -1013,7 +1054,6 @@ class Dhl
 
         );
 
-
         if (!isset($codes[$type])) {
             return false;
         } elseif ('' === $code) {
@@ -1030,7 +1070,7 @@ class Dhl
     /**
      * Parse xml and add rates to instance property
      *
-     * @param mixed $shipXml
+     * @param \SimpleXMLElement $shipXml
      * @return void
      */
     protected function _addRate($shipXml)
@@ -1067,8 +1107,8 @@ class Dhl
     /**
      * Get tracking
      *
-     * @param mixed $trackings
-     * @return mixed
+     * @param string|string[] $trackings
+     * @return Result|null
      */
     public function getTracking($trackings)
     {
@@ -1085,7 +1125,7 @@ class Dhl
     /**
      * Set tracking request
      *
-     * @return null
+     * @return void
      */
     protected function setTrackingReqeust()
     {
@@ -1103,8 +1143,8 @@ class Dhl
     /**
      * Send request for tracking
      *
-     * @param array $tracking
-     * @return null
+     * @param string[] $trackings
+     * @return void
      */
     protected function _getXMLTracking($trackings)
     {
@@ -1136,15 +1176,24 @@ class Dhl
             if (!$url) {
                 $url = $this->_defaultGatewayUrl;
             }
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-            $responseBody = curl_exec($ch);
+
+            $config = array(
+                'adapter' => 'Zend_Http_Client_Adapter_Curl',
+                'curloptions' => array(
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_URL => $url,
+                    CURLOPT_SSL_VERIFYPEER => true,
+                    CURLOPT_SSL_VERIFYHOST => false,
+                    CURLOPT_POSTFIELDS => $request
+                )
+            );
+            $client = $this->_httpClientFactory->create(
+                array('data' => $config)
+            );
+            $response = $client->request();
+            $responseBody = $response->getBody();
+
             $debugData['result'] = $responseBody;
-            curl_close($ch);
         } catch (\Exception $e) {
             $debugData['result'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
             $responseBody = '';
@@ -1156,9 +1205,9 @@ class Dhl
     /**
      * Parse xml tracking response
      *
-     * @param array $trackingvalue
+     * @param string[] $trackings value
      * @param string $response
-     * @return null
+     * @return void
      */
     protected function _parseXmlTrackingResponse($trackings, $response)
     {
@@ -1200,8 +1249,9 @@ class Dhl
                                         * Code 0== airbill  found
                                         */
                                         $rArr['service'] = (string)$txml->Service->Desc;
-                                        if (isset($txml->Weight))
+                                        if (isset($txml->Weight)) {
                                             $rArr['weight'] = (string)$txml->Weight . " lbs";
+                                        }
                                         if (isset($txml->Delivery)) {
                                             $rArr['deliverydate'] = (string)$txml->Delivery->Date;
                                             $rArr['deliverytime'] = (string)$txml->Delivery->Time . ':00';
@@ -1265,10 +1315,11 @@ class Dhl
                                         $resultArr[$tracknum] = $rArr;
                                     } else {
                                         $description = (string)$txml->Result->Desc;
-                                        if ($description)
+                                        if ($description) {
                                             $errorArr[$tracknum] = __('Error #%1: %2', $code, $description);
-                                        else
+                                        } else {
                                             $errorArr[$tracknum] = __('Unable to retrieve tracking');
+                                        }
                                     }
                                 } else {
                                     $errorArr[$tracknum] = __('Unable to retrieve tracking');
@@ -1402,7 +1453,7 @@ class Dhl
      * Map request to shipment
      *
      * @param \Magento\Object $request
-     * @return null
+     * @return void
      */
     protected function _mapRequestToShipment(\Magento\Object $request)
     {
@@ -1441,7 +1492,7 @@ class Dhl
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
      * @param \Magento\Object $request
-     * @return \Magento\Object
+     * @return \Magento\Object|Result
      */
     protected function _doShipmentRequest(\Magento\Object $request)
     {

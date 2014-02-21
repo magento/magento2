@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -77,19 +77,6 @@ class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())->method('getStatus')->will($this->returnValue($productStatus));
         $this->_quoteMock->expects($this->any())->method('markQuotesRecollect');
         $this->_model->catalogProductSaveAfter($this->_observerMock);
-    }
-
-    /**
-     * @param int $productId
-     * @param int $productStatus
-     * @dataProvider statusUpdateDataProvider
-     */
-    public function testStatusUpdate($productId, $productStatus)
-    {
-        $this->_eventMock->expects($this->once())->method('getStatus')->will($this->returnValue($productStatus));
-        $this->_eventMock->expects($this->once())->method('getProductId')->will($this->returnValue($productId));
-        $this->_quoteMock->expects($this->any())->method('markQuotesRecollect');
-        $this->_model->catalogProductStatusUpdate($this->_observerMock);
     }
 
     public function statusUpdateDataProvider()

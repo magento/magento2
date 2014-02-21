@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Convert
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,9 +34,14 @@
  */
 namespace Magento\Convert\Mapper;
 
-class Column extends \Magento\Convert\Container\AbstractContainer
-    implements \Magento\Convert\Mapper\MapperInterface
+use Magento\Convert\Container\AbstractContainer;
+
+class Column extends AbstractContainer
+    implements MapperInterface
 {
+    /**
+     * @return $this
+     */
     public function map()
     {
         $data = $this->getData();

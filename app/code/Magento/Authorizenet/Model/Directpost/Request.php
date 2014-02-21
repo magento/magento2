@@ -20,21 +20,21 @@
  *
  * @category    Magento
  * @package     Magento_Authorizenet
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Authorizenet\Model\Directpost;
 
 /**
  * Authorize.net request model for DirectPost model.
  *
- * @category   Magento
- * @package    Magento_Authorizenet
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Authorizenet\Model\Directpost;
-
 class Request extends \Magento\Object
 {
+    /**
+     * @var string
+     */
     protected $_transKey = null;
 
     /**
@@ -53,7 +53,7 @@ class Request extends \Magento\Object
      * Needed to generate sign.
      *
      * @param string $transKey
-     * @return \Magento\Authorizenet\Model\Directpost\Request
+     * @return $this
      */
     protected function _setTransactionKey($transKey)
     {
@@ -84,10 +84,10 @@ class Request extends \Magento\Object
     }
 
     /**
-     * Set paygate data to request.
+     * Set Authorizenet data to request.
      *
      * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
-     * @return \Magento\Authorizenet\Model\Directpost\Request
+     * @return $this
      */
     public function setConstantData(\Magento\Authorizenet\Model\Directpost $paymentMethod)
     {
@@ -99,7 +99,7 @@ class Request extends \Magento\Object
 
         $this->setXLogin($paymentMethod->getConfigData('login'))
             ->setXType('AUTH_ONLY')
-            ->setXMethod(\Magento\Paygate\Model\Authorizenet::REQUEST_METHOD_CC)
+            ->setXMethod(\Magento\Authorizenet\Model\Authorizenet::REQUEST_METHOD_CC)
             ->setXRelayUrl($paymentMethod->getRelayUrl());
 
         $this->_setTransactionKey($paymentMethod->getConfigData('trans_key'));
@@ -111,7 +111,7 @@ class Request extends \Magento\Object
      *
      * @param \Magento\Sales\Model\Order $order
      * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
-     * @return \Magento\Authorizenet\Model\Directpost\Request
+     * @return $this
      */
     public function setDataFromOrder(\Magento\Sales\Model\Order $order, \Magento\Authorizenet\Model\Directpost $paymentMethod)
     {
@@ -166,7 +166,7 @@ class Request extends \Magento\Object
      * Set sign hash into the request object.
      * All needed fields should be placed in the object fist.
      *
-     * @return \Magento\Authorizenet\Model\Directpost\Request
+     * @return $this
      */
     public function signRequestData()
     {

@@ -20,15 +20,18 @@
  *
  * @category    Magento
  * @package     Magento_Bundle
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+/** @var $installer \Magento\Catalog\Model\Resource\Setup */
+$installer = $this;
 
 /** @var $this \Magento\Catalog\Model\Resource\Setup */
 $installFile = __DIR__ . '/upgrade-1.6.0.0-1.6.0.0.1.php';
 
 /** @var \Magento\Filesystem\Directory\Read $modulesDirectory */
-$modulesDirectory = $this->getFilesystem()->getDirectoryRead(\Magento\Filesystem::MODULES);
+$modulesDirectory = $this->getFilesystem()->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
 
 if ($modulesDirectory->isExist($modulesDirectory->getRelativePath($installFile))) {
     include $installFile;

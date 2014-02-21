@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Install
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,6 +31,9 @@ namespace Magento\Install\Block;
 
 class Begin extends \Magento\Install\Block\AbstractBlock
 {
+    /**
+     * @var string
+     */
     protected $_template = 'begin.phtml';
 
     /**
@@ -79,7 +82,7 @@ class Begin extends \Magento\Install\Block\AbstractBlock
     public function getLicenseHtml()
     {
         return ($this->_eulaFile)
-            ? $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT)->readFile($this->_eulaFile)
+            ? $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR)->readFile($this->_eulaFile)
             : '';
     }
 }

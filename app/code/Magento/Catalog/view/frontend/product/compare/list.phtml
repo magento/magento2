@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* @var $this \Magento\Catalog\Block\Product\Compare\ListCompare */
@@ -40,7 +40,8 @@
                             <th class="cell label remove">&nbsp;</th>
                         <?php endif; ?>
                         <td class="cell remove product">
-                            <a href="<?php echo $this->helper('Magento\Catalog\Helper\Product\Compare')->getRemoveUrl($_item) ?>"
+                            <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+                            <a href="#" data-post='<?php echo $compareHelper->getPostDataRemove($_item); ?>'
                                class="action delete" title="<?php echo __('Remove Product') ?>">
                                 <span><?php echo __('Remove Product') ?></span>
                             </a>
@@ -84,8 +85,8 @@
                                     <?php endif; ?>
                                 </div>
                                 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
-                                    <div class="secondary addto links">
-                                        <a href="<?php echo $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToWishlistUrl($_item) ?>" class="action towishlist" data-action="add-to-wishlist">
+                                    <div class="secondary addto links" data-role="add-to-links">
+                                        <a href="#" data-post='<?php echo $this->getAddToWishlistParams($_item); ?>' class="action towishlist" data-action="add-to-wishlist">
                                             <span><?php echo __('Add to Wishlist') ?></span>
                                         </a>
                                     </div>

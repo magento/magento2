@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Sales\Block\Items;
@@ -35,18 +35,25 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemRenderer()
     {
+        $rendererType = 'some-type';
         $renderer = $this->getMock('Magento\View\Element\AbstractBlock', array('setRenderedBlock'), array(), '', false);
+
+        $rendererList = $this->getMock('Magento\View\Element\RendererList', array(), array(), '', false);
+        $rendererList->expects($this->once())->method('getRenderer')
+            ->with($rendererType, AbstractItems::DEFAULT_TYPE)->will($this->returnValue($renderer));
+
         $layout = $this->getMock('Magento\Core\Model\Layout', array(
             'getChildName', 'getBlock'
         ), array(), '', false);
-        $layout->expects($this->at(0))
+
+        $layout->expects($this->once())
             ->method('getChildName')
-            ->with(null, 'some-type')
-            ->will($this->returnValue('some-block-name'));
-        $layout->expects($this->at(1))
+            ->will($this->returnValue('renderer.list'));
+
+        $layout->expects($this->once())
             ->method('getBlock')
-            ->with('some-block-name')
-            ->will($this->returnValue($renderer));
+            ->with('renderer.list')
+            ->will($this->returnValue($rendererList));
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */
         $block = $this->_objectManager->getObject('Magento\Sales\Block\Items\AbstractItems', array(
@@ -55,31 +62,23 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ))
         ));
 
-        $renderer->expects($this->once())
-            ->method('setRenderedBlock')
-            ->with($block);
+        $renderer->expects($this->once())->method('setRenderedBlock')->with($block);
 
-        $this->assertSame($renderer, $block->getItemRenderer('some-type'));
+        $this->assertSame($renderer, $block->getItemRenderer($rendererType));
     }
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Renderer for type "some-type" does not exist.
+     * @expectedExceptionMessage Renderer list for block "" is not defined
      */
-    public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
+    public function te1stGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $renderer = $this->getMock('StdClass');
         $layout = $this->getMock('Magento\Core\Model\Layout', array(
             'getChildName', 'getBlock'
         ), array(), '', false);
-        $layout->expects($this->at(0))
+        $layout->expects($this->once())
             ->method('getChildName')
-            ->with(null, 'some-type')
-            ->will($this->returnValue('some-block-name'));
-        $layout->expects($this->at(1))
-            ->method('getBlock')
-            ->with('some-block-name')
-            ->will($this->returnValue($renderer));
+            ->will($this->returnValue(null));
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */
         $block = $this->_objectManager->getObject('Magento\Sales\Block\Items\AbstractItems', array(

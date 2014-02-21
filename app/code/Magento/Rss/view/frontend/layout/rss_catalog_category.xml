@@ -19,16 +19,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Rss\Block\Catalog\Category" output="1" name="rss.catalog.category">
-        <action method="addPriceBlockType">
-            <argument name="type" xsi:type="string">msrp_rss</argument>
-            <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>
-            <argument name="template" xsi:type="string">product/price_msrp_rss.phtml</argument>
-        </action>
+    <update handle="catalog_product_rss_feed_renderer_list" />
+    <block class="Magento\Rss\Block\Catalog\Category" output="1" name="rss.catalog.category" cacheable="false">
+        <block class="Magento\View\Element\RendererList" name="catalog.product.rss.feed.renderer.list" as="renderer.list" />
     </block>
 </layout>

@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App;
@@ -96,6 +96,7 @@ class Resource
      * Set cache instance
      *
      * @param \Magento\App\CacheInterface $cache
+     * @return void
      */
     public function setCache(\Magento\App\CacheInterface $cache)
     {
@@ -107,6 +108,7 @@ class Resource
      * Added for console installation
      *
      * @param string $tablePrefix
+     * @return void
      */
     public function setTablePrefix($tablePrefix)
     {
@@ -139,7 +141,7 @@ class Resource
     /**
      * Get resource table name, validated by db adapter
      *
-     * @param   string|array $modelEntity
+     * @param   string|string[] $modelEntity
      * @return  string
      */
     public function getTableName($modelEntity)
@@ -172,7 +174,7 @@ class Resource
      *
      * @param string $tableName
      * @param string $mappedName
-     * @return \Magento\App\Resource
+     * @return $this
      */
     public function setMappedTableName($tableName, $mappedName)
     {
@@ -199,7 +201,7 @@ class Resource
      * Retrieve 32bit UNIQUE HASH for a Table index
      *
      * @param string $tableName
-     * @param array|string $fields
+     * @param string|string[] $fields
      * @param string $indexType
      * @return string
      */

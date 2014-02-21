@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,11 +54,11 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_viewUrlMock = $this->getMock('Magento\View\Url', array(), array(), '', false);
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 
-        $this->_filesystem->expects($this->any())->method('getPath')->with(\Magento\Filesystem::MEDIA)
+        $this->_filesystem->expects($this->any())->method('getPath')->with(\Magento\App\Filesystem::MEDIA_DIR)
             ->will($this->returnValue('/media'));
 
         $this->_model = new Path(

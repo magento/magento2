@@ -22,22 +22,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
-    array('ADMIN_STORE_ID', 'Magento\Core\Model\AppInterface'),
+    array('ADMIN_STORE_ID', 'Magento\AppInterface'),
     array('BACKORDERS_BELOW'),
     array('DS'),
     array('BACKORDERS_YES'),
     array('CACHE_TAG', 'Magento\Api\Model\Config', 'Magento_Api_Model_Cache_Type::CACHE_TAG'),
-    array('CACHE_TAG', 'Magento\Core\Model\AppInterface'),
+    array('CACHE_TAG', 'Magento\AppInterface'),
     array(
         'CACHE_TAG',
         'Magento\Core\Model\Resource\Db\Collection\AbstractCollection',
         'Magento_Core_Model_Cache_Type_Collection::CACHE_TAG'
     ),
-    array('CACHE_TAG', 'Magento\Core\Model\Translate', 'Magento_Core_Model_Cache_Type_Translate::CACHE_TAG'),
+    array('CACHE_TAG', 'Magento\Translate', 'Magento_Core_Model_Cache_Type_Translate::CACHE_TAG'),
     array('CACHE_TAG', 'Magento\Rss\Block\Catalog\NotifyStock'),
     array('CACHE_TAG', 'Magento\Rss\Block\Catalog\Review'),
     array('CACHE_TAG', 'Magento\Rss\Block\Order\NewOrder'),
@@ -94,7 +94,7 @@ return array(
     array('INIT_OPTION_RESPONSE', 'Magento\Core\Model\App'),
     array('INIT_OPTION_SCOPE_CODE', 'Magento\Core\Model\App', 'Magento_Core_Model_App::PARAM_RUN_CODE'),
     array('INIT_OPTION_SCOPE_TYPE', 'Magento\Core\Model\App', 'Magento_Core_Model_App::PARAM_RUN_TYPE'),
-    array('INIT_OPTION_URIS', 'Magento\Core\Model\App', 'Magento_Core_Model_App::PARAM_APP_URIS'),
+    array('INIT_OPTION_URIS', 'Magento\Core\Model\App'),
     array('INSTALLER_HOST_RESPONSE', 'Magento\Install\Model\Installer'),
     array(
         'LAYOUT_GENERAL_CACHE_TAG',
@@ -104,6 +104,7 @@ return array(
     array('LOCALE_CACHE_KEY', 'Magento\Backend\Block\Page\Footer'),
     array('LOCALE_CACHE_LIFETIME', 'Magento\Backend\Block\Page\Footer'),
     array('LOCALE_CACHE_TAG', 'Magento\Backend\Block\Page\Footer'),
+    array('PARAM_CACHE_OPTIONS', '\Magento\Core\Model\App', '\Magento\Core\Model\App::PARAM_CACHE_FORCED_OPTIONS'),
     array('PATH_PREFIX_CUSTOMIZATION', 'Magento\Core\Model\Theme'),
     array('PATH_PREFIX_CUSTOMIZED', 'Magento\Core\Model\Theme\Files'),
     array('PUBLIC_BASE_THEME_DIR', 'Magento\Core\Model\Design\PackageInterface'),
@@ -192,9 +193,6 @@ return array(
     ),
     array('XML_PATH_INDEXER_DATA', 'Magento\Index\Model\Process'),
     array('XML_PATH_INSTALL_DATE', 'Mage_Core_Model_App', 'Mage_Core_Model_Config_Primary::XML_PATH_INSTALL_DATE'),
-    array('XML_PATH_EXTERNAL_CACHE_CONTROLS', 'Magento\PageCache\Helper\Data'),
-    array('XML_PATH_EXTERNAL_CACHE_CONTROLS', 'Magento\PageCache\Model\CacheControlFactory'),
-    array('XML_PATH_EXTERNAL_CACHE_CONTROL', 'Magento\PageCache\Helper\Data'),
     array('XML_PATH_LOCALE_INHERITANCE', 'Mage_Core_Model_Translate'),
     array('XML_PATH_PRODUCT_ATTRIBUTES', 'Magento\Wishlist\Model\Config'),
     array('XML_PATH_PRODUCT_COLLECTION_ATTRIBUTES', 'Magento\Catalog\Model\Config'),
@@ -209,6 +207,36 @@ return array(
         'XML_PATH_STATIC_FILE_SIGNATURE',
         'Magento\Core\Helper\Data',
         'Magento_Core_Model_Design_Package::XML_PATH_STATIC_FILE_SIGNATURE'
+    ),
+    array(
+        'XML_PATH_STORE_ADDRESS1',
+        'Magento\Shipping\Model\Shipping',
+        'Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ADDRESS1'
+    ),
+    array(
+        'XML_PATH_STORE_ADDRESS2',
+        'Magento\Shipping\Model\Shipping',
+        'Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ADDRESS2'
+    ),
+    array(
+        'XML_PATH_STORE_CITY',
+        'Magento\Shipping\Model\Shipping',
+        'Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_CITY'
+    ),
+    array(
+        'XML_PATH_STORE_REGION_ID',
+        'Magento\Shipping\Model\Shipping',
+        'Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_REGION_ID'
+    ),
+    array(
+        'XML_PATH_STORE_ZIP',
+        'Magento\Shipping\Model\Shipping',
+        'Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP'
+    ),
+    array(
+        'XML_PATH_STORE_COUNTRY_ID',
+        'Magento\Shipping\Model\Shipping',
+        'Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID'
     ),
     array('XML_PATH_TEMPLATE_EMAIL', 'Magento\Core\Model\Email\Template'),
     array(
@@ -471,6 +499,26 @@ return array(
         'Magento\View\Asset\MinifyService',
         'Magento\Core\Model\Asset\Config::XML_PATH_MINIFICATION_ADAPTER'
     ),
+    array(
+        'USE_PARENT_IMAGE',
+        'Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable',
+        'Magento\Catalog\Model\Config\Source\Product\Thumbnail::OPTION_USE_PARENT_IMAGE'
+    ),
+    array(
+        'USE_PARENT_IMAGE',
+        'Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped',
+        'Magento\Catalog\Model\Config\Source\Product\Thumbnail::OPTION_USE_PARENT_IMAGE'
+    ),
+    array(
+        'CONFIGURABLE_PRODUCT_IMAGE',
+        'Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable',
+        'Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable::CONFIG_THUMBNAIL_SOURCE'
+    ),
+    array(
+        'GROUPED_PRODUCT_IMAGE',
+        'Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped',
+        'Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped::CONFIG_THUMBNAIL_SOURCE'
+    ),
     array('TYPE_BLOCK', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('TYPE_CONTAINER', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('TYPE_ACTION', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
@@ -492,5 +540,67 @@ return array(
     array('UPLOAD_ROOT', 'Magento\Backend\Model\Config\Backend\Logo'),
     array('UPLOAD_ROOT', 'Magento\Backend\Model\Config\Backend\Favicon'),
     array('DIRECTORY_SEPARATOR', 'Magento\Filesystem'),
-    array('PARAM_APP_URIS', 'Magento\Filesystem')
+
+    array('MAX_QTY_VALUE', '\Magento\Catalog\Controller\Adminhtml\Product',
+        'Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::MAX_QTY_VALUE'
+    ),
+    array('LINK_TYPE_GROUPED', '\Magento\Catalog\Model\Product\Link',
+        '\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED'
+    ),
+    array('TYPE_GROUPED', '\Magento\Catalog\Model\Product\Type',
+        '\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED'
+    ),
+
+    array('PARAM_APP_URIS', 'Magento\Filesystem'),
+
+    array('ROOT', '\Magento\Filesystem', '\Magento\App\Filesystem::ROOT_DIR'),
+    array('APP', '\Magento\Filesystem', '\Magento\App\Filesystem::APP_DIR'),
+    array('MODULES', '\Magento\Filesystem', '\Magento\App\Filesystem::MODULES_DIR'),
+    array('THEMES', '\Magento\Filesystem', '\Magento\App\Filesystem::THEMES_DIR'),
+    array('CONFIG', '\Magento\Filesystem', '\Magento\App\Filesystem::CONFIG_DIR'),
+    array('LIB', '\Magento\Filesystem', '\Magento\App\Filesystem::LIB_DIR'),
+    array('LOCALE', '\Magento\Filesystem', '\Magento\App\Filesystem::LOCALE_DIR'),
+    array('PUB', '\Magento\Filesystem', '\Magento\App\Filesystem::PUB_DIR'),
+    array('PUB_LIB', '\Magento\Filesystem', '\Magento\App\Filesystem::PUB_LIB_DIR'),
+    array('MEDIA', '\Magento\Filesystem', '\Magento\App\Filesystem::MEDIA_DIR'),
+    array('STATIC_VIEW', '\Magento\Filesystem', '\Magento\App\Filesystem::STATIC_VIEW_DIR'),
+    array('PUB_VIEW_CACHE', '\Magento\Filesystem', '\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR'),
+    array('VAR_DIR', '\Magento\Filesystem', '\Magento\App\Filesystem'),
+    array('TMP', '\Magento\Filesystem', '\Magento\App\Filesystem::TMP_DIR'),
+    array('CACHE', '\Magento\Filesystem', '\Magento\App\Filesystem::CACHE_DIR'),
+    array('LOG', '\Magento\Filesystem', '\Magento\App\Filesystem::LOG_DIR'),
+    array('SESSION', '\Magento\Filesystem', '\Magento\App\Filesystem::SESSION_DIR'),
+    array('DI', '\Magento\Filesystem', '\Magento\App\Filesystem::DI_DIR'),
+    array('GENERATION', '\Magento\Filesystem', '\Magento\App\Filesystem::GENERATION_DIR'),
+    array('UPLOAD', '\Magento\Filesystem', '\Magento\App\Filesystem::UPLOAD_DIR'),
+    array('SYS_TMP', '\Magento\Filesystem', '\Magento\App\Filesystem::SYS_TMP_DIR'),
+    array('LAYOUT_NAVIGATION_CLASS_NAME', 'Magento\DesignEditor\Model\State'),
+    array(
+        'TYPE_CONFIGURABLE',
+        '\Magento\Catalog\Model\Product\Type',
+        '\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE'
+    ),
+    ['PERIOD_UNIT_DAY', '\Magento\Payment\Model\Recurring\Profile', '\Magento\RecurringProfile\Model\PeriodUnits::DAY'],
+    [
+        'PERIOD_UNIT_WEEK',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringProfile\Model\PeriodUnits::WEEK'
+    ],
+    [
+        'PERIOD_UNIT_SEMI_MONTH',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringProfile\Model\PeriodUnits::SEMI_MONTH'
+    ],
+    [
+        'PERIOD_UNIT_MONTH',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringProfile\Model\PeriodUnits::MONTH'
+    ],
+    [
+        'PERIOD_UNIT_YEAR',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringProfile\Model\PeriodUnits::YEAR'
+    ],
+    array('XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY', '\Magento\Catalog\Helper\Category\Flat',
+        '\Magento\Catalog\Model\Indexer\Category\Flat\Config::XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY'),
 );

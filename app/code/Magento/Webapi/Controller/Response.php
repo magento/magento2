@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller;
@@ -57,7 +57,7 @@ class Response extends \Zend_Controller_Response_Http implements \Magento\App\Re
      * Set header appropriate to specified MIME type.
      *
      * @param string $mimeType MIME type
-     * @return \Magento\Webapi\Controller\Response
+     * @return $this
      */
     public function setMimeType($mimeType)
     {
@@ -71,7 +71,7 @@ class Response extends \Zend_Controller_Response_Http implements \Magento\App\Re
      * @param string $code
      * @param array $params
      * @param string $type
-     * @return \Magento\Webapi\Controller\Response
+     * @return $this
      */
     public function addMessage($message, $code, $params = array(), $type = self::MESSAGE_TYPE_ERROR)
     {
@@ -104,7 +104,7 @@ class Response extends \Zend_Controller_Response_Http implements \Magento\App\Re
     /**
      * Clear messages.
      *
-     * @return \Magento\Webapi\Controller\Response
+     * @return $this
      */
     public function clearMessages()
     {

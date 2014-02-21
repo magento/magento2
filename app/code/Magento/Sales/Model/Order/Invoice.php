@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -215,7 +215,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     /**
      * @var \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory
      */
-    protected $_invoiceItemCollFactory;
+    protected $_invoiceItemCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Invoice\CommentFactory
@@ -225,7 +225,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     /**
      * @var \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory
      */
-    protected $_commentCollFactory;
+    protected $_commentCollectionFactory;
 
     /**
      * @var \Magento\Email\Model\Template\MailerFactory
@@ -249,9 +249,9 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\OrderFactory $orderResourceFactory
      * @param \Magento\Core\Model\CalculatorFactory $calculatorFactory
-     * @param \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory $invoiceItemCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory
      * @param \Magento\Sales\Model\Order\Invoice\CommentFactory $invoiceCommentFactory
-     * @param \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $commentCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $commentCollectionFactory
      * @param \Magento\Email\Model\Template\MailerFactory $templateMailerFactory
      * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -270,9 +270,9 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\OrderFactory $orderResourceFactory,
         \Magento\Core\Model\CalculatorFactory $calculatorFactory,
-        \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory $invoiceItemCollFactory,
+        \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory,
         \Magento\Sales\Model\Order\Invoice\CommentFactory $invoiceCommentFactory,
-        \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $commentCollFactory,
+        \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $commentCollectionFactory,
         \Magento\Email\Model\Template\MailerFactory $templateMailerFactory,
         \Magento\Email\Model\InfoFactory $emailInfoFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
@@ -286,9 +286,9 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
         $this->_orderFactory = $orderFactory;
         $this->_orderResourceFactory = $orderResourceFactory;
         $this->_calculatorFactory = $calculatorFactory;
-        $this->_invoiceItemCollFactory = $invoiceItemCollFactory;
+        $this->_invoiceItemCollectionFactory = $invoiceItemCollectionFactory;
         $this->_invoiceCommentFactory = $invoiceCommentFactory;
-        $this->_commentCollFactory = $commentCollFactory;
+        $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->_templateMailerFactory = $templateMailerFactory;
         $this->_emailInfoFactory = $emailInfoFactory;
         parent::__construct($context, $registry, $coreLocale, $dateTime, $resource, $resourceCollection, $data);
@@ -615,7 +615,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     public function getItemsCollection()
     {
         if (empty($this->_items)) {
-            $this->_items = $this->_invoiceItemCollFactory->create()->setInvoiceFilter($this->getId());
+            $this->_items = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
 
             if ($this->getId()) {
                 foreach ($this->_items as $item) {
@@ -832,7 +832,7 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     public function getCommentsCollection($reload=false)
     {
         if (is_null($this->_comments) || $reload) {
-            $this->_comments = $this->_commentCollFactory->create()
+            $this->_comments = $this->_commentCollectionFactory->create()
                 ->setInvoiceFilter($this->getId())
                 ->setCreatedAtOrder();
             /**

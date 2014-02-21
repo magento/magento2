@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -282,8 +282,8 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     public function explodeStreetAddress()
     {
         $streetLines = $this->getStreet();
-        foreach ($streetLines as $i=>$line) {
-            $this->setData('street'.($i+1), $line);
+        foreach ($streetLines as $i => $line) {
+            $this->setData('street' . ($i+1), $line);
         }
         return $this;
     }
@@ -299,8 +299,8 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
         $region   = $this->getData('region');
 
         if ($regionId) {
-               if ($this->getRegionModel($regionId)->getCountryId() == $this->getCountryId()) {
-                   $region = $this->getRegionModel($regionId)->getName();
+            if ($this->getRegionModel($regionId)->getCountryId() == $this->getCountryId()) {
+                $region = $this->getRegionModel($regionId)->getName();
                 $this->setData('region', $region);
             }
         }

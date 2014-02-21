@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Urlrewrite;
 
 /**
  * Modes selector for URL rewrites modes
@@ -31,8 +32,6 @@
  * @package    Magento_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Urlrewrite;
-
 class Selector extends \Magento\View\Element\Template
 {
     /**
@@ -43,11 +42,15 @@ class Selector extends \Magento\View\Element\Template
      */
     protected $_modes;
 
+    /**
+     * @var string
+     */
     protected $_template = 'urlrewrite/selector.phtml';
 
     /**
      * Set block template and get available modes
      *
+     * @return void
      */
     protected function _construct()
     {

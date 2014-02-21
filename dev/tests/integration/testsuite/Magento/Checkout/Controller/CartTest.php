@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Checkout
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -159,42 +159,6 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             1,
             $response->getBody(),
             'Response for downloadable product doesn\'t contain links for download'
-        );
-    }
-
-    /**
-     * Test for \Magento\Checkout\Controller\Cart::configureAction() with configurable product
-     *
-     * @magentoDataFixture Magento/Checkout/_files/quote_with_configurable_product.php
-     */
-    public function testConfigureActionWithConfigurableProduct()
-    {
-        /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
-
-        $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), 1);
-        $this->assertNotNull($quoteItem, 'Cannot get quote item for configurable product');
-
-        $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
-        $response = $this->getResponse();
-
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
-
-        $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
-            1,
-            $response->getBody(),
-            'Response for configurable product doesn\'t contain "Update Cart" button'
-        );
-
-        $this->assertSelectCount(
-            'select.super-attribute-select',
-            1,
-            $response->getBody(),
-            'Response for configurable product doesn\'t contain select for super attribute'
         );
     }
 

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_CatalogSearch
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,11 +31,9 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
      * @magentoDataFixture Magento/CatalogSearch/_files/query.php
-     * @magentoConfigFixture current_store general/locale/code de_DE
      */
     public function testIndexActionTranslation()
     {
-        $this->markTestIncomplete('endTest() called too early, config fixture reseted');
         $this->getRequest()->setParam('q', 'query_text');
         $this->dispatch('catalogsearch/result');
 
@@ -45,5 +43,16 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertNotContains('Search entire store here...', $responseBody);
         $this->assertContains('Den gesamten Shop durchsuchen...', $responseBody);
+    }
+
+    public function testIndexActionXSSQueryVerification()
+    {
+        $this->getRequest()->setParam('q', '<script>alert(1)</script>');
+        $this->dispatch('catalogsearch/result');
+
+        $responseBody = $this->getResponse()->getBody();
+        $data = '<script>alert(1)</script>';
+        $this->assertNotContains($data, $responseBody);
+        $this->assertContains(htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false), $responseBody);
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -212,7 +212,7 @@ class Helper extends \Magento\Core\Model\Resource\Helper\AbstractHelper
      *
      * @param \Magento\DB\Select $select
      * @param string|null $groupByCondition OPTIONAL
-     * @return array
+     * @return mixed|array
      * @throws \Zend_Db_Exception
      */
     public function prepareColumnsList(\Magento\DB\Select $select, $groupByCondition = null)

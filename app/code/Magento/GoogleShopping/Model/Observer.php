@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -99,7 +99,7 @@ class Observer
      * Update product item in Google Content
      *
      * @param \Magento\Object $observer
-     * @return \Magento\GoogleShopping\Model\Observer
+     * @return $this
      */
     public function saveProductItem($observer)
     {
@@ -119,7 +119,7 @@ class Observer
      * Delete product item from Google Content
      *
      * @param \Magento\Object $observer
-     * @return \Magento\GoogleShopping\Model\Observer
+     * @return $this
      */
     public function deleteProductItem($observer)
     {
@@ -161,17 +161,17 @@ class Observer
      * Check if synchronize process is finished and generate notification message
      *
      * @param  \Magento\Event\Observer $observer
-     * @return \Magento\GoogleShopping\Model\Observer
+     * @return $this
      */
     public function checkSynchronizationOperations(\Magento\Event\Observer $observer)
     {
-        $flag = $this->_flag->loadSelf();
-        if ($flag->isExpired()) {
+        $this->_flag->loadSelf();
+        if ($this->_flag->isExpired()) {
             $this->_inboxFactory->create()->addMajor(
                 __('Google Shopping operation has expired.'),
                 __('One or more google shopping synchronization operations failed because of timeout.')
             );
-            $flag->unlock();
+            $this->_flag->unlock();
         }
         return $this;
     }

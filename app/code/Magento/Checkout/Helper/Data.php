@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,7 +63,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * @var \Magento\Checkout\Model\Resource\Agreement\CollectionFactory
      */
-    protected $_agreementCollFactory;
+    protected $_agreementCollectionFactory;
 
     /**
      * @var \Magento\Email\Model\TemplateFactory
@@ -71,13 +71,21 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_emailTemplFactory;
 
     /**
+     * Translator model
+     *
+     * @var \Magento\TranslateInterface
+     */
+    protected $_translator;
+
+    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory
+     * @param \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
      * @param \Magento\Email\Model\TemplateFactory $emailTemplFactory
+     * @param \Magento\TranslateInterface $translator
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
@@ -85,15 +93,17 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollFactory,
-        \Magento\Email\Model\TemplateFactory $emailTemplFactory
+        \Magento\Checkout\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
+        \Magento\Email\Model\TemplateFactory $emailTemplFactory,
+        \Magento\TranslateInterface $translator
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_locale = $locale;
-        $this->_agreementCollFactory = $agreementCollFactory;
+        $this->_agreementCollectionFactory = $agreementCollectionFactory;
         $this->_emailTemplFactory = $emailTemplFactory;
+        $this->_translator = $translator;
         parent::__construct($context);
     }
 
@@ -133,7 +143,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
             if (!$this->_coreStoreConfig->getConfigFlag('checkout/options/enable_agreements')) {
                 $this->_agreements = array();
             } else {
-                $this->_agreements = $this->_agreementCollFactory->create()
+                $this->_agreements = $this->_agreementCollectionFactory->create()
                     ->addStoreFilter($this->_storeManager->getStore()->getId())
                     ->addFieldToFilter('is_active', 1)
                     ->getAllIds();
@@ -208,7 +218,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function sendPaymentFailedEmail($checkout, $message, $checkoutType = 'onepage')
     {
-        /* @var $translate \Magento\Core\Model\Translate */
         $this->_translator->setTranslateInline(false);
 
         /** @var \Magento\Email\Model\Template $mailTemplate */
@@ -302,29 +311,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
             return explode(',', $data);
         }
         return false;
-    }
-
-    /**
-     * Check if multishipping checkout is available.
-     * There should be a valid quote in checkout session. If not, only the config value will be returned.
-     *
-     * @return bool
-     */
-    public function isMultishippingCheckoutAvailable()
-    {
-        $quote = $this->getQuote();
-        $isMultiShipping = (bool)(int)$this->_coreStoreConfig->getConfig('shipping/option/checkout_multiple');
-        if ((!$quote) || !$quote->hasItems()) {
-            return $isMultiShipping;
-        }
-        $maximunQty = (int)$this->_coreStoreConfig->getConfig('shipping/option/checkout_multiple_maximum_qty');
-        return $isMultiShipping
-            && !$quote->hasItemsWithDecimalQty()
-            && $quote->validateMinimumAmount(true)
-            && (($quote->getItemsSummaryQty() - $quote->getItemVirtualQty()) > 0)
-            && ($quote->getItemsSummaryQty() <= $maximunQty)
-            && !$quote->hasNominalItems()
-        ;
     }
 
     /**

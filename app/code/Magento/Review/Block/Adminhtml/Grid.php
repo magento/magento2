@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,18 +63,21 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_coreRegistry = null;
 
     /**
+     * Review collection model factory
+     *
      * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
      */
     protected $_productsFactory;
 
     /**
+     * Review model factory
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory
@@ -85,7 +88,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory,
@@ -99,11 +101,13 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_reviewData = $reviewData;
         $this->_reviewActionPager = $reviewActionPager;
         $this->_reviewFactory = $reviewFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Initialize grid
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -305,7 +309,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid mass actions
      *
-     * @return \Magento\Backend\Block\Widget\Grid|void
+     * @return void
      */
     protected function _prepareMassaction()
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 /** @var $installer \Magento\Catalog\Model\Resource\Setup */
@@ -60,9 +60,5 @@ if ($attributeTableOld != $attributeTableNew) {
     $connection->enableTableKeys($attributeTableOld)
         ->enableTableKeys($attributeTableNew);
 }
-
-$process = $installer->createIndexer()
-    ->getProcessByCode(\Magento\Catalog\Helper\Category\Flat::CATALOG_CATEGORY_FLAT_PROCESS_CODE);
-$process->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
 
 $installer->endSetup();

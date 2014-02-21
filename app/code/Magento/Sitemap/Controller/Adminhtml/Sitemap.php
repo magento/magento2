@@ -20,18 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-
-/**
- * XML sitemap controller
  */
 namespace Magento\Sitemap\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 
+/**
+ * XML sitemap controller
+ */
 class Sitemap extends  \Magento\Backend\App\Action
 {
     /**
@@ -56,7 +54,7 @@ class Sitemap extends  \Magento\Backend\App\Action
     /**
      * Init actions
      *
-     * @return \Magento\Sitemap\Controller\Adminhtml\Sitemap
+     * @return $this
      */
     protected function _initAction()
     {
@@ -75,6 +73,8 @@ class Sitemap extends  \Magento\Backend\App\Action
 
     /**
      * Index action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -85,6 +85,8 @@ class Sitemap extends  \Magento\Backend\App\Action
 
     /**
      * Create new sitemap
+     *
+     * @return void
      */
     public function newAction()
     {
@@ -94,6 +96,8 @@ class Sitemap extends  \Magento\Backend\App\Action
 
     /**
      * Edit sitemap
+     *
+     * @return void
      */
     public function editAction()
     {
@@ -136,6 +140,8 @@ class Sitemap extends  \Magento\Backend\App\Action
 
     /**
      * Save action
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -169,8 +175,8 @@ class Sitemap extends  \Magento\Backend\App\Action
             }
 
             /** @var \Magento\Filesystem\Directory\Write $directory */
-            $directory = $this->_objectManager->get('Magento\Filesystem')
-                ->getDirectoryWrite(\Magento\Filesystem::ROOT);
+            $directory = $this->_objectManager->get('Magento\App\Filesystem')
+                ->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
 
             if ($this->getRequest()->getParam('sitemap_id')) {
                 $model->load($this->getRequest()->getParam('sitemap_id'));
@@ -219,17 +225,18 @@ class Sitemap extends  \Magento\Backend\App\Action
             }
         }
         $this->_redirect('adminhtml/*/');
-
     }
 
     /**
      * Delete action
+     *
+     * @return void
      */
     public function deleteAction()
     {
         /** @var \Magento\Filesystem\Directory\Write $directory */
-        $directory = $this->_objectManager->get('Magento\Filesystem')
-            ->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $directory = $this->_objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
 
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('sitemap_id');
@@ -270,6 +277,8 @@ class Sitemap extends  \Magento\Backend\App\Action
 
     /**
      * Generate sitemap
+     *
+     * @return void
      */
     public function generateAction()
     {
@@ -303,7 +312,7 @@ class Sitemap extends  \Magento\Backend\App\Action
     /**
      * Check the permission to run it
      *
-     * @return boolean
+     * @return bool
      */
     protected function _isAllowed()
     {

@@ -20,19 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_Bundle
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Sales Order Invoice Pdf default items renderer
- *
- * @category   Magento
- * @package    Magento_Sales
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
+/**
+ * Sales Order Invoice Pdf default items renderer
+ */
 class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
 {
     /**
@@ -44,7 +40,8 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Stdlib\String $coreString
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -54,19 +51,28 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
+        \Magento\Filter\FilterManager $filterManager,
         \Magento\Stdlib\String $coreString,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->string = $coreString;
-        parent::__construct($context, $registry, $taxData, $filesystem, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $taxData,
+            $filesystem,
+            $filterManager,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
      * Draw item line
-     *
      */
     public function draw()
     {
@@ -78,17 +84,16 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
         $this->_setFontRegular();
         $items = $this->getChilds($item);
 
-        $_prevOptionId = '';
+        $prevOptionId = '';
         $drawItems = array();
 
-        foreach ($items as $_item) {
+        foreach ($items as $childItem) {
             $line   = array();
 
-            $attributes = $this->getSelectionAttributes($_item);
+            $attributes = $this->getSelectionAttributes($childItem);
             if (is_array($attributes)) {
                 $optionId   = $attributes['option_id'];
-            }
-            else {
+            } else {
                 $optionId = 0;
             }
 
@@ -99,8 +104,8 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                 );
             }
 
-            if ($_item->getOrderItem()->getParentItem()) {
-                if ($_prevOptionId != $attributes['option_id']) {
+            if ($childItem->getOrderItem()->getParentItem()) {
+                if ($prevOptionId != $attributes['option_id']) {
                     $line[0] = array(
                         'font'  => 'italic',
                         'text'  => $this->string->split($attributes['option_label'], 45, true, true),
@@ -113,18 +118,17 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                     );
 
                     $line = array();
-
-                    $_prevOptionId = $attributes['option_id'];
+                    $prevOptionId = $attributes['option_id'];
                 }
             }
 
             /* in case Product name is longer than 80 chars - it is written in a few lines */
-            if ($_item->getOrderItem()->getParentItem()) {
+            if ($childItem->getOrderItem()->getParentItem()) {
                 $feed = 40;
-                $name = $this->getValueHtml($_item);
+                $name = $this->getValueHtml($childItem);
             } else {
                 $feed = 35;
-                $name = $_item->getName();
+                $name = $childItem->getName();
             }
             $line[] = array(
                 'text'  => $this->string->split($name, 35, true, true),
@@ -132,7 +136,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
             );
 
             // draw SKUs
-            if (!$_item->getOrderItem()->getParentItem()) {
+            if (!$childItem->getOrderItem()->getParentItem()) {
                 $text = array();
                 foreach ($this->string->split($item->getSku(), 17) as $part) {
                     $text[] = $part;
@@ -144,8 +148,8 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
             }
 
             // draw prices
-            if ($this->canShowPriceInfo($_item)) {
-                $price = $order->formatPriceTxt($_item->getPrice());
+            if ($this->canShowPriceInfo($childItem)) {
+                $price = $order->formatPriceTxt($childItem->getPrice());
                 $line[] = array(
                     'text'  => $price,
                     'feed'  => 395,
@@ -153,12 +157,12 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                     'align' => 'right'
                 );
                 $line[] = array(
-                    'text'  => $_item->getQty()*1,
+                    'text'  => $childItem->getQty() * 1,
                     'feed'  => 435,
                     'font'  => 'bold',
                 );
 
-                $tax = $order->formatPriceTxt($_item->getTaxAmount());
+                $tax = $order->formatPriceTxt($childItem->getTaxAmount());
                 $line[] = array(
                     'text'  => $tax,
                     'feed'  => 495,
@@ -166,7 +170,7 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                     'align' => 'right'
                 );
 
-                $row_total = $order->formatPriceTxt($_item->getRowTotal());
+                $row_total = $order->formatPriceTxt($childItem->getRowTotal());
                 $line[] = array(
                     'text'  => $row_total,
                     'feed'  => 565,
@@ -185,20 +189,25 @@ class Invoice extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
                 foreach ($options['options'] as $option) {
                     $lines = array();
                     $lines[][] = array(
-                        'text'  => $this->string->split(strip_tags($option['label']), 40, true, true),
+                        'text'  => $this->string->split(
+                            $this->filterManager->stripTags($option['label']),
+                            40,
+                            true,
+                            true
+                        ),
                         'font'  => 'italic',
                         'feed'  => 35
                     );
 
                     if ($option['value']) {
                         $text = array();
-                        $_printValue = isset($option['print_value'])
+                        $printValue = isset($option['print_value'])
                             ? $option['print_value']
-                            : strip_tags($option['value']);
-                        $values = explode(', ', $_printValue);
+                            : $this->filterManager->stripTags($option['value']);
+                        $values = explode(', ', $printValue);
                         foreach ($values as $value) {
-                            foreach ($this->string->split($value, 30, true, true) as $_value) {
-                                $text[] = $_value;
+                            foreach ($this->string->split($value, 30, true, true) as $subValue) {
+                                $text[] = $subValue;
                             }
                         }
 

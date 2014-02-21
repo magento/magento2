@@ -21,13 +21,13 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View\Design\FileResolution\Strategy\Fallback;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\TestFramework\Helper\ProxyTesting;
 
 /**
@@ -286,14 +286,14 @@ class CachingProxyTest extends \PHPUnit_Framework_TestCase
             ->method('getRelativePath')
             ->will($this->returnArgument(0));
         $methods = array('getDirectoryRead', 'getDirectoryWrite', '__wakeup');
-        $filesystem = $this->getMock('Magento\Filesystem', $methods, array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', $methods, array(), '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::ROOT)
+            ->with(\Magento\App\Filesystem::ROOT_DIR)
             ->will($this->returnValue($directoryRead));
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::VAR_DIR)
+            ->with(\Magento\App\Filesystem::VAR_DIR)
             ->will($this->returnValue($this->directoryWrite));
         return $filesystem;
     }

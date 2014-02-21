@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,19 +97,24 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEndsWith('catalog/product/view/', $this->_block->getSubmitUrl($this->_product));
     }
 
-    public function testGetAddToWishlistUrl()
+    public function testGetAddToWishlistParams()
     {
+        $json = $this->_block->getAddToWishlistParams($this->_product);
+        $params = (array) json_decode($json);
+        $data = (array) $params['data'];
+        $this->assertEquals('1', $data['product']);
+        $this->assertArrayHasKey('uenc', $data);
+        $this->assertArrayHasKey('form_key', $data);
         $this->assertStringEndsWith(
-            'wishlist/index/add/product/1/',
-            $this->_block->getAddToWishlistUrl($this->_product)
+            'wishlist/index/add/',
+            $params['action']
         );
     }
 
     public function testGetAddToCompareUrl()
     {
-        $this->assertStringMatchesFormat(
-            '%scatalog/product_compare/add/product/1/%s',
-            $this->_block->getAddToCompareUrl($this->_product)
+        $this->assertStringMatchesFormat('%scatalog/product_compare/add/',
+            $this->_block->getAddToCompareUrl()
         );
     }
 

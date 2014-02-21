@@ -20,11 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Cms\Model\Wysiwyg\Images;
+
+use Magento\Cms\Helper\Wysiwyg\Images;
 
 /**
  * Wysiwyg Images model
@@ -96,7 +98,7 @@ class Storage extends \Magento\Object
     protected $_dirs;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -144,10 +146,10 @@ class Storage extends \Magento\Object
      * Construct
      *
      * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Image\AdapterFactory $imageFactory
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory
@@ -164,10 +166,10 @@ class Storage extends \Magento\Object
      */
     public function __construct(
         \Magento\Backend\Model\Session $session,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Image\AdapterFactory $imageFactory,
         \Magento\View\Url $viewUrl,
         \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory,
@@ -184,7 +186,7 @@ class Storage extends \Magento\Object
         $this->_backendUrl = $backendUrl;
         $this->_cmsWysiwygImages = $cmsWysiwygImages;
         $this->_coreFileStorageDb = $coreFileStorageDb;
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $this->_directory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $this->_imageFactory = $imageFactory;
         $this->_viewUrl = $viewUrl;
         $this->_storageCollectionFactory = $storageCollectionFactory;
@@ -381,32 +383,30 @@ class Storage extends \Magento\Object
      */
     public function deleteDirectory($path)
     {
-        // prevent accidental root directory deleting
-        $rootCmp = rtrim($this->_cmsWysiwygImages->getStorageRoot(), '/');
-        $rootCmp = preg_replace('~[/\\\]+~', '/', $rootCmp);
-        $pathCmp = rtrim($path, '/');
-
-        if ($rootCmp == $pathCmp) {
-            throw new \Magento\Core\Exception(
-                __('We cannot delete root directory %1.', $path)
-            );
-        }
-
         if ($this->_coreFileStorageDb->checkDbUsage()) {
             $this->_directoryDatabaseFactory->create()->deleteDirectory($path);
         }
         try {
-            $this->_directory->delete($this->_directory->getRelativePath($path));
+            $this->_deleteByPath($path);
+            $path = $this->getThumbnailRoot() . $this->_getRelativePathToRoot($path);
+            $this->_deleteByPath($path);
         } catch (\Magento\Filesystem\FilesystemException $e) {
             throw new \Magento\Core\Exception(__('We cannot delete directory %1.', $path));
         }
+    }
 
-        if (strpos($pathCmp, $rootCmp) === 0) {
-            $this->_directory->delete(
-                $this->_directory->getRelativePath(
-                    $this->getThumbnailRoot() . substr($pathCmp, strlen($rootCmp))
-                )
-            );
+    /**
+     * Delete by path
+     *
+     * @param string $path
+     * @return void
+     */
+    protected function _deleteByPath($path)
+    {
+        $path = $this->_sanitizePath($path);
+        if (!empty($path)) {
+            $this->_validatePath($path);
+            $this->_directory->delete($this->_directory->getRelativePath($path));
         }
     }
 
@@ -414,7 +414,7 @@ class Storage extends \Magento\Object
      * Delete file (and its thumbnail if exists) from storage
      *
      * @param string $target File path to be deleted
-     * @return \Magento\Cms\Model\Wysiwyg\Images\Storage
+     * @return $this
      */
     public function deleteFile($target)
     {
@@ -478,8 +478,8 @@ class Storage extends \Magento\Object
      * Thumbnail path getter
      *
      * @param  string $filePath original file path
-     * @param  boolean $checkFile OPTIONAL is it necessary to check file availability
-     * @return string | false
+     * @param  bool $checkFile OPTIONAL is it necessary to check file availability
+     * @return string|false
      */
     public function getThumbnailPath($filePath, $checkFile = false)
     {
@@ -500,8 +500,8 @@ class Storage extends \Magento\Object
      * Thumbnail URL getter
      *
      * @param  string $filePath original file path
-     * @param  boolean $checkFile OPTIONAL is it necessary to check file availability
-     * @return string | false
+     * @param  bool $checkFile OPTIONAL is it necessary to check file availability
+     * @return string|false
      */
     public function getThumbnailUrl($filePath, $checkFile = false)
     {
@@ -557,7 +557,7 @@ class Storage extends \Magento\Object
     /**
      * Resize images on the fly in controller action
      *
-     * @param string File basename
+     * @param string $filename File basename
      * @return bool|string Thumbnail path or false for errors
      */
     public function resizeOnTheFly($filename)
@@ -657,5 +657,61 @@ class Storage extends \Magento\Object
     public function getResizeHeight()
     {
         return $this->_resizeParameters['height'];
+    }
+
+    /**
+     * Get cms wysiwyg images helper
+     *
+     * @return Images|null
+     */
+    public function getCmsWysiwygImages()
+    {
+        return $this->_cmsWysiwygImages;
+    }
+
+    /**
+     * Is path under storage root directory
+     *
+     * @param string $path
+     *
+     * @return void
+     * @throws \Magento\Core\Exception
+     */
+    protected function _validatePath($path)
+    {
+        $root = $this->_sanitizePath($this->_cmsWysiwygImages->getStorageRoot());
+        if ($root == $path) {
+            throw new \Magento\Core\Exception(__('We cannot delete root directory %1.', $path));
+        }
+        if (strpos($path, $root) !== 0) {
+            throw new \Magento\Core\Exception(__('Directory %1 is not under storage root path.', $path));
+        }
+    }
+
+    /**
+     * Sanitize path
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function _sanitizePath($path)
+    {
+        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPath($path)), '/');
+    }
+
+    /**
+     * Get path in root storage dir
+     *
+     * @param string $path
+     *
+     * @return string|bool
+     */
+    protected function _getRelativePathToRoot($path)
+    {
+        return substr(
+            $this->_sanitizePath($path),
+            strlen($this->_sanitizePath($this->_cmsWysiwygImages->getStorageRoot()))
+        );
     }
 }

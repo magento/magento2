@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,6 +34,9 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\View\Element\AbstractBlock;
+
 class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
@@ -46,7 +49,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Product Collection
      *
-     * @var \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @var AbstractCollection
      */
     protected $_productCollection;
 
@@ -79,6 +82,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -96,7 +100,8 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Layer $catalogLayer,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_catalogLayer = $catalogLayer;
@@ -112,14 +117,15 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
 
     /**
      * Retrieve loaded category collection
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     protected function _getProductCollection()
     {
@@ -181,7 +187,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve loaded category collection
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     public function getLoadedProductCollection()
     {
@@ -201,6 +207,7 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Need use as _prepareLayout - but problem in declaring collection from
      * another block (was problem with search result)
+     * @return $this
      */
     protected function _beforeToHtml()
     {
@@ -278,18 +285,29 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this->getChildHtml('toolbar');
     }
 
+    /**
+     * @param AbstractCollection $collection
+     * @return $this
+     */
     public function setCollection($collection)
     {
         $this->_productCollection = $collection;
         return $this;
     }
 
+    /**
+     * @param array|string|integer|\Magento\Core\Model\Config\Element $code
+     * @return $this
+     */
     public function addAttribute($code)
     {
         $this->_getProductCollection()->addAttributeToSelect($code);
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPriceBlockTemplate()
     {
         return $this->_getData('price_block_template');

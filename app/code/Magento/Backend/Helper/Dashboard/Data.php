@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Helper\Dashboard;
@@ -46,7 +46,7 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
-     * @param $installDate
+     * @param string $installDate
      * @param bool $dbCompatibleMode
      */
     public function __construct(
@@ -72,7 +72,7 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Retrieve stores configured in system.
      *
-     * @return array
+     * @return \Magento\Data\Collection\Db
      */
     public function getStores()
     {

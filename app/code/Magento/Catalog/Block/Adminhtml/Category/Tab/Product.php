@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,6 +32,10 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
+
+use Magento\Backend\Block\Widget\Grid;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Extended;
 
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -49,7 +53,6 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -57,7 +60,6 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\Registry $coreRegistry,
@@ -65,9 +67,12 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     ) {
         $this->_productFactory = $productFactory;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -76,11 +81,18 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setUseAjax(true);
     }
 
+    /**
+     * @return array|null
+     */
     public function getCategory()
     {
         return $this->_coreRegistry->registry('category');
     }
 
+    /**
+     * @param Column $column
+     * @return $this
+     */
     protected function _addColumnFilterToCollection($column)
     {
         // Set custom filter for in category flag
@@ -102,6 +114,9 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+    /**
+     * @return Grid
+     */
     protected function _prepareCollection()
     {
         if ($this->getCategory()->getId()) {
@@ -131,6 +146,9 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return Extended
+     */
     protected function _prepareColumns()
     {
         if (!$this->getCategory()->getProductsReadonly()) {
@@ -177,11 +195,17 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('catalog/*/grid', array('_current'=>true));
     }
 
+    /**
+     * @return array
+     */
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost('selected_products');

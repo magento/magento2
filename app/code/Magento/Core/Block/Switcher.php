@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,25 +31,43 @@
  */
 namespace Magento\Core\Block;
 
+use Magento\Core\Model\Store\Group;
+use Magento\Core\Model\Store;
+
 class Switcher extends \Magento\View\Element\Template
 {
+    /**
+     * @var bool
+     */
     protected $_storeInUrl;
 
+    /**
+     * @return int|null|string
+     */
     public function getCurrentWebsiteId()
     {
         return $this->_storeManager->getStore()->getWebsiteId();
     }
 
+    /**
+     * @return int|null|string
+     */
     public function getCurrentGroupId()
     {
         return $this->_storeManager->getStore()->getGroupId();
     }
 
+    /**
+     * @return int
+     */
     public function getCurrentStoreId()
     {
         return $this->_storeManager->getStore()->getId();
     }
 
+    /**
+     * @return array
+     */
     public function getRawGroups()
     {
         if (!$this->hasData('raw_groups')) {
@@ -64,13 +82,16 @@ class Switcher extends \Magento\View\Element\Template
         return $this->getData('raw_groups');
     }
 
+    /**
+     * @return array
+     */
     public function getRawStores()
     {
         if (!$this->hasData('raw_stores')) {
             $websiteStores = $this->_storeManager->getWebsite()->getStores();
             $stores = array();
             foreach ($websiteStores as $store) {
-                /* @var $store \Magento\Core\Model\Store */
+                /* @var $store Store */
                 if (!$store->getIsActive()) {
                     continue;
                 }
@@ -95,7 +116,7 @@ class Switcher extends \Magento\View\Element\Template
     /**
      * Retrieve list of store groups with default urls set
      *
-     * @return array
+     * @return Group[]
      */
     public function getGroups()
     {
@@ -106,7 +127,7 @@ class Switcher extends \Magento\View\Element\Template
             $groups = array();
             $localeCode = $this->_storeConfig->getConfig('general/locale/code');
             foreach ($rawGroups as $group) {
-                /* @var $group \Magento\Core\Model\Store\Group */
+                /* @var $group Group */
                 if (!isset($rawStores[$group->getId()])) {
                     continue;
                 }
@@ -127,6 +148,9 @@ class Switcher extends \Magento\View\Element\Template
         return $this->getData('groups');
     }
 
+    /**
+     * @return Store[]
+     */
     public function getStores()
     {
         if (!$this->getData('stores')) {
@@ -143,11 +167,17 @@ class Switcher extends \Magento\View\Element\Template
         return $this->getData('stores');
     }
 
+    /**
+     * @return string
+     */
     public function getCurrentStoreCode()
     {
         return $this->_storeManager->getStore()->getCode();
     }
 
+    /**
+     * @return bool
+     */
     public function isStoreInUrl()
     {
         if (is_null($this->_storeInUrl)) {

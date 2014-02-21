@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
 /**
  * GoogleShopping Products selection grid controller
@@ -31,12 +32,12 @@
  * @package     Magento_GoogleShopping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
-
 class Selection extends \Magento\Backend\App\Action
 {
     /**
      * Search result grid with available products for Google Content
+     *
+     * @return void
      */
     public function searchAction()
     {
@@ -51,6 +52,8 @@ class Selection extends \Magento\Backend\App\Action
 
     /**
      * Grid with available products for Google Content
+     *
+     * @return void
      */
     public function gridAction()
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Shipping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -123,30 +123,5 @@ class Data extends \Magento\App\Helper\AbstractHelper
             return $this->_getTrackingUrl('track_id', $model, 'getEntityId');
         }
         return '';
-    }
-
-    /**
-     * Retrieve tracking ajax url
-     *
-     * @return string
-     */
-    public function getTrackingAjaxUrl()
-    {
-        return $this->_getUrl('shipping/tracking/ajax');
-    }
-
-    /**
-     * @param string $method
-     * @param mixed $storeId
-     * @return bool
-     */
-    public function isFreeMethod($method, $storeId = null)
-    {
-        $arr = explode('_', $method, 2);
-        if (!isset($arr[1])) {
-            return false;
-        }
-        $freeMethod = $this->_coreStoreConfig->getConfig('carriers/' . $arr[0] . '/free_method', $storeId);
-        return $freeMethod == $arr[1];
     }
 }

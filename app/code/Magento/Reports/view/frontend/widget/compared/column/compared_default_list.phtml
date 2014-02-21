@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -67,8 +67,23 @@ if ($exist = $this->getRecentlyComparedProducts()) {
                 <?php echo $this->getPriceHtml($_product, true, '-widget-compared-'.$suffix) ?>
                 <?php if($_product->isSaleable()): ?>
                     <div class="actions">
-                        <a href="<?php echo $this->getAddToCartUrl($_product) ?>"
-                           class="action tocart"><span><?php echo __('Add to Cart') ?></span></a>
+                        <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
+                            <button class="action tocart"
+                                    data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_product) ?>"}}'
+                                    type="button" title="<?php echo __('Add to Cart') ?>">
+                                <span><?php echo __('Add to Cart') ?></span>
+                            </button>
+                        <?php else: ?>
+                            <?php
+                                $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_product), ['product' => $_product->getEntityId()])
+                            ?>
+                            <button class="action tocart"
+                                    data-post='<?php echo $postData; ?>'
+                                    type="button" title="<?php echo __('Add to Cart') ?>">
+                                <span><?php echo __('Add to Cart') ?></span>
+                            </button>
+                        <?php endif; ?>
                     </div>
                 <?php else: ?>
                     <?php if ($_product->getIsSalable()): ?>

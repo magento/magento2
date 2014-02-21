@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Indexer;
 
 /**
  * Catalog url rewrites index model.
@@ -33,8 +34,6 @@
  *  - Store group save (changed root category or group website) - require reindex all data
  *  - Seo config settings change - require reindex all data
  */
-namespace Magento\Catalog\Model\Indexer;
-
 class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
 {
     /**
@@ -61,11 +60,16 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
         \Magento\Core\Model\Store\Group::ENTITY => array(
             \Magento\Index\Model\Event::TYPE_SAVE
         ),
-        \Magento\Core\Model\Config\Value::ENTITY => array(
+        \Magento\App\Config\ValueInterface::ENTITY => array(
             \Magento\Index\Model\Event::TYPE_SAVE
         ),
     );
 
+    /**
+     * Related Config Settings
+     *
+     * @var array
+     */
     protected $_relatedConfigSettings = array(
         \Magento\Catalog\Helper\Category::XML_PATH_CATEGORY_URL_SUFFIX,
         \Magento\Catalog\Helper\Product::XML_PATH_PRODUCT_URL_SUFFIX,
@@ -87,9 +91,11 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected $_catalogResourceUrl;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Catalog\Model\Resource\Url $catalogResourceUrl
+     * @param \Magento\Catalog\Model\Resource\UrlFactory $catalogResourceUrlFactory
      * @param \Magento\Catalog\Model\Url $catalogUrl
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -98,13 +104,13 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Catalog\Model\Resource\Url $catalogResourceUrl,
+        \Magento\Catalog\Model\Resource\UrlFactory $catalogResourceUrlFactory,
         \Magento\Catalog\Model\Url $catalogUrl,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_catalogResourceUrl = $catalogResourceUrl;
+        $this->_catalogResourceUrl = $catalogResourceUrlFactory->create();
         $this->_catalogUrl = $catalogUrl;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -160,7 +166,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
             } else {
                 $result = false;
             }
-        } else if ($entity == \Magento\Core\Model\Config\Value::ENTITY) {
+        } else if ($entity == \Magento\App\Config\ValueInterface::ENTITY) {
             $configData = $event->getDataObject();
             if ($configData && in_array($configData->getPath(), $this->_relatedConfigSettings)) {
                 $result = $configData->isValueChanged();
@@ -180,6 +186,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by process in event object
      *
      * @param \Magento\Index\Model\Event $event
+     * @return $this
      */
     protected function _registerEvent(\Magento\Index\Model\Event $event)
     {
@@ -187,7 +194,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
         $entity = $event->getEntity();
         switch ($entity) {
             case \Magento\Catalog\Model\Product::ENTITY:
-               $this->_registerProductEvent($event);
+                $this->_registerProductEvent($event);
                 break;
 
             case \Magento\Catalog\Model\Category::ENTITY:
@@ -196,7 +203,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
 
             case \Magento\Core\Model\Store::ENTITY:
             case \Magento\Core\Model\Store\Group::ENTITY:
-            case \Magento\Core\Model\Config\Value::ENTITY:
+            case \Magento\App\Config\ValueInterface::ENTITY:
                 $process = $event->getProcess();
                 $process->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
                 break;
@@ -208,6 +215,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register event data during product save process
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerProductEvent(\Magento\Index\Model\Event $event)
     {
@@ -225,6 +233,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register event data during category save process
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCategoryEvent(\Magento\Index\Model\Event $event)
     {
@@ -246,6 +255,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Process event
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _processEvent(\Magento\Index\Model\Event $event)
     {
@@ -260,7 +270,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
             $this->_catalogUrl->setShouldSaveRewritesHistory($dataObject->getData('save_rewrites_history'));
         }
 
-        if(isset($data['rewrite_product_ids'])) {
+        if (isset($data['rewrite_product_ids'])) {
             $this->_catalogUrl->clearStoreInvalidRewrites(); // Maybe some products were moved or removed from website
             foreach ($data['rewrite_product_ids'] as $productId) {
                 $this->_catalogUrl->refreshProductRewrite($productId);
@@ -276,6 +286,9 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
 
     /**
      * Rebuild all index data
+     *
+     * @return void
+     * @throws \Exception
      */
     public function reindexAll()
     {

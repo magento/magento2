@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,7 +53,8 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
-        $mediaDirectory = $objectManager->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
 
         self::$_mediaTmpDir = $mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath());
         self::$_mediaDir = $mediaDirectory->getAbsolutePath($config->getBaseMediaPath());
@@ -74,8 +75,8 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = $objectManager->get('Magento\Filesystem')
-            ->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
 
         if ($mediaDirectory->isExist($config->getBaseMediaPath())) {
             $mediaDirectory->delete($config->getBaseMediaPath());
@@ -127,28 +128,36 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave()
     {
+        $fileName = 'magento_image.jpg';
+        $fileLabel = 'Magento image';
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product');
         $product->setData('media_gallery', array('images' => array(
-            'image'   => array('file' => 'magento_image.jpg'),
+            'image' => array(
+                'file' => $fileName,
+                'label' => $fileLabel,
+            ),
         )));
-
+        $product->setData('image', $fileName);
         $this->_model->beforeSave($product);
         $this->assertStringStartsWith('./magento_image', $product->getData('media_gallery/images/image/new_file'));
+        $this->assertEquals($fileLabel, $product->getData('image_label'));
 
         $product->setIsDuplicate(true);
         $product->setData('media_gallery', array('images' => array(
-            'image'     => array(
-                'value_id'  => '100',
-                'file'      => 'magento_image.jpg'
-            )
+            'image' => array(
+                'value_id' => '100',
+                'file' => $fileName,
+                'label' => $fileLabel,
+            ),
         )));
         $this->_model->beforeSave($product);
         $this->assertStringStartsWith('./magento_image', $product->getData('media_gallery/duplicate/100'));
+        $this->assertEquals($fileLabel, $product->getData('image_label'));
 
         /* affect of beforeSave */
-        $this->assertNotEquals('magento_image.jpg', $this->_model->getRenamedImage('magento_image.jpg'));
+        $this->assertNotEquals($fileName, $this->_model->getRenamedImage($fileName));
         $this->assertEquals('test.jpg', $this->_model->getRenamedImage('test.jpg'));
     }
 

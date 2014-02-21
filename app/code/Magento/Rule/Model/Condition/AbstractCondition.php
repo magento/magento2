@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Rule
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,9 +32,10 @@
  */
 namespace Magento\Rule\Model\Condition;
 
-abstract class AbstractCondition
-    extends \Magento\Object
-    implements \Magento\Rule\Model\Condition\ConditionInterface
+use Magento\Data\Form;
+use Magento\Data\Form\Element\AbstractElement;
+
+abstract class AbstractCondition extends \Magento\Object implements ConditionInterface
 {
     /**
      * Defines which operators will be available for this condition
@@ -57,7 +58,7 @@ abstract class AbstractCondition
 
     /**
      * List of input types for values which should be array
-     * @var array
+     * @var string[]
      */
     protected $_arrayInputTypes = array();
 
@@ -77,10 +78,10 @@ abstract class AbstractCondition
     protected $_layout;
 
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
+     * @param Context $context
      * @param array $data
      */
-    public function __construct(\Magento\Rule\Model\Condition\Context $context, array $data = array())
+    public function __construct(Context $context, array $data = array())
     {
         $this->_viewUrl = $context->getViewUrl();
         $this->_locale = $context->getLocale();
@@ -153,6 +154,9 @@ abstract class AbstractCondition
         return $this->_defaultOperatorOptions;
     }
 
+    /**
+     * @return Form
+     */
     public function getForm()
     {
         return $this->getRule()->getForm();
@@ -454,6 +458,9 @@ abstract class AbstractCondition
         return $html;
     }
 
+    /**
+     * @return AbstractElement
+     */
     public function getTypeElement()
     {
         return $this->getForm()->addField($this->getPrefix() . '__' . $this->getId() . '__type', 'hidden', array(
@@ -464,11 +471,17 @@ abstract class AbstractCondition
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getTypeElementHtml()
     {
         return $this->getTypeElement()->getHtml();
     }
 
+    /**
+     * @return $this
+     */
     public function getAttributeElement()
     {
         if (null === $this->getAttribute()) {
@@ -552,6 +565,9 @@ abstract class AbstractCondition
         return $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable');
     }
 
+    /**
+     * @return $this
+     */
     public function getValueElement()
     {
         $elementParams = array(
@@ -641,7 +657,7 @@ abstract class AbstractCondition
     /**
      * Validate product attribute value for condition
      *
-     * @param   mixed $validatedValue product attribute value
+     * @param   object|array|int|string|float|bool $validatedValue product attribute value
      * @return  bool
      */
     public function validateAttribute($validatedValue)

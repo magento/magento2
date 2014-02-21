@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Config\Converter\Dom;
@@ -39,9 +39,12 @@ class FlatTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Config\Converter\Dom\Flat(array(
-            '/root/multipleNode' => 'id'
-        ));
+        $arrayNodeConfig = new \Magento\Config\Dom\ArrayNodeConfig(
+            new \Magento\Config\Dom\NodePathMatcher(),
+            array('/root/multipleNode' => 'id'),
+            array('/root/node_one/subnode')
+        );
+        $this->_model = new \Magento\Config\Converter\Dom\Flat($arrayNodeConfig);
         $this->_fixturePath = realpath(__DIR__ . '/../../')
             . '/_files/converter/dom/flat/';
     }

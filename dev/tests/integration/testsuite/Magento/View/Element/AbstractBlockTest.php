@@ -21,13 +21,13 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View\Element;
 
-use Magento\Filesystem\DirectoryList;
+use Magento\App\Filesystem\DirectoryList;
 
 /**
  * @magentoAppIsolation enabled
@@ -65,12 +65,13 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
     public function testCssWithWrongImage()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Filesystem $filesystem */
-        $relativePath = $objectManager->get('Magento\Filesystem')->getDirectoryRead(\Magento\Filesystem::ROOT)
+        /** @var \Magento\App\Filesystem $filesystem */
+        $relativePath = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR)
             ->getRelativePath(__DIR__ . '/_files');
-        /** @var $directoryList \Magento\Filesystem\DirectoryList */
-        $directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
-        $directoryList->addDirectory(\Magento\Filesystem::THEMES, array('path' => $relativePath));
+        /** @var $directoryList \Magento\App\Filesystem\DirectoryList */
+        $directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
+        $directoryList->addDirectory(\Magento\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
 
         $cssUrl = $this->_block->getViewFileUrl('css/wrong.css', array(
             'area'    => 'frontend',

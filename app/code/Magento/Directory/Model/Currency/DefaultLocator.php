@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,13 +36,24 @@ class DefaultLocator
     protected $_app;
 
     /**
+     * Store manager
+     *
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * Constructor
      *
      * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\App $app)
-    {
+    public function __construct(
+        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager
+    ) {
         $this->_app = $app;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -55,15 +66,15 @@ class DefaultLocator
     {
         if ($request->getParam('store')) {
             $store = $request->getParam('store');
-            $currencyCode = $this->_app->getStore($store)->getBaseCurrencyCode();
+            $currencyCode = $this->_storeManager->getStore($store)->getBaseCurrencyCode();
         } else if ($request->getParam('website')) {
             $website = $request->getParam('website');
-            $currencyCode = $this->_app->getWebsite($website)->getBaseCurrencyCode();
+            $currencyCode = $this->_storeManager->getWebsite($website)->getBaseCurrencyCode();
         } else if ($request->getParam('group')) {
             $group = $request->getParam('group');
-            $currencyCode =  $this->_app->getGroup($group)->getWebsite()->getBaseCurrencyCode();
+            $currencyCode =  $this->_storeManager->getGroup($group)->getWebsite()->getBaseCurrencyCode();
         } else {
-            $currencyCode = $this->_app->getStore()->getBaseCurrencyCode();
+            $currencyCode = $this->_app->getBaseCurrencyCode();
         }
 
         return $currencyCode;

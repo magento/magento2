@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,12 +29,18 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Locale;
 
+use Magento\Core\Exception;
+
 class Timezone extends \Magento\Core\Model\Config\Value
 {
+    /**
+     * @return $this
+     * @throws Exception
+     */
     protected function _beforeSave()
     {
         if (!in_array($this->getValue(), \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC))) {
-            throw new \Magento\Core\Exception(__('Please correct the timezone.'));
+            throw new Exception(__('Please correct the timezone.'));
         }
         return $this;
     }

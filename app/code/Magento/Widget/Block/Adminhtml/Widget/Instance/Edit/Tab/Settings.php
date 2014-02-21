@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,6 +67,9 @@ class Settings
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -126,7 +129,7 @@ class Settings
     /**
      * Prepare form before rendering HTML
      *
-     * @return \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Settings
+     * @return $this
      */
     protected function _prepareForm()
     {

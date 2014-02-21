@@ -18,9 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Model;
 
 /**
  * Backup file item model
@@ -32,8 +33,6 @@
  * @method string getTime()
  * @method \Magento\Backup\Model\Backup setTime() setTime($time)
  */
-namespace Magento\Backup\Model;
-
 class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterface
 {
     /* internal constants */
@@ -54,7 +53,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     protected $_stream = null;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -92,7 +91,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
@@ -100,14 +99,14 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $data = array()
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($data);
 
         $this->_filesystem = $filesystem;
-        $this->varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $this->_helper = $helper;
         $this->_locale = $locale;
         $this->_backendAuthSession = $authSession;
@@ -117,7 +116,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      * Set backup time
      *
      * @param int $time
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function setTime($time)
     {
@@ -129,7 +128,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      * Set backup path
      *
      * @param string $path
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function setPath($path)
     {
@@ -141,7 +140,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      * Set backup name
      *
      * @param string $name
-     * @return \Magento\Backup\Db\BackupInterface
+     * @return $this
      */
     public function setName($name)
     {
@@ -155,7 +154,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      *
      * @param string $fileName
      * @param string $filePath
-     * @return \Magento\Backup\Model\Backup
+     * @return $this
      */
     public function load($fileName, $filePath)
     {
@@ -178,7 +177,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     /**
      * Checks backup file exists.
      *
-     * @return boolean
+     * @return bool
      */
     public function exists()
     {
@@ -208,7 +207,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      * Sets type of file
      *
      * @param string $value
-     * @return \Magento\Backup\Model\Backup
+     * @return $this
      */
     public function setType($value = 'db')
     {
@@ -236,8 +235,8 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     /**
      * Set the backup file content
      *
-     * @param string $content
-     * @return \Magento\Backup\Model\Backup
+     * @param string &$content
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function setFile(&$content)
@@ -268,7 +267,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     /**
      * Delete backup file
      *
-     * @return \Magento\Backup\Model\Backup
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function deleteFile()
@@ -285,7 +284,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      * Open backup file (write or read mode)
      *
      * @param bool $write
-     * @return \Magento\Backup\Model\Backup
+     * @return $this
      * @throws \Magento\Backup\Exception
      * @throws \Magento\Backup\Exception\NotEnoughPermissions
      */
@@ -306,11 +305,11 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
 
         try {
             /** @var \Magento\Filesystem\Directory\WriteInterface $varDirectory */
-            $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+            $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
             $this->_stream = $varDirectory->openFile(
                 $this->_getFilePath(),
                 $mode,
-                \Magento\Filesystem::WRAPPER_CONTENT_ZLIB
+                \Magento\App\Filesystem::WRAPPER_CONTENT_ZLIB
             );
         }
         catch (\Magento\Filesystem\FilesystemException $e) {
@@ -337,7 +336,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     }
 
     /**
-     * Read backup uncomressed data
+     * Read backup uncompressed data
      *
      * @param int $length
      * @return string
@@ -361,7 +360,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      * Write to backup file
      *
      * @param string $string
-     * @return \Magento\Backup\Model\Backup
+     * @return $this
      * @throws \Magento\Backup\Exception
      */
     public function write($string)
@@ -380,7 +379,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     /**
      * Close open backup file
      *
-     * @return \Magento\Backup\Model\Backup
+     * @return $this
      */
     public function close()
     {
@@ -392,6 +391,8 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
 
     /**
      * Print output
+     *
+     * @return void
      */
     public function output()
     {
@@ -400,7 +401,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         }
 
         /** @var \Magento\Filesystem\Directory\ReadInterface $zlibDirectory */
-        $zlibDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ZLIB);
+        $zlibDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::WRAPPER_CONTENT_ZLIB);
         $zlibDirectory = $zlibDirectory->readFile($this->_getFilePath());
 
         echo $zlibDirectory;

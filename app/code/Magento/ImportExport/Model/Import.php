@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model;
+
+use Magento\HTTP\Adapter\FileTransferFactory;
 
 /**
  * Import model
@@ -34,10 +37,6 @@
  * @method string getBehavior() getBehavior()
  * @method \Magento\ImportExport\Model\Import setEntity() setEntity(string $value)
  */
-namespace Magento\ImportExport\Model;
-
-use Magento\HTTP\Adapter\FileTransferFactory;
-
 class Import extends \Magento\ImportExport\Model\AbstractModel
 {
     /**#@+
@@ -79,7 +78,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      protected static $_entityInvalidatedIndexes = array (
         'catalog_product' => array (
             'catalog_product_price',
-            'catalog_category_product',
             'catalogsearch_fulltext',
             'catalog_product_flat',
         )
@@ -133,32 +131,32 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_behaviorFactory;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Log\AdapterFactory $adapterFactory
      * @param \Magento\ImportExport\Helper\Data $importExportData
-     * @param \Magento\Core\Model\Config $coreConfig
-     * @param Import\ConfigInterface $importConfig
-     * @param Import\Entity\Factory $entityFactory
-     * @param Resource\Import\Data $importData
-     * @param Export\Adapter\CsvFactory $csvFactory
-     * @param FileTransferFactory $httpFactory
+     * @param \Magento\App\ConfigInterface $coreConfig
+     * @param \Magento\ImportExport\Model\Import\ConfigInterface $importConfig
+     * @param \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory
+     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
+     * @param \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory
+     * @param \Magento\HTTP\Adapter\FileTransferFactory $httpFactory
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
-     * @param Source\Import\Behavior\Factory $behaviorFactory
+     * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Index\Model\Indexer $indexer
      * @param array $data
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Log\AdapterFactory $adapterFactory,
         \Magento\ImportExport\Helper\Data $importExportData,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\ImportExport\Model\Import\ConfigInterface $importConfig,
         \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
@@ -236,7 +234,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     {
         return \Magento\ImportExport\Model\Import\Adapter::findAdapterFor(
             $sourceFile,
-            $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT)
+            $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)
         );
     }
 
@@ -244,7 +242,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Return operation result messages
      *
      * @param bool $validationResult
-     * @return array
+     * @return string[]
      */
     public function getOperationResultMessages($validationResult)
     {
@@ -385,7 +383,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Returns entity model noticees.
      *
-     * @return array
+     * @return string[]
      */
     public function getNotices()
     {
@@ -617,7 +615,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Invalidate indexes by process codes.
      *
-     * @return \Magento\ImportExport\Model\Import
+     * @return $this
      */
     public function invalidateIndex()
     {
@@ -647,6 +645,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * )
      *
      * @return array
+     * @throws \Magento\Core\Exception
      */
     public function getEntityBehaviors()
     {

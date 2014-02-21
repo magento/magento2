@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,7 +30,7 @@
  */
 namespace Magento\Core\Model\Translate\Inline;
 
-class Config implements ConfigInterface
+class Config implements \Magento\Translate\Inline\ConfigInterface
 {
     /**
      * Core store config
@@ -40,21 +40,35 @@ class Config implements ConfigInterface
     protected $_coreStoreConfig;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @var \Magento\Core\Helper\Data
      */
-    public function __construct(\Magento\Core\Model\Store\Config $coreStoreConfig)
-    {
+    protected $_helper;
+
+    /**
+     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Core\Helper\Data $helper
+     */
+    public function __construct(
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Core\Helper\Data $helper
+    ) {
         $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_helper = $helper;
     }
 
     /**
-     * Check whether inline translation is enabled
-     *
-     * @param int|null $store
-     * @return bool
+     * @inheritdoc
      */
-    public function isActive($store = null)
+    public function isActive($scope = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag('dev/translate_inline/active', $store);
+        return $this->_coreStoreConfig->getConfigFlag('dev/translate_inline/active', $scope);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDevAllowed($scope = null)
+    {
+        return $this->_helper->isDevAllowed($scope);
     }
 }

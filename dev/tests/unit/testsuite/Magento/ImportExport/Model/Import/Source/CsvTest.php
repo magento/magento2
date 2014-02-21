@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -27,7 +27,7 @@ namespace Magento\ImportExport\Model\Import\Source;
 class CsvTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
@@ -41,7 +41,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
     }
 

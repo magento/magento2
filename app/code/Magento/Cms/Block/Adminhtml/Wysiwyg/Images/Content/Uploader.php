@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 
 /**
  * Uploader block for Wysiwyg Images
@@ -31,8 +32,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
-
 class Uploader extends \Magento\Backend\Block\Media\Uploader
 {
     /**
@@ -56,6 +55,9 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
         parent::__construct($context, $fileSize, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -80,6 +82,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
 
     /**
      * Return current media type based on request or data
+     *
      * @return string
      */
     protected function _getMediaType()

@@ -20,20 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_Sitemap
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sitemap\Model\Resource\Catalog;
 
 /**
  * Sitemap resource catalog collection model
  *
- * @category    Magento
- * @package     Magento_Sitemap
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sitemap\Model\Resource\Catalog;
-
 class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -75,6 +71,9 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
         parent::__construct($resource);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('catalog_category_entity', 'entity_id');
@@ -84,7 +83,7 @@ class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Get category collection array
      *
      * @param null|string|bool|int|\Magento\Core\Model\Store $storeId
-     * @return array
+     * @return array|bool
      */
     public function getCollection($storeId)
     {

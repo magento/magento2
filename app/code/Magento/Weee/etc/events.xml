@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -31,7 +31,7 @@
         <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateDiscountPercents" />
     </event>
     <event name="catalog_product_view_config">
-        <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateConfigurableProductOptions" />
+        <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateProductOptions" />
     </event>
     <event name="bundle_product_view_config">
         <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateBundleProductOptions" />

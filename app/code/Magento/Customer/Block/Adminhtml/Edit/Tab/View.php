@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@ class View
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * @var \Magento\Log\Model\Customer
+     * @var \Magento\Customer\Model\Customer
      */
     protected $_customer;
 
@@ -56,9 +56,9 @@ class View
     protected $_modelVisitor;
 
     /**
-     * @var \Magento\Customer\Model\GroupFactory
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
-    protected $_groupFactory;
+    protected $_groupService;
 
     /**
      * @var \Magento\Log\Model\CustomerFactory
@@ -69,10 +69,10 @@ class View
      * @var \Magento\Stdlib\DateTime
      */
     protected $dateTime;
-
+    
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Customer\Model\GroupFactory $groupFactory
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param \Magento\Log\Model\CustomerFactory $logFactory
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Log\Model\Visitor $modelVisitor
@@ -81,7 +81,7 @@ class View
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Customer\Model\GroupFactory $groupFactory,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         \Magento\Log\Model\CustomerFactory $logFactory,
         \Magento\Core\Model\Registry $registry,
         \Magento\Log\Model\Visitor $modelVisitor,
@@ -90,14 +90,14 @@ class View
     ) {
         $this->_coreRegistry = $registry;
         $this->_modelVisitor = $modelVisitor;
-        $this->_groupFactory = $groupFactory;
+        $this->_groupService = $groupService;
         $this->_logFactory = $logFactory;
         $this->dateTime = $dateTime;
         parent::__construct($context, $data);
     }
 
     /**
-     * @return \Magento\Log\Model\Customer
+     * @return \Magento\Customer\Model\Customer
      */
     public function getCustomer()
     {
@@ -108,16 +108,33 @@ class View
     }
 
     /**
-     * @return int
+     * @param int $groupId
+     * @return \Magento\Customer\Service\V1\Dto\CustomerGroup|null
+     */
+    private function getGroup($groupId)
+    {
+        try {
+            $group = $this->_groupService->getGroup($groupId);
+        } catch (\Magento\Exception\NoSuchEntityException $e) {
+            $group = null;
+        }
+        return $group;
+    }
+
+    /**
+     * @return string|null
      */
     public function getGroupName()
     {
-        $groupId = $this->getCustomer()->getGroupId();
-        if ($groupId) {
-            return $this->_groupFactory->create()
-                ->load($groupId)
-                ->getCustomerGroupCode();
+        $customer = $this->getCustomer();
+
+        if ($groupId = ($customer->getId() ? $customer->getGroupId() : null)) {
+            if ($group = $this->getGroup($groupId)) {
+                return $group->getCode();
+            }
         }
+
+        return null;
     }
 
     /**
@@ -142,7 +159,7 @@ class View
     public function getCreateDate()
     {
         return $this->formatDate(
-            $this->getCustomer()->getCreatedAtTimestamp(),
+            $this->getCustomer()->getCreatedAt(),
             \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM,
             true
         );

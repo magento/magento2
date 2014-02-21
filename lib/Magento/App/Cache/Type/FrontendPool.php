@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\App\Cache\Type;
 
 /**
  * In-memory readonly pool of cache front-ends with enforced access control, specific to cache types
  */
-namespace Magento\App\Cache\Type;
-
 class FrontendPool
 {
     /**
@@ -37,9 +35,19 @@ class FrontendPool
     private $_objectManager;
 
     /**
+     * @var \Magento\App\Arguments
+     */
+    private $_arguments;
+
+    /**
      * @var \Magento\App\Cache\Frontend\Pool
      */
     private $_frontendPool;
+
+    /**
+     * @var array
+     */
+    private $_typeFrontendMap;
 
     /**
      * @var \Magento\Cache\FrontendInterface[]
@@ -48,40 +56,61 @@ class FrontendPool
 
     /**
      * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\App\Arguments $arguments
      * @param \Magento\App\Cache\Frontend\Pool $frontendPool
+     * @param array $typeFrontendMap Format: array('<cache_type_id>' => '<cache_frontend_id>', ...)
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\App\Cache\Frontend\Pool $frontendPool
+        \Magento\App\Arguments $arguments,
+        \Magento\App\Cache\Frontend\Pool $frontendPool,
+        array $typeFrontendMap = array()
     ) {
         $this->_objectManager = $objectManager;
+        $this->_arguments = $arguments;
         $this->_frontendPool = $frontendPool;
+        $this->_typeFrontendMap = $typeFrontendMap;
     }
 
     /**
-     * Retrieve cache frontend instance by its unique identifier, enforcing identifier-scoped access control
+     * Retrieve cache frontend instance by a cache type identifier, enforcing identifier-scoped access control
      *
-     * @param string $identifier Cache frontend identifier
+     * @param string $cacheType Cache type identifier
      * @return \Magento\Cache\FrontendInterface Cache frontend instance
      */
-    public function get($identifier)
+    public function get($cacheType)
     {
-        if (!isset($this->_instances[$identifier])) {
-            $frontendInstance = $this->_frontendPool->get($identifier);
-            if (!$frontendInstance) {
-                $frontendInstance = $this->_frontendPool->get(
-                    \Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID
-                );
-            }
+        if (!isset($this->_instances[$cacheType])) {
+            $frontendId = $this->_getCacheFrontendId($cacheType);
+            $frontendInstance = $this->_frontendPool->get($frontendId);
             /** @var $frontendInstance \Magento\App\Cache\Type\AccessProxy */
             $frontendInstance = $this->_objectManager->create(
                 'Magento\App\Cache\Type\AccessProxy', array(
                     'frontend' => $frontendInstance,
-                    'identifier' => $identifier,
+                    'identifier' => $cacheType,
                 )
             );
-            $this->_instances[$identifier] = $frontendInstance;
+            $this->_instances[$cacheType] = $frontendInstance;
         }
-        return $this->_instances[$identifier];
+        return $this->_instances[$cacheType];
+    }
+
+    /**
+     * Retrieve cache frontend identifier, associated with a cache type
+     *
+     * @param string $cacheType
+     * @return string
+     */
+    protected function _getCacheFrontendId($cacheType)
+    {
+        $result = $this->_arguments->getCacheTypeFrontendId($cacheType);
+        if (!$result) {
+            if (isset($this->_typeFrontendMap[$cacheType])) {
+                $result = $this->_typeFrontendMap[$cacheType];
+            } else {
+                $result = \Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID;
+            }
+        }
+        return $result;
     }
 }

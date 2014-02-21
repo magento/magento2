@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Oauth
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Integration\Model\Oauth\Consumer\Validator;
 
 /**
  * Validate OAuth keys
@@ -31,8 +32,6 @@
  * @package    Magento_Oauth
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Integration\Model\Oauth\Consumer\Validator;
-
 class KeyLength extends \Zend_Validate_StringLength
 {
     /**
@@ -71,7 +70,7 @@ class KeyLength extends \Zend_Validate_StringLength
     /**
      * Init validation failure message template definitions
      *
-     * @return \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength
+     * @return $this
      */
     protected function _initMessageTemplates()
     {
@@ -97,8 +96,8 @@ class KeyLength extends \Zend_Validate_StringLength
     /**
      * Set length
      *
-     * @param $length
-     * @return \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength
+     * @param int|null $length
+     * @return $this
      */
     public function setLength($length)
     {
@@ -140,7 +139,7 @@ class KeyLength extends \Zend_Validate_StringLength
      * Set key name
      *
      * @param string $name
-     * @return \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength
+     * @return $this
      */
     public function setName($name)
     {

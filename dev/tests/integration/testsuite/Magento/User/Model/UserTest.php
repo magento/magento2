@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_User
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,6 +68,19 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $crud = new \Magento\TestFramework\Entity($this->_model, array('firstname' => '_New_name_'));
         $crud->testCrud();
+    }
+
+    /**
+     * @magentoDataFixture Magento/User/_files/dummy_user.php
+     */
+    public function testCreatedOnUpdate()
+    {
+        $this->_model->loadByUsername('user_created_date');
+        $this->assertEquals('2010-01-06 00:00:00', $this->_model->getCreated());
+        //reload to update lognum record
+        $this->_model->getResource()->recordLogin($this->_model);
+        $this->_model->reload();
+        $this->assertEquals('2010-01-06 00:00:00', $this->_model->getCreated());
     }
 
     /**

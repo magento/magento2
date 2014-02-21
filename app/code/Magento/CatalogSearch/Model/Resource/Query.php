@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogSearch\Model\Resource;
 
+use Magento\Core\Model\Resource\Db\AbstractDb;
 
 /**
  * Catalog search query resource model
@@ -32,9 +34,7 @@
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource;
-
-class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Query extends AbstractDb
 {
     /**
      * Date
@@ -65,6 +65,8 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Init resource data
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -76,7 +78,7 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Core\Model\AbstractModel $object
      * @param string $value
-     * @return \Magento\CatalogSearch\Model\Resource\Query
+     * @return $this
      */
     public function loadByQuery(\Magento\Core\Model\AbstractModel $object, $value)
     {
@@ -100,7 +102,7 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Core\Model\AbstractModel $object
      * @param string $value
-     * @return \Magento\CatalogSearch\Model\Resource\Query
+     * @return $this
      */
     public function loadByQueryText(\Magento\Core\Model\AbstractModel $object, $value)
     {
@@ -123,7 +125,7 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Core\Model\AbstractModel $object
      * @param int|string $value
      * @param null|string $field
-     * @return \Magento\CatalogSearch\Model\Resource\Query
+     * @return $this|AbstractDb
      */
     public function load(\Magento\Core\Model\AbstractModel $object, $value, $field = null)
     {
@@ -137,7 +139,7 @@ class Query extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\CatalogSearch\Model\Resource\Query
+     * @return $this
      */
     public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {

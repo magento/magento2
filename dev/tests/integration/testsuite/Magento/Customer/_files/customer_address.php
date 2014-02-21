@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,13 +31,15 @@ $customerAddress->isObjectNew(true);
 $customerAddress->setCustomerId(1)
     ->setData(array(
         'entity_id' => 1,
+        'attribute_set_id' => 2,
         'telephone' => 3468676,
         'postcode' => 75477,
-        'country_id' => 'AL',
+        'country_id' => 'US',
         'city' => 'CityM',
-        'street' => 'Green str, 67',
+        'street' => array('Green str, 67'),
         'lastname' => 'Smith',
         'firstname' => 'John',
-        'parent_id' => 1
+        'parent_id' => 1,
+        'region_id' => 1
     ));
 $customerAddress->save();

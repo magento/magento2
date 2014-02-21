@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,8 +34,14 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+use Magento\View\Element\BlockInterface;
+use Magento\View\Element\Template\Helper;
+
 abstract class AbstractProduct extends \Magento\View\Element\Template
 {
+    /**
+     * @var array
+     */
     protected $_priceBlock = array();
 
     /**
@@ -45,10 +51,19 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      */
     protected $_block = 'Magento\Catalog\Block\Product\Price';
 
+    /**
+     * @var string
+     */
     protected $_priceBlockDefaultTemplate = 'product/price.phtml';
 
+    /**
+     * @var string
+     */
     protected $_tierPriceDefaultTemplate  = 'product/view/tierprices.phtml';
 
+    /**
+     * @var array
+     */
     protected $_priceBlockTypes = array();
 
     /**
@@ -58,6 +73,9 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      */
     protected $_useLinkForAsLowAs = true;
 
+    /**
+     * @var Helper
+     */
     protected $_reviewsHelperBlock;
 
     /**
@@ -87,7 +105,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      * @var \Magento\Core\Model\Registry
      */
     protected $_coreRegistry = null;
-    
+
     /**
      * Catalog data
      *
@@ -112,7 +130,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
     /**
      * @var \Magento\Math\Random
      */
-    protected $mathRandom;
+    protected $_mathRandom;
 
     /**
      * @var \Magento\Checkout\Helper\Cart
@@ -152,7 +170,8 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      * @param \Magento\Theme\Helper\Layout $layoutHelper
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param array $data
-     * 
+     * @param array $priceBlockTypes
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -167,7 +186,8 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         \Magento\Catalog\Helper\Product\Compare $compareProduct,
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_imageHelper = $imageHelper;
         $this->_layoutHelper = $layoutHelper;
@@ -178,7 +198,8 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         $this->_coreRegistry = $registry;
         $this->_taxData = $taxData;
         $this->_catalogData = $catalogData;
-        $this->mathRandom = $mathRandom;
+        $this->_mathRandom = $mathRandom;
+        $this->_priceBlockTypes = $priceBlockTypes;
         parent::__construct($context, $data);
     }
 
@@ -229,25 +250,24 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
     }
 
     /**
-     * Enter description here...
+     * Retrieve add to wishlist params
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return string
      */
-    public function getAddToWishlistUrl($product)
+    public function getAddToWishlistParams($product)
     {
-        return $this->_wishlistHelper->getAddUrl($product);
+        return $this->_wishlistHelper->getAddParams($product);
     }
 
     /**
      * Retrieve Add Product to Compare Products List URL
      *
-     * @param \Magento\Catalog\Model\Product $product
      * @return string
      */
-    public function getAddToCompareUrl($product)
+    public function getAddToCompareUrl()
     {
-        return $this->_compareProduct->getAddUrl($product);
+        return $this->_compareProduct->getAddUrl();
     }
 
     /**
@@ -266,6 +286,10 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return null;
     }
 
+    /**
+     * @param string $productTypeId
+     * @return BlockInterface
+     */
     protected function _getPriceBlock($productTypeId)
     {
         if (!isset($this->_priceBlock[$productTypeId])) {
@@ -280,6 +304,10 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return $this->_priceBlock[$productTypeId];
     }
 
+    /**
+     * @param string $productTypeId
+     * @return string
+     */
     protected function _getPriceBlockTemplate($productTypeId)
     {
         if (isset($this->_priceBlockTypes[$productTypeId])) {
@@ -339,6 +367,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      * @param string $type
      * @param string $block
      * @param string $template
+     * @return void
      */
     public function addPriceBlockType($type, $block = '', $template = '')
     {
@@ -399,6 +428,11 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return $this->getData('product');
     }
 
+    /**
+     * Retrieve tier price template
+     *
+     * @return string
+     */
     public function getTierPriceTemplate()
     {
         if (!$this->hasData('tier_price_template')) {
@@ -407,6 +441,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
 
         return $this->getData('tier_price_template');
     }
+
     /**
      * Returns product tier price block html
      *
@@ -421,7 +456,6 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         return $this->_getPriceBlock($product->getTypeId())
             ->setTemplate($this->getTierPriceTemplate())
             ->setProduct($product)
-            ->setInGrouped($this->getProduct()->isGrouped())
             ->toHtml();
     }
 
@@ -826,6 +860,6 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      */
     public function getRandomString($length, $chars = null)
     {
-        return $this->mathRandom->getRandomString($length, $chars);
+        return $this->_mathRandom->getRandomString($length, $chars);
     }
 }

@@ -19,10 +19,10 @@
  *
  * @category    frontend image zoom
  * @package     mage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-/*jshint evil:true browser:true jquery:true expr:true*/
+/*jshint browser:true jquery:true expr:true*/
 (function($) {
     $.widget('mage.zoom', {
         options: {

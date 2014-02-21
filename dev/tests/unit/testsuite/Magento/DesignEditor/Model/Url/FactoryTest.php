@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\DesignEditor\Model\Url;
@@ -53,7 +53,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager->expects($this->once())
             ->method('configure')
-            ->with(array('preferences' => array('Magento\Core\Model\Url' => 'TestClass')));
+            ->with(array('preferences' => array('Magento\UrlInterface' => 'TestClass')));
 
         $this->assertEquals($this->_model, $this->_model->replaceClassName('TestClass'));
     }
@@ -62,7 +62,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Core\Model\Url', array())
+            ->with('Magento\UrlInterface', array())
             ->will($this->returnValue('ModelInstance'));
 
         $this->assertEquals('ModelInstance', $this->_model->create());

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,7 +59,7 @@ interface LocaleInterface
      * Set default locale code
      *
      * @param   string $locale
-     * @return  \Magento\Core\Model\LocaleInterface
+     * @return  $this
      */
     public function setDefaultLocale($locale);
 
@@ -74,7 +74,7 @@ interface LocaleInterface
      * Set locale
      *
      * @param   string $locale
-     * @return  \Magento\Core\Model\LocaleInterface
+     * @return  $this
      */
     public function setLocale($locale = null);
 
@@ -110,7 +110,7 @@ interface LocaleInterface
      * Specify current locale code
      *
      * @param   string $code
-     * @return  \Magento\Core\Model\LocaleInterface
+     * @return  $this
      */
     public function setLocaleCode($code);
 
@@ -138,9 +138,11 @@ interface LocaleInterface
     /**
      * Retrieve days of week option list
      *
+     * @param bool $preserveCodes
+     * @param bool $ucFirstCode
      * @return array
      */
-    public function getOptionWeekdays();
+    public function getOptionWeekdays($preserveCodes = false, $ucFirstCode = false);
 
     /**
      * Retrieve country option list
@@ -152,14 +154,14 @@ interface LocaleInterface
     /**
      * Retrieve currency option list
      *
-     * @return unknown
+     * @return array
      */
     public function getOptionCurrencies();
 
     /**
      * Retrieve all currency option list
      *
-     * @return unknown
+     * @return array
      */
     public function getOptionAllCurrencies();
 
@@ -173,7 +175,7 @@ interface LocaleInterface
     /**
      * Retrieve array of allowed currencies
      *
-     * @return unknown
+     * @return array
      */
     public function getAllowCurrencies();
 
@@ -211,10 +213,10 @@ interface LocaleInterface
     /**
      * Create \Zend_Date object for current locale
      *
-     * @param mixed              $date
-     * @param string             $part
-     * @param string|Zend_Locale $locale
-     * @param bool               $useTimezone
+     * @param string|integer|\Zend_Date|array|null $date
+     * @param string $part
+     * @param string|\Zend_Locale $locale
+     * @param bool $useTimezone
      * @return \Zend_Date
      */
     public function date($date = null, $part = null, $locale = null, $useTimezone = true);
@@ -222,8 +224,8 @@ interface LocaleInterface
     /**
      * Create \Zend_Date object with date converted to store timezone and store Locale
      *
-     * @param   mixed $store Information about store
-     * @param   string|integer|Zend_Date|array|null $date date in UTC
+     * @param   null|string|bool|int|Store $store Information about store
+     * @param   string|integer|\Zend_Date|array|null $date date in UTC
      * @param   boolean $includeTime flag for including time to date
      * @return  \Zend_Date
      */
@@ -234,8 +236,8 @@ interface LocaleInterface
      * to UTC time zone. Date can be passed in format of store's locale
      * or in format which was passed as parameter.
      *
-     * @param mixed $store Information about store
-     * @param string|integer|Zend_Date|array|null $date date in store's timezone
+     * @param null|string|bool|int|Store $store Information about store
+     * @param string|integer|\Zend_Date|array|null $date date in store's timezone
      * @param boolean $includeTime flag for including time to date
      * @param null|string $format
      * @return \Zend_Date
@@ -246,7 +248,7 @@ interface LocaleInterface
      * Get store timestamp
      * Timestamp will be built with store timezone settings
      *
-     * @param   mixed $store
+     * @param   null|string|bool|int|Store $store
      * @return  int
      */
     public function storeTimeStamp($store=null);
@@ -291,12 +293,14 @@ interface LocaleInterface
      * Event is not dispatched.
      *
      * @param int $storeId
+     * @return void
      */
     public function emulate($storeId);
 
     /**
      * Get last locale, used before last emulation
      *
+     * @return void
      */
     public function revert();
 
@@ -325,7 +329,7 @@ interface LocaleInterface
      * Returns the localized country name
      *
      * @param  string             $value  Name to get detailed information about
-     * @return array
+     * @return string|false
      */
     public function getCountryTranslation($value);
 
@@ -339,7 +343,7 @@ interface LocaleInterface
     /**
      * Checks if current date of the given store (in the store timezone) is within the range
      *
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|Store $store
      * @param string|null $dateFrom
      * @param string|null $dateTo
      * @return bool
@@ -349,7 +353,7 @@ interface LocaleInterface
     /**
      * Format date using current locale options and time zone.
      *
-     * @param Zend_Date|null $date
+     * @param \Zend_Date|null $date
      * @param string $format
      * @param bool $showTime
      * @return string
@@ -361,7 +365,7 @@ interface LocaleInterface
     /**
      * Format time using current locale options
      *
-     * @param Zend_Date|null $time
+     * @param \Zend_Date|null $time
      * @param string $format
      * @param bool $showDate
      * @return string

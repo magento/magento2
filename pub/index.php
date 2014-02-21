@@ -20,14 +20,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require __DIR__ . '/../app/bootstrap.php';
-\Magento\Profiler::start('magento');
 $params = $_SERVER;
-$params[\Magento\Filesystem::PARAM_APP_DIRS][\Magento\Filesystem::PUB] = array('uri' => '');
+$params[\Magento\App\Filesystem::PARAM_APP_DIRS][\Magento\App\Filesystem::PUB_DIR] = array('uri' => '');
 $entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
-$result = $entryPoint->run('Magento\App\Http');
-\Magento\Profiler::stop('magento');
-return $result;
+$entryPoint->run('Magento\App\Http');

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_System
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,8 +59,8 @@ class Ftp
     /**
      * ftp_mkdir wrapper
      *
-     * @param stin$name
-     * @return unknown_type
+     * @param string $name
+     * @return string the newly created directory name on success or <b>FALSE</b> on error.
      */
     public function mdkir($name)
     {
@@ -101,8 +101,8 @@ class Ftp
      * 
      * @param string $login
      * @param string $password
-     * @throws \Exception on invalid login credentials
      * @return bool
+     * @throws \Exception on invalid login credentials
      */
     public function login($login = "anonymous", $password = "test@gmail.com")
     {
@@ -140,6 +140,8 @@ class Ftp
      *
      * @param string $string
      * @param int $timeout
+     * @return void
+     * @throws \Exception
      */
     public function connect($string, $timeout = 900)
     {
@@ -196,7 +198,7 @@ class Ftp
     /**
      * Get current working directory
      * 
-     * @return mixed
+     * @return false|string
      */
     public function getcwd()
     {
@@ -217,9 +219,9 @@ class Ftp
 
     /**
      * ftp_raw wrapper
-     * 
+     *
      * @param string $cmd
-     * @return mixed
+     * @return array The server's response as an array of strings.
      */
     public function raw($cmd)
     {
@@ -233,11 +235,12 @@ class Ftp
      * Can be used for relative and absoulte remote paths
      * Relative: use chdir before calling this
      *
-     * @param srting $remote
+     * @param string $remote
      * @param string $local
      * @param int $dirMode
      * @param int $ftpMode
-     * @return unknown_type
+     * @return bool
+     * @throws \Exception
      */
     public function upload($remote, $local, $dirMode = 0777, $ftpMode = FTP_BINARY)
     {
@@ -314,9 +317,9 @@ class Ftp
     /**
      * ftp_chmod wrapper
      * 
-     * @param $mode
-     * @param $remoteFile
-     * @return bool
+     * @param int $mode
+     * @param string $remoteFile
+     * @return int The new file permissions on success or <b>FALSE</b> on error.
      */
     public function chmod($mode, $remoteFile)
     {
@@ -381,7 +384,7 @@ class Ftp
      * 
      * @param string $dir
      * @param bool $recursive
-     * @return mixed
+     * @return array an array where each element corresponds to one line of text.
      */
     public function rawlist( $dir = "/", $recursive = false )
     {

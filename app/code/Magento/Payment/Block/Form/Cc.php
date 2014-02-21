@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Payment\Block\Form;
 
 class Cc extends \Magento\Payment\Block\Form
@@ -109,13 +108,13 @@ class Cc extends \Magento\Payment\Block\Form
     /**
      * Retrieve has verification configuration
      *
-     * @return boolean
+     * @return bool
      */
     public function hasVerification()
     {
         if ($this->getMethod()) {
             $configData = $this->getMethod()->getConfigData('useccv');
-            if(is_null($configData)){
+            if (is_null($configData)) {
                 return true;
             }
             return (bool) $configData;
@@ -123,9 +122,11 @@ class Cc extends \Magento\Payment\Block\Form
         return true;
     }
 
-    /*
-    * Whether switch/solo card type available
-    */
+    /**
+     * Whether switch/solo card type available
+     *
+     * @return bool
+     */
     public function hasSsCardType()
     {
         $availableTypes = explode(',', $this->getMethod()->getConfigData('cctypes'));
@@ -136,11 +137,12 @@ class Cc extends \Magento\Payment\Block\Form
         return false;
     }
 
-    /*
-    * solo/switch card start year
-    * @return array
-    */
-     public function getSsStartYears()
+    /**
+     * Solo/switch card start year
+     *
+     * @return array
+     */
+    public function getSsStartYears()
     {
         $years = array();
         $first = date("Y");

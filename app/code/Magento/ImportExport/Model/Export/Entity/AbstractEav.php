@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export\Entity;
 
 /**
  * Export EAV entity abstract model
@@ -31,8 +32,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Export\Entity;
-
 abstract class AbstractEav
     extends \Magento\ImportExport\Model\Export\AbstractEntity
 {
@@ -60,14 +59,14 @@ abstract class AbstractEav
     /**
      * Attributes with index (not label) value
      *
-     * @var array
+     * @var string[]
      */
     protected $_indexValueAttributes = array();
 
     /**
      * Permanent entity columns
      *
-     * @var array
+     * @var string[]
      */
     protected $_permanentAttributes = array();
 
@@ -78,7 +77,7 @@ abstract class AbstractEav
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -87,7 +86,7 @@ abstract class AbstractEav
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -95,7 +94,7 @@ abstract class AbstractEav
         array $data = array()
     ) {
         $this->_locale = $locale;
-        parent::__construct($coreStoreConfig, $app, $collectionFactory, $resourceColFactory, $data);
+        parent::__construct($coreStoreConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
 
         if (isset($data['entity_type_id'])) {
             $this->_entityTypeId = $data['entity_type_id'];
@@ -137,7 +136,7 @@ abstract class AbstractEav
     /**
      * Initialize attribute option values
      *
-     * @return \Magento\ImportExport\Model\Export\Entity\AbstractEav
+     * @return $this
      */
     protected function _initAttributeValues()
     {

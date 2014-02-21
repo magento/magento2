@@ -19,21 +19,24 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 (function($) {
     $.widget("mage.validation", $.mage.validation, {
         options: {
+            radioCheckboxClosest: 'ul',
             errorPlacement: function (error, element) {
+                if (element.attr('data-validate-message-box')) {
+                    var messageBox = $(element.attr('data-validate-message-box'));
+                    messageBox.html(error);
+                    return;
+                }
                 var dataValidate = element.attr('data-validate');
                 if (dataValidate && dataValidate.indexOf('validate-one-checkbox-required-by-name') > 0) {
                     error.appendTo('#links-advice-container');
-                } else if (dataValidate && dataValidate.indexOf('validate-grouped-qty') > 0) {
-                    $('#super-product-table').siblings(this.errorElement + '.' + this.errorClass).remove();
-                    $('#super-product-table').after(error);
                 } else if (element.is(':radio, :checkbox')) {
-                    element.closest('ul').after(error);
+                    element.closest(this.radioCheckboxClosest).after(error);
                 } else {
                     element.after(error);
                 }
@@ -48,7 +51,7 @@
                         }
                     });
                 } else if ($(element).is(':radio, :checkbox')) {
-                    $(element).closest('ul').addClass(errorClass);
+                    $(element).closest(this.radioCheckboxClosest).addClass(errorClass);
                 } else {
                     $(element).addClass(errorClass);
                 }
@@ -58,7 +61,7 @@
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').removeClass(errorClass);
                 } else if ($(element).is(':radio, :checkbox')) {
-                    $(element).closest('ul').removeClass(errorClass);
+                    $(element).closest(this.radioCheckboxClosest).removeClass(errorClass);
                 } else {
                     $(element).removeClass(errorClass);
                 }

@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Session;
 
 /**
@@ -153,8 +152,9 @@ class Quote extends \Magento\Session\SessionManager
     /**
      * Set customer model object
      * To enable quick switch of preconfigured customer
+     *
      * @param \Magento\Customer\Model\Customer $customer
-     * @return \Magento\Backend\Model\Session\Quote
+     * @return $this
      */
     public function setCustomer(\Magento\Customer\Model\Customer $customer)
     {
@@ -164,6 +164,7 @@ class Quote extends \Magento\Session\SessionManager
 
     /**
      * Retrieve customer model object
+     *
      * @param bool $forceReload
      * @param bool $useSetStore
      * @return \Magento\Customer\Model\Customer

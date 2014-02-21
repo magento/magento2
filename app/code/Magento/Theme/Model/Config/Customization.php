@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Theme
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -184,7 +184,7 @@ class Customization
      * NOTE: To get into "assigned" list theme customization not necessary should be assigned to store-view directly.
      * It can be set to website or as default theme and be used by store-view via config fallback mechanism.
      *
-     * @return Customization
+     * @return $this
      */
     protected function _prepareThemeCustomizations()
     {

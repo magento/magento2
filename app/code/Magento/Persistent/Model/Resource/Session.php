@@ -20,22 +20,20 @@
  *
  * @category    Magento
  * @package     Magento_Persistent
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Persistent\Model\Resource;
 
 /**
  * Persistent Session Resource Model
  */
-namespace Magento\Persistent\Model\Resource;
-
 class Session extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Use is object new method for object saving
      *
-     * @var boolean
+     * @var bool
      */
     protected $_useIsObjectNew = true;
 
@@ -62,6 +60,8 @@ class Session extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Initialize connection and define main table and primary key
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -93,7 +93,7 @@ class Session extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete customer persistent session by customer id
      *
      * @param int $customerId
-     * @return \Magento\Persistent\Model\Resource\Session
+     * @return $this
      */
     public function deleteByCustomerId($customerId)
     {
@@ -117,9 +117,9 @@ class Session extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Delete expired persistent sessions
      *
-     * @param  $websiteId
-     * @param  $expiredBefore
-     * @return \Magento\Persistent\Model\Resource\Session
+     * @param  int $websiteId
+     * @param  string $expiredBefore A formatted date string
+     * @return $this
      */
     public function deleteExpired($websiteId, $expiredBefore)
     {

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,11 +39,15 @@ class Calendar extends \Magento\View\Element\Template
     protected $_date;
 
     /**
+     * JSON Encoder
+     *
      * @var \Magento\Json\EncoderInterface
      */
     protected $encoder;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Model\Date $date
      * @param \Magento\Json\EncoderInterface $encoder
@@ -124,7 +128,7 @@ class Calendar extends \Magento\View\Element\Template
     /**
      * Return offset of current timezone with GMT in seconds
      *
-     * @return integer
+     * @return int
      */
     public function getTimezoneOffsetSeconds()
     {
@@ -134,7 +138,7 @@ class Calendar extends \Magento\View\Element\Template
     /**
      * Getter for store timestamp based on store timezone settings
      *
-     * @param mixed $store
+     * @param null|string|bool|int|\Magento\Core\Model\Store $store
      * @return int
      */
     public function getStoreTimestamp($store = null)

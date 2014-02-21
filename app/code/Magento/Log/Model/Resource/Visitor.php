@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Log
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,6 +68,8 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Define main table
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -117,7 +119,7 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Save url info before save
      *
      * @param \Magento\Core\Model\AbstractModel $visitor
-     * @return \Magento\Log\Model\Resource\Visitor
+     * @return $this
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $visitor)
     {
@@ -131,7 +133,7 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Actions after save
      *
      * @param \Magento\Core\Model\AbstractModel $visitor
-     * @return \Magento\Log\Model\Resource\Visitor
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $visitor)
     {

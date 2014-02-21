@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -27,39 +27,41 @@
 <?php echo $this->getChildHtml('info');?>
 <div class="order toolbar"><?php echo $this->getPagerHtml(); ?></div>
 <?php if($_orders->getSize()): ?>
-<table class="data table orders history" id="my-orders-table">
-    <thead>
-        <tr>
-            <th class="col id"><?php echo __('Order #') ?></th>
-            <th class="col date"><?php echo __('Date') ?></th>
-            <th class="col shipping"><?php echo __('Ship To') ?></th>
-            <th class="col total"><?php echo __('Order Total') ?></th>
-            <th class="col status"><?php echo __('Status') ?></th>
-            <th class="col actions">&nbsp;</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($_orders as $_order): ?>
+<div class="wrapper table orders history">
+    <table class="data table orders history" id="my-orders-table">
+        <thead>
             <tr>
-                <td class="col id"><?php echo $_order->getRealOrderId() ?></td>
-                <td class="col date"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></td>
-                <td class="col shipping"><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
-                <td class="col total"><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
-                <td class="col status"><em><?php echo $_order->getStatusLabel() ?></em></td>
-                <td class="col actions">
-                    <a href="<?php echo $this->getViewUrl($_order) ?>" class="action view">
-                        <span><?php echo __('View Order') ?></span>
-                    </a>
-                    <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order)) : ?>
-                        <a href="<?php echo $this->getReorderUrl($_order) ?>" class="action order">
-                            <span><?php echo __('Reorder') ?></span>
-                        </a>
-                    <?php endif ?>
-                </td>
+                <th class="col id"><?php echo __('Order #') ?></th>
+                <th class="col date"><?php echo __('Date') ?></th>
+                <th class="col shipping"><?php echo __('Ship To') ?></th>
+                <th class="col total"><?php echo __('Order Total') ?></th>
+                <th class="col status"><?php echo __('Status') ?></th>
+                <th class="col actions">&nbsp;</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($_orders as $_order): ?>
+                <tr>
+                    <td class="col id"><?php echo $_order->getRealOrderId() ?></td>
+                    <td class="col date"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></td>
+                    <td class="col shipping"><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                    <td class="col total"><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                    <td class="col status"><em><?php echo $_order->getStatusLabel() ?></em></td>
+                    <td class="col actions">
+                        <a href="<?php echo $this->getViewUrl($_order) ?>" class="action view">
+                            <span><?php echo __('View Order') ?></span>
+                        </a>
+                        <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order)) : ?>
+                            <a href="<?php echo $this->getReorderUrl($_order) ?>" class="action order">
+                                <span><?php echo __('Reorder') ?></span>
+                            </a>
+                        <?php endif ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 <div class="order toolbar bottom"><?php echo $this->getPagerHtml(); ?></div>
 <?php else: ?>
     <div class="message info empty"><span><?php echo __('You have placed no orders.'); ?></span></div>

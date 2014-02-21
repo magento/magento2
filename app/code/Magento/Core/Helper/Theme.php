@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@ class Theme extends \Magento\App\Helper\AbstractHelper
     /**
      * Filesystem facade
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -59,14 +59,14 @@ class Theme extends \Magento\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory
      * @param \Magento\Core\Model\Resource\Theme\Collection $themeCollection
      * @param \Magento\View\FileSystem $viewFileSystem
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
         \Magento\Core\Model\Resource\Theme\Collection $themeCollection,
         \Magento\View\FileSystem $viewFileSystem
@@ -118,7 +118,7 @@ class Theme extends \Magento\App\Helper\AbstractHelper
             'skipProxy'  => true
         );
 
-        $rootDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $rootDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $files = array();
         foreach ($elements as $fileId) {
             $fileId = (string)$fileId;
@@ -145,9 +145,9 @@ class Theme extends \Magento\App\Helper\AbstractHelper
      */
     public function getGroupedCssFiles($theme)
     {
-        $jsDir = $this->_filesystem->getPath(\Magento\Filesystem::PUB_LIB);
-        $codeDir = $this->_filesystem->getPath(\Magento\Filesystem::MODULES);
-        $designDir = $this->_filesystem->getPath(\Magento\Filesystem::THEMES);
+        $jsDir = $this->_filesystem->getPath(\Magento\App\Filesystem::PUB_LIB_DIR);
+        $codeDir = $this->_filesystem->getPath(\Magento\App\Filesystem::MODULES_DIR);
+        $designDir = $this->_filesystem->getPath(\Magento\App\Filesystem::THEMES_DIR);
 
         $groups = array();
         $themes = array();
@@ -194,9 +194,9 @@ class Theme extends \Magento\App\Helper\AbstractHelper
     /**
      * Detect theme view file belongs to and set it to file data under "theme" key
      *
-     * @param array $file
+     * @param array &$file
      * @param string $designDir
-     * @return \Magento\Core\Helper\Theme
+     * @return $this
      * @throws \LogicException
      */
     protected function _detectTheme(&$file, $designDir)
@@ -234,11 +234,11 @@ class Theme extends \Magento\App\Helper\AbstractHelper
     /**
      * Detect group where file should be placed and set it to file data under "group" key
      *
-     * @param array $file
+     * @param array &$file
      * @param string $designDir
      * @param string $jsDir
      * @param string $codeDir
-     * @return \Magento\Core\Helper\Theme
+     * @return $this
      * @throws \LogicException
      */
     protected function _detectGroup(&$file, $designDir, $jsDir, $codeDir)

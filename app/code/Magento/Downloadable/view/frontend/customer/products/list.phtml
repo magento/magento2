@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -32,34 +32,36 @@
     <?php echo $this->getChildHtml('pager'); ?>
 </div>
 <?php if(count($_items)): ?>
-    <table id="my-downloadable-products-table" class="data table downloadable products">
-        <thead>
-            <tr>
-                <th class="col id"><?php echo __('Order #') ?></th>
-                <th class="col date"><?php echo __('Date') ?></th>
-                <th class="col title"><?php echo __('Title') ?></th>
-                <th class="col status"><?php echo __('Status') ?></th>
-                <th class="col remaining"><?php echo __('Remaining Downloads') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($_items as $_item): ?>
-            <tr>
-                <td class="col id">
-                    <a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo __('View Order') ?>">
-                        <?php echo $_item->getPurchased()->getOrderIncrementId() ?>
-                    </a>
-                </td>
-                <td class="col date"><?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?></td>
-                <td class="col title">
-                    <?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?> - <a href="<?php echo $this->getDownloadUrl($_item) ?>" title="<?php echo __('Start Download') ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $this->escapeHtml($_item->getLinkTitle()) ?></a>
-                </td>
-                <td class="col status"><?php echo __(ucfirst($_item->getStatus())) ?></td>
-                <td class="col remaining"><?php echo $this->getRemainingDownloads($_item) ?></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div class="wrapper table downloadable products">
+        <table id="my-downloadable-products-table" class="data table downloadable products">
+            <thead>
+                <tr>
+                    <th class="col id"><?php echo __('Order #') ?></th>
+                    <th class="col date"><?php echo __('Date') ?></th>
+                    <th class="col title"><?php echo __('Title') ?></th>
+                    <th class="col status"><?php echo __('Status') ?></th>
+                    <th class="col remaining"><?php echo __('Remaining Downloads') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($_items as $_item): ?>
+                <tr>
+                    <td class="col id">
+                        <a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo __('View Order') ?>">
+                            <?php echo $_item->getPurchased()->getOrderIncrementId() ?>
+                        </a>
+                    </td>
+                    <td class="col date"><?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?></td>
+                    <td class="col title">
+                        <?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?> - <a href="<?php echo $this->getDownloadUrl($_item) ?>" title="<?php echo __('Start Download') ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $this->escapeHtml($_item->getLinkTitle()) ?></a>
+                    </td>
+                    <td class="col status"><?php echo __(ucfirst($_item->getStatus())) ?></td>
+                    <td class="col remaining"><?php echo $this->getRemainingDownloads($_item) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 <?php else: ?>
     <div class="message info empty"><span><?php echo __('You have not purchased any downloadable products yet.'); ?></span></div>
 <?php endif; ?>

@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Rss\App\Action\Plugin;
@@ -56,7 +56,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
 
     /**
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\App\ActionFlag $actionFlag
      * @param \Magento\Message\ManagerInterface $messageManager
@@ -66,7 +66,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Url $url,
+        \Magento\Backend\Model\UrlInterface $url,
         \Magento\App\ResponseInterface $response,
         \Magento\App\ActionFlag $actionFlag,
         \Magento\Message\ManagerInterface $messageManager,

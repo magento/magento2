@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogInventory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,7 @@ namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
 
 class DefaultStock
     extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
-    implements \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface
+    implements StockInterface
 {
     /**
      * Current Product Type Id
@@ -78,6 +78,7 @@ class DefaultStock
     /**
      * Initialize connection and define main table name
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -87,7 +88,8 @@ class DefaultStock
     /**
      * Reindex all stock status data for default logic product type
      *
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
+     * @throws \Exception
      */
     public function reindexAll()
     {
@@ -107,7 +109,7 @@ class DefaultStock
      * Reindex stock data for defined product ids
      *
      * @param int|array $entityIds
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     public function reindexEntity($entityIds)
     {
@@ -119,7 +121,7 @@ class DefaultStock
      * Set active Product Type Id
      *
      * @param string $typeId
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     public function setTypeId($typeId)
     {
@@ -145,7 +147,7 @@ class DefaultStock
      * Set Product Type Composite flag
      *
      * @param bool $flag
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     public function setIsComposite($flag)
     {
@@ -202,7 +204,7 @@ class DefaultStock
             ->where('e.type_id = ?', $this->getTypeId());
 
         // add limitation of status
-        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
 
         if ($this->_isManageStock()) {
@@ -225,8 +227,8 @@ class DefaultStock
     /**
      * Prepare stock status data in temporary index table
      *
-     * @param int|array $entityIds  the product limitation
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @param int|array $entityIds the product limitation
+     * @return $this
      */
     protected function _prepareIndexTable($entityIds = null)
     {
@@ -242,7 +244,7 @@ class DefaultStock
      * Update Stock status index by product ids
      *
      * @param array|int $entityIds
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     protected function _updateIndex($entityIds)
     {
@@ -275,7 +277,7 @@ class DefaultStock
      * Update stock status index table (INSERT ... ON DUPLICATE KEY UPDATE ...)
      *
      * @param array $data
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     protected function _updateIndexTable($data)
     {

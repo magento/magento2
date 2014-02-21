@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
+        <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\CartConfiguration">
+        <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Product\CartConfiguration\Plugin\Configurable" sortOrder="50" />
+    </type>
+    <type name="Magento\Sales\Model\Order\Admin\Item">
+        <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable" sortOrder="50" />
+    </type>
+    <type name="Magento\Catalog\Helper\Product\Configuration">
+        <plugin name="confiburable_product" type="Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface">
+        <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\TypeTransitionManager">
+        <plugin name="configurable_product_transition" type="Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable" sortOrder="50" />
+        <arguments>
+            <argument name="compatibleTypes" xsi:type="array">
+                <item name="configurable" xsi:type="const">Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Resource\Report\Bestsellers">
+        <arguments>
+            <argument name="ignoredProductTypes" xsi:type="array">
+                <item name="configurable" xsi:type="const">\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="configurableproduct_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Export\RowCustomizer\Composite">
+        <arguments>
+            <argument name="customizers" xsi:type="array">
+                <item name="configurableProduct" xsi:type="string">Magento\ConfigurableProduct\Model\Export\RowCustomizer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
+        <arguments>
+            <argument name="propertyMappers" xsi:type="array">
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Resource\Setup\PropertyMapper</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Attribute\LockValidatorComposite">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Attribute\LockValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Type">
+        <plugin name="configurable_output" type="Magento\ConfigurableProduct\Model\Product\Type\Plugin" />
+    </type>
+</config>

@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\GoogleOptimizer\Model\Observer;
+
+use Magento\Event\Observer;
 
 abstract class AbstractSave
 {
@@ -65,8 +67,8 @@ abstract class AbstractSave
     /**
      * Save script after saving entity
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\GoogleOptimizer\Model\Observer\Category\Save
+     * @param Observer $observer
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function saveGoogleExperimentScript($observer)
@@ -83,12 +85,15 @@ abstract class AbstractSave
     /**
      * Init entity
      *
-     * @param \Magento\Event\Observer $observer
+     * @param Observer $observer
+     * @return void
      */
     abstract protected function _initEntity($observer);
 
     /**
      * Check is Google Experiment enabled
+     *
+     * @return bool
      */
     protected function _isGoogleExperimentActive()
     {
@@ -97,6 +102,8 @@ abstract class AbstractSave
 
     /**
      * Processes Save event of the entity
+     *
+     * @return void
      */
     protected function _processCode()
     {
@@ -117,6 +124,7 @@ abstract class AbstractSave
     /**
      * Init request params
      *
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _initRequestParams()
@@ -140,6 +148,8 @@ abstract class AbstractSave
 
     /**
      * Save code model
+     *
+     * @return void
      */
     protected function _saveCode()
     {
@@ -157,6 +167,7 @@ abstract class AbstractSave
     /**
      * Load model code
      *
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _loadCode()
@@ -180,6 +191,7 @@ abstract class AbstractSave
     /**
      * Delete model code
      *
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _deleteCode()

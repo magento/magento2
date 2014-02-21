@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Io;
 
 /**
  * Filesystem client
- *
- * @category   Magento
- * @package    Magento_Io
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Io;
-
-class File extends \Magento\Io\AbstractIo
+class File extends AbstractIo
 {
     /**
      * Save initial working directory
@@ -101,6 +96,8 @@ class File extends \Magento\Io\AbstractIo
 
     /**
      * Destruct
+     *
+     * @return void
      */
     public function __destruct()
     {
@@ -116,7 +113,7 @@ class File extends \Magento\Io\AbstractIo
      * @param string $fileName
      * @param string $mode
      * @param int $chmod
-     * @return bool
+     * @return true
      * @throws \Exception
      */
     public function streamOpen($fileName, $mode = 'w+', $chmod = 0666)
@@ -176,7 +173,7 @@ class File extends \Magento\Io\AbstractIo
      * Binary-safe file read
      *
      * @param int $length
-     * @return string
+     * @return string|false
      */
     public function streamRead($length = 1024)
     {
@@ -194,7 +191,7 @@ class File extends \Magento\Io\AbstractIo
      *
      * @param string $delimiter
      * @param string $enclosure
-     * @return string
+     * @return string|false
      */
     public function streamReadCsv($delimiter = ',', $enclosure = '"')
     {
@@ -208,7 +205,7 @@ class File extends \Magento\Io\AbstractIo
      * Binary-safe file write
      *
      * @param string $str
-     * @return bool
+     * @return int|false
      */
     public function streamWrite($str)
     {
@@ -224,7 +221,7 @@ class File extends \Magento\Io\AbstractIo
      * @param array $row
      * @param string $delimiter
      * @param string $enclosure
-     * @return bool|int
+     * @return int|false The length of the written string or false
      */
     public function streamWriteCsv(array $row, $delimiter = ',', $enclosure = '"')
     {
@@ -290,7 +287,7 @@ class File extends \Magento\Io\AbstractIo
      * - path     default current path
      *
      * @param array $args
-     * @return boolean
+     * @return true
      */
     public function open(array $args = array())
     {
@@ -310,9 +307,9 @@ class File extends \Magento\Io\AbstractIo
     /**
      * Used to set {@link _allowCreateFolders} value
      *
-     * @param mixed $flag
+     * @param bool $flag
      * @access public
-     * @return \Magento\Io\File
+     * @return $this
      */
     public function setAllowCreateFolders($flag)
     {
@@ -323,7 +320,7 @@ class File extends \Magento\Io\AbstractIo
     /**
      * Close a connection
      *
-     * @return boolean
+     * @return true
      */
     public function close()
     {
@@ -335,8 +332,8 @@ class File extends \Magento\Io\AbstractIo
      *
      * @param string $dir
      * @param int $mode
-     * @param boolean $recursive
-     * @return boolean
+     * @param bool $recursive
+     * @return bool
      */
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
@@ -351,7 +348,7 @@ class File extends \Magento\Io\AbstractIo
      *
      * @param string $dir
      * @param bool $recursive
-     * @return boolean
+     * @return bool
      */
     public function rmdir($dir, $recursive = false)
     {
@@ -437,7 +434,7 @@ class File extends \Magento\Io\AbstractIo
      * Change current working directory
      *
      * @param string $dir
-     * @return boolean
+     * @return true
      * @throws \Exception
      */
     public function cd($dir)
@@ -459,7 +456,7 @@ class File extends \Magento\Io\AbstractIo
      *
      * @param string $filename
      * @param string|resource $dest
-     * @return boolean|string
+     * @return bool|string
      */
     public function read($filename, $dest = null)
     {
@@ -480,7 +477,7 @@ class File extends \Magento\Io\AbstractIo
      * @param string $filename
      * @param string|resource $src
      * @param int $mode
-     * @return int|boolean
+     * @return int|bool
      */
     public function write($filename, $src, $mode = null)
     {
@@ -553,7 +550,7 @@ class File extends \Magento\Io\AbstractIo
      * Get destination folder
      *
      * @param string $filePath
-     * @return bool
+     * @return bool|string
      */
     public function getDestinationFolder($filePath)
     {
@@ -568,7 +565,7 @@ class File extends \Magento\Io\AbstractIo
      * Create destination folder
      *
      * @param string $path
-     * @return \Magento\Io\File
+     * @return bool
      */
     public function createDestinationDir($path)
     {
@@ -583,7 +580,7 @@ class File extends \Magento\Io\AbstractIo
      *
      * @param string $folder
      * @param int $mode
-     * @return bool
+     * @return true
      * @throws \Exception
      */
     public function checkAndCreateFolder($folder, $mode = 0777)
@@ -615,7 +612,7 @@ class File extends \Magento\Io\AbstractIo
      * Delete a file
      *
      * @param string $filename
-     * @return boolean
+     * @return bool
      */
     public function rm($filename)
     {
@@ -630,7 +627,7 @@ class File extends \Magento\Io\AbstractIo
      *
      * @param string $src
      * @param string $destination
-     * @return boolean
+     * @return bool
      */
     public function mv($src, $destination)
     {
@@ -645,7 +642,7 @@ class File extends \Magento\Io\AbstractIo
      *
      * @param string $src
      * @param string $destination
-     * @return boolean
+     * @return bool
      */
     public function cp($src, $destination)
     {
@@ -660,8 +657,8 @@ class File extends \Magento\Io\AbstractIo
      *
      * @param string $filename
      * @param int $mode
-     * @param boolean $recursive
-     * @return boolean
+     * @param bool $recursive
+     * @return bool
      */
     public function chmod($filename, $mode, $recursive = false)
     {
@@ -698,7 +695,7 @@ class File extends \Magento\Io\AbstractIo
      *   - LS_FILES = 2
      *   - LS_ALL   = 3
      *
-     * @param \Magento\Io\File const
+     * @param string|null $grep
      * @return array
      * @throws \Exception
      */
@@ -706,7 +703,7 @@ class File extends \Magento\Io\AbstractIo
     {
         $ignoredDirectories = Array('.', '..');
 
-        if ( is_dir($this->_cwd)) {
+        if (is_dir($this->_cwd)) {
             $dir = $this->_cwd;
         } elseif (is_dir($this->_iwd)) {
             $dir = $this->_iwd;
@@ -732,7 +729,7 @@ class File extends \Magento\Io\AbstractIo
                 }
 
                 $listItem['text'] = $entry;
-                $listItem['mod_date'] = date ('Y-m-d H:i:s', filectime($fullPath));
+                $listItem['mod_date'] = date('Y-m-d H:i:s', filectime($fullPath));
                 $listItem['permissions'] = $this->_parsePermissions(fileperms($fullPath));
                 $listItem['owner'] = $this->_getFileOwner($fullPath);
 
@@ -773,6 +770,8 @@ class File extends \Magento\Io\AbstractIo
 
     /**
      * Change directory to current working directory
+     *
+     * @return void
      */
     protected function _cwd()
     {
@@ -783,6 +782,8 @@ class File extends \Magento\Io\AbstractIo
 
     /**
      * Change directory to initial directory
+     *
+     * @return void
      */
     protected function _iwd()
     {
@@ -794,7 +795,7 @@ class File extends \Magento\Io\AbstractIo
     /**
      * Convert integer permissions format into human readable
      *
-     * @param integer $mode
+     * @param int $mode
      * @access protected
      * @return string
      */

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,7 +97,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     /**
      * Return an array of stored cache ids
      *
-     * @return array array of stored cache ids (string)
+     * @return string[] array of stored cache ids (string)
      */
     public function getIds()
     {
@@ -107,7 +107,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     /**
      * Return an array of stored tags
      *
-     * @return array array of stored tags (string)
+     * @return string[] array of stored tags (string)
      */
     public function getTags()
     {
@@ -120,8 +120,8 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * In case of multiple tags, a logical AND is made between tags
      *
-     * @param array $tags array of tags
-     * @return array array of matching cache ids (string)
+     * @param string[] $tags array of tags
+     * @return string[] array of matching cache ids (string)
      */
     public function getIdsMatchingTags($tags = array())
     {
@@ -138,8 +138,8 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * In case of multiple tags, a logical OR is made between tags
      *
-     * @param array $tags array of tags
-     * @return array array of not matching cache ids (string)
+     * @param string[] $tags array of tags
+     * @return string[] array of not matching cache ids (string)
      */
     public function getIdsNotMatchingTags($tags = array())
     {
@@ -156,8 +156,8 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * In case of multiple tags, a logical AND is made between tags
      *
-     * @param array $tags array of tags
-     * @return array array of any matching cache ids (string)
+     * @param string[] $tags array of tags
+     * @return string[] array of any matching cache ids (string)
      */
     public function getIdsMatchingAnyTags($tags = array())
     {
@@ -172,7 +172,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     /**
      * Get query to filter by specified tags and comparison mode
      *
-     * @param array $tags
+     * @param string[] $tags
      * @param string $comparisonMode
      * @return array
      */
@@ -214,7 +214,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * - mtime : timestamp of last modification time
      *
      * @param string $cacheId cache id
-     * @return array array of metadatas (false if the cache id is not found)
+     * @return array|false array of metadatas (false if the cache id is not found)
      */
     public function getMetadatas($cacheId)
     {
@@ -326,7 +326,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * @param  string $data            Datas to cache
      * @param  string $cacheId              Cache id
-     * @param  array $tags             Array of strings, the cache record will be tagged by each string entry
+     * @param  string[] $tags             Array of strings, the cache record will be tagged by each string entry
      * @param  int|bool $specificLifetime If != false, set a specific lifetime (null => infinite lifetime)
      * @return boolean true if no problem
      */
@@ -371,8 +371,8 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *                                               ($tags can be an array of strings or a single string)
      *
      * @param  string $mode Clean mode
-     * @param  array  $tags Array of tags
-     * @return boolean true if no problem
+     * @param  string[] $tags Array of tags
+     * @return bool true if no problem
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = array())
     {
@@ -402,7 +402,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     /**
      * Quote specified value to be used in query as string
      *
-     * @param $value
+     * @param string $value
      * @return string
      */
     protected function _quoteString($value)

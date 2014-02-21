@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,16 +29,24 @@ use Magento\Oauth\TokenProviderInterface;
 
 class Provider implements TokenProviderInterface
 {
-    /** @var \Magento\Integration\Model\Oauth\Consumer\Factory */
+    /**
+     * @var \Magento\Integration\Model\Oauth\Consumer\Factory
+     */
     protected $_consumerFactory;
 
-    /** @var \Magento\Integration\Model\Oauth\Token\Factory */
+    /**
+     * @var \Magento\Integration\Model\Oauth\Token\Factory
+     */
     protected $_tokenFactory;
 
-    /** @var  \Magento\Integration\Helper\Oauth\Data */
+    /**
+     * @var  \Magento\Integration\Helper\Oauth\Data
+     */
     protected $_dataHelper;
 
-    /** @var \Magento\Core\Model\Date */
+    /**
+     * @var \Magento\Core\Model\Date
+     */
     protected $_date;
 
     /**
@@ -204,6 +212,7 @@ class Provider implements TokenProviderInterface
      *
      * @param string $oauthVerifier
      * @param string $tokenVerifier
+     * @return void
      * @throws \Magento\Oauth\Exception
      */
     protected function _validateVerifierParam($oauthVerifier, $tokenVerifier)

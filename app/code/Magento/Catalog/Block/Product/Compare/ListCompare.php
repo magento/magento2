@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,9 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Product\Compare;
+
+use Magento\App\Action\Action;
+use Magento\Catalog\Model\Product;
 
 class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
 {
@@ -127,6 +130,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      * @param \Magento\Log\Model\Visitor $logVisitor
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -147,7 +151,8 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Log\Model\Visitor $logVisitor,
         \Magento\Customer\Model\Session $customerSession,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_wishlistHelper = $wishlistHelper;
         $this->_coreData = $coreData;
@@ -167,26 +172,26 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
+        $this->_isScopePrivate = true;
     }
 
     /**
-     * Retrieve url for adding product to wishlist with params
+     * Get add to wishlist params
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    public function getAddToWishlistUrl($product)
+    public function getAddToWishlistParams($product)
     {
         $continueUrl    = $this->_coreData->urlEncode($this->getUrl('customer/account'));
-        $urlParamName   = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $urlParamName   = Action::PARAM_NAME_URL_ENCODED;
 
-        $params = array(
-            $urlParamName   => $continueUrl
-        );
+        $continueUrlParams = array($urlParamName => $continueUrl);
 
-        return $this->_wishlistHelper->getAddUrlWithParams($product, $params);
+        return $this->_wishlistHelper->getAddParams($product, $continueUrlParams);
     }
 
     /**
@@ -253,7 +258,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     /**
      * Retrieve Product Attribute Value
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @return string
      */

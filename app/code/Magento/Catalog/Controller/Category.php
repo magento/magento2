@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Controller;
 
 /**
  * Category controller
@@ -31,8 +32,6 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Controller;
-
 class Category extends \Magento\App\Action\Action
 {
     /**
@@ -132,6 +131,8 @@ class Category extends \Magento\App\Action\Action
 
     /**
      * Category view action
+     *
+     * @return void
      */
     public function viewAction()
     {

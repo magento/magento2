@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -307,7 +307,7 @@ $table = $installer->getConnection()
         ), 'Key Id of Translation')
     ->addColumn('string', \Magento\DB\Ddl\Table::TYPE_TEXT, 255, array(
         'nullable'  => false,
-        'default'   => \Magento\Core\Model\Translate::DEFAULT_STRING,
+        'default'   => \Magento\TranslateInterface::DEFAULT_STRING,
         ), 'Translation String')
     ->addColumn('store_id', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,

@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Log
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Log\Model;
 
 /**
  * Customer log model
@@ -44,8 +45,6 @@
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model;
-
 class Customer extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -75,6 +74,8 @@ class Customer extends \Magento\Core\Model\AbstractModel
 
     /**
      * Define resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -86,7 +87,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * Load last log by customer id
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @return \Magento\Log\Model\Customer
+     * @return $this
      */
     public function loadByCustomer($customer)
     {

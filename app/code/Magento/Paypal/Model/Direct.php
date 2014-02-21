@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,7 +53,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     protected $_canVoid                 = true;
     protected $_canUseInternal          = true;
     protected $_canUseCheckout          = true;
-    protected $_canUseForMultishipping  = true;
     protected $_canSaveCc = false;
     protected $_canFetchTransactionInfo = true;
     protected $_canReviewPayment        = true;
@@ -420,8 +419,9 @@ class Direct extends \Magento\Payment\Model\Method\Cc
         }
 
         // add line items
-        $parameters = array('params' => array($order));
-        $api->setPaypalCart($this->_cartFactory->create($parameters))
+        $cart = $this->_cartFactory->create(array('salesModel' => $order));
+
+        $api->setPaypalCart($cart)
             ->setIsLineItemsEnabled($this->_pro->getConfig()->lineItemsEnabled);
 
         // call api and import transaction and other payment information

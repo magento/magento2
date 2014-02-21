@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -54,7 +54,7 @@
         <?php endif; ?>
         <div class="sorter">
             <label class="label" for="sorter"><?php echo __('Sort By') ?></label>
-            <select id="sorter" data-mage-init="{redirectUrl: {event:'change'}}">
+            <select id="sorter" data-mage-init='{"redirectUrl":{"event":"change"}}'>
                 <?php foreach ($this->getAvailableOrders() as $_key => $_order): ?>
                     <option
                         value="<?php echo $this->getOrderUrl($_key, 'asc') ?>"<?php if ($this->isOrderCurrent($_key)): ?>
@@ -88,7 +88,7 @@
         </p>
         <div class="limiter">
             <strong class="label"><?php echo __('Show') ?></strong>
-            <select id="limiter" data-mage-init="{redirectUrl: {event:'change'}}">
+            <select id="limiter" data-mage-init='{"redirectUrl":{"event":"change"}}'>
                 <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
                     <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if ($this->isLimitCurrent($_key)): ?>
                         selected="selected"<?php endif ?>>

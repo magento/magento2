@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,7 +55,7 @@ class Locale extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Resource\Config\Data\CollectionFactory $configsFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Core\Model\Website\Factory $websiteFactory
@@ -70,7 +70,7 @@ class Locale extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Resource\Config\Data\CollectionFactory $configsFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Core\Model\Website\Factory $websiteFactory,
@@ -87,7 +87,7 @@ class Locale extends \Magento\Core\Model\Config\Value
     }
 
     /**
-     * @return \Magento\Backend\Model\Config\Backend\Locale
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _afterSave()

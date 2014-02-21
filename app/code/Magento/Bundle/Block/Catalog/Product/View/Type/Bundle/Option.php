@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Bundle
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -151,7 +151,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Collect selected options
      *
-     * @return void
+     * @return mixed
      */
     protected function _getSelectedOptions()
     {
@@ -183,9 +183,9 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     {
         $selectedOptions = $this->_getSelectedOptions();
         if (is_numeric($selectedOptions)) {
-            return ($selection->getSelectionId() == $this->_getSelectedOptions());
+            return ($selection->getSelectionId() == $selectedOptions);
         } elseif (is_array($selectedOptions) && !empty($selectedOptions)) {
-            return in_array($selection->getSelectionId(), $this->_getSelectedOptions());
+            return in_array($selection->getSelectionId(), $selectedOptions);
         } elseif ($selectedOptions == 'None') {
             return false;
         } else {
@@ -321,5 +321,17 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
         }
 
         return $formated;
+    }
+
+    /**
+     * Clear selected option when setting new option
+     *
+     * @param \Magento\Bundle\Model\Option $option
+     * @return mixed
+     */
+    public function setOption(\Magento\Bundle\Model\Option $option)
+    {
+        $this->_selectedOptions = null;
+        return parent::setOption($option);
     }
 }

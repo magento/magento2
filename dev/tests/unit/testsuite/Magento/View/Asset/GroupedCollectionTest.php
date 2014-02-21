@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -112,6 +112,10 @@ class GroupedCollectionTest extends \PHPUnit_Framework_TestCase
         $this->_object->add('css_asset_one', $cssAsset, array('property' => 'test_value'));
         $this->_object->add('css_asset_two', $cssAsset, array('property' => 'test_value'));
 
+        // assets with identical properties but empty properties should be grouped together
+        $this->_object->add('css_asset_four', $cssAsset, array('property' => 'test_value2', 'junk1' => null));
+        $this->_object->add('css_asset_five', $cssAsset, array('property' => 'test_value2', 'junk2' => ''));
+
         // assets with different properties should go to different groups
         $this->_object->add('css_asset_three', $cssAsset, array('property' => 'different_value'));
         $this->_object->add('js_asset_one', $jsAsset, array('property' => 'test_value'));
@@ -131,6 +135,10 @@ class GroupedCollectionTest extends \PHPUnit_Framework_TestCase
             array(
                 'properties' => array('property' => 'test_value', 'content_type' => 'css', 'can_merge' => false),
                 'assets' => array('css_asset_one' => $cssAsset, 'css_asset_two' => $cssAsset),
+            ),
+            array(
+                'properties' => array('property' => 'test_value2', 'content_type' => 'css', 'can_merge' => false),
+                'assets' => array('css_asset_four' => $cssAsset, 'css_asset_five' => $cssAsset),
             ),
             array(
                 'properties' => array('property' => 'different_value', 'content_type' => 'css', 'can_merge' => false),

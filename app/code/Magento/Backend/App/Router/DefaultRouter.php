@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  */
@@ -39,9 +39,22 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected $_url;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_coreConfig;
+
+    /**
+     * List of required request parameters
+     * Order sensitive
+     *
+     * @var string[]
+     */
+    protected $_requiredParams = array(
+        'areaFrontName',
+        'moduleFrontName',
+        'controllerName',
+        'actionName',
+    );
 
     /**
      * @param \Magento\App\ActionFactory $actionFactory
@@ -52,9 +65,9 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -68,9 +81,9 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
         \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
         parent::__construct(
@@ -89,18 +102,6 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
         $this->_backendConfig = $backendConfig;
         $this->_url = $url;
     }
-
-    /**
-     * List of required request parameters
-     * Order sensitive
-     * @var array
-     */
-    protected $_requiredParams = array(
-        'areaFrontName',
-        'moduleFrontName',
-        'controllerName',
-        'actionName',
-    );
 
     /**
      * Get router default request path
@@ -132,7 +133,7 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
     protected function _shouldBeSecure($path)
     {
         return substr((string)$this->_coreConfig->getValue('web/unsecure/base_url', 'default'), 0, 5) === 'https'
-            || $this->_backendConfig->getFlag('web/secure/use_in_adminhtml')
+            || $this->_backendConfig->isSetFlag('web/secure/use_in_adminhtml')
             && substr((string)$this->_coreConfig->getValue('web/secure/base_url', 'default'), 0, 5) === 'https';
     }
 
@@ -166,13 +167,6 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      */
     public function getControllerClassName($module, $controller)
     {
-        /**
-         * TODO: Delete these lines after adminhtml module is removed
-         */
-        if ($module == 'Magento_Adminhtml') {
-            return parent::getControllerClassName($module, $controller);
-        }
-
         $parts = explode('_', $module);
         $parts = array_splice($parts, 0, 2);
         $parts[] = 'Controller';

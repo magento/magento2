@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -70,11 +70,6 @@ class Track extends \Magento\Sales\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Shipping\Model\Config
-     */
-    protected $_shippingConfig;
-
-    /**
      * @var \Magento\Sales\Model\Order\ShipmentFactory
      */
     protected $_shipmentFactory;
@@ -85,7 +80,6 @@ class Track extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Core\Model\LocaleInterface $coreLocale
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -97,7 +91,6 @@ class Track extends \Magento\Sales\Model\AbstractModel
         \Magento\Core\Model\LocaleInterface $coreLocale,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -113,7 +106,6 @@ class Track extends \Magento\Sales\Model\AbstractModel
             $data
         );
         $this->_storeManager = $storeManager;
-        $this->_shippingConfig = $shippingConfig;
         $this->_shipmentFactory = $shipmentFactory;
     }
 
@@ -190,31 +182,6 @@ class Track extends \Magento\Sales\Model\AbstractModel
     public function getProtectCode()
     {
         return (string)$this->getShipment()->getProtectCode();
-    }
-
-    /**
-     * Retrieve detail for shipment track
-     *
-     * @return string
-     */
-    public function getNumberDetail()
-    {
-        $carrierInstance = $this->_shippingConfig->getCarrierInstance($this->getCarrierCode());
-        if (!$carrierInstance) {
-            $custom = array();
-            $custom['title'] = $this->getTitle();
-            $custom['number'] = $this->getTrackNumber();
-            return $custom;
-        } else {
-            $carrierInstance->setStore($this->getStore());
-        }
-
-        $trackingInfo = $carrierInstance->getTrackingInfo($this->getNumber());
-        if (!$trackingInfo) {
-            return __('No detail for number "%1"', $this->getNumber());
-        }
-
-        return $trackingInfo;
     }
 
     /**

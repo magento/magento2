@@ -20,17 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_Shipping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Shipping\Model\Rate;
 
 class Result
 {
     /**
-     * Shippin method rates
+     * Shipping method rates
      *
      * @var array
      */
@@ -60,7 +58,7 @@ class Result
     /**
      * Reset result
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function reset()
     {
@@ -82,7 +80,7 @@ class Result
     /**
      * Get Error
      *
-     * @return null|bool;
+     * @return null|bool
      */
     public function getError()
     {
@@ -92,15 +90,15 @@ class Result
     /**
      * Add a rate to the result
      *
-     * @param \Magento\Shipping\Model\Rate\Result\AbstractResult|\Magento\Shipping\Model\Rate\Result $result
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\AbstractResult|\Magento\Shipping\Model\Rate\Result $result
+     * @return $this
      */
     public function append($result)
     {
-        if ($result instanceof \Magento\Shipping\Model\Rate\Result\Error) {
+        if ($result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
             $this->setError(true);
         }
-        if ($result instanceof \Magento\Shipping\Model\Rate\Result\AbstractResult) {
+        if ($result instanceof \Magento\Sales\Model\Quote\Address\RateResult\AbstractResult) {
             $this->_rates[] = $result;
         }
         elseif ($result instanceof \Magento\Shipping\Model\Rate\Result) {
@@ -126,7 +124,7 @@ class Result
      * Return rate by id in array
      *
      * @param int $id
-     * @return \Magento\Shipping\Model\Rate\Result\Method|null
+     * @return \Magento\Sales\Model\Quote\Address\RateResult\Method|null
      */
     public function getRateById($id)
     {
@@ -174,7 +172,7 @@ class Result
     /**
      * Get cheapest rate
      *
-     * @return null|\Magento\Shipping\Model\Rate\Result\Method
+     * @return null|\Magento\Sales\Model\Quote\Address\RateResult\Method
      */
     public function getCheapestRate()
     {
@@ -192,14 +190,14 @@ class Result
     /**
      * Sort rates by price from min to max
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function sortRatesByPrice()
     {
         if (!is_array($this->_rates) || !count($this->_rates)) {
             return $this;
         }
-        /* @var $rate \Magento\Shipping\Model\Rate\Result\Method */
+        /* @var $rate \Magento\Sales\Model\Quote\Address\RateResult\Method */
         foreach ($this->_rates as $i => $rate) {
             $tmp[$i] = $rate->getPrice();
         }
@@ -219,7 +217,7 @@ class Result
      * Set price for each rate according to count of packages
      *
      * @param int $packageCount
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function updateRatePrice($packageCount)
     {

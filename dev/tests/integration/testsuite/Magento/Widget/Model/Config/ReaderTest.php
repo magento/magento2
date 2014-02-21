@@ -21,14 +21,14 @@ namespace Magento\Widget\Model\Config;
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @magentoDataFixture Magento/Backend/controllers/_files/cache/all_types_disabled.php
  */
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Filesystem\DirectoryList
+     * @var \Magento\App\Filesystem\DirectoryList
      */
     protected $directoryList;
 
@@ -42,14 +42,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->directoryList = $objectManager->get('Magento\Filesystem\DirectoryList');
+        $this->directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
         $dirPath = ltrim(str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__))
             . '/_files', '/');
-        $this->directoryList->addDirectory(\Magento\Filesystem::MODULES, array('path' => $dirPath));
-        $this->directoryList->addDirectory(\Magento\Filesystem::CONFIG, array('path' => $dirPath));
-        $this->directoryList->addDirectory(\Magento\Filesystem::ROOT, array('path' => $dirPath));
+        $this->directoryList->addDirectory(\Magento\App\Filesystem::MODULES_DIR, array('path' => $dirPath . '/code'));
+        $this->directoryList->addDirectory(\Magento\App\Filesystem::CONFIG_DIR, array('path' => $dirPath));
+        $this->directoryList->addDirectory(\Magento\App\Filesystem::ROOT_DIR, array('path' => $dirPath));
 
-        $filesystem = $objectManager->create('Magento\Filesystem', array('directoryList' => $this->directoryList));
+        $filesystem = $objectManager->create('Magento\App\Filesystem', array('directoryList' => $this->directoryList));
 
         /** @var \Magento\Module\Declaration\FileResolver $modulesDeclarations */
         $modulesDeclarations = $objectManager->create(

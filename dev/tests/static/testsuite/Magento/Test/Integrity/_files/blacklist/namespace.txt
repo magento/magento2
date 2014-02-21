@@ -64,3 +64,7 @@ dev/tests/unit/testsuite/Magento/Code/Validator/_files/ClassesForContextAggregat
 dev/tests/unit/testsuite/Magento/Code/Reader/_files/ClassesForArgumentsReader.php
 dev/tests/unit/testsuite/Magento/Code/Validator/_files/ClassesForArgumentSequence.php
 dev/tests/unit/testsuite/Magento/Code/Validator/_files/ClassesForTypeDuplication.php
+dev/tests/static/testsuite/Magento/Test/Php/_files/phpcs/Magento/Sniffs/Annotations/RequireAnnotatedMethodsSniff.php
+dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Helper/Helper.php
+dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Model/Model.php
+dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Model/WithoutDependencies.php

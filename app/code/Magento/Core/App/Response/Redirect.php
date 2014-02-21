@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\App\Response;
@@ -58,7 +58,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
     protected $_canUseSessionIdInParam;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
@@ -68,7 +68,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
      * @param \Magento\Encryption\UrlCoder $urlCoder
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Core\Model\Url $urlBuilder
+     * @param \Magento\UrlInterface $urlBuilder
      * @param bool $canUseSessionIdInParam
      */
     public function __construct(
@@ -77,7 +77,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
         \Magento\Encryption\UrlCoder $urlCoder,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Core\Model\Url $urlBuilder,
+        \Magento\UrlInterface $urlBuilder,
         $canUseSessionIdInParam = true
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;
@@ -209,7 +209,7 @@ class Redirect implements \Magento\App\Response\RedirectInterface
             $unsecure = (strpos($url, $this->_storeManager->getStore()->getBaseUrl()) === 0);
             $secure = strpos(
                     $url,
-                    $this->_storeManager->getStore()->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_LINK, true)
+                    $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)
                 ) === 0;
             return $unsecure || $secure;
         }

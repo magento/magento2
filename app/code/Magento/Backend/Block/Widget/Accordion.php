@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget;
 
 /**
  * Magento_Backend accordion widget
@@ -31,10 +32,11 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget;
-
 class Accordion extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var string[]
+     */
     protected $_items = array();
 
     /**
@@ -42,11 +44,19 @@ class Accordion extends \Magento\Backend\Block\Widget
      */
     protected $_template = 'Magento_Backend::widget/accordion.phtml';
 
+    /**
+     * @return string[]
+     */
     public function getItems()
     {
         return $this->_items;
     }
-    
+
+    /**
+     * @param string $itemId
+     * @param array $config
+     * @return $this
+     */
     public function addItem($itemId, $config)
     {
         $this->_items[$itemId] = $this->getLayout()
@@ -60,7 +70,7 @@ class Accordion extends \Magento\Backend\Block\Widget
         if (isset($config['content']) && $config['content'] instanceof \Magento\View\Element\AbstractBlock) {
             $this->_items[$itemId]->setChild($itemId.'_content', $config['content']);
         }
-            
+
         $this->setChild($itemId, $this->_items[$itemId]);
         return $this;
     }

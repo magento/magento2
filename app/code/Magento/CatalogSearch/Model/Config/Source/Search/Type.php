@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,14 +34,20 @@
  */
 namespace Magento\CatalogSearch\Model\Config\Source\Search;
 
-class Type implements \Magento\Core\Model\Option\ArrayInterface
+use Magento\CatalogSearch\Model\Fulltext;
+use Magento\Core\Model\Option\ArrayInterface;
+
+class Type implements ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         $types = array(
-            \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_LIKE     => 'Like',
-            \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_FULLTEXT => 'Fulltext',
-            \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE  => 'Combine (Like and Fulltext)',
+            Fulltext::SEARCH_TYPE_LIKE     => 'Like',
+            Fulltext::SEARCH_TYPE_FULLTEXT => 'Fulltext',
+            Fulltext::SEARCH_TYPE_COMBINE  => 'Combine (Like and Fulltext)',
         );
         $options = array();
         foreach ($types as $k => $v) {

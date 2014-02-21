@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Rss
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -94,6 +94,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Catalog\Helper\Output $outputHelper
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -116,7 +117,8 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Catalog\Helper\Output $outputHelper,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_outputHelper = $outputHelper;
         $this->_coreData = $coreData;
@@ -137,7 +139,8 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
             $imageHelper,
             $customerSession,
             $productFactory,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
 

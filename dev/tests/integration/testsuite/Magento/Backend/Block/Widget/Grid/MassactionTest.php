@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,8 +69,8 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
             \Magento\Core\Model\App::PARAM_RUN_CODE => 'admin',
             \Magento\Core\Model\App::PARAM_RUN_TYPE => 'store',
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => __DIR__ . '/../../_files/design')
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/../../_files/design')
             ),
         ));
     }

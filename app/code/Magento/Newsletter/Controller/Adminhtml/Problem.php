@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,6 +31,11 @@ namespace Magento\Newsletter\Controller\Adminhtml;
  */
 class Problem extends \Magento\Backend\App\Action
 {
+    /**
+     * Newsletter problems report page
+     *
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Newsletter Problems Report'));
@@ -49,6 +54,11 @@ class Problem extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Newsletter problems grid
+     *
+     * @return void
+     */
     public function gridAction()
     {
         if ($this->getRequest()->getParam('_unsubscribe')) {
@@ -85,6 +95,11 @@ class Problem extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Check if user has enough privileges
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Newsletter::problem');

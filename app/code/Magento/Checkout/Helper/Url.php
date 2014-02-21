@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -51,40 +51,6 @@ class Url extends \Magento\Core\Helper\Url
     public function getCheckoutUrl()
     {
         return $this->_getUrl('checkout/onepage');
-    }
-
-    /**
-     * Multi Shipping (MS) checkout urls
-     */
-
-    /**
-     * Retrieve multishipping checkout url
-     *
-     * @return string
-     */
-    public function getMSCheckoutUrl()
-    {
-        return $this->_getUrl('checkout/multishipping');
-    }
-
-    public function getMSLoginUrl()
-    {
-        return $this->_getUrl('checkout/multishipping/login', array('_secure'=>true, '_current'=>true));
-    }
-
-    public function getMSAddressesUrl()
-    {
-        return $this->_getUrl('checkout/multishipping/addresses');
-    }
-
-    public function getMSShippingAddressSavedUrl()
-    {
-        return $this->_getUrl('checkout/multishipping_address/shippingSaved');
-    }
-
-    public function getMSRegisterUrl()
-    {
-        return $this->_getUrl('checkout/multishipping/register');
     }
 
     /**

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,6 +97,7 @@ class Iframe extends \Magento\Payment\Block\Form
         $this->_orderFactory = $orderFactory;
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -114,7 +115,7 @@ class Iframe extends \Magento\Payment\Block\Form
             $templatePath = str_replace('_', '', $paymentCode);
             $templateFile = "{$templatePath}/iframe.phtml";
 
-            $directory = $this->getDirectory();
+            $directory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
             $file = $this->_viewFileSystem->getFilename($templateFile, array('module' => 'Magento_Paypal'));
             if ($directory->isExist($directory->getRelativePath($file))) {
                 $this->setTemplate($templateFile);

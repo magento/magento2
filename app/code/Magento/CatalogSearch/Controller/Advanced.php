@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,43 +33,48 @@
  */
 namespace Magento\CatalogSearch\Controller;
 
+use Magento\App\Action\Context;
+use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
+use Magento\Session\Generic;
+use Magento\UrlFactory;
+
 class Advanced extends \Magento\App\Action\Action
 {
 
     /**
      * Url factory
      *
-     * @var \Magento\Core\Model\UrlFactory
+     * @var UrlFactory
      */
     protected $_urlFactory;
 
     /**
      * Catalog search advanced
      *
-     * @var \Magento\CatalogSearch\Model\Advanced
+     * @var ModelAdvanced
      */
     protected $_catalogSearchAdvanced;
 
     /**
      * Catalog search session
      *
-     * @var \Magento\Session\Generic
+     * @var Generic
      */
     protected $_catalogSearchSession;
 
     /**
      * Construct
      *
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Session\Generic $catalogSearchSession
-     * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
-     * @param \Magento\Core\Model\UrlFactory $urlFactory
+     * @param Context $context
+     * @param Generic $catalogSearchSession
+     * @param ModelAdvanced $catalogSearchAdvanced
+     * @param UrlFactory $urlFactory
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Session\Generic $catalogSearchSession,
-        \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
-        \Magento\Core\Model\UrlFactory $urlFactory
+        Context $context,
+        Generic $catalogSearchSession,
+        ModelAdvanced $catalogSearchAdvanced,
+        UrlFactory $urlFactory
     ) {
         $this->_catalogSearchSession = $catalogSearchSession;
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
@@ -77,6 +82,9 @@ class Advanced extends \Magento\App\Action\Action
         parent::__construct($context);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_view->loadLayout();
@@ -84,6 +92,9 @@ class Advanced extends \Magento\App\Action\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function resultAction()
     {
         $this->_view->loadLayout();
@@ -96,7 +107,6 @@ class Advanced extends \Magento\App\Action\Action
                 ->getUrl('*/*/');
             $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
         }
-        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 }

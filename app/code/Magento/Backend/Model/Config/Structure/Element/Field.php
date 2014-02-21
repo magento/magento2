@@ -22,7 +22,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Model\Config\Structure\Element;
@@ -30,17 +30,6 @@ namespace Magento\Backend\Model\Config\Structure\Element;
 class Field
     extends \Magento\Backend\Model\Config\Structure\AbstractElement
 {
-
-    /**
-     * Default 'value' field for service option
-     */
-    const DEFAULT_VALUE_FIELD = 'id';
-
-    /**
-     * Default 'label' field for service option
-     */
-    const DEFAULT_LABEL_FIELD = 'name';
-
     /**
      * Default value for useEmptyValueOption for service option
      */
@@ -81,36 +70,26 @@ class Field
     protected $_blockFactory;
 
     /**
-     * dataservice graph
-     *
-     * @var \Magento\Core\Model\DataService\Graph
-     */
-     protected $_dataServiceGraph;
-
-    /**
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Backend\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Backend\Model\Config\CommentFactory $commentFactory
      * @param \Magento\View\Element\BlockFactory $blockFactory
-     * @param \Magento\Core\Model\DataService\Graph $dataServiceGraph,
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
     public function __construct(
-        \Magento\Core\Model\App $application,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\BackendFactory $backendFactory,
         \Magento\Backend\Model\Config\SourceFactory $sourceFactory,
         \Magento\Backend\Model\Config\CommentFactory $commentFactory,
         \Magento\View\Element\BlockFactory $blockFactory,
-        \Magento\Core\Model\DataService\Graph $dataServiceGraph,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
     ) {
-        parent::__construct($application);
+        parent::__construct($storeManager);
         $this->_backendFactory = $backendFactory;
         $this->_sourceFactory = $sourceFactory;
         $this->_commentFactory = $commentFactory;
         $this->_blockFactory = $blockFactory;
-        $this->_dataServiceGraph = $dataServiceGraph;
         $this->_dependencyMapper = $dependencyMapper;
     }
 
@@ -192,7 +171,7 @@ class Field
      *
      * @param string $fieldPrefix
      * @param string $elementType
-     * @return array
+     * @return string[]
      */
     protected function _getRequiredElements($fieldPrefix = '', $elementType = 'group')
     {
@@ -213,7 +192,7 @@ class Field
      * Get required groups paths for the field
      *
      * @param string $fieldPrefix
-     * @return array
+     * @return string[]
      */
     public function getRequiredGroups($fieldPrefix = '')
     {
@@ -225,7 +204,7 @@ class Field
      * Get required fields paths for the field
      *
      * @param string $fieldPrefix
-     * @return array
+     * @return string[]
      */
     public function getRequiredFields($fieldPrefix = '')
     {
@@ -255,7 +234,7 @@ class Field
     /**
      * Retrieve backend model
      *
-     * @return \Magento\Core\Model\Config\Value
+     * @return \Magento\App\Config\ValueInterface
      */
     public function getBackendModel()
     {
@@ -327,6 +306,7 @@ class Field
      * Populate form element with field data
      *
      * @param \Magento\Data\Form\Element\AbstractElement $formField
+     * @return void
      */
     public function populateInput($formField)
     {
@@ -386,12 +366,11 @@ class Field
      */
     public function hasOptions()
     {
-        return isset($this->_data['source_model']) || isset($this->_data['options'])
-            || isset($this->_data['source_service']);
+        return isset($this->_data['source_model']) || isset($this->_data['options']);
     }
 
     /**
-     * Retrieve static options, source service options or source model option list
+     * Retrieve static options or source model option list
      *
      * @return array
      */
@@ -401,10 +380,6 @@ class Field
             $sourceModel = $this->_data['source_model'];
             $optionArray = $this->_getOptionsFromSourceModel($sourceModel);
             return $optionArray;
-        } else if (isset($this->_data['source_service'])) {
-            $sourceService = $this->_data['source_service'];
-            $options = $this->_getOptionsFromService($sourceService);
-            return $options;
         } else if (isset($this->_data['options']) && isset($this->_data['options']['option'])) {
             $options = $this->_data['options']['option'];
             $options = $this->_getStaticOptions($options);
@@ -428,40 +403,6 @@ class Field
         return $options;
     }
 
-    /**
-     * Retrieve the options list from the specified service call.
-     *
-     * @param array $sourceService
-     * @return array
-     */
-    protected function _getOptionsFromService($sourceService)
-    {
-        $valueField = self::DEFAULT_VALUE_FIELD;
-        $labelField = self::DEFAULT_LABEL_FIELD;
-        $inclEmptyValOption = self::DEFAULT_INCLUDE_EMPTY_VALUE_OPTION;
-        $serviceCall = $sourceService['service_call'];
-        if (isset($sourceService['idField'])) {
-            $valueField = $sourceService['idField'];
-        }
-        if (isset($sourceService['labelField'])) {
-            $labelField = $sourceService['labelField'];
-        }
-        if (isset($sourceService['includeEmptyValueOption'])) {
-            $inclEmptyValOption = $sourceService['includeEmptyValueOption'];
-        }
-        $dataCollection = $this->_dataServiceGraph->get($serviceCall);
-        $options = array();
-        if ($inclEmptyValOption) {
-            $options[] = array('value' => '', 'label' => '-- Please Select --');
-        }
-        foreach ($dataCollection as $dataItem) {
-            $options[] = array(
-                'value' => $dataItem[$valueField],
-                'label' => $this->_translateLabel($dataItem[$labelField])
-            );
-        }
-        return $options;
-    }
 
     /**
      * Translate a label

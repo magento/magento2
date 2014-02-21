@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Data
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,24 +33,29 @@
  */
 namespace Magento\Data\Form\Element;
 
-class Time extends \Magento\Data\Form\Element\AbstractElement
+use Magento\Escaper;
+
+class Time extends AbstractElement
 {
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
         $data = array()
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('time');
     }
 
+    /**
+     * @return mixed
+     */
     public function getName()
     {
         $name = parent::getName();
@@ -60,6 +65,9 @@ class Time extends \Magento\Data\Form\Element\AbstractElement
         return $name;
     }
 
+    /**
+     * @return string
+     */
     public function getElementHtml()
     {
         $this->addClass('select');

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,8 +33,13 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\NewAttribute\Product;
 
+use Magento\Backend\Block\Widget\Form;
+
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
+    /**
+     * @return void
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
@@ -69,6 +74,9 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
         $this->setForm($form);
     }
 
+    /**
+     * @return array
+     */
     protected function _getAdditionalElementTypes()
     {
         $result = array(
@@ -88,6 +96,9 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
         return $result;
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         parent::_toHtml();

@@ -20,15 +20,18 @@
  *
  * @category    Magento
  * @package     Magento_Index
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Index\Model;
+
+use Magento\Event\ManagerInterface;
+use Magento\Index\Model\Resource\Process as ResourceProcess;
+use Magento\Index\Model\Resource\Process\Collection;
 
 /**
  * Indexer strategy
  */
-namespace Magento\Index\Model;
-
 class Indexer
 {
     /**
@@ -39,14 +42,14 @@ class Indexer
     protected $_processesCollection;
 
     /**
-     * @var \Magento\Index\Model\Resource\Process
+     * @var ResourceProcess
      */
     protected $_resourceProcess;
 
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -62,14 +65,14 @@ class Indexer
 
     /**
      * @param \Magento\Index\Model\Resource\Process\CollectionFactory $collectionFactory
-     * @param \Magento\Index\Model\Resource\Process $resourceProcess
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param ResourceProcess $resourceProcess
+     * @param ManagerInterface $eventManager
      * @param \Magento\Index\Model\EventFactory $indexEventFactory
      */
     public function __construct(
         \Magento\Index\Model\Resource\Process\CollectionFactory $collectionFactory,
-        \Magento\Index\Model\Resource\Process $resourceProcess,
-        \Magento\Event\ManagerInterface $eventManager,
+        ResourceProcess $resourceProcess,
+        ManagerInterface $eventManager,
         \Magento\Index\Model\EventFactory $indexEventFactory
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -102,7 +105,7 @@ class Indexer
      * Get index process by specific id
      *
      * @param int $processId
-     * @return \Magento\Index\Model\Process | false
+     * @return false|Process
      */
     public function getProcessById($processId)
     {
@@ -118,7 +121,7 @@ class Indexer
      * Get index process by specific code
      *
      * @param string $code
-     * @return \Magento\Index\Model\Process | false
+     * @return false|Process
      */
     public function getProcessByCode($code)
     {
@@ -134,10 +137,10 @@ class Indexer
      * Indexing all pending events.
      * Events set can be limited by event entity and type
      *
-     * @param   null | string $entity
-     * @param   null | string $type
-     * @return  \Magento\Index\Model\Indexer
-     * @throws Exception
+     * @param   null|string $entity
+     * @param   null|string $type
+     * @return  $this
+     * @throws \Exception
      */
     public function indexEvents($entity=null, $type=null)
     {
@@ -157,10 +160,10 @@ class Indexer
     /**
      * Index one event by all processes
      *
-     * @param   \Magento\Index\Model\Event $event
-     * @return  \Magento\Index\Model\Indexer
+     * @param   Event $event
+     * @return  $this
      */
-    public function indexEvent(\Magento\Index\Model\Event $event)
+    public function indexEvent(Event $event)
     {
         $this->_runAll('safeProcessEvent', array($event));
         return $this;
@@ -169,10 +172,10 @@ class Indexer
     /**
      * Register event in each indexing process process
      *
-     * @param \Magento\Index\Model\Event $event
+     * @param Event $event
      * @return $this
      */
-    public function registerEvent(\Magento\Index\Model\Event $event)
+    public function registerEvent(Event $event)
     {
         $this->_runAll('register', array($event));
         return $this;
@@ -185,7 +188,7 @@ class Indexer
      * @param   string $entityType
      * @param   string $eventType
      * @param   bool $doSave
-     * @return  \Magento\Index\Model\Event
+     * @return  Event
      */
     public function logEvent(\Magento\Object $entity, $entityType, $eventType, $doSave=true)
     {
@@ -209,8 +212,8 @@ class Indexer
      * @param   \Magento\Object $entity
      * @param   string $entityType
      * @param   string $eventType
-     * @return  \Magento\Index\Model\Indexer
-     * @throws Exception
+     * @return  $this
+     * @throws \Exception
      */
     public function processEntityAction(\Magento\Object $entity, $entityType, $eventType)
     {
@@ -236,6 +239,8 @@ class Indexer
 
     /**
      * Reindex all processes
+     *
+     * @return void
      */
     public function reindexAll()
     {
@@ -244,6 +249,8 @@ class Indexer
 
     /**
      * Reindex only processes that are invalidated
+     *
+     * @return void
      */
     public function reindexRequired()
     {
@@ -255,9 +262,10 @@ class Indexer
     /**
      * Sub-routine for iterating collection and reindexing all processes of specified collection
      *
-     * @param \Magento\Index\Model\Resource\Process\Collection $collection
+     * @param Collection $collection
+     * @return void
      */
-    private function _reindexCollection(\Magento\Index\Model\Resource\Process\Collection $collection)
+    private function _reindexCollection(Collection $collection)
     {
         /** @var $process \Magento\Index\Model\Process */
         foreach ($collection as $process) {
@@ -272,7 +280,7 @@ class Indexer
      *
      * @param string $method
      * @param array $args
-     * @return \Magento\Index\Model\Indexer
+     * @return void
      */
     protected function _runAll($method, $args)
     {

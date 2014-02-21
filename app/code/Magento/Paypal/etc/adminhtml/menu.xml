@@ -21,12 +21,13 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <menu>
-        <add id="Magento_Paypal::report_salesroot_paypal_settlement_reports" title="PayPal Settlement" module="Magento_Paypal" sortOrder="70" parent="Magento_Reports::report_salesroot" action="adminhtml/paypal_reports" resource="Magento_Paypal::paypal_settlement_reports"/>
+        <add id="Magento_Paypal::report_salesroot_paypal_settlement_reports" title="PayPal Settlement" module="Magento_Paypal" sortOrder="70" parent="Magento_Reports::report_salesroot" action="paypal/paypal_reports" resource="Magento_Paypal::paypal_settlement_reports"/>
+        <add id="Magento_Paypal::paypal_billing_agreement" title="Billing Agreements" module="Magento_Paypal" sortOrder="60" parent="Magento_Sales::sales_operation" action="paypal/billing_agreement" resource="Magento_Paypal::billing_agreement"/>
     </menu>
 </config>

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -123,6 +123,9 @@ abstract class AbstractOptions extends \Magento\View\Element\Template
         return $this->_option;
     }
 
+    /**
+     * @return string
+     */
     public function getFormatedPrice()
     {
         if ($option = $this->getOption()) {
@@ -138,6 +141,7 @@ abstract class AbstractOptions extends \Magento\View\Element\Template
      * Return formated price
      *
      * @param array $value
+     * @param bool $flag
      * @return string
      */
     protected function _formatPrice($value, $flag=true)
@@ -179,9 +183,9 @@ abstract class AbstractOptions extends \Magento\View\Element\Template
     /**
      * Get price with including/excluding tax
      *
-     * @param decimal $price
+     * @param float $price
      * @param bool $includingTax
-     * @return decimal
+     * @return float
      */
     public function getPrice($price, $includingTax = null)
     {

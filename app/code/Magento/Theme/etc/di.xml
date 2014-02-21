@@ -19,54 +19,46 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Theme\Model\Config">
-        <param name="configCache">
-            <instance type="Magento\App\Cache\Type\Config" />
-        </param>
-        <param name="layoutCache">
-            <instance type="Magento\App\Cache\Type\Layout" />
-        </param>
+        <arguments>
+            <argument name="configCache" xsi:type="object">Magento\App\Cache\Type\Config</argument>
+            <argument name="layoutCache" xsi:type="object">Magento\App\Cache\Type\Layout</argument>
+        </arguments>
     </type>
     <type name="Magento\Theme\Model\Uploader\Service">
-        <param name="uploadLimits">
-            <value>
-                <css>2M</css>
-                <js>2M</js>
-            </value>
-        </param>
+        <arguments>
+            <argument name="uploadLimits" xsi:type="array">
+                <item name="css" xsi:type="string">2M</item>
+                <item name="js" xsi:type="string">2M</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Theme\Model\Layout\Config\Reader">
-        <param name="fileName">
-            <value>page_layouts.xml</value>
-        </param>
-        <param name="converter">
-            <instance type="Magento\Theme\Model\Layout\Config\Converter" />
-        </param>
-        <param name="schemaLocator">
-            <instance type="Magento\Theme\Model\Layout\Config\SchemaLocator" />
-        </param>
+        <arguments>
+            <argument name="fileName" xsi:type="string">page_layouts.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Theme\Model\Layout\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Theme\Model\Layout\Config\SchemaLocator</argument>
+        </arguments>
     </type>
     <virtualType name="Magento\Theme\Model\Layout\Config\Data" type="Magento\Config\Data">
-        <param name='reader'>
-            <instance type="Magento\Theme\Model\Layout\Config\Reader" />
-        </param>
-        <param name="cacheId">
-            <value>page_layouts_config</value>
-        </param>
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Theme\Model\Layout\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">page_layouts_config</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Theme\Model\Layout\Config">
-        <param name="dataStorage">
-            <instance type="Magento\Theme\Model\Layout\Config\Data" />
-        </param>
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Theme\Model\Layout\Config\Data</argument>
+        </arguments>
     </type>
     <type name="Magento\Theme\Model\Wysiwyg\Storage">
-        <param name="helper">
-            <instance type="Magento\Theme\Helper\Storage\Proxy" />
-        </param>
+        <arguments>
+            <argument name="helper" xsi:type="object">Magento\Theme\Helper\Storage\Proxy</argument>
+        </arguments>
     </type>
 </config>

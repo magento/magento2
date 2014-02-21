@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Theme
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $_storageRoot;
 
     /**
-     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
@@ -68,7 +68,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem      = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem      = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_helperStorage   = $this->getMock('Magento\Theme\Helper\Storage', array(), array(), '', false);
         $this->_objectManager   = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
         $this->_imageFactory    = $this->getMock('Magento\Image\AdapterFactory', array(), array(), '', false);

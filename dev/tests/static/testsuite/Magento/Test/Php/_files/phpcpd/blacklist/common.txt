@@ -16,7 +16,6 @@ lib/Magento/DB
 sql
 data
 Magento/Paypal
-Magento/Paygate
 Magento/Downloadable
 Magento/Core/Model/Resource/Helper
 Magento/Catalog/Block/Adminhtml
@@ -50,6 +49,7 @@ Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
 Magento/Customer/Block/Adminhtml/Edit/Tab
 Magento/Customer/Model/Config/Backend/Show
+Magento/Customer/Model/Metadata
 Magento/DesignEditor/Block/Adminhtml/Editor/Tools/Code
 Magento/DesignEditor/Block/Adminhtml/Theme/Selector/Tab
 Magento/DesignEditor/Model/Url
@@ -73,7 +73,8 @@ Magento/Reports/Model/Resource
 Magento/Review/Block
 Magento/Rss/Block/Catalog
 Magento/Rule
-Magento/Sales/Block/Adminhtml
+Magento/Sales/Block/Adminhtml/Order
+Magento/Shipping/Block/Adminhtml/View
 Magento/Sales/Model/Resource
 Magento/Sales/Model/Quote/Address/Total
 Magento/Sales/Model/Resource/Report/Order
@@ -97,6 +98,7 @@ lib/Magento/Acl
 lib/PEAR
 lib/phpseclib
 lib/Magento/Convert
+lib/Magento/App/Config
 Magento/Cron/Model
 Magento/SalesRule/Model/Resource/Report/Rule
 Magento/SalesRule/Model/Resource/Rule

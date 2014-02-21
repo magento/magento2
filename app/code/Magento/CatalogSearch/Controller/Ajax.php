@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,8 +33,13 @@
  */
 namespace Magento\CatalogSearch\Controller;
 
-class Ajax extends \Magento\App\Action\Action
+use Magento\App\Action\Action;
+
+class Ajax extends Action
 {
+    /**
+     * @return void
+     */
     public function suggestAction()
     {
         if (!$this->getRequest()->getParam('q', false)) {

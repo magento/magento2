@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Resource\Import;
 
 /**
  * ImportExport import data resource model
@@ -31,8 +32,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Resource\Import;
-
 class Data
     extends \Magento\Core\Model\Resource\Db\AbstractDb
     implements \IteratorAggregate
@@ -66,6 +65,8 @@ class Data
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -130,10 +131,9 @@ class Data
     /**
      * Return request data from import data table
      *
-     * @throws \Magento\Core\Exception
-     *
      * @param string $code parameter name
      * @return string
+     * @throws \Magento\Core\Exception
      */
     public function getUniqueColumnData($code)
     {

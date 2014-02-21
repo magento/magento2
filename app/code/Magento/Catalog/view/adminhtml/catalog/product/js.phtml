@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -29,13 +29,12 @@
 Event.observe(window, 'load', recalculateTax);
 Event.observe(window, 'load', registerTaxRecalcs);
 
-function registerTaxRecalcs()
-{
+function registerTaxRecalcs() {
     if (typeof dynamicTaxes == 'undefined') {
         return;
     }
 
-    for (var i=0; i<dynamicTaxes.length; i++) {
+    for (var i = 0; i < dynamicTaxes.length; i++) {
         Event.observe($(dynamicTaxes[i]), 'change', recalculateTax);
     }
     Event.observe($('tax_class_id'), 'change', recalculateTax);
@@ -44,13 +43,12 @@ function registerTaxRecalcs()
 var priceFormat = <?php echo $this->helper('Magento\Tax\Helper\Data')->getPriceFormat($this->getStore()); ?>;
 var taxRates = <?php echo $this->helper('Magento\Tax\Helper\Data')->getAllRatesByProductClass($this->getStore()); ?>;
 
-function recalculateTax()
-{
+function recalculateTax() {
     if (typeof dynamicTaxes == 'undefined') {
         return;
     }
 
-    for (var i=0; i<dynamicTaxes.length; i++) {
+    for (var i = 0; i < dynamicTaxes.length; i++) {
         var code = dynamicTaxes[i];
         var span = $('dynamic-tax-' + code);
         var input = $(code);
@@ -60,9 +58,9 @@ function recalculateTax()
             continue;
         }
 
-        var rate = 0;
-        var taxClass = $('tax_class_id').options[$('tax_class_id').selectedIndex].value;
-        eval('var value = taxRates.value_' + taxClass);
+        var rate = 0,
+            taxClass = $('tax_class_id').options[$('tax_class_id').selectedIndex].value,
+            value = taxRates['value_' + taxClass];
 
         if (value != undefined) {
             rate = value;
@@ -70,7 +68,7 @@ function recalculateTax()
 
         var spanValue = '';
         if (rate != 0) {
-            spanValue = ' ' + formatCurrency(input.value/(100+rate)*rate, priceFormat);
+            spanValue = ' ' + formatCurrency(input.value / (100 + rate) * rate, priceFormat);
         }
         span.innerHTML = spanValue;
     }
@@ -80,7 +78,7 @@ function recalculateTax()
 function bindActiveProductTab(event, ui) {
     var anchor = jQuery(ui.newTab).find('a');
     if (anchor && anchor.name && $('store_switcher')) {
-        $('store_switcher').switchParams = 'active_tab/'+anchor.name+'/';
+        $('store_switcher').switchParams = 'active_tab/' + anchor.name + '/';
     }
 }
 //varienGlobalEvents.attachEventHandler('showTab', bindActiveProductTab);
@@ -88,7 +86,7 @@ jQuery(document).on('tabsactivate', bindActiveProductTab);
 
 // bind active tab
 <?php if($tabsBlock = $this->getLayout()->getBlock('product_tabs')): ?>
-jQuery(document).ready(function(){
+jQuery(document).ready(function () {
     if (jQuery('#<?php echo $tabsBlock->getId() ?>').length && jQuery('#<?php echo $tabsBlock->getId() ?>').is(':mage-tabs')) {
         var activeAnchor = jQuery('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
         if (activeAnchor && $('store_switcher')) {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,7 @@ class Factory
     /**
      * Default url model class name
      */
-    const CLASS_NAME = 'Magento\Core\Model\Url';
+    const CLASS_NAME = 'Magento\UrlInterface';
 
     /**
      * @var \Magento\ObjectManager
@@ -50,7 +50,7 @@ class Factory
      * Replace name of url model
      *
      * @param string $className
-     * @return \Magento\DesignEditor\Model\Url\Factory
+     * @return $this
      */
     public function replaceClassName($className)
     {
@@ -63,7 +63,7 @@ class Factory
      * Create url model new instance
      *
      * @param array $arguments
-     * @return \Magento\Core\Model\Url
+     * @return \Magento\UrlInterface
      */
     public function create(array $arguments = array())
     {

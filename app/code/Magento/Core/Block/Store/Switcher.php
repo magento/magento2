@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,8 +35,19 @@ namespace Magento\Core\Block\Store;
 
 class Switcher extends \Magento\View\Element\Template
 {
+    /**
+     * @var array
+     */
     protected $_groups = array();
+
+    /**
+     * @var array
+     */
     protected $_stores = array();
+
+    /**
+     * @var bool
+     */
     protected $_loaded = false;
 
     /**
@@ -70,6 +81,9 @@ class Switcher extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_loadData();
@@ -78,6 +92,9 @@ class Switcher extends \Magento\View\Element\Template
         return parent::_construct();
     }
 
+    /**
+     * @return $this
+     */
     protected function _loadData()
     {
         if ($this->_loaded) {
@@ -107,6 +124,9 @@ class Switcher extends \Magento\View\Element\Template
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getStoreCount()
     {
         $stores = array();
@@ -131,6 +151,9 @@ class Switcher extends \Magento\View\Element\Template
         return count($this->getStores());
     }
 
+    /**
+     * @return int
+     */
     public function getLanguageCount()
     {
         $groupId = $this->_storeManager->getStore()->getGroupId();
@@ -142,11 +165,17 @@ class Switcher extends \Magento\View\Element\Template
         return count($this->getLanguages());
     }
 
+    /**
+     * @return int
+     */
     public function getCurrentStoreId()
     {
         return $this->_storeManager->getStore()->getId();
     }
 
+    /**
+     * @return string
+     */
     public function getCurrentStoreCode()
     {
         return $this->_storeManager->getStore()->getCode();

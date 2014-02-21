@@ -19,156 +19,9 @@
 //  *
 //  * @category    design
 //  * @package     magento2_reference
-//  * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
-
-//  #Forms mixins
-//
-//  Mixins for all form elements
-
-.controlStyling() {
-    .box-sizing();
-    background: @fieldBg;
-    border: 1px solid @primary3;
-    border-radius: 3px;
-    font: @baseFontWeight @baseFontSize @baseFont;
-    /* Prevent background color leak outs */
-    background-clip: padding-box;
-    outline: none;
-    &:focus {
-        border-color: @primary4;
-    }
-    .control & {
-        width: 100%;
-    }
-    &:disabled {
-        opacity: 0.5;
-    }
-}
-
-.inputText() {
-    .controlStyling();
-    height: 32px;
-    line-height: 1;
-    padding: 0 10px;
-    &::-webkit-input-placeholder {
-        line-height: 1.333;
-    }
-    &:-ms-input-placeholder {
-        line-height: 1.333;
-    }
-    .eq-ie8 & {
-        padding-top: 8px;
-    }
-}
-
-.formFieldset() {
-    border: 0;
-    margin: 30px 10px 30px 30px;
-    padding: 0;
-    letter-spacing: -0.31em;
-    word-spacing: -0.43em;
-    > * {
-        letter-spacing: normal;
-        word-spacing: normal;
-    }
-    > .legend {
-        float: left;
-        font: @baseFontWeight @legendFontSize/1.2 @baseFont;
-        margin: -30px 30px 50px -30px;
-        width: 100%;
-        & + br {
-            display: block;
-            .clearfix();
-        }
-    }
-}
-
-.formField() {
-    .box-sizing();
-    margin: 0 0 20px;
-    > .label {
-        display: block;
-        padding-bottom: 5px;
-    }
-    .nested .field {
-        margin: 5px 0;
-    }
-    &.choice {
-        > .control {
-            width: auto;
-        }
-        > .label {
-            display: inline;
-        }
-        > input {
-            vertical-align: top;
-            margin-top: 2px;
-            margin-right: 5px;
-        }
-    }
-    &.required > .label > span:first-child:after {
-        content: '*';
-        color: @requiredField;
-    }
-    .addon {
-        display: table;
-        padding: 0;
-        width: 100%;
-        textarea,
-        select,
-        input {
-            box-shadow: none;
-            display: table-cell;
-            margin: 0;
-            width: 100%;
-        }
-        .addbefore,
-        .addafter {
-            height: 0;
-            white-space: nowrap;
-            display: inline-block;
-            display: table-cell;
-            vertical-align: middle;
-            width: 1px;
-            .inputText();
-        }
-    }
-    .note {
-        font-size: @baseFontSizeMiddle;
-        margin-top: 3px;
-        padding-left: 15px;
-        &:before {
-            border-bottom: 5px solid @baseColor;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            content: '';
-            display: inline-block;
-            font-size: 0;
-            line-height: 0;
-            margin: 4px 0 0 -14px;
-            position: absolute;
-            vertical-align: top;
-            width: 0;
-        }
-    }
-}
-
-.formCols(@fieldWidth : 50%) {
-    > .field {
-        display: inline-block;
-        padding-right: 20px;
-        vertical-align: top;
-        width: @fieldWidth;
-    }
-    .nested .field {
-        width: 100%;
-    }
-    .actions {
-        margin-right: 30px;
-    }
-}
 
 .hasRequired {
     &:after {
@@ -461,7 +314,8 @@ input[type="tel"],
 input[type="url"],
 input[type="email"],
 input[type="datetime"],
-input[type="password"] {
+input[type="password"],
+input[type="number"] {
     .inputText();
 }
 
@@ -472,6 +326,12 @@ input[type="button"] {
 
 input[type="reset"] {
     &:extend(.secondary.action all);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 select {
@@ -539,7 +399,8 @@ textarea {
     input[type="url"].valid,
     input[type="email"].valid,
     input[type="datetime"].valid,
-    input[type="password"].valid {
+    input[type="password"].valid,
+    input[type="number"].valid {
         border-color: @validHilight !important;
     }
     // Validation error
@@ -551,7 +412,8 @@ textarea {
     input[type="url"].mage-error,
     input[type="email"].mage-error,
     input[type="datetime"].mage-error,
-    input[type="password"].mage-error {
+    input[type="password"].mage-error,
+    input[type="number"].mage-error {
         border-color: @nonValidHilight !important;
     }
     div.mage-error[generated] {
@@ -668,19 +530,19 @@ textarea {
 }
 
 // #Datepicker custom styles
-@datepickerArrows : @secondary1;
-@datepickerArrowsHover : darken(@datepickerArrows, 10%);
-@datepickerTextColor : #000;
-@datepickerBg : #efefef;
-@datepickerBorder : #fff;
-@datepickerShadow : rgba(0, 0, 0, 0.35);
-@datepickerCalendarBg : #fff;
-@datepickerCalendarBorder : #cfcfcf;
-@datepickerCalendarHover : #f9eae7;
-@datepickerCalendarToday : #f3d7d2;
-@datepickerCalendarActive : lighten(@secondary1, 20%);
-@datepickerDisabledBg : #f9f9f9;
-@datepickerDisable : #959595;
+@datepickerArrows: @secondary1;
+@datepickerArrowsHover: darken(@datepickerArrows, 10%);
+@datepickerTextColor: #000;
+@datepickerBg: #efefef;
+@datepickerBorder: #fff;
+@datepickerShadow: rgba(0, 0, 0, 0.35);
+@datepickerCalendarBg: #fff;
+@datepickerCalendarBorder: #cfcfcf;
+@datepickerCalendarHover: #f9eae7;
+@datepickerCalendarToday: #f3d7d2;
+@datepickerCalendarActive: lighten(@secondary1, 20%);
+@datepickerDisabledBg: #f9f9f9;
+@datepickerDisable: #959595;
 
 .ui-datepicker {
     background: @datepickerBg;

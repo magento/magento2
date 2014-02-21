@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento;
@@ -31,27 +31,34 @@ namespace Magento;
 interface TranslateInterface
 {
     /**
-     * Translate
-     *
-     * @param array $args
-     * @return string
+     * Default translation string
      */
-    public function translate($args);
+    const DEFAULT_STRING = 'Translate String';
 
     /**
-     * Parse and save edited translate
+     * Determine if translation is enabled and allowed.
      *
-     * @param array $translate
+     * @param mixed $scope
+     * @return bool
      */
-    public function processAjaxPost($translate);
+    public function isAllowed($scope = null);
 
     /**
-     * Replace translation templates with HTML fragments
+     * Initialization translation data
      *
-     * @param array|string $body
-     * @param bool $isJson
+     * @param string $area
+     * @param \Magento\Object $initParams
+     * @param bool $forceReload
+     * @return \Magento\TranslateInterface
      */
-    public function processResponseBody(&$body, $isJson = false);
+    public function init($area = null, $initParams = null, $forceReload = false);
+
+    /**
+     * Retrieve active translate mode
+     *
+     * @return bool
+     */
+    public function getTranslateInline();
 
     /**
      * Set Translate inline mode
@@ -60,4 +67,20 @@ interface TranslateInterface
      * @return \Magento\TranslateInterface
      */
     public function setTranslateInline($flag);
+
+    /**
+     * Set locale
+     *
+     * @param $locale
+     * @return \Magento\TranslateInterface
+     */
+    public function setLocale($locale);
+
+    /**
+     * Translate
+     *
+     * @param array $args
+     * @return string
+     */
+    public function translate($args);
 }

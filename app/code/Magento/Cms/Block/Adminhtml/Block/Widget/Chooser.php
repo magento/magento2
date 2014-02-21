@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Block\Widget;
 
 /**
  * CMS block chooser for Wysiwyg CMS widget
@@ -31,8 +32,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Block\Widget;
-
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -47,7 +46,6 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory
@@ -55,7 +53,6 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Cms\Model\BlockFactory $blockFactory,
         \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory,
@@ -63,11 +60,13 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     ) {
         $this->_blockFactory = $blockFactory;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Block construction, prepare grid params
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -180,6 +179,11 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * Get grid url
+     *
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('cms/block_widget/chooser', array('_current' => true));

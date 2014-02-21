@@ -20,9 +20,11 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product\Indexer;
+
 /**
  * @method \Magento\Catalog\Model\Resource\Product\Indexer\Price _getResource()
  * @method \Magento\Catalog\Model\Resource\Product\Indexer\Price getResource()
@@ -48,8 +50,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Indexer;
-
 class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
 {
     /**
@@ -74,7 +74,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
             \Magento\Index\Model\Event::TYPE_MASS_ACTION,
             self::EVENT_TYPE_REINDEX_PRICE,
         ),
-        \Magento\Core\Model\Config\Value::ENTITY => array(
+        \Magento\App\Config\ValueInterface::ENTITY => array(
             \Magento\Index\Model\Event::TYPE_SAVE
         ),
         \Magento\Customer\Model\Group::ENTITY => array(
@@ -82,6 +82,9 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
         )
     );
 
+    /**
+     * @var string[]
+     */
     protected $_relatedConfigSettings = array(
         \Magento\Catalog\Helper\Data::XML_PATH_PRICE_SCOPE,
         \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK
@@ -90,6 +93,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -119,7 +123,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
     /**
      * Retrieve attribute list has an effect on product price
      *
-     * @return array
+     * @return string[]
      */
     protected function _getDependentAttributes()
     {
@@ -149,7 +153,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
             return $data[self::EVENT_MATCH_RESULT_KEY];
         }
 
-        if ($event->getEntity() == \Magento\Core\Model\Config\Value::ENTITY) {
+        if ($event->getEntity() == \Magento\App\Config\ValueInterface::ENTITY) {
             $data = $event->getDataObject();
             if ($data && in_array($data->getPath(), $this->_relatedConfigSettings)) {
                 $result = $data->isValueChanged();
@@ -171,6 +175,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by catalog product delete process
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCatalogProductDeleteEvent(\Magento\Index\Model\Event $event)
     {
@@ -187,6 +192,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by catalog product save process
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCatalogProductSaveEvent(\Magento\Index\Model\Event $event)
     {
@@ -210,6 +216,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
 
     /**
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerCatalogProductMassActionEvent(\Magento\Index\Model\Event $event)
     {
@@ -244,13 +251,14 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Register data required by process in event object
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _registerEvent(\Magento\Index\Model\Event $event)
     {
         $event->addNewData(self::EVENT_MATCH_RESULT_KEY, true);
         $entity = $event->getEntity();
 
-        if ($entity == \Magento\Core\Model\Config\Value::ENTITY || $entity == \Magento\Customer\Model\Group::ENTITY) {
+        if ($entity == \Magento\App\Config\ValueInterface::ENTITY || $entity == \Magento\Customer\Model\Group::ENTITY) {
             $process = $event->getProcess();
             $process->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
         } else if ($entity == \Magento\Catalog\Model\Product::ENTITY) {
@@ -283,6 +291,7 @@ class Price extends \Magento\Index\Model\Indexer\AbstractIndexer
      * Process event
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     protected function _processEvent(\Magento\Index\Model\Event $event)
     {

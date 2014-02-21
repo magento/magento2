@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogInventory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,14 +37,14 @@ class Minsaleqty
     extends \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
     /**
-     * @var \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup
+     * @var Customergroup
      */
     protected $_groupRenderer;
 
     /**
      * Retrieve group column renderer
      *
-     * @return \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup
+     * @return Customergroup
      */
     protected function _getGroupRenderer()
     {
@@ -60,6 +60,8 @@ class Minsaleqty
 
     /**
      * Prepare to render
+     *
+     * @return void
      */
     protected function _prepareToRender()
     {
@@ -77,7 +79,8 @@ class Minsaleqty
     /**
      * Prepare existing row data object
      *
-     * @param \Magento\Object
+     * @param \Magento\Object $row
+     * @return void
      */
     protected function _prepareArrayRow(\Magento\Object $row)
     {

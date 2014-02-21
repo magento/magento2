@@ -20,20 +20,21 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Usa\Helper;
 
 /**
  * Usa data helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Usa\Helper;
-
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
+     * Locale interface
+     *
      * @var \Magento\Core\Model\LocaleInterface
      */
     protected $_locale;
@@ -51,9 +52,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Convert weight in different measure types
      *
-     * @param  mixed $value
-     * @param  string $sourceWeightMeasure
-     * @param  string $toWeightMeasure
+     * @param int|float $value
+     * @param string $sourceWeightMeasure
+     * @param string $toWeightMeasure
      * @return int|null|string
      */
     public function convertMeasureWeight($value, $sourceWeightMeasure, $toWeightMeasure)
@@ -70,7 +71,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Convert dimensions in different measure types
      *
-     * @param  mixed $value
+     * @param  int|float $value
      * @param  string $sourceDimensionMeasure
      * @param  string $toDimensionMeasure
      * @return int|null|string
@@ -89,7 +90,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Get name of measure by its type
      *
-     * @param  $key
+     * @param string $key
      * @return string
      */
     public function getMeasureWeightName($key)
@@ -105,7 +106,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Get name of measure by its type
      *
-     * @param  $key
+     * @param string $key
      * @return string
      */
     public function getMeasureDimensionName($key)
@@ -127,25 +128,25 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function displayGirthValue($shippingMethod)
     {
         if (in_array($shippingMethod, array(
-            'usps_Priority Mail International',
-            'usps_Priority Mail International Small Flat Rate Box',
-            'usps_Priority Mail International Medium Flat Rate Box',
-            'usps_Priority Mail International Large Flat Rate Box',
-            'usps_Priority Mail International Flat Rate Envelope',
-            'usps_Express Mail International Flat Rate Envelope',
-            'usps_Express Mail Hold For Pickup',
-            'usps_Express Mail International',
-            'usps_First-Class Mail International Package',
-            'usps_First-Class Mail International Parcel',
-            'usps_First-Class Mail International Large Envelope',
-            'usps_First-Class Mail International',
-            'usps_Global Express Guaranteed (GXG)',
-            'usps_USPS GXG Envelopes',
-            'usps_Global Express Guaranteed Non-Document Non-Rectangular',
-            'usps_Media Mail',
-            'usps_Parcel Post',
-            'usps_Express Mail',
-            'usps_Priority Mail'
+            'usps_0_FCLE', // First-Class Mail Large Envelope
+            'usps_1',      // Priority Mail
+            'usps_2',      // Priority Mail Express Hold For Pickup
+            'usps_3',      // Priority Mail Express
+            'usps_4',      // Standard Post
+            'usps_6',      // Media Mail
+            'usps_INT_1',  // Priority Mail Express International
+            'usps_INT_2',  // Priority Mail International
+            'usps_INT_4',  // Global Express Guaranteed (GXG)
+            'usps_INT_7',  // Global Express Guaranteed Non-Document Non-Rectangular
+            'usps_INT_8',  // Priority Mail International Flat Rate Envelope
+            'usps_INT_9',  // Priority Mail International Medium Flat Rate Box
+            'usps_INT_10', // Priority Mail Express International Flat Rate Envelope
+            'usps_INT_11', // Priority Mail International Large Flat Rate Box
+            'usps_INT_12', // USPS GXG Envelopes
+            'usps_INT_14', // First-Class Mail International Large Envelope
+            'usps_INT_16', // Priority Mail International Small Flat Rate Box
+            'usps_INT_20', // Priority Mail International Small Flat Rate Envelope
+            'usps_INT_26', // Priority Mail Express International Flat Rate Boxes
         ))) {
             return true;
         } else {

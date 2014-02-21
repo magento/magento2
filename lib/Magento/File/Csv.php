@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_File
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
  
@@ -33,8 +33,19 @@ namespace Magento\File;
 
 class Csv
 {
+    /**
+     * @var int
+     */
     protected $_lineLength= 0;
+
+    /**
+     * @var string
+     */
     protected $_delimiter = ',';
+
+    /**
+     * @var string
+     */
     protected $_enclosure = '"';
     
     public function __construct() 
@@ -124,7 +135,7 @@ class Csv
      *
      * @param   string $file
      * @param   array $data
-     * @return  \Magento\File\Csv
+     * @return  $this
      */
     public function saveData($file, $data)
     {
@@ -135,7 +146,16 @@ class Csv
         fclose($fh);
         return $this;
     }
-    
+
+    /**
+     * Write to csv
+     *
+     * @param resource $handle
+     * @param string[] $fields
+     * @param string $delimiter
+     * @param string $enclosure
+     * @return int
+     */
     public function fputcsv(&$handle, $fields = array(), $delimiter = ',', $enclosure = '"') {
         $str = '';
         $escape_char = '\\';

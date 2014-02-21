@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@ class Authentication
     protected $_auth;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $_openActions = array(
         'forgotpassword',
@@ -45,7 +45,7 @@ class Authentication
     );
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
@@ -66,14 +66,14 @@ class Authentication
 
     /**
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\App\ActionFlag $actionFlag
      * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Url $url,
+        \Magento\Backend\Model\UrlInterface $url,
         \Magento\App\ResponseInterface $response,
         \Magento\App\ActionFlag $actionFlag,
         \Magento\Message\ManagerInterface $messageManager
@@ -112,6 +112,7 @@ class Authentication
      * Process not logged in user data
      *
      * @param \Magento\App\RequestInterface $request
+     * @return void
      */
     protected function _processNotLoggedInUser(\Magento\App\RequestInterface $request)
     {

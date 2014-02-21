@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Sendfriend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sendfriend\Block;
 
 /**
  * Email to a Friend Block
@@ -32,8 +32,6 @@
  * @package     Magento_Sendfriend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sendfriend\Block;
-
 class Send extends \Magento\View\Element\Template
 {
     /**
@@ -73,6 +71,7 @@ class Send extends \Magento\View\Element\Template
         $this->_coreRegistry = $registry;
         $this->_sendfriendData = $sendfriendData;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -149,7 +148,7 @@ class Send extends \Magento\View\Element\Template
      * Set Form data array
      *
      * @param array $data
-     * @return \Magento\Sendfriend\Block\Send
+     * @return $this
      */
     public function setFormData($data)
     {

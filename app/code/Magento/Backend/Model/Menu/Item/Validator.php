@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Model\Menu\Item;
@@ -30,7 +30,7 @@ class Validator
     /**
      * The list of required params
      *
-     * @var array
+     * @var string[]
      */
     protected $_required = array(
         'id', 'title', 'resource'
@@ -79,10 +79,12 @@ class Validator
         $this->_validators['dependsOnConfig'] = $configDepValidator;
         $this->_validators['toolTip'] = $tooltipValidator;
     }
+
     /**
      * Validate menu item params
      *
      * @param $data
+     * @return void
      * @throws \InvalidArgumentException
      * @throws \BadMethodCallException
      */
@@ -117,6 +119,7 @@ class Validator
      *
      * @param string $param
      * @param mixed $value
+     * @return void
      * @throws \InvalidArgumentException
      */
     public function validateParam($param, $value)

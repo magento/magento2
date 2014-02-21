@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,7 +40,7 @@ $connection->dropIndex($table, $installer->getIdxName(
 $connection->addColumn($table, 'crc_string', array(
     'type'     => \Magento\DB\Ddl\Table::TYPE_BIGINT,
     'nullable' => false,
-    'default'  => crc32(\Magento\Core\Model\Translate::DEFAULT_STRING),
+    'default'  => crc32(\Magento\TranslateInterface::DEFAULT_STRING),
     'comment'  => 'Translation String CRC32 Hash',
 ));
 

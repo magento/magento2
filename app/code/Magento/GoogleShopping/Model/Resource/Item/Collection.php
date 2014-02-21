@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model\Resource\Item;
 
 /**
  * Google Content items collection
@@ -31,8 +32,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model\Resource\Item;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -74,6 +73,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\GoogleShopping\Model\Item', 'Magento\GoogleShopping\Model\Resource\Item');
@@ -82,7 +84,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Init collection select
      *
-     * @return \Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -95,7 +97,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter collection by specified store ids
      *
      * @param array|int $storeIds
-     * @return \Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addStoreFilter($storeIds)
     {
@@ -107,7 +109,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter collection by specified product id
      *
      * @param int $productId
-     * @return \Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @return $this
      */
     public function addProductFilterId($productId)
     {
@@ -118,10 +120,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add field filter to collection
      *
-     * @see self::_getConditionSql for $condition
      * @param string $field
      * @param null|string|array $condition
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return $this
+     * @see self::_getConditionSql for $condition
      */
     public function addFieldToFilter($field, $condition=null)
     {
@@ -139,7 +141,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Join product and type data
      *
-     * @return \Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @return $this
      */
     protected function _joinTables()
     {

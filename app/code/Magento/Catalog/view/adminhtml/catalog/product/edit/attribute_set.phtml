@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
  /* @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet */
@@ -29,13 +29,13 @@
 {{if !term && items.length && !$data.allShown()}}
 <h5 class="title">Recent Items</h5>
 {{/if}}
-<ul data-mage-init="{&quot;menu&quot;:[]}">
+<ul data-mage-init='{"menu":[]}'>
     {{each items}}
     <li {{html optionData($value)}}><a href="#">${$value.label}</a></li>
     {{/each}}
 </ul>
 {{if !term && items.length && !$data.allShown()}}
-<button data-mage-init="{actionLink:{event:&quot;showAll&quot;}}" class="action-show-all">
+<button data-mage-init='{"actionLink":{"event":"showAll"}}' class="action-show-all">
     <span>Show all Templates...</span>
 </button>
 {{/if}}

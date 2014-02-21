@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Weee
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Weee\Block\Renderer\Weee;
+
+use Magento\Data\Form\Element\AbstractElement;
 
 /**
  * Adminhtml weee tax item renderer
@@ -31,15 +34,28 @@
  * @package    Magento_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Weee\Block\Renderer\Weee;
-
 class Tax
     extends \Magento\Backend\Block\Widget
     implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
+    /**
+     * @var AbstractElement|null
+     */
     protected $_element = null;
+
+    /**
+     * @var array|null
+     */
     protected $_countries = null;
+
+    /**
+     * @var array|null
+     */
     protected $_websites = null;
+
+    /**
+     * @var string
+     */
     protected $_template = 'renderer/tax.phtml';
 
     /**
@@ -79,19 +95,26 @@ class Tax
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return \Magento\Object
+     */
     public function getProduct()
     {
         return $this->_coreRegistry->registry('product');
     }
 
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    public function render(AbstractElement $element)
     {
         $this->setElement($element);
         return $this->toHtml();
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _prepareLayout()
     {
@@ -116,17 +139,27 @@ class Tax
         return parent::_prepareLayout();
     }
 
-    public function setElement(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return $this
+     */
+    public function setElement(AbstractElement $element)
     {
         $this->_element = $element;
         return $this;
     }
 
+    /**
+     * @return AbstractElement|null
+     */
     public function getElement()
     {
         return $this->_element;
     }
 
+    /**
+     * @return array
+     */
     public function getValues()
     {
         $values = array();
@@ -139,6 +172,11 @@ class Tax
         return $values;
     }
 
+    /**
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
     protected function _sortWeeeTaxes($a, $b)
     {
         if ($a['website_id'] != $b['website_id']) {
@@ -150,16 +188,25 @@ class Tax
         return 0;
     }
 
+    /**
+     * @return int
+     */
     public function getWebsiteCount()
     {
         return count($this->getWebsites());
     }
 
+    /**
+     * @return bool
+     */
     public function isMultiWebsites()
     {
         return !$this->_storeManager->hasSingleStore();
     }
 
+    /**
+     * @return array|null
+     */
     public function getCountries()
     {
         if (is_null($this->_countries)) {
@@ -169,6 +216,9 @@ class Tax
         return $this->_countries;
     }
 
+    /**
+     * @return array|null
+     */
     public function getWebsites()
     {
         if (!is_null($this->_websites)) {
@@ -203,6 +253,9 @@ class Tax
         return $this->_websites;
     }
 
+    /**
+     * @return string
+     */
     public function getAddButtonHtml()
     {
         return $this->getChildHtml('add_button');

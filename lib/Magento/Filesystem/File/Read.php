@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -58,7 +58,7 @@ class Read implements ReadInterface
     /**
      * Constructor
      *
-     * @param $path
+     * @param string $path
      * @param DriverInterface $driver
      */
     public function __construct($path, DriverInterface $driver)
@@ -73,7 +73,6 @@ class Read implements ReadInterface
     /**
      * Open file
      *
-     * @throws FilesystemException
      * @return $this
      */
     protected function open()
@@ -186,5 +185,15 @@ class Read implements ReadInterface
     public function close()
     {
         return $this->driver->fileClose($this->resource);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return array
+     */
+    public function stat()
+    {
+        return $this->driver->stat($this->path);
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,15 +34,16 @@ class Stock extends \Magento\ProductAlert\Block\Product\View
     /**
      * Prepare stock info
      *
-     * @return void
+     * @param string $template
+     * @return \Magento\View\Element\Template
      */
-    protected function _prepareLayout()
+    public function setTemplate($template)
     {
-        parent::_prepareLayout();
         if (!$this->_helper->isStockAlertAllowed() || !$this->_product || $this->_product->isAvailable()) {
-            $this->setTemplate('');
-            return;
+            $template = '';
+        } else {
+            $this->setSignupUrl($this->_helper->getSaveUrl('stock'));
         }
-        $this->setSignupUrl($this->_helper->getSaveUrl('stock'));
+        return parent::setTemplate($template);
     }
 }

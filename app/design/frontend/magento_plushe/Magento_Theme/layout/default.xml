@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -30,13 +30,21 @@
         </arguments>
     </referenceBlock>
 
-    <referenceContainer name="header">
+    <referenceContainer name="header-wrapper">
         <block class="Magento\View\Element\Html\Links" name="header.links" after="minicart">
             <arguments>
                 <argument name="css_class" xsi:type="string">links</argument>
             </arguments>
         </block>
     </referenceContainer>
+
+    <referenceBlock name="header.links">
+        <block class="Magento\Theme\Block\Html\Header" name="header" as="header" before="-">
+            <arguments>
+                <argument name="show_part" xsi:type="string">welcome</argument>
+            </arguments>
+        </block>
+    </referenceBlock>
 
     <referenceBlock name="top.links">
         <arguments>

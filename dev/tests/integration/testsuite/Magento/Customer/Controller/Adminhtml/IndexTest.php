@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Customer
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -95,6 +95,9 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testSaveActionWithInvalidCustomerAddressData()
     {
         $post = array(
@@ -303,7 +306,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         * Check that error message is set
         */
         $this->assertSessionMessages(
-            $this->equalTo(array('Customer with the same email already exists.')),
+            $this->equalTo(array('Customer with the same email already exists in associated website.')),
             \Magento\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertEquals($post, \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

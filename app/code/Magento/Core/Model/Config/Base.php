@@ -23,7 +23,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Config;
@@ -33,7 +33,7 @@ class Base extends \Magento\Simplexml\Config
     /**
      * List of instances
      *
-     * @var array
+     * @var Base[]
      */
     public static $instances = array();
 
@@ -49,6 +49,8 @@ class Base extends \Magento\Simplexml\Config
 
     /**
      * Cleanup objects because of simplexml memory leak
+     *
+     * @return void
      */
     public static function destroy()
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,7 +57,7 @@ class Currency extends \Magento\Backend\App\Action
     /**
      * Init currency by currency code from request
      *
-     * @return \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
+     * @return $this
      */
     protected function _initCurrency()
     {
@@ -70,6 +70,8 @@ class Currency extends \Magento\Backend\App\Action
 
     /**
      * Currency management main page
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -81,6 +83,12 @@ class Currency extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Fetch rates action
+     *
+     * @return void
+     * @throws \Exception|\Magento\Core\Exception
+     */
     public function fetchRatesAction()
     {
         /** @var \Magento\Backend\Model\Session $backendSession */
@@ -117,6 +125,11 @@ class Currency extends \Magento\Backend\App\Action
         $this->_redirect('adminhtml/*/');
     }
 
+    /**
+     * Save rates action
+     *
+     * @return void
+     */
     public function saveRatesAction()
     {
         $data = $this->getRequest()->getParam('rate');
@@ -147,6 +160,11 @@ class Currency extends \Magento\Backend\App\Action
         $this->_redirect('adminhtml/*/');
     }
 
+    /**
+     * Check if allowed
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_CurrencySymbol::currency_rates');

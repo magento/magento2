@@ -20,16 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Persistent
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Persistent\Model\Persistent;
 
 /**
  * Persistent Config Model
  */
-namespace Magento\Persistent\Model\Persistent;
-
 class Config
 {
     /**
@@ -39,13 +37,19 @@ class Config
      */
     protected $_configFilePath;
 
-    /** @var \Magento\Config\DomFactory  */
+    /**
+     * @var \Magento\Config\DomFactory
+     */
     protected $_domFactory;
 
-    /** @var \Magento\Module\Dir\Reader  */
+    /**
+     * @var \Magento\Module\Dir\Reader
+     */
     protected $_moduleReader;
 
-    /** @var \DOMXPath  */
+    /**
+     * @var \DOMXPath
+     */
     protected $_configDomXPath = null;
 
     /**
@@ -82,7 +86,7 @@ class Config
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Config\DomFactory $domFactory,
@@ -90,21 +94,21 @@ class Config
         \Magento\View\LayoutInterface $layout,
         \Magento\App\State $appState,
         \Magento\Persistent\Model\Factory $persistentFactory,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_domFactory = $domFactory;
         $this->_moduleReader = $moduleReader;
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
     }
 
     /**
      * Set path to config file that should be loaded
      *
      * @param string $path
-     * @return \Magento\Persistent\Model\Persistent\Config
+     * @return $this
      */
     public function setConfigFilePath($path)
     {
@@ -151,7 +155,7 @@ class Config
      * Get block's persistent config info.
      *
      * @param string $block
-     * @return $array
+     * @return array
      */
     public function getBlockConfigInfo($block)
     {
@@ -176,7 +180,7 @@ class Config
     /**
      * Convert Blocks
      *
-     * @param DomNodeList $blocks
+     * @param /DomNodeList $blocks
      * @return array
      */
     protected function _convertBlocksToArray($blocks)
@@ -186,7 +190,7 @@ class Config
             $referenceAttributes = $reference->attributes;
             $id = $referenceAttributes->getNamedItem('id')->nodeValue;
             $blocksArray[$id] = array();
-            /** @var $referenceSubNode DOMNode */
+            /** @var $referenceSubNode /DOMNode */
             foreach ($reference->childNodes as $referenceSubNode) {
                 switch ($referenceSubNode->nodeName) {
                     case 'name_in_layout':
@@ -205,7 +209,7 @@ class Config
     /**
      * Run all methods declared in persistent configuration
      *
-     * @return \Magento\Persistent\Model\Persistent\Config
+     * @return $this
      */
     public function fire()
     {
@@ -229,7 +233,7 @@ class Config
      *
      * @param array $info
      * @param bool $instance
-     * @return \Magento\Persistent\Model\Persistent\Config
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function fireOne($info, $instance = false)

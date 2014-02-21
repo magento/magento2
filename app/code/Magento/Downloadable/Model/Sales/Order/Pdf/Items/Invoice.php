@@ -20,22 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Downloadable\Model\Sales\Order\Pdf\Items;
 
 /**
  * Order Invoice Downloadable Pdf Items renderer
- *
- * @category   Magento
- * @package    Magento_Downloadable
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model\Sales\Order\Pdf\Items;
-
-class Invoice
-    extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\AbstractItems
+class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\AbstractItems
 {
     /**
      * @var \Magento\Stdlib\String
@@ -46,7 +40,8 @@ class Invoice
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
@@ -59,7 +54,8 @@ class Invoice
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
+        \Magento\Filter\FilterManager $filterManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
@@ -74,6 +70,7 @@ class Invoice
             $registry,
             $taxData,
             $filesystem,
+            $filterManager,
             $coreStoreConfig,
             $purchasedFactory,
             $itemsFactory,
@@ -85,7 +82,6 @@ class Invoice
 
     /**
      * Draw item line
-     *
      */
     public function draw()
     {
@@ -167,18 +163,18 @@ class Invoice
             foreach ($options as $option) {
                 // draw options label
                 $lines[][] = array(
-                    'text' => $this->string->split(strip_tags($option['label']), 40, true, true),
+                    'text' => $this->string->split($this->filterManager->stripTags($option['label']), 40, true, true),
                     'font' => 'italic',
                     'feed' => 35
                 );
 
                 if ($option['value']) {
                     if (isset($option['print_value'])) {
-                        $_printValue = $option['print_value'];
+                        $printValue = $option['print_value'];
                     } else {
-                        $_printValue = strip_tags($option['value']);
+                        $printValue = $this->filterManager->stripTags($option['value']);
                     }
-                    $values = explode(', ', $_printValue);
+                    $values = explode(', ', $printValue);
                     foreach ($values as $value) {
                         $lines[][] = array(
                             'text' => $this->string->split($value, 30, true, true),
@@ -190,7 +186,7 @@ class Invoice
         }
 
         // downloadable Items
-        $_purchasedItems = $this->getLinks()->getPurchasedItems();
+        $purchasedItems = $this->getLinks()->getPurchasedItems();
 
         // draw Links title
         $lines[][] = array(
@@ -200,9 +196,9 @@ class Invoice
         );
 
         // draw Links
-        foreach ($_purchasedItems as $_link) {
+        foreach ($purchasedItems as $link) {
             $lines[][] = array(
-                'text' => $this->string->split($_link->getLinkTitle(), 50, true, true),
+                'text' => $this->string->split($link->getLinkTitle(), 50, true, true),
                 'feed' => 40
             );
         }

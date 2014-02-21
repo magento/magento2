@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Tax
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,9 @@ namespace Magento\Tax\Model\System\Config\Source\Tax;
 
 class Region implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * @var array
+     */
     protected $_options;
 
     /**
@@ -43,6 +46,11 @@ class Region implements \Magento\Core\Model\Option\ArrayInterface
         $this->_regionsFactory = $regionsFactory;
     }
 
+    /**
+     * @param bool $noEmpty
+     * @param string|array|null $country
+     * @return array
+     */
     public function toOptionArray($noEmpty = false, $country = null)
     {
         /** @var $region \Magento\Directory\Model\Resource\Region\Collection */

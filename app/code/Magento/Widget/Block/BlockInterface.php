@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,14 +40,14 @@ interface BlockInterface
      * Retains previous data in the widget.
      *
      * @param array $arr
-     * @return \Magento\Widget\Block\BlockInterface
+     * @return $this
      */
     public function addData(array $arr);
 
     /**
      * Overwrite data in the widget.
      *
-     * $key can be string or array.
+     * Param $key can be string or array.
      * If $key is string, the attribute value will be overwritten by $value.
      * If $key is an array, it will overwrite all the data in the widget.
      *

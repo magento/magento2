@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles;
 
 /**
  * Quick style CSS renderer
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles;
-
 class Renderer
 {
     /**
@@ -65,8 +64,8 @@ class Renderer
      * Render CSS recursively
      *
      * @param array $data
-     * @param string $content
-     * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer
+     * @param string &$content
+     * @return $this
      */
     protected function _rendererCssRecursively($data, &$content)
     {

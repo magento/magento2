@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css;
 
 /**
  * Block that renders group of files
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css;
-
 class Group extends \Magento\Backend\Block\Widget\Form
 {
     /**
@@ -68,7 +67,7 @@ class Group extends \Magento\Backend\Block\Widget\Form
     /**
      * Check if files group needs "add" button
      *
-     * @return bool
+     * @return false
      */
     public function hasAddButton()
     {
@@ -78,7 +77,7 @@ class Group extends \Magento\Backend\Block\Widget\Form
     /**
      * Check if files group needs download buttons next to each file
      *
-     * @return bool
+     * @return true
      */
     public function hasDownloadButton()
     {

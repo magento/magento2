@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Convert
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,7 +43,7 @@ class Object
      * Convert input data into an array and return the resulting array.
      * The resulting array should not contain any objects.
      *
-     * @param mixed $data input data
+     * @param array $data input data
      * @return array Data converted to an array
      */
     public function convertDataToArray($data)
@@ -96,5 +96,72 @@ class Object
         }
         return $result;
     }
+
+    /**
+     * Converts the list of objects into an array of the form: [ [ 'label' => <id>, 'value' => <value> ], ... ].
+     *
+     *
+     * The <id> and <value> values are taken from the objects in the list using the $idField and $valueField
+     * parameters, which can be either the name of the field to use, or a closure.
+     *
+     * @param array $items
+     * @param string|callable $idField
+     * @param string|callable $valueField
+     * @return array
+     */
+    public function toOptionArray(array $items, $idField, $valueField)
+    {
+        $options = [];
+        foreach ($items as $item) {
+            $options[] = ['value' => $this->_invokeGetter($item, $idField),
+                          'label' => $this->_invokeGetter($item, $valueField)];
+        }
+        return $options;
+    }
+
+    /**
+     * Converts the list of objects into an array of the form: [ <id> => <value>, ... ].
+     *
+     *
+     * The <id> and <value> values are taken from the objects in the list using the $idField and $valueField parameters,
+     * which can be either the name of the field to use, or a closure.
+     *
+     * @param array $items
+     * @param string|callable $idField
+     * @param string|callable $valueField
+     * @return array
+     */
+    public function toOptionHash(array $items, $idField, $valueField)
+    {
+        $options = [];
+        foreach ($items as $item) {
+            $options[$this->_invokeGetter($item, $idField)] = $this->_invokeGetter($item, $valueField);
+        }
+        return $options;
+    }
+
+    /**
+     * Returns the value of the property represented by $field on the $item object.
+     *
+     *
+     * When $field is a closure, the $item parameter is passed to the $field method, otherwise the $field is assumed
+     * to be a property name, and the associated get method is invoked on the $item instead.
+     *
+     * @param mixed $item
+     * @param string|callable $field
+     * @return mixed
+     */
+    protected function _invokeGetter($item, $field)
+    {
+        if (is_callable($field)) {
+            // if $field is a closure, use that on the item
+            return $field($item);
+        } else {
+            // otherwise, turn it into a call to the item's getter method
+            $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
+            return $item->$methodName();
+        }
+    }
+
 
 }

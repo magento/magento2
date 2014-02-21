@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,12 +48,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory
      */
-    protected $_itemOptionCollFactory;
+    protected $_itemOptionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
      */
-    protected $_productCollFactory;
+    protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\Quote\Config
@@ -65,8 +65,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
+     * @param \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Sales\Model\Quote\Config $quoteConfig
      * @param mixed $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
@@ -76,15 +76,15 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
+        \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Sales\Model\Quote\Config $quoteConfig,
         $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->_itemOptionCollFactory = $itemOptionCollFactory;
-        $this->_productCollFactory = $productCollFactory;
+        $this->_itemOptionCollectionFactory = $itemOptionCollectionFactory;
+        $this->_productCollectionFactory = $productCollectionFactory;
         $this->_quoteConfig = $quoteConfig;
     }
 
@@ -189,7 +189,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected function _assignOptions()
     {
         $itemIds          = array_keys($this->_items);
-        $optionCollection = $this->_itemOptionCollFactory->create()->addItemFilter($itemIds);
+        $optionCollection = $this->_itemOptionCollectionFactory->create()->addItemFilter($itemIds);
         foreach ($this as $item) {
             $item->setOptions($optionCollection->getOptionsByItem($item));
         }
@@ -213,7 +213,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         }
         $this->_productIds = array_merge($this->_productIds, $productIds);
 
-        $productCollection = $this->_productCollFactory->create()
+        $productCollection = $this->_productCollectionFactory->create()
             ->setStoreId($this->getStoreId())
             ->addIdFilter($this->_productIds)
             ->addAttributeToSelect($this->_quoteConfig->getProductAttributes())

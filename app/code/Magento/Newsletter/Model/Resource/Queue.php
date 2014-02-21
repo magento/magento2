@@ -20,10 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Newsletter\Model\Resource;
 
+use Magento\Newsletter\Model\Queue as ModelQueue;
+use Magento\Core\Model\AbstractModel;
 
 /**
  * Newsletter queue resource model
@@ -32,8 +35,6 @@
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource;
-
 class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -60,6 +61,7 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -69,11 +71,12 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Add subscribers to queue
      *
-     * @param \Magento\Newsletter\Model\Queue $queue
+     * @param ModelQueue $queue
      * @param array $subscriberIds
+     * @return void
      * @throws \Magento\Core\Exception
      */
-    public function addSubscribersToQueue(\Magento\Newsletter\Model\Queue $queue, array $subscriberIds)
+    public function addSubscribersToQueue(ModelQueue $queue, array $subscriberIds)
     {
         if (count($subscriberIds)==0) {
             throw new \Magento\Core\Exception(__('There are no subscribers selected.'));
@@ -112,9 +115,11 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Removes subscriber from queue
      *
-     * @param \Magento\Newsletter\Model\Queue $queue
+     * @param ModelQueue $queue
+     * @return void
+     * @throws \Exception
      */
-    public function removeSubscribersFromQueue(\Magento\Newsletter\Model\Queue $queue)
+    public function removeSubscribersFromQueue(ModelQueue $queue)
     {
         $adapter = $this->_getWriteAdapter();
         try {
@@ -138,10 +143,10 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Links queue to store
      *
-     * @param \Magento\Newsletter\Model\Queue $queue
-     * @return \Magento\Newsletter\Model\Resource\Queue
+     * @param ModelQueue $queue
+     * @return $this
      */
-    public function setStores(\Magento\Newsletter\Model\Queue $queue)
+    public function setStores(ModelQueue $queue)
     {
         $adapter = $this->_getWriteAdapter();
         $adapter->delete(
@@ -186,10 +191,10 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Returns queue linked stores
      *
-     * @param \Magento\Newsletter\Model\Queue $queue
+     * @param ModelQueue $queue
      * @return array
      */
-    public function getStores(\Magento\Newsletter\Model\Queue $queue)
+    public function getStores(ModelQueue $queue)
     {
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select()->from($this->getTable('newsletter_queue_store_link'), 'store_id')
@@ -205,10 +210,10 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Saving template after saving queue action
      *
-     * @param \Magento\Core\Model\AbstractModel $queue
-     * @return \Magento\Newsletter\Model\Resource\Queue
+     * @param AbstractModel $queue
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $queue)
+    protected function _afterSave(AbstractModel $queue)
     {
         if ($queue->getSaveStoresFlag()) {
             $this->setStores($queue);

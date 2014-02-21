@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 /**
@@ -40,14 +40,14 @@ class Date
     private $_offset = 0;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var LocaleInterface
      */
     protected $_locale;
 
     /**
      * @param LocaleInterface $locale
      */
-    public function __construct(\Magento\Core\Model\LocaleInterface $locale)
+    public function __construct(LocaleInterface $locale)
     {
         $this->_locale = $locale;
         $this->_offset = $this->calculateOffset($locale->getConfigTimezone());
@@ -56,7 +56,7 @@ class Date
     /**
      * Calculates timezone offset
      *
-     * @param  string $timezone
+     * @param  string|null $timezone
      * @return int offset between timezone and gmt
      */
     public function calculateOffset($timezone = null)

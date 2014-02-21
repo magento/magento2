@@ -20,15 +20,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Module;
 
+use Magento\Module\Dir\Reader;
+
 class ResourceResolver implements \Magento\Module\ResourceResolverInterface
 {
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var Reader
      */
     protected $_moduleReader;
 
@@ -40,9 +42,9 @@ class ResourceResolver implements \Magento\Module\ResourceResolverInterface
     protected $_moduleResources = array();
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * @param Reader $moduleReader
      */
-    public function __construct(Dir\Reader $moduleReader)
+    public function __construct(Reader $moduleReader)
     {
         $this->_moduleReader = $moduleReader;
     }
@@ -51,7 +53,7 @@ class ResourceResolver implements \Magento\Module\ResourceResolverInterface
      * Retrieve the list of resources declared by the given module
      *
      * @param string $moduleName
-     * @return array
+     * @return string[]
      */
     public function getResourceList($moduleName)
     {

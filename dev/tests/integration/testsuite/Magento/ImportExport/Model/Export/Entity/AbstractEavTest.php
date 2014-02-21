@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,7 +69,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($customerAttributes));
         $this->_model->__construct(
             $objectManager->get('Magento\Core\Model\Store\Config'),
-            $objectManager->get('Magento\Core\Model\App'),
+            $objectManager->get('Magento\Core\Model\StoreManager'),
             $objectManager->get('Magento\ImportExport\Model\Export\Factory'),
             $objectManager->get('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory'),
             $objectManager->get('Magento\Core\Model\LocaleInterface'),

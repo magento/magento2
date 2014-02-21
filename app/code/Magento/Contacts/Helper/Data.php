@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Contacts
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,11 +67,21 @@ class Data extends \Magento\App\Helper\AbstractHelper
         parent::__construct($context);
     }
 
+    /**
+     * Check if enabled
+     *
+     * @return string|null
+     */
     public function isEnabled()
     {
         return $this->_coreStoreConfig->getConfig( self::XML_PATH_ENABLED );
     }
 
+    /**
+     * Get user name
+     *
+     * @return string
+     */
     public function getUserName()
     {
         if (!$this->_customerSession->isLoggedIn()) {
@@ -81,6 +91,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
         return trim($customer->getName());
     }
 
+    /**
+     * Get user email
+     *
+     * @return string
+     */
     public function getUserEmail()
     {
         if (!$this->_customerSession->isLoggedIn()) {

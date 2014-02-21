@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_DesignEditor
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@ class BackgroundImageTest
     extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @cover \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage::toCss
+     * @covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage::toCss
      * @dataProvider backgroundImageData
      */
     public function testToCss($expectedResult, $data)
@@ -48,7 +48,7 @@ class BackgroundImageTest
     }
 
     /**
-     * @cover \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage::toCss
+     * @covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage::toCss
      * @dataProvider backgroundImageDataClearDefault
      */
     public function testToCssClearDefault($expectedResult, $data)

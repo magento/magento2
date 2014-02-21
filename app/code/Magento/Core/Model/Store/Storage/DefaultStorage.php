@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Store\Storage;
@@ -60,14 +60,16 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
     ) {
 
         $this->_store = $storeFactory->create();
-        $this->_store->setId(\Magento\Core\Model\AppInterface::DISTRO_STORE_ID);
-        $this->_store->setCode(\Magento\Core\Model\AppInterface::DISTRO_STORE_CODE);
+        $this->_store->setId(\Magento\Core\Model\Store::DISTRO_STORE_ID);
+        $this->_store->setCode(\Magento\Core\Model\Store::DEFAULT_CODE);
         $this->_website = $websiteFactory->create();
         $this->_group = $groupFactory->create();
     }
 
     /**
      * Initialize current application store
+     *
+     * @return void
      */
     public function initCurrentStore()
     {
@@ -78,6 +80,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
      * Allow or disallow single store mode
      *
      * @param bool $value
+     * @return void
      */
     public function setIsSingleStoreModeAllowed($value)
     {
@@ -190,6 +193,8 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
 
     /**
      * Reinitialize store list
+     *
+     * @return void
      */
     public function reinitStores()
     {
@@ -199,17 +204,18 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
     /**
      * Retrieve default store for default group and website
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Core\Model\Store|null
      */
     public function getDefaultStoreView()
     {
-       return null;
+        return null;
     }
 
     /**
      *  Unset website by id from app cache
      *
      * @param null|bool|int|string|\Magento\Core\Model\Website $websiteId
+     * @return void
      */
     public function clearWebsiteCache($websiteId = null)
     {
@@ -219,7 +225,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
     /**
      * Get either default or any store view
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Core\Model\Store|null
      */
     public function getAnyStoreView()
     {
@@ -230,6 +236,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
      * Set current default store
      *
      * @param string $store
+     * @return void
      */
     public function setCurrentStore($store)
     {
@@ -237,6 +244,7 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
     }
 
     /**
+     * @return void
      * @throws \Magento\Core\Model\Store\Exception
      */
     public function throwStoreException()

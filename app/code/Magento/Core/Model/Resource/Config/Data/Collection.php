@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Config\Data;
 
 /**
  * Config data collection
@@ -32,13 +32,10 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Config\Data;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Define resource model
-     *
      */
     protected function _construct()
     {
@@ -51,7 +48,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param string $scope
      * @param int $scopeId
      * @param string $section
-     * @return \Magento\Core\Model\Resource\Config\Data\Collection
+     * @return $this
      */
     public function addScopeFilter($scope, $scopeId, $section)
     {
@@ -65,7 +62,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *  Add path filter
      *
      * @param string $section
-     * @return \Magento\Core\Model\Resource\Config\Data\Collection
+     * @return $this
      */
     public function addPathFilter($section)
     {
@@ -77,7 +74,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add value filter
      *
      * @param int|string $value
-     * @return \Magento\Core\Model\Resource\Config\Data\Collection
+     * @return $this
      */
     public function addValueFilter($value)
     {

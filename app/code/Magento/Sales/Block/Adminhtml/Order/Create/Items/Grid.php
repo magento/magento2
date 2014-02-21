@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,6 +32,8 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
+
+use \Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -121,7 +123,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 $item->setMessage($check->getMessage());
                 $item->setHasError($check->getHasError());
                 */
-                if ($item->getProduct()->getStatus() == \Magento\Catalog\Model\Product\Status::STATUS_DISABLED) {
+                if ($item->getProduct()->getStatus() == ProductStatus::STATUS_DISABLED) {
                     $item->setMessage(__('This product is disabled.'));
                     $item->setHasError(true);
                 }

@@ -18,11 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Convert;
+
+use Magento\Exception;
 
 /**
  * Convert the array data to SimpleXMLElement object
@@ -36,12 +38,12 @@ class ConvertArray
      * @param array $array
      * @param string $rootName
      * @return \SimpleXMLElement
-     * @throws \Magento\Exception
+     * @throws Exception
      */
     public function assocToXml(array $array, $rootName = '_')
     {
         if (empty($rootName) || is_numeric($rootName)) {
-            throw new \Magento\Exception('Root element must not be empty or numeric');
+            throw new Exception('Root element must not be empty or numeric');
         }
 
         $xmlStr = <<<XML
@@ -51,7 +53,7 @@ XML;
         $xml = new \SimpleXMLElement($xmlStr);
         foreach (array_keys($array) as $key) {
             if (is_numeric($key)) {
-                throw new \Magento\Exception('Array root keys must not be numeric.');
+                throw new Exception('Array root keys must not be numeric.');
             }
         }
         return self::_assocToXml($array, $rootName, $xml);
@@ -64,7 +66,7 @@ XML;
      * @param string $rootName
      * @param \SimpleXMLElement $xml
      * @return \SimpleXMLElement
-     * @throws \Magento\Exception
+     * @throws Exception
      */
     private function _assocToXml(array $array, $rootName, \SimpleXMLElement &$xml)
     {
@@ -74,7 +76,7 @@ XML;
             if (!is_array($value)) {
                 if (is_string($key)) {
                     if ($key === $rootName) {
-                        throw new \Magento\Exception(
+                        throw new Exception(
                             'Associative key must not be the same as its parent associative key.'
                         );
                     }
@@ -89,7 +91,7 @@ XML;
             }
         }
         if ($hasNumericKey && $hasStringKey) {
-            throw new \Magento\Exception('Associative and numeric keys must not be mixed at one level.');
+            throw new Exception('Associative and numeric keys must not be mixed at one level.');
         }
         return $xml;
     }

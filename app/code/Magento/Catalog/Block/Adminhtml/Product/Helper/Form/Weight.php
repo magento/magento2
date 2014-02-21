@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,6 +32,8 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
+
+use Magento\Data\Form;
 
 class Weight extends \Magento\Data\Form\Element\Text
 {
@@ -84,6 +86,9 @@ class Weight extends \Magento\Data\Form\Element\Text
         if (!$this->getForm()->getDataObject()->getTypeInstance()->hasWeight()) {
             $this->_virtual->setChecked('checked');
         }
+        if ($this->getDisabled()) {
+            $this->_virtual->setDisabled($this->getDisabled());
+        }
         return '<div class="fields-group-2"><div class="field"><div class="addon"><div class="control">'
             . parent::getElementHtml()
             . '<label class="addafter" for="'
@@ -97,8 +102,8 @@ class Weight extends \Magento\Data\Form\Element\Text
     /**
      * Set form for both fields
      *
-     * @param \Magento\Data\Form $form
-     * @return \Magento\Data\Form
+     * @param Form $form
+     * @return $this
      */
     public function setForm($form)
     {

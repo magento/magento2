@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,11 +33,18 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
+use Magento\View\Element\AbstractBlock;
+
 class Add extends \Magento\Backend\Block\Template
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/attribute/set/toolbar/add.phtml';
 
+    /**
+     * @return AbstractBlock
+     */
     protected function _prepareLayout()
     {
         $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
@@ -59,21 +66,33 @@ class Add extends \Magento\Backend\Block\Template
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     protected function _getHeader()
     {
         return __('Add New Attribute Set');
     }
 
+    /**
+     * @return string
+     */
     public function getSaveButtonHtml()
     {
         return $this->getChildHtml('save_button');
     }
 
+    /**
+     * @return string
+     */
     public function getBackButtonHtml()
     {
         return $this->getChildHtml('back_button');
     }
 
+    /**
+     * @return string
+     */
     public function getFormHtml()
     {
         return $this->getChildHtml('setForm');

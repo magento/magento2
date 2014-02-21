@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -30,7 +30,11 @@
 $orderAdminDate = $this->formatDate($_order->getCreatedAtDate(), 'medium', true);
 $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', true);
 ?>
+
+<?php /* the opening and closing divs of these two clearfixes are in app\code\core\Mage\Adminhtml\view\adminhtml\sales\order\invoice\create\form.phtml */?>
+
 <div class="clearfix">
+
     <div class="order-information">
         <?php /* Order Information */?>
         <div class="fieldset-wrapper">
@@ -101,12 +105,13 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                 <?php if($_order->getBaseCurrencyCode() != $_order->getOrderCurrencyCode()): ?>
                 <tr>
                     <th><?php echo __('%1 / %2 rate:', $_order->getOrderCurrencyCode(), $_order->getBaseCurrencyCode()) ?></th>
-                    <th><?php echo $_order->getBaseToOrderRate() ?></td>
+                    <th><?php echo $_order->getBaseToOrderRate() ?></th>
                 </tr>
                 <?php endif; ?>
             </table>
         </div>
     </div>
+
     <div class="order-account-information">
         <?php /* Account Information */?>
         <div class="fieldset-wrapper">
@@ -144,10 +149,11 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
             </table>
         </div>
     </div>
-<?php /* the opening and closing divs of these two clearfixes are in app\code\core\Mage\Adminhtml\view\adminhtml\sales\order\invoice\create\form.phtml */?>
+
 </div>
 
 <div class="clearfix">
+
     <div class="order-billing-address">
         <?php /* Billing Address */?>
         <div class="fieldset-wrapper">
@@ -160,6 +166,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
             <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
         </div>
     </div>
+
     <?php if (!$this->getOrder()->getIsVirtual()): ?>
     <div class="order-shipping-address">
         <?php /* Shipping Address */ ?>
@@ -175,3 +182,12 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
     </div>
 </div>
     <?php endif; ?>
+
+<?php
+/*
+    closing div of this opening div are in
+    app\code\Magento\Sales\view\adminhtml\order\invoice\view\form.phtml
+    or
+    app\code\Magento\Sales\view\adminhtml\order\view\tab\info.phtml
+*/
+?>

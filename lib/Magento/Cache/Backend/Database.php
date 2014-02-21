@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Cache
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,6 +68,9 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
         'store_data'          => true,
     );
 
+    /**
+     * @var \Zend_Db_Adapter_Abstract
+     */
     protected $_adapter = null;
 
     /**
@@ -195,11 +198,11 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Note : $data is always "string" (serialization is done by the
      * core not by the backend)
      *
-     * @param  string $data            Datas to cache
-     * @param  string $id              Cache id
-     * @param  array $tags             Array of strings, the cache record will be tagged by each string entry
-     * @param  int   $specificLifetime If != false, set a specific lifetime for this cache record (null => infinite lifetime)
-     * @return boolean true if no problem
+     * @param string $data            Datas to cache
+     * @param string $id              Cache id
+     * @param string[] $tags          Array of strings, the cache record will be tagged by each string entry
+     * @param int|bool $specificLifetime  If != false, set a specific lifetime for this cache record (null => infinite lifetime)
+     * @return bool true if no problem
      */
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
@@ -263,7 +266,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *                                               ($tags can be an array of strings or a single string)
      *
      * @param  string $mode Clean mode
-     * @param  array  $tags Array of tags
+     * @param  string[] $tags Array of tags
      * @return boolean true if no problem
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = array())
@@ -304,7 +307,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * Return an array of stored cache ids
      *
-     * @return array array of stored cache ids (string)
+     * @return string[] array of stored cache ids (string)
      */
     public function getIds()
     {
@@ -320,7 +323,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * Return an array of stored tags
      *
-     * @return array array of stored tags (string)
+     * @return string[] array of stored tags (string)
      */
     public function getTags()
     {
@@ -335,8 +338,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * In case of multiple tags, a logical AND is made between tags
      *
-     * @param array $tags array of tags
-     * @return array array of matching cache ids (string)
+     * @param string[] $tags array of tags
+     * @return string[] array of matching cache ids (string)
      */
     public function getIdsMatchingTags($tags = array())
     {
@@ -354,8 +357,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * In case of multiple tags, a logical OR is made between tags
      *
-     * @param array $tags array of tags
-     * @return array array of not matching cache ids (string)
+     * @param string[] $tags array of tags
+     * @return string[] array of not matching cache ids (string)
      */
     public function getIdsNotMatchingTags($tags = array())
     {
@@ -367,8 +370,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * In case of multiple tags, a logical AND is made between tags
      *
-     * @param array $tags array of tags
-     * @return array array of any matching cache ids (string)
+     * @param string[] $tags array of tags
+     * @return string[] array of any matching cache ids (string)
      */
     public function getIdsMatchingAnyTags($tags = array())
     {
@@ -398,7 +401,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * - mtime : timestamp of last modification time
      *
      * @param string $id cache id
-     * @return array array of metadatas (false if the cache id is not found)
+     * @return array|false array of metadatas (false if the cache id is not found)
      */
     public function getMetadatas($id)
     {
@@ -472,7 +475,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Save tags related to specific id
      *
      * @param string $id
-     * @param array $tags
+     * @param string[] $tags
      * @return bool
      */
     protected function _saveTags($id, $tags)
@@ -513,7 +516,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Remove cache data by tags with specified mode
      *
      * @param string $mode
-     * @param array $tags
+     * @param string[] $tags
      * @return bool
      */
     protected function _cleanByTags($mode, $tags)

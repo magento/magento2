@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Data
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,22 +33,25 @@
  */
 namespace Magento\Data\Form\Element;
 
-class Fieldset extends \Magento\Data\Form\Element\AbstractElement
+use Magento\Data\Form;
+use Magento\Escaper;
+
+class Fieldset extends AbstractElement
 {
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
         $data = array()
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
-        $this->_renderer = \Magento\Data\Form::getFieldsetRenderer();
+        $this->_renderer = Form::getFieldsetRenderer();
         $this->setType('fieldset');
         if (isset($data['advancedSection'])) {
             $this->setAdvancedLabel($data['advancedSection']);
@@ -76,7 +79,7 @@ class Fieldset extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Get Children element's array
      *
-     * @return array
+     * @return AbstractElement[]
      */
     public function getChildren()
     {
@@ -102,7 +105,7 @@ class Fieldset extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Get Basic elements' array
      *
-     * @return array
+     * @return AbstractElement[]
      */
     public function getBasicChildren()
     {
@@ -126,7 +129,7 @@ class Fieldset extends \Magento\Data\Form\Element\AbstractElement
     }
 
     /**
-     * Get Number of Bacic Children
+     * Get Number of Basic Children
      *
      * @return int
      */
@@ -179,7 +182,7 @@ class Fieldset extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Get SubFieldset
      *
-     * @return array
+     * @return AbstractElement[]
      */
     public function getSubFieldset()
     {
@@ -222,12 +225,12 @@ class Fieldset extends \Magento\Data\Form\Element\AbstractElement
      * @param string $type
      * @param array $config
      * @param boolean $after
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return AbstractElement
      */
     public function addField($elementId, $type, $config, $after = false, $isAdvanced = false)
     {
         $element = parent::addField($elementId, $type, $config, $after);
-        if ($renderer = \Magento\Data\Form::getFieldsetElementRenderer()) {
+        if ($renderer = Form::getFieldsetElementRenderer()) {
             $element->setRenderer($renderer);
         }
         $element->setAdvanced($isAdvanced);
@@ -237,7 +240,7 @@ class Fieldset extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Return elements as html string
      *
-     * @param array $elements
+     * @param AbstractElement[] $elements
      * @return string
      */
     protected function _elementsToHtml($elements)

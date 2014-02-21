@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,40 +35,50 @@ class Service
     const SCOPE_SEPARATOR = '::';
 
     /**
+     * Application state
+     *
      * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
+     * Design
+     *
      * @var \Magento\View\DesignInterface
      */
     private $_design;
 
     /**
+     * Theme factory
+     *
      * @var \Magento\View\Design\Theme\FlyweightFactory
      */
     protected $themeFactory;
 
     /**
+     * Pub directory
+     *
      * @var string
      */
     protected $_pubDirectory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\State $appState
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\State $appState,
         \Magento\View\DesignInterface $design,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_appState = $appState;
         $this->_design = $design;
-        $this->_pubDirectory = $filesystem->getPath(\Magento\Filesystem::STATIC_VIEW);
+        $this->_pubDirectory = $filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR);
         $this->themeFactory = $themeFactory;
     }
 
@@ -134,7 +144,7 @@ class Service
     /**
      * Update required parameters with default values if custom not specified
      *
-     * @param array $params
+     * @param array &$params
      * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

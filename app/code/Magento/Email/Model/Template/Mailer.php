@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Email
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Email\Model\Template;
+
+use Magento\Email\Model\Info;
 
 /**
  * Email Template Mailer Model
@@ -31,15 +34,13 @@
  * @package     Magento_Email
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Email\Model\Template;
-
 class Mailer extends \Magento\Object
 {
     /**
      * List of email infos
-     * @see \Magento\Email\Model\Info
      *
      * @var array
+     * @see Info
      */
     protected $_emailInfos = array();
 
@@ -65,10 +66,10 @@ class Mailer extends \Magento\Object
     /**
      * Add new email info to corresponding list
      *
-     * @param \Magento\Email\Model\Info $emailInfo
-     * @return \Magento\Email\Model\Template\Mailer
+     * @param Info $emailInfo
+     * @return $this
      */
-    public function addEmailInfo(\Magento\Email\Model\Info $emailInfo)
+    public function addEmailInfo(Info $emailInfo)
     {
         $this->_emailInfos[] = $emailInfo;
         return $this;
@@ -78,7 +79,7 @@ class Mailer extends \Magento\Object
      * Send all emails from email list
      * @see self::$_emailInfos
      *
-     * @return \Magento\Email\Model\Template\Mailer
+     * @return $this
      */
     public function send()
     {
@@ -112,7 +113,7 @@ class Mailer extends \Magento\Object
      * Set email sender
      *
      * @param string|array $sender
-     * @return \Magento\Email\Model\Template\Mailer
+     * @return $this
      */
     public function setSender($sender)
     {
@@ -133,7 +134,7 @@ class Mailer extends \Magento\Object
      * Set store id
      *
      * @param int $storeId
-     * @return \Magento\Email\Model\Template\Mailer
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -154,7 +155,7 @@ class Mailer extends \Magento\Object
      * Set template id
      *
      * @param int $templateId
-     * @return \Magento\Email\Model\Template\Mailer
+     * @return $this
      */
     public function setTemplateId($templateId)
     {
@@ -175,7 +176,7 @@ class Mailer extends \Magento\Object
      * Set template parameters
      *
      * @param array $templateParams
-     * @return \Magento\Email\Model\Template\Mailer
+     * @return $this
      */
     public function setTemplateParams(array $templateParams)
     {

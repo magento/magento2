@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Shipping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Shipping\Model\Tracking\Result;
 
 /**
  * Fields:
@@ -46,11 +46,13 @@
  * -carrier: usps
  * -tracksummary: Your item was delivered at 6:50 am on February 6 in Los Angeles CA 90064
  */
-namespace Magento\Shipping\Model\Tracking\Result;
-
 class Status extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
 {
-    public function getAllData(){
+    /**
+     * @return array
+     */
+    public function getAllData()
+    {
         return $this->_data;
     }
 }

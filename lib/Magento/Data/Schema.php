@@ -3,13 +3,17 @@
  *
  * @category    Magento
  * @package     Magento_Data
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Data;
 
 class Schema extends \Magento\Object
 {
+    /**
+     * @param mixed $schema
+     * @return void
+     */
     public function load($schema)
     {
         if (is_array($schema)) {
@@ -22,9 +26,13 @@ class Schema extends \Magento\Object
         }
     }
 
+    /**
+     * @param mixed $rawData
+     * @return DataArray
+     */
     public function extract($rawData)
     {
         $elements = $rawData;
-        return new \Magento\Data\DataArray($elements);
+        return new DataArray($elements);
     }
 }

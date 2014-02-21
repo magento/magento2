@@ -20,9 +20,11 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
+use Magento\Connect\Channel\VO;
 
 /**
  * Class to work with remote REST interface
@@ -31,9 +33,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Connect;
-
 class Rest
 {
 
@@ -50,7 +49,6 @@ class Rest
      */
     protected $_loader = null;
 
-
     /**
      * XML parser
      * @var \Magento\Xml\Parser
@@ -64,14 +62,16 @@ class Rest
     protected $_chanUri = '';
 
     /**
-    * Protocol HTTP or FTP
-    *
-    * @var string http or ftp
-    */
+     * Protocol HTTP or FTP
+     *
+     * @var string http or ftp
+     */
     protected $_protocol = '';
 
     /**
      * Constructor
+     *
+     * @param string $protocol
      */
     public function __construct($protocol="http")
     {
@@ -89,7 +89,7 @@ class Rest
      * Set channel info
      *
      * @param string $uri
-     * @param string $name
+     * @return void
      */
     public function setChannel($uri)
     {
@@ -124,7 +124,8 @@ class Rest
 
     /**
      * Load URI response
-     * @param string $uri
+     * @param string $uriSuffix
+     * @return false|string
      */
     protected function loadChannelUri($uriSuffix)
     {
@@ -140,7 +141,9 @@ class Rest
 
     /**
      * Get channels list of URI
-     * @return array
+     *
+     * @return VO
+     * @throws \Exception
      */
     public function getChannelInfo()
     {
@@ -153,7 +156,7 @@ class Rest
         $out = $parser->loadXML($out)->xmlToArray();
 
         // TODO: add channel validator
-        $vo = new \Magento\Connect\Channel\VO();
+        $vo = new VO();
         $vo->fromArray($out['channel']);
         if(!$vo->validate()) {
             throw new \Exception("Invalid channel.xml file");
@@ -164,7 +167,8 @@ class Rest
 
     /**
      * Get packages list of channel
-     * @return array
+     *
+     * @return array|false
      */
     public function getPackages()
     {
@@ -189,7 +193,9 @@ class Rest
         return array();
     }
 
-
+    /**
+     * @return array|false
+     */
     public function getPackagesHashed()
     {
         $out = $this->loadChannelUri(self::PACKAGES_XML);
@@ -233,8 +239,8 @@ class Rest
 
     /**
      * Stub
-     * @param $n
-     * @return unknown_type
+     * @param string $n
+     * @return string
      */
     public function escapePackageName($n)
     {
@@ -244,6 +250,7 @@ class Rest
     /**
      * Get releases list of package on current channel
      * @param string $package package name
+     * @return false|array
      */
     public function getReleases($package)
     {
@@ -267,7 +274,7 @@ class Rest
 
     /**
      * Sort releases
-     * @param array $releases
+     * @param array &$releases
      * @return void
      */
     public function sortReleases(array &$releases)
@@ -279,19 +286,19 @@ class Rest
     /**
      * Sort releases callback
      * @param string $a
-     * @param srting $b
+     * @param string $b
      * @return int
      */
     protected function sortReleasesCallback($a, $b)
     {
-        return version_compare($a['v'],$b['v']);
+        return version_compare($a['v'], $b['v']);
     }
 
     /**
      * Get package info (package.xml)
      *
-     * @param $package
-     * @return unknown_type
+     * @param string $package
+     * @return \Magento\Connect\Package
      */
     public function getPackageInfo($package)
     {
@@ -304,8 +311,8 @@ class Rest
 
     /**
      *
-     * @param $package
-     * @param $version
+     * @param string $package
+     * @param string $version
      * @return \Magento\Connect\Package
      */
     public function getPackageReleaseInfo($package, $version)
@@ -319,8 +326,12 @@ class Rest
 
     /**
      * Get package archive file of release
+     *
      * @param string $package package name
      * @param string $version version
+     * @param string $targetFile
+     * @return true|void
+     * @throws \Exception
      */
     public function downloadPackageFileOfRelease($package, $version, $targetFile)
     {
@@ -354,8 +365,15 @@ class Rest
         return true;
     }
 
+    /**
+     * @var array
+     */
     protected $states = array('b'=>'beta', 'd'=>'dev', 's'=>'stable', 'a'=>'alpha');
 
+    /**
+     * @param string $s
+     * @return string
+     */
     public function shortStateToLong($s)
     {
         return isset($this->states[$s]) ? $this->states[$s] : 'dev';

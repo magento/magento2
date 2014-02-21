@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Shell
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,6 +29,16 @@ namespace Magento;
 
 class ShellTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\OSInfo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $osInfo;
+
+    public function setUp()
+    {
+        $this->osInfo = $this->getMockBuilder('Magento\OSInfo')->disableOriginalConstructor()->getMock();
+    }
+
     /**
      * Test that a command with input arguments returns an expected result
      *
@@ -52,7 +62,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($command, $commandArgs, $expectedResult)
     {
-        $this->_testExecuteCommand(new \Magento\Shell(), $command, $commandArgs, $expectedResult);
+        $this->_testExecuteCommand(new \Magento\Shell($this->osInfo), $command, $commandArgs, $expectedResult);
     }
 
     /**
@@ -74,7 +84,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
                 ->with($expectedLogMessage, \Zend_Log::INFO)
             ;
         }
-        $this->_testExecuteCommand(new \Magento\Shell($logger), $command, $commandArgs, $expectedResult);
+        $this->_testExecuteCommand(new \Magento\Shell($this->osInfo, $logger), $command, $commandArgs, $expectedResult);
     }
 
     public function executeDataProvider()
@@ -108,7 +118,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteFailure()
     {
-        $shell = new \Magento\Shell();
+        $shell = new \Magento\Shell($this->osInfo);
         $shell->execute('non_existing_command');
     }
 

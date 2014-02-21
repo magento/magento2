@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,17 +36,31 @@ class CssResolver
         = '#url\s*\(\s*(?(?=\'|").)(?!http\://|https\://|/|data\:)(.+?)(?:[\#\?].*?|[\'"])?\s*\)#';
 
     /**
-     * @var \Magento\Filesystem
+     * File system
+     *
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * View file system
+     *
+     * @var \Magento\View\FileSystem
+     */
+    protected $viewFileSystem;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\View\FileSystem $viewFileSystem
      */
     public function __construct(
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem,
+        \Magento\View\FileSystem $viewFileSystem
     ) {
         $this->filesystem = $filesystem;
+        $this->viewFileSystem = $viewFileSystem;
     }
 
     /**
@@ -58,10 +72,12 @@ class CssResolver
      * @param string $originalPath
      * @param string $newPath
      * @param callable|null $cbRelUrlToPublicPath Optional custom callback to resolve relative urls to file paths
-     * @return mixed
+     * @return string
      */
     public function replaceCssRelativeUrls($cssContent, $originalPath, $newPath, $cbRelUrlToPublicPath = null)
     {
+        $originalPath = $this->viewFileSystem->normalizePath($originalPath);
+        $newPath = $this->viewFileSystem->normalizePath($newPath);
         $relativeUrls = $this->_extractCssRelativeUrls($cssContent);
         foreach ($relativeUrls as $urlNotation => $originalRelativeUrl) {
             if ($cbRelUrlToPublicPath) {
@@ -69,39 +85,12 @@ class CssResolver
             } else {
                 $filePath = dirname($originalPath) . '/' . $originalRelativeUrl;
             }
-            $filePath = $this->_normalizePath(str_replace('\\', '/', $filePath));
-            $relativePath = $this->_getFileRelativePath(
-                $this->_normalizePath(str_replace('\\', '/', $newPath)), $filePath
-            );
+            $filePath = $this->viewFileSystem->normalizePath(str_replace('\\', '/', $filePath));
+            $relativePath = $this->_getFileRelativePath(str_replace('\\', '/', $newPath), $filePath);
             $urlNotationNew = str_replace($originalRelativeUrl, $relativePath, $urlNotation);
             $cssContent = str_replace($urlNotation, $urlNotationNew, $cssContent);
         }
         return $cssContent;
-    }
-
-    /**
-     * Remove unmeaning path chunks from path
-     *
-     * @param string $path
-     * @return string
-     */
-    protected function _normalizePath($path)
-    {
-        $parts = explode('/', $path);
-        $result = array();
-
-        foreach ($parts as $part) {
-            if ('..' === $part) {
-                if (!count($result) || ($result[count($result) - 1] == '..')) {
-                    $result[] = $part;
-                } else {
-                    array_pop($result);
-                }
-            } else if ('.' !== $part) {
-                $result[] = $part;
-            }
-        }
-        return implode('/', $result);
     }
 
     /**
@@ -139,7 +128,7 @@ class CssResolver
          * Thus, calculating relative path is not possible in general case. So we just assume,
          * that urls follow the structure of directory paths.
          */
-        $topDir = $this->filesystem->getPath(\Magento\Filesystem::ROOT);
+        $topDir = $this->filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR);
         if (strpos($file, $topDir) !== 0 || strpos($referencedFile, $topDir) !== 0) {
             throw new \Magento\Exception('Offset can be calculated for internal resources only.');
         }

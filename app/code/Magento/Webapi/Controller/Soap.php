@@ -20,15 +20,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller;
 
-use Magento\Webapi\Exception as WebapiException;
 use Magento\Service\AuthorizationException;
+use Magento\Webapi\Exception as WebapiException;
 
 /**
+ * TODO: Consider warnings suppression removal
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Soap implements \Magento\App\FrontControllerInterface
@@ -49,10 +51,10 @@ class Soap implements \Magento\App\FrontControllerInterface
     /** @var \Magento\Webapi\Controller\Soap\Request */
     protected $_request;
 
-    /** @var \Magento\Webapi\Controller\Response */
+    /** @var Response */
     protected $_response;
 
-    /** @var \Magento\Webapi\Controller\ErrorProcessor */
+    /** @var ErrorProcessor */
     protected $_errorProcessor;
 
     /** @var \Magento\App\State */
@@ -68,22 +70,22 @@ class Soap implements \Magento\App\FrontControllerInterface
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Controller\Soap\Request $request
-     * @param \Magento\Webapi\Controller\Response $response
+     * @param Response $response
      * @param \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator
      * @param \Magento\Webapi\Model\Soap\Server $soapServer
-     * @param \Magento\Webapi\Controller\ErrorProcessor $errorProcessor
+     * @param ErrorProcessor $errorProcessor
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\AppInterface $application
+     * @param \Magento\AppInterface $application
      * @param \Magento\Oauth\OauthInterface $oauthService
      */
     public function __construct(
         \Magento\Webapi\Controller\Soap\Request $request,
-        \Magento\Webapi\Controller\Response $response,
+        Response $response,
         \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator,
         \Magento\Webapi\Model\Soap\Server $soapServer,
-        \Magento\Webapi\Controller\ErrorProcessor $errorProcessor,
+        ErrorProcessor $errorProcessor,
         \Magento\App\State $appState,
-        \Magento\Core\Model\AppInterface $application,
+        \Magento\AppInterface $application,
         \Magento\Oauth\OauthInterface $oauthService
     ) {
         $this->_request = $request;
@@ -94,16 +96,6 @@ class Soap implements \Magento\App\FrontControllerInterface
         $this->_appState = $appState;
         $this->_application = $application;
         $this->_oauthService = $oauthService;
-    }
-
-    /**
-     * Initialize front controller
-     *
-     * @return \Magento\Webapi\Controller\Soap
-     */
-    public function init()
-    {
-        return $this;
     }
 
     /**
@@ -125,13 +117,12 @@ class Soap implements \Magento\App\FrontControllerInterface
                     $this->_soapServer->generateUri()
                 );
                 $this->_setResponseContentType(self::CONTENT_TYPE_WSDL_REQUEST);
+                $this->_setResponseBody($responseBody);
             } else {
                 $consumerId = $this->_oauthService->validateAccessToken($this->_getAccessToken());
                 $this->_request->setConsumerId($consumerId);
-                $responseBody = $this->_soapServer->handle();
-                $this->_setResponseContentType(self::CONTENT_TYPE_SOAP_CALL);
+                $this->_soapServer->handle();
             }
-            $this->_setResponseBody($responseBody);
         } catch (\Exception $e) {
             $this->_prepareErrorResponse($e);
         }
@@ -170,6 +161,7 @@ class Soap implements \Magento\App\FrontControllerInterface
      * Set body and status code to response using information extracted from provided exception.
      *
      * @param \Exception $exception
+     * @return void
      */
     protected function _prepareErrorResponse($exception)
     {
@@ -178,7 +170,7 @@ class Soap implements \Magento\App\FrontControllerInterface
             $httpCode = $maskedException->getHttpCode();
             $contentType = self::CONTENT_TYPE_WSDL_REQUEST;
         } else {
-            $httpCode = \Magento\Webapi\Controller\Response::HTTP_OK;
+            $httpCode = Response::HTTP_OK;
             $contentType = self::CONTENT_TYPE_SOAP_CALL;
         }
         $this->_setResponseContentType($contentType);
@@ -192,7 +184,7 @@ class Soap implements \Magento\App\FrontControllerInterface
      * Set content type to response object.
      *
      * @param string $contentType
-     * @return \Magento\Webapi\Controller\Soap
+     * @return $this
      */
     protected function _setResponseContentType($contentType = 'text/xml')
     {
@@ -205,7 +197,7 @@ class Soap implements \Magento\App\FrontControllerInterface
      * Replace WSDL xml encoding from config, if present, else default to UTF-8 and set it to the response object.
      *
      * @param string $responseBody
-     * @return \Magento\Webapi\Controller\Soap
+     * @return $this
      */
     protected function _setResponseBody($responseBody)
     {

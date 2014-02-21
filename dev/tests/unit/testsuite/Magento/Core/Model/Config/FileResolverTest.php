@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Config;
@@ -35,7 +35,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * Filesystem
      *
-     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
@@ -60,7 +60,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $this->filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryRead'), array(), '', false);
         $this->moduleReader = $this->getMock(
             'Magento\Module\Dir\Reader',
             array(),
@@ -95,11 +95,11 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         );
         $directory->expects($this->once())
             ->method('search')
-            ->with('#' . preg_quote($filename) . '$#')
+            ->with(sprintf('{%1$s,*/%1$s}', $filename))
             ->will($this->returnValue($fileList));
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::CONFIG)
+            ->with(\Magento\App\Filesystem::CONFIG_DIR)
             ->will($this->returnValue($directory));
         $this->iteratorFactory->expects($this->once())
             ->method('create')

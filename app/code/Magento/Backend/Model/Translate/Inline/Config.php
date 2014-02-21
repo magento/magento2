@@ -20,16 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Translate\Inline;
 
 /**
  * Backend Inline Translation config
  */
-namespace Magento\Backend\Model\Translate\Inline;
-
-class Config implements \Magento\Core\Model\Translate\Inline\ConfigInterface
+class Config implements \Magento\Translate\Inline\ConfigInterface
 {
     /**
      * @var \Magento\Backend\App\ConfigInterface
@@ -37,21 +36,35 @@ class Config implements \Magento\Core\Model\Translate\Inline\ConfigInterface
     protected $_config;
 
     /**
-     * @param \Magento\Backend\App\ConfigInterface $config
+     * @var \Magento\Core\Helper\Data
      */
-    public function __construct(\Magento\Backend\App\ConfigInterface $config)
-    {
+    protected $_helper;
+
+    /**
+     * @param \Magento\Backend\App\ConfigInterface $config
+     * @param \Magento\Core\Helper\Data $helper
+     */
+    public function __construct(
+        \Magento\Backend\App\ConfigInterface $config,
+        \Magento\Core\Helper\Data $helper
+    ) {
         $this->_config = $config;
+        $this->_helper = $helper;
     }
 
     /**
-     * Check whether inline translation is enabled
-     *
-     * @param int|null $store
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isActive($store = null)
+    public function isActive($scope = null)
     {
-        return $this->_config->getFlag('dev/translate_inline/active_admin');
+        return $this->_config->isSetFlag('dev/translate_inline/active_admin');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDevAllowed($scope = null)
+    {
+        return $this->_helper->isDevAllowed($scope);
     }
 }

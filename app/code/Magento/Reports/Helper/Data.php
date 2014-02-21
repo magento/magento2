@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,9 @@
  * Reports data helper
  */
 namespace Magento\Reports\Helper;
+
+use Magento\Data\Collection;
+use Magento\Stdlib\DateTime;
 
 class Data extends \Magento\App\Helper\AbstractHelper
 {
@@ -63,7 +66,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getIntervals($from, $to, $period = self::REPORT_PERIOD_TYPE_DAY)
     {
         $intervals = array();
-        if (!$from && !$to){
+        if (!$from && !$to) {
             return $intervals;
         }
 
@@ -74,14 +77,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
         }
 
         if ($period == self::REPORT_PERIOD_TYPE_MONTH) {
-            $dateStart = new \Zend_Date(date("Y-m", $start->getTimestamp()), \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $dateStart = new \Zend_Date(date("Y-m", $start->getTimestamp()), DateTime::DATE_INTERNAL_FORMAT);
         }
 
         if ($period == self::REPORT_PERIOD_TYPE_YEAR) {
-            $dateStart = new \Zend_Date(date("Y", $start->getTimestamp()), \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $dateStart = new \Zend_Date(date("Y", $start->getTimestamp()), DateTime::DATE_INTERNAL_FORMAT);
         }
 
-        $dateEnd = new \Zend_Date($to, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+        $dateEnd = new \Zend_Date($to, DateTime::DATE_INTERNAL_FORMAT);
 
         while ($dateStart->compare($dateEnd) <= 0) {
             switch ($period) {
@@ -103,6 +106,15 @@ class Data extends \Magento\App\Helper\AbstractHelper
         return  $intervals;
     }
 
+    /**
+     * Add items to interval collection
+     *
+     * @param Collection $collection
+     * @param string $from
+     * @param string $to
+     * @param string $periodType
+     * @return void
+     */
     public function prepareIntervalsCollection($collection, $from, $to, $periodType = self::REPORT_PERIOD_TYPE_DAY)
     {
         $intervals = $this->getIntervals($from, $to, $periodType);

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Captcha
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,7 @@ namespace Magento\Captcha\Block\Adminhtml\Captcha;
 class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
 {
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
@@ -48,14 +48,14 @@ class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Captcha\Helper\Data $captchaData
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\App\ConfigInterface $config
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Captcha\Helper\Data $captchaData,
-        \Magento\Backend\Model\Url $url,
+        \Magento\Backend\Model\UrlInterface $url,
         \Magento\Backend\App\ConfigInterface $config,
         array $data = array()
     ) {
@@ -73,7 +73,7 @@ class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
     public function getRefreshUrl()
     {
         return $this->_url->getUrl('adminhtml/refresh/refresh', array(
-            '_secure' => $this->_config->getFlag('web/secure/use_in_adminhtml'),
+            '_secure' => $this->_config->isSetFlag('web/secure/use_in_adminhtml'),
             '_nosecret' => true
         ));
     }

@@ -20,18 +20,19 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Helper;
+
+use Magento\App\Helper\AbstractHelper;
 
 /**
  * Catalog image helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Helper;
-
-class Image extends \Magento\App\Helper\AbstractHelper
+class Image extends AbstractHelper
 {
     /**
      * Current model
@@ -150,7 +151,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
     /**
      * Reset all previous data
      *
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function _reset()
     {
@@ -172,8 +173,8 @@ class Image extends \Magento\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $attributeName
-     * @param mixed $imageFile
-     * @return \Magento\Catalog\Helper\Image
+     * @param string|null $imageFile
+     * @return $this
      */
     public function init(\Magento\Catalog\Model\Product $product, $attributeName, $imageFile=null)
     {
@@ -211,7 +212,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * @see \Magento\Catalog\Model\Product\Image
      * @param int $width
      * @param int $height
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function resize($width, $height = null)
     {
@@ -224,7 +225,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set image quality, values in percentage from 0 to 100
      *
      * @param int $quality
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function setQuality($quality)
     {
@@ -239,7 +240,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function keepAspectRatio($flag)
     {
@@ -256,8 +257,8 @@ class Image extends \Magento\App\Helper\AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
-     * @param array $position
-     * @return \Magento\Catalog\Helper\Image
+     * @param string[] $position
+     * @return $this
      */
     public function keepFrame($flag, $position = array('center', 'middle'))
     {
@@ -275,7 +276,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
      * @param int $alphaOpacity
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function keepTransparency($flag, $alphaOpacity = null)
     {
@@ -289,7 +290,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * It is false by default
      *
      * @param bool $flag
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function constrainOnly($flag)
     {
@@ -305,7 +306,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param array $colorRGB
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function backgroundColor($colorRGB)
     {
@@ -321,7 +322,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Rotate image into specified angle
      *
      * @param int $angle
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function rotate($angle)
     {
@@ -339,7 +340,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * @param string $position
      * @param string $size
      * @param int $imageOpacity
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function watermark($fileName, $position, $size=null, $imageOpacity=null)
     {
@@ -418,7 +419,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set current Image model
      *
      * @param \Magento\Catalog\Model\Product\Image $model
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function _setModel($model)
     {
@@ -440,7 +441,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set Rotation Angle
      *
      * @param int $angle
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setAngle($angle)
     {
@@ -462,7 +463,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set watermark file name
      *
      * @param string $watermark
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setWatermark($watermark)
     {
@@ -485,7 +486,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set watermark position
      *
      * @param string $position
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setWatermarkPosition($position)
     {
@@ -509,7 +510,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * param size in format 100x200
      *
      * @param string $size
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function setWatermarkSize($size)
     {
@@ -532,7 +533,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set watermark image opacity
      *
      * @param int $imageOpacity
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -559,7 +560,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set current Product
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setProduct($product)
     {
@@ -581,7 +582,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set Image file
      *
      * @param string $file
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setImageFile($file)
     {
@@ -641,7 +642,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Retrieve Original image size as array
      * 0 - width, 1 - height
      *
-     * @return array
+     * @return int[]
      */
     public function getOriginalSizeArray()
     {

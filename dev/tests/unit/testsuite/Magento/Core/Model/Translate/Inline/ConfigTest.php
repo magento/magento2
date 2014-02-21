@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Translate\Inline;
@@ -38,7 +38,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getConfigFlag')
             ->with($this->equalTo('dev/translate_inline/active'), $this->equalTo($store))
             ->will($this->returnValue($result));
-        $config = new Config($coreStoreConfig);
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $config = $objectManager->getObject(
+            '\Magento\Core\Model\Translate\Inline\Config',
+            array(
+                'coreStoreConfig' => $coreStoreConfig
+            )
+        );
         $this->assertEquals($result, $config->isActive($store));
     }
 }

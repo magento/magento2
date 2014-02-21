@@ -1,6 +1,6 @@
 <?php
 /**
- * Admihtml DirtectPost Payment Controller
+ * Adminhtml DirectPost Payment Controller
  *
  * Magento
  *
@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost;
@@ -82,6 +82,7 @@ class Payment
     /**
      * Send request to authorize.net
      *
+     * @return void
      */
     public function placeAction()
     {
@@ -130,18 +131,18 @@ class Payment
                     $session->addCheckoutOrderIncrementId($order->getIncrementId());
                     $session->setLastOrderIncrementId($order->getIncrementId());
 
-                    $requestToPaygate = $payment->getMethodInstance()->generateRequestFromOrder($order);
-                    $requestToPaygate->setControllerActionName($controller);
-                    $requestToPaygate->setOrderSendConfirmation($sendConfirmationFlag);
-                    $requestToPaygate->setStoreId($this->_getOrderCreateModel()->getQuote()->getStoreId());
+                    $requestToAuthorizenet = $payment->getMethodInstance()->generateRequestFromOrder($order);
+                    $requestToAuthorizenet->setControllerActionName($controller);
+                    $requestToAuthorizenet->setOrderSendConfirmation($sendConfirmationFlag);
+                    $requestToAuthorizenet->setStoreId($this->_getOrderCreateModel()->getQuote()->getStoreId());
 
-                    $adminUrl = $this->_objectManager->get('Magento\Backend\Model\Url');
+                    $adminUrl = $this->_objectManager->get('Magento\Backend\Model\UrlInterface');
                     if ($adminUrl->useSecretKey()) {
-                        $requestToPaygate->setKey(
+                        $requestToAuthorizenet->setKey(
                             $adminUrl->getSecretKey('adminhtml', 'authorizenet_directpost_payment', 'redirect')
                         );
                     }
-                    $result['directpost'] = array('fields' => $requestToPaygate->getData());
+                    $result['directpost'] = array('fields' => $requestToAuthorizenet->getData());
                 }
 
                 $result['success'] = 1;
@@ -161,7 +162,7 @@ class Payment
                 $result['success'] = 0;
                 $result['error'] = 1;
                 $result['redirect'] = $this->_objectManager
-                    ->get('Magento\Backend\Model\Url')
+                    ->get('Magento\Backend\Model\UrlInterface')
                     ->getUrl('sales/order_create/');
             }
 
@@ -178,6 +179,7 @@ class Payment
     /**
      * Retrieve params and put javascript into iframe
      *
+     * @return void
      */
     public function redirectAction()
     {
@@ -222,6 +224,7 @@ class Payment
     /**
      * Return order quote by ajax
      *
+     * @return void
      */
     public function returnQuoteAction()
     {
@@ -235,6 +238,7 @@ class Payment
      *
      * @param bool $cancelOrder
      * @param string $errorMsg
+     * @return void
      */
     protected function _returnQuote($cancelOrder = false, $errorMsg = '')
     {

@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource;
 
 /**
  * Translation resource model
@@ -32,9 +32,7 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource;
-
-class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Magento\Translate\ResourceInterface
 {
     /**
      * @var \Magento\App\State
@@ -64,7 +62,6 @@ class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Define main table
-     *
      */
     protected function _construct()
     {
@@ -75,7 +72,7 @@ class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve translation array for store / locale code
      *
      * @param int $storeId
-     * @param string|Zend_Locale $locale
+     * @param string $locale
      * @return array
      */
     public function getTranslationArray($storeId = null, $locale = null)
@@ -111,7 +108,7 @@ class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve translations array by strings
      *
      * @param array $strings
-     * @param int_type $storeId
+     * @param int|null $storeId
      * @return array
      */
     public function getTranslationArrayByStrings(array $strings, $storeId = null)

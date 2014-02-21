@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GoogleCheckout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,7 +36,7 @@ require_once('googlecheckout/googlerequest.php');
 abstract class AbstractXml extends \Magento\Object
 {
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translator;
 
@@ -54,13 +54,13 @@ abstract class AbstractXml extends \Magento\Object
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\TranslateInterface $translator
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param array $data
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Translate $translator,
+        \Magento\TranslateInterface $translator,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         array $data = array()
     ) {
@@ -114,7 +114,7 @@ abstract class AbstractXml extends \Magento\Object
     public function getCurrency()
     {
         if (!$this->hasData('currency')) {
-            $this->setData('currency', $this->objectManager->get('Magento\Core\Mode\StoreManager')->getStore()->getBaseCurrencyCode());
+            $this->setData('currency', $this->objectManager->get('Magento\Core\Model\StoreManager')->getStore()->getBaseCurrencyCode());
             //$this->setData('currency', $this->getLocale()=='en_US' ? 'USD' : 'GBP');
         }
         return $this->getData('currency');
@@ -240,7 +240,7 @@ abstract class AbstractXml extends \Magento\Object
 
     protected function _getCallbackUrl()
     {
-        return $this->objectManager->create('Magento\Core\Model\Url')->getUrl(
+        return $this->objectManager->create('Magento\UrlInterface')->getUrl(
             'googlecheckout/api',
             array('_forced_secure'=>$this->_coreStoreConfig->getConfig('google/checkout/use_secure_callback_url',$this->getStoreId()))
         );
@@ -257,7 +257,7 @@ abstract class AbstractXml extends \Magento\Object
     {
         if ($quote->getQuoteCurrencyCode() != $quote->getBaseCurrencyCode()) {
             $amount = $amount * $quote->getStoreToQuoteRate();
-            $amount = $this->objectManager->get('Magento\Core\Mode\StoreManager')->getStore()->roundPrice($amount);
+            $amount = $this->objectManager->get('Magento\Core\Model\StoreManager')->getStore()->roundPrice($amount);
         }
         return $amount;
     }

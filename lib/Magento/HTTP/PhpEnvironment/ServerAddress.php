@@ -20,11 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\HTTP\PhpEnvironment;
+
+use \Magento\App\RequestInterface;
 
 /**
  * Library for working with server ip address
@@ -34,12 +36,15 @@ class ServerAddress
     /**
      * Request object
      *
-     * @var \Magento\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
+    /**
+     * @param RequestInterface $httpRequest
+     */
     public function __construct(
-        \Magento\App\RequestInterface $httpRequest
+        RequestInterface $httpRequest
     ) {
         $this->request = $httpRequest;
     }

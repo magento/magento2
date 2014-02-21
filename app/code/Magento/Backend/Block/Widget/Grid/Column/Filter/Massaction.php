@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Massaction grid column filter
@@ -31,11 +32,11 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
-class Massaction
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Checkbox
+class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Checkbox
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getCondition()
     {
         if ($this->getValue()) {

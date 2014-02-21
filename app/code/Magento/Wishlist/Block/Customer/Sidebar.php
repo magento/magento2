@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Wishlist
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,14 +43,14 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function getTitle()
     {
-        return __('My Wish List <small>(%1)</small>', $this->getItemCount());
+        return __('My Wish List');
     }
 
     /**
      * Add sidebar conditions to collection
      *
      * @param  \Magento\Wishlist\Model\Resource\Item\Collection $collection
-     * @return \Magento\Wishlist\Block\Customer\Wishlist
+     * @return $this
      */
     protected function _prepareCollection($collection)
     {

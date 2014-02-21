@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -32,7 +32,7 @@
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="js-matchmedia-js">
             <arguments>
-                <argument name="file" xsi:type="string">js/matchMedia.js</argument>
+                <argument name="file" xsi:type="string">matchMedia.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="js-responsive-js">
@@ -42,7 +42,7 @@
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="js-head-js">
             <arguments>
-                <argument name="file" xsi:type="string">js/head.js</argument>
+                <argument name="file" xsi:type="string">headjs/head.min.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="js-jquery-dropdowns-js">
@@ -67,7 +67,7 @@
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="js-selectivizr-js">
             <arguments>
-                <argument name="file" xsi:type="string">js/selectivizr.js</argument>
+                <argument name="file" xsi:type="string">selectivizr.js</argument>
                 <argument name="properties" xsi:type="array">
                     <item name="ie_condition" xsi:type="string">lt IE 9</item>
                 </argument>

@@ -20,26 +20,28 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Sales\Block\Order;
 
 class Comments extends \Magento\View\Element\Template
 {
+
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\ResourceFactory $resourceFactory
-     * @param array $data
+     * @var \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory
      */
-    public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Sales\Model\ResourceFactory $resourceFactory,
-        array $data = array()
-    ) {
-        $this->_resourceFactory = $resourceFactory;
-        parent::__construct($context, $data);
-    }
+    protected $_invoiceCollectionFactory;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory
+     */
+    protected $_memoCollectionFactory;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory
+     */
+    protected $_shipmentCollectionFactory;
 
     /**
      * Current entity (model instance) with getCommentsCollection() method
@@ -54,6 +56,26 @@ class Comments extends \Magento\View\Element\Template
      * @var \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
      */
     protected $_commentCollection;
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $invoiceCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $invoiceCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_invoiceCollectionFactory = $invoiceCollectionFactory;
+        $this->_memoCollectionFactory = $memoCollectionFactory;
+        $this->_shipmentCollectionFactory = $shipmentCollectionFactory;
+    }
 
     /**
      * Sets comments parent model instance
@@ -89,16 +111,15 @@ class Comments extends \Magento\View\Element\Template
         if (is_null($this->_commentCollection)) {
             $entity = $this->getEntity();
             if ($entity instanceof \Magento\Sales\Model\Order\Invoice) {
-                $collectionClass = 'Magento\Sales\Model\Resource\Order\Invoice\Comment\Collection';
+                $this->_commentCollection = $this->_invoiceCollectionFactory->create();
             } else if ($entity instanceof \Magento\Sales\Model\Order\Creditmemo) {
-                $collectionClass = 'Magento\Sales\Model\Resource\Order\Creditmemo\Comment\Collection';
+                $this->_commentCollection = $this->_memoCollectionFactory->create();
             } else if ($entity instanceof \Magento\Sales\Model\Order\Shipment) {
-                $collectionClass = 'Magento\Sales\Model\Resource\Order\Shipment\Comment\Collection';
+                $this->_commentCollection = $this->_shipmentCollectionFactory->create();
             } else {
                 throw new \Magento\Core\Exception(__('We found an invalid entity model.'));
             }
 
-            $this->_commentCollection = $this->_resourceFactory->create($collectionClass);
             $this->_commentCollection->setParentFilter($entity)
                ->setCreatedAtOrder()
                ->addVisibleOnFrontFilter();

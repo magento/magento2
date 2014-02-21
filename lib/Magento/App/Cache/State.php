@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App\Cache;
@@ -76,6 +76,7 @@ class State implements \Magento\App\Cache\StateInterface
      * Load statuses (enabled/disabled) of cache types
      *
      * @param bool $forceDisableAll
+     * @return void
      */
     private function _loadTypeStatuses($forceDisableAll = false)
     {
@@ -111,6 +112,7 @@ class State implements \Magento\App\Cache\StateInterface
      *
      * @param string $cacheType
      * @param bool $isEnabled
+     * @return void
      */
     public function setEnabled($cacheType, $isEnabled)
     {
@@ -119,6 +121,8 @@ class State implements \Magento\App\Cache\StateInterface
 
     /**
      * Save the current statuses (enabled/disabled) of cache types to the persistent storage
+     *
+     * @return void
      */
     public function persist()
     {

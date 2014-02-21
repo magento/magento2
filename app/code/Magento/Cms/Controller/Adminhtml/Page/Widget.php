@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Controller\Adminhtml\Page;
 
 /**
  * Controller for CMS Page Link Widget plugin
@@ -32,12 +32,12 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Controller\Adminhtml\Page;
-
 class Widget extends \Magento\Backend\App\Action
 {
     /**
      * Chooser Source action
+     *
+     * @return void
      */
     public function chooserAction()
     {

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\ObjectManager\Config\Mapper;
@@ -32,7 +32,20 @@ class DomTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom();
+        $argumentParser = $this->getMock('\Magento\ObjectManager\Config\Mapper\ArgumentParser');
+        $argumentParser->expects($this->any())
+            ->method('parse')
+            ->will($this->returnCallback(array($this, 'parserMockCallback')));
+
+        $booleanUtils = $this->getMock('\Magento\Stdlib\BooleanUtils');
+        $booleanUtils->expects($this->any())
+            ->method('toBoolean')
+            ->will($this->returnValueMap(array(
+                array('true', true),
+                array('false', false),
+            )));
+
+        $this->_mapper = new Dom($booleanUtils, $argumentParser);
     }
 
     public function testConvert()
@@ -44,6 +57,19 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $resultFile = __DIR__ . '/_files/mapped_simple_di_config.php';
         $expectedResult = include $resultFile;
         $this->assertEquals($expectedResult, $this->_mapper->convert($dom));
+    }
+
+    /**
+     * Callback for mocking parse() method of the argument parser
+     *
+     * @param \DOMElement $argument
+     * @return string
+     */
+    public function parserMockCallback(\DOMElement $argument)
+    {
+        $this->assertNotEmpty($argument->getAttribute('name'));
+        $this->assertNotEmpty($argument->getAttribute('xsi:type'));
+        return 'test value';
     }
 
     /**
@@ -71,9 +97,9 @@ class DomTest extends \PHPUnit_Framework_TestCase
                     . '</type></config>',
             ),
             array(
-                '<?xml version="1.0"?><config><type name="some_type">'
-                    . '<param name="some_param"><wrong_node name="wrong_node" /></param>'
-                    . '</type></config>',
+                '<?xml version="1.0"?><config><virtualType name="some_type">'
+                    . '<wrong_node name="wrong_node" />'
+                    . '</virtualType></config>',
             ),
             array(
                 '<?xml version="1.0"?><config>'

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Rss
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -89,7 +89,7 @@ class CatalogTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAuthorizationFailed($action)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\UrlInterface')
             ->turnOffSecretKey();
         $this->dispatch("backend/rss/catalog/{$action}");
         $this->assertHeaderPcre('Http/1.1', '/^401 Unauthorized$/');
@@ -172,7 +172,7 @@ class CatalogTest extends \Magento\TestFramework\TestCase\AbstractController
             'PHP_AUTH_USER' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             'PHP_AUTH_PW' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         ));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\UrlInterface')
             ->turnOffSecretKey();
     }
 }

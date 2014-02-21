@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Bundle
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -552,7 +552,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'price_type', a
         'used_in_product_listing' => true,
         'unique'            => false,
         'apply_to'          => 'bundle',
-        'is_configurable'   => false
     ));
 
 $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'sku_type', array(
@@ -574,7 +573,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'sku_type', arr
         'visible_on_front'  => false,
         'unique'            => false,
         'apply_to'          => 'bundle',
-        'is_configurable'   => false
     ));
 
 $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'weight_type', array(
@@ -597,7 +595,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'weight_type', 
         'used_in_product_listing' => true,
         'unique'            => false,
         'apply_to'          => 'bundle',
-        'is_configurable'   => false
     ));
 
 $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'price_view', array(
@@ -621,7 +618,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'price_view', a
         'used_in_product_listing' => true,
         'unique'            => false,
         'apply_to'          => 'bundle',
-        'is_configurable'   => false
     ));
 
 $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'shipment_type', array(
@@ -644,7 +640,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'shipment_type'
         'used_in_product_listing' => true,
         'unique'            => false,
         'apply_to'          => 'bundle',
-        'is_configurable'   => false
     ));
 
 $installer->endSetup();

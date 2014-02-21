@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,17 +42,17 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param \Magento\Core\Model\System\Store $store
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory,
+        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
         \Magento\Core\Model\System\Store $store
     ) {
-        parent::__construct($coreData, $attrOptCollFactory, $attrOptionFactory);
+        parent::__construct($coreData, $attrOptionCollectionFactory, $attrOptionFactory);
         $this->_store = $store;
     }
 

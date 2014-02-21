@@ -20,18 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_Shipping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Shipping\Model\Carrier;
 
 class Tablerate
     extends \Magento\Shipping\Model\Carrier\AbstractCarrier
     implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
-
     /**
      * @var string
      */
@@ -45,7 +42,7 @@ class Tablerate
     /**
      * @var string
      */
-    protected $_default_condition_name = 'package_weight';
+    protected $_defaultConditionName = 'package_weight';
 
     /**
      * @var array
@@ -58,7 +55,7 @@ class Tablerate
     protected $_rateResultFactory;
 
     /**
-     * @var \Magento\Shipping\Model\Rate\Result\MethodFactory
+     * @var \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory
      */
     protected $_resultMethodFactory;
 
@@ -69,19 +66,19 @@ class Tablerate
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
-     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
-     * @param \Magento\Shipping\Model\Rate\Result\MethodFactory $resultMethodFactory
+     * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
      * @param \Magento\Shipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
-        \Magento\Shipping\Model\Rate\Result\MethodFactory $resultMethodFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory,
         \Magento\Shipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory,
         array $data = array()
     ) {
@@ -95,10 +92,10 @@ class Tablerate
     }
 
     /**
-     * @param \Magento\Shipping\Model\Rate\Request $request
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      */
-    public function collectRates(\Magento\Shipping\Model\Rate\Request $request)
+    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;
@@ -150,7 +147,7 @@ class Tablerate
 
         if (!$request->getConditionName()) {
             $conditionName = $this->getConfigData('condition_name');
-            $request->setConditionName($conditionName ? $conditionName : $this->_default_condition_name);
+            $request->setConditionName($conditionName ? $conditionName : $this->_defaultConditionName);
         }
 
          // Package weight and qty free shipping
@@ -168,7 +165,7 @@ class Tablerate
         $request->setPackageQty($oldQty);
 
         if (!empty($rate) && $rate['price'] >= 0) {
-            /** @var \Magento\Shipping\Model\Rate\Result\Method $method */
+            /** @var \Magento\Sales\Model\Quote\Address\RateResult\Method $method */
             $method = $this->_resultMethodFactory->create();
 
             $method->setCarrier('tablerate');
@@ -187,16 +184,24 @@ class Tablerate
             $method->setCost($rate['cost']);
 
             $result->append($method);
+        } else {
+            /** @var \Magento\Sales\Model\Quote\Address\RateResult\Error $error */
+            $error = $this->_rateErrorFactory->create(array('data' => array(
+                'carrier'       => $this->_code,
+                'carrier_title' => $this->getConfigData('title'),
+                'error_message' => $this->getConfigData('specificerrmsg'),
+            )));
+            $result->append($error);
         }
 
         return $result;
     }
 
     /**
-     * @param \Magento\Shipping\Model\Rate\Request $request
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return array|bool
      */
-    public function getRate(\Magento\Shipping\Model\Rate\Request $request)
+    public function getRate(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         return $this->_tablerateFactory->create()->getRate($request);
     }

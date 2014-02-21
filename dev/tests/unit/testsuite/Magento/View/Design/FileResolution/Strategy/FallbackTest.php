@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -75,7 +75,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         $this->fallbackFactory = $this->getMock(
             'Magento\View\Design\Fallback\Factory',
             array('createLocaleFileRule', 'createFileRule', 'createViewFileRule'),
-            array($this->getMock('Magento\Filesystem', array(), array(), '', false))
+            array($this->getMock('Magento\App\Filesystem', array(), array(), '', false))
         );
         $this->fallbackFactory
             ->expects($this->any())->method('createLocaleFileRule')->will($this->returnValue($this->fallbackLocale));
@@ -225,7 +225,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $targetFile
-     * @return \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFileSystemMock($targetFile)
     {
@@ -245,10 +245,16 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
                     }
                 )
             );
-        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false);
+        $filesystem = $this->getMock(
+            'Magento\App\Filesystem',
+            array('getDirectoryRead', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::ROOT)
+            ->with(\Magento\App\Filesystem::ROOT_DIR)
             ->will($this->returnValue($directoryMock));
 
         return $filesystem;

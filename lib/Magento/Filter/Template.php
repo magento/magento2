@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Filter
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,7 +53,7 @@ class Template implements \Zend_Filter_Interface
     /**
      * Include processor
      *
-     * @var array|string|null
+     * @var callable|null
      */
     protected $_includeProcessor = null;
 
@@ -89,8 +89,8 @@ class Template implements \Zend_Filter_Interface
     /**
      * Sets the processor of includes.
      *
-     * @param array $callback it must return string
-     * @return \Magento\Filter\Template
+     * @param callable $callback it must return string
+     * @return $this
      */
     public function setIncludeProcessor(array $callback)
     {
@@ -101,7 +101,7 @@ class Template implements \Zend_Filter_Interface
     /**
      * Sets the processor of includes.
      *
-     * @return array|null
+     * @return callable|null
      */
     public function getIncludeProcessor()
     {
@@ -156,7 +156,7 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function varDirective($construction)
@@ -171,7 +171,7 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * @param array $construction
+     * @param string[] $construction
      * @return mixed
      */
     public function includeDirective($construction)
@@ -192,7 +192,7 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function dependDirective($construction)
@@ -210,7 +210,7 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function ifDirective($construction)

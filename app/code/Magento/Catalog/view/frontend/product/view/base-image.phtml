@@ -18,14 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 /**
  * Product media data template
  *
- * @var $this \Magento\Catalog\Block\Product\View\BaseImage
+ * @var $this \Magento\Catalog\Block\Product\View\Gallery
  */
 ?>
 <?php
@@ -39,102 +39,143 @@ $_resizedHeight = $this->getVar("{$image}:height") ?: $_resizedWidth ;
 
 $_hasImage = ($_product->getImage() && $_product->getImage() != "no_selection") ? true : false;
 
-$_isOldDisplayMode = 0;
 $whiteBorders =  $this->getVar("product_image_white_borders");
+$thumbWidth =  $this->getVar("product_page_more_views:width");
+$thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
 ?>
-<div class="product photo main" data-role="base-image-container">
-    <a class="product photo magento-zoom<?php echo (!$_hasImage) ? ' isPlaceholder' : ''; ?>"
-       id="base-image" data-role="base-image-zoom"
-       href="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image'); ?>">
-       <?php echo $this->getChildBlock('product.image.main')->setAddAttribute('itemprop="image"')->init($_product, $image)->toHtml() ?>
-    </a>
-    <script type="text/javascript">
-        jQuery('[data-role=base-image-zoom]').attr('rel', '<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image'); ?>');
-    </script>
-    <p class="notice"></p>
-    <script type="text/javascript">
-        jQuery(function(){
-            <?php if ($_isOldDisplayMode): ?>
-            jQuery('.magento-zoom').magentoZoom({
-                useGallery: false,
-                swapNotices: false,
-                isOldMode: <?php print $_isOldDisplayMode; ?>,
-                messages: {
-                    noticeDefault: '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>',
-                    loadingMessage: '<?php echo $this->escapeJsQuote(__("Loading...")) ?>'
-                }
-            });
-            <?php else: ?>
-            jQuery('.magento-zoom').magentoZoom({
-                useLens: true,
-                enlarged: {
-                    adjustment: 20,
-                    width: 500,
-                    height: <?php echo $_resizedHeight ?>
-                },
-                useGallery: true,
-                swapNotices: true,
-                isOldMode: <?php print $_isOldDisplayMode; ?>,
-                messages: {
-                    noticeDefault: '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>',
-                    noticeLightBox: '<?php echo $this->escapeJsQuote(__("Click on image to view it full sized")) ?>', loadingMessage: '<?php echo $this->escapeJsQuote(__("Loading...")) ?>'
-                }
-            });
-            <?php endif; ?>
-        });
-    </script>
-    <?php  ?>
-</div>
-<?php if (count($this->getGalleryImages()) > 0): ?>
-    <?php
-        $thumbWidth =  $this->getVar("product_page_more_views:width");
-        $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
-    ?>
-    <div class="product photo thumbs">
-        <strong class="title"><?php echo __('More Views') ?></strong>
-        <ul class="items thumbs">
-            <?php foreach ($this->getGalleryImages() as $_image): ?>
-                <?php if ($_isOldDisplayMode) {
-                    $attributes = ' href="#" data-mage-init="{popupWindow: {windowURL:'
-                        . $this->getGalleryUrl($_image)
-                        . ',windowName:\'gallery\',width:300,height:300,status:1,scrollbars:1,resizable:1}"';
-                } else {
-                    $attributes = ' href="'
-                        . $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image', $_image->getFile())
-                        . '" rel="';
-                    if ($whiteBorders) {
-                        $attributes .= $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image', $_image->getFile())->resize($_resizedWidth,$_resizedHeight) . '"';
-                    } else {
-                        $attributes .= $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image', $_image->getFile())->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($_resizedWidth,$_resizedHeight) . '"';
-                    }
-                };?>
+<div data-role="media-gallery">
+    <div class="product photo main">
+        <div data-role="gallery-base-image-container">
+            <a href="#" class="product photo magento-zoom<?php echo (!$_hasImage) ? ' isPlaceholder' : ''; ?>"
+               id="base-image" data-role="zoom-image"
+               data-large="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image'); ?>">
+                <?php echo $this->getChildBlock('product.image.main')->setAddAttribute('itemprop="image"')->init($_product, $image)->toHtml() ?>
+            </a>
+        </div>
+        <div data-role="gallery-notice-container">
+            <p class="notice" data-role="notice"></p>
+        </div>
+    </div>
+    <?php if (count($this->getGalleryImages()) > 0): ?>
+
+        <div class="product photo thumbs">
+            <strong class="title"><?php echo __('More Views') ?></strong>
+            <ul class="items thumbs">
+                <?php foreach ($this->getGalleryImages() as $_image): ?>
+                <?php
+                $imageSmall = $this->getImageUrl($_image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
+                $imageMedium = $this->getImageUrl($_image, 'image', $whiteBorders, $_resizedWidth, $_resizedHeight);
+                $imageLarge = $this->getImageUrl($_image, 'image');
+                ?>
                 <li class="item thumb">
-                    <a<?php echo $attributes; ?> class="magento-zoom" title="<?php echo $this->escapeHtml($_image->getLabel()) ?>">
-                        <?php if ($whiteBorders): ?>
-                            <span class="img"
-                                  style="position:relative; z-index:1; display:block; width:<?php echo $thumbHeight; ?>px; height:<?php echo $thumbHeight; ?>px;">
-                                <img itemprop="image"
-                                     src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'thumbnail', $_image->getFile())->resize($thumbWidth, $thumbHeight); ?>"
-                                     alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>"/>
-                            </span>
-                        <?php else: ?>
-                            <span class="img"
-                                  style="position:relative; z-index:1; display:block; width:<?php echo $thumbHeight; ?>px; height:<?php echo $thumbHeight; ?>px;">
-                                <img itemprop="image"
-                                     src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'thumbnail', $_image->getFile())->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($thumbWidth, $thumbHeight); ?>"
-                                     alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>"/>
-                            </span>
+                    <a class="magento-zoom" data-role="gallery-thumb"
+                         href ="<?php echo $imageLarge ?>"
+                         data-image-small="<?php echo $imageSmall; ?>"
+                         data-image-medium="<?php echo $imageMedium; ?>"
+                         data-image-large="<?php echo $imageLarge; ?>"
+                        <?php if ($this->isMainImage($_image)): ?>
+                             data-image-selected="true"
                         <?php endif; ?>
+                         title="<?php echo $this->escapeHtml($_image->getLabel()) ?>">
+                        <span class="img"
+                              style="position:relative; z-index:1; display:block; width:<?php echo $thumbHeight; ?>px; height:<?php echo $thumbHeight; ?>px;">
+                            <img itemprop="image"
+                                 src="<?php echo $imageSmall; ?>"
+                                 alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>"/>
+                        </span>
                     </a>
                 </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-    <?php if ($_isOldDisplayMode): ?>
-        <script type="text/javascript">
-            (function($) {
-                head.js("<?php echo $this->getViewFileUrl('mage/popup-window.js')?>");
-            })(jQuery);
-        </script>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     <?php endif; ?>
+</div>
+<?php if ($_hasImage): ?>
+    <script data-template="gallery-wrapper" type="text/x-jQuery-tmpl">
+        <div class="product photo main">
+            <div data-role="gallery-base-image-container"></div>
+            <div data-role="gallery-notice-container"></div>
+        </div>
+        <div class="product photo thumbs" data-role="gallery-thumbs-container">
+        </div>
+        <div class="product photo buttons" data-role="gallery-buttons-container">
+        </div>
+    </script>
+    <script data-template="gallery-buttons" type="text/x-jQuery-tmpl">
+        <a class="gallery control prev" data-role="gallery-prev" href="#"></a>
+        <a class="gallery control next" data-role="gallery-next" href="#"></a>
+    </script>
+    <script data-template="gallery-base-image" type="text/x-jQuery-tmpl">
+        <a class="product photo{{if typeof hasImg !== 'undefined'}} isPlaceholder{{/if}}" href="#">
+            <span class="img photo container" style="width:${width}px; height:${height}px; display: block; position: relative; overflow: hidden">
+                <img data-role="zoom-image" class="photo image" width="${width}" itemprop="image" {{if !fullSizeMode}}data-large="${large}" src="${medium}"{{else}}src="${large}"{{/if}} alt="${title}"/>
+            </span>
+        </a>
+    </script>
+    <script data-template="gallery-thumbs" type="text/x-jQuery-tmpl">
+        <strong class="title">${tumbsTitle}</strong>
+        <ul class="items thumbs">
+            {{each(index, img) images}}
+            <li class="item thumb">
+                <a title="${img.title}" data-index="${index}" data-role="gallery-thumb" href="#">
+                        <span style="position:relative; z-index:1; display:block; width:${size.width}px; height:${size.height}px;" class="img">
+                            <img alt="${img.title}" src="${img.small}" itemprop="image" width="${size.width}">
+                        </span>
+                </a>
+            </li>
+            {{/each}}
+        </ul>
+    </script>
+    <script data-template="zoom-display" type="text/x-jQuery-tmpl">
+        <div class="magento-zoom-enlarged" data-role="zoom-container">
+            <div data-role="zoom-inner"></div>
+        </div>
+    </script>
+    <script data-template="zoom-enlarged-image" type="text/x-jQuery-tmpl">
+        <img data-role="enlarged-image" src="${img}" />
+    </script>
+    <script data-template="zoom-track" type="text/z-jQuery-tmpl">
+        <div data-role="zoom-track"></div>
+    </script>
+    <script data-template="zoom-lens" type="text/z-jQuery-tmpl">
+        <div data-role="zoom-lens"></div>
+    </script>
+    <script data-template="notice" type="text/x-jQuery-tmpl">
+        <p class="notice" data-role="notice">${text}</p>
+    </script>
+    <script type="text/javascript">
+        (function($) {
+            head.js("<?php echo $this->getViewFileUrl('mage/zoom.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/gallery.js')?>",
+                "<?php echo $this->getViewFileUrl('mage/gallery-fullscreen.js')?>",
+                function() {
+                    $('[data-role=media-gallery]')
+                        .gallery({
+                            sizes: {
+                                small: {
+                                    width: <?php echo $thumbWidth ?>,
+                                    height: <?php echo $thumbHeight ?>
+                                },
+                                medium: {
+                                    width: <?php echo $_resizedWidth ?>,
+                                    height: <?php echo $_resizedHeight ?>
+                                }
+                            },
+                            controls: {
+                                notice: {
+                                    text: '<?php echo $this->escapeJsQuote(__("Click on image to view it full sized")) ?>'
+                                }
+                            }
+                        })
+                        .zoom({
+                            controls: {
+                                notice: {
+                                    text: '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>'
+                                }
+                            }
+                        })
+                        .galleryFullScreen();
+            });
+        })(jQuery);
+    </script>
 <?php endif; ?>

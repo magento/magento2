@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Service;
 
 use Magento\Integration\Model\Integration\Factory as IntegrationFactory;
@@ -35,10 +34,14 @@ use Magento\Integration\Service\OauthV1Interface as IntegrationOauthService;
  */
 class IntegrationV1 implements \Magento\Integration\Service\IntegrationV1Interface
 {
-    /** @var IntegrationFactory */
+    /**
+     * @var IntegrationFactory
+     */
     protected $_integrationFactory;
 
-    /** @var IntegrationOauthService */
+    /**
+     * @var IntegrationOauthService
+     */
     protected $_oauthService;
 
     /**
@@ -130,6 +133,7 @@ class IntegrationV1 implements \Magento\Integration\Service\IntegrationV1Interfa
      * Check if an integration exists by the name
      *
      * @param string $name
+     * @return void
      * @throws \Magento\Integration\Exception
      */
     private function _checkIntegrationByName($name)
@@ -160,6 +164,7 @@ class IntegrationV1 implements \Magento\Integration\Service\IntegrationV1Interfa
      * Add oAuth consumer key and secret.
      *
      * @param IntegrationModel $integration
+     * @return void
      */
     protected function _addOauthConsumerData(IntegrationModel $integration)
     {
@@ -174,6 +179,7 @@ class IntegrationV1 implements \Magento\Integration\Service\IntegrationV1Interfa
      * Add oAuth token and token secret.
      *
      * @param IntegrationModel $integration
+     * @return void
      */
     protected function _addOauthTokenData(IntegrationModel $integration)
     {

@@ -19,19 +19,21 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this \Magento\Catalog\Block\Product\View */
 ?>
 <?php $_product = $this->getProduct(); ?>
 <?php $buttonTitle = __('Update Cart'); ?>
 <?php if ($_product->isSaleable()): ?>
     <div class="box tocart update">
-        <?php if (!$_product->isGrouped()): ?>
+        <?php if ($this->shouldRenderQuantity()): ?>
         <div class="field qty">
             <label class="label" for="qty"><span><?php echo __('Qty') ?></span></label>
             <div class="control">
-                <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="{required:true,digits:true}"/>
+                <input type="number" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="{required:true,digits:true}"/>
             </div>
         </div>
         <?php endif; ?>

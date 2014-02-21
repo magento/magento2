@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,7 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * Excluded from batch update attribute codes
      *
-     * @var array
+     * @var string[]
      */
     protected $_excludedAttributes = array('url_key');
 
@@ -70,8 +70,8 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\App\Route\Config $routeConfig
-     * @param \Magento\Core\Model\AppInterface $app
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\AppInterface $app
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver
      * @param \Magento\Math\Random $mathRandom
@@ -82,8 +82,8 @@ class Attribute extends \Magento\Backend\Helper\Data
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\App\Route\Config $routeConfig,
-        \Magento\Core\Model\AppInterface $app,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\AppInterface $app,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver,
         \Magento\Math\Random $mathRandom,

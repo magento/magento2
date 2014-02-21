@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,7 +63,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_type;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Status
+     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
      */
     protected $_status;
 
@@ -74,13 +74,12 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\Product\LinkFactory $linkFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
-     * @param \Magento\Catalog\Model\Product\Status $status
+     * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
@@ -89,13 +88,12 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\Product\LinkFactory $linkFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
-        \Magento\Catalog\Model\Product\Status $status,
+        \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()
@@ -107,12 +105,13 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_status = $status;
         $this->_visibility = $visibility;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Set grid params
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -142,7 +141,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * Add filter
      *
      * @param object $column
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Upsell
+     * @return $this
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -202,7 +201,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add columns to grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareColumns()
     {

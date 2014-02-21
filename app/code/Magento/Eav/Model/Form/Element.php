@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Form;
 
+use Magento\Core\Exception;
 
 /**
  * Eav Form Element Model
@@ -42,8 +44,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Form;
-
 class Element extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -81,6 +81,7 @@ class Element extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -110,16 +111,16 @@ class Element extends \Magento\Core\Model\AbstractModel
     /**
      * Validate data before save data
      *
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Eav\Model\Form\Element
+     * @throws Exception
+     * @return $this
      */
     protected function _beforeSave()
     {
         if (!$this->getTypeId()) {
-            throw new \Magento\Core\Exception(__('Invalid form type.'));
+            throw new Exception(__('Invalid form type.'));
         }
         if (!$this->getAttributeId()) {
-            throw new \Magento\Core\Exception(__('Invalid EAV attribute'));
+            throw new Exception(__('Invalid EAV attribute'));
         }
 
         return parent::_beforeSave();

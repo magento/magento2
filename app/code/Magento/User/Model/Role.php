@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Model;
 
 /**
@@ -72,7 +71,7 @@ class Role extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __sleep()
     {
@@ -81,7 +80,7 @@ class Role extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __wakeup()
     {
@@ -97,6 +96,11 @@ class Role extends \Magento\Core\Model\AbstractModel
      */
     protected $_eventPrefix = 'admin_roles';
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\User\Model\Resource\Role');
@@ -105,7 +109,7 @@ class Role extends \Magento\Core\Model\AbstractModel
     /**
      * Update object into database
      *
-     * @return \Magento\User\Model\Role
+     * @return $this
      */
     public function update()
     {

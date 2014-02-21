@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,7 +74,7 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
         foreach ($files as $file) {
             $content = file_get_contents($file);
             try {
-                new \Magento\Config\Dom($content, $this->_idAttributes, $this->_schemaFile);
+                new \Magento\Config\Dom($content, $this->_idAttributes, null, $this->_schemaFile);
 
                 //merge won't be performed if file is invalid because of exception thrown
                 $mergedConfig->merge($content);

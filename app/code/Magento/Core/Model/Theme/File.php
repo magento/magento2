@@ -20,17 +20,19 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Theme;
+
+use Magento\Core\Model\AbstractModel;
+use Magento\View\Design\Theme\FileInterface;
+use \Magento\View\Design\Theme\Customization\FileInterface as CustomizationFileInterface;
 
 /**
  * Theme files model class
  */
-namespace Magento\Core\Model\Theme;
-
-class File extends \Magento\Core\Model\AbstractModel
-    implements \Magento\View\Design\Theme\FileInterface
+class File extends AbstractModel implements FileInterface
 {
     /**
      * {@inheritdoc}
@@ -57,7 +59,7 @@ class File extends \Magento\Core\Model\AbstractModel
     protected $_fileServiceFactory;
 
     /**
-     * @var \Magento\View\Design\Theme\Customization\FileInterface
+     * @var CustomizationFileInterface
      */
     protected $_fileService;
 
@@ -91,6 +93,8 @@ class File extends \Magento\Core\Model\AbstractModel
 
     /**
      * Theme files model initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -102,7 +106,7 @@ class File extends \Magento\Core\Model\AbstractModel
      *
      * @return $this
      */
-    public function setCustomizationService(\Magento\View\Design\Theme\Customization\FileInterface $fileService)
+    public function setCustomizationService(CustomizationFileInterface $fileService)
     {
         $this->_fileService = $fileService;
         return $this;
@@ -111,6 +115,7 @@ class File extends \Magento\Core\Model\AbstractModel
     /**
      * {@inheritdoc}
      *
+     * @return CustomizationFileInterface
      * @throws \UnexpectedValueException
      */
     public function getCustomizationService()

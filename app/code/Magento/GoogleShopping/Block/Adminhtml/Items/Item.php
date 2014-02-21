@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Block\Adminhtml\Items;
 
 /**
  * Google Shopping Items
@@ -31,8 +32,6 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Block\Adminhtml\Items;
-
 class Item extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -44,20 +43,18 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     protected function _construct()
@@ -70,7 +67,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid collection object
      *
-     * @return \Magento\GoogleShopping\Block\Adminhtml\Items\Item
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -85,7 +82,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid columns
      *
-     * @return \Magento\GoogleShopping\Block\Adminhtml\Items\Item
+     * @return $this
      */
     protected function _prepareColumns()
     {
@@ -110,7 +107,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid massaction actions
      *
-     * @return \Magento\GoogleShopping\Block\Adminhtml\Items\Item
+     * @return $this
      */
     protected function _prepareMassaction()
     {

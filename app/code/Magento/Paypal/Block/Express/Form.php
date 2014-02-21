@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,6 +67,7 @@ class Form extends \Magento\Paypal\Block\Standard\Form
         $this->_paypalData = $paypalData;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $paypalConfigFactory, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -80,18 +81,14 @@ class Form extends \Magento\Paypal\Block\Standard\Form
     }
 
     /**
-     * Set data to block
+     * Get billing agreement code
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return string|null
      */
-    protected function _beforeToHtml()
+    public function getBillingAgreementCode()
     {
         $customerId = $this->_customerSession->getCustomerId();
-        if ($this->_paypalData->shouldAskToCreateBillingAgreement($this->_config, $customerId)
-            && $this->canCreateBillingAgreement()
-        ) {
-            $this->setCreateBACode(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
-        }
-        return parent::_beforeToHtml();
+        return $this->_paypalData->shouldAskToCreateBillingAgreement($this->_config, $customerId)
+            ? \Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT : null;
     }
 }

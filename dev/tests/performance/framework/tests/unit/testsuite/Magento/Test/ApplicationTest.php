@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     performance_tests
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -77,7 +77,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->_config = new \Magento\TestFramework\Performance\Config(
             $this->_fixtureConfigData, $this->_fixtureDir, $this->_fixtureDir . '/app_base_dir'
         );
-        $this->_shell = $this->getMock('Magento\Shell', array('execute'));
+        $this->_shell = $this->getMock('Magento\Shell', array('execute'), array(), '', false);
 
         $this->_object = $this->getMock(
             'Magento\TestFramework\Application',
@@ -232,7 +232,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyFixturesSuperSetNoInstallation()
     {
-        $this->_shell->expects($this->exactly(5)) // Initial uninstall/install only
+        $this->_shell->expects($this->exactly(8)) // Initial uninstall/install only
             ->method('execute');
 
         $fixture1 = $this->_getFixtureFiles(array('fixture1'));
@@ -254,11 +254,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($this->logicalNot($this->stringContains('--uninstall')), $this->contains($this->_installerScript));
 
-        $this->_shell->expects($this->at(4))
+        $this->_shell->expects($this->at(6))
             ->method('execute')
             ->with($this->stringContains('--uninstall'), $this->contains($this->_installerScript));
 
-        $this->_shell->expects($this->at(5))
+        $this->_shell->expects($this->at(7))
             ->method('execute')
             ->with($this->logicalNot($this->stringContains('--uninstall')), $this->contains($this->_installerScript));
 

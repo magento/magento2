@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Sitemap
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,7 +63,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     protected $_sitemapCmsPageMock;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystemMock;
 
@@ -144,7 +144,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->method('openFile')
             ->will($this->returnValue($this->_fileMock));
 
-        $this->_filesystemMock = $this->getMockBuilder('Magento\Filesystem')
+        $this->_filesystemMock = $this->getMockBuilder('Magento\App\Filesystem')
             ->setMethods(array('getDirectoryWrite'))
             ->disableOriginalConstructor()
             ->getMock();

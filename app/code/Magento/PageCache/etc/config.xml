@@ -21,18 +21,27 @@
  *
  * @category    Magento
  * @package     Magento_PageCache
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config>
     <default>
         <system>
-            <external_page_cache>
-                <enabled>0</enabled>
-                <control>zend_page_cache</control>
-                <cookie_lifetime>3600</cookie_lifetime>
-            </external_page_cache>
+            <headers>
+                <public-max-age>0</public-max-age>
+            </headers>
+            <full_page_cache>
+                <varnish>
+                    <path>Magento/PageCache/etc/varnish.vcl</path>
+                </varnish>
+                <default>
+                    <access_list>localhost</access_list>
+                    <backend_host>localhost</backend_host>
+                    <backend_port>8080</backend_port>
+                    <ttl>120</ttl>
+                </default>
+            </full_page_cache>
         </system>
     </default>
 </config>

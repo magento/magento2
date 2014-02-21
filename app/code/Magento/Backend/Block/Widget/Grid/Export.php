@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Widget\Grid;
 
 /**
@@ -36,7 +35,7 @@ class Export
     /**
      * Grid export types
      *
-     * @var array
+     * @var  \Magento\Object[]
      */
     protected $_exportTypes = array();
 
@@ -85,6 +84,10 @@ class Export
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     * @throws \Magento\Core\Exception
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -96,7 +99,7 @@ class Export
                 $this->addExportType($type['urlPath'], $type['label']);
             }
         }
-        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -122,7 +125,7 @@ class Export
     /**
      * Return count totals
      *
-     * @return mixed
+     * @return bool
      */
     public function getCountTotals()
     {
@@ -142,7 +145,7 @@ class Export
     /**
      * Retrieve grid export types
      *
-     * @return array|bool
+     * @return  \Magento\Object[]|false
      */
     public function getExportTypes()
     {
@@ -162,7 +165,7 @@ class Export
     /**
      * Prepare export button
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -192,7 +195,7 @@ class Export
      *
      * @param   string $url
      * @param   string $label
-     * @return  \Magento\Backend\Block\Widget\Grid
+     * @return  $this
      */
     public function addExportType($url, $label)
     {
@@ -219,7 +222,7 @@ class Export
     /**
      * Retrieve Headers row array for Export
      *
-     * @return array
+     * @return string[]
      */
     protected function _getExportHeaders()
     {
@@ -235,7 +238,7 @@ class Export
     /**
      * Retrieve Totals row array for Export
      *
-     * @return array
+     * @return string[]
      */
     protected function _getExportTotals()
     {
@@ -255,7 +258,7 @@ class Export
      *
      * @param string $callback
      * @param array $args additional arguments for callback method
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return void
      */
     public function _exportIterateCollection($callback, array $args)
     {
@@ -291,6 +294,7 @@ class Export
      *
      * @param \Magento\Object $item
      * @param \Magento\Filesystem\File\WriteInterface $stream
+     * @return void
      */
     protected function _exportCsvItem(\Magento\Object $item, \Magento\Filesystem\File\WriteInterface $stream)
     {
@@ -408,7 +412,7 @@ class Export
      *  Get a row data of the particular columns
      *
      * @param \Magento\Object $data
-     * @return array
+     * @return string[]
      */
     public function getRowRecord(\Magento\Object $data)
     {
@@ -549,6 +553,9 @@ class Export
         return $this->_getRowCollection($collection);
     }
 
+    /**
+     * @return int
+     */
     public function getExportPageSize()
     {
         return $this->_exportPageSize;

@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Variable;
 
 /**
  * Custom Variable Edit Container
  */
-namespace Magento\Backend\Block\System\Variable;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -55,6 +54,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Internal constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,7 +79,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Prepare layout.
      * Adding save_and_continue button
      *
-     * @return \Magento\Backend\Block\System\Variable\Edit
+     * @return $this
      */
     protected function _preparelayout()
     {

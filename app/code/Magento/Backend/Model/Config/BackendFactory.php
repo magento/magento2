@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -47,13 +47,13 @@ class BackendFactory
      * Create backend model by name
      *
      * @param string $modelName
-     * @return \Magento\Core\Model\Config\Value
+     * @return \Magento\App\Config\ValueInterface
      * @throws \InvalidArgumentException
      */
     public function create($modelName)
     {
         $model = $this->_objectManager->create($modelName);
-        if (!$model instanceof \Magento\Core\Model\Config\Value) {
+        if (!$model instanceof \Magento\App\Config\ValueInterface) {
             throw new \InvalidArgumentException('Invalid config field backend model: ' . $modelName);
         }
         return $model;

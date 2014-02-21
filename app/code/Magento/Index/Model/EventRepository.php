@@ -18,10 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  * 
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Index\Model;
+
+use Magento\Index\Model\Resource\Event\Collection;
 
 class EventRepository
 {
@@ -43,7 +45,7 @@ class EventRepository
     /**
      * Check whether unprocessed events exist for provided process
      *
-     * @param int|array|\Magento\Index\Model\Process $process
+     * @param int|array|Process $process
      * @return bool
      */
     public function hasUnprocessed($process)
@@ -54,8 +56,8 @@ class EventRepository
     /**
      * Retrieve list of unprocessed events
      *
-     * @param int|array|\Magento\Index\Model\Process $process
-     * @return \Magento\Index\Model\Resource\Event\Collection
+     * @param int|array|Process $process
+     * @return Collection
      */
     public function getUnprocessed($process)
     {

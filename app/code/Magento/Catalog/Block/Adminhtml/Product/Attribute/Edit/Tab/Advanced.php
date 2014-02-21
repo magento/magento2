@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,18 +34,21 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-class Advanced
-    extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Model\Config\Source\Yesno;
+use Magento\Eav\Helper\Data;
+
+class Advanced extends Generic
 {
     /**
      * Eav data
      *
-     * @var \Magento\Eav\Helper\Data
+     * @var Data
      */
     protected $_eavData = null;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var Yesno
      */
     protected $_yesNo;
 
@@ -53,16 +56,16 @@ class Advanced
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Backend\Model\Config\Source\Yesno $yesNo
-     * @param \Magento\Eav\Helper\Data $eavData
+     * @param Yesno $yesNo
+     * @param Data $eavData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Backend\Model\Config\Source\Yesno $yesNo,
-        \Magento\Eav\Helper\Data $eavData,
+        Yesno $yesNo,
+        Data $eavData,
         array $data = array()
     ) {
         $this->_yesNo = $yesNo;
@@ -73,7 +76,7 @@ class Advanced
     /**
      * Adding product form elements for editing attribute
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -194,8 +197,6 @@ class Advanced
             }
         }
 
-        $yesnoSource = $this->_yesNo->toOptionArray();
-
         $scopes = array(
             \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE =>__('Store View'),
             \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE =>__('Website'),
@@ -214,12 +215,7 @@ class Advanced
             'values'=> $scopes
         ), 'attribute_code');
 
-
-        $fieldset->addField('is_configurable', 'select', array(
-            'name' => 'is_configurable',
-            'label' => __('Use To Create Configurable Product'),
-            'values' => $yesnoSource,
-        ));
+        $this->_eventManager->dispatch('product_attribute_form_build', array('form' => $form));
         $this->setForm($form);
         return $this;
     }
@@ -227,7 +223,7 @@ class Advanced
     /**
      * Initialize form fileds values
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced
+     * @return $this
      */
     protected function _initFormValues()
     {
@@ -238,7 +234,7 @@ class Advanced
     /**
      * Retrieve attribute object from registry
      *
-     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return mixed
      */
     private function getAttributeObject()
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,29 +29,39 @@
  */
 namespace Magento\CatalogSearch\Block;
 
-class Autocomplete extends \Magento\View\Element\AbstractBlock
+use Magento\CatalogSearch\Helper\Data;
+use Magento\View\Element\AbstractBlock;
+use Magento\View\Element\Context;
+
+class Autocomplete extends AbstractBlock
 {
+    /**
+     * @var array
+     */
     protected $_suggestData = null;
 
     /**
-     * @var \Magento\CatalogSearch\Helper\Data
+     * @var Data
      */
     protected $_catalogsearchHelper;
 
     /**
-     * @param \Magento\View\Element\Context $context
-     * @param \Magento\CatalogSearch\Helper\Data $catalogsearchHelper
+     * @param Context $context
+     * @param Data $catalogsearchHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Context $context,
-        \Magento\CatalogSearch\Helper\Data $catalogsearchHelper,
+        Context $context,
+        Data $catalogsearchHelper,
         array $data = array()
     ) {
         $this->_catalogsearchHelper = $catalogsearchHelper;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         $html = '';
@@ -87,6 +97,9 @@ class Autocomplete extends \Magento\View\Element\AbstractBlock
         return $html;
     }
 
+    /**
+     * @return array
+     */
     public function getSuggestData()
     {
         if (!$this->_suggestData) {

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,7 +59,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_transferAdapterMock = $this->getMock('Zend_File_Transfer_Adapter_Http', array(), array(), '', false);
         $this->_fileUploader = $this->getMock('Magento\File\Uploader', array(), array(), '', false);
 

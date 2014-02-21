@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Acl\Loader;
@@ -41,7 +41,6 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $acl->expects($this->at(0))->method('addResource')->with($aclResource, null)->will($this->returnSelf());
         $acl->expects($this->at(1))->method('addResource')->with($aclResource, $aclResource)->will($this->returnSelf());
 
-        /** @var $factoryObject \Magento\Core\Model\Config */
         $factoryObject = $this->getMock('Magento\Acl\ResourceFactory', array('createResource'), array(), '', false);
         $factoryObject->expects($this->any())->method('createResource')->will($this->returnValue($aclResource));
 

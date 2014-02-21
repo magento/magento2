@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Model\ProductOptions\Config;
@@ -36,7 +36,7 @@ class Converter implements \Magento\Config\ConverterInterface
     {
         $output = array();
 
-        /** @var $optionNode DOMNode */
+        /** @var $optionNode \DOMNode */
         foreach ($source->getElementsByTagName('option') as $optionNode) {
             $optionName = $this->_getAttributeValue($optionNode, 'name');
             $data = array();
@@ -44,7 +44,7 @@ class Converter implements \Magento\Config\ConverterInterface
             $data['label'] = $this->_getAttributeValue($optionNode, 'label');
             $data['renderer'] = $this->_getAttributeValue($optionNode, 'renderer');
 
-            /** @var $childNode DOMNode */
+            /** @var $childNode \DOMNode */
             foreach ($optionNode->childNodes as $childNode) {
                 if ($childNode->nodeType != XML_ELEMENT_NODE) {
                     continue;
@@ -64,9 +64,9 @@ class Converter implements \Magento\Config\ConverterInterface
     /**
      * Get attribute value
      *
-     * @param DOMNode $node
+     * @param \DOMNode $node
      * @param string $attributeName
-     * @param mixed $defaultValue
+     * @param string|null $defaultValue
      * @return null|string
      */
     protected function _getAttributeValue(\DOMNode $node, $attributeName, $defaultValue = null)

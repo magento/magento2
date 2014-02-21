@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_applicationMock;
+    protected $_storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -49,10 +49,10 @@ class TabTest extends \PHPUnit_Framework_TestCase
         $this->_iteratorMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Iterator\Field', array(), array(), '', false
         );
-        $this->_applicationMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Tab(
-            $this->_applicationMock, $this->_iteratorMock
+            $this->_storeManagerMock, $this->_iteratorMock
         );
     }
 
@@ -60,7 +60,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->_model);
         unset($this->_iteratorMock);
-        unset($this->_applicationMock);
+        unset($this->_storeManagerMock);
     }
 
     public function testIsVisibleOnlyChecksPresenceOfChildren()

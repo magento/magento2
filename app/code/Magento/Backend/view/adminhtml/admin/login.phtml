@@ -20,13 +20,12 @@
  *
  * @category    design
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo __('Log into Magento Admin Page') ?></title>
@@ -38,9 +37,11 @@
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/base.css') ?>" media="all" />
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/elements.css') ?>" media="all" />
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/form.css') ?>" media="all" />
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/styles.css') ?>" media="all" />
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/admin.css') ?>" media="all" />
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/header.css') ?>" media="all" />
+    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/pages.css') ?>" media="all" />
+    <?php /* <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/styles.css') ?>" media="all" /> */?>
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/utils.css') ?>" media="all" />
-
 
     <script src="<?php echo $this->getViewFileUrl('jquery/jquery.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('mage/jquery-no-conflict.js') ?>"></script>
@@ -55,9 +56,9 @@
     <script src="<?php echo $this->getViewFileUrl('prototype/prototype.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('scriptaculous/effects.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('mage/captcha.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('lib/modernizr.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('js/head.js') ?>"></script>
-
+    <script src="<?php echo $this->getViewFileUrl('modernizr/modernizr.js') ?>"></script>
+    <script src="<?php echo $this->getViewFileUrl('headjs/head.min.js') ?>"></script>
+</head>
 <body id="page-login" class="page-login" onload="document.forms['login-form'].username.focus();">
     <div class="wrapper">
         <div class="wrapper-inner">
@@ -68,7 +69,7 @@
                 <div id="messages" data-container-for="messages">
                     <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
                 </div>
-                <form method="post" action="" id="login-form">
+                <form method="post" action="" id="login-form" autocomplete="off">
                     <fieldset class="fieldset">
                         <legend class="legend"><span><?php echo __('Welcome') ?></span></legend><br/>
                         <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
@@ -81,6 +82,8 @@
                         <div class="field field-password">
                             <label for="login" class="label"><?php echo __('Password:') ?></label>
                             <div class="control">
+                                <!-- This is a dummy hidden field to trick firefox from auto filling the password -->
+                                <input type="text" class="input-text no-display" name="dummy" id="dummy" />
                                 <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" placeholder="password" />
                             </div>
                         </div>

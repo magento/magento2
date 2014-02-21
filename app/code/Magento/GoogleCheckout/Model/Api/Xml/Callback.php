@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GoogleCheckout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,30 +59,37 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     protected $_eventManager = null;
 
     /**
+     * @var \Magento\Shipping\Model\CarrierFactory
+     */
+    protected $_carrierFactory;
+
+    /**
      * @var \Magento\Stdlib\String
      */
     protected $string;
 
     /**
      * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\TranslateInterface $translator
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\GoogleCheckout\Helper\Data $googleCheckoutData
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Stdlib\String $string
+     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
-        \Magento\Core\Model\Translate $translator,
+        \Magento\TranslateInterface $translator,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\GoogleCheckout\Helper\Data $googleCheckoutData,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Stdlib\String $string,
+        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -90,6 +97,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
         $this->_googleCheckoutData = $googleCheckoutData;
         $this->_taxData = $taxData;
         $this->string = $string;
+        $this->_carrierFactory = $carrierFactory;
         parent::__construct($objectManager, $translator, $coreStoreConfig, $data);
     }
 
@@ -282,7 +290,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
                 $address->setCollectShippingRates(true)
                     ->collectShippingRates();
                 foreach ($address->getAllShippingRates() as $rate) {
-                    if ($rate instanceof \Magento\Shipping\Model\Rate\Result\Error) {
+                    if ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
                         continue;
                     }
                     $methodName = sprintf('%s - %s', $rate->getCarrierTitle(), $rate->getMethodTitle());
@@ -643,13 +651,11 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
     {
         $cacheKey = ($storeId === null) ? 'nofilter' : $storeId;
         if (!isset($this->_cachedShippingInfo[$cacheKey])) {
-            /* @var $shipping \Magento\Shipping\Model\Shipping */
-            $shipping = $this->objectManager->create('Magento\Shipping\Model\Shipping');
             $carriers = $this->_coreStoreConfig->getConfig('carriers', $storeId);
             $infos = array();
 
             foreach (array_keys($carriers) as $carrierCode) {
-                $carrier = $shipping->getCarrierByCode($carrierCode);
+                $carrier = $this->_carrierFactory->getIfActive($carrierCode);
                 if (!$carrier) {
                     continue;
                 }

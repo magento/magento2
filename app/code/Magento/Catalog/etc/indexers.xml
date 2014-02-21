@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -27,7 +27,4 @@
     <indexer name="catalog_product_attribute" instance="Magento\Catalog\Model\Product\Indexer\Eav" />
     <indexer name="catalog_product_price" instance="Magento\Catalog\Model\Product\Indexer\Price" />
     <indexer name="catalog_url" instance="Magento\Catalog\Model\Indexer\Url" />
-    <indexer name="catalog_product_flat" instance="Magento\Catalog\Model\Product\Indexer\Flat" />
-    <indexer name="catalog_category_flat" instance="Magento\Catalog\Model\Category\Indexer\Flat" />
-    <indexer name="catalog_category_product" instance="Magento\Catalog\Model\Category\Indexer\Product" />
 </config>

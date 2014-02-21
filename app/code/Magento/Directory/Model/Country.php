@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -58,14 +58,14 @@ class Country extends \Magento\Core\Model\AbstractModel
     /**
      * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
      */
-    protected $_regionCollFactory;
+    protected $_regionCollectionFactory;
 
     /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Directory\Model\Country\FormatFactory $formatFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -75,7 +75,7 @@ class Country extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Directory\Model\Country\FormatFactory $formatFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -85,9 +85,12 @@ class Country extends \Magento\Core\Model\AbstractModel
         );
         $this->_locale = $locale;
         $this->_formatFactory = $formatFactory;
-        $this->_regionCollFactory = $regionCollFactory;
+        $this->_regionCollectionFactory = $regionCollectionFactory;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Directory\Model\Resource\Country');
@@ -126,7 +129,7 @@ class Country extends \Magento\Core\Model\AbstractModel
      */
     public function getRegionCollection()
     {
-        $collection = $this->_regionCollFactory->create();
+        $collection = $this->_regionCollectionFactory->create();
         $collection->addCountryFilter($this->getId());
         return $collection;
     }
@@ -197,7 +200,7 @@ T: {{telephone}}";
      * Retrieve format
      *
      * @param string $type
-     * @return \Magento\Directory\Model\Country\Format
+     * @return \Magento\Directory\Model\Country\Format|null
      */
     public function getFormat($type)
     {

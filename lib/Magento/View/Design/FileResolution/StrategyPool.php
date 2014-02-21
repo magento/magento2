@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -26,7 +26,7 @@ namespace Magento\View\Design\FileResolution;
 
 use Magento\Exception;
 use Magento\App\State;
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\ObjectManager;
 
 /**
@@ -42,16 +42,22 @@ class StrategyPool
     const FALLBACK_MAP_DIR = 'maps/fallback';
 
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Application state
+     *
      * @var string
      */
     protected $appState;
 
     /**
+     * File system
+     *
      * @var Filesystem
      */
     protected $filesystem;
@@ -87,6 +93,8 @@ class StrategyPool
     );
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      * @param State $appState
      * @param Filesystem $filesystem
@@ -113,7 +121,7 @@ class StrategyPool
     }
 
     /**
-     * * Get strategy to resolve locale files (e.g. locale settings)
+     * Get strategy to resolve locale files (e.g. locale settings)
      *
      * @param bool $skipProxy
      * @return \Magento\View\Design\FileResolution\Strategy\LocaleInterface
@@ -186,7 +194,7 @@ class StrategyPool
                 $mapDir = $this->filesystem->getPath(Filesystem::VAR_DIR) . '/' . self::FALLBACK_MAP_DIR;
                 $arguments = array(
                     'mapDir' => $mapDir,
-                    'baseDir' => $this->filesystem->getPath(Filesystem::ROOT),
+                    'baseDir' => $this->filesystem->getPath(Filesystem::ROOT_DIR),
                 );
                 break;
             default:

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,21 +53,12 @@ class RemoteAddress
     /**
      * @param \Magento\App\RequestInterface $httpRequest
      * @param array $alternativeHeaders
-     * @throws \InvalidArgumentException
      */
     public function __construct(
         \Magento\App\RequestInterface $httpRequest,
-        $alternativeHeaders = array()
+        array $alternativeHeaders = array()
     ) {
         $this->request = $httpRequest;
-
-        if (!is_array($alternativeHeaders)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Invalid value of type "%s" given while array is expected as alternative headers',
-                gettype($alternativeHeaders)
-            ));
-        }
-
         $this->alternativeHeaders = $alternativeHeaders;
     }
 

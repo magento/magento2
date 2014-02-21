@@ -18,15 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Model\Fs;
 
 /**
  * Backup data collection
  */
-namespace Magento\Backup\Model\Fs;
-
 class Collection extends \Magento\Data\Collection\Filesystem
 {
     /**
@@ -39,7 +38,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
      *
      * @var string
      */
-    protected $_path;
+    protected $_path = 'backups';
 
     /**
      * Backup data
@@ -58,24 +57,22 @@ class Collection extends \Magento\Data\Collection\Filesystem
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Backup\Helper\Data $backupData
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Backup\Model\Backup $backup
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Backup\Helper\Data $backupData,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Backup\Model\Backup $backup
     ) {
         $this->_backupData = $backupData;
         parent::__construct($entityFactory);
 
-        $this->_backupData = $backupData;
         $this->_filesystem = $filesystem;
         $this->_backup = $backup;
-        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->_varDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
 
-        $this->_varDirectory->create($this->_path);
         $this->_hideBackupsForApache();
 
         // set collection specific params
@@ -86,8 +83,8 @@ class Collection extends \Magento\Data\Collection\Filesystem
         }
         $extensions = implode('|', $extensions);
 
-        $this->_varDirectory->create('backups');
-        $path = rtrim($this->_varDirectory->getAbsolutePath($this->_path), '/') . '/backups';
+        $this->_varDirectory->create($this->_path);
+        $path = rtrim($this->_varDirectory->getAbsolutePath($this->_path), '/') . '/';
         $this->setOrder('time', self::SORT_ORDER_DESC)
             ->addTargetDir($path)
             ->setFilesFilter('/^[a-z0-9\-\_]+\.' . $extensions . '$/')
@@ -96,6 +93,8 @@ class Collection extends \Magento\Data\Collection\Filesystem
 
     /**
      * Create .htaccess file and deny backups directory access from web
+     *
+     * @return void
      */
     protected function _hideBackupsForApache()
     {

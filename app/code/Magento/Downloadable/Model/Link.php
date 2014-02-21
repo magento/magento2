@@ -20,42 +20,42 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Downloadable\Model;
+
+use Magento\Downloadable\Model\Resource\Link as Resource;
 
 /**
  * Downloadable link model
  *
- * @method \Magento\Downloadable\Model\Resource\Link _getResource()
- * @method \Magento\Downloadable\Model\Resource\Link getResource()
+ * @method Resource _getResource()
+ * @method Resource getResource()
  * @method int getProductId()
- * @method \Magento\Downloadable\Model\Link setProductId(int $value)
+ * @method Link setProductId(int $value)
  * @method int getSortOrder()
- * @method \Magento\Downloadable\Model\Link setSortOrder(int $value)
+ * @method Link setSortOrder(int $value)
  * @method int getNumberOfDownloads()
- * @method \Magento\Downloadable\Model\Link setNumberOfDownloads(int $value)
+ * @method Link setNumberOfDownloads(int $value)
  * @method int getIsShareable()
- * @method \Magento\Downloadable\Model\Link setIsShareable(int $value)
+ * @method Link setIsShareable(int $value)
  * @method string getLinkUrl()
- * @method \Magento\Downloadable\Model\Link setLinkUrl(string $value)
+ * @method Link setLinkUrl(string $value)
  * @method string getLinkFile()
- * @method \Magento\Downloadable\Model\Link setLinkFile(string $value)
+ * @method Link setLinkFile(string $value)
  * @method string getLinkType()
- * @method \Magento\Downloadable\Model\Link setLinkType(string $value)
+ * @method Link setLinkType(string $value)
  * @method string getSampleUrl()
- * @method \Magento\Downloadable\Model\Link setSampleUrl(string $value)
+ * @method Link setSampleUrl(string $value)
  * @method string getSampleFile()
- * @method \Magento\Downloadable\Model\Link setSampleFile(string $value)
+ * @method Link setSampleFile(string $value)
  * @method string getSampleType()
- * @method \Magento\Downloadable\Model\Link setSampleType(string $value)
+ * @method Link setSampleType(string $value)
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model;
-
 class Link extends \Magento\Core\Model\AbstractModel
 {
     const XML_PATH_LINKS_TITLE              = 'catalog/downloadable/links_title';
@@ -97,7 +97,7 @@ class Link extends \Magento\Core\Model\AbstractModel
     /**
      * Enter description here...
      *
-     * @return \Magento\Downloadable\Model\Link
+     * @return Link
      */
     protected function _afterSave()
     {

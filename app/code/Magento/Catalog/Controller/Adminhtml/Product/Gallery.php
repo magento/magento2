@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * Catalog product gallery controller
@@ -31,10 +32,11 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Controller\Adminhtml\Product;
-
 class Gallery extends \Magento\Backend\App\Action
 {
+    /**
+     * @return void
+     */
     public function uploadAction()
     {
         try {
@@ -46,7 +48,7 @@ class Gallery extends \Magento\Backend\App\Action
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             /** @var \Magento\Filesystem\Directory\Read $mediaDirectory */
-            $mediaDirectory = $this->_objectManager->get('Magento\Filesystem')->getDirectoryRead(\Magento\Filesystem::MEDIA);
+            $mediaDirectory = $this->_objectManager->get('Magento\App\Filesystem')->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
             $config = $this->_objectManager->get('Magento\Catalog\Model\Product\Media\Config');
             $result = $uploader->save($mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath()));
 
@@ -72,6 +74,9 @@ class Gallery extends \Magento\Backend\App\Action
         $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Catalog::products');

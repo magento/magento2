@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Sales
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,11 +68,11 @@ class AbstractTest
             'data' => array(
                 'attribute_code' => 'date',
                 'backend_type' => 'datetime',
-                'frontend_input' => 'date',
+                'front_end_input' => 'date',
                 'frontend_label' => 'Date',
             )
         );
-        $dateAttribute = $objectManager->create('Magento\Customer\Model\Attribute', $arguments);
+        $dateAttribute = $objectManager->create('\Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', $arguments);
         $attributes = array('date' => $dateAttribute);
         $method->invoke($block, $attributes, $fieldset);
 

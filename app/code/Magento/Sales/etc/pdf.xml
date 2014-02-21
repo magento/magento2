@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -27,14 +27,12 @@
     <renderers>
         <page type="invoice">
             <renderer product_type="default">Magento\Sales\Model\Order\Pdf\Items\Invoice\DefaultInvoice</renderer>
-            <renderer product_type="grouped">Magento\Sales\Model\Order\Pdf\Items\Invoice\Grouped</renderer>
         </page>
         <page type="shipment">
             <renderer product_type="default">Magento\Sales\Model\Order\Pdf\Items\Shipment\DefaultShipment</renderer>
         </page>
         <page type="creditmemo">
             <renderer product_type="default">Magento\Sales\Model\Order\Pdf\Items\Creditmemo\DefaultCreditmemo</renderer>
-            <renderer product_type="grouped">Magento\Sales\Model\Order\Pdf\Items\Creditmemo\Grouped</renderer>
         </page>
     </renderers>
     <totals>

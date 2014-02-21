@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogInventory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,26 +34,28 @@
  */
 namespace Magento\CatalogInventory\Block\Stockqty;
 
-abstract class Composite extends \Magento\CatalogInventory\Block\Stockqty\DefaultStockqty
+use Magento\Catalog\Model\Product;
+
+abstract class Composite extends DefaultStockqty
 {
     /**
      * Child products cache
      *
-     * @var array
+     * @var Product[]
      */
     private $_childProducts;
 
     /**
      * Retrieve child products
      *
-     * @return array
+     * @return Product[]
      */
     abstract protected function _getChildProducts();
 
     /**
      * Retrieve child products (using cache)
      *
-     * @return array
+     * @return Product[]
      */
     public function getChildProducts()
     {
@@ -66,6 +68,7 @@ abstract class Composite extends \Magento\CatalogInventory\Block\Stockqty\Defaul
     /**
      * Retrieve product stock qty
      *
+     * @param Product $product
      * @return float
      */
     public function getProductStockQty($product)

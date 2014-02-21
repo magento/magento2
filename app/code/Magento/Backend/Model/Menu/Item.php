@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -130,7 +130,7 @@ class Item
     protected $_menuFactory;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_urlModel;
 
@@ -168,7 +168,7 @@ class Item
      * @param \Magento\AuthorizationInterface $authorization
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
-     * @param \Magento\Backend\Model\Url $urlModel
+     * @param \Magento\Backend\Model\UrlInterface $urlModel
      * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Module\Manager $moduleManager
      * @param array $data
@@ -178,7 +178,7 @@ class Item
         \Magento\AuthorizationInterface $authorization,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Backend\Model\MenuFactory $menuFactory,
-        \Magento\Backend\Model\Url $urlModel,
+        \Magento\Backend\Model\UrlInterface $urlModel,
         \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Module\Manager $moduleManager,
         array $data = array()
@@ -207,7 +207,7 @@ class Item
      * Retrieve argument element, or default value
      *
      * @param array $array
-     * @param mixed $key
+     * @param string $key
      * @param mixed $defaultValue
      * @return mixed
      */
@@ -276,7 +276,7 @@ class Item
      * Set Item action
      *
      * @param string $action
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setAction($action)
@@ -323,7 +323,7 @@ class Item
      * Set Item title
      *
      * @param string $title
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setTitle($title)
@@ -357,7 +357,7 @@ class Item
      * Set Item tooltip
      *
      * @param string $tooltip
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setTooltip($tooltip)
@@ -371,7 +371,7 @@ class Item
      * Set Item module
      *
      * @param string $module
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setModule($module)
@@ -385,7 +385,7 @@ class Item
      * Set Item module dependency
      *
      * @param string $moduleName
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setModuleDependency($moduleName)
@@ -399,7 +399,7 @@ class Item
      * Set Item config dependency
      *
      * @param string $configPath
-     * @return \Magento\Backend\Model\Menu\Item
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setConfigDependency($configPath)
@@ -462,6 +462,9 @@ class Item
         }
     }
 
+    /**
+     * @return string[]
+     */
     public function __sleep()
     {
         if ($this->_submenu) {
@@ -483,6 +486,9 @@ class Item
         );
     }
 
+    /**
+     * @return void
+     */
     public function __wakeup()
     {
         $objectManager = \Magento\App\ObjectManager::getInstance();
@@ -491,7 +497,7 @@ class Item
         $this->_acl = $objectManager->get('Magento\AuthorizationInterface');
         $this->_storeConfig = $objectManager->get('Magento\Core\Model\Store\Config');
         $this->_menuFactory = $objectManager->get('Magento\Backend\Model\MenuFactory');
-        $this->_urlModel = $objectManager->get('Magento\Backend\Model\Url');
+        $this->_urlModel = $objectManager->get('Magento\Backend\Model\UrlInterface');
         $this->_moduleList = $objectManager->get('Magento\Module\ModuleListInterface');
         if ($this->_serializedSubmenu) {
             $this->_submenu = $this->_menuFactory->create();

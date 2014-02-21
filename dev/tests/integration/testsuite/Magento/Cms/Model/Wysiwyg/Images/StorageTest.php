@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  */
@@ -83,9 +83,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     public function testGetThumbsPath()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $filesystem = $objectManager->get('Magento\Filesystem');
+        $filesystem = $objectManager->get('Magento\App\Filesystem');
         $session = $objectManager->get('Magento\Backend\Model\Session');
-        $backendUrl = $objectManager->get('Magento\Backend\Model\Url');
+        $backendUrl = $objectManager->get('Magento\Backend\Model\UrlInterface');
         $imageFactory = $objectManager->get('Magento\Image\AdapterFactory');
         $viewUrl = $objectManager->get('Magento\View\Url');
         $imageHelper = $objectManager->get('Magento\Cms\Helper\Wysiwyg\Images');
@@ -111,7 +111,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $uploaderFactory
         );
         $this->assertStringStartsWith(
-            str_replace('\\', '/', $filesystem->getPath(\Magento\Filesystem::MEDIA)),
+            str_replace('\\', '/', $filesystem->getPath(\Magento\App\Filesystem::MEDIA_DIR)),
             $model->getThumbsPath()
         );
     }

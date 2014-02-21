@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -57,8 +57,8 @@
                 <max_package_weight>150</max_package_weight>
                 <handling_type>F</handling_type>
                 <handling_action>O</handling_action>
-                <shipment_days>1,2,3,4,5,6</shipment_days>
-                <intl_shipment_days>1,2,3,4,5</intl_shipment_days>
+                <shipment_days>Mon,Tue,Wed,Thu,Fri,Sat</shipment_days>
+                <intl_shipment_days>Mon,Tue,Wed,Thu,Fri</intl_shipment_days>
                 <additional_protection_rounding>0</additional_protection_rounding>
             </dhl>
             <fedex>
@@ -117,7 +117,7 @@
             <usps>
                 <active>0</active>
                 <sallowspecific>0</sallowspecific>
-                <allowed_methods>Bound Printed Matter,Express Mail,Express Mail Flat Rate Envelope,Express Mail Flat Rate Envelope Hold For Pickup,Express Mail Flat-Rate Envelope Sunday/Holiday Guarantee,Express Mail Hold For Pickup,Express Mail International,Express Mail International Flat Rate Envelope,Express Mail PO to PO,Express Mail Sunday/Holiday Guarantee,First-Class Mail International Large Envelope,First-Class Mail International Letter,First-Class Mail International Package,First-Class Mail International Parcel,First-Class,First-Class Mail,First-Class Mail Flat,First-Class Mail Large Envelope,First-Class Mail International,First-Class Mail Letter,First-Class Mail Parcel,First-Class Mail Package,Global Express Guaranteed (GXG),Global Express Guaranteed Non-Document Non-Rectangular,Global Express Guaranteed Non-Document Rectangular,Library Mail,Media Mail,Parcel Post,Priority Mail,Priority Mail Small Flat Rate Box,Priority Mail Medium Flat Rate Box,Priority Mail Large Flat Rate Box,Priority Mail Flat Rate Box,Priority Mail Flat Rate Envelope,Priority Mail International,Priority Mail International Flat Rate Box,Priority Mail International Flat Rate Envelope,Priority Mail International Small Flat Rate Box,Priority Mail International Medium Flat Rate Box,Priority Mail International Large Flat Rate Box,USPS GXG Envelopes</allowed_methods>
+                <allowed_methods>0_FCLE,0_FCL,0_FCP,1,2,3,4,6,7,13,16,17,22,23,25,27,28,33,34,35,36,37,42,43,53,55,56,57,61,INT_1,INT_2,INT_4,INT_6,INT_7,INT_8,INT_9,INT_10,INT_11,INT_12,INT_13,INT_14,INT_15,INT_16,INT_20,INT_26</allowed_methods>
                 <container>VARIABLE</container>
                 <cutoff_cost />
                 <free_method />
@@ -126,7 +126,7 @@
                 <shipment_requesttype>0</shipment_requesttype>
                 <handling />
                 <machinable>true</machinable>
-                <methods>Bound Printed Matter,Express Mail,Express Mail Flat Rate Envelope,Express Mail Flat Rate Envelope Hold For Pickup,Express Mail Flat-Rate Envelope Sunday/Holiday Guarantee,Express Mail Hold For Pickup,Express Mail International,Express Mail International Flat Rate Envelope,Express Mail PO to PO,Express Mail Sunday/Holiday Guarantee,First-Class Mail International Large Envelope,First-Class Mail International Letters,First-Class Mail International Package,First-Class Mail International Parcel,First-Class,First-Class Mail,First-Class Mail Flat,First-Class Mail Large Envelope,First-Class Mail International,First-Class Mail Letter,First-Class Mail Parcel,First-Class Mail Package,Global Express Guaranteed (GXG),Global Express Guaranteed Non-Document Non-Rectangular,Global Express Guaranteed Non-Document Rectangular,Library Mail,Media Mail,Parcel Post,Priority Mail,Priority Mail Small Flat Rate Box,Priority Mail Medium Flat Rate Box,Priority Mail Large Flat Rate Box,Priority Mail Flat Rate Box,Priority Mail Flat Rate Envelope,Priority Mail International,Priority Mail International Flat Rate Box,Priority Mail International Flat Rate Envelope,Priority Mail International Small Flat Rate Box,Priority Mail International Medium Flat Rate Box,Priority Mail International Large Flat Rate Box,USPS GXG Envelopes</methods>
+                <methods></methods>
                 <model>Magento\Usa\Model\Shipping\Carrier\Usps</model>
                 <size>REGULAR</size>
                 <title>United States Postal Service</title>
@@ -157,6 +157,7 @@
                 <size>R</size>
                 <handling_type>F</handling_type>
                 <handling_action>O</handling_action>
+                <shipment_days>Mon,Tue,Wed,Thu,Fri</shipment_days>
             </dhlint>
         </carriers>
     </default>

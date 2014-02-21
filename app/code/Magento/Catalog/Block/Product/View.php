@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -75,6 +75,11 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_productHelper;
 
     /**
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     */
+    protected $productTypeConfig;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Core\Model\Registry $registry
@@ -92,8 +97,10 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param array $data
-     * 
+     * @param array $priceBlockTypes
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -114,13 +121,16 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Stdlib\String $string,
         \Magento\Catalog\Helper\Product $productHelper,
-        array $data = array()
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_productHelper = $productHelper;
         $this->_coreData = $coreData;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_productFactory = $productFactory;
         $this->_taxCalculation = $taxCalculation;
+        $this->productTypeConfig = $productTypeConfig;
         $this->string = $string;
         parent::__construct(
             $context,
@@ -134,7 +144,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
 
@@ -157,7 +168,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             $currentCategory = $this->_coreRegistry->registry('current_category');
             if ($keyword) {
                 $headBlock->setKeywords($keyword);
-            } elseif($currentCategory) {
+            } elseif ($currentCategory) {
                 $headBlock->setKeywords($product->getName());
             }
             $description = $product->getMetaDescription();
@@ -373,5 +384,15 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     public function getOptionsContainer()
     {
         return $this->getProduct()->getOptionsContainer() == 'container1' ? 'container1' : 'container2';
+    }
+
+    /**
+     * Check whether quantity field should be rendered
+     *
+     * @return bool
+     */
+    public function shouldRenderQuantity()
+    {
+        return !$this->productTypeConfig->isProductSet($this->getProduct()->getTypeId());
     }
 }

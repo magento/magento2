@@ -20,35 +20,42 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block;
 
 /**
  * Review detailed view block
  *
- * @category   Magento
- * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Review\Block;
-
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {
+    /**
+     * View template name
+     *
+     * @var string
+     */
     protected $_template = 'view.phtml';
 
     /**
+     * Rating option model
+     *
      * @var \Magento\Rating\Model\Rating\Option\VoteFactory
      */
     protected $_voteFactory;
 
     /**
+     * Rating model factory
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
+     * Review model
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
@@ -69,6 +76,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,7 +95,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_voteFactory = $voteFactory;
         $this->_reviewFactory = $reviewFactory;
@@ -104,7 +113,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
 
@@ -145,7 +155,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getRating()
     {
-        if( !$this->getRatingCollection() ) {
+        if (!$this->getRatingCollection()) {
             $ratingCollection = $this->_voteFactory->create()
                 ->getResourceCollection()
                 ->setReviewFilter($this->getReviewId())
@@ -164,7 +174,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getRatingSummary()
     {
-        if( !$this->getRatingSummaryCache() ) {
+        if (!$this->getRatingSummaryCache()) {
             $this->setRatingSummaryCache(
                 $this->_ratingFactory->create()->getEntitySummary($this->getProductData()->getId())
             );
@@ -179,7 +189,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getTotalReviews()
     {
-        if( !$this->getTotalReviewsCache() ) {
+        if (!$this->getTotalReviewsCache()) {
             $this->setTotalReviewsCache(
                 $this->_reviewFactory->create()->getTotalReviews(
                     $this->getProductData()->getId(), false, $this->_storeManager->getStore()->getId()

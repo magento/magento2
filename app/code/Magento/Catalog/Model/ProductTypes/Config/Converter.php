@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Model\ProductTypes\Config;
@@ -39,7 +39,7 @@ class Converter implements \Magento\Config\ConverterInterface
         $output = array();
         $xpath = new \DOMXPath($source);
         $types = $xpath->evaluate('/config/type');
-        /** @var $typeNode DOMNode */
+        /** @var $typeNode \DOMNode */
         foreach ($types as $typeNode) {
             $typeName = $this->_getAttributeValue($typeNode, 'name');
             $isComposite = $this->_getAttributeValue($typeNode, 'composite', 'false');
@@ -54,7 +54,7 @@ class Converter implements \Magento\Config\ConverterInterface
             $data['can_use_qty_decimals'] = !empty($isDecimal) && 'false' !== $isDecimal;
             $data['is_qty'] = !empty($isQty) && 'false' !== $isQty;
 
-            /** @var $childNode DOMNode */
+            /** @var $childNode \DOMNode */
             foreach ($typeNode->childNodes as $childNode) {
                 if ($childNode->nodeType != XML_ELEMENT_NODE) {
                     continue;
@@ -70,18 +70,8 @@ class Converter implements \Magento\Config\ConverterInterface
                     case 'stockIndexerModel':
                         $data['stock_indexer'] = $this->_getAttributeValue($childNode, 'instance');
                         break;
-                    case 'allowProductTypes':
-                        /** @var $allowedTypes DOMNode */
-                        foreach ($childNode->childNodes as $allowedTypes) {
-                            if ($allowedTypes->nodeType != XML_ELEMENT_NODE) {
-                                continue;
-                            }
-                            $name = $this->_getAttributeValue($allowedTypes, 'name');
-                            $data['allow_product_types'][$name] = $name;
-                        }
-                        break;
                     case 'allowedSelectionTypes':
-                        /** @var $selectionsTypes DOMNode */
+                        /** @var $selectionsTypes \DOMNode */
                         foreach ($childNode->childNodes as $selectionsTypes) {
                             if ($selectionsTypes->nodeType != XML_ELEMENT_NODE) {
                                 continue;
@@ -90,20 +80,39 @@ class Converter implements \Magento\Config\ConverterInterface
                             $data['allowed_selection_types'][$name] = $name;
                         }
                         break;
+                    case 'customAttributes':
+                        /** @var $customAttributes \DOMNode */
+                        foreach ($childNode->childNodes as $customAttributes) {
+                            if ($customAttributes->nodeType != XML_ELEMENT_NODE) {
+                                continue;
+                            }
+                            $name = $this->_getAttributeValue($customAttributes, 'name');
+                            $value = $this->_getAttributeValue($customAttributes, 'value');
+                            $data['custom_attributes'][$name] = $value;
+                        }
+                        break;
                 }
 
             }
-            $output[$typeName] = $data;
+            $output['types'][$typeName] = $data;
         }
+
+        $composableTypes = $xpath->evaluate('/config/composableTypes/*');
+        $output['composableTypes'] = array();
+        foreach ($composableTypes as $typeNode) {
+            $typeName = $this->_getAttributeValue($typeNode, 'name');
+            $output['composableTypes'][$typeName] = $typeName;
+        }
+
         return $output;
     }
 
     /**
      * Get attribute value
      *
-     * @param DOMNode $input
+     * @param \DOMNode $input
      * @param string $attributeName
-     * @param mixed $default
+     * @param string|null $default
      * @return null|string
      */
     protected function _getAttributeValue(\DOMNode $input, $attributeName, $default = null)

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,6 +37,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price;
 class Group
     extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group\AbstractGroup
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/edit/price/group.phtml';
 
     /**
@@ -74,7 +77,7 @@ class Group
      *
      * Add "Add Group Price" button to layout
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group
+     * @return $this
      */
     protected function _prepareLayout()
     {

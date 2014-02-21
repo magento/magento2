@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -227,17 +227,17 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory
      */
-    protected $_itemCollFactory;
+    protected $_itemCollectionFactory;
 
     /**
-     * @var \Magento\Shipping\Model\ShippingFactory
+     * @var \Magento\Sales\Model\Quote\Address\RateCollectorInterface
      */
-    protected $_shippingFactory;
+    protected $_rateCollector;
 
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory
      */
-    protected $_rateCollFactory;
+    protected $_rateCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\Quote\Address\Total\CollectorFactory
@@ -260,14 +260,15 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Sales\Model\Quote\Address\ItemFactory $addressItemFactory
-     * @param \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollFactory
+     * @param \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Sales\Model\Quote\Address\RateFactory $addressRateFactory
-     * @param \Magento\Shipping\Model\ShippingFactory $shippingFactory
-     * @param \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollFactory
-     * @param \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateCollectorInterface $rateCollector
+     * @param \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateRequestFactory $rateRequestFactory
      * @param \Magento\Sales\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
      * @param \Magento\Sales\Model\Quote\Address\TotalFactory $addressTotalFactory
      * @param \Magento\Object\Copy $objectCopyService
+     * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -283,14 +284,15 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Sales\Model\Quote\Address\ItemFactory $addressItemFactory,
-        \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollFactory,
+        \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Sales\Model\Quote\Address\RateFactory $addressRateFactory,
-        \Magento\Shipping\Model\ShippingFactory $shippingFactory,
-        \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollFactory,
-        \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory,
+        \Magento\Sales\Model\Quote\Address\RateCollectorInterface $rateCollector,
+        \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory,
+        \Magento\Sales\Model\Quote\Address\RateRequestFactory $rateRequestFactory,
         \Magento\Sales\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
         \Magento\Sales\Model\Quote\Address\TotalFactory $addressTotalFactory,
         \Magento\Object\Copy $objectCopyService,
+        \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -298,14 +300,15 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_addressFactory = $addressFactory;
         $this->_addressItemFactory = $addressItemFactory;
-        $this->_itemCollFactory = $itemCollFactory;
+        $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_addressRateFactory = $addressRateFactory;
-        $this->_shippingFactory = $shippingFactory;
-        $this->_rateCollFactory = $rateCollFactory;
+        $this->_rateCollector = $rateCollector;
+        $this->_rateCollectionFactory = $rateCollectionFactory;
         $this->_rateRequestFactory = $rateRequestFactory;
         $this->_totalCollectorFactory = $totalCollectorFactory;
         $this->_addressTotalFactory = $addressTotalFactory;
         $this->_objectCopyService = $objectCopyService;
+        $this->_carrierFactory = $carrierFactory;
         parent::__construct(
             $context,
             $registry,
@@ -336,27 +339,68 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected function _beforeSave()
     {
         parent::_beforeSave();
+        $this->_populateBeforeSaveData();
+        return $this;
+    }
+
+    /**
+     * Set the required fields
+     */
+    protected function _populateBeforeSaveData()
+    {
         if ($this->getQuote()) {
-            $quoteId = $this->getQuote()->getId();
-            if ($quoteId) {
-                $this->setQuoteId($quoteId);
-            } else {
-                $this->_dataSaveAllowed = false;
+            $this->_dataSaveAllowed = (bool)$this->getQuote()->getId();
+
+            if ($this->getQuote()->getId()) {
+                $this->setQuoteId($this->getQuote()->getId());
             }
             $this->setCustomerId($this->getQuote()->getCustomerId());
+
             /**
              * Init customer address id if customer address is assigned
              */
             if ($this->getCustomerAddress()) {
                 $this->setCustomerAddressId($this->getCustomerAddress()->getId());
             }
+
+            if (!$this->getId()) {
+                $this->setSameAsBilling((int)$this->_isSameAsBilling());
+            }
         }
-        if ($this->getAddressType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING
-            && $this->getSameAsBilling() === null
-        ) {
-            $this->setSameAsBilling(1);
-        }
-        return $this;
+    }
+
+    /**
+     * Returns true if shipping address is same as billing
+     *
+     * @return bool
+     */
+    protected function _isSameAsBilling()
+    {
+        return $this->getAddressType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING
+            && ($this->_isNotRegisteredCustomer() || $this->_isDefaultShippingNullOrSameAsBillingAddress());
+    }
+
+    /**
+     * Checks if the user is a registered customer
+     *
+     * @return bool
+     */
+    protected function _isNotRegisteredCustomer()
+    {
+        return !$this->getQuote()->getCustomerId() || $this->getCustomerAddressId() === null;
+    }
+
+    /**
+     * Returns true if shipping address is same as billing or it is undefined
+     *
+     * @return bool
+     */
+    protected function _isDefaultShippingNullOrSameAsBillingAddress()
+    {
+        $customer = $this->getQuote()->getCustomer();
+        return !$customer->getDefaultShippingAddress()
+            || $customer->getDefaultBillingAddress() && $customer->getDefaultShippingAddress()
+                && $customer->getDefaultBillingAddress()->getId() == $customer->getDefaultShippingAddress()->getId();
     }
 
     /**
@@ -479,7 +523,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getItemsCollection()
     {
         if (null === $this->_items) {
-            $this->_items = $this->_itemCollFactory->create()->setAddressFilter($this->getId());
+            $this->_items = $this->_itemCollectionFactory->create()->setAddressFilter($this->getId());
             if ($this->getId()) {
                 foreach ($this->_items as $item) {
                     $item->setAddress($this);
@@ -775,7 +819,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getShippingRatesCollection()
     {
         if (null === $this->_rates) {
-            $this->_rates = $this->_rateCollFactory->create()->setAddressFilter($this->getId());
+            $this->_rates = $this->_rateCollectionFactory->create()->setAddressFilter($this->getId());
             if ($this->getQuote()->hasNominalItems(false)) {
                 $this->_rates->setFixedOnlyFilter(true);
             }
@@ -813,13 +857,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         $rates = array();
         foreach ($this->getShippingRatesCollection() as $rate) {
-            if (!$rate->isDeleted() && $rate->getCarrierInstance()) {
+            if (!$rate->isDeleted() && $this->_carrierFactory->get($rate->getCarrier())) {
                 if (!isset($rates[$rate->getCarrier()])) {
                     $rates[$rate->getCarrier()] = array();
                 }
 
                 $rates[$rate->getCarrier()][] = $rate;
-                $rates[$rate->getCarrier()][0]->carrier_sort_order = $rate->getCarrierInstance()->getSortOrder();
+                $rates[$rate->getCarrier()][0]->carrier_sort_order
+                    = $this->_carrierFactory->get($rate->getCarrier())->getSortOrder();
             }
         }
         uasort($rates, array($this, '_sortRates'));
@@ -941,7 +986,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function requestShippingRates(\Magento\Sales\Model\Quote\Item\AbstractItem $item = null)
     {
-        /** @var $request \Magento\Shipping\Model\Rate\Request */
+        /** @var $request \Magento\Sales\Model\Quote\Address\RateRequest */
         $request = $this->_rateRequestFactory->create();
         $request->setAllItems($item ? array($item) : $this->getAllItems());
         $request->setDestCountryId($this->getCountryId());
@@ -986,7 +1031,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
         $request->setBaseSubtotalInclTax($this->getBaseSubtotalInclTax());
 
-        $result = $this->_shippingFactory->create()->collectRates($request)->getResult();
+        $result = $this->_rateCollector->collectRates($request)->getResult();
 
         $found = false;
         if ($result) {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,15 +41,15 @@ class Config
     protected $_viewUrl;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
     /**
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Backend\Model\UrlInterface $url
      */
-    public function __construct(\Magento\View\Url $viewUrl, \Magento\Backend\Model\Url $url)
+    public function __construct(\Magento\View\Url $viewUrl, \Magento\Backend\Model\UrlInterface $url)
     {
         $this->_viewUrl = $viewUrl;
         $this->_url = $url;

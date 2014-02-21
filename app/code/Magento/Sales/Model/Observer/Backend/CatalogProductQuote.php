@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Sales\Model\Observer\Backend;
@@ -46,7 +46,7 @@ class CatalogProductQuote
      */
     protected function _recollectQuotes($productId, $status)
     {
-        if ($status != \Magento\Catalog\Model\Product\Status::STATUS_ENABLED) {
+        if ($status != \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
             $this->_quote->markQuotesRecollect($productId);
         }
     }
@@ -60,18 +60,6 @@ class CatalogProductQuote
     {
         $product = $observer->getEvent()->getProduct();
         $this->_recollectQuotes($product->getId(), $product->getStatus());
-    }
-
-    /**
-     * Catalog Mass Status update process
-     *
-     * @param \Magento\Event\Observer $observer
-     */
-    public function catalogProductStatusUpdate(\Magento\Event\Observer $observer)
-    {
-        $status = $observer->getEvent()->getStatus();
-        $productId  = $observer->getEvent()->getProductId();
-        $this->_recollectQuotes($productId, $status);
     }
 
     /**

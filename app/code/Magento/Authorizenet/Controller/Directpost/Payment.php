@@ -20,19 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_Authorizenet
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * DirtectPost Payment Controller
- *
- * @category   Magento
- * @package    Magento_Authorizenet
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Authorizenet\Controller\Directpost;
 
+/**
+ * DirectPost Payment Controller
+ *
+ * @author     Magento Core Team <core@magentocommerce.com>
+ */
 class Payment extends \Magento\App\Action\Action
 {
     /**
@@ -75,8 +72,33 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Response action.
      * Action for Authorize.net SIM Relay Request.
+     *
+     * @return void
+     */
+    public function backendResponseAction()
+    {
+        $this->_responseAction($this->_objectManager->get('Magento\Authorizenet\Helper\Backend'));
+    }
+
+    /**
+     * Response action.
+     * Action for Authorize.net SIM Relay Request.
+     *
+     * @return void
      */
     public function responseAction()
+    {
+        $this->_responseAction($this->_objectManager->get('Magento\Authorizenet\Helper\Data'));
+    }
+
+    /**
+     * Response action.
+     * Action for Authorize.net SIM Relay Request.
+     *
+     * @param \Magento\Authorizenet\Helper\HelperInterface $helper
+     * @return void
+     */
+    protected function _responseAction(\Magento\Authorizenet\Helper\HelperInterface $helper)
     {
         $params = array();
         $data = $this->getRequest()->getPost();
@@ -112,8 +134,7 @@ class Payment extends \Magento\App\Action\Action
             }
             $result['controller_action_name'] = $data['controller_action_name'];
             $result['is_secure'] = isset($data['is_secure']) ? $data['is_secure'] : false;
-            $params['redirect'] = $this->_objectManager->get('Magento\Authorizenet\Helper\HelperInterface')
-                ->getRedirectIframeUrl($result);
+            $params['redirect'] = $helper->getRedirectIframeUrl($result);
         }
 
         $this->_coreRegistry->register('authorizenet_directpost_form_params', $params);
@@ -124,6 +145,7 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Retrieve params and put javascript into iframe
      *
+     * @return void
      */
     public function redirectAction()
     {
@@ -157,6 +179,7 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Send request to authorize.net
      *
+     * @return void
      */
     public function placeAction()
     {
@@ -184,6 +207,7 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Return customer quote by ajax
      *
+     * @return void
      */
     public function returnQuoteAction()
     {
@@ -197,6 +221,7 @@ class Payment extends \Magento\App\Action\Action
      *
      * @param bool $cancelOrder
      * @param string $errorMsg
+     * @return void
      */
     protected function _returnCustomerQuote($cancelOrder = false, $errorMsg = '')
     {

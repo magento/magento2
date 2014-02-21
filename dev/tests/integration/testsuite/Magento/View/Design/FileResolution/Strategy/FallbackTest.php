@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,14 +63,14 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
     {
         // Prepare config with directories
         $filesystem = Bootstrap::getObjectManager()->create(
-            'Magento\Filesystem',
+            'Magento\App\Filesystem',
             array(
                 'directoryList' => Bootstrap::getObjectManager()->create(
-                    'Magento\Filesystem\DirectoryList',
+                    'Magento\App\Filesystem\DirectoryList',
                     array(
                         'root' => $this->_baseDir,
                         'directories' => array(
-                            \Magento\Filesystem::THEMES => array('path' => $this->_viewDir)
+                            \Magento\App\Filesystem::THEMES_DIR => array('path' => $this->_viewDir)
                         )
                     )
                 )

@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Resource\Website\Grid;
 
 /**
  * Grid collection
@@ -31,14 +32,12 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Website\Grid;
-
 class Collection extends \Magento\Core\Model\Resource\Website\Collection
 {
     /**
      * Join website and store names
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection|\Magento\Core\Model\Resource\Website\Grid\Collection
+     * @return $this
      */
     protected function  _initSelect()
     {

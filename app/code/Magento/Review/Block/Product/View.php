@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block\Product;
+
+use Magento\Review\Model\Resource\Review\Collection as ReviewCollection;
 
 /**
  * Product Reviews Page
@@ -31,16 +34,18 @@
  * @package    Magento_Review
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block\Product;
-
 class View extends \Magento\Catalog\Block\Product\View
 {
     /**
-     * @var \Magento\Review\Model\Resource\Review\Collection
+     * Review collection
+     *
+     * @var ReviewCollection
      */
     protected $_reviewsCollection;
 
     /**
+     * Review resource model
+     *
      * @var \Magento\Review\Model\Resource\Review\CollectionFactory
      */
     protected $_reviewsColFactory;
@@ -63,9 +68,11 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
      * @param array $data
-     * 
+     * @param array $priceBlockTypes
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -86,8 +93,10 @@ class View extends \Magento\Catalog\Block\Product\View
         \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Stdlib\String $string,
         \Magento\Catalog\Helper\Product $productHelper,
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_reviewsColFactory = $collectionFactory;
         parent::__construct(
@@ -108,7 +117,9 @@ class View extends \Magento\Catalog\Block\Product\View
             $taxCalculation,
             $string,
             $productHelper,
-            $data
+            $productTypeConfig,
+            $data,
+            $priceBlockTypes
         );
     }
 
@@ -129,12 +140,15 @@ class View extends \Magento\Catalog\Block\Product\View
      * Reviews collection count will be jerked here
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param string $templateType
+     * @param bool $templateType
      * @param bool $displayIfNoReviews
      * @return string
      */
-    public function getReviewsSummaryHtml(\Magento\Catalog\Model\Product $product, $templateType = false, $displayIfNoReviews = false)
-    {
+    public function getReviewsSummaryHtml(
+        \Magento\Catalog\Model\Product $product,
+        $templateType = false,
+        $displayIfNoReviews = false
+    ) {
         return
             $this->getLayout()->createBlock('Magento\Rating\Block\Entity\Detailed')
                 ->setEntityId($this->getProduct()->getId())
@@ -146,6 +160,11 @@ class View extends \Magento\Catalog\Block\Product\View
             ;
     }
 
+    /**
+     * Get collection of reviews
+     *
+     * @return ReviewCollection
+     */
     public function getReviewsCollection()
     {
         if (null === $this->_reviewsCollection) {
@@ -161,7 +180,7 @@ class View extends \Magento\Catalog\Block\Product\View
     /**
      * Force product view page behave like without options
      *
-     * @return false
+     * @return bool
      */
     public function hasOptions()
     {

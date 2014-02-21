@@ -20,16 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\System\Store;
 
 /**
  * Adminhtml store edit
  */
-
-namespace Magento\Backend\Block\System\Store;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -56,6 +54,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Init class
      *
+     * @return void
      */
     protected function _construct()
     {

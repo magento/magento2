@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,7 +44,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('update_time', $config);
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Filesystem')->getPath(\Magento\Filesystem::MEDIA),
+                ->get('Magento\App\Filesystem')->getPath(\Magento\App\Filesystem::MEDIA_DIR),
             $config['media_directory']
         );
         $this->assertInternalType('array', $config['allowed_resources']);

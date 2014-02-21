@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,27 +37,35 @@ class Uploader
     protected  $_allowedExtensions = array('jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp');
 
     /**
-     * @var \Magento\Filesystem
+     * File system
+     *
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
+     * Transfer adapter
+     *
      * @var \Zend_File_Transfer_Adapter_Http
      */
     protected $_transferAdapter;
 
     /**
+     * Uploader factory
+     *
      * @var \Magento\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * Constructor
+     *
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\HTTP\Adapter\FileTransferFactory $adapterFactory
      * @param \Magento\File\UploaderFactory $uploaderFactory
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\HTTP\Adapter\FileTransferFactory $adapterFactory,
         \Magento\File\UploaderFactory $uploaderFactory
     ) {

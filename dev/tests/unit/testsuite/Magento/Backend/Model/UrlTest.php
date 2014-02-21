@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -81,6 +81,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected $_authSessionMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_paramsResolverMock;
+
+    /**
      * @var \Magento\Encryption\EncryptorInterface
      */
     protected $_encryptor;
@@ -126,14 +131,23 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             '', false, false);
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_encryptor = $this->getMock('Magento\Encryption\Encryptor', null, array(), '', false);
+        $this->_paramsResolverMock = $this->getMock(
+            'Magento\Url\RouteParamsResolverFactory', array(), array(), '', false
+        );
+        $this->_paramsResolverMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->getMock(
+                'Magento\Core\Model\Url\RouteParamsResolver', array(), array(), '', false
+            )));
         $this->_model = $helper->getObject('Magento\Backend\Model\Url', array(
             'coreStoreConfig' => $this->_storeConfigMock,
-            'backendHelper'   => $helperMock,
-            'formKey'         => $this->_formKey,
-            'menuConfig'      => $this->_menuConfigMock,
-            'coreData'        => $this->_coreDataMock,
-            'authSession'     => $this->_authSessionMock,
-            'encryptor'       => $this->_encryptor
+            'backendHelper' => $helperMock,
+            'formKey' => $this->_formKey,
+            'menuConfig' => $this->_menuConfigMock,
+            'coreData' => $this->_coreDataMock,
+            'authSession' => $this->_authSessionMock,
+            'encryptor' => $this->_encryptor,
+            'routeParamsResolver' => $this->_paramsResolverMock
         ));
 
         $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
@@ -205,55 +219,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $urlModel = $helper->getObject('Magento\Backend\Model\Url', array(
             'backendHelper'   => $helperMock,
-            'authSession'     => $this->_authSessionMock
+            'authSession'     => $this->_authSessionMock,
+            'routeParamsResolver' => $this->_paramsResolverMock,
         ));
         $urlModel->getAreaFrontName();
-    }
-
-    public function testGetActionPath()
-    {
-        $moduleFrontName = 'moduleFrontName';
-        $controllerName = 'controllerName';
-        $actionName = 'actionName';
-
-        $this->_model->setRouteName($moduleFrontName);
-        $this->_model->setRouteFrontName($moduleFrontName);
-        $this->_model->setControllerName($controllerName);
-        $this->_model->setActionName($actionName);
-
-        $actionPath = $this->_model->getActionPath();
-
-        $this->assertNotEmpty($actionPath);
-        $this->assertStringStartsWith($this->_areaFrontName . '/', $actionPath);
-        $this->assertStringMatchesFormat($this->_areaFrontName . '/%s/%s/%s', $actionPath);
-    }
-
-    public function testGetActionPathWhenAreaFrontNameIsEmpty()
-    {
-        $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
-        $helperMock->expects($this->once())->method('getAreaFrontName')
-            ->will($this->returnValue(''));
-
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $urlModel = $helper->getObject('Magento\Backend\Model\Url', array(
-            'backendHelper'   => $helperMock,
-            'authSession'     => $this->_authSessionMock
-        ));
-
-        $moduleFrontName = 'moduleFrontName';
-        $controllerName = 'controllerName';
-        $actionName = 'actionName';
-
-        $urlModel->setRouteName($moduleFrontName);
-        $urlModel->setRouteFrontName($moduleFrontName);
-        $urlModel->setControllerName($controllerName);
-        $urlModel->setActionName($actionName);
-
-        $actionPath = $urlModel->getActionPath();
-
-        $this->assertNotEmpty($actionPath);
-        $this->assertStringStartsWith($moduleFrontName . '/', $actionPath);
-        $this->assertStringMatchesFormat($moduleFrontName . '/%s/%s', $actionPath);
     }
 
     /**

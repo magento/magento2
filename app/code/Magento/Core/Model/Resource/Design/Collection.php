@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Design;
 
 /**
@@ -60,6 +59,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * Core Design resource collection
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -83,8 +84,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add date filter to collection
      *
-     * @param null|int|string|Zend_Date $date
-     * @return \Magento\Core\Model\Resource\Design\Collection
+     * @param null|int|string|\Zend_Date $date
+     * @return $this
      */
     public function addDateFilter($date = null)
     {

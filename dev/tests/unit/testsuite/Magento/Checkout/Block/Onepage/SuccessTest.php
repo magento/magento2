@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Checkout\Block\Onepage;
@@ -53,7 +53,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             ->method('getLastRecurringProfileIds')
             ->will($this->returnValue([1, 2, 3]));
         $collection = $this->getMock(
-            'Magento\Sales\Model\Resource\Recurring\Profile\Collection',
+            'Magento\RecurringProfile\Model\Resource\Profile\Collection',
             ['addFieldToFilter'],
             [],
             '',
@@ -62,7 +62,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('addFieldToFilter')
             ->with('profile_id', ['in' => [1, 2, 3]])->will($this->returnValue([]));
         $recurringProfileCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\Resource\Recurring\Profile\CollectionFactory',
+            'Magento\RecurringProfile\Model\Resource\Profile\CollectionFactory',
             ['create'],
             [],
             '',
@@ -80,5 +80,18 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->assertEquals('', $block->toHtml());
+    }
+
+    public function testGetAdditionalInfoHtml()
+    {
+        /** @var \Magento\Checkout\Block\Onepage\Success $block */
+        $block = $this->objectManager->getObject('Magento\Checkout\Block\Onepage\Success');
+        $layout = $this->getMock('Magento\View\LayoutInterface', [], [], '', false);
+        $layout->expects($this->once())
+            ->method('renderElement')
+            ->with('order.success.additional.info')
+            ->will($this->returnValue('AdditionalInfoHtml'));
+        $block->setLayout($layout);
+        $this->assertEquals('AdditionalInfoHtml', $block->getAdditionalInfoHtml());
     }
 }

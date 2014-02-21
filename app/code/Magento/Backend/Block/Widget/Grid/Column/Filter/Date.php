@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Date grid column filter
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
 class Date
     extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
@@ -53,6 +52,9 @@ class Date
         parent::__construct($context, $resourceHelper, $data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareLayout()
     {
         if ($head = $this->getLayout()->getBlock('head')) {
@@ -61,6 +63,9 @@ class Date
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getHtml()
     {
         $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
@@ -95,6 +100,10 @@ class Date
         return $html;
     }
 
+    /**
+     * @param string|null $index
+     * @return string
+     */
     public function getEscapedValue($index=null)
     {
         $value = $this->getValue($index);
@@ -104,6 +113,10 @@ class Date
         return $value;
     }
 
+    /**
+     * @param string|null $index
+     * @return array|string|int|float|null
+     */
     public function getValue($index=null)
     {
         if ($index) {
@@ -119,6 +132,9 @@ class Date
         return $value;
     }
 
+    /**
+     * @return array|string|int|float|null
+     */
     public function getCondition()
     {
         $value = $this->getValue();
@@ -126,6 +142,10 @@ class Date
         return $value;
     }
 
+    /**
+     * @param array|string|int|float $value
+     * @return $this
+     */
     public function setValue($value)
     {
         if (isset($value['locale'])) {
@@ -160,7 +180,7 @@ class Date
      *
      * @param string $date
      * @param string $locale
-     * @return \Zend_Date
+     * @return \Zend_Date|null
      */
     protected function _convertDate($date, $locale)
     {

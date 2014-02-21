@@ -20,19 +20,19 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Usa\Model\Shipping\Carrier;
+
+use Magento\Sales\Model\Quote\Address\RateRequest;
+use Magento\Shipping\Model\Rate\Result;
 
 /**
  * Fedex shipping implementation
  *
- * @category   Magento
- * @package    Magento_Usa
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Usa\Model\Shipping\Carrier;
-
 class Fedex
     extends \Magento\Usa\Model\Shipping\Carrier\AbstractCarrier
     implements \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -69,7 +69,7 @@ class Fedex
     /**
      * Rate request data
      *
-     * @var \Magento\Shipping\Model\Rate\Request|null
+     * @var RateRequest|null
      */
     protected $_request = null;
 
@@ -83,7 +83,7 @@ class Fedex
     /**
      * Rate result data
      *
-     * @var \Magento\Shipping\Model\Rate\Result|null
+     * @var Result|null
      */
     protected $_result = null;
 
@@ -111,7 +111,7 @@ class Fedex
     /**
      * Container types that could be customized for FedEx carrier
      *
-     * @var array
+     * @var string[]
      */
     protected $_customizableContainerTypes = array('YOUR_PACKAGING');
 
@@ -128,15 +128,15 @@ class Fedex
     /**
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
      */
-    protected $_productCollFactory;
+    protected $_productCollectionFactory;
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
-     * @param \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory
      * @param \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory
      * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory
@@ -147,18 +147,18 @@ class Fedex
      * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Module\Dir\Reader $configReader
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param array $data
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
-        \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory,
         \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory,
         \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory,
@@ -169,11 +169,11 @@ class Fedex
         \Magento\Logger $logger,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Module\Dir\Reader $configReader,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
-        $this->_productCollFactory = $productCollFactory;
+        $this->_productCollectionFactory = $productCollectionFactory;
         parent::__construct(
             $coreStoreConfig,
             $rateErrorFactory,
@@ -248,10 +248,10 @@ class Fedex
     /**
      * Collect and get rates
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return \Magento\Shipping\Model\Rate\Result|bool|null
+     * @param RateRequest $request
+     * @return Result|bool|null
      */
-    public function collectRates(\Magento\Shipping\Model\Rate\Request $request)
+    public function collectRates(RateRequest $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -268,10 +268,10 @@ class Fedex
     /**
      * Prepare and set request to this instance
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return \Magento\Usa\Model\Shipping\Carrier\Fedex
+     * @param RateRequest $request
+     * @return $this
      */
-    public function setRequest(\Magento\Shipping\Model\Rate\Request $request)
+    public function setRequest(RateRequest $request)
     {
         $this->_request = $request;
 
@@ -306,7 +306,7 @@ class Fedex
             $origCountry = $request->getOrigCountry();
         } else {
             $origCountry = $this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
                 $request->getStoreId()
             );
         }
@@ -316,7 +316,7 @@ class Fedex
             $r->setOrigPostal($request->getOrigPostcode());
         } else {
             $r->setOrigPostal($this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_ZIP,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
                 $request->getStoreId()
             ));
         }
@@ -359,11 +359,11 @@ class Fedex
     /**
      * Get result of request
      *
-     * @return mixed
+     * @return Result|null
      */
     public function getResult()
     {
-       return $this->_result;
+        return $this->_result;
     }
 
     /**
@@ -500,7 +500,7 @@ class Fedex
     /**
      * Do remote request for and handle errors
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result
      */
     protected function _getQuotes()
     {
@@ -527,7 +527,7 @@ class Fedex
      * Prepare shipping rate result based on response
      *
      * @param mixed $response
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result
      */
     protected function _prepareRateResponse($response)
     {
@@ -624,7 +624,7 @@ class Fedex
     /**
      * Set free method request
      *
-     * @param  $freeMethod
+     * @param string $freeMethod
      * @return void
      */
     protected function _setFreeMethodRequest($freeMethod)
@@ -638,7 +638,7 @@ class Fedex
     /**
      * Get xml quotes
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result
      */
     protected function _getXmlQuotes()
     {
@@ -699,8 +699,8 @@ class Fedex
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
                 $responseBody = curl_exec($ch);
                 curl_close ($ch);
@@ -721,7 +721,7 @@ class Fedex
      * Prepare shipping rate result based on response
      *
      * @param mixed $response
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result
      */
     protected function _parseXmlResponse($response)
     {
@@ -729,34 +729,33 @@ class Fedex
         $priceArr = array();
 
         if (strlen(trim($response))>0) {
-           if ($xml = $this->_parseXml($response)) {
+            if ($xml = $this->_parseXml($response)) {
+                if (is_object($xml->Error) && is_object($xml->Error->Message)) {
+                    $errorTitle = (string)$xml->Error->Message;
+                } elseif (is_object($xml->SoftError) && is_object($xml->SoftError->Message)) {
+                    $errorTitle = (string)$xml->SoftError->Message;
+                } else {
+                    $errorTitle = 'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.';
+                }
 
-               if (is_object($xml->Error) && is_object($xml->Error->Message)) {
-                   $errorTitle = (string)$xml->Error->Message;
-               } elseif (is_object($xml->SoftError) && is_object($xml->SoftError->Message)) {
-                   $errorTitle = (string)$xml->SoftError->Message;
-               } else {
-                   $errorTitle = 'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.';
-               }
+                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
 
-               $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+                foreach ($xml->Entry as $entry) {
+                    if (in_array((string)$entry->Service, $allowedMethods)) {
+                        $costArr[(string)$entry->Service] =
+                            (string)$entry->EstimatedCharges->DiscountedCharges->NetCharge;
+                        $priceArr[(string)$entry->Service] = $this->getMethodPrice(
+                            (string)$entry->EstimatedCharges->DiscountedCharges->NetCharge,
+                            (string)$entry->Service
+                        );
+                    }
+                }
 
-               foreach ($xml->Entry as $entry) {
-                   if (in_array((string)$entry->Service, $allowedMethods)) {
-                       $costArr[(string)$entry->Service] =
-                           (string)$entry->EstimatedCharges->DiscountedCharges->NetCharge;
-                       $priceArr[(string)$entry->Service] = $this->getMethodPrice(
-                           (string)$entry->EstimatedCharges->DiscountedCharges->NetCharge,
-                           (string)$entry->Service
-                       );
-                   }
-               }
+                asort($priceArr);
 
-               asort($priceArr);
-
-           } else {
-               $errorTitle = 'Response is in the wrong format.';
-           }
+            } else {
+                $errorTitle = 'Response is in the wrong format.';
+            }
         } else {
             $errorTitle = 'Unable to retrieve tracking';
         }
@@ -809,7 +808,7 @@ class Fedex
      *
      * @param string $type
      * @param string $code
-     * @return array|bool
+     * @return array|false
      */
     public function getCode($type, $code='')
     {
@@ -971,9 +970,9 @@ class Fedex
     }
 
     /**
-     *  Return FeDex currency ISO code by Magento Base Currency Code
+     * Return FeDex currency ISO code by Magento Base Currency Code
      *
-     *  @return string 3-digit currency code
+     * @return string 3-digit currency code
      */
     public function getCurrencyCode ()
     {
@@ -1001,8 +1000,8 @@ class Fedex
     /**
      * Get tracking
      *
-     * @param mixed $trackings
-     * @return mixed
+     * @param string|string[] $trackings
+     * @return Result|null
      */
     public function getTracking($trackings)
     {
@@ -1012,7 +1011,7 @@ class Fedex
             $trackings=array($trackings);
         }
 
-        foreach($trackings as $tracking){
+        foreach ($trackings as $tracking) {
             $this->_getXMLTracking($tracking);
         }
 
@@ -1037,7 +1036,7 @@ class Fedex
     /**
      * Send request for tracking
      *
-     * @param array $tracking
+     * @param string[] $tracking
      * @return void
      */
     protected function _getXMLTracking($tracking)
@@ -1094,8 +1093,9 @@ class Fedex
     /**
      * Parse tracking response
      *
-     * @param array $trackingValue
+     * @param string[] $trackingValue
      * @param \stdClass $response
+     * @return void
      */
     protected function _parseTrackingResponse($trackingValue, $response)
     {
@@ -1188,12 +1188,12 @@ class Fedex
             $tracking->addData($resultArray);
             $this->_result->append($tracking);
         } else {
-           $error = $this->_trackErrorFactory->create();
-           $error->setCarrier('fedex');
-           $error->setCarrierTitle($this->getConfigData('title'));
-           $error->setTracking($trackingValue);
-           $error->setErrorMessage($errorTitle ? $errorTitle : __('Unable to retrieve tracking'));
-           $this->_result->append($error);
+            $error = $this->_trackErrorFactory->create();
+            $error->setCarrier('fedex');
+            $error->setCarrierTitle($this->getConfigData('title'));
+            $error->setTracking($trackingValue);
+            $error->setErrorMessage($errorTitle ? $errorTitle : __('Unable to retrieve tracking'));
+            $this->_result->append($error);
         }
     }
 
@@ -1207,8 +1207,8 @@ class Fedex
         $statuses = '';
         if ($this->_result instanceof \Magento\Shipping\Model\Tracking\Result) {
             if ($trackings = $this->_result->getAllTrackings()) {
-                foreach ($trackings as $tracking){
-                    if($data = $tracking->getAllData()){
+                foreach ($trackings as $tracking) {
+                    if ($data = $tracking->getAllData()) {
                         if (!empty($data['status'])) {
                             $statuses .= __($data['status']) . "\n<br/>";
                         } else {
@@ -1310,7 +1310,7 @@ class Fedex
         }
 
         // get countries of manufacture
-        $productCollection = $this->_productCollFactory
+        $productCollection = $this->_productCollectionFactory
             ->create()
             ->addStoreFilter($request->getStoreId())
             ->addFieldToFilter('entity_id', array('in' => $productIds))
@@ -1360,7 +1360,7 @@ class Fedex
                     'Payor' => array(
                         'AccountNumber' => $this->getConfigData('account'),
                         'CountryCode'   => $this->_coreStoreConfig->getConfig(
-                            \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID,
+                            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
                             $request->getStoreId()
                         )
                     )
@@ -1404,7 +1404,7 @@ class Fedex
                         'Payor' => array(
                             'AccountNumber' => $this->getConfigData('account'),
                             'CountryCode'   => $this->_coreStoreConfig->getConfig(
-                                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID,
+                                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
                                 $request->getStoreId()
                             )
                         )

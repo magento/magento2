@@ -2,7 +2,7 @@
 /**
  * Router route factory.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Controller\Router\Route;
 
@@ -24,7 +24,7 @@ class Factory
     /**
      * Create route instance.
      *
-     * @param $routeClass
+     * @param string $routeClass
      * @param string $route Map used to match with later submitted URL path
      * @param array $defaults Defaults for map variables with keys as variable names
      * @param array $reqs Regular expression requirements for variables (keys as variable names)

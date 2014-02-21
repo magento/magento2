@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Wishlist
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,14 +48,14 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\App\Resource $coreResource
-     * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
+     * @param \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory
      * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
      * @param \Magento\Wishlist\Model\Resource\Item $resource
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\Registry $registry
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -71,8 +71,8 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\App\Resource $coreResource,
-        \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
+        \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Resource\ConfigFactory $catalogConfFactory,
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\Resource\Item $resource,
@@ -93,8 +93,8 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
             $wishlistConfig,
             $productVisibility,
             $coreResource,
-            $optionCollFactory,
-            $productCollFactory,
+            $optionCollectionFactory,
+            $productCollectionFactory,
             $catalogConfFactory,
             $catalogAttrFactory,
             $resource,
@@ -106,7 +106,7 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
     /**
      * Initialize db select
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -141,10 +141,9 @@ class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
     /**
      * Add field filter to collection
      *
-     * @see self::_getConditionSql for $condition
-     *
      * @param string|array $field
      * @param null|string|array $condition
+     * @see self::_getConditionSql for $condition
      * @return \Magento\Data\Collection\Db
      */
     public function addFieldToFilter($field, $condition = null)

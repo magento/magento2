@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Model\Soap;
@@ -61,6 +61,9 @@ class Server
     /** @var \Magento\Webapi\Model\Soap\Server\Factory */
     protected $_soapServerFactory;
 
+    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
+    protected $_typeProcessor;
+
     /**
      * Initialize dependencies, initialize WSDL cache.
      *
@@ -70,6 +73,7 @@ class Server
      * @param \Magento\DomDocument\Factory $domDocumentFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
+     * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
      * @throws \Magento\Webapi\Exception
      */
     public function __construct(
@@ -78,7 +82,8 @@ class Server
         \Magento\Webapi\Controller\Soap\Request $request,
         \Magento\DomDocument\Factory $domDocumentFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
+        \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory,
+        \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
     ) {
         if (!extension_loaded('soap')) {
             throw new \Magento\Webapi\Exception('SOAP extension is not loaded.', 0,
@@ -90,6 +95,7 @@ class Server
         $this->_domDocumentFactory = $domDocumentFactory;
         $this->_storeManager = $storeManager;
         $this->_soapServerFactory = $soapServerFactory;
+        $this->_typeProcessor = $typeProcessor;
         /** Enable or disable SOAP extension WSDL cache depending on Magento configuration. */
         $wsdlCacheEnabled = (bool)$storeManager->getStore()->getConfig(self::CONFIG_PATH_WSDL_CACHE_ENABLED);
         if ($wsdlCacheEnabled) {
@@ -100,9 +106,9 @@ class Server
     }
 
     /**
-     * Handle SOAP request.
+     * Handle SOAP request. Response is sent by SOAP server.
      *
-     * @return string
+     * @return void
      */
     public function handle()
     {
@@ -112,8 +118,8 @@ class Server
             'encoding' => $this->getApiCharset(),
             'soap_version' => SOAP_1_2
         );
-        $soap = $this->_soapServerFactory->create($this->generateUri(true), $options);
-        return $soap->handle($rawRequestBody);
+        $soapServer = $this->_soapServerFactory->create($this->generateUri(true), $options);
+        $soapServer->handle($rawRequestBody);
     }
 
     /**
@@ -124,7 +130,7 @@ class Server
     public function getApiCharset()
     {
         $charset = $this->_storeManager->getStore()->getConfig(self::CONFIG_PATH_SOAP_CHARSET);
-        return $charset ? $charset : \Magento\Webapi\Model\Soap\Server::SOAP_DEFAULT_ENCODING;
+        return $charset ? $charset : self::SOAP_DEFAULT_ENCODING;
     }
 
     /**
@@ -137,7 +143,7 @@ class Server
     {
         $params = array(
             self::REQUEST_PARAM_SERVICES => $this->_request->getParam(
-                \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_SERVICES
+                self::REQUEST_PARAM_SERVICES
             )
         );
         if ($isWsdl) {
@@ -162,8 +168,8 @@ class Server
      * Generate exception if request is invalid.
      *
      * @param string $soapRequest
-     * @throws \Magento\Webapi\Exception with invalid SOAP extension
-     * @return \Magento\Webapi\Model\Soap\Server
+     * @throws \Magento\Webapi\Exception With invalid SOAP extension
+     * @return $this
      */
     protected function _checkRequest($soapRequest)
     {

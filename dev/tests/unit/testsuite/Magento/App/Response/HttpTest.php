@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App\Response;
@@ -52,5 +52,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetHeaderWhenHeaderNameIsNotEqualsName()
     {
         $this->assertFalse($this->_model->getHeader('Test'));
+    }
+
+    public function testGetVaryString()
+    {
+        $vary = array('some-vary-key' => 'some-vary-value');
+        ksort($vary);
+        $expected = sha1(serialize($vary));
+        $this->_model->setVary('some-vary-key', 'some-vary-value');
+
+        $this->assertEquals($expected, $this->_model->getVaryString());
     }
 }

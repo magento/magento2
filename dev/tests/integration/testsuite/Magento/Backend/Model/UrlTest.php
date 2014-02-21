@@ -21,21 +21,21 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Backend\Model;
 
 /**
- * Test class for \Magento\Backend\Model\Url.
+ * Test class for \Magento\Backend\Model\UrlInterface.
  *
  * @magentoAppArea adminhtml
  */
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_model;
 
@@ -43,40 +43,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Url');
-    }
-
-    /**
-     * @covers \Magento\Backend\Model\Url::isSecure
-     */
-    public function testIsSecure()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\App\ConfigInterface')
-            ->setValue('web/secure/use_in_adminhtml', true);
-        $this->assertTrue($this->_model->isSecure());
-
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\App\ConfigInterface')
-            ->setValue('web/secure/use_in_adminhtml', false);
-        $this->assertFalse($this->_model->isSecure());
-
-        $this->_model->setData('secure_is_forced', true);
-        $this->_model->setData('secure', true);
-        $this->assertTrue($this->_model->isSecure());
-
-        $this->_model->setData('secure', false);
-        $this->assertFalse($this->_model->isSecure());
-    }
-
-    /**
-     * @covers \Magento\Backend\Model\Url::setRouteParams
-     */
-    public function testSetRouteParams()
-    {
-        $this->_model->setRouteParams(array('_nosecret' => 'any_value'));
-        $this->assertTrue($this->_model->getNoSecret());
-
-        $this->_model->setRouteParams(array());
-        $this->assertFalse($this->_model->getNoSecret());
+            ->create('Magento\Backend\Model\UrlInterface');
     }
 
     /**

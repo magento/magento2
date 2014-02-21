@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,16 +37,22 @@ class GroupedCollection extends Collection
     /**#@-*/
 
     /**
+     * Property Factory
+     *
      * @var \Magento\View\Asset\PropertyGroupFactory
      */
     protected $propertyFactory;
 
     /**
+     * Property Groups
+     *
      * @var PropertyGroup[]
      */
     protected $groups = array();
 
     /**
+     * Constructor
+     *
      * @param PropertyGroupFactory $propertyFactory
      */
     public function __construct(PropertyGroupFactory $propertyFactory)
@@ -60,10 +66,12 @@ class GroupedCollection extends Collection
      * @param string $identifier
      * @param AssetInterface $asset
      * @param array $properties
+     * @return void
      */
     public function add($identifier, AssetInterface $asset, array $properties = array())
     {
         parent::add($identifier, $asset);
+        $properties = array_filter($properties);
         $properties[self::PROPERTY_CONTENT_TYPE] = $asset->getContentType();
         $properties[self::PROPERTY_CAN_MERGE] = $asset instanceof MergeableInterface;
         $this->getGroupFor($properties)->add($identifier, $asset);
@@ -93,11 +101,12 @@ class GroupedCollection extends Collection
      * Remove an instance from the list and from the corresponding group
      *
      * @param string $identifier
+     * @return void
      */
     public function remove($identifier)
     {
         parent::remove($identifier);
-        /** @var $group PropertyGroup */
+        /** @var PropertyGroup $group  */
         foreach ($this->groups as $group) {
             if ($group->has($identifier)) {
                 $group->remove($identifier);

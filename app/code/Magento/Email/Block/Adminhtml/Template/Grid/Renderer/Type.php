@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Email
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
  * Adminhtml system templates grid block type item renderer
@@ -31,16 +32,24 @@
  * @package    Magento_Email
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
-
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * Email template types
+     *
+     * @var array
+     */
     protected static $_types = array(
         \Magento\Email\Model\Template::TYPE_HTML => 'HTML',
         \Magento\Email\Model\Template::TYPE_TEXT => 'Text',
     );
 
+    /**
+     * Render grid column
+     *
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
 

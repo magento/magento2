@@ -20,14 +20,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Filesystem\Driver;
 
-use Magento\Filesystem\FilesystemException;
+use Magento\Filesystem\FilesystemException,
+    Magento\Filesystem\DriverInterface;
 
-class File implements \Magento\Filesystem\DriverInterface
+class File implements DriverInterface
 {
     /**
      * @var string
@@ -73,7 +74,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return array
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function stat($path)
     {
@@ -93,7 +94,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function isReadable($path)
     {
@@ -113,7 +114,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function isFile($path)
     {
@@ -133,7 +134,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function isDirectory($path)
     {
@@ -161,7 +162,7 @@ class File implements \Magento\Filesystem\DriverInterface
     {
         clearstatcache();
         $result = @file_get_contents($this->getScheme() . $path, $flag, $context);
-        if (!$result) {
+        if (false === $result) {
             throw new FilesystemException(
                 sprintf('Cannot read contents from file "%s" %s',
                     $path,
@@ -176,7 +177,7 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function isWritable($path)
     {
@@ -223,16 +224,75 @@ class File implements \Magento\Filesystem\DriverInterface
     }
 
     /**
+     * Read directory
+     *
+     * @param string $path
+     * @return string[]
+     * @throws FilesystemException
+     */
+    public function readDirectory($path)
+    {
+        try {
+            $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+            $iterator = new \FilesystemIterator($path, $flags);
+            $result = array();
+            /** @var \FilesystemIterator $file */
+            foreach ($iterator as $file) {
+                $result[] = $file->getPathname();
+            }
+            sort($result);
+            return $result;
+        } catch (\Exception $e) {
+            throw new FilesystemException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Search paths by given regex
+     *
+     * @param string $pattern
+     * @param string $path
+     * @return string[]
+     * @throws FilesystemException
+     */
+    public function search($pattern, $path)
+    {
+        clearstatcache();
+        $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
+        $result = @glob($globPattern, GLOB_BRACE);
+        if ($result === false) {
+            throw new FilesystemException(
+                sprintf('The "%s" pattern cannot be processed in "%s" path %s',
+                    $pattern,
+                    $path,
+                    $this->getWarningMessage()
+                ));
+        }
+        return $result;
+    }
+
+
+    /**
      * Renames a file or directory
      *
      * @param string $oldPath
      * @param string $newPath
+     * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FilesystemException
      */
-    public function rename($oldPath, $newPath)
+    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null)
     {
-        $result = @rename($this->getScheme() . $oldPath, $newPath);
+        $result = false;
+        $targetDriver = $targetDriver ?: $this;
+        if (get_class($targetDriver) == get_class($this)) {
+            $result = @rename($this->getScheme() . $oldPath, $newPath);
+        } else {
+            $content = $this->fileGetContents($oldPath);
+            if (false !== $targetDriver->filePutContents($newPath, $content)) {
+                $result = $this->deleteFile($newPath);
+            }
+        }
         if (!$result) {
             throw new FilesystemException(
                 sprintf('The "%s" path cannot be renamed into "%s" %s',
@@ -249,12 +309,19 @@ class File implements \Magento\Filesystem\DriverInterface
      *
      * @param string $source
      * @param string $destination
+     * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FilesystemException
      */
-    public function copy($source, $destination)
+    public function copy($source, $destination, DriverInterface $targetDriver = null)
     {
-        $result = @copy($this->getScheme() . $source, $destination);
+        $targetDriver = $targetDriver ?: $this;
+        if (get_class($targetDriver) == get_class($this)) {
+            $result = @copy($this->getScheme() . $source, $destination);
+        } else {
+            $content = $this->fileGetContents($source);
+            $result = $targetDriver->filePutContents($destination, $content);
+        }
         if (!$result) {
             throw new FilesystemException(
                 sprintf('The file or directory "%s" cannot be copied to "%s" %s',
@@ -417,7 +484,7 @@ class File implements \Magento\Filesystem\DriverInterface
     public function fileReadLine($resource, $length, $ending = null)
     {
         $result = @stream_get_line($resource, $length, $ending);
-        if (!$result) {
+        if (false === $result) {
             throw new FilesystemException(
                 sprintf('File cannot be read %s',
                     $this->getWarningMessage()
@@ -550,7 +617,7 @@ class File implements \Magento\Filesystem\DriverInterface
     public function fileWrite($resource, $data)
     {
         $result = @fwrite($resource, $data);
-        if (!$result) {
+        if (false === $result) {
             throw new FilesystemException(
                 sprintf('Error occurred during execution of fileWrite %s',
                     $this->getWarningMessage()
@@ -603,7 +670,7 @@ class File implements \Magento\Filesystem\DriverInterface
     /**
      * Lock file in selected mode
      *
-     * @param $resource
+     * @param resource $resource
      * @param int $lockMode
      * @return bool
      * @throws FilesystemException
@@ -623,7 +690,7 @@ class File implements \Magento\Filesystem\DriverInterface
     /**
      * Unlock file
      *
-     * @param $resource
+     * @param resource $resource
      * @return bool
      * @throws FilesystemException
      */
@@ -692,15 +759,40 @@ class File implements \Magento\Filesystem\DriverInterface
     }
 
     /**
-     * Checks is directory contains path
-     * Utility method.
+     * Read directory recursively
      *
      * @param string $path
-     * @param string $directory
-     * @return bool
+     * @return string[]
+     * @throws FilesystemException
      */
-    public function isPathInDirectory($path, $directory)
+    public function readDirectoryRecursively($path = null)
     {
-        return 0 === strpos($this->fixSeparator($path), $this->fixSeparator($directory));
+        $result = array();
+        $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+        try {
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($path, $flags),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
+            /** @var \FilesystemIterator $file */
+            foreach ($iterator as $file) {
+                $result[] = $file->getPathname();
+            }
+        } catch (\Exception $e) {
+            throw new FilesystemException($e->getMessage(), $e->getCode(), $e);
+        }
+        return $result;
+    }
+
+    /**
+     * Get real path
+     *
+     * @param string $path
+     *
+     * @return string|bool
+     */
+    public function getRealPath($path)
+    {
+        return realpath($path);
     }
 }

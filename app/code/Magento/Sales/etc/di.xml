@@ -19,48 +19,42 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Sales\Model\Resource\Report" shared="false" />
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
-        <param name="fileName">
-            <value>pdf.xml</value>
-        </param>
-        <param name="converter">
-            <instance type="Magento\Sales\Model\Order\Pdf\Config\Converter" />
-        </param>
-        <param name="schemaLocator">
-            <instance type="Magento\Sales\Model\Order\Pdf\Config\SchemaLocator" />
-        </param>
+        <arguments>
+            <argument name="fileName" xsi:type="string">pdf.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Sales\Model\Order\Pdf\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Sales\Model\Order\Pdf\Config\SchemaLocator</argument>
+        </arguments>
     </type>
     <virtualType name="pdfConfigDataStorage" type="Magento\Config\Data">
-        <param name="reader">
-            <instance type="Magento\Sales\Model\Order\Pdf\Config\Reader" />
-        </param>
-        <param name="cacheId">
-            <value>sales_pdf_config</value>
-        </param>
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Sales\Model\Order\Pdf\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">sales_pdf_config</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Sales\Model\Order\Pdf\Config">
-        <param name="dataStorage">
-            <instance type="pdfConfigDataStorage" />
-        </param>
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">pdfConfigDataStorage</argument>
+        </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Product\Flat\Indexer">
-        <param name="flatAttributeGroups">
-            <value>
-                <sales_quote_item>sales_quote_item</sales_quote_item>
-            </value>
-        </param>
+    <type name="Magento\Catalog\Helper\Product\Flat\Indexer">
+        <arguments>
+            <argument name="flatAttributeGroups" xsi:type="array">
+                <item name="sales_quote_item" xsi:type="string">sales_quote_item</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <sales_setup>Magento\Sales\Model\Resource\Setup</sales_setup>
-            </value>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="sales_setup" xsi:type="string">Magento\Sales\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
 </config>

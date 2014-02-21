@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,6 +32,8 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
+
+use Magento\CatalogInventory\Model\Stock\Item;
 
 class Inventory
     extends \Magento\Backend\Block\Widget
@@ -91,31 +93,42 @@ class Inventory
      * Get default config value
      *
      * @param string $field
-     * @return mixed
+     * @return string|null
      */
     public function getDefaultConfigValue($field)
     {
-        return $this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field, $this->getStoreId());
+        return $this->_storeConfig->getConfig(Item::XML_PATH_ITEM . $field, $this->getStoreId());
     }
 
     /**
-     * ######################## TAB settings #################################
+     * Tab settings
+     *
+     * @return string
      */
     public function getTabLabel()
     {
         return __('Advanced Inventory');
     }
 
+    /**
+     * @return string
+     */
     public function getTabTitle()
     {
         return __('Advanced Inventory');
     }
 
+    /**
+     * @return bool
+     */
     public function canShowTab()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isHidden()
     {
         return false;

@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Newsletter\Model\Resource\Template;
 
 /**
  * Newsletter templates collection
@@ -32,13 +32,12 @@
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource\Template;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Define resource model and model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +47,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Load only actual template
      *
-     * @return \Magento\Newsletter\Model\Resource\Template\Collection
+     * @return $this
      */
     public function useOnlyActual()
     {

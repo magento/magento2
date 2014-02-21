@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -68,7 +68,6 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     public function getControllerClassNameDataProvider()
     {
         return array(
-            array('Magento_Adminhtml', 'index', 'Magento\Adminhtml\Controller\Index'),
             array('Magento_Index', 'process', 'Magento\Index\Controller\Adminhtml\Process'),
             array('Magento_Index_Adminhtml', 'process', 'Magento\Index\Controller\Adminhtml\Process'),
         );

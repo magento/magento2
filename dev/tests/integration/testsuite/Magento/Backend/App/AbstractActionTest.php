@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,9 +39,9 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->dispatch('backend');
-        /** @var $backendUrlModel \Magento\Backend\Model\Url */
+        /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
         $backendUrlModel =
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url');
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\UrlInterface');
         $url = $backendUrlModel->getStartupPageUrl();
         $expected = $backendUrlModel->getUrl($url);
         $this->assertRedirect($this->stringStartsWith($expected));

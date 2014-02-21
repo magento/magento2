@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Shipping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Model\Shipment;
 
 /**
  * @method \Magento\Shipping\Model\Shipment\Request setOrderShipment(\Magento\Sales\Model\Order\Shipment $orderShipment)
@@ -80,12 +81,8 @@
  * @method \Magento\Shipping\Model\Shipment\Request setPackageWeight(float $value)
  * @method float getPackageWeight()
  *
- * @category    Magento
- * @package     Magento_Shipping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Shipping\Model\Shipment;
-
 class Request extends \Magento\Object
 {
 }

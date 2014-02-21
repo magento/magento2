@@ -20,11 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
+use Magento\Catalog\Model\Resource\Category\Collection;
 
 /**
  * Product form category field helper
@@ -82,6 +83,7 @@ class Category extends \Magento\Data\Form\Element\Multiselect
 
     /**
      * Get values for select
+     *
      * @return array
      */
     public function getValues()
@@ -107,7 +109,8 @@ class Category extends \Magento\Data\Form\Element\Multiselect
 
     /**
      * Get categories collection
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     *
+     * @return Collection
      */
     protected function _getCategoriesCollection()
     {
@@ -129,10 +132,11 @@ class Category extends \Magento\Data\Form\Element\Multiselect
         $button = $this->_layout
             ->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData(array(
-                'id'        => 'add_category_button',
-                'label'     => $newCategoryCaption,
-                'title'     => $newCategoryCaption,
-                'onclick'   => 'jQuery("#new-category").dialog("open")'
+                'id' => 'add_category_button',
+                'label' => $newCategoryCaption,
+                'title' => $newCategoryCaption,
+                'onclick' => 'jQuery("#new-category").dialog("open")',
+                'disabled' => $this->getDisabled(),
             ));
         $return = <<<HTML
     <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />

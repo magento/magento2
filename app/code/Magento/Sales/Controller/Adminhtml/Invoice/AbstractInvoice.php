@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -130,7 +130,12 @@ class AbstractInvoice
             if ($invoice) {
                 $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')->getPdf(array($invoice));
                 $date = $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s');
-                return $this->_fileFactory->create('invoice' . $date . '.pdf', $pdf->render(), 'application/pdf');
+                return $this->_fileFactory->create(
+                    'invoice' . $date . '.pdf',
+                    $pdf->render(),
+                    \Magento\App\Filesystem::VAR_DIR,
+                    'application/pdf'
+                );
             }
         } else {
             $this->_forward('noroute');
@@ -153,7 +158,12 @@ class AbstractInvoice
             }
             $date = $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s');
 
-            return $this->_fileFactory->create('invoice' . $date . '.pdf', $pdf->render(), 'application/pdf');
+            return $this->_fileFactory->create(
+                'invoice' . $date . '.pdf',
+                $pdf->render(),
+                \Magento\App\Filesystem::VAR_DIR,
+                'application/pdf'
+            );
         }
         $this->_redirect('sales/*/');
     }

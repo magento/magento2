@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogRule
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,11 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\Resource;
+
+use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Model\Rule as ModelRule;
+use Magento\Core\Model\AbstractModel;
+use Magento\Core\Model\Resource\Db\AbstractDb;
 
 class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 {
@@ -138,6 +143,8 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 
     /**
      * Initialize main table and table id field
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -147,11 +154,10 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     /**
      * Add customer group ids and website ids to rule data after load
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     *
-     * @return \Magento\CatalogRule\Model\Resource\Rule
+     * @param AbstractModel $object
+     * @return AbstractDb
      */
-    protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object)
     {
         $object->setData('customer_group_ids', (array)$this->getCustomerGroupIds($object->getId()));
         $object->setData('website_ids', (array)$this->getWebsiteIds($object->getId()));
@@ -163,11 +169,10 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * Bind catalog rule to customer group(s) and website(s).
      * Update products which are matched for rule.
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     *
-     * @return \Magento\CatalogRule\Model\Resource\Rule
+     * @param AbstractModel $object
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         if ($object->hasWebsiteIds()) {
             $websiteIds = $object->getWebsiteIds();
@@ -192,11 +197,11 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     /**
      * Update products which are matched for rule
      *
-     * @param \Magento\CatalogRule\Model\Rule $rule
-     *
-     * @return \Magento\CatalogRule\Model\Resource\Rule
+     * @param ModelRule $rule
+     * @return $this
+     * @throws \Exception
      */
-    public function updateRuleProductData(\Magento\CatalogRule\Model\Rule $rule)
+    public function updateRuleProductData(ModelRule $rule)
     {
         $ruleId = $rule->getId();
         $write  = $this->_getWriteAdapter();
@@ -287,7 +292,6 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * Get all product ids matched for rule
      *
      * @param int $ruleId
-     *
      * @return array
      */
     public function getRuleProductIds($ruleId)
@@ -305,8 +309,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param int|string $fromDate
      * @param int|string $toDate
      * @param int|null $productId
-     *
-     * @return \Magento\CatalogRule\Model\Resource\Rule
+     * @return $this
      */
     public function removeCatalogPricesForDateRange($fromDate, $toDate, $productId = null)
     {
@@ -344,8 +347,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      *
      * @param string $date
      * @param int|null $productId
-     *
-     * @return \Magento\CatalogRule\Model\Resource\Rule
+     * @return $this
      */
     public function deleteOldData($date, $productId = null)
     {
@@ -366,7 +368,6 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param int $toDate
      * @param int|null $productId
      * @param int|null $websiteId
-     *
      * @return \Zend_Db_Statement_Interface
      */
     protected function _getRuleProductsStmt($fromDate, $toDate, $productId = null, $websiteId = null)
@@ -395,7 +396,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         /**
          * Join default price and websites prices to result
          */
-        $priceAttr  = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'price');
+        $priceAttr  = $this->_eavConfig->getAttribute(Product::ENTITY, 'price');
         $priceTable = $priceAttr->getBackend()->getTable();
         $attributeId= $priceAttr->getId();
 
@@ -463,8 +464,8 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param int|string|null $fromDate
      * @param int|string|null $toDate
      * @param int $productId
-     *
-     * @return \Magento\CatalogRule\Model\Resource\Rule
+     * @return $this
+     * @throws \Exception
      */
     public function applyAllRulesForDateRange($fromDate = null, $toDate = null, $productId = null)
     {
@@ -494,7 +495,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         }
 
         $product = null;
-        if ($productId instanceof \Magento\Catalog\Model\Product) {
+        if ($productId instanceof Product) {
             $product    = $productId;
             $productId  = $productId->getId();
         }
@@ -624,7 +625,6 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      *
      * @param array $ruleData
      * @param null|array $productData
-     *
      * @return float
      */
     protected function _calcRuleProductPrice($ruleData, $productData = null)
@@ -652,8 +652,8 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * Save rule prices for products to DB
      *
      * @param array $arrData
-     *
-     * @return \Magento\CatalogRule\Model\Resource\Rule
+     * @return $this
+     * @throws \Exception
      */
     protected function _saveRuleProductPrices($arrData)
     {
@@ -693,8 +693,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param int $wId
      * @param int $gId
      * @param int $pId
-     *
-     * @return float|bool
+     * @return float|false
      */
     public function getRulePrice($date, $wId, $gId, $pId)
     {
@@ -714,7 +713,6 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param int $websiteId
      * @param int $customerGroupId
      * @param array $productIds
-     *
      * @return array
      */
     public function getRulePrices($date, $websiteId, $customerGroupId, $productIds)
@@ -761,7 +759,6 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param int|string $date
      * @param int $wId
      * @param int $pId
-     *
      * @return array
      */
     public function getRulesForProduct($date, $wId, $pId)
@@ -779,11 +776,11 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     /**
      * Apply catalog rule to product
      *
-     * @param \Magento\CatalogRule\Model\Rule $rule
-     * @param \Magento\Catalog\Model\Product $product
+     * @param ModelRule $rule
+     * @param Product $product
      * @param array $websiteIds
-     *
-     * @return \Magento\CatalogRule\Model\Resource\Rule
+     * @return $this
+     * @throws \Exception
      */
     public function applyToProduct($rule, $product, $websiteIds)
     {

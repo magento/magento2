@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 
+use Magento\Backend\App\Action;
 
 /**
  * Adminhtml catalog product action attribute update controller
@@ -32,24 +34,31 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
-
-use Magento\Backend\App\Action;
-
-class Attribute extends \Magento\Backend\App\Action
+class Attribute extends Action
 {
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
+     */
+    protected $_productFlatIndexerProcessor;
+
     /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper
+        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper,
+        \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
     ) {
         parent::__construct($context);
         $this->_helper = $helper;
+        $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         if (!$this->_validateProducts()) {
@@ -62,6 +71,8 @@ class Attribute extends \Magento\Backend\App\Action
 
     /**
      * Update product attributes
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -182,11 +193,12 @@ class Attribute extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess(
                 __('A total of %1 record(s) were updated.', count($this->_helper->getProductIds()))
             );
-        }
-        catch (\Magento\Core\Exception $e) {
+
+            $this->_productFlatIndexerProcessor->reindexList($this->_helper->getProductIds());
+
+        } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->messageManager->addException(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')
@@ -219,6 +231,9 @@ class Attribute extends \Magento\Backend\App\Action
         return !$error;
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Catalog::update_attributes');
@@ -227,6 +242,7 @@ class Attribute extends \Magento\Backend\App\Action
     /**
      * Attributes validation action
      *
+     * @return void
      */
     public function validateAction()
     {

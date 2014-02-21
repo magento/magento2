@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,7 +56,6 @@ class Creditmemos
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory
      * @param \Magento\Sales\Model\Order\Creditmemo $orderCreditmemo
@@ -65,7 +64,6 @@ class Creditmemos
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory,
         \Magento\Sales\Model\Order\Creditmemo $orderCreditmemo,
@@ -75,7 +73,7 @@ class Creditmemos
         $this->_coreRegistry = $coreRegistry;
         $this->_orderCreditmemo = $orderCreditmemo;
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     protected function _construct()

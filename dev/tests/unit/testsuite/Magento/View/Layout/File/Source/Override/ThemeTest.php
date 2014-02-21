@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,13 +43,15 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryRead'), array(), '', false);
-        $this->_directory = $this->getMock('Magento\Filesystem\Directory\Read', array('search'), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryRead'), array(), '', false);
+        $this->_directory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $this->_directory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnArgument(0));
 
         $filesystem->expects($this->any())->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::THEMES)
+            ->with($this->equalTo(\Magento\App\Filesystem::THEMES_DIR))
             ->will($this->returnValue($this->_directory));
-
         $this->_fileFactory = $this->getMock('Magento\View\Layout\File\Factory', array(), array(), '', false);
         $this->_model = new \Magento\View\Layout\File\Source\Override\Theme(
             $filesystem, $this->_fileFactory
@@ -73,9 +75,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $filePathTwo = 'design/area/theme_path/Module_Two/layout/override/theme/grand_parent_theme/2.xml';
         $this->_directory->expects($this->once())
             ->method('search')
-            ->with('~area\/theme_path\/[\S]+_[\S]+\/layout\/override\/theme\/[\S]+\/[\S]+\.xml~')
-            ->will($this->returnValue(array($filePathOne, $filePathTwo)))
-        ;
+            ->with($this->equalTo('area/theme_path/*_*/layout/override/theme/*/*.xml'))
+            ->will($this->returnValue(array($filePathOne, $filePathTwo)));
 
         $fileOne = new \Magento\View\Layout\File('1.xml', 'Module_One', $parentTheme);
         $fileTwo = new \Magento\View\Layout\File('2.xml', 'Module_Two', $grandparentTheme);
@@ -107,7 +108,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $filePathOne = 'design/area/theme_path/Module_Two/layout/override/theme/grand_parent_theme/preset/3.xml';
         $this->_directory->expects($this->once())
             ->method('search')
-            ->with('~area\/theme_path\/[\S]+_[\S]+\/layout\/override\/theme\/[\S]+\/preset\/3\.xml~')
+            ->with('area/theme_path/*_*/layout/override/theme/*/preset/3.xml')
             ->will($this->returnValue(array($filePathOne)))
         ;
 
@@ -138,7 +139,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         $this->_directory->expects($this->once())
             ->method('search')
-            ->with('~area\/theme_path\/[\S]+_[\S]+\/layout\/override\/theme\/[\S]+\/[\S]+\.xml~')
+            ->with('area/theme_path/*_*/layout/override/theme/*/*.xml')
             ->will($this->returnValue(array($filePath)));
 
         $this->_model->getFiles($theme);

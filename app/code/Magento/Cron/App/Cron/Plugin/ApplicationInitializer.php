@@ -20,27 +20,35 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Cron\App\Cron\Plugin;
 
-use \Magento\Core\Model\AppInterface;
+use \Magento\AppInterface;
 
 class ApplicationInitializer
 {
     /**
-     * @var \Magento\Core\Model\AppInterface
+     * @var \Magento\AppInterface
      */
     protected $_application;
 
     /**
+     * @var \Magento\Session\SidResolverInterface
+     */
+    protected $_sidResolver;
+
+    /**
      * @param AppInterface $application
+     * @param \Magento\Session\SidResolverInterface $sidResolver
      */
     public function __construct(
-        AppInterface $application
+        AppInterface $application,
+        \Magento\Session\SidResolverInterface $sidResolver
     ) {
         $this->_application = $application;
+        $this->_sidResolver = $sidResolver;
     }
 
     /**
@@ -51,7 +59,7 @@ class ApplicationInitializer
      */
     public function beforeExecute(array $methodArguments)
     {
-        $this->_application->setUseSessionInUrl(false);
+        $this->_sidResolver->setUseSessionInUrl(false);
         $this->_application->requireInstalledInstance();
         return $methodArguments;
     }

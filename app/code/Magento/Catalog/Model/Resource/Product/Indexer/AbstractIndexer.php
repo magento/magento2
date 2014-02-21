@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Indexer;
 
 /**
  * Catalog Product Indexer Abstract Resource Model
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Indexer;
-
 abstract class AbstractIndexer extends \Magento\Index\Model\Resource\AbstractResource
 {
     /**
@@ -75,8 +73,8 @@ abstract class AbstractIndexer extends \Magento\Index\Model\Resource\AbstractRes
      *
      * @param \Magento\DB\Select $select
      * @param string $attrCode              the attribute code
-     * @param string|Zend_Db_Expr $entity   the entity field or expression for condition
-     * @param string|Zend_Db_Expr $store    the store field or expression for condition
+     * @param string|\Zend_Db_Expr $entity   the entity field or expression for condition
+     * @param string|\Zend_Db_Expr $store    the store field or expression for condition
      * @param \Zend_Db_Expr $condition       the limitation condition
      * @param bool $required                if required or has condition used INNER join, else - LEFT
      * @return \Zend_Db_Expr                 the attribute value expression
@@ -133,10 +131,10 @@ abstract class AbstractIndexer extends \Magento\Index\Model\Resource\AbstractRes
      *  csg for store group table (joined by website default group)
      *  cs for store table (joined by website default store)
      *
-     * @param \Magento\DB\Select $select              the select object
-     * @param bool $store                           add default store join
-     * @param string|Zend_Db_Expr $joinCondition    the limitation for website_id
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
+     * @param \Magento\DB\Select $select the select object
+     * @param bool $store add default store join
+     * @param string|\Zend_Db_Expr $joinCondition the limitation for website_id
+     * @return $this
      */
     protected function _addWebsiteJoinToSelect($select, $store = true, $joinCondition = null)
     {
@@ -168,10 +166,10 @@ abstract class AbstractIndexer extends \Magento\Index\Model\Resource\AbstractRes
      * Add join for catalog/product_website table
      * Joined table has alias pw
      *
-     * @param \Magento\DB\Select $select          the select object
-     * @param string|Zend_Db_Expr $website      the limitation of website_id
-     * @param string|Zend_Db_Expr $product      the limitation of product_id
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
+     * @param \Magento\DB\Select $select the select object
+     * @param string|\Zend_Db_Expr $website the limitation of website_id
+     * @param string|\Zend_Db_Expr $product the limitation of product_id
+     * @return $this
      */
     protected function _addProductWebsiteJoinToSelect($select, $website, $product)
     {

@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract
@@ -32,8 +32,6 @@
  * @package    Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity\Attribute\Backend;
-
 abstract class AbstractBackend
     implements \Magento\Eav\Model\Entity\Attribute\Backend\BackendInterface
 {
@@ -96,7 +94,7 @@ abstract class AbstractBackend
      * Set attribute instance
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function setAttribute($attribute)
     {
@@ -127,7 +125,7 @@ abstract class AbstractBackend
     /**
      * Check whether the attribute is a real field in the entity table
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -178,7 +176,7 @@ abstract class AbstractBackend
      * Set value id
      *
      * @param int $valueId
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function setValueId($valueId)
     {
@@ -191,7 +189,7 @@ abstract class AbstractBackend
      *
      * @param \Magento\Object $entity
      * @param int $valueId
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function setEntityValueId($entity, $valueId)
     {
@@ -251,7 +249,7 @@ abstract class AbstractBackend
      *
      * @param \Magento\Object $object
      * @throws \Magento\Eav\Exception
-     * @return boolean
+     * @return bool
      */
     public function validate($object)
     {
@@ -284,7 +282,7 @@ abstract class AbstractBackend
      * After load method
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function afterLoad($object)
     {
@@ -295,7 +293,7 @@ abstract class AbstractBackend
      * Before save method
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function beforeSave($object)
     {
@@ -311,7 +309,7 @@ abstract class AbstractBackend
      * After save method
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function afterSave($object)
     {
@@ -322,7 +320,7 @@ abstract class AbstractBackend
      * Before delete method
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function beforeDelete($object)
     {
@@ -333,7 +331,7 @@ abstract class AbstractBackend
      * After delete method
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function afterDelete($object)
     {

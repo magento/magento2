@@ -17,7 +17,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -35,11 +35,10 @@
                 $('.action.showcart').addClass('is-disabled');
 
                 $('.action.showcart').on( "click", function() {
-                if ($(this).hasClass('is-disabled')) {
-                    window.location = $(this).attr("href");
-                }
+                    if ($(this).hasClass('is-disabled')) {
+                        window.location = $(this).attr("href");
+                    }
                 });
-
 
                 $('.action.toggle.checkout.progress')
                     .on('click.gotoCheckoutProgress', function(e){
@@ -55,12 +54,62 @@
                         $('#checkout-progress-wrapper .content').toggle();
                     });
 
+                (function() {
+                    var productInfoMain = $('.product.info.main'),
+                        productInfoAdditional = $("#product-info-additional");
+
+                    if (!productInfoAdditional.length) {
+
+                        var productTitle = productInfoMain.find(".page.title.product").clone(),
+                            productStock = productInfoMain.find(".stock:not(.alert)").clone();
+
+                        productInfoAdditional = $("<div/>", {
+                            id: "product-info-additional",
+                            addClass: "product info additional"
+                        });
+
+                        $('.catalog-product-view .column.main')
+                            .prepend(productInfoAdditional);
+
+                        productInfoAdditional
+                            .append(productTitle)
+                            .append(productStock);
+
+                    } else {
+                        productInfoAdditional.removeClass("hidden");
+                    }
+
+                    productInfoMain.addClass("responsive");
+
+                })();
+
+                var galleryElement = $('[data-role=media-gallery]');
+                if (galleryElement.length && galleryElement.data('zoom')) {
+                    galleryElement.zoom('disable');
+                }
             },
 
             // Switch to Desktop Version
             exit: function() {
                 // minicart
                 $('.action.showcart').removeClass('is-disabled');
+
+                (function() {
+
+                    var productInfoMain = $('.product.info.main'),
+                        productInfoAdditional = $("#product-info-additional");
+
+                    if(productInfoAdditional.length) {
+                        productInfoAdditional.addClass("hidden");
+                        productInfoMain.removeClass("responsive");
+                    }
+
+                })();
+
+                var galleryElement = $('[data-role=media-gallery]');
+                if (galleryElement.length && galleryElement.data('zoom')) {
+                    galleryElement.zoom('enable');
+                }
             }
         });
     });

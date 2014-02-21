@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Event
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,7 +45,6 @@ class Collection
     
     /**
      * Initializes observers
-     *
      */
     public function __construct()
     {
@@ -77,7 +76,7 @@ class Collection
      * Adds an observer to the collection
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Event\Observer\Collection
+     * @return $this
      */
     public function addObserver(\Magento\Event\Observer $observer)
     {
@@ -89,7 +88,7 @@ class Collection
      * Removes an observer from the collection by its name
      *
      * @param string $observerName
-     * @return \Magento\Event\Observer\Collection
+     * @return $this
      */
     public function removeObserverByName($observerName)
     {
@@ -101,7 +100,7 @@ class Collection
      * Dispatches an event to all observers in the collection
      *
      * @param \Magento\Event $event
-     * @return \Magento\Event\Observer\Collection
+     * @return $this
      */
     public function dispatch(\Magento\Event $event)
     {

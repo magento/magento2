@@ -20,19 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_Captcha
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Captcha\Model;
 
 /**
  * Captcha Observer
  *
- * @category    Magento
- * @package     Magento_Captcha
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Captcha\Model;
-
 class Observer
 {
     /**
@@ -45,7 +42,7 @@ class Observer
     /**
      * URL manager
      *
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_urlManager;
 
@@ -94,28 +91,37 @@ class Observer
     protected $messageManager;
 
     /**
+     * @var \Magento\App\Response\RedirectInterface
+     */
+    protected $redirect;
+
+    /**
      * @param Resource\LogFactory $resLogFactory
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Checkout\Model\Type\Onepage $typeOnepage
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Captcha\Helper\Data $helper
-     * @param \Magento\Core\Model\Url $urlManager
+     * @param \Magento\UrlInterface $urlManager
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\App\ActionFlag $actionFlag
      * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\App\Response\RedirectInterface $redirect
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
+        Resource\LogFactory $resLogFactory,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Checkout\Model\Type\Onepage $typeOnepage,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Captcha\Helper\Data $helper,
-        \Magento\Core\Model\Url $urlManager,
+        \Magento\UrlInterface $urlManager,
         \Magento\App\RequestInterface $request,
         \Magento\App\ActionFlag $actionFlag,
-        \Magento\Message\ManagerInterface $messageManager
+        \Magento\Message\ManagerInterface $messageManager,
+        \Magento\App\Response\RedirectInterface $redirect
     ) {
         $this->_resLogFactory = $resLogFactory;
         $this->_session = $session;
@@ -127,13 +133,14 @@ class Observer
         $this->_request = $request;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
+        $this->redirect = $redirect;
     }
 
     /**
      * Check Captcha On Forgot Password Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkForgotpassword($observer)
     {
@@ -145,7 +152,7 @@ class Observer
             if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $controller->getResponse()->setRedirect($this->_urlManager->getUrl('*/*/forgotpassword'));
+                $this->redirect->redirect($controller->getResponse(), '*/*/forgotpassword');
             }
         }
         return $this;
@@ -155,17 +162,19 @@ class Observer
      * Check CAPTCHA on Contact Us page
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function checkContactUsForm($observer)
     {
         $formId = 'contact_us';
         $captcha = $this->_helper->getCaptcha($formId);
         if ($captcha->isRequired()) {
+            /** @var \Magento\App\Action\Action $controller */
             $controller = $observer->getControllerAction();
             if (!$captcha->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA.'));
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $controller->getResponse()->setRedirect($this->_urlManager->getUrl('contacts/index/index'));
+                $this->redirect->redirect($controller->getResponse(), 'contacts/index/index');
             }
         }
     }
@@ -174,7 +183,7 @@ class Observer
      * Check Captcha On User Login Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkUserLogin($observer)
     {
@@ -202,19 +211,21 @@ class Observer
      * Check Captcha On Register User Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkUserCreate($observer)
     {
         $formId = 'user_create';
         $captchaModel = $this->_helper->getCaptcha($formId);
         if ($captchaModel->isRequired()) {
+            /** @var \Magento\App\Action\Action $controller */
             $controller = $observer->getControllerAction();
             if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->_session->setCustomerFormData($controller->getRequest()->getPost());
-                $controller->getResponse()->setRedirect($this->_urlManager->getUrl('*/*/create'));
+                $url = $this->_urlManager->getUrl('*/*/create', array('_nosecret' => true));
+                $controller->getResponse()->setRedirect($this->redirect->error($url));
             }
         }
         return $this;
@@ -224,7 +235,7 @@ class Observer
      * Check Captcha On Checkout as Guest Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkGuestCheckout($observer)
     {
@@ -248,7 +259,7 @@ class Observer
      * Check Captcha On Checkout Register Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkRegisterCheckout($observer)
     {
@@ -273,7 +284,7 @@ class Observer
      *
      * @param \Magento\Event\Observer $observer
      * @throws \Magento\Backend\Model\Auth\Plugin\Exception
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkUserLoginBackend($observer)
     {
@@ -296,7 +307,7 @@ class Observer
      * Check Captcha On User Login Backend Page
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Captcha\Model\Observer
+     * @return $this
      */
     public function checkUserForgotPasswordBackend($observer)
     {

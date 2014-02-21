@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -76,12 +76,18 @@ class Price extends \Magento\Data\Form\Element\Text
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->addClass('validate-zero-or-greater');
     }
 
+    /**
+     * @return mixed
+     */
     public function getAfterElementHtml()
     {
         $html = parent::getAfterElementHtml();
@@ -110,6 +116,10 @@ class Price extends \Magento\Data\Form\Element\Text
         return $html;
     }
 
+    /**
+     * @param mixed $attribute
+     * @return string
+     */
     protected function _getTaxObservingCode($attribute)
     {
         $spanId = "dynamic-tax-{$attribute->getAttributeCode()}";
@@ -118,6 +128,10 @@ class Price extends \Magento\Data\Form\Element\Text
         return $html;
     }
 
+    /**
+     * @param null|int|string $index
+     * @return null|string
+     */
     public function getEscapedValue($index=null)
     {
         $value = $this->getValue();

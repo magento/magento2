@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Bundle
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -85,7 +85,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_keyUsedOptionsIds           = '_cache_instance_used_options_ids';
 
     /**
-     * Product is configurable
+     * Product is possible to configure
      *
      * @var bool
      */
@@ -150,7 +150,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -174,7 +174,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Logger $logger,
         \Magento\Catalog\Helper\Product $catalogProduct,
@@ -659,7 +659,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $optionIds = array_keys($options);
 
             if (empty($optionIds) && $isStrictProcessMode) {
-                return __('Please select options for the product.');
+                return __('Please specify product option(s).');
             }
 
             $product->getTypeInstance()->setStoreFilter($product->getStoreId(), $product);
@@ -842,6 +842,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->create()
                 ->addAttributeToSelect('*')
                 ->setFlag('require_stock_items', true)
+                ->setFlag('product_children', true)
                 ->addStoreFilter($this->getStoreFilter($product))
                 ->setStoreId($storeId)
                 ->setPositionOrder()

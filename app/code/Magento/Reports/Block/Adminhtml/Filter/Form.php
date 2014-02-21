@@ -20,41 +20,46 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Filter;
 
 /**
  * Adminhtml report filter form
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Filter;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * Report type options
+     *
+     * @var array
      */
     protected $_reportTypeOptions = array();
 
     /**
      * Report field visibility
+     *
+     * @var array
      */
     protected $_fieldVisibility = array();
 
     /**
      * Report field opions
+     *
+     * @var array
      */
     protected $_fieldOptions = array();
 
     /**
      * Set field visibility
      *
-     * @param string Field id
-     * @param bool Field visibility
+     * @param string $fieldId
+     * @param bool $visibility
+     *
+     * @return void
      */
     public function setFieldVisibility($fieldId, $visibility)
     {
@@ -64,8 +69,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Get field visibility
      *
-     * @param string Field id
-     * @param bool Default field visibility
+     * @param string $fieldId
+     * @param bool $defaultVisibility
      * @return bool
      */
     public function getFieldVisibility($fieldId, $defaultVisibility = true)
@@ -81,7 +86,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $fieldId Field id
      * @param mixed $option Field option name
-     * @param mixed $value Field option value
+     * @param mixed|null $value Field option value
+     *
+     * @return void
      */
     public function setFieldOption($fieldId, $option, $value = null)
     {
@@ -103,7 +110,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param string $key
      * @param string $value
-     * @return \Magento\Reports\Block\Adminhtml\Filter\Form
+     * @return $this
      */
     public function addReportTypeOption($key, $value)
     {
@@ -114,7 +121,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add fieldset with general report fields
      *
-     * @return \Magento\Reports\Block\Adminhtml\Filter\Form
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -191,7 +198,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Initialize form fileds values
+     * Initialize form fields values
      * Method will be called after prepareForm and can be used for field values initialization
      *
      * @return \Magento\Backend\Block\Widget\Form

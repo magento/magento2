@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,7 +33,8 @@ class NewStatus extends \Magento\Backend\Block\Widget\Form\Container
     {
         $this->_objectId = 'status';
         $this->_controller = 'adminhtml_order_status';
-        $this->_mode = 'new';
+        $this->_blockGroup = 'Magento_Sales';
+        $this->_mode = 'newStatus';
 
         parent::_construct();
         $this->_updateButton('save', 'label', __('Save Status'));

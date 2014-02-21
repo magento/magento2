@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,12 +39,12 @@ class Data extends \Magento\View\Element\Template
     /**
      * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
      */
-    protected $_regionCollFactory;
+    protected $_regionCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
      */
-    protected $_countryCollFactory;
+    protected $_countryCollectionFactory;
 
     /**
      * @var \Magento\Json\EncoderInterface
@@ -61,8 +61,8 @@ class Data extends \Magento\View\Element\Template
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -70,16 +70,16 @@ class Data extends \Magento\View\Element\Template
         \Magento\Core\Helper\Data $coreData,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         array $data = array()
     ) {
         parent::__construct($context, $data);
         $this->_coreData = $coreData;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_configCacheType = $configCacheType;
-        $this->_regionCollFactory = $regionCollFactory;
-        $this->_countryCollFactory = $countryCollFactory;
+        $this->_regionCollectionFactory = $regionCollectionFactory;
+        $this->_countryCollectionFactory = $countryCollectionFactory;
     }
 
     /**
@@ -97,7 +97,7 @@ class Data extends \Magento\View\Element\Template
     {
         $collection = $this->getData('country_collection');
         if (is_null($collection)) {
-            $collection = $this->_countryCollFactory->create()->loadByStore();
+            $collection = $this->_countryCollectionFactory->create()->loadByStore();
             $this->setData('country_collection', $collection);
         }
 
@@ -145,7 +145,7 @@ class Data extends \Magento\View\Element\Template
     {
         $collection = $this->getData('region_collection');
         if (is_null($collection)) {
-            $collection = $this->_regionCollFactory->create()
+            $collection = $this->_regionCollectionFactory->create()
                 ->addCountryFilter($this->getCountryId())
                 ->load();
 
@@ -204,7 +204,7 @@ class Data extends \Magento\View\Element\Template
             foreach ($this->getCountryCollection() as $country) {
                 $countryIds[] = $country->getCountryId();
             }
-            $collection = $this->_regionCollFactory->create()
+            $collection = $this->_regionCollectionFactory->create()
                 ->addCountryFilter($countryIds)
                 ->load();
             $regions = array();

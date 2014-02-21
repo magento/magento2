@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
  
@@ -33,23 +33,27 @@
  */
 namespace Magento\Catalog\Block;
 
+use Magento\Catalog\Helper\Data;
+use Magento\Core\Model\Store;
+use Magento\View\Element\Template\Context;
+
 class Breadcrumbs extends \Magento\View\Element\Template
 {
     /**
      * Catalog data
      *
-     * @var \Magento\Catalog\Helper\Data
+     * @var Data
      */
     protected $_catalogData = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param Context $context
+     * @param Data $catalogData
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
+        Context $context,
+        Data $catalogData,
         array $data = array()
     ) {
         $this->_catalogData = $catalogData;
@@ -59,7 +63,7 @@ class Breadcrumbs extends \Magento\View\Element\Template
     /**
      * Retrieve HTML title value separator (with space)
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return string
      */
     public function getTitleSeparator($store = null)

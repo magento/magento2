@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Config\Data;
@@ -56,7 +56,7 @@ class Scoped extends \Magento\Config\Data
     /**
      * Scope priority loading scheme
      *
-     * @var array
+     * @var string[]
      */
     protected $_scopePriorityScheme = array();
 
@@ -68,6 +68,8 @@ class Scoped extends \Magento\Config\Data
     protected $_loadedScopes = array();
 
     /**
+     * Constructor
+     *
      * @param \Magento\Config\ReaderInterface $reader
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Config\CacheInterface $cache
@@ -90,7 +92,7 @@ class Scoped extends \Magento\Config\Data
      *
      * @param string $path
      * @param mixed $default
-     * @return mixed
+     * @return array|mixed|null
      */
     public function get($path = null, $default = null)
     {
@@ -100,6 +102,8 @@ class Scoped extends \Magento\Config\Data
 
     /**
      * Load data for current scope
+     *
+     * @return void
      */
     protected function _loadScopedData()
     {

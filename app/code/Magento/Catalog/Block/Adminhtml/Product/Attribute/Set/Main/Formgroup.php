@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,6 +31,8 @@
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
+
+use Magento\Backend\Block\Widget\Form;
 
 class Formgroup
     extends \Magento\Backend\Block\Widget\Form\Generic
@@ -58,6 +60,9 @@ class Formgroup
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
@@ -99,6 +104,9 @@ class Formgroup
         $this->setForm($form);
     }
 
+    /**
+     * @return int
+     */
     protected function _getSetId()
     {
         return ( intval($this->getRequest()->getParam('id')) > 0 )

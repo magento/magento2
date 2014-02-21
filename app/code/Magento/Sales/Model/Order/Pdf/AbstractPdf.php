@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -94,7 +94,7 @@ abstract class AbstractPdf extends \Magento\Object
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translate;
 
@@ -107,12 +107,6 @@ abstract class AbstractPdf extends \Magento\Object
      * @var \Magento\Filesystem\Directory\ReadInterface
      */
     protected $_rootDirectory;
-
-    /**
-     * @var \Magento\Shipping\Model\Config
-     */
-    protected $_shippingConfig;
-
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Config
      */
@@ -132,9 +126,8 @@ abstract class AbstractPdf extends \Magento\Object
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Core\Model\Translate $translate
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Shipping\Model\Config $shippingConfig
+     * @param \Magento\TranslateInterface $translate
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
@@ -147,9 +140,8 @@ abstract class AbstractPdf extends \Magento\Object
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\Translate $translate,
-        \Magento\Filesystem $filesystem,
-        \Magento\Shipping\Model\Config $shippingConfig,
+        \Magento\TranslateInterface $translate,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
@@ -161,9 +153,8 @@ abstract class AbstractPdf extends \Magento\Object
         $this->string = $string;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_translate = $translate;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
-        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
-        $this->_shippingConfig = $shippingConfig;
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $this->_pdfConfig = $pdfConfig;
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
@@ -559,20 +550,9 @@ abstract class AbstractPdf extends \Magento\Object
                 $yShipments -= 20;
                 $this->_setFontRegular($page, 8);
                 foreach ($tracks as $track) {
-
-                    $carrierCode = $track->getCarrierCode();
-                    if ($carrierCode != 'custom') {
-                        $carrier = $this->_shippingConfig->getCarrierInstance($carrierCode);
-                        $carrierTitle = $carrier->getConfigData('title');
-                    } else {
-                        $carrierTitle = __('Custom Value');
-                    }
-
-                    //$truncatedCarrierTitle = substr($carrierTitle, 0, 35) . (strlen($carrierTitle) > 35 ? '...' : '');
                     $maxTitleLen = 45;
                     $endOfTitle = strlen($track->getTitle()) > $maxTitleLen ? '...' : '';
                     $truncatedTitle = substr($track->getTitle(), 0, $maxTitleLen) . $endOfTitle;
-                    //$page->drawText($truncatedCarrierTitle, 285, $yShipments, 'UTF-8');
                     $page->drawText($truncatedTitle, 292, $yShipments, 'UTF-8');
                     $page->drawText($track->getNumber(), 410, $yShipments, 'UTF-8');
                     $yShipments -= $topMargin - 5;

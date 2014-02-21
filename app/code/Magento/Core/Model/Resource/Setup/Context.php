@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Resource\Setup;
@@ -76,7 +76,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_encryptor;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -93,7 +93,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory
      * @param \Magento\Core\Model\Theme\CollectionFactory $themeFactory
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Logger $logger,
@@ -106,7 +106,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
         \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
         \Magento\Core\Model\Theme\CollectionFactory $themeFactory,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_logger = $logger;
         $this->_eventManager = $eventManager;
@@ -202,7 +202,7 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Filesystem
+     * @return \Magento\App\Filesystem
      */
     public function getFilesystem()
     {

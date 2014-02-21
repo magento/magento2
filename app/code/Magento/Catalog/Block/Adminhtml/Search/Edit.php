@@ -20,16 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Admin tag edit block
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Search;
 
+/**
+ * Admin tag edit block
+ */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -37,7 +36,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @var \Magento\Core\Model\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -49,10 +48,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         \Magento\Core\Model\Registry $registry,
         array $data = array()
     ) {
-        $this->_coreRegistry = $registry;
+        $this->coreRegistry = $registry;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'id';
@@ -65,10 +67,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('delete', 'label', __('Delete Search'));
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderText()
     {
-        if ($this->_coreRegistry->registry('current_catalog_search')->getId()) {
-            $queryText = $this->escapeHtml($this->_coreRegistry->registry('current_catalog_search')->getQueryText());
+        if ($this->coreRegistry->registry('current_catalog_search')->getId()) {
+            $queryText = $this->escapeHtml($this->coreRegistry->registry('current_catalog_search')->getQueryText());
             return __("Edit Search '%1'", $queryText);
         } else {
             return __('New Search');

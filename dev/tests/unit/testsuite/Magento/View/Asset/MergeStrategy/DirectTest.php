@@ -18,14 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View\Asset\MergeStrategy;
 
-use Magento\Filesystem,
-    Magento\Filesystem\Directory\Write;
+use Magento\Filesystem\Directory\Write;
 
 class DirectTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,11 +51,11 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_cssUrlResolver = $this->getMock('Magento\View\Url\CssResolver', array(), array(), '', false);
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::PUB)
+            ->with(\Magento\App\Filesystem::PUB_DIR)
             ->will($this->returnValue($this->_directory));
         $this->_directory->expects($this->any())
             ->method('getRelativePath')

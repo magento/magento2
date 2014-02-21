@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Filesystem;
@@ -114,24 +114,54 @@ interface DriverInterface
     public function createDirectory($path, $permissions);
 
     /**
+     * Read directory
+     *
+     * @param string $path
+     * @return array
+     * @throws FilesystemException
+     */
+    public function readDirectory($path);
+
+    /**
+     * Read directory recursively
+     *
+     * @param string|null $path
+     * @return array
+     * @throws \Magento\Filesystem\FilesystemException
+     */
+    public function readDirectoryRecursively($path = null);
+
+    /**
+     * Search paths by given regex
+     *
+     * @param string $pattern
+     * @param string $path
+     * @return array
+     * @throws FilesystemException
+     */
+    public function search($pattern, $path);
+
+    /**
      * Renames a file or directory
      *
      * @param string $oldPath
      * @param string $newPath
+     * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FilesystemException
      */
-    public function rename($oldPath, $newPath);
+    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null);
 
     /**
      * Copy source into destination
      *
      * @param string $source
      * @param string $destination
+     * @param DriverInterface|null $targetDriver
      * @return bool
      * @throws FilesystemException
      */
-    public function copy($source, $destination);
+    public function copy($source, $destination, DriverInterface $targetDriver = null);
 
     /**
      * Delete file
@@ -322,16 +352,15 @@ interface DriverInterface
     public function getAbsolutePath($basePath, $path, $scheme = null);
 
     /**
+     * @param $path
+     * @return mixed
+     */
+    public function getRealPath($path);
+
+    /**
      * @param string $basePath
      * @param null $path
      * @return mixed
      */
     public function getRelativePath($basePath, $path = null);
-
-    /**
-     * @param $path
-     * @param $directory
-     * @return mixed
-     */
-    public function isPathInDirectory($path, $directory);
 }

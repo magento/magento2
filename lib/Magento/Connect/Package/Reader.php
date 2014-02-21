@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect\Package;
 
 /**
  * Class to get package.xml from different places.
@@ -31,11 +32,8 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect\Package;
-
 class Reader
 {
-
     /**
     * Name of package file
     */
@@ -47,25 +45,25 @@ class Reader
     const PATH_TO_TEMPORARY_DIRECTORY = 'var/package/tmp/';
 
     /**
-    * Current path to file.
-    *
-    * @var string
-    */
+     * Current path to file.
+     *
+     * @var string
+     */
     protected $_file = '';
 
     /**
-    * Archivator is used for extract DEFAULT_NAME_PACKAGE.
-    *
-    * @var \Magento\Archive
-    */
+     * Archivator is used for extract DEFAULT_NAME_PACKAGE.
+     *
+     * @var \Magento\Archive
+     */
     protected $_archivator = null;
 
     /**
-    * Constructor initializes $_file.
-    *
-    * @param string $file
-    * @return \Magento\Connect\Package\Reader
-    */
+     * Constructor initializes $_file.
+     *
+     * @param string $file
+     * @return $this
+     */
     public function __construct($file='')
     {
         if ($file) {
@@ -77,10 +75,10 @@ class Reader
     }
 
     /**
-    * Retrieve archivator.
-    *
-    * @return \Magento\Archive
-    */
+     * Retrieve archivator.
+     *
+     * @return \Magento\Archive
+     */
     protected function _getArchivator()
     {
         if (is_null($this->_archivator)) {
@@ -90,10 +88,11 @@ class Reader
     }
 
     /**
-    * Open file directly or from archive and return his content.
-    *
-    * @return string Content of file $file
-    */
+     * Open file directly or from archive and return his content.
+     *
+     * @return string Content of file $file
+     * @throws \Exception
+     */
     public function load()
     {
         if (!is_file($this->_file) || !is_readable($this->_file)) {
@@ -112,10 +111,11 @@ class Reader
     }
 
     /**
-    * Read content file.
-    *
-    * @return string Content of file $file
-    */
+     * Read content file.
+     *
+     * @return string Content of file $file
+     * @throws \Magento\Exception
+     */
     protected function _readFile()
     {
         $handle = fopen($this->_file, 'r');
@@ -130,11 +130,12 @@ class Reader
     }
 
     /**
-    * Loads a package from specified resource
-    *
-    * @param resource $resource only file resources are supported at the moment
-    * @return \Magento\Connect\Package
-    */
+     * Loads a package from specified resource
+     *
+     * @param resource &$resource only file resources are supported at the moment
+     * @return \Magento\Connect\Package
+     * @throws \Magento\Exception
+     */
     protected function _loadResource(&$resource)
     {
         $data = '';

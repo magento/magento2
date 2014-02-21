@@ -20,21 +20,19 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Usa\Model\Shipping\Carrier;
 
+use Magento\Shipping\Model\Rate\Result;
 
 /**
  * USPS shipping rates estimation
  *
  * @link       http://www.usps.com/webtools/htm/Development-Guide-v3-0b.htm
- * @category   Magento
- * @package    Magento_Usa
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Usa\Model\Shipping\Carrier;
-
 class Usps
     extends \Magento\Usa\Model\Shipping\Carrier\AbstractCarrier
     implements \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -91,7 +89,7 @@ class Usps
     /**
      * Rate request data
      *
-     * @var \Magento\Shipping\Model\Rate\Request|null
+     * @var \Magento\Sales\Model\Quote\Address\RateRequest|null
      */
     protected $_request = null;
 
@@ -105,7 +103,7 @@ class Usps
     /**
      * Rate result data
      *
-     * @var \Magento\Shipping\Model\Rate\Result|null
+     * @var Result|null
      */
     protected $_result = null;
 
@@ -119,7 +117,7 @@ class Usps
     /**
      * Container types that could be customized for USPS carrier
      *
-     * @var array
+     * @var string[]
      */
     protected $_customizableContainerTypes = array('VARIABLE', 'RECTANGULAR', 'NONRECTANGULAR');
 
@@ -133,15 +131,20 @@ class Usps
     /**
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
      */
-    protected $_productCollFactory;
+    protected $_productCollectionFactory;
+
+    /**
+     * @var \Zend_Http_ClientFactory
+     */
+    protected $_httpClientFactory;
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
-     * @param \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory
      * @param \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory
      * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory
@@ -150,18 +153,19 @@ class Usps
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Usa\Helper\Data $usaData
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Zend_Http_ClientFactory $httpClientFactory
      * @param array $data
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
-        \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory,
         \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory,
         \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory,
@@ -170,12 +174,13 @@ class Usps
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Usa\Helper\Data $usaData,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Zend_Http_ClientFactory $httpClientFactory,
         array $data = array()
     ) {
         $this->_usaData = $usaData;
-        $this->_productCollFactory = $productCollFactory;
-        $this->_xmlElFactory = $xmlElFactory;
+        $this->_productCollectionFactory = $productCollectionFactory;
+        $this->_httpClientFactory = $httpClientFactory;
         parent::__construct(
             $coreStoreConfig,
             $rateErrorFactory,
@@ -197,10 +202,10 @@ class Usps
     /**
      * Collect and get rates
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return \Magento\Shipping\Model\Rate\Result|bool|null
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @return Result|bool|null
      */
-    public function collectRates(\Magento\Shipping\Model\Rate\Request $request)
+    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -218,10 +223,10 @@ class Usps
     /**
      * Prepare and set request to this instance
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return \Magento\Usa\Model\Shipping\Carrier\Usps
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @return $this
      */
-    public function setRequest(\Magento\Shipping\Model\Rate\Request $request)
+    public function setRequest(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         $this->_request = $request;
 
@@ -293,7 +298,7 @@ class Usps
             $r->setOrigPostal($request->getOrigPostcode());
         } else {
             $r->setOrigPostal($this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_ZIP,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
                 $request->getStoreId()
             ));
         }
@@ -302,7 +307,7 @@ class Usps
             $r->setOrigCountryId($request->getOrigCountryId());
         } else {
             $r->setOrigCountryId($this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID,
+                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
                 $request->getStoreId()
             ));
         }
@@ -343,17 +348,17 @@ class Usps
     /**
      * Get result of request
      *
-     * @return mixed
+     * @return Result|null
      */
     public function getResult()
     {
-       return $this->_result;
+        return $this->_result;
     }
 
     /**
      * Get quotes
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result
      */
     protected function _getQuotes()
     {
@@ -363,7 +368,7 @@ class Usps
     /**
      * Set free method request
      *
-     * @param  $freeMethod
+     * @param string $freeMethod
      * @return void
      */
     protected function _setFreeMethodRequest($freeMethod)
@@ -380,14 +385,14 @@ class Usps
      * Build RateV3 request, send it to USPS gateway and retrieve quotes in XML format
      *
      * @link http://www.usps.com/webtools/htm/Rate-Calculators-v2-3.htm
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result
      */
     protected function _getXmlQuotes()
     {
         $r = $this->_rawRequest;
 
         // The origin address(shipper) must be only in USA
-        if(!$this->_isUSCountry($r->getOrigCountryId())){
+        if (!$this->_isUSCountry($r->getOrigCountryId())) {
             $responseBody = '';
             return $this->_parseXmlResponse($responseBody);
         }
@@ -407,7 +412,7 @@ class Usps
                 $service = $r->getService();
             }
             if ($r->getContainer() == 'FLAT RATE BOX' || $r->getContainer() == 'FLAT RATE ENVELOPE') {
-                $service = 'PRIORITY';
+                $service = 'Priority';
             }
             $package->addChild('Service', $service);
 
@@ -478,7 +483,7 @@ class Usps
                 if (!$url) {
                     $url = $this->_defaultGatewayUrl;
                 }
-                $client = new \Zend_Http_Client();
+                $client = $this->_httpClientFactory->create();
                 $client->setUri($url);
                 $client->setConfig(array('maxredirects'=>0, 'timeout'=>30));
                 $client->setParameterGet('API', $api);
@@ -494,18 +499,20 @@ class Usps
             }
             $this->_debug($debugData);
         }
+
         return $this->_parseXmlResponse($responseBody);
     }
 
     /**
      * Parse calculated rates
      *
-     * @link http://www.usps.com/webtools/htm/Rate-Calculators-v2-3.htm
      * @param string $response
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result
+     * @link http://www.usps.com/webtools/htm/Rate-Calculators-v2-3.htm
      */
     protected function _parseXmlResponse($response)
     {
+        $r = $this->_rawRequest;
         $costArr = array();
         $priceArr = array();
         if (strlen(trim($response)) > 0) {
@@ -517,39 +524,27 @@ class Usps
                         $response
                     );
                 }
-
                 $xml = simplexml_load_string($response);
 
                 if (is_object($xml)) {
-                    if (is_object($xml->Number) && is_object($xml->Description) && (string)$xml->Description!='') {
-                        $errorTitle = (string)$xml->Description;
-                    } elseif (is_object($xml->Package)
-                          && is_object($xml->Package->Error)
-                          && is_object($xml->Package->Error->Description)
-                          && (string)$xml->Package->Error->Description!=''
-                    ) {
-                        $errorTitle = (string)$xml->Package->Error->Description;
-                    } else {
-                        $errorTitle = 'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.';
-                    }
-                    $r = $this->_rawRequest;
-                    $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
-                    $allMethods = $this->getCode('method');
-                    $newMethod = false;
+                    $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
+                    $serviceCodeToActualNameMap = array();
+                    /**
+                     * US Rates
+                     */
                     if ($this->_isUSCountry($r->getDestCountryId())) {
                         if (is_object($xml->Package) && is_object($xml->Package->Postage)) {
                             foreach ($xml->Package->Postage as $postage) {
                                 $serviceName = $this->_filterServiceName((string)$postage->MailService);
-                                $postage->MailService = $serviceName;
-                                if (in_array($serviceName, $allowedMethods)) {
-                                    $costArr[$serviceName] = (string)$postage->Rate;
-                                    $priceArr[$serviceName] = $this->getMethodPrice(
+                                $_serviceCode = $this->getCode('method_to_code', $serviceName);
+                                $serviceCode = $_serviceCode ? $_serviceCode : (string)$postage->attributes()->CLASSID;
+                                $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                                if (in_array($serviceCode, $allowedMethods)) {
+                                    $costArr[$serviceCode] = (string)$postage->Rate;
+                                    $priceArr[$serviceCode] = $this->getMethodPrice(
                                         (string)$postage->Rate,
-                                        $serviceName
+                                        $serviceCode
                                     );
-                                } elseif (!in_array($serviceName, $allMethods)) {
-                                    $allMethods[] = $serviceName;
-                                    $newMethod = true;
                                 }
                             }
                             asort($priceArr);
@@ -561,24 +556,20 @@ class Usps
                         if (is_object($xml->Package) && is_object($xml->Package->Service)) {
                             foreach ($xml->Package->Service as $service) {
                                 $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
-                                $service->SvcDescription = $serviceName;
-                                if (in_array($serviceName, $allowedMethods)) {
-                                    $costArr[$serviceName] = (string)$service->Postage;
-                                    $priceArr[$serviceName] = $this->getMethodPrice(
+                                $serviceCode = 'INT_' . (string)$service->attributes()->ID;
+                                $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                                if (in_array($serviceCode, $allowedMethods)) {
+                                    $costArr[$serviceCode] = (string)$service->Postage;
+                                    $priceArr[$serviceCode] = $this->getMethodPrice(
                                         (string)$service->Postage,
-                                        $serviceName
+                                        $serviceCode
                                     );
-                                } elseif (!in_array($serviceName, $allMethods)) {
-                                    $allMethods[] = $serviceName;
-                                    $newMethod = true;
                                 }
                             }
                             asort($priceArr);
                         }
                     }
                 }
-            } else {
-                $errorTitle = 'Response is in the wrong format';
             }
         }
 
@@ -595,7 +586,11 @@ class Usps
                 $rate->setCarrier('usps');
                 $rate->setCarrierTitle($this->getConfigData('title'));
                 $rate->setMethod($method);
-                $rate->setMethodTitle($method);
+                $rate->setMethodTitle(
+                    isset($serviceCodeToActualNameMap[$method])
+                        ? $serviceCodeToActualNameMap[$method]
+                        : $this->getCode('method', $method)
+                );
                 $rate->setCost($costArr[$method]);
                 $rate->setPrice($price);
                 $result->append($rate);
@@ -610,64 +605,176 @@ class Usps
      *
      * @param string $type
      * @param string $code
-     * @return array|bool
+     * @return array|false
      */
     public function getCode($type, $code='')
     {
         $codes = array(
-
-            'service'=>array(
-                'FIRST CLASS' => __('First-Class'),
-                'PRIORITY'    => __('Priority Mail'),
-                'EXPRESS'     => __('Express Mail'),
-                'BPM'         => __('Bound Printed Matter'),
-                'PARCEL'      => __('Parcel Post'),
-                'MEDIA'       => __('Media Mail'),
-                'LIBRARY'     => __('Library'),
+            'method' => array(
+                '0_FCLE' => __('First-Class Mail Large Envelope'),
+                '0_FCL'  => __('First-Class Mail Letter'),
+                '0_FCP'  => __('First-Class Mail Parcel'),
+                '0_FCPC' => __('First-Class Mail Postcards'),
+                '1'      => __('Priority Mail'),
+                '2'      => __('Priority Mail Express Hold For Pickup'),
+                '3'      => __('Priority Mail Express'),
+                '4'      => __('Standard Post'),
+                '6'      => __('Media Mail'),
+                '7'      => __('Library Mail'),
+                '13'     => __('Priority Mail Express Flat Rate Envelope'),
+                '15'     => __('First-Class Mail Large Postcards'),
+                '16'     => __('Priority Mail Flat Rate Envelope'),
+                '17'     => __('Priority Mail Medium Flat Rate Box'),
+                '22'     => __('Priority Mail Large Flat Rate Box'),
+                '23'     => __('Priority Mail Express Sunday/Holiday Delivery'),
+                '25'     => __('Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope'),
+                '27'     => __('Priority Mail Express Flat Rate Envelope Hold For Pickup'),
+                '28'     => __('Priority Mail Small Flat Rate Box'),
+                '29'     => __('Priority Mail Padded Flat Rate Envelope'),
+                '30'     => __('Priority Mail Express Legal Flat Rate Envelope'),
+                '31'     => __('Priority Mail Express Legal Flat Rate Envelope Hold For Pickup'),
+                '32'     => __('Priority Mail Express Sunday/Holiday Delivery Legal Flat Rate Envelope'),
+                '33'     => __('Priority Mail Hold For Pickup'),
+                '34'     => __('Priority Mail Large Flat Rate Box Hold For Pickup'),
+                '35'     => __('Priority Mail Medium Flat Rate Box Hold For Pickup'),
+                '36'     => __('Priority Mail Small Flat Rate Box Hold For Pickup'),
+                '37'     => __('Priority Mail Flat Rate Envelope Hold For Pickup'),
+                '38'     => __('Priority Mail Gift Card Flat Rate Envelope'),
+                '39'     => __('Priority Mail Gift Card Flat Rate Envelope Hold For Pickup'),
+                '40'     => __('Priority Mail Window Flat Rate Envelope'),
+                '41'     => __('Priority Mail Window Flat Rate Envelope Hold For Pickup'),
+                '42'     => __('Priority Mail Small Flat Rate Envelope'),
+                '43'     => __('Priority Mail Small Flat Rate Envelope Hold For Pickup'),
+                '44'     => __('Priority Mail Legal Flat Rate Envelope'),
+                '45'     => __('Priority Mail Legal Flat Rate Envelope Hold For Pickup'),
+                '46'     => __('Priority Mail Padded Flat Rate Envelope Hold For Pickup'),
+                '47'     => __('Priority Mail Regional Rate Box A'),
+                '48'     => __('Priority Mail Regional Rate Box A Hold For Pickup'),
+                '49'     => __('Priority Mail Regional Rate Box B'),
+                '50'     => __('Priority Mail Regional Rate Box B Hold For Pickup'),
+                '53'     => __('First-Class Package Service Hold For Pickup'),
+                '55'     => __('Priority Mail Express Flat Rate Boxes'),
+                '56'     => __('Priority Mail Express Flat Rate Boxes Hold For Pickup'),
+                '57'     => __('Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes'),
+                '58'     => __('Priority Mail Regional Rate Box C'),
+                '59'     => __('Priority Mail Regional Rate Box C Hold For Pickup'),
+                '61'     => __('First-Class Package Service'),
+                '62'     => __('Priority Mail Express Padded Flat Rate Envelope'),
+                '63'     => __('Priority Mail Express Padded Flat Rate Envelope Hold For Pickup'),
+                '64'     => __('Priority Mail Express Sunday/Holiday Delivery Padded Flat Rate Envelope'),
+                'INT_1'  => __('Priority Mail Express International'),
+                'INT_2'  => __('Priority Mail International'),
+                'INT_4'  => __('Global Express Guaranteed (GXG)'),
+                'INT_5'  => __('Global Express Guaranteed Document'),
+                'INT_6'  => __('Global Express Guaranteed Non-Document Rectangular'),
+                'INT_7'  => __('Global Express Guaranteed Non-Document Non-Rectangular'),
+                'INT_8'  => __('Priority Mail International Flat Rate Envelope'),
+                'INT_9'  => __('Priority Mail International Medium Flat Rate Box'),
+                'INT_10' => __('Priority Mail Express International Flat Rate Envelope'),
+                'INT_11' => __('Priority Mail International Large Flat Rate Box'),
+                'INT_12' => __('USPS GXG Envelopes'),
+                'INT_13' => __('First-Class Mail International Letter'),
+                'INT_14' => __('First-Class Mail International Large Envelope'),
+                'INT_15' => __('First-Class Package International Service'),
+                'INT_16' => __('Priority Mail International Small Flat Rate Box'),
+                'INT_17' => __('Priority Mail Express International Legal Flat Rate Envelope'),
+                'INT_18' => __('Priority Mail International Gift Card Flat Rate Envelope'),
+                'INT_19' => __('Priority Mail International Window Flat Rate Envelope'),
+                'INT_20' => __('Priority Mail International Small Flat Rate Envelope'),
+                'INT_21' => __('First-Class Mail International Postcard'),
+                'INT_22' => __('Priority Mail International Legal Flat Rate Envelope'),
+                'INT_23' => __('Priority Mail International Padded Flat Rate Envelope'),
+                'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
+                'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
+                'INT_26' => __('Priority Mail Express International Flat Rate Boxes'),
+                'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
             ),
 
-            'service_to_code'=>array(
-                'First-Class'                                   => 'FIRST CLASS',
-                'First-Class Mail International Large Envelope' => 'FIRST CLASS',
-                'First-Class Mail International Letter'         => 'FIRST CLASS',
-                'First-Class Mail International Package'        => 'FIRST CLASS',
-                'First-Class Mail International Parcel'         => 'FIRST CLASS',
-                'First-Class Mail'                 => 'FIRST CLASS',
-                'First-Class Mail Flat'            => 'FIRST CLASS',
-                'First-Class Mail Large Envelope'  => 'FIRST CLASS',
-                'First-Class Mail International'   => 'FIRST CLASS',
-                'First-Class Mail Letter'          => 'FIRST CLASS',
-                'First-Class Mail Parcel'          => 'FIRST CLASS',
-                'First-Class Mail Package'         => 'FIRST CLASS',
-                'Parcel Post'                      => 'PARCEL',
-                'Bound Printed Matter'             => 'BPM',
-                'Media Mail'                       => 'MEDIA',
-                'Library Mail'                     => 'LIBRARY',
-                'Express Mail'                     => 'EXPRESS',
-                'Express Mail PO to PO'            => 'EXPRESS',
-                'Express Mail Flat Rate Envelope'  => 'EXPRESS',
-                'Express Mail Flat-Rate Envelope Sunday/Holiday Guarantee'  => 'EXPRESS',
-                'Express Mail Sunday/Holiday Guarantee'            => 'EXPRESS',
-                'Express Mail Flat Rate Envelope Hold For Pickup'  => 'EXPRESS',
-                'Express Mail Hold For Pickup'                     => 'EXPRESS',
-                'Global Express Guaranteed (GXG)'                  => 'EXPRESS',
-                'Global Express Guaranteed Non-Document Rectangular'     => 'EXPRESS',
-                'Global Express Guaranteed Non-Document Non-Rectangular' => 'EXPRESS',
-                'USPS GXG Envelopes'                               => 'EXPRESS',
-                'Express Mail International'                       => 'EXPRESS',
-                'Express Mail International Flat Rate Envelope'    => 'EXPRESS',
-                'Priority Mail'                        => 'PRIORITY',
-                'Priority Mail Small Flat Rate Box'    => 'PRIORITY',
-                'Priority Mail Medium Flat Rate Box'   => 'PRIORITY',
-                'Priority Mail Large Flat Rate Box'    => 'PRIORITY',
-                'Priority Mail Flat Rate Box'          => 'PRIORITY',
-                'Priority Mail Flat Rate Envelope'     => 'PRIORITY',
-                'Priority Mail International'                            => 'PRIORITY',
-                'Priority Mail International Flat Rate Envelope'         => 'PRIORITY',
-                'Priority Mail International Small Flat Rate Box'        => 'PRIORITY',
-                'Priority Mail International Medium Flat Rate Box'       => 'PRIORITY',
-                'Priority Mail International Large Flat Rate Box'        => 'PRIORITY',
-                'Priority Mail International Flat Rate Box'              => 'PRIORITY'
+            'service_to_code' => array(
+                '0_FCLE' => 'First Class',
+                '0_FCL'  => 'First Class',
+                '0_FCP'  => 'First Class',
+                '0_FCPC' => 'First Class',
+                '1'      => 'Priority',
+                '2'      => 'Priority Express',
+                '3'      => 'Priority Express',
+                '4'      => 'Standard Post',
+                '6'      => 'Media',
+                '7'      => 'Library',
+                '13'     => 'Priority Express',
+                '15'     => 'First Class',
+                '16'     => 'Priority',
+                '17'     => 'Priority',
+                '22'     => 'Priority',
+                '23'     => 'Priority Express',
+                '25'     => 'Priority Express',
+                '27'     => 'Priority Express',
+                '28'     => 'Priority',
+                '29'     => 'Priority',
+                '30'     => 'Priority Express',
+                '31'     => 'Priority Express',
+                '32'     => 'Priority Express',
+                '33'     => 'Priority',
+                '34'     => 'Priority',
+                '35'     => 'Priority',
+                '36'     => 'Priority',
+                '37'     => 'Priority',
+                '38'     => 'Priority',
+                '39'     => 'Priority',
+                '40'     => 'Priority',
+                '41'     => 'Priority',
+                '42'     => 'Priority',
+                '43'     => 'Priority',
+                '44'     => 'Priority',
+                '45'     => 'Priority',
+                '46'     => 'Priority',
+                '47'     => 'Priority',
+                '48'     => 'Priority',
+                '49'     => 'Priority',
+                '50'     => 'Priority',
+                '53'     => 'First Class',
+                '55'     => 'Priority Express',
+                '56'     => 'Priority Express',
+                '57'     => 'Priority Express',
+                '58'     => 'Priority',
+                '59'     => 'Priority',
+                '61'     => 'First Class',
+                '62'     => 'Priority Express',
+                '63'     => 'Priority Express',
+                '64'     => 'Priority Express',
+                'INT_1'  => 'Priority Express',
+                'INT_2'  => 'Priority',
+                'INT_4'  => 'Priority Express',
+                'INT_5'  => 'Priority Express',
+                'INT_6'  => 'Priority Express',
+                'INT_7'  => 'Priority Express',
+                'INT_8'  => 'Priority',
+                'INT_9'  => 'Priority',
+                'INT_10' => 'Priority Express',
+                'INT_11' => 'Priority',
+                'INT_12' => 'Priority Express',
+                'INT_13' => 'First Class',
+                'INT_14' => 'First Class',
+                'INT_15' => 'First Class',
+                'INT_16' => 'Priority',
+                'INT_17' => 'Priority',
+                'INT_18' => 'Priority',
+                'INT_19' => 'Priority',
+                'INT_20' => 'Priority',
+                'INT_21' => 'First Class',
+                'INT_22' => 'Priority',
+                'INT_23' => 'Priority',
+                'INT_24' => 'Priority',
+                'INT_25' => 'Priority',
+                'INT_26' => 'Priority Express',
+                'INT_27' => 'Priority Express',
+            ),
+
+            // Added because USPS has different services but with same CLASSID value, which is "0"
+            'method_to_code' => array(
+                'First-Class Mail Large Envelope' => '0_FCLE',
+                'First-Class Mail Letter'         => '0_FCL',
+                'First-Class Mail Parcel'         => '0_FCP',
             ),
 
             'first_class_mail_type'=>array(
@@ -690,33 +797,49 @@ class Usps
                     'filters'    => array(
                         'within_us' => array(
                             'method' => array(
-                                'Express Mail Flat Rate Envelope',
-                                'Express Mail Flat Rate Envelope Hold For Pickup',
+                                'Priority Mail Express Flat Rate Envelope',
+                                'Priority Mail Express Flat Rate Envelope Hold For Pickup',
                                 'Priority Mail Flat Rate Envelope',
                                 'Priority Mail Large Flat Rate Box',
                                 'Priority Mail Medium Flat Rate Box',
                                 'Priority Mail Small Flat Rate Box',
-                                'Express Mail',
+                                'Priority Mail Express Hold For Pickup',
+                                'Priority Mail Express',
                                 'Priority Mail',
-                                'Parcel Post',
+                                'Priority Mail Hold For Pickup',
+                                'Priority Mail Large Flat Rate Box Hold For Pickup',
+                                'Priority Mail Medium Flat Rate Box Hold For Pickup',
+                                'Priority Mail Small Flat Rate Box Hold For Pickup',
+                                'Priority Mail Flat Rate Envelope Hold For Pickup',
+                                'Priority Mail Small Flat Rate Envelope',
+                                'Priority Mail Small Flat Rate Envelope Hold For Pickup',
+                                'First-Class Package Service Hold For Pickup',
+                                'Priority Mail Express Flat Rate Boxes',
+                                'Priority Mail Express Flat Rate Boxes Hold For Pickup',
+                                'Standard Post',
                                 'Media Mail',
                                 'First-Class Mail Large Envelope',
+                                'Priority Mail Express Sunday/Holiday Delivery',
+                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope',
+                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes',
                             )
                         ),
                         'from_us' => array(
                             'method' => array(
-                                'Express Mail International Flat Rate Envelope',
+                                'Priority Mail Express International Flat Rate Envelope',
                                 'Priority Mail International Flat Rate Envelope',
                                 'Priority Mail International Large Flat Rate Box',
                                 'Priority Mail International Medium Flat Rate Box',
                                 'Priority Mail International Small Flat Rate Box',
+                                'Priority Mail International Small Flat Rate Envelope',
+                                'Priority Mail Express International Flat Rate Boxes',
                                 'Global Express Guaranteed (GXG)',
                                 'USPS GXG Envelopes',
-                                'Express Mail International',
+                                'Priority Mail Express International',
                                 'Priority Mail International',
-                                'First-Class Mail International Package',
+                                'First-Class Mail International Letter',
                                 'First-Class Mail International Large Envelope',
-                                'First-Class Mail International Parcel',
+                                'First-Class Package International Service',
                             )
                         )
                     )
@@ -729,6 +852,11 @@ class Usps
                                 'Priority Mail Large Flat Rate Box',
                                 'Priority Mail Medium Flat Rate Box',
                                 'Priority Mail Small Flat Rate Box',
+                                'Priority Mail International Large Flat Rate Box',
+                                'Priority Mail International Medium Flat Rate Box',
+                                'Priority Mail International Small Flat Rate Box',
+                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes',
+
                             )
                         ),
                         'from_us' => array(
@@ -736,6 +864,8 @@ class Usps
                                 'Priority Mail International Large Flat Rate Box',
                                 'Priority Mail International Medium Flat Rate Box',
                                 'Priority Mail International Small Flat Rate Box',
+                                'Priority Mail International DVD Flat Rate priced box',
+                                'Priority Mail International Large Video Flat Rate priced box'
                             )
                         )
                     )
@@ -745,15 +875,29 @@ class Usps
                     'filters'    => array(
                         'within_us' => array(
                             'method' => array(
-                                'Express Mail Flat Rate Envelope',
-                                'Express Mail Flat Rate Envelope Hold For Pickup',
                                 'Priority Mail Flat Rate Envelope',
+                                'Priority Mail Express Flat Rate Envelope',
+                                'Priority Mail Express Flat Rate Envelope Hold For Pickup',
+                                'Priority Mail Flat Rate Envelope',
+                                'First-Class Mail Large Envelope',
+                                'Priority Mail Flat Rate Envelope Hold For Pickup',
+                                'Priority Mail Small Flat Rate Envelope',
+                                'Priority Mail Small Flat Rate Envelope Hold For Pickup',
+                                'Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope',
+                                'Priority Mail Express Padded Flat Rate Envelope'
                             )
                         ),
                         'from_us' => array(
                             'method' => array(
-                                'Express Mail International Flat Rate Envelope',
+                                'Priority Mail Express International Flat Rate Envelope',
                                 'Priority Mail International Flat Rate Envelope',
+                                'First-Class Mail International Large Envelope',
+                                'Priority Mail International Small Flat Rate Envelope',
+                                'Priority Mail Express International Legal Flat Rate Envelope',
+                                'Priority Mail International Gift Card Flat Rate Envelope',
+                                'Priority Mail International Window Flat Rate Envelope',
+                                'Priority Mail International Legal Flat Rate Envelope',
+                                'Priority Mail Express International Padded Flat Rate Envelope',
                             )
                         )
                     )
@@ -763,19 +907,20 @@ class Usps
                     'filters'    => array(
                         'within_us' => array(
                             'method' => array(
-                                'Express Mail',
+                                'Priority Mail Express',
                                 'Priority Mail',
-                                'Parcel Post',
+                                'Standard Post',
                                 'Media Mail',
+                                'Library Mail',
+                                'First-Class Package Service'
                             )
                         ),
                         'from_us' => array(
                             'method' => array(
                                 'USPS GXG Envelopes',
-                                'Express Mail International',
+                                'Priority Mail Express International',
                                 'Priority Mail International',
-                                'First-Class Mail International Package',
-                                'First-Class Mail International Parcel',
+                                'First-Class Package International Service',
                             )
                         )
                     )
@@ -785,20 +930,19 @@ class Usps
                     'filters'    => array(
                         'within_us' => array(
                             'method' => array(
-                                'Express Mail',
+                                'Priority Mail Express',
                                 'Priority Mail',
-                                'Parcel Post',
+                                'Standard Post',
                                 'Media Mail',
+                                'Library Mail',
                             )
                         ),
                         'from_us' => array(
                             'method' => array(
                                 'Global Express Guaranteed (GXG)',
-                                'USPS GXG Envelopes',
-                                'Express Mail International',
+                                'Priority Mail Express International',
                                 'Priority Mail International',
-                                'First-Class Mail International Package',
-                                'First-Class Mail International Parcel',
+                                'First-Class Package International Service',
                             )
                         )
                     )
@@ -821,13 +965,6 @@ class Usps
             ),
         );
 
-        $methods = $this->getConfigData('methods');
-        if (!empty($methods)) {
-            $codes['method'] = explode(",", $methods);
-        } else {
-            $codes['method'] = array();
-        }
-
         if (!isset($codes[$type])) {
             return false;
         } elseif (''===$code) {
@@ -844,8 +981,8 @@ class Usps
     /**
      * Get tracking
      *
-     * @param mixed $trackings
-     * @return mixed
+     * @param string|string[] $trackings
+     * @return Result|null
      */
     public function getTracking($trackings)
     {
@@ -863,7 +1000,7 @@ class Usps
     /**
      * Set tracking request
      *
-     * @return null
+     * @return void
      */
     protected function setTrackingReqeust()
     {
@@ -878,32 +1015,32 @@ class Usps
     /**
      * Send request for tracking
      *
-     * @param array $tracking
-     * @return null
+     * @param string[] $trackings
+     * @return void
      */
     protected function _getXmlTracking($trackings)
     {
-         $r = $this->_rawTrackRequest;
+        $r = $this->_rawTrackRequest;
 
-         foreach ($trackings as $tracking) {
-             $xml = $this->_xmlElFactory->create(
-                 array('data' => '<?xml version = "1.0" encoding = "UTF-8"?><TrackRequest/>')
-             );
-             $xml->addAttribute('USERID', $r->getUserId());
+        foreach ($trackings as $tracking) {
+            $xml = $this->_xmlElFactory->create(
+                array('data' => '<?xml version = "1.0" encoding = "UTF-8"?><TrackRequest/>')
+            );
+            $xml->addAttribute('USERID', $r->getUserId());
 
-             $trackid = $xml->addChild('TrackID');
-             $trackid->addAttribute('ID',$tracking);
+            $trackid = $xml->addChild('TrackID');
+            $trackid->addAttribute('ID', $tracking);
 
-             $api = 'TrackV2';
-             $request = $xml->asXML();
-             $debugData = array('request' => $request);
+            $api = 'TrackV2';
+            $request = $xml->asXML();
+            $debugData = array('request' => $request);
 
-             try {
+            try {
                 $url = $this->getConfigData('gateway_url');
                 if (!$url) {
                     $url = $this->_defaultGatewayUrl;
                 }
-                $client = new \Zend_Http_Client();
+                $client = $this->_httpClientFactory->create();
                 $client->setUri($url);
                 $client->setConfig(array('maxredirects'=>0, 'timeout'=>30));
                 $client->setParameterGet('API', $api);
@@ -919,15 +1056,15 @@ class Usps
 
             $this->_debug($debugData);
             $this->_parseXmlTrackingResponse($tracking, $responseBody);
-         }
+        }
     }
 
     /**
      * Parse xml tracking response
      *
-     * @param array $trackingvalue
+     * @param string $trackingvalue
      * @param string $response
-     * @return null
+     * @return void
      */
     protected function _parseXmlTrackingResponse($trackingvalue, $response)
     {
@@ -949,8 +1086,8 @@ class Usps
                         $errorTitle = __('Sorry, something went wrong. Please try again or contact us and we\'ll try to help.');
                     }
 
-                    if(isset($xml->TrackInfo) && isset($xml->TrackInfo->TrackSummary)){
-                       $resultArr['tracksummary'] = (string)$xml->TrackInfo->TrackSummary;
+                    if (isset($xml->TrackInfo) && isset($xml->TrackInfo->TrackSummary)) {
+                        $resultArr['tracksummary'] = (string)$xml->TrackInfo->TrackSummary;
 
                     }
                 }
@@ -969,14 +1106,14 @@ class Usps
              $tracking->setTracking($trackingvalue);
              $tracking->setTrackSummary($resultArr['tracksummary']);
              $this->_result->append($tracking);
-         } else {
+        } else {
             $error = $this->_trackErrorFactory->create();
             $error->setCarrier('usps');
             $error->setCarrierTitle($this->getConfigData('title'));
             $error->setTracking($trackingvalue);
             $error->setErrorMessage($errorTitle);
             $this->_result->append($error);
-         }
+        }
     }
 
     /**
@@ -990,7 +1127,7 @@ class Usps
         if ($this->_result instanceof \Magento\Shipping\Model\Tracking\Result) {
             if ($trackings = $this->_result->getAllTrackings()) {
                 foreach ($trackings as $tracking) {
-                    if($data = $tracking->getAllData()) {
+                    if ($data = $tracking->getAllData()) {
                         if (!empty($data['track_summary'])) {
                             $statuses .= __($data['track_summary']);
                         } else {
@@ -1016,7 +1153,7 @@ class Usps
         $allowed = explode(',', $this->getConfigData('allowed_methods'));
         $arr = array();
         foreach ($allowed as $k) {
-            $arr[$k] = $k;
+            $arr[$k] = $this->getCode('method', $k);
         }
         return $arr;
     }
@@ -1352,23 +1489,29 @@ class Usps
      * @param \Magento\Object $request
      * @param string $serviceType
      * @return string
+     * @throws \Exception
      */
     protected function _formUsSignatureConfirmationShipmentRequest(\Magento\Object $request, $serviceType)
     {
         switch ($serviceType) {
             case 'PRIORITY':
+            case 'Priority':
                 $serviceType = 'Priority';
                 break;
             case 'FIRST CLASS':
+            case 'First Class':
                 $serviceType = 'First Class';
                 break;
-            case 'PARCEL':
-                $serviceType = 'Parcel Post';
+            case 'STANDARD':
+            case 'Standard Post':
+                $serviceType = 'Standard Post';
                 break;
             case 'MEDIA':
+            case 'Media':
                 $serviceType = 'Media Mail';
                 break;
             case 'LIBRARY':
+            case 'Library':
                 $serviceType = 'Library Mail';
                 break;
             default:
@@ -1429,7 +1572,7 @@ class Usps
      * Convert decimal weight into pound-ounces format
      *
      * @param float $weightInPounds
-     * @return array
+     * @return float[]
      */
     protected function _convertPoundOunces($weightInPounds)
     {
@@ -1515,11 +1658,12 @@ class Usps
             array('data' => '<?xml version = "1.0" encoding = "UTF-8"?><wrap/>')
         );
         $method = '';
-        if (stripos($shippingMethod, 'Priority') !== false) {
+        $service = $this->getCode('service_to_code', $shippingMethod);
+        if ($service == 'Priority') {
             $method = 'Priority';
             $rootNode = 'PriorityMailIntlRequest';
             $xml = $xmlWrap->addChild($rootNode);
-        } else if (stripos($shippingMethod, 'First-Class') !== false) {
+        } else if ($service == 'First Class') {
             $method = 'FirstClass';
             $rootNode = 'FirstClassMailIntlRequest';
             $xml = $xmlWrap->addChild($rootNode);
@@ -1554,7 +1698,8 @@ class Usps
             }
             $xml->addChild('FromCustomsReference', 'Order #' . $referenceData);
         }
-        $xml->addChild('ToName', $request->getRecipientContactPersonName());
+        $xml->addChild('ToFirstName', $request->getRecipientContactPersonFirstName());
+        $xml->addChild('ToLastName', $request->getRecipientContactPersonLastName());
         $xml->addChild('ToFirm', $request->getRecipientContactCompanyName());
         $xml->addChild('ToAddress1', $request->getRecipientAddressStreet1());
         $xml->addChild('ToAddress2', $request->getRecipientAddressStreet2());
@@ -1574,7 +1719,7 @@ class Usps
                 $xml->addChild('FirstClassMailType', 'LETTER');
             } else if (stripos($shippingMethod, 'Flat') !== false) {
                 $xml->addChild('FirstClassMailType', 'FLAT');
-            } else{
+            } else {
                 $xml->addChild('FirstClassMailType', 'PARCEL');
             }
         }
@@ -1592,7 +1737,7 @@ class Usps
 
                 $productIds[]= $item->getProductId();
         }
-        $productCollection = $this->_productCollFactory
+        $productCollection = $this->_productCollectionFactory
             ->create()
             ->addStoreFilter($request->getStoreId())
             ->addFieldToFilter('entity_id', array('in' => $productIds))
@@ -1692,7 +1837,7 @@ class Usps
         $service = $this->getCode('service_to_code', $request->getShippingMethod());
         $recipientUSCountry = $this->_isUSCountry($request->getRecipientAddressCountryCode());
 
-        if ($recipientUSCountry && $service == 'EXPRESS') {
+        if ($recipientUSCountry && $service == 'Priority Express') {
             $requestXml = $this->_formUsExpressShipmentRequest($request);
             $api = 'ExpressMailLabel';
         } else if ($recipientUSCountry) {
@@ -1702,10 +1847,10 @@ class Usps
             } else {
                 $api = 'SignatureConfirmationCertifyV3';
             }
-        } else if ($service == 'FIRST CLASS') {
+        } else if ($service == 'First Class') {
             $requestXml = $this->_formIntlShipmentRequest($request);
             $api = 'FirstClassMailIntl';
-        } else if ($service == 'PRIORITY') {
+        } else if ($service == 'Priority') {
             $requestXml = $this->_formIntlShipmentRequest($request);
             $api = 'PriorityMailIntl';
         } else {
@@ -1718,7 +1863,7 @@ class Usps
         if (!$url) {
             $url = $this->_defaultGatewayUrl;
         }
-        $client = new \Zend_Http_Client();
+        $client = $this->_httpClientFactory->create();
         $client->setUri($url);
         $client->setConfig(array('maxredirects'=>0, 'timeout'=>30));
         $client->setParameterGet('API', $api);
@@ -1735,13 +1880,13 @@ class Usps
             $this->_debug($debugData);
             $result->setErrors($debugData['result']['error']);
         } else {
-            if ($recipientUSCountry && $service == 'EXPRESS') {
+            if ($recipientUSCountry && $service == 'Priority Express') {
                 $labelContent = base64_decode((string) $response->EMLabel);
                 $trackingNumber = (string) $response->EMConfirmationNumber;
             } else if ($recipientUSCountry) {
                 $labelContent = base64_decode((string) $response->SignatureConfirmationLabel);
                 $trackingNumber = (string) $response->SignatureConfirmationNumber;
-            } else  {
+            } else {
                 $labelContent = base64_decode((string) $response->LabelImage);
                 $trackingNumber = (string) $response->BarcodeNumber;
             }
@@ -1850,7 +1995,7 @@ class Usps
      *
      * @param string $zipString
      * @param bool $returnFull
-     * @return array
+     * @return string[]
      */
     protected function _parseZip($zipString, $returnFull = false)
     {

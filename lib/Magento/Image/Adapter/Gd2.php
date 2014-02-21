@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Image
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,22 +60,86 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Open image for processing
      *
      * @param string $filename
+     * @return void
+     * @throws \OverflowException
      */
     public function open($filename)
     {
         $this->_fileName = $filename;
         $this->getMimeType();
         $this->_getFileAttributes();
+        if ($this->_isMemoryLimitReached()) {
+            throw new \OverflowException('Memory limit has been reached.');
+        }
         $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
+    }
+
+    /**
+     * Checks whether memory limit is reached.
+     *
+     * @return bool
+     */
+    protected function _isMemoryLimitReached()
+    {
+        $limit = $this->_convertToByte(ini_get('memory_limit'));
+        $requiredMemory = $this->_getImageNeedMemorySize($this->_fileName);
+        return (memory_get_usage(true) + $requiredMemory) > $limit;
+    }
+
+    /**
+     * Get image needed memory size
+     *
+     * @param string $file
+     * @return float|int
+     */
+    protected function _getImageNeedMemorySize($file)
+    {
+        $imageInfo = getimagesize($file);
+        if (!isset($imageInfo[0]) || !isset($imageInfo[1])) {
+            return 0;
+        }
+        if (!isset($imageInfo['channels'])) {
+            // if there is no info about this parameter lets set it for maximum
+            $imageInfo['channels'] = 4;
+        }
+        if (!isset($imageInfo['bits'])) {
+            // if there is no info about this parameter lets set it for maximum
+            $imageInfo['bits'] = 8;
+        }
+
+        return round(
+            ($imageInfo[0] * $imageInfo[1] * $imageInfo['bits'] * $imageInfo['channels'] / 8 + Pow(2, 16)) * 1.65
+        );
+    }
+
+    /**
+     * Converts memory value (e.g. 64M, 129KB) to bytes.
+     * Case insensitive value might be used.
+     *
+     * @param string $memoryValue
+     * @return int
+     */
+    protected function _convertToByte($memoryValue)
+    {
+        if (stripos($memoryValue, 'G') !== false) {
+            return (int)$memoryValue * pow(1024, 3);
+        } elseif (stripos($memoryValue, 'M') !== false) {
+            return (int)$memoryValue * 1024 * 1024;
+        } elseif (stripos($memoryValue, 'KB') !== false) {
+            return (int)$memoryValue * 1024;
+        }
+
+        return (int)$memoryValue;
     }
 
     /**
      * Save image to specific path.
      * If some folders of path does not exist they will be created
      *
-     * @throws \Exception  if destination path is not writable
-     * @param string $destination
-     * @param string $newName
+     * @param null|string $destination
+     * @param null|string $newName
+     * @return void
+     * @throws \Exception  If destination path is not writable
      */
     public function save($destination = null, $newName = null)
     {
@@ -96,9 +160,12 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
                 imagecopy(
                     $newImage,
                     $this->_imageHandler,
-                    0, 0,
-                    0, 0,
-                    $this->_imageSrcWidth, $this->_imageSrcHeight
+                    0,
+                    0,
+                    0,
+                    0,
+                    $this->_imageSrcWidth,
+                    $this->_imageSrcHeight
                 );
                 $this->_imageHandler = $newImage;
             }
@@ -137,7 +204,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Obtain function name, basing on image type and callback type
      *
      * @param string $callbackType
-     * @param int $fileType
+     * @param null|int $fileType
+     * @param string $unsupportedText
      * @return string
      * @throws \Exception
      */
@@ -159,9 +227,9 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Fill image with main background color.
      * Returns a color identifier.
      *
-     * @throws \Exception
-     * @param resource $imageResourceTo
+     * @param resource &$imageResourceTo
      * @return int
+     * @throws \Exception
      */
     private function _fillBackgroundColor(&$imageResourceTo)
     {
@@ -235,8 +303,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      *
      * @param resource $imageResource
      * @param int $fileType one of the constants IMAGETYPE_*
-     * @param bool $isAlpha
-     * @param bool $isTrueColor
+     * @param bool &$isAlpha
+     * @param bool &$isTrueColor
      * @return boolean
      */
     private function _getTransparency($imageResource, $fileType, &$isAlpha = false, &$isTrueColor = false)
@@ -266,8 +334,9 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Change the image size
      *
-     * @param int $frameWidth
-     * @param int $frameHeight
+     * @param null|int $frameWidth
+     * @param null|int $frameHeight
+     * @return void
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -306,6 +375,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * Rotate image on specific angle
      *
      * @param int $angle
+     * @return void
      */
     public function rotate($angle)
     {
@@ -321,6 +391,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      * @param int $positionY
      * @param int $opacity
      * @param bool $tile
+     * @return void
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
@@ -501,7 +572,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Checks required dependencies
      *
-     * @throws \Exception if some of dependencies are missing
+     * @return void
+     * @throws \Exception If some of dependencies are missing
      */
     public function checkDependencies()
     {
@@ -514,6 +586,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
 
     /**
      * Reassign image dimensions
+     *
+     * @return void
      */
     public function refreshImageDimensions()
     {
@@ -531,10 +605,11 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
         }
     }
 
-    /*
+    /**
      * Fixes saving PNG alpha channel
      *
      * @param resource $imageHandler
+     * @return void
      */
     private function _saveAlpha($imageHandler)
     {
@@ -584,7 +659,8 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Create Image using standard font
      *
-     * @param $text
+     * @param string $text
+     * @return void
      */
     protected function _createImageFromText($text)
     {
@@ -603,6 +679,7 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
      *
      * @param string $text
      * @param string $font
+     * @return void
      * @throws \Exception
      */
     protected function _createImageFromTtfText($text, $font)
@@ -624,8 +701,9 @@ class Gd2 extends \Magento\Image\Adapter\AbstractAdapter
     /**
      * Create empty image with transparent background
      *
-     * @param $width
-     * @param $height
+     * @param int $width
+     * @param int $height
+     * @return void
      */
     protected function _createEmptyImage($width, $height)
     {

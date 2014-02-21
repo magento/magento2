@@ -20,13 +20,13 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <div class="centinel">
     <div class="authentication">
-        <iframe frameborder="0" border="0" id="<?php echo $this->getContainerId() ?>" src="" style="display:none;"></iframe>
+        <iframe frameborder="0" border="0" id="<?php echo $this->getContainerId() ?>" src="" style="display:none;" width="50%" height="350" title="<?php echo __('Card Verification')?>"></iframe>
     </div>
 </div>
 <button onclick="cardValidator.validate()" class="scalable" type="button"><span><span><span><?php echo __('Start/Reset Validation...')?></span></span></span></button>

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,9 @@ namespace Magento\Backend\Block;
 
 class Dashboard extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var \Magento\Core\Model\LocaleInterface
+     */
     protected $_locale;
 
     /**
@@ -35,8 +38,14 @@ class Dashboard extends \Magento\Backend\Block\Template
      */
     const XML_PATH_ENABLE_CHARTS = 'admin/dashboard/enable_charts';
 
+    /**
+     * @var string
+     */
     protected $_template = 'dashboard/index.phtml';
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         $this->addChild('lastOrders', 'Magento\Backend\Block\Dashboard\Orders\Grid');
@@ -63,6 +72,9 @@ class Dashboard extends \Magento\Backend\Block\Template
         parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getSwitchUrl()
     {
         if ($url = $this->getData('switch_url')) {

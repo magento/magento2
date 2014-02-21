@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Model\Resource;
 
 use Magento\User\Model\Acl\Role\User as RoleUser;
@@ -61,6 +60,7 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\App\Resource $resource
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @return void
      */
     public function __construct(
         \Magento\App\Resource $resource,
@@ -74,7 +74,6 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Define main table
-     *
      */
     protected function _construct()
     {
@@ -88,7 +87,7 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Process role before saving
      *
      * @param \Magento\Core\Model\AbstractModel $role
-     * @return \Magento\User\Model\Resource\Role
+     * @return $this
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $role)
     {
@@ -134,7 +133,7 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Process role after saving
      *
      * @param \Magento\Core\Model\AbstractModel $role
-     * @return \Magento\User\Model\Resource\Role
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $role)
     {
@@ -148,7 +147,7 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Process role after deleting
      *
      * @param \Magento\Core\Model\AbstractModel $role
-     * @return \Magento\User\Model\Resource\Role
+     * @return $this
      */
     protected function _afterDelete(\Magento\Core\Model\AbstractModel $role)
     {

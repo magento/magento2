@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Model\ProductTypes;
 
-class Config
-    extends \Magento\Config\Data
-    implements \Magento\Catalog\Model\ProductTypes\ConfigInterface
+class Config extends \Magento\Config\Data implements \Magento\Catalog\Model\ProductTypes\ConfigInterface
 {
     /**
      * @param \Magento\Catalog\Model\ProductTypes\Config\Reader $reader
@@ -48,7 +46,7 @@ class Config
      */
     public function getType($name)
     {
-        return $this->get($name, array());
+        return $this->get('types/' . $name, array());
     }
 
     /**
@@ -58,6 +56,46 @@ class Config
      */
     public function getAll()
     {
-        return $this->get();
+        return $this->get('types');
+    }
+
+    /**
+     * Check whether product type is set of products
+     *
+     * @param string $typeId
+     * @return bool
+     */
+    public function isProductSet($typeId)
+    {
+        return 'true' == $this->get('types/' . $typeId . '/custom_attributes/is_product_set', false);
+    }
+
+    /**
+     * Get composable types
+     *
+     * @return array
+     */
+    public function getComposableTypes()
+    {
+        return $this->get('composableTypes', array());
+    }
+
+    /**
+     * Get list of product types that comply with condition
+     *
+     * @param string $attributeName
+     * @param string $value
+     * @return array
+     */
+    public function filter($attributeName, $value = 'true')
+    {
+        $availableProductTypes = array();
+        foreach ($this->getAll() as $type) {
+            if (!isset($type['custom_attributes'][$attributeName])
+                || $type['custom_attributes'][$attributeName] == $value) {
+                $availableProductTypes[$type['name']] = $type['name'];
+            }
+        }
+        return $availableProductTypes;
     }
 }

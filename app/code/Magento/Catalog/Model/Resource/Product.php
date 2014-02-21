@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Resource;
 
 /**
@@ -31,7 +30,7 @@ namespace Magento\Catalog\Model\Resource;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Product extends \Magento\Catalog\Model\Resource\AbstractResource
+class Product extends AbstractResource
 {
     /**
      * Product to website linkage table
@@ -50,7 +49,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
     /**
      * Catalog category
      *
-     * @var \Magento\Catalog\Model\Resource\Category
+     * @var Category
      */
     protected $_catalogCategory;
 
@@ -73,7 +72,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\Category $catalogCategory
+     * @param Category $catalogCategory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -88,7 +87,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory,
-        \Magento\Catalog\Model\Resource\Category $catalogCategory,
+        Category $catalogCategory,
         $data = array()
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -112,7 +111,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
     /**
      * Default product attributes
      *
-     * @return array
+     * @return string[]
      */
     protected function _getDefaultAttributes()
     {
@@ -206,7 +205,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
      * Process product data before save
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Product
+     * @return $this
      */
     protected function _beforeSave(\Magento\Object $object)
     {
@@ -234,7 +233,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
      * Save data related with product
      *
      * @param \Magento\Object $product
-     * @return \Magento\Catalog\Model\Resource\Product
+     * @return $this
      */
     protected function _afterSave(\Magento\Object $product)
     {
@@ -247,7 +246,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
      * Save product website relations
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Product
+     * @return $this
      */
     protected function _saveWebsiteIds($product)
     {
@@ -296,7 +295,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
      * Save product category relations
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Product
+     * @return $this
      */
     protected function _saveCategories(\Magento\Object $object)
     {
@@ -347,201 +346,6 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
             $object->setAffectedCategoryIds(array_merge($insert, $delete));
             $object->setIsChangedCategories(true);
         }
-
-        return $this;
-    }
-
-    /**
-     * Refresh Product Enabled Index
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Product
-     */
-    public function refreshIndex($product)
-    {
-        $writeAdapter = $this->_getWriteAdapter();
-
-        /**
-         * Ids of all categories where product is assigned (not related with store)
-         */
-        $categoryIds = $product->getCategoryIds();
-
-        /**
-         * Clear previous index data related with product
-         */
-        $condition = array('product_id = ?' => (int)$product->getId());
-        $writeAdapter->delete($this->getTable('catalog_category_product_index'), $condition);
-
-        if (!empty($categoryIds)) {
-            $categoriesSelect = $writeAdapter->select()
-                ->from($this->getTable('catalog_category_entity'))
-                ->where('entity_id IN (?)', $categoryIds);
-
-            $categoriesInfo = $writeAdapter->fetchAll($categoriesSelect);
-
-            $indexCategoryIds = array();
-            foreach ($categoriesInfo as $categoryInfo) {
-                $ids = explode('/', $categoryInfo['path']);
-                $ids[] = $categoryInfo['entity_id'];
-                $indexCategoryIds = array_merge($indexCategoryIds, $ids);
-            }
-
-            $indexCategoryIds   = array_unique($indexCategoryIds);
-            $indexProductIds    = array($product->getId());
-
-            $this->_catalogCategory->refreshProductIndex($indexCategoryIds, $indexProductIds);
-        } else {
-            $websites = $product->getWebsiteIds();
-
-            if ($websites) {
-                $storeIds = array();
-
-                foreach ($websites as $websiteId) {
-                    $website  = $this->_storeManager->getWebsite($websiteId);
-                    $storeIds = array_merge($storeIds, $website->getStoreIds());
-                }
-
-                $this->_catalogCategory->refreshProductIndex(array(), array($product->getId()), $storeIds);
-            }
-        }
-
-        /**
-         * Refresh enabled products index (visibility state)
-         */
-        $this->refreshEnabledIndex(null, $product);
-
-        return $this;
-    }
-
-    /**
-     * Refresh index for visibility of enabled product in store
-     * if store parameter is null - index will refreshed for all stores
-     * if product parameter is null - idex will be refreshed for all products
-     *
-     * @param \Magento\Core\Model\Store $store
-     * @param \Magento\Catalog\Model\Product $product
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Catalog\Model\Resource\Product
-     */
-    public function refreshEnabledIndex($store = null, $product = null)
-    {
-        $statusAttribute        = $this->getAttribute('status');
-        $visibilityAttribute    = $this->getAttribute('visibility');
-        $statusAttributeId      = $statusAttribute->getId();
-        $visibilityAttributeId  = $visibilityAttribute->getId();
-        $statusTable            = $statusAttribute->getBackend()->getTable();
-        $visibilityTable        = $visibilityAttribute->getBackend()->getTable();
-
-        $adapter = $this->_getWriteAdapter();
-
-        $select = $adapter->select();
-        $condition = array();
-
-        $indexTable = $this->getTable('catalog_product_enabled_index');
-        if (is_null($store) && is_null($product)) {
-            throw new \Magento\Core\Exception(
-                __('To reindex the enabled product(s), please specify the store or product.')
-            );
-        } elseif (is_null($product) || is_array($product)) {
-            $storeId    = $store->getId();
-            $websiteId  = $store->getWebsiteId();
-
-            if (is_array($product) && !empty($product)) {
-                $condition[] = $adapter->quoteInto('product_id IN (?)', $product);
-            }
-
-            $condition[] = $adapter->quoteInto('store_id = ?', $storeId);
-
-            $selectFields = array(
-                't_v_default.entity_id',
-                new \Zend_Db_Expr($storeId),
-                $adapter->getCheckSql('t_v.value_id > 0', 't_v.value', 't_v_default.value'),
-            );
-
-            $select->joinInner(
-                array('w' => $this->getTable('catalog_product_website')),
-                $adapter->quoteInto(
-                    'w.product_id = t_v_default.entity_id AND w.website_id = ?', $websiteId
-                ),
-                array()
-            );
-        } elseif ($store === null) {
-            foreach ($product->getStoreIds() as $storeId) {
-                $store = $this->_storeManager->getStore($storeId);
-                $this->refreshEnabledIndex($store, $product);
-            }
-            return $this;
-        } else {
-            $productId = is_numeric($product) ? $product : $product->getId();
-            $storeId   = is_numeric($store) ? $store : $store->getId();
-
-            $condition = array(
-                'product_id = ?' => (int)$productId,
-                'store_id   = ?' => (int)$storeId,
-            );
-
-            $selectFields = array(
-                new \Zend_Db_Expr($productId),
-                new \Zend_Db_Expr($storeId),
-                $adapter->getCheckSql('t_v.value_id > 0', 't_v.value', 't_v_default.value')
-            );
-
-            $select->where('t_v_default.entity_id = ?', $productId);
-        }
-
-        $adapter->delete($indexTable, $condition);
-
-        $select->from(array('t_v_default' => $visibilityTable), $selectFields);
-
-        $visibilityTableJoinCond = array(
-            't_v.entity_id = t_v_default.entity_id',
-            $adapter->quoteInto('t_v.attribute_id = ?', $visibilityAttributeId),
-            $adapter->quoteInto('t_v.store_id     = ?', $storeId),
-        );
-
-        $select->joinLeft(
-            array('t_v' => $visibilityTable),
-            implode(' AND ', $visibilityTableJoinCond),
-            array()
-        );
-
-        $defaultStatusJoinCond = array(
-            't_s_default.entity_id = t_v_default.entity_id',
-            't_s_default.store_id = 0',
-            $adapter->quoteInto('t_s_default.attribute_id = ?', $statusAttributeId),
-        );
-
-        $select->joinInner(
-            array('t_s_default' => $statusTable),
-            implode(' AND ', $defaultStatusJoinCond),
-            array()
-        );
-
-
-        $statusJoinCond = array(
-            't_s.entity_id = t_v_default.entity_id',
-            $adapter->quoteInto('t_s.store_id     = ?', $storeId),
-            $adapter->quoteInto('t_s.attribute_id = ?', $statusAttributeId),
-        );
-
-        $select->joinLeft(
-            array('t_s' => $statusTable),
-            implode(' AND ', $statusJoinCond),
-            array()
-        );
-
-        $valueCondition = $adapter->getCheckSql('t_s.value_id > 0', 't_s.value', 't_s_default.value');
-
-        $select->where('t_v_default.attribute_id = ?', $visibilityAttributeId)
-            ->where('t_v_default.store_id = ?', 0)
-            ->where(sprintf('%s = ?', $valueCondition), \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
-
-        if (is_array($product) && !empty($product)) {
-            $select->where('t_v_default.entity_id IN (?)', $product);
-        }
-
-        $adapter->query($adapter->insertFromSelect($select, $indexTable));
-
 
         return $this;
     }
@@ -614,7 +418,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
      *
      * @param int $oldId
      * @param int $newId
-     * @return \Magento\Catalog\Model\Resource\Product
+     * @return $this
      */
     public function duplicate($oldId, $newId)
     {
@@ -661,7 +465,7 @@ class Product extends \Magento\Catalog\Model\Resource\AbstractResource
         $updateCond[]         = $adapter->quoteInto('attribute_id = ?', $statusAttributeId);
         $adapter->update(
             $statusAttributeTable,
-            array('value' => \Magento\Catalog\Model\Product\Status::STATUS_DISABLED),
+            array('value' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED),
             $updateCond
         );
 

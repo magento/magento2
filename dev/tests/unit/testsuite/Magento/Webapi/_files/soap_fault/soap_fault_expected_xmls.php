@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
@@ -36,10 +36,20 @@ return array(
                     <env:Text xml:lang="en">Fault reason</env:Text>
                 </env:Reason>
                 <env:Detail>
-                    <m:DefaultFault>
-                        <m:key1>value1</m:key1>
-                        <m:key2>value2</m:key2>
-                    </m:DefaultFault>
+                    <m:GenericFault>
+                        <m:Parameters>
+                            <m:GenericFaultParameter>
+                                <m:key>key1</m:key>
+                                <m:value>value1</m:value>
+                            </m:GenericFaultParameter>
+                            <m:GenericFaultParameter>
+                                <m:key>key2</m:key>
+                                <m:value>value2</m:value>
+                            </m:GenericFaultParameter>
+                        </m:Parameters>
+                        <m:Code>333</m:Code>
+                        <m:Trace>Trace</m:Trace>
+                    </m:GenericFault>
                 </env:Detail>
             </env:Fault>
         </env:Body>
@@ -88,7 +98,7 @@ return array(
     </env:Envelope>',
     'expectedResultComplexDataDetails' =>
     '<?xml version = "1.0" encoding = "utf-8" ?>
-    <env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:m="{wsdl_url}">
+    <env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
         <env:Body>
             <env:Fault>
                 <env:Code>
@@ -97,13 +107,6 @@ return array(
                 <env:Reason>
                     <env:Text xml:lang="en">Fault reason</env:Text>
                 </env:Reason>
-                <env:Detail>
-                    <m:DefaultFault>
-                        <m:key>
-                            <m:sub_key>value</m:sub_key>
-                        </m:key>
-                    </m:DefaultFault>
-                </env:Detail>
             </env:Fault>
         </env:Body>
     </env:Envelope>'

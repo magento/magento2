@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Rule
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,8 +61,7 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      * Prepare rule's active "from" and "to" dates
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     *
-     * @return \Magento\Rule\Model\Resource\AbstractResource
+     * @return $this
      */
     public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -87,11 +86,11 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
     /**
      * Bind specified rules to entities
      *
-     * @param array|int|string $ruleIds
-     * @param array|int|string $entityIds
+     * @param int[]|int|string $ruleIds
+     * @param int[]|int|string $entityIds
      * @param string $entityType
-     *
-     * @return \Magento\Rule\Model\Resource\AbstractResource
+     * @return $this
+     * @throws \Exception
      */
     public function bindRuleToEntity($ruleIds, $entityIds, $entityType)
     {
@@ -141,12 +140,11 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
 
             $adapter->delete($this->getTable($entityInfo['associations_table']),
                 $adapter->quoteInto($entityInfo['rule_id_field']   . ' IN (?) AND ', $ruleIds) .
-                $adapter->quoteInto($entityInfo['entity_id_field'] . ' NOT IN (?)',  $entityIds)
+                $adapter->quoteInto($entityInfo['entity_id_field'] . ' NOT IN (?)', $entityIds)
             );
         } catch (\Exception $e) {
             $adapter->rollback();
             throw $e;
-
         }
 
         $adapter->commit();
@@ -157,11 +155,10 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
     /**
      * Unbind specified rules from entities
      *
-     * @param array|int|string $ruleIds
-     * @param array|int|string $entityIds
+     * @param int[]|int|string $ruleIds
+     * @param int[]|int|string $entityIds
      * @param string $entityType
-     *
-     * @return \Magento\Rule\Model\Resource\AbstractResource
+     * @return $this
      */
     public function unbindRuleFromEntity($ruleIds, $entityIds, $entityType)
     {
@@ -193,7 +190,6 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      *
      * @param int $ruleId
      * @param string $entityType
-     *
      * @return array
      */
     public function getAssociatedEntityIds($ruleId, $entityType)
@@ -234,9 +230,8 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      * of rule's associated entity by specified entity type
      *
      * @param string $entityType
-     *
-     * @throws \Magento\Core\Exception
      * @return array
+     * @throws \Magento\Core\Exception
      */
     protected function _getAssociatedEntityInfo($entityType)
     {

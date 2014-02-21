@@ -20,11 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
@@ -46,7 +44,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory
      */
-    protected $_attrOptCollFactory;
+    protected $_attrOptionCollectionFactory;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
@@ -55,16 +53,16 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory,
+        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
     ) {
         $this->_coreData = $coreData;
-        $this->_attrOptCollFactory = $attrOptCollFactory;
+        $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;
     }
 
@@ -85,7 +83,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $this->_optionsDefault = array();
         }
         if (!isset($this->_options[$storeId])) {
-            $collection = $this->_attrOptCollFactory->create()
+            $collection = $this->_attrOptionCollectionFactory->create()
                 ->setPositionOrder('asc')
                 ->setAttributeFilter($this->getAttribute()->getId())
                 ->setStoreFilter($this->getAttribute()->getStoreId())
@@ -105,7 +103,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Get a text for option value
      *
      * @param string|integer $value
-     * @return string
+     * @return array|string|bool
      */
     public function getOptionText($value)
     {
@@ -141,7 +139,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir
      *
-     * @return \Magento\Eav\Model\Entity\Attribute\Source\Table
+     * @return $this
      */
     public function addValueSortToCollection($collection, $dir = \Magento\DB\Select::SQL_ASC)
     {
@@ -184,45 +182,26 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $isMulti = $this->getAttribute()->getFrontend()->getInputType() == 'multiselect';
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $columns[$attributeCode] = array(
-                'type'      => $isMulti ? 'varchar(255)' : 'int',
+        $type = ($isMulti) ? \Magento\DB\Ddl\Table::TYPE_TEXT : \Magento\DB\Ddl\Table::TYPE_INTEGER;
+        $columns[$attributeCode] = array(
+            'type'      => $type,
+            'length'    => $isMulti ? '255' : null,
+            'unsigned'  => false,
+            'nullable'   => true,
+            'default'   => null,
+            'extra'     => null,
+            'comment'   => $attributeCode . ' column'
+        );
+        if (!$isMulti) {
+            $columns[$attributeCode . '_value'] = array(
+                'type'      => \Magento\DB\Ddl\Table::TYPE_TEXT,
+                'length'    => 255,
                 'unsigned'  => false,
-                'is_null'   => true,
-                'default'   => null,
-                'extra'     => null
-            );
-            if (!$isMulti) {
-                $columns[$attributeCode . '_value'] = array(
-                    'type'      => 'varchar(255)',
-                    'unsigned'  => false,
-                    'is_null'   => true,
-                    'default'   => null,
-                    'extra'     => null
-                );
-            }
-        } else {
-            $type = ($isMulti) ? \Magento\DB\Ddl\Table::TYPE_TEXT : \Magento\DB\Ddl\Table::TYPE_INTEGER;
-            $columns[$attributeCode] = array(
-                'type'      => $type,
-                'length'    => $isMulti ? '255' : null,
-                'unsigned'  => false,
-                'nullable'   => true,
+                'nullable'  => true,
                 'default'   => null,
                 'extra'     => null,
                 'comment'   => $attributeCode . ' column'
             );
-            if (!$isMulti) {
-                $columns[$attributeCode . '_value'] = array(
-                    'type'      => \Magento\DB\Ddl\Table::TYPE_TEXT,
-                    'length'    => 255,
-                    'unsigned'  => false,
-                    'nullable'  => true,
-                    'default'   => null,
-                    'extra'     => null,
-                    'comment'   => $attributeCode . ' column'
-                );
-            }
         }
 
         return $columns;

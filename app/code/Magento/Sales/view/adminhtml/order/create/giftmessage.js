@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -244,7 +244,7 @@ GiftMessageSet.prototype = {
                 }
             }, this);
             $('gift_options_giftmessage').show();
-        } else {
+        } else if ($('gift_options_giftmessage')) {
             $('gift_options_giftmessage').hide();
         }
 

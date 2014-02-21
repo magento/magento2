@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Urlrewrite;
 
 /**
  * Block for URL rewrites edit page
@@ -34,8 +35,6 @@
  * @package    Magento_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Urlrewrite;
-
 class Edit extends \Magento\Backend\Block\Widget\Container
 {
     /**
@@ -89,7 +88,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     /**
      * Prepare URL rewrite editing layout
      *
-     * @return \Magento\Backend\Block\Urlrewrite\Edit
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -103,6 +102,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Prepare featured blocks for layout of URL rewrite editing
+     *
+     * @return void
      */
     protected function _prepareLayoutFeatures()
     {
@@ -121,6 +122,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add child edit form block
+     *
+     * @return void
      */
     protected function _addEditFormBlock()
     {
@@ -136,6 +139,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add reset button
+     *
+     * @return void
      */
     protected function _addResetButton()
     {
@@ -149,6 +154,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add back button
+     *
+     * @return void
      */
     protected function _addBackButton()
     {
@@ -164,6 +171,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
      * Update Back button location link
      *
      * @param string $link
+     * @return void
      */
     protected function _updateBackButtonLink($link)
     {
@@ -172,6 +180,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add delete button
+     *
+     * @return void
      */
     protected function _addDeleteButton()
     {
@@ -189,6 +199,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add save button
+     *
+     * @return void
      */
     protected function _addSaveButton()
     {
@@ -220,6 +232,8 @@ class Edit extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add child URL rewrite selector block
+     *
+     * @return void
      */
     protected function _addUrlRewriteSelectorBlock()
     {

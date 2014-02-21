@@ -17,256 +17,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
 // *
-// * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 // * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 // */
-
-.actionLink() {
-    display: inline;
-    color: @linkColor;
-    text-decoration: none;
-    &:visited,
-    &:active {
-        color: @linkColor;
-    }
-    &:focus,
-    &:hover {
-        color: @linkColor;
-        text-decoration: underline;
-    }
-}
-
-.actionLinkI() {
-    display: inline;
-    color: @linkColor2;
-    text-decoration: underline;
-    &:visited,
-    &:active {
-        color: @linkColor2;
-    }
-    &:focus,
-    &:hover {
-        color: @linkColor2;
-        text-decoration: underline;
-    }
-}
-
-.style1() { // absent in design
-}
-
-.style2 {
-    color: @primary1;
-    font-size: 13px;
-    font-weight: @baseFontWeightSemibold;
-}
-
-.style3() {
-    color: @primary5;
-    font-size: 14px;
-    font-weight: @baseFontWeight;
-
-    &:focus,
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.style4() { // absent in design
-}
-
-.style5() { // absent in design
-}
-
-.style6() {
-    color: @primary5;
-    font-size: 13px;
-    font-weight: @baseFontWeight;
-
-    &:focus,
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.style7() {
-    color: @primary1;
-    font-size: 16px;
-    font-weight: @baseFontWeight;
-}
-
-.style8() {
-    color: @primary6;
-    font-size: 13px;
-    font-weight: @baseFontWeight;
-}
-
-.style9() {
-    color: @primary1;
-    font-size: 14px;
-    font-weight: @baseFontWeight;
-}
-
-.style10() {
-    color: @primary1;
-    font-size: 20px;
-    font-weight: @baseFontWeight;
-}
-
-.style11() { // absent in design
-}
-
-.style12() { // absent in design
-}
-
-.style13() { // absent in design
-}
-
-.style14() {
-    color: @primary1;
-    font-size: 11px;
-    font-weight: @baseFontWeight;
-}
-
-.style15() {
-    color: @primary7;
-    font-size: 13px;
-    font-weight: @baseFontWeight;
-}
-
-.style15I() {
-    color: @primary1;
-    font-size: 13px;
-    font-weight: @baseFontWeight;
-}
-
-.style16() {
-    color: @primary4;
-    font-size: 12px;
-    font-weight: @baseFontWeightSemibold;
-}
-
-.style17() { // absent in design
-}
-
-.style18() {
-    color: @primary1;
-    font-size: 13px;
-    font-weight: @baseFontWeight;
-}
-
-.style19() {
-    color: @primary1;
-    font-size: 12px;
-    font-weight: @baseFontWeight;
-}
-
-.style20() { // absent in design
-    color: @primary2;
-    font-size: 12px;
-    font-weight: @baseFontWeightSemibold;
-}
-
-.style21() { // absent in design
-    color: @primary1;
-    font-size: 11px;
-    font-weight: @baseFontWeight;
-}
-
-.style22() {
-    color: @primary5;
-    font-size: 12px;
-    font-weight: @baseFontWeight;
-    &:focus,
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.style23() {
-    color: @primary1;
-    font-size: 28px;
-    font-weight: @baseFontWeight;
-}
-
-.style24() { // absent in design
-    color: @primary1;
-    font-size: 12px;
-    font-weight: @baseFontWeight;
-}
-
-.style25() { // absent in design
-    color: @primary8;
-    font-size: 14px;
-    font-weight: @baseFontWeight;
-    &:focus,
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.style26() { // absent in design
-    color: @primary4;
-    font-size: 30px;
-    font-weight: @baseFontWeightBold;
-}
-
-.style27() { // absent in design
-    color: @primary9;
-    font-size: 20px;
-    font-weight: @baseFontWeightBold;
-}
-
-.style28() {
-    color: @primary1;
-    font-size: 14px;
-    font-weight: @baseFontWeightBold;
-}
-
-.style29() {
-    color: @primary4;
-    font-size: 13px;
-    font-weight: @baseFontWeightBold;
-}
-
-.style30() {
-    color: @primary1;
-    font-size: 14px;
-    font-weight: @baseFontWeightSemibold;
-}
-
-.style31() {
-    color: @primary1;
-    font-size: 20px;
-    font-style: italic;
-    font-weight: @baseFontWeight;
-}
-
-.style32() {
-    color: @primary6;
-    font-size: 14px;
-    font-weight: @baseFontWeightBold;
-}
-
-.style33() {
-    color: @primary3;
-    font-size: 12px;
-    font-weight: @baseFontWeightSemibold;
-
-    &:focus,
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.style34() { // no such html yet
-    color: @primary2;
-    font-size: 12px;
-    font-weight: @baseFontWeight;
-    &:focus,
-    &:hover {
-        text-decoration: underline;
-    }
-}
 
 // Fonts
 
@@ -289,28 +42,28 @@
 /* @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600,700 <http://fonts.googleapis.com/css?family=Open+Sans:400italic%2c400%2c600%2c700>); */
 
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
 }
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/MTP_ySUJH_bn48VBG8sNSnhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/MTP_ySUJH_bn48VBG8sNSnhCUOGz7vYGh680lGh-uXM.woff) format('woff');
 }
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
 }
 @font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/xjAJXh38I15wypJXxuGMBobN6UDyHWBl620a-IRfuBk.woff) format('woff');
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Open Sans Italic'), local('OpenSans-Italic'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/xjAJXh38I15wypJXxuGMBobN6UDyHWBl620a-IRfuBk.woff) format('woff');
 }
 
 // Base

@@ -20,14 +20,27 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Catalog\Model\Product\Condition;
 
+use Magento\DB\Adapter\AdapterInterface;
+use Magento\DB\Select;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+
 interface ConditionInterface
 {
+    /**
+     * @param AbstractCollection $collection
+     * @return $this
+     */
     public function applyToCollection($collection);
+
+    /**
+     * @param AdapterInterface $dbAdapter
+     * @return Select|string
+     */
     public function getIdsSelect($dbAdapter);
 }

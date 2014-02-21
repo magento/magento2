@@ -21,11 +21,13 @@
  * @category    Magento
  * @package     Magento_CatalogSearch
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$objectManager->get('Magento\Core\Model\Locale')->setLocale('de_DE');
 
 /** @var $query \Magento\CatalogSearch\Model\Query */
 $query = $objectManager->create('Magento\CatalogSearch\Model\Query');

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,7 +60,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = $this->getMockForAbstractClass('Magento\ObjectManager', array('create'));
         $this->_config = $this->getMock('Magento\View\Asset\ConfigInterface', array(), array(), '', false);
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('\Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_state = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->_filesystem->expects($this->any())

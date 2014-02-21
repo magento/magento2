@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Payment
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Payment;
 
 /**
  * Payment exception
@@ -32,18 +32,26 @@
  * @package    Magento_Payment
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Payment;
-
 class Exception extends \Exception
 {
+    /**
+     * @var int|null
+     */
     protected $_code = null;
 
+    /**
+     * @param string|null $message
+     * @param int $code
+     */
     public function __construct($message = null, $code = 0)
     {
         $this->_code = $code;
         parent::__construct($message, 0);
     }
 
+    /**
+     * @return int|null
+     */
     public function getFields()
     {
         return $this->_code;

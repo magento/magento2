@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_AdminNotification
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\AdminNotification\Model;
 
 /**
  * AdminNotification observer
@@ -32,8 +32,6 @@
  * @package    Magento_AdminNotification
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\AdminNotification\Model;
-
 class Observer
 {
     /**
@@ -62,6 +60,7 @@ class Observer
      * Predispath admin action controller
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function preDispatch(\Magento\Event\Observer $observer)
     {

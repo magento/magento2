@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -382,10 +382,10 @@ class Pro
     /**
      * Validate RP data
      *
-     * @param \Magento\Payment\Model\Recurring\Profile $profile
+     * @param \Magento\RecurringProfile\Model\RecurringProfile $profile
      * @throws \Magento\Core\Exception
      */
-    public function validateRecurringProfile(\Magento\Payment\Model\Recurring\Profile $profile)
+    public function validateRecurringProfile(\Magento\RecurringProfile\Model\RecurringProfile $profile)
     {
         $errors = array();
         if (strlen($profile->getSubscriberName()) > 32) { // up to 32 single-byte chars
@@ -407,11 +407,11 @@ class Pro
     /**
      * Submit RP to the gateway
      *
-     * @param \Magento\Payment\Model\Recurring\Profile $profile
+     * @param \Magento\RecurringProfile\Model\RecurringProfile $profile
      * @param \Magento\Payment\Model\Info $paymentInfo
      * @throws \Magento\Core\Exception
      */
-    public function submitRecurringProfile(\Magento\Payment\Model\Recurring\Profile $profile,
+    public function submitRecurringProfile(\Magento\RecurringProfile\Model\RecurringProfile $profile,
         \Magento\Payment\Model\Info $paymentInfo
     ) {
         $api = $this->getApi();
@@ -427,9 +427,9 @@ class Pro
         $api->callCreateRecurringPaymentsProfile();
         $profile->setReferenceId($api->getRecurringProfileId());
         if ($api->getIsProfileActive()) {
-            $profile->setState(\Magento\Sales\Model\Recurring\Profile::STATE_ACTIVE);
+            $profile->setState(\Magento\RecurringProfile\Model\States::ACTIVE);
         } elseif ($api->getIsProfilePending()) {
-            $profile->setState(\Magento\Sales\Model\Recurring\Profile::STATE_PENDING);
+            $profile->setState(\Magento\RecurringProfile\Model\States::PENDING);
         }
     }
 
@@ -450,9 +450,9 @@ class Pro
     /**
      * Update RP data
      *
-     * @param \Magento\Payment\Model\Recurring\Profile $profile
+     * @param \Magento\RecurringProfile\Model\RecurringProfile $profile
      */
-    public function updateRecurringProfile(\Magento\Payment\Model\Recurring\Profile $profile)
+    public function updateRecurringProfile(\Magento\RecurringProfile\Model\RecurringProfile $profile)
     {
 
     }
@@ -460,22 +460,22 @@ class Pro
     /**
      * Manage status
      *
-     * @param \Magento\Payment\Model\Recurring\Profile $profile
+     * @param \Magento\RecurringProfile\Model\RecurringProfile $profile
      */
-    public function updateRecurringProfileStatus(\Magento\Payment\Model\Recurring\Profile $profile)
+    public function updateRecurringProfileStatus(\Magento\RecurringProfile\Model\RecurringProfile $profile)
     {
         $api = $this->getApi();
         $action = null;
         switch ($profile->getNewState()) {
-            case \Magento\Sales\Model\Recurring\Profile::STATE_CANCELED: $action = 'cancel'; break;
-            case \Magento\Sales\Model\Recurring\Profile::STATE_SUSPENDED: $action = 'suspend'; break;
-            case \Magento\Sales\Model\Recurring\Profile::STATE_ACTIVE: $action = 'activate'; break;
+            case \Magento\RecurringProfile\Model\States::CANCELED: $action = 'cancel'; break;
+            case \Magento\RecurringProfile\Model\States::SUSPENDED: $action = 'suspend'; break;
+            case \Magento\RecurringProfile\Model\States::ACTIVE: $action = 'activate'; break;
         }
         $state = $profile->getState();
         $api->setRecurringProfileId($profile->getReferenceId())
-            ->setIsAlreadyCanceled($state == \Magento\Sales\Model\Recurring\Profile::STATE_CANCELED)
-            ->setIsAlreadySuspended($state == \Magento\Sales\Model\Recurring\Profile::STATE_SUSPENDED)
-            ->setIsAlreadyActive($state == \Magento\Sales\Model\Recurring\Profile::STATE_ACTIVE)
+            ->setIsAlreadyCanceled($state == \Magento\RecurringProfile\Model\States::CANCELED)
+            ->setIsAlreadySuspended($state == \Magento\RecurringProfile\Model\States::SUSPENDED)
+            ->setIsAlreadyActive($state == \Magento\RecurringProfile\Model\States::ACTIVE)
             ->setAction($action)
             ->callManageRecurringPaymentsProfileStatus()
         ;

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Gdata
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -77,7 +77,9 @@ class Control extends \Zend_Gdata_App_Extension_Control
      * and eventually XML text for sending to the server upon updates, or
      * for application storage/persistence.
      *
-     * @param \DOMDocument $doc The \DOMDocument used to construct \DOMElements
+     * @param \DOMDocument|null $doc The \DOMDocument used to construct \DOMElements
+     * @param int $majorVersion
+     * @param null|int $minorVersion
      * @return \DOMElement The \DOMElement representing this element and all
      * child properties.
      */
@@ -110,6 +112,7 @@ class Control extends \Zend_Gdata_App_Extension_Control
      * objects are created and stored in an array.
      *
      * @param \DOMNode $child The \DOMNode needed to be handled
+     * @return void
      */
     protected function takeChildFromDOM($child)
     {

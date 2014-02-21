@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard\Tab\Products;
 
 /**
  * Adminhtml dashboard most ordered products grid
@@ -31,9 +32,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard\Tab\Products;
-
 class Ordered extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
@@ -48,7 +46,6 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory $collectionFactory
@@ -56,7 +53,6 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Module\Manager $moduleManager,
         \Magento\Sales\Model\Resource\Report\Bestsellers\CollectionFactory $collectionFactory,
@@ -64,15 +60,21 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_moduleManager = $moduleManager;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('productsOrderedGrid');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareCollection()
     {
         if (!$this->_moduleManager->isEnabled('Magento_Sales')) {
@@ -98,6 +100,9 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareCollection();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareColumns()
     {
 
@@ -132,12 +137,11 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareColumns();
     }
 
-    /*
+    /**
      * Returns row url to show in admin dashboard
      * $row is bestseller row wrapped in Product model
      *
      * @param \Magento\Catalog\Model\Product $row
-     *
      * @return string
      */
     public function getRowUrl($row)

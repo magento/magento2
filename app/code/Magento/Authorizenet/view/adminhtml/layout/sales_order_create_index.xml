@@ -19,15 +19,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-directpost-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-authorizenet-js-direct-post-js">
             <arguments>
-                <argument name="file" xsi:type="string">mage/directpost.js</argument>
+                <argument name="file" xsi:type="string">Magento_Authorizenet::js/direct-post.js</argument>
             </arguments>
         </block>
     </referenceBlock>

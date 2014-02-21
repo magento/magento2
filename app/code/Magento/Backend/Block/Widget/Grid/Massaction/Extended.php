@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 /**
  * Grid widget massaction block
@@ -34,8 +35,6 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  * @deprecated support Magento 1.x grid massaction implementation
  */
-namespace Magento\Backend\Block\Widget\Grid\Massaction;
-
 class Extended extends \Magento\Backend\Block\Widget
 {
     /**
@@ -83,6 +82,8 @@ class Extended extends \Magento\Backend\Block\Widget
 
     /**
      * Sets Massaction template
+     *
+     * @return void
      */
     public function _construct()
     {
@@ -93,6 +94,7 @@ class Extended extends \Magento\Backend\Block\Widget
     /**
      * Add new massaction item
      *
+     * The item array should look like:
      * $item = array(
      *      'label'    => string,
      *      'complete' => string, // Only for ajax enabled grid (optional)
@@ -103,7 +105,7 @@ class Extended extends \Magento\Backend\Block\Widget
      *
      * @param string $itemId
      * @param array $item
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Extended
+     * @return $this
      */
     public function addItem($itemId, array $item)
     {
@@ -124,7 +126,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve massaction item with id $itemId
      *
      * @param string $itemId
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Item
+     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Item|null
      */
     public function getItem($itemId)
     {
@@ -238,7 +240,7 @@ class Extended extends \Magento\Backend\Block\Widget
     /**
      * Retrieve array of selected checkboxes
      *
-     * @return array
+     * @return string[]
      */
     public function getSelected()
     {
@@ -260,6 +262,9 @@ class Extended extends \Magento\Backend\Block\Widget
         return $this->getButtonHtml(__('Submit'), $this->getJsObjectName() . ".apply()");
     }
 
+    /**
+     * @return string
+     */
     public function getJavaScript()
     {
         return " var {$this->getJsObjectName()} = new varienGridMassaction('{$this->getHtmlId()}', "
@@ -272,6 +277,9 @@ class Extended extends \Magento\Backend\Block\Widget
             . "{$this->getJsObjectName()}.errorText = '{$this->getErrorText()}';";
     }
 
+    /**
+     * @return string
+     */
     public function getGridIdsJson()
     {
         if (!$this->getUseSelectAll()) {
@@ -286,6 +294,9 @@ class Extended extends \Magento\Backend\Block\Widget
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function getHtmlId()
     {
         return $this->getParentBlock()->getHtmlId() . '_massaction';
@@ -295,7 +306,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Remove existing massaction item by its id
      *
      * @param string $itemId
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Extended
+     * @return $this
      */
     public function removeItem($itemId)
     {
@@ -320,7 +331,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve select all functionality flag check
      *
      * @param boolean $flag
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Extended
+     * @return $this
      */
     public function setUseSelectAll($flag)
     {

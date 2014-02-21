@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -91,7 +91,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
             array(
                 'name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
                 'options' => array('pattern' => '/(\d+\.\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)|\*/'),
-                'message' => 'Theme version has not compatible format'
+                'message' => 'Theme version has not compatible format.'
             )
         );
 
@@ -144,7 +144,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'theme_code'           => array('Theme code has not compatible format'),
-            'theme_version'        => array('Theme version has not compatible format')
+            'theme_version'        => array('Theme version has not compatible format.')
         );
     }
 }

@@ -20,24 +20,33 @@
  *
  * @category    Magento
  * @package     Magento_Payment
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Payment\Model\Method;
 
 class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
 {
+    /**
+     * @var string
+     */
     protected $_code  = 'purchaseorder';
+
+    /**
+     * @var string
+     */
     protected $_formBlockType = 'Magento\Payment\Block\Form\Purchaseorder';
+
+    /**
+     * @var string
+     */
     protected $_infoBlockType = 'Magento\Payment\Block\Info\Purchaseorder';
 
     /**
      * Assign data to info model instance
      *
-     * @param   mixed $data
-     * @return  \Magento\Payment\Model\Method\Purchaseorder
+     * @param \Magento\Object|mixed $data
+     * @return $this
      */
     public function assignData($data)
     {

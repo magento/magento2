@@ -2,7 +2,7 @@
 /**
  * {licence_notice}
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -27,31 +27,41 @@ class Context extends \Magento\View\Element\Context
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
+     * View file system
+     *
      * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
     /**
+     * Template engine pool
+     *
      * @var \Magento\View\TemplateEnginePool
      */
     protected $enginePool;
 
     /**
+     * Application state
+     *
      * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
+     * Store manager
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -71,13 +81,13 @@ class Context extends \Magento\View\Element\Context
      * @param \Magento\Escaper $escaper
      * @param \Magento\Filter\FilterManager $filterManager
      * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\View\TemplateEnginePool $enginePool
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -100,7 +110,7 @@ class Context extends \Magento\View\Element\Context
         \Magento\Escaper $escaper,
         \Magento\Filter\FilterManager $filterManager,
         \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\View\TemplateEnginePool $enginePool,
         \Magento\App\State $appState,
@@ -141,7 +151,7 @@ class Context extends \Magento\View\Element\Context
     /**
      * Get filesystem instance
      *
-     * @return \Magento\Filesystem
+     * @return \Magento\App\Filesystem
      */
     public function getFilesystem()
     {

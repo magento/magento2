@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,6 +61,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Form with widget to select
+     *
+     * @return void
      */
     protected function _prepareForm()
     {
@@ -151,7 +153,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Return array of widgets disabled for selection
      *
-     * @return array
+     * @return string[]
      */
     protected function _getSkippedWidgets()
     {

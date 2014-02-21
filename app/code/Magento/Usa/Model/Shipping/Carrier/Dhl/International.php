@@ -20,17 +20,24 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Usa\Model\Shipping\Carrier\Dhl;
 
+use Magento\Catalog\Model\Product\Type;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Quote\Address\RateRequest;
+use Magento\Sales\Model\Quote\Address\RateResult\Error;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
+use Magento\Shipping\Model\Rate\Result;
+
 /**
  * DHL International (API v1.4)
  */
 class International
-    extends \Magento\Usa\Model\Shipping\Carrier\AbstractCarrier
+    extends \Magento\Usa\Model\Shipping\Carrier\Dhl\AbstractDhl
     implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /**
@@ -48,7 +55,7 @@ class International
     /**
      * Container types that could be customized
      *
-     * @var array
+     * @var string[]
      */
     protected $_customizableContainerTypes = array(self::DHL_CONTENT_TYPE_NON_DOC);
 
@@ -60,7 +67,7 @@ class International
     /**
      * Rate request data
      *
-     * @var \Magento\Shipping\Model\Rate\Request|null
+     * @var RateRequest|null
      */
     protected $_request = null;
 
@@ -74,7 +81,7 @@ class International
     /**
      * Rate result data
      *
-     * @var \Magento\Shipping\Model\Rate\Result|null
+     * @var Result|null
      */
     protected $_result = null;
 
@@ -88,7 +95,7 @@ class International
     /**
      * Errors placeholder
      *
-     * @var array
+     * @var string[]
      */
     protected $_errors = array();
 
@@ -171,11 +178,6 @@ class International
     protected $_coreDate;
 
     /**
-     * @var \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\PdfFactory
-     */
-    protected $_pdfFactory;
-
-    /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -191,11 +193,6 @@ class International
     protected $mathDivision;
 
     /**
-     * @var \Magento\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * Modules directory with read permissions
      *
      * @var \Magento\Filesystem\Directory\Read
@@ -203,12 +200,22 @@ class International
     protected $modulesDirectory;
 
     /**
+     * @var \Magento\Stdlib\DateTime
+     */
+    protected $_dateTime;
+
+    /**
+     * @var \Zend_Http_ClientFactory
+     */
+    protected $_httpClientFactory;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
-     * @param \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory
      * @param \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory
      * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory
@@ -218,22 +225,22 @@ class International
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Usa\Helper\Data $usaData
      * @param \Magento\Core\Model\Date $coreDate
-     * @param Label\PdfFactory $pdfFactory
      * @param \Magento\Module\Dir\Reader $configReader
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Division $mathDivision
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Filesystem $filesystem
+     * @param \Zend_Http_ClientFactory $httpClientFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Usa\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
-        \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory,
         \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory,
         \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory,
@@ -243,24 +250,24 @@ class International
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Usa\Helper\Data $usaData,
         \Magento\Core\Model\Date $coreDate,
-        \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\PdfFactory $pdfFactory,
         \Magento\Module\Dir\Reader $configReader,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Stdlib\String $string,
         \Magento\Math\Division $mathDivision,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Filesystem $filesystem,
+        \Zend_Http_ClientFactory $httpClientFactory,
         array $data = array()
     ) {
-        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         $this->_usaData = $usaData;
         $this->_coreDate = $coreDate;
-        $this->_pdfFactory = $pdfFactory;
         $this->_storeManager = $storeManager;
         $this->_configReader = $configReader;
         $this->string = $string;
         $this->mathDivision = $mathDivision;
-        $this->dateTime = $dateTime;
+        $this->_dateTime = $dateTime;
+        $this->_httpClientFactory = $httpClientFactory;
         parent::__construct(
             $coreStoreConfig,
             $rateErrorFactory,
@@ -285,9 +292,9 @@ class International
     /**
      * Returns value of given variable
      *
-     * @param mixed $origValue
+     * @param string|int $origValue
      * @param string $pathToValue
-     * @return mixed
+     * @return string|int|null
      */
     protected function _getDefaultValue($origValue, $pathToValue)
     {
@@ -304,10 +311,10 @@ class International
     /**
      * Collect and get rates
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return bool|\Magento\Shipping\Model\Rate\Result|null
+     * @param RateRequest $request
+     * @return bool|Result|null
      */
-    public function collectRates(\Magento\Shipping\Model\Rate\Request $request)
+    public function collectRates(RateRequest $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -322,19 +329,19 @@ class International
         );
         $origCountryId = $this->_getDefaultValue(
             $requestDhl->getOrigCountryId(),
-            \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID
+            Shipment::XML_PATH_STORE_COUNTRY_ID
         );
         $origState = $this->_getDefaultValue(
             $requestDhl->getOrigState(),
-            \Magento\Shipping\Model\Shipping::XML_PATH_STORE_REGION_ID
+            Shipment::XML_PATH_STORE_REGION_ID
         );
         $origCity = $this->_getDefaultValue(
             $requestDhl->getOrigCity(),
-            \Magento\Shipping\Model\Shipping::XML_PATH_STORE_CITY
+            Shipment::XML_PATH_STORE_CITY
         );
         $origPostcode = $this->_getDefaultValue(
             $requestDhl->getOrigPostcode(),
-            \Magento\Shipping\Model\Shipping::XML_PATH_STORE_ZIP
+            Shipment::XML_PATH_STORE_ZIP
         );
 
         $requestDhl->setOrigCompanyName($origCompanyName)
@@ -354,7 +361,7 @@ class International
     /**
      * Set Free Method Request
      *
-     * @param  string $freeMethod
+     * @param string $freeMethod
      * @return void
      */
     protected function _setFreeMethodRequest($freeMethod)
@@ -370,14 +377,20 @@ class International
     /**
      * Returns request result
      *
-     * @return \Magento\Shipping\Model\Rate\Result|null
+     * @return Result|null
      */
     public function getResult()
     {
         return $this->_result;
     }
 
-    protected function _addParams($requestObject)
+    /**
+     * Fills request object with Dhl config parameters
+     *
+     * @param \Magento\Object $requestObject
+     * @return \Magento\Object
+     */
+    protected function _addParams(\Magento\Object $requestObject)
     {
         $request = $this->_request;
         foreach ($this->_requestVariables as $code => $objectCode) {
@@ -395,7 +408,7 @@ class International
      * Prepare and set request in property of current instance
      *
      * @param \Magento\Object $request
-     * @return \Magento\Usa\Model\Shipping\Carrier\Dhl
+     * @return $this
      */
     public function setRequest(\Magento\Object $request)
     {
@@ -420,11 +433,11 @@ class International
 
         $requestObject->setOrigCountry(
                 $this->_getDefaultValue(
-                    $request->getOrigCountry(), \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID)
+                    $request->getOrigCountry(), Shipment::XML_PATH_STORE_COUNTRY_ID)
             )
             ->setOrigCountryId(
                 $this->_getDefaultValue(
-                    $request->getOrigCountryId(), \Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID)
+                    $request->getOrigCountryId(), Shipment::XML_PATH_STORE_COUNTRY_ID)
             );
 
         $shippingWeight = $request->getPackageWeight();
@@ -448,7 +461,7 @@ class International
             ->setDestCompanyName($request->getDestCompanyName());
 
         $originStreet2 = $this->_coreStoreConfig->getConfig(
-                \Magento\Shipping\Model\Shipping::XML_PATH_STORE_ADDRESS2, $requestObject->getStoreId());
+            Shipment::XML_PATH_STORE_ADDRESS2, $requestObject->getStoreId());
 
         $requestObject->setOrigStreet($request->getOrigStreet() ? $request->getOrigStreet() : $originStreet2);
 
@@ -491,7 +504,7 @@ class International
     /**
      * Get allowed shipping methods
      *
-     * @return array
+     * @return string[]
      * @throws \Magento\Core\Exception
      */
     public function getAllowedMethods()
@@ -677,7 +690,7 @@ class International
 
         if ($configWeightUnit != $countryWeightUnit) {
             $weight = $this->_usaData->convertMeasureWeight(
-                round($weight,3),
+                round($weight, 3),
                 $configWeightUnit,
                 $countryWeightUnit
             );
@@ -697,7 +710,7 @@ class International
         $fullItems  = array();
 
         foreach ($allItems as $item) {
-            if ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+            if ($item->getProductType() == Type::TYPE_BUNDLE
                 && $item->getProduct()->getShipmentType()
             ) {
                 continue;
@@ -718,26 +731,26 @@ class International
             }
 
             $itemWeight = $item->getWeight();
-            if ($item->getIsQtyDecimal() && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+            if ($item->getIsQtyDecimal() && $item->getProductType() != Type::TYPE_BUNDLE) {
                 $stockItem = $item->getProduct()->getStockItem();
                 if ($stockItem->getIsDecimalDivided()) {
-                   if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
+                    if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
                         $itemWeight = $itemWeight * $stockItem->getQtyIncrements();
                         $qty        = round(($item->getWeight() / $itemWeight) * $qty);
                         $changeQty  = false;
-                   } else {
-                       $itemWeight = $this->_getWeight($itemWeight * $item->getQty());
-                       $maxWeight  = $this->_getWeight($this->_maxWeight, true);
-                       if ($itemWeight > $maxWeight) {
-                           $qtyItem = floor($itemWeight / $maxWeight);
-                           $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
-                           $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
-                           if ($weightItem) {
-                               $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
-                           }
-                           $checkWeight = false;
-                       }
-                   }
+                    } else {
+                        $itemWeight = $this->_getWeight($itemWeight * $item->getQty());
+                        $maxWeight  = $this->_getWeight($this->_maxWeight, true);
+                        if ($itemWeight > $maxWeight) {
+                            $qtyItem = floor($itemWeight / $maxWeight);
+                            $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
+                            $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
+                            if ($weightItem) {
+                                $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
+                            }
+                            $checkWeight = false;
+                        }
+                    }
                 } else {
                     $itemWeight = $itemWeight * $item->getQty();
                 }
@@ -748,7 +761,7 @@ class International
             }
 
             if ($changeQty && !$item->getParentItem() && $item->getIsQtyDecimal()
-                && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+                && $item->getProductType() != Type::TYPE_BUNDLE
             ) {
                 $qty = 1;
             }
@@ -833,7 +846,7 @@ class International
         }
 
         $handlingAction = $this->getConfigData('handling_action');
-        if ($handlingAction == \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_ACTION_PERORDER || !$numberOfPieces) {
+        if ($handlingAction == AbstractCarrier::HANDLING_ACTION_PERORDER || !$numberOfPieces) {
             $numberOfPieces = 1;
         }
         $this->_numBoxes = $numberOfPieces;
@@ -897,16 +910,82 @@ class International
     /**
      * Get shipping quotes
      *
-     * @return \Magento\Core\Model\AbstractModel|\Magento\Shipping\Model\Rate\Result
+     * @return \Magento\Core\Model\AbstractModel|Result
      */
     protected function _getQuotes()
     {
+        $responseBody = '';
+        try {
+            $debugData = array();
+            for ($offset = 0; $offset <= self::UNAVAILABLE_DATE_LOOK_FORWARD; $offset++) {
+                $debugData['try-' . $offset] = array();
+                $debugPoint = &$debugData['try-' . $offset];
+
+                $requestXml = $this->_buildQuotesRequestXml();
+                $date = date(self::REQUEST_DATE_FORMAT, strtotime($this->_getShipDate() . " +$offset days"));
+                $this->_setQuotesRequestXmlDate($requestXml, $date);
+
+                $request = $requestXml->asXML();
+                $debugPoint['request'] = $request;
+                $responseBody = $this->_getCachedQuotes($request);
+                $debugPoint['from_cache'] = ($responseBody === null);
+
+                if ($debugPoint['from_cache']) {
+                    $responseBody = $this->_getQuotesFromServer($request);
+                }
+
+                $debugPoint['response'] = $responseBody;
+
+                $bodyXml = $this->_xmlElFactory->create(
+                    array('data' => $responseBody)
+                );
+                $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
+                if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
+                    $debugPoint['info'] = sprintf(
+                        __("DHL service is not available at %s date"),
+                        $date
+                    );
+                } else {
+                    break;
+                }
+
+                $this->_setCachedQuotes($request, $responseBody);
+            }
+            $this->_debug($debugData);
+        } catch (\Exception $e) {
+            $this->_errors[$e->getCode()] = $e->getMessage();
+        }
+        return $this->_parseResponse($responseBody);
+    }
+
+    /**
+     * Get shipping quotes from DHL service
+     *
+     * @param string $request
+     * @return string
+     */
+    protected function _getQuotesFromServer($request)
+    {
+        $client = $this->_httpClientFactory->create();
+        $client->setUri((string)$this->getConfigData('gateway_url'));
+        $client->setConfig(array('maxredirects' => 0, 'timeout' => 30));
+        $client->setRawData(utf8_encode($request));
+        return $client->request(\Zend_Http_Client::POST)->getBody();
+    }
+
+    /**
+     * Build qoutes request XML object
+     *
+     * @return \SimpleXMLElement
+     */
+    protected function _buildQuotesRequestXml()
+    {
         $rawRequest = $this->_rawRequest;
         $xmlStr = '<?xml version = "1.0" encoding = "UTF-8"?>'
-                . '<p:DCTRequest xmlns:p="http://www.dhl.com" xmlns:p1="http://www.dhl.com/datatypes" '
-                . 'xmlns:p2="http://www.dhl.com/DCTRequestdatatypes" '
-                . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                . 'xsi:schemaLocation="http://www.dhl.com DCT-req.xsd "/>';
+            . '<p:DCTRequest xmlns:p="http://www.dhl.com" xmlns:p1="http://www.dhl.com/datatypes" '
+            . 'xmlns:p2="http://www.dhl.com/DCTRequestdatatypes" '
+            . 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+            . 'xsi:schemaLocation="http://www.dhl.com DCT-req.xsd "/>';
         $xml = $this->_xmlElFactory->create(array('data' => $xmlStr));
         $nodeGetQuote = $xml->addChild('GetQuote', '', '');
         $nodeRequest = $nodeGetQuote->addChild('Request');
@@ -922,7 +1001,7 @@ class International
 
         $nodeBkgDetails = $nodeGetQuote->addChild('BkgDetails');
         $nodeBkgDetails->addChild('PaymentCountryCode', $rawRequest->getOrigCountryId());
-        $nodeBkgDetails->addChild('Date', $this->dateTime->now(true));
+        $nodeBkgDetails->addChild('Date', $this->_dateTime->now(true));
         $nodeBkgDetails->addChild('ReadyTime', 'PT' . (int)(string)$this->getConfigData('ready_time') . 'H00M');
 
         $nodeBkgDetails->addChild('DimensionUnit', $this->_getDimensionUnit());
@@ -949,42 +1028,31 @@ class International
             $nodeDutiable->addChild('DeclaredCurrency', $baseCurrencyCode);
             $nodeDutiable->addChild('DeclaredValue', sprintf("%.2F", $rawRequest->getValue()));
         }
+        return $xml;
+    }
 
-        $request = $xml->asXML();
-        $request = utf8_encode($request);
-        $responseBody = $this->_getCachedQuotes($request);
-        if ($responseBody === null) {
-            $debugData = array('request' => $request);
-            try {
-                $client = new \Magento\HTTP\ZendClient();
-                $client->setUri((string)$this->getConfigData('gateway_url'));
-                $client->setConfig(array('maxredirects' => 0, 'timeout' => 30));
-                $client->setRawData($request);
-                $responseBody = $client->request(\Magento\HTTP\ZendClient::POST)->getBody();
-                $debugData['result'] = $responseBody;
-                $this->_setCachedQuotes($request, $responseBody);
-            } catch (\Exception $e) {
-                $this->_errors[$e->getCode()] = $e->getMessage();
-                $responseBody = '';
-            }
-            $this->_debug($debugData);
-        }
-
-        return $this->_parseResponse($responseBody);
+    /**
+     * Set pick-up date in request XML object
+     *
+     * @param \SimpleXMLElement $requestXml
+     * @param string $date
+     * @return \SimpleXMLElement
+     */
+    protected function _setQuotesRequestXmlDate(\SimpleXMLElement $requestXml, $date)
+    {
+        $requestXml->GetQuote->BkgDetails->Date = $date;
+        return $requestXml;
     }
 
     /**
      * Parse response from DHL web service
      *
      * @param string $response
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return bool|\Magento\Object|Result|Error
+     * @throws \Magento\Core\Exception
      */
     protected function _parseResponse($response)
     {
-        $htmlTranslationTable = get_html_translation_table(HTML_ENTITIES);
-        unset($htmlTranslationTable['<'], $htmlTranslationTable['>'], $htmlTranslationTable['"']);
-        $response = str_replace(array_keys($htmlTranslationTable), array_values($htmlTranslationTable), $response);
-
         $responseError =  __('The response is in wrong format.');
 
         if (strlen(trim($response)) > 0) {
@@ -1022,18 +1090,7 @@ class International
                                 $this->_addRate($quotedShipment);
                             }
                         } elseif (isset($xml->AirwayBillNumber)) {
-                            $result = new \Magento\Object();
-                            $result->setTrackingNumber((string)$xml->AirwayBillNumber);
-                            try {
-                                /* @var $pdf \Magento\Usa\Model\Shipping\Carrier\Dhl\Label\Pdf */
-                                $pdf = $this->_pdfFactory->create(
-                                    array('arguments' => array('info' => $xml, 'request' => $this->_request))
-                                );
-                                $result->setShippingLabelContent($pdf->render());
-                            } catch (\Exception $e) {
-                                throw new \Magento\Core\Exception(__($e->getMessage()));
-                            }
-                            return $result;
+                            return $this->_prepareShippingLabelContent($xml);
                         } else {
                             $this->_errors[] = $responseError;
                         }
@@ -1046,13 +1103,13 @@ class International
             $this->_errors[] = $responseError;
         }
 
-        /* @var $result \Magento\Shipping\Model\Rate\Result */
+        /* @var $result Result */
         $result = $this->_rateFactory->create();
         if ($this->_rates) {
             foreach ($this->_rates as $rate) {
                 $method = $rate['service'];
                 $data = $rate['data'];
-                /* @var $rate \Magento\Shipping\Model\Rate\Result\Method */
+                /* @var $rate \Magento\Sales\Model\Quote\Address\RateResult\Method */
                 $rate = $this->_rateMethodFactory->create();
                 $rate->setCarrier(self::CODE);
                 $rate->setCarrierTitle($this->getConfigData('title'));
@@ -1075,7 +1132,7 @@ class International
      * Add rate to DHL rates array
      *
      * @param \SimpleXMLElement $shipmentDetails
-     * @return \Magento\Usa\Model\Shipping\Carrier\Dhl\International
+     * @return $this
      */
     protected function _addRate(\SimpleXMLElement $shipmentDetails)
     {
@@ -1143,6 +1200,7 @@ class International
      * Returns dimension unit (cm or inch)
      *
      * @return string
+     * @throws \Magento\Core\Exception
      */
     protected function _getDimensionUnit()
     {
@@ -1181,13 +1239,14 @@ class International
     protected function getCountryParams($countryCode)
     {
         if (empty($this->_countryParams)) {
-
             $usaEtcPath = $this->_configReader->getModuleDir('etc', 'Magento_Usa');
             $countriesXmlPath = $this->modulesDirectory->getRelativePath(
                 $usaEtcPath  . '/dhl/international/countries.xml'
             );
             $countriesXml = $this->modulesDirectory->readFile($countriesXmlPath);
-            $this->_countryParams = new \Magento\Simplexml\Element($countriesXml);
+            $this->_countryParams = $this->_xmlElFactory->create(
+                array('data' => $countriesXml)
+            );
         }
         if (isset($this->_countryParams->$countryCode)) {
             $countryParams = new \Magento\Object($this->_countryParams->$countryCode->asArray());
@@ -1213,10 +1272,10 @@ class International
     /**
      * Processing additional validation to check is carrier applicable.
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return \Magento\Shipping\Model\Carrier\AbstractCarrier|\Magento\Shipping\Model\Rate\Result\Error|boolean
+     * @param RateRequest $request
+     * @return $this|Error|boolean
      */
-    public function proccessAdditionalValidation(\Magento\Shipping\Model\Rate\Request $request)
+    public function proccessAdditionalValidation(RateRequest $request)
     {
         //Skip by item validation if there is no items in request
         if (!count($this->getAllItems($request))) {
@@ -1224,7 +1283,7 @@ class International
         }
 
         $countryParams = $this->getCountryParams(
-            $this->_coreStoreConfig->getConfig(\Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID, $request->getStoreId())
+            $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_COUNTRY_ID, $request->getStoreId())
         );
         if (!$countryParams->getData()) {
             $this->_errors[] = __('Please, specify origin country');
@@ -1240,14 +1299,14 @@ class International
     /**
      * Show default error
      *
-     * @return bool|\Magento\Shipping\Model\Rate\Result\Error
+     * @return bool|Error
      */
     protected function _showError()
     {
         $showMethod = $this->getConfigData('showmethod');
 
         if ($showMethod) {
-            /* @var $error \Magento\Shipping\Model\Rate\Result\Error */
+            /* @var $error Error */
             $error = $this->_rateErrorFactory->create();
             $error->setCarrier(self::CODE);
             $error->setCarrierTitle($this->getConfigData('title'));
@@ -1277,11 +1336,11 @@ class International
      * Map request to shipment
      *
      * @param \Magento\Object $request
-     * @return null
+     * @return void
+     * @throws \Magento\Core\Exception
      */
     protected function _mapRequestToShipment(\Magento\Object $request)
     {
-
         $request->setOrigCountryId($request->getShipperAddressCountryCode());
         $this->_rawRequest = $request;
         $customsValue = 0;
@@ -1317,28 +1376,29 @@ class International
             ->setFreeMethodWeight(0);
     }
 
-        /**
-         * Retrieve minimum allowed value for dimensions in given dimension unit
-         *
-         * @param string $dimensionUnit
-         * @return int
-         */
-        protected function _getMinDimension($dimensionUnit)
-        {
-            return $dimensionUnit == "CENTIMETER" ? self::DIMENSION_MIN_CM : self::DIMENSION_MIN_IN;
-        }
+    /**
+     * Retrieve minimum allowed value for dimensions in given dimension unit
+     *
+     * @param string $dimensionUnit
+     * @return int
+     */
+    protected function _getMinDimension($dimensionUnit)
+    {
+        return $dimensionUnit == "CENTIMETER" ? self::DIMENSION_MIN_CM : self::DIMENSION_MIN_IN;
+    }
 
     /**
      * Do rate request and handle errors
      *
-     * @return \Magento\Shipping\Model\Rate\Result|\Magento\Object
+     * @return Result|\Magento\Object
+     * @throws \Magento\Core\Exception
      */
     protected function _doRequest()
     {
         $rawRequest = $this->_request;
 
         $originRegion = $this->getCountryParams(
-            $this->_coreStoreConfig->getConfig(\Magento\Shipping\Model\Shipping::XML_PATH_STORE_COUNTRY_ID, $this->getStore())
+            $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_COUNTRY_ID, $this->getStore())
         )->getRegion();
 
         if (!$originRegion) {
@@ -1476,6 +1536,8 @@ class International
         $nodeContact->addChild('PersonName', substr($rawRequest->getShipperContactPersonName(), 0, 34));
         $nodeContact->addChild('PhoneNumber', substr($rawRequest->getShipperContactPhoneNumber(), 0, 24));
 
+        $xml->addChild('LabelImageFormat', 'PDF', '');
+
         $request = $xml->asXML();
         $request = utf8_encode($request);
 
@@ -1483,7 +1545,7 @@ class International
         if ($responseBody === null) {
             $debugData = array('request' => $request);
             try {
-                $client = new \Magento\HTTP\ZendClient();
+                $client = $this->_httpClientFactory->create();
                 $client->setUri((string)$this->getConfigData('gateway_url'));
                 $client->setConfig(array('maxredirects' => 0, 'timeout' => 30));
                 $client->setRawData($request);
@@ -1504,7 +1566,7 @@ class International
      * Generation Shipment Details Node according to origin region
      *
      * @param \Magento\Usa\Model\Simplexml\Element $xml
-     * @param \Magento\Shipping\Model\Rate\Request $rawRequest
+     * @param RateRequest $rawRequest
      * @param string $originRegion
      * @return void
      */
@@ -1537,7 +1599,7 @@ class International
             }
             $nodePiece->addChild('PieceID', ++$i);
             $nodePiece->addChild('PackageType', $packageType);
-            $nodePiece->addChild('Weight', round($package['params']['weight'],1));
+            $nodePiece->addChild('Weight', round($package['params']['weight'], 1));
             $params = $package['params'];
             if ($params['width'] && $params['length'] && $params['height']) {
                 if (!$originRegion) {
@@ -1558,9 +1620,9 @@ class International
         }
 
         if (!$originRegion) {
-            $nodeShipmentDetails->addChild('Weight', round($rawRequest->getPackageWeight(),1));
+            $nodeShipmentDetails->addChild('Weight', round($rawRequest->getPackageWeight(), 1));
 
-            $nodeShipmentDetails->addChild('WeightUnit', substr($this->_getWeightUnit(),0,1));
+            $nodeShipmentDetails->addChild('WeightUnit', substr($this->_getWeightUnit(), 0, 1));
 
             $nodeShipmentDetails->addChild('GlobalProductCode', $rawRequest->getShippingMethod());
             $nodeShipmentDetails->addChild('LocalProductCode', $rawRequest->getShippingMethod());
@@ -1591,8 +1653,8 @@ class International
             $nodeShipmentDetails->addChild('PackageType', $packageType);
             $nodeShipmentDetails->addChild('Weight', $rawRequest->getPackageWeight());
 
-            $nodeShipmentDetails->addChild('DimensionUnit', substr($this->_getDimensionUnit(),0,1));
-            $nodeShipmentDetails->addChild('WeightUnit',  substr($this->_getWeightUnit(),0,1));
+            $nodeShipmentDetails->addChild('DimensionUnit', substr($this->_getDimensionUnit(), 0, 1));
+            $nodeShipmentDetails->addChild('WeightUnit', substr($this->_getWeightUnit(), 0, 1));
 
             $nodeShipmentDetails->addChild('GlobalProductCode', $rawRequest->getShippingMethod());
             $nodeShipmentDetails->addChild('LocalProductCode', $rawRequest->getShippingMethod());
@@ -1611,8 +1673,8 @@ class International
     /**
      * Get tracking
      *
-     * @param mixed $trackings
-     * @return mixed
+     * @param string|string[] $trackings
+     * @return Result|null
      */
     public function getTracking($trackings)
     {
@@ -1627,7 +1689,7 @@ class International
     /**
      * Send request for tracking
      *
-     * @param array $trackings
+     * @param string[] $trackings
      * @return void
      */
     protected function _getXMLTracking($trackings)
@@ -1695,7 +1757,7 @@ class International
     /**
      * Parse xml tracking response
      *
-     * @param array $trackings
+     * @param string[] $trackings
      * @param string $response
      * @return void
      */
@@ -1703,10 +1765,6 @@ class International
     {
         $errorTitle = __('Unable to retrieve tracking');
         $resultArr = array();
-
-        $htmlTranslationTable = get_html_translation_table(HTML_ENTITIES);
-        unset($htmlTranslationTable['<'], $htmlTranslationTable['>'], $htmlTranslationTable['"']);
-        $response = str_replace(array_keys($htmlTranslationTable), array_values($htmlTranslationTable), $response);
 
         if (strlen(trim($response)) > 0) {
             $xml = simplexml_load_string($response);
@@ -1797,7 +1855,7 @@ class International
      */
     protected function _getPerpackagePrice($cost, $handlingType, $handlingFee)
     {
-        if ($handlingType == \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_PERCENT) {
+        if ($handlingType == AbstractCarrier::HANDLING_TYPE_PERCENT) {
             return $cost + ($cost * $this->_numBoxes * $handlingFee / 100);
         }
 
@@ -1808,9 +1866,10 @@ class International
      * Do request to shipment
      *
      * @param \Magento\Shipping\Model\Shipment\Request $request
-     * @return \Magento\Object
+     * @return array|\Magento\Object
+     * @throws \Magento\Core\Exception
      */
-    public function requestToShipment(\Magento\Shipping\Model\Shipment\Request $request)
+    public function requestToShipment($request)
     {
         $packages = $request->getPackages();
         if (!is_array($packages) || !$packages) {
@@ -1850,5 +1909,28 @@ class International
         }
 
         return $this->_isDomestic;
+    }
+
+    /**
+     * Prepare shipping label data
+     *
+     * @param \SimpleXMLElement $xml
+     * @return \Magento\Object
+     * @throws \Magento\Core\Exception
+     */
+    protected function _prepareShippingLabelContent(\SimpleXMLElement $xml)
+    {
+        $result = new \Magento\Object();
+        try {
+            if (!isset($xml->AirwayBillNumber) || !isset($xml->LabelImage->OutputImage)) {
+                throw new \Magento\Core\Exception('Unable to retrieve shipping label');
+            }
+            $result->setTrackingNumber((string)$xml->AirwayBillNumber);
+            $labelContent = (string)$xml->LabelImage->OutputImage;
+            $result->setShippingLabelContent(base64_decode($labelContent));
+        } catch (\Exception $e) {
+            throw new \Magento\Core\Exception(__($e->getMessage()));
+        }
+        return $result;
     }
 }

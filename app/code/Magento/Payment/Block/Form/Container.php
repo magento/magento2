@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Payment
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Block\Form;
 
+use Magento\Payment\Model\Method\AbstractMethod;
 /**
  * Base container block for payment methods forms
  *
@@ -33,8 +35,6 @@
  * @package    Magento_Payment
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Payment\Block\Form;
-
 class Container extends \Magento\View\Element\Template
 {
     /**
@@ -58,6 +58,8 @@ class Container extends \Magento\View\Element\Template
 
     /**
      * Prepare children blocks
+     *
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -77,14 +79,14 @@ class Container extends \Magento\View\Element\Template
     /**
      * Check payment method model
      *
-     * @param \Magento\Payment\Model\Method\AbstractMethod $method
+     * @param AbstractMethod $method
      * @return bool
      */
     protected function _canUseMethod($method)
     {
-        return $method->isApplicableToQuote($this->getQuote(), \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY
-            | \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY
-            | \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
+        return $method->isApplicableToQuote($this->getQuote(), AbstractMethod::CHECK_USE_FOR_COUNTRY
+            | AbstractMethod::CHECK_USE_FOR_CURRENCY
+            | AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
         );
     }
 
@@ -93,8 +95,8 @@ class Container extends \Magento\View\Element\Template
      *
      * Redeclare this method in child classes for declaring method info instance
      *
-     * @param \Magento\Payment\Model\Method\AbstractMethod $method
-     * @return bool
+     * @param AbstractMethod $method
+     * @return $this
      */
     protected function _assignMethod($method)
     {
@@ -105,9 +107,9 @@ class Container extends \Magento\View\Element\Template
     /**
      * Declare template for payment method form block
      *
-     * @param   string $method
-     * @param   string $template
-     * @return  \Magento\Payment\Block\Form\Container
+     * @param string $method
+     * @param string $template
+     * @return $this
      */
     public function setMethodFormTemplate($method='', $template='')
     {
@@ -134,7 +136,7 @@ class Container extends \Magento\View\Element\Template
             foreach ($this->_paymentHelper->getStoreMethods($store, $quote) as $method) {
                 if ($this->_canUseMethod($method) && $method->isApplicableToQuote(
                     $quote,
-                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL
+                    AbstractMethod::CHECK_ZERO_TOTAL
                 )) {
                     $this->_assignMethod($method);
                     $methods[] = $method;
@@ -148,7 +150,7 @@ class Container extends \Magento\View\Element\Template
     /**
      * Retrieve code of current payment method
      *
-     * @return mixed
+     * @return string|false
      */
     public function getSelectedMethodCode()
     {

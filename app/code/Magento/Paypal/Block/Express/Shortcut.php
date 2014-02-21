@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,14 +29,10 @@
  */
 namespace Magento\Paypal\Block\Express;
 
-class Shortcut extends \Magento\View\Element\Template
-{
-    /**
-     * Position of "OR" label against shortcut
-     */
-    const POSITION_BEFORE = 'before';
-    const POSITION_AFTER = 'after';
+use Magento\Catalog\Block as CatalogBlock;
 
+class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\ShortcutInterface
+{
     /**
      * Whether the block should be eventually rendered
      *
@@ -112,6 +108,11 @@ class Shortcut extends \Magento\View\Element\Template
     protected $mathRandom;
 
     /**
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     */
+    protected $productTypeConfig;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Paypal\Helper\Data $paypalData
      * @param \Magento\Payment\Helper\Data $paymentData
@@ -121,6 +122,7 @@ class Shortcut extends \Magento\View\Element\Template
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
      * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param array $data
      */
     public function __construct(
@@ -130,9 +132,10 @@ class Shortcut extends \Magento\View\Element\Template
         \Magento\Core\Model\Registry $registry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
         \Magento\Math\Random $mathRandom,
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession = null,
         array $data = array()
     ) {
         $this->_registry = $registry;
@@ -143,7 +146,9 @@ class Shortcut extends \Magento\View\Element\Template
         $this->_checkoutSession = $checkoutSession;
         $this->_checkoutFactory = $checkoutFactory;
         $this->mathRandom = $mathRandom;
+        $this->productTypeConfig = $productTypeConfig;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -155,7 +160,7 @@ class Shortcut extends \Magento\View\Element\Template
         $params = array($this->_paymentMethodCode);
         $config = $this->_paypalConfigFactory->create(array('params' => $params));
         $isInCatalog = $this->getIsInCatalogProduct();
-        $quote = ($isInCatalog || '' == $this->getIsQuoteAllowed()) ? null : $this->_checkoutSession->getQuote();
+        $quote = ($isInCatalog || !$this->_checkoutSession) ? null : $this->_checkoutSession->getQuote();
 
         // check visibility on cart or product page
         $context = $isInCatalog ? 'visible_on_product' : 'visible_on_cart';
@@ -170,7 +175,7 @@ class Shortcut extends \Magento\View\Element\Template
             $currentProduct = $this->_registry->registry('current_product');
             if (!is_null($currentProduct)) {
                 $productPrice = (float)$currentProduct->getFinalPrice();
-                if (empty($productPrice) && !$currentProduct->isGrouped()) {
+                if (empty($productPrice) && !$this->productTypeConfig->isProductSet($currentProduct->getTypeId())) {
                     $this->_shouldRender = false;
                     return $result;
                 }
@@ -242,8 +247,7 @@ class Shortcut extends \Magento\View\Element\Template
      */
     public function isOrPositionBefore()
     {
-        return ($this->getIsInCatalogProduct() && !$this->getShowOrPosition())
-            || ($this->getShowOrPosition() && $this->getShowOrPosition() == self::POSITION_BEFORE);
+        return $this->getShowOrPosition() == CatalogBlock\ShortcutButtons::POSITION_BEFORE;
 
     }
 
@@ -254,7 +258,16 @@ class Shortcut extends \Magento\View\Element\Template
      */
     public function isOrPositionAfter()
     {
-        return (!$this->getIsInCatalogProduct() && !$this->getShowOrPosition())
-            || ($this->getShowOrPosition() && $this->getShowOrPosition() == self::POSITION_AFTER);
+        return $this->getShowOrPosition() == CatalogBlock\ShortcutButtons::POSITION_AFTER;
+    }
+
+    /**
+     * Get shortcut alias
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'product.info.addtocart.paypal';
     }
 }

@@ -20,10 +20,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Email\Model\Template\Config;
+
+use Magento\Config\FileResolverInterface;
+use Magento\Email\Model\Template\Config\Converter;
+use Magento\Email\Model\Template\Config\SchemaLocator;
+use Magento\Config\ValidationStateInterface;
 
 class Reader extends \Magento\Config\Reader\Filesystem
 {
@@ -36,11 +41,21 @@ class Reader extends \Magento\Config\Reader\Filesystem
         '/config/template' => 'id',
     );
 
+    /**
+     * @param FileResolverInterface $fileResolver
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
+     * @param ValidationStateInterface $validationState
+     * @param string $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
+     */
     public function __construct(
-        \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Email\Model\Template\Config\Converter $converter,
-        \Magento\Email\Model\Template\Config\SchemaLocator $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState,
+        FileResolverInterface $fileResolver,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
+        ValidationStateInterface $validationState,
         $fileName = 'email_templates.xml',
         $idAttributes = array(),
         $domDocumentClass = 'Magento\Config\Dom',

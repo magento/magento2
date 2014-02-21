@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Shipping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Shipping\Block\Tracking;
 
 class Popup extends \Magento\View\Element\Template
@@ -115,11 +114,17 @@ class Popup extends \Magento\View\Element\Template
         return (bool) $this->_storeConfig->getConfig('contacts/contacts/enabled');
     }
 
+    /**
+     * @return string
+     */
     public function getStoreSupportEmail()
     {
         return $this->_storeConfig->getConfig('trans_email/ident_support/email');
     }
 
+    /**
+     * @return string
+     */
     public function getContactUs()
     {
         return $this->getUrl('contacts');

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,29 +41,33 @@ class Allregion implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
      */
-    protected $_countryCollFactory;
+    protected $_countryCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
      */
-    protected $_regionCollFactory;
+    protected $_regionCollectionFactory;
 
     /**
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
      */
     public function __construct(
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
     ) {
-        $this->_countryCollFactory = $countryCollFactory;
-        $this->_regionCollFactory = $regionCollFactory;
+        $this->_countryCollectionFactory = $countryCollectionFactory;
+        $this->_regionCollectionFactory = $regionCollectionFactory;
     }
 
+    /**
+     * @param bool $isMultiselect
+     * @return array
+     */
     public function toOptionArray($isMultiselect = false)
     {
         if (!$this->_options) {
-            $countriesArray = $this->_countryCollFactory->create()->load()
+            $countriesArray = $this->_countryCollectionFactory->create()->load()
                 ->toOptionArray(false);
             $this->_countries = array();
             foreach ($countriesArray as $a) {
@@ -71,7 +75,7 @@ class Allregion implements \Magento\Core\Model\Option\ArrayInterface
             }
 
             $countryRegions = array();
-            $regionsCollection = $this->_regionCollFactory->create()->load();
+            $regionsCollection = $this->_regionCollectionFactory->create()->load();
             foreach ($regionsCollection as $region) {
                 $countryRegions[$region->getCountryId()][$region->getId()] = $region->getDefaultName();
             }

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_System
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,14 @@ namespace Magento\System;
 
 class Args
 {
+    /**
+     * @var array
+     */
     public $flags;
+
+    /**
+     * @var array
+     */
     public $filtered;
 
     /**
@@ -54,8 +61,9 @@ class Args
 
     /**
      * Constructor
-     * @param array $argv, if false $GLOBALS['argv'] is taken
-     * @return void
+     * Note: the array $argv, if false $GLOBALS['argv'] is taken
+     *
+     * @param bool $source
      */
     public function __construct($source = false)
     {

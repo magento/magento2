@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,6 +43,5 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'country_of_man
     'comparable'        => false,
     'visible_on_front'  => false,
     'unique'            => false,
-    'apply_to'          => 'simple,configurable,bundle,grouped',
-    'is_configurable'   => false,
+    'apply_to'          => 'simple,bundle',
 ));

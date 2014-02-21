@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Captcha
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Captcha\Model;
@@ -93,6 +93,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $_messageManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $redirect;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -107,9 +112,10 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_customerData = $this->getMock('Magento\Customer\Helper\Data', array(), array(), '', false);
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', array(), array(), '', false);
-        $this->_urlManager = $this->getMock('Magento\Core\Model\Url', array(), array(), '', false);
+        $this->_urlManager = $this->getMock('Magento\Url', array(), array(), '', false);
         $this->_actionFlag = $this->getMock('Magento\App\ActionFlag', array(), array(), '', false);
         $this->_messageManager = $this->getMock('\Magento\Message\ManagerInterface', array(), array(), '', false);
+        $this->redirect = $this->getMock('\Magento\App\Response\RedirectInterface', array(), array(), '', false);
         $this->_observer = $this->_objectManager->getObject(
             'Magento\Captcha\Model\Observer',
             array(
@@ -121,7 +127,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'helper' => $this->_helper,
                 'urlManager' => $this->_urlManager,
                 'actionFlag' => $this->_actionFlag,
-                'messageManager' => $this->_messageManager
+                'messageManager' => $this->_messageManager,
+                'redirect' => $this->redirect,
             )
         );
 
@@ -166,22 +173,21 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $redirectRoutePath = 'contacts/index/index';
         $redirectUrl = 'http://magento.com/contacts/';
 
-        $this->_urlManager->expects($this->once())
-            ->method('getUrl')
-            ->with($redirectRoutePath, null)
-            ->will($this->returnValue($redirectUrl));
-
-        $controller = $this->getMock('Magento\App\Action\Action', array(), array(), '', false);
         $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
-        $request->expects($this->any())->method('getPost')->with(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE,
-            null)
+        $request->expects($this->any())
+            ->method('getPost')
+            ->with(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE, null)
             ->will($this->returnValue(array(
                 $formId => $captchaValue,
             )));
-        $response->expects($this->once())
-            ->method('setRedirect')
-            ->with($redirectUrl, 302);
+
+        $this->redirect->expects($this->once())
+            ->method('redirect')
+            ->with($response, $redirectRoutePath, array())
+            ->will($this->returnValue($redirectUrl));
+
+        $controller = $this->getMock('Magento\App\Action\Action', array(), array(), '', false);
         $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
         $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
         $this->_captcha->expects($this->any())->method('isRequired')->will($this->returnValue(true));
@@ -208,6 +214,95 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_captcha->expects($this->never())->method('isCorrect');
 
         $this->_observer->checkContactUsForm(new \Magento\Event\Observer());
+    }
+
+    public function testCheckForgotpasswordRedirects()
+    {
+        $formId = 'user_forgotpassword';
+        $captchaValue = 'some-value';
+        $warningMessage = 'Incorrect CAPTCHA';
+        $redirectRoutePath = '*/*/forgotpassword';
+        $redirectUrl = 'http://magento.com/customer/account/forgotpassword/';
+
+        $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $request->expects($this->any())
+            ->method('getPost')
+            ->with(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE, null)
+            ->will($this->returnValue(array(
+                $formId => $captchaValue,
+            )));
+
+        $this->redirect->expects($this->once())
+            ->method('redirect')
+            ->with($response, $redirectRoutePath, array())
+            ->will($this->returnValue($redirectUrl));
+
+        $controller = $this->getMock('Magento\App\Action\Action', array(), array(), '', false);
+        $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
+        $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
+        $this->_captcha->expects($this->any())->method('isRequired')->will($this->returnValue(true));
+        $this->_captcha->expects($this->once())
+            ->method('isCorrect')
+            ->with($captchaValue)
+            ->will($this->returnValue(false));
+        $this->_helper->expects($this->any())->method('getCaptcha')
+            ->with($formId)
+            ->will($this->returnValue($this->_captcha));
+        $this->_messageManager->expects($this->once())->method('addError')->with($warningMessage);
+        $this->_actionFlag->expects($this->once())->method('set')
+            ->with('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
+
+        $this->_observer->checkForgotpassword(new \Magento\Event\Observer(array('controller_action' => $controller)));
+    }
+
+    public function testCheckUserCreateRedirectsError()
+    {
+        $formId = 'user_create';
+        $captchaValue = 'some-value';
+        $warningMessage = 'Incorrect CAPTCHA';
+        $redirectRoutePath = '*/*/create';
+        $redirectUrl = 'http://magento.com/customer/account/create/';
+
+        $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $request->expects($this->at(0))
+            ->method('getPost')
+            ->with(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE, null)
+            ->will($this->returnValue(array(
+                $formId => $captchaValue,
+            )));
+
+        $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $response->expects($this->once())
+            ->method('setRedirect')
+            ->with($redirectUrl);
+
+        $this->_urlManager->expects($this->once())
+            ->method('getUrl')
+            ->with($redirectRoutePath, array('_nosecret' => true))
+            ->will($this->returnValue($redirectUrl));
+
+        $this->redirect->expects($this->once())
+            ->method('error')
+            ->with($redirectUrl)
+            ->will($this->returnValue($redirectUrl));
+
+        $controller = $this->getMock('Magento\App\Action\Action', array(), array(), '', false);
+        $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
+        $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
+        $this->_captcha->expects($this->any())->method('isRequired')->will($this->returnValue(true));
+        $this->_captcha->expects($this->once())
+            ->method('isCorrect')
+            ->with($captchaValue)
+            ->will($this->returnValue(false));
+        $this->_helper->expects($this->any())->method('getCaptcha')
+            ->with($formId)
+            ->will($this->returnValue($this->_captcha));
+        $this->_messageManager->expects($this->once())->method('addError')->with($warningMessage);
+        $this->_actionFlag->expects($this->once())->method('set')
+            ->with('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
+
+        $this->_observer->checkUserCreate(new \Magento\Event\Observer(array('controller_action' => $controller)));
     }
 
     /**

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,20 +50,11 @@ abstract class AbstractFlat extends \Magento\App\Helper\AbstractHelper
     protected $_process = null;
 
     /**
-     * Check if Catalog Flat Data has been initialized
-     *
-     * @return bool
-     */
-    abstract public function isBuilt();
-
-    /**
      * Check if Catalog Category Flat Data is enabled
      *
-     * @param mixed $deprecatedParam this parameter is deprecated and no longer in use
-     *
      * @return bool
      */
-    abstract public function isEnabled($deprecatedParam = false);
+    abstract public function isEnabled();
 
     /**
      * Process factory

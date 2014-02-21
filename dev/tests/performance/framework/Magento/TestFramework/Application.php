@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     performance_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -137,6 +137,10 @@ class Application
         $this->_shell->execute(
             'php -f ' . $this->_config->getApplicationBaseDir() . '/dev/shell/indexer.php -- reindexall'
         );
+        // TODO: remove once Magento\Index module is completely removed (MAGETWO-18168)
+        $this->_shell->execute(
+            'php -f ' . $this->_config->getApplicationBaseDir() . '/dev/shell/newindexer.php -- reindexall'
+        );
         return $this;
     }
 
@@ -195,8 +199,8 @@ class Application
     protected function _updateFilesystemPermissions()
     {
         /** @var \Magento\Filesystem\Directory\Write $varDirectory */
-        $varDirectory = $this->getObjectManager()->get('Magento\Filesystem')
-            ->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $varDirectory = $this->getObjectManager()->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $varDirectory->changePermissions('', 0777);
     }
 

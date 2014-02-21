@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Index
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Index\Model;
+
+use Magento\Index\Model\Resource\Event\Collection;
 
 /**
  * @method \Magento\Index\Model\Resource\Process _getResource()
@@ -42,8 +45,6 @@
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Index\Model;
-
 class Process extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -153,6 +154,8 @@ class Process extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize resource
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -162,10 +165,10 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Set indexer class name as data namespace for event object
      *
-     * @param   \Magento\Index\Model\Event $event
-     * @return  \Magento\Index\Model\Process
+     * @param   Event $event
+     * @return  $this
      */
-    protected function _setEventNamespace(\Magento\Index\Model\Event $event)
+    protected function _setEventNamespace(Event $event)
     {
         $namespace = get_class($this->getIndexer());
         $event->setDataNamespace($namespace);
@@ -176,8 +179,8 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Remove indexer namespace from event
      *
-     * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\Process
+     * @param Event $event
+     * @return $this
      */
     protected function _resetEventNamespace($event)
     {
@@ -189,10 +192,10 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Register data required by process in event object
      *
-     * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\Process
+     * @param Event $event
+     * @return $this
      */
-    public function register(\Magento\Index\Model\Event $event)
+    public function register(Event $event)
     {
         if ($this->matchEvent($event)) {
             $this->_setEventNamespace($event);
@@ -210,10 +213,10 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Check if event can be matched by process
      *
-     * @param \Magento\Index\Model\Event $event
+     * @param Event $event
      * @return bool
      */
-    public function matchEvent(\Magento\Index\Model\Event $event)
+    public function matchEvent(Event $event)
     {
         return $this->getIndexer()->matchEvent($event);
     }
@@ -236,6 +239,7 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Reindex all data what this process responsible is
      *
+     * @return void
      * @throws \Magento\Core\Exception
      * @throws \Exception
      */
@@ -289,7 +293,7 @@ class Process extends \Magento\Core\Model\AbstractModel
      * Reindex all data what this process responsible is
      * Check and using depends processes
      *
-     * @return \Magento\Index\Model\Process
+     * @return $this|void
      */
     public function reindexEverything()
     {
@@ -317,10 +321,10 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Process event with assigned indexer object
      *
-     * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\Process
+     * @param Event $event
+     * @return $this
      */
-    public function processEvent(\Magento\Index\Model\Event $event)
+    public function processEvent(Event $event)
     {
         if (!$this->matchEvent($event)) {
             return $this;
@@ -382,7 +386,7 @@ class Process extends \Magento\Core\Model\AbstractModel
      *
      * @param   null|string $entity
      * @param   null|string $type
-     * @return  \Magento\Index\Model\Process
+     * @return  $this
      * @throws \Exception
      */
     public function indexEvents($entity = null, $type = null)
@@ -429,12 +433,12 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Process all events of the collection
      *
-     * @param \Magento\Index\Model\Resource\Event\Collection $eventsCollection
+     * @param Collection $eventsCollection
      * @param bool $skipUnmatched
-     * @return \Magento\Index\Model\Process
+     * @return $this
      */
     protected function _processEventsCollection(
-        \Magento\Index\Model\Resource\Event\Collection $eventsCollection,
+        Collection $eventsCollection,
         $skipUnmatched = true
     ) {
         // We can't reload the collection because of transaction
@@ -459,11 +463,11 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Update status process/event association
      *
-     * @param   \Magento\Index\Model\Event $event
+     * @param   Event $event
      * @param   string $status
-     * @return  \Magento\Index\Model\Process
+     * @return  $this
      */
-    public function updateEventStatus(\Magento\Index\Model\Event $event, $status)
+    public function updateEventStatus(Event $event, $status)
     {
         $this->_getResource()->updateEventStatus($this->getId(), $event->getId(), $status);
         return $this;
@@ -486,7 +490,7 @@ class Process extends \Magento\Core\Model\AbstractModel
      * Lock process without blocking.
      * This method allow protect multiple process running and fast lock validation.
      *
-     * @return \Magento\Index\Model\Process
+     * @return $this
      */
     public function lock()
     {
@@ -499,7 +503,7 @@ class Process extends \Magento\Core\Model\AbstractModel
      * If new instance of the process will try validate locking state
      * script will wait until process will be unlocked
      *
-     * @return \Magento\Index\Model\Process
+     * @return $this
      */
     public function lockAndBlock()
     {
@@ -510,7 +514,7 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Unlock process
      *
-     * @return \Magento\Index\Model\Process
+     * @return $this
      */
     public function unlock()
     {
@@ -533,7 +537,7 @@ class Process extends \Magento\Core\Model\AbstractModel
      * Change process status
      *
      * @param string $status
-     * @return \Magento\Index\Model\Process
+     * @return $this
      */
     public function changeStatus($status)
     {
@@ -611,11 +615,11 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Process event with locks checking
      *
-     * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\Process
+     * @param Event $event
+     * @return $this
      * @throws \Exception
      */
-    public function safeProcessEvent(\Magento\Index\Model\Event $event)
+    public function safeProcessEvent(Event $event)
     {
         if (!$this->matchEvent($event)) {
             return $this;

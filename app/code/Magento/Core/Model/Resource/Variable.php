@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource;
 
 /**
  * Custom variable resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource;
-
 class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -50,7 +48,7 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Core\Model\Variable $object
      * @param string $code
-     * @return \Magento\Core\Model\Resource\Variable
+     * @return $this
      */
     public function loadByCode(\Magento\Core\Model\Variable $object, $code)
     {
@@ -64,7 +62,7 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve variable data by code
      *
      * @param string $code
-     * @param boolean $withValue
+     * @param bool $withValue
      * @param integer $storeId
      * @return array
      */
@@ -83,7 +81,7 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Perform actions after object save
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Variable
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -120,7 +118,7 @@ class Variable extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param string $field
      * @param mixed $value
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Zend_Db_Select
+     * @return $this
      */
     protected function _getLoadSelect($field, $value, $object)
     {

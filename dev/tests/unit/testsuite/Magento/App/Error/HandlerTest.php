@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App\Error;
@@ -37,7 +37,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Filesystem mock
      *
-     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
@@ -58,7 +58,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->appState = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->handler = new \Magento\App\Error\Handler($this->logger, $this->filesystem, $this->appState);
     }
@@ -85,6 +85,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
      * Test for processException method report
      *
      * @covers \Magento\Error\Handler::processException
+     * @runInSeparateProcess
      */
     public function testProcessExceptionReport()
     {
@@ -92,7 +93,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\App\State::MODE_DEFAULT));
         $this->filesystem->expects($this->atLeastOnce())
             ->method('getPath')
-            ->with(\Magento\Filesystem::PUB)
+            ->with(\Magento\App\Filesystem::PUB_DIR)
             ->will($this->returnValue(dirname(__DIR__) . '/../_files'));
 
         $exception = new \Exception('TestMessage');

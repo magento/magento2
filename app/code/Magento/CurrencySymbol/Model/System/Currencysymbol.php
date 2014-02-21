@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CurrencySymbol
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,14 +45,14 @@ class Currencysymbol
     /**
      * Store id
      *
-     * @var string | null
+     * @var string|null
      */
     protected $_storeId;
 
     /**
      * Website id
      *
-     * @var string | null
+     * @var string|null
      */
     protected $_websiteId;
     /**
@@ -115,7 +115,7 @@ class Currencysymbol
     protected $_locale;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ReinitableConfigInterface
      */
     protected $_coreConfig;
 
@@ -128,7 +128,7 @@ class Currencysymbol
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ReinitableConfigInterface $coreConfig
      * @param \Magento\Backend\Model\Config\Factory $configFactory
      * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -138,7 +138,7 @@ class Currencysymbol
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ReinitableConfigInterface $coreConfig,
         \Magento\Backend\Model\Config\Factory $configFactory,
         \Magento\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
@@ -159,8 +159,8 @@ class Currencysymbol
     /**
      * Sets store Id
      *
-     * @param  $storeId
-     * @return \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @param  string|null $storeId
+     * @return $this
      */
     public function setStoreId($storeId=null)
     {
@@ -173,8 +173,8 @@ class Currencysymbol
     /**
      * Sets website Id
      *
-     * @param  $websiteId
-     * @return \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @param string|null $websiteId
+     * @return $this
      */
     public function setWebsiteId($websiteId=null)
     {
@@ -266,7 +266,7 @@ class Currencysymbol
      * Saves currency symbol to config
      *
      * @param  $symbols array
-     * @return \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @return $this
      */
     public function setCurrencySymbolsData($symbols=array())
     {
@@ -309,8 +309,8 @@ class Currencysymbol
     /**
      * Returns custom currency symbol by currency code
      *
-     * @param  $code
-     * @return bool|string
+     * @param string $code
+     * @return string|false
      */
     public function getCurrencySymbol($code)
     {
@@ -325,7 +325,7 @@ class Currencysymbol
     /**
      * Clear translate cache
      *
-     * @return \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @return $this
      */
     public function clearCache()
     {

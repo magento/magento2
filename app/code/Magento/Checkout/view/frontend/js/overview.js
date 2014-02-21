@@ -19,7 +19,7 @@
  *
  * @category    checkout multi-shipping review order overview
  * @package     mage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
@@ -31,7 +31,7 @@
             opacity: 0.5, // CSS opacity for the 'Place Order' button when it's clicked and then disabled.
             pleaseWaitLoader: 'span.please-wait', // 'Submitting order information...' Ajax loader.
             placeOrderSubmit: 'button[type="submit"]', // The 'Place Order' button.
-            agreements: '#checkout-agreements' // Container for all of the checkout billing agreements.
+            agreements: '#checkout-agreements' // Container for all of the checkout agreements and terms/conditions
         },
 
         /**

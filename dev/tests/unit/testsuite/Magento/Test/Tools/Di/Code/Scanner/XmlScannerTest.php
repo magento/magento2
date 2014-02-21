@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,6 +66,8 @@ class XmlScannerTest extends \PHPUnit_Framework_TestCase
             'Invalid proxy class for ' . substr($className, 0, -5));
         $this->_logMock->expects($this->at(1))->method('add')->with(4, '\Magento\SomeModule\Model\Element\Proxy',
             'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Element\Proxy', 0, -5));
+        $this->_logMock->expects($this->at(2))->method('add')->with(4, '\Magento\SomeModule\Model\Nested\Element\Proxy',
+            'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5));
         $actual = $this->_model->collectEntities($this->_testFiles);
         $expected = array(
             'Magento\Core\Model\App\Proxy'

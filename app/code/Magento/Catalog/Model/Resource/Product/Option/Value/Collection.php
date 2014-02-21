@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Option\Value;
 
 /**
  * Catalog product option values collection
@@ -32,13 +32,13 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Option\Value;
-
 class Collection
     extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +49,7 @@ class Collection
      * Add price, title to result
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return $this
      */
     public function getValues($storeId)
     {
@@ -63,7 +63,7 @@ class Collection
      * Add titles to result
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return $this
      */
     public function addTitlesToResult($storeId)
     {
@@ -131,7 +131,7 @@ class Collection
      * Add title result
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return $this
      */
     public function addTitleToResult($storeId)
     {
@@ -164,7 +164,7 @@ class Collection
      * Add price to result
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return $this
      */
     public function addPriceToResult($storeId)
     {
@@ -210,7 +210,7 @@ class Collection
      *
      * @param array $optionIds
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return $this
      */
     public function getValuesByOption($optionIds, $storeId = null)
     {
@@ -225,7 +225,7 @@ class Collection
      * Add option to filter
      *
      * @param array|\Magento\Catalog\Model\Product\Option|int $option
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return $this
      */
     public function addOptionToFilter($option)
     {

@@ -1,4 +1,6 @@
 <?php
+namespace Magento\GoogleOptimizer\Model;
+
 /**
  * Google Experiment Code Model
  *
@@ -20,7 +22,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @method \Magento\GoogleOptimizer\Model\Resource\Code _getResource()
  * @method \Magento\GoogleOptimizer\Model\Resource\Code getResource()
@@ -33,8 +35,6 @@
  * @method \Magento\GoogleOptimizer\Model\Code setExperimentScript(int $value)
  * @method string getExperimentScript()
  */
-namespace Magento\GoogleOptimizer\Model;
-
 class Code extends \Magento\Core\Model\AbstractModel
 {
     /**#@+
@@ -52,6 +52,7 @@ class Code extends \Magento\Core\Model\AbstractModel
 
     /**
      * Model construct that should be used for object initialization
+     * @return void
      */
     protected function _construct()
     {
@@ -65,7 +66,7 @@ class Code extends \Magento\Core\Model\AbstractModel
      * @param int $entityId
      * @param string $entityType One of self::CODE_ENTITY_TYPE_
      * @param int $storeId
-     * @return \Magento\GoogleOptimizer\Model\Code
+     * @return $this
      */
     public function loadByEntityIdAndType($entityId, $entityType, $storeId = 0)
     {

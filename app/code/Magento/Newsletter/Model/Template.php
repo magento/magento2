@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Newsletter\Model;
 
 /**
  * Template model
@@ -54,8 +55,6 @@
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model;
-
 class Template extends \Magento\Core\Model\Template
 {
 
@@ -151,6 +150,7 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -160,7 +160,7 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Validate Newsletter template
      *
-     * @return bool
+     * @return void
      * @throws \Magento\Core\Exception
      */
     public function validate()
@@ -196,7 +196,7 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Processing object before save data
      *
-     * @return \Magento\Newsletter\Model\Template
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -208,7 +208,7 @@ class Template extends \Magento\Core\Model\Template
      * Load template by code
      *
      * @param string $templateCode
-     * @return \Magento\Newsletter\Model\Template
+     * @return $this
      */
     public function loadByCode($templateCode)
     {

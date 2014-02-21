@@ -18,12 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
-    '\Magento\TestModule1\Service\AllSoapAndRestV1Interface' => array(
-        'class' => '\Magento\TestModule1\Service\AllSoapAndRestV1Interface',
+    '\Magento\TestModule1\Service\V1\AllSoapAndRestInterface' => array(
+        'class' => '\Magento\TestModule1\Service\V1\AllSoapAndRestInterface',
         'methods' => array(
             'item' => array(
                 'httpMethod' => 'GET',
@@ -42,8 +42,8 @@ return array(
         ),
         'baseUrl' => '/V1/testmodule1',
     ),
-    '\Magento\TestModule1\Service\AllSoapAndRestV2Interface' => array(
-        'class' => '\Magento\TestModule1\Service\AllSoapAndRestV2Interface',
+    '\Magento\TestModule1\Service\V2\AllSoapAndRestInterface' => array(
+        'class' => '\Magento\TestModule1\Service\V2\AllSoapAndRestInterface',
         'methods' => array(
             'item' => array(
                 'httpMethod' => 'GET',
@@ -69,8 +69,8 @@ return array(
         ),
         'baseUrl' => '/V2/testmodule1',
     ),
-    '\Magento\TestModule2\Service\AllSoapAndRestV2Interface' => array(
-        'class' => '\Magento\TestModule2\Service\AllSoapAndRestV2Interface',
+    '\Magento\TestModule2\Service\V2\AllSoapAndRestInterface' => array(
+        'class' => '\Magento\TestModule2\Service\V2\AllSoapAndRestInterface',
         'methods' => array(
             'update' => array(
                 'httpMethod' => 'PUT',

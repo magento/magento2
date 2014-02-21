@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller\Rest;
@@ -55,6 +55,8 @@ class Response extends \Magento\Webapi\Controller\Response
 
     /**
      * Send response to the client, render exceptions if they are present.
+     *
+     * @return void
      */
     public function sendResponse()
     {
@@ -80,12 +82,14 @@ class Response extends \Magento\Webapi\Controller\Response
 
     /**
      * Generate and set HTTP response code, error messages to Response object.
+     *
+     * @return $this
      */
     protected function _renderMessages()
     {
         $formattedMessages = $this->getMessages();
         $responseHttpCode = null;
-        /** @var Exception $exception */
+        /** @var \Exception $exception */
         foreach ($this->getException() as $exception) {
             $maskedException = $this->_errorProcessor->maskException($exception);
             $messageData = array(
@@ -115,7 +119,7 @@ class Response extends \Magento\Webapi\Controller\Response
      * Perform rendering of response data.
      *
      * @param array|null $outputData
-     * @return \Magento\Webapi\Controller\Rest\Response
+     * @return $this
      */
     public function prepareResponse($outputData = null)
     {
@@ -129,7 +133,8 @@ class Response extends \Magento\Webapi\Controller\Response
     /**
      * Render data using registered Renderer.
      *
-     * @param mixed $data
+     * @param array|object $data
+     * @return void
      */
     protected function _render($data)
     {

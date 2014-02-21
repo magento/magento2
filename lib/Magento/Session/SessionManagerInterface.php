@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Session;
@@ -45,6 +45,8 @@ interface SessionManagerInterface
 
     /**
      * Session write close
+     *
+     * @return void
      */
     public function writeClose();
 
@@ -81,6 +83,7 @@ interface SessionManagerInterface
      * Destroy/end a session
      *
      * @param  array $options
+     * @return void
      */
     public function destroy(array $options = null);
 
@@ -132,6 +135,8 @@ interface SessionManagerInterface
      * Expire the session cookie
      *
      * Sends a session cookie with no value, and with an expiry in the past.
+     *
+     * @return void
      */
     public function expireSessionCookie();
 

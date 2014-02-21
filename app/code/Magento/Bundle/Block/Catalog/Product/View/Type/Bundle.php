@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Bundle
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -85,6 +85,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -105,7 +106,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         \Magento\Bundle\Model\Product\PriceFactory $productPrice,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Json\EncoderInterface $jsonEncoder,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_productPrice = $productPrice;
@@ -124,7 +126,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             $layoutHelper,
             $imageHelper,
             $arrayUtils,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
 

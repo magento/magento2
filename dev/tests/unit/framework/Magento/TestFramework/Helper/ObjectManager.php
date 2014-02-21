@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,7 +38,7 @@ class ObjectManager
      */
     protected $_specialCases = array(
         'Magento\Core\Model\Resource\AbstractResource' => '_getResourceModelMock',
-        'Magento\Core\Model\Translate' => '_getTranslatorMock',
+        'Magento\TranslateInterface' => '_getTranslatorMock',
     );
 
     /**
@@ -120,13 +120,12 @@ class ObjectManager
      * Retrieve mock of core translator model
      *
      * @param string $className
-     * @return \Magento\Core\Model\Translate|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getTranslatorMock($className)
     {
         $translator = $this->_testObject->getMockBuilder($className)
             ->disableOriginalConstructor()
-            ->setMethods(array('translate'))
             ->getMock();
         $translateCallback = function ($arguments) {
             return is_array($arguments) ? vsprintf(array_shift($arguments), $arguments) : '';
@@ -218,5 +217,26 @@ class ObjectManager
             $constructArguments[$parameterName] = null === $object ? $defaultValue : $object;
         }
         return $constructArguments;
+    }
+
+    /**
+     * Get collection mock
+     *
+     * @param string $className
+     * @param array $data
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @throws \InvalidArgumentException
+     */
+    public function getCollectionMock($className, array $data)
+    {
+        if (!is_subclass_of($className, '\Magento\Data\Collection')) {
+            throw new \InvalidArgumentException($className . ' does not instance of \Magento\Data\Collection');
+        }
+        $mock = $this->_testObject->getMock($className, array(), array(), '', false, false);
+        $iterator = new \ArrayIterator($data);
+        $mock->expects($this->_testObject->any())
+            ->method('getIterator')
+            ->will($this->_testObject->returnValue($iterator));
+        return $mock;
     }
 }

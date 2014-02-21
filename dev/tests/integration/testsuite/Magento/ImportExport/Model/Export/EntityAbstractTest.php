@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,7 +46,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getMockForAbstractClass(
             'Magento\ImportExport\Model\Export\AbstractEntity', array(
                 $objectManager->get('Magento\Core\Model\Store\Config'),
-                $objectManager->get('Magento\Core\Model\App'),
+                $objectManager->get('Magento\Core\Model\StoreManager'),
                 $objectManager->get('Magento\ImportExport\Model\Export\Factory'),
                 $objectManager->get('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory'),
             )
@@ -124,12 +124,12 @@ abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity
 {
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         array $data = array()
     ) {
-        parent::__construct($coreStoreConfig, $app, $collectionFactory, $resourceColFactory, $data);
+        parent::__construct($coreStoreConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
         $this->_disabledAttrs = array('default_billing', 'default_shipping');
     }
 }

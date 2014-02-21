@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -82,6 +82,16 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      */
     const HISTORY_ENTITY_NAME = 'shipment';
 
+    /**
+     * Store address
+     */
+    const XML_PATH_STORE_ADDRESS1 = 'shipping/origin/street_line1';
+    const XML_PATH_STORE_ADDRESS2 = 'shipping/origin/street_line2';
+    const XML_PATH_STORE_CITY = 'shipping/origin/city';
+    const XML_PATH_STORE_REGION_ID = 'shipping/origin/region_id';
+    const XML_PATH_STORE_ZIP = 'shipping/origin/postcode';
+    const XML_PATH_STORE_COUNTRY_ID = 'shipping/origin/country_id';
+
     protected $_items;
     protected $_tracks;
     protected $_order;
@@ -119,12 +129,12 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
     /**
      * @var \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory
      */
-    protected $_shipmentItemCollFactory;
+    protected $_shipmentItemCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory
      */
-    protected $_trackCollFactory;
+    protected $_trackCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment\CommentFactory
@@ -134,7 +144,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
     /**
      * @var \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory
      */
-    protected $_commentCollFactory;
+    protected $_commentCollectionFactory;
 
     /**
      * @var \Magento\Email\Model\Template\MailerFactory
@@ -155,10 +165,10 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollFactory
-     * @param \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollectionFactory
+     * @param \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
      * @param \Magento\Sales\Model\Order\Shipment\CommentFactory $commentFactory
-     * @param \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $commentCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory
      * @param \Magento\Email\Model\Template\MailerFactory $templateMailerFactory
      * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -174,10 +184,10 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollFactory,
+        \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
         \Magento\Sales\Model\Order\Shipment\CommentFactory $commentFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $commentCollFactory,
+        \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $commentCollectionFactory,
         \Magento\Email\Model\Template\MailerFactory $templateMailerFactory,
         \Magento\Email\Model\InfoFactory $emailInfoFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
@@ -188,10 +198,10 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         $this->_salesData = $salesData;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_orderFactory = $orderFactory;
-        $this->_shipmentItemCollFactory = $shipmentItemCollFactory;
-        $this->_trackCollFactory = $trackCollFactory;
+        $this->_shipmentItemCollectionFactory = $shipmentItemCollectionFactory;
+        $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->_commentFactory = $commentFactory;
-        $this->_commentCollFactory = $commentCollFactory;
+        $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->_templateMailerFactory = $templateMailerFactory;
         $this->_emailInfoFactory = $emailInfoFactory;
         parent::__construct($context, $registry, $coreLocale, $dateTime, $resource, $resourceCollection, $data);
@@ -316,7 +326,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
     public function getItemsCollection()
     {
         if (empty($this->_items)) {
-            $this->_items = $this->_shipmentItemCollFactory->create()->setShipmentFilter($this->getId());
+            $this->_items = $this->_shipmentItemCollectionFactory->create()->setShipmentFilter($this->getId());
 
             if ($this->getId()) {
                 foreach ($this->_items as $item) {
@@ -379,7 +389,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
     public function getTracksCollection()
     {
         if (empty($this->_tracks)) {
-            $this->_tracks = $this->_trackCollFactory->create()->setShipmentFilter($this->getId());
+            $this->_tracks = $this->_trackCollectionFactory->create()->setShipmentFilter($this->getId());
 
             if ($this->getId()) {
                 foreach ($this->_tracks as $track) {
@@ -477,7 +487,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
     public function getCommentsCollection($reload=false)
     {
         if (is_null($this->_comments) || $reload) {
-            $this->_comments = $this->_commentCollFactory->create()
+            $this->_comments = $this->_commentCollectionFactory->create()
                 ->setShipmentFilter($this->getId())
                 ->setCreatedAtOrder();
 
@@ -671,9 +681,6 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         if (!$this->getOrderId() && $this->getOrder()) {
             $this->setOrderId($this->getOrder()->getId());
             $this->setShippingAddressId($this->getOrder()->getShippingAddress()->getId());
-        }
-        if ($this->getPackages()) {
-            $this->setPackages(serialize($this->getPackages()));
         }
 
         return parent::_beforeSave();

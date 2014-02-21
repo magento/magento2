@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,6 +74,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * Define main, country, locale region name tables
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -89,7 +91,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Initialize select object
      *
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -109,7 +111,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter by country_id
      *
      * @param string|array $countryId
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return $this
      */
     public function addCountryFilter($countryId)
     {
@@ -127,7 +129,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter by country code (ISO 3)
      *
      * @param string $countryCode
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return $this
      */
     public function addCountryCodeFilter($countryCode)
     {
@@ -145,7 +147,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter by Region code
      *
      * @param string|array $regionCode
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return $this
      */
     public function addRegionCodeFilter($regionCode)
     {
@@ -163,7 +165,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter by region name
      *
      * @param string|array $regionName
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return $this
      */
     public function addRegionNameFilter($regionName)
     {
@@ -181,7 +183,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Filter region by its code or name
      *
      * @param string|array $region
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return $this
      */
     public function addRegionCodeOrNameFilter($region)
     {

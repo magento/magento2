@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\App\Request;
@@ -31,7 +31,7 @@ class RewriteService
     protected $_rewriteFactory;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -40,10 +40,15 @@ class RewriteService
      */
     protected $_routerList;
 
+    /**
+     * @param \Magento\App\RouterList $routerList
+     * @param \Magento\Core\Model\Url\RewriteFactory $rewriteFactory
+     * @param \Magento\App\ConfigInterface $config
+     */
     public function __construct(
         \Magento\App\RouterList $routerList,
         \Magento\Core\Model\Url\RewriteFactory $rewriteFactory,
-        \Magento\Core\Model\Config $config
+        \Magento\App\ConfigInterface $config
     ) {
         $this->_rewriteFactory = $rewriteFactory;
         $this->_config = $config;
@@ -54,6 +59,7 @@ class RewriteService
      * Apply rewrites to current request
      *
      * @param \Magento\App\RequestInterface $request
+     * @return void
      */
     public function applyRewrites(\Magento\App\RequestInterface $request)
     {

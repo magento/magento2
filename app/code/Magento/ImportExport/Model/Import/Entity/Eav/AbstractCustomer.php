@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,7 +57,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * For example, when entity attribute has own validation and import procedures
      * or just to deny this attribute processing.
      *
-     * @var array
+     * @var string[]
      */
     protected $_ignoredAttributes = array('website_id', 'store_id', 'default_billing', 'default_shipping');
 
@@ -80,7 +80,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\ImportExport\Model\Resource\Customer\StorageFactory $storageFactory
@@ -93,7 +93,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\ImportExport\Model\Resource\Customer\StorageFactory $storageFactory,
@@ -101,7 +101,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     ) {
         $this->_storageFactory = $storageFactory;
         parent::__construct(
-            $coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource, $app,
+            $coreData, $string, $coreStoreConfig, $importFactory, $resourceHelper, $resource, $storeManager,
             $collectionFactory, $eavConfig, $data
         );
 
@@ -132,7 +132,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * Initialize existent customers data
      *
      * @param array $data
-     * @return \Magento\ImportExport\Model\Import\Entity\Eav\AbstractCustomer
+     * @return $this
      */
     protected function _initCustomers(array $data)
     {
@@ -169,7 +169,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      *
      * @param array $rowData
      * @param int $rowNumber
-     * @return boolean
+     * @return bool
      */
     public function validateRow(array $rowData, $rowNumber)
     {
@@ -211,7 +211,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      *
      * @param array $rowData
      * @param int $rowNumber
-     * @return boolean
+     * @return bool
      */
     protected function _checkUniqueKey(array $rowData, $rowNumber)
     {

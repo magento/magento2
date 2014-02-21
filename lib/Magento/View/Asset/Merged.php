@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,26 +35,36 @@ class Merged implements \Iterator
     const PUBLIC_MERGE_DIR  = '_merged';
 
     /**
+     * ObjectManager
+     *
      * @var \Magento\ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Logger
+     *
      * @var \Magento\Logger
      */
     protected $logger;
 
     /**
+     * MergeStrategyInterface
+     *
      * @var MergeStrategyInterface
      */
     protected $mergeStrategy;
 
     /**
+     * Assets
+     *
      * @var MergeableInterface[]
      */
     protected $assets;
 
     /**
+     * Content type
+     *
      * @var string
      */
     protected $contentType;
@@ -67,6 +77,8 @@ class Merged implements \Iterator
     protected $isInitialized = false;
 
     /**
+     * Constructor
+     *
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Logger $logger
      * @param MergeStrategyInterface $mergeStrategy
@@ -106,6 +118,8 @@ class Merged implements \Iterator
 
     /**
      * Attempt to merge assets, falling back to original non-merged ones, if merging fails
+     *
+     * @return void
      */
     protected function initialize()
     {
@@ -162,10 +176,10 @@ class Merged implements \Iterator
      */
     protected function getMergedFilePath(array $publicFiles)
     {
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = $this->objectManager->get('Magento\Filesystem');
-        $jsDir = $filesystem->getPath(\Magento\Filesystem::PUB_LIB);
-        $publicDir = $filesystem->getPath(\Magento\Filesystem::STATIC_VIEW);
+        /** @var \Magento\App\Filesystem $filesystem */
+        $filesystem = $this->objectManager->get('Magento\App\Filesystem');
+        $jsDir = $filesystem->getPath(\Magento\App\Filesystem::PUB_LIB_DIR);
+        $publicDir = $filesystem->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR);
 
         $prefixRemovals = array($jsDir, $publicDir);
 
@@ -174,7 +188,7 @@ class Merged implements \Iterator
             $relFileNames[] = ltrim(str_replace($prefixRemovals, '', $file), '/');
         }
 
-        $mergedDir = $filesystem->getDirectoryRead(\Magento\Filesystem::PUB_VIEW_CACHE)
+        $mergedDir = $filesystem->getDirectoryRead(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
             ->getAbsolutePath(self::PUBLIC_MERGE_DIR);
         return $mergedDir . '/' . md5(implode('|', $relFileNames)) . '.' . $this->contentType;
     }

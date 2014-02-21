@@ -18,43 +18,39 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Json;
 
-use Magento\TranslateInterface;
-
-/**
- * @package Magento\Json
- */
 class Encoder implements EncoderInterface
 {
     /**
      * Translator
      *
-     * @var TranslateInterface
+     * @var \Magento\Translate\InlineInterface
      */
-    protected $translator;
+    protected $translateInline;
 
     /**
-     * @param TranslateInterface $translator
+     * @param \Magento\Translate\InlineInterface $translateInline
      */
-    public function __construct(TranslateInterface $translator)
+    public function __construct(\Magento\Translate\InlineInterface $translateInline)
     {
-        $this->translator = $translator;
+        $this->translateInline = $translateInline;
     }
 
     /**
+     * Encode the mixed $data into the JSON format.
+     *
      * @param mixed $data
      * @return string
      */
     public function encode($data)
     {
         $json = \Zend_Json::encode($data);
-        if ($this->translator->isAllowed()) {
-            $this->translator->processResponseBody($json, true);
+        if ($this->translateInline->isAllowed()) {
+            $this->translateInline->processResponseBody($json, true);
         }
 
         return $json;

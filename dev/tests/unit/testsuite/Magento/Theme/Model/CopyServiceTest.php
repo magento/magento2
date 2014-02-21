@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Theme
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -146,7 +146,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\View\Design\Theme\FileFactory', array('create'), array(), '', false
         );
         $this->_filesystem = $this->getMock(
-            'Magento\Filesystem',
+            'Magento\App\Filesystem',
             array('getDirectoryWrite'),
             array(),
             '',
@@ -160,7 +160,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::MEDIA)
+            ->with(\Magento\App\Filesystem::MEDIA_DIR)
             ->will($this->returnValue($this->_dirWriteMock));
 
         /* Init \Magento\Core\Model\Resource\Layout\Collection model  */

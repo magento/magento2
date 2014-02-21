@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,6 +66,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -84,7 +85,8 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Tax\Model\Calculation $calculationModel,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Helper\Data $coreData,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_calculationModel = $calculationModel;
         $this->jsonEncoder = $jsonEncoder;
@@ -101,8 +103,10 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
+        $this->_isScopePrivate = true;
     }
 
     /**

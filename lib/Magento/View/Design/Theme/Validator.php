@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\View\Design\Theme;
@@ -30,7 +30,6 @@ class Validator
 {
     /**
      * Validators list by data key
-     *
      * array('dataKey' => array('validator_name' => [validators], ...), ...)
      *
      * @var array
@@ -39,7 +38,6 @@ class Validator
 
     /**
      * List of errors after validation process
-     *
      * array('dataKey' => 'Error message')
      *
      * @var array
@@ -59,7 +57,7 @@ class Validator
     /**
      * Set version validators
      *
-     * @return Validator
+     * @return $this
      */
     protected function _setVersionValidators()
     {
@@ -68,7 +66,7 @@ class Validator
                   'message' => __('Field can\'t be empty')),
             array('name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
                   'options' => array('pattern' => '/^(\d+\.\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)$|^\*$/'),
-                  'message' => __('Theme version has not compatible format'))
+                  'message' => __('Theme version has not compatible format.'))
         );
 
         $this->addDataValidators('theme_version', $versionValidators);
@@ -79,7 +77,7 @@ class Validator
     /**
      * Set title validators
      *
-     * @return Validator
+     * @return $this
      */
     protected function _setTitleValidators()
     {
@@ -100,7 +98,7 @@ class Validator
     /**
      * Set theme type validators
      *
-     * @return Validator
+     * @return $this
      */
     protected function _setTypeValidators()
     {
@@ -137,7 +135,7 @@ class Validator
      *
      * @param string $dataKey
      * @param array $validators
-     * @return Validator
+     * @return $this
      */
     public function addDataValidators($dataKey, $validators)
     {
@@ -167,8 +165,8 @@ class Validator
     /**
      * Instantiate class validator
      *
-     * @param array $validators
-     * @return Validator
+     * @param array &$validators
+     * @return $this
      */
     protected function _instantiateValidators(array &$validators)
     {

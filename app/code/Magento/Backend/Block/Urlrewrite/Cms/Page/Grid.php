@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Urlrewrite\Cms\Page;
 
 /**
  * CMS pages grid for URL rewrites
@@ -31,12 +32,12 @@
  * @package    Magento_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Urlrewrite\Cms\Page;
-
 class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
 {
     /**
      * Constructor
+     *
+     * @return void
      */
     public function _construct()
     {
@@ -47,7 +48,7 @@ class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
     /**
      * Disable massaction
      *
-     * @return \Magento\Backend\Block\Urlrewrite\Cms\Page\Grid
+     * @return $this
      */
     protected function _prepareMassaction()
     {
@@ -57,7 +58,7 @@ class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
     /**
      * Prepare columns layout
      *
-     * @return \Magento\Backend\Block\Urlrewrite\Cms\Page\Grid
+     * @return $this
      */
     protected function _prepareColumns()
     {

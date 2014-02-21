@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,7 +52,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param int $attributeSetId
      * @param string $targetCountry two words ISO format
-     * @return \Magento\GoogleShopping\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function addAttributeSetFilter($attributeSetId, $targetCountry)
     {
@@ -68,7 +68,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add type filter
      *
      * @param int $type_id
-     * @return \Magento\GoogleShopping\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function addTypeFilter($type_id)
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -104,9 +104,9 @@ $installer->getConnection()->insertArray($installer->getTable('directory_country
  */
 $data = array(
     array('US', 'AL', 'Alabama'), array('US', 'AK', 'Alaska'), array('US', 'AS', 'American Samoa'),
-    array('US', 'AZ', 'Arizona'), array('US', 'AR', 'Arkansas'), array('US', 'AF', 'Armed Forces Africa'),
-    array('US', 'AA', 'Armed Forces Americas'), array('US', 'AC', 'Armed Forces Canada'),
-    array('US', 'AE', 'Armed Forces Europe'), array('US', 'AM', 'Armed Forces Middle East'),
+    array('US', 'AZ', 'Arizona'), array('US', 'AR', 'Arkansas'), array('US', 'AE', 'Armed Forces Africa'),
+    array('US', 'AA', 'Armed Forces Americas'), array('US', 'AE', 'Armed Forces Canada'),
+    array('US', 'AE', 'Armed Forces Europe'), array('US', 'AE', 'Armed Forces Middle East'),
     array('US', 'AP', 'Armed Forces Pacific'), array('US', 'CA', 'California'), array('US', 'CO', 'Colorado'),
     array('US', 'CT', 'Connecticut'), array('US', 'DE', 'Delaware'), array('US', 'DC', 'District of Columbia'),
     array('US', 'FM', 'Federated States Of Micronesia'), array('US', 'FL', 'Florida'), array('US', 'GA', 'Georgia'),
@@ -138,7 +138,7 @@ $data = array(
     array('DE', 'THE', 'Thüringen'), array('AT', 'WI', 'Wien'), array('AT', 'NO', 'Niederösterreich'),
     array('AT', 'OO', 'Oberösterreich'), array('AT', 'SB', 'Salzburg'), array('AT', 'KN', 'Kärnten'),
     array('AT', 'ST', 'Steiermark'), array('AT', 'TI', 'Tirol'), array('AT', 'BL', 'Burgenland'),
-    array('AT', 'VB', 'Voralberg'), array('CH', 'AG', 'Aargau'), array('CH', 'AI', 'Appenzell Innerrhoden'),
+    array('AT', 'VB', 'Vorarlberg'), array('CH', 'AG', 'Aargau'), array('CH', 'AI', 'Appenzell Innerrhoden'),
     array('CH', 'AR', 'Appenzell Ausserrhoden'), array('CH', 'BE', 'Bern'), array('CH', 'BL', 'Basel-Landschaft'),
     array('CH', 'BS', 'Basel-Stadt'), array('CH', 'FR', 'Freiburg'), array('CH', 'GE', 'Genf'),
     array('CH', 'GL', 'Glarus'), array('CH', 'GR', 'Graubünden'), array('CH', 'JU', 'Jura'),

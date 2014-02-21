@@ -18,15 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\User\Controller\Adminhtml;
 
 /**
  * \Magento\User Auth controller
  */
-namespace Magento\User\Controller\Adminhtml;
-
 class Auth extends \Magento\Backend\App\AbstractAction
 {
     /**
@@ -52,6 +51,8 @@ class Auth extends \Magento\Backend\App\AbstractAction
 
     /**
      * Forgot administrator password action
+     *
+     * @return void
      */
     public function forgotpasswordAction()
     {
@@ -102,6 +103,8 @@ class Auth extends \Magento\Backend\App\AbstractAction
      * Display reset forgotten password form
      *
      * User is redirected on this action when he clicks on the corresponding link in password reset confirmation email
+     *
+     * @return void
      */
     public function resetPasswordAction()
     {
@@ -132,6 +135,8 @@ class Auth extends \Magento\Backend\App\AbstractAction
      * Reset forgotten password
      *
      * Used to handle data received from reset forgotten password form
+     *
+     * @return void
      */
     public function resetPasswordPostAction()
     {
@@ -188,6 +193,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
      *
      * @param int $userId
      * @param string $resetPasswordToken
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _validateResetPasswordLinkToken($userId, $resetPasswordToken)
@@ -216,7 +222,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
     /**
      * Check if user has permissions to access this controller
      *
-     * @return boolean
+     * @return bool
      */
     protected function _isAllowed()
     {

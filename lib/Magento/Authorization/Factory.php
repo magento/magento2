@@ -20,10 +20,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Authorization;
+
+use Magento\Authorization;
+use Magento\ObjectManager;
 
 class Factory
 {
@@ -35,16 +38,16 @@ class Factory
     /**
      * Object Manager instance
      *
-     * @var \Magento\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager = null;
 
     /**
      * Factory constructor
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -53,7 +56,7 @@ class Factory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Authorization
+     * @return Authorization
      */
     public function create(array $data = array())
     {

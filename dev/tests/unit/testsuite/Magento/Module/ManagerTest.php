@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -73,7 +73,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_outputConfig
             ->expects($this->any())
-            ->method('getFlag')
+            ->method('isSetFlag')
             ->will($this->returnValue(true));
         $this->assertFalse($this->_model->isOutputEnabled('Nonexisting_Module'));
     }
@@ -118,7 +118,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
         $this->_outputConfig
             ->expects($this->at(0))
-            ->method('getFlag')
+            ->method('isSetFlag')
             ->with(self::XML_PATH_OUTPUT_ENABLED)
             ->will($this->returnValue($configValue))
         ;

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,16 +39,22 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_reviewData = null;
 
     /**
+     * Customer model factory
+     *
      * @var \Magento\Customer\Model\CustomerFactory
      */
     protected $_customerFactory;
 
     /**
+     * Catalog product factory
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Core system store model
+     *
      * @var \Magento\Core\Model\System\Store
      */
     protected $_systemStore;
@@ -80,6 +86,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * Prepare edit review form
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $review = $this->_coreRegistry->registry('review_data');
@@ -115,12 +126,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 $this->escapeHtml($customer->getFirstname()),
                 $this->escapeHtml($customer->getLastname()),
                 $this->escapeHtml($customer->getEmail()));
+        } elseif ($review->getStoreId() == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
+            $customerText = __('Administrator');
         } else {
-            if (is_null($review->getCustomerId())) {
-                $customerText = __('Guest');
-            } elseif ($review->getCustomerId() == 0) {
-                $customerText = __('Administrator');
-            }
+            $customerText = __('Guest');
         }
 
         $fieldset->addField('customer', 'note', array(

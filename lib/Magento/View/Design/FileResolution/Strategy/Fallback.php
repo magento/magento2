@@ -18,13 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View\Design\FileResolution\Strategy;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\View\Design\Fallback\Factory;
 use Magento\View\Design\Fallback\Rule\RuleInterface;
 use Magento\View\Design\ThemeInterface;
@@ -38,21 +38,29 @@ use Magento\Filesystem\Directory\Read;
 class Fallback implements FileInterface, LocaleInterface, ViewInterface
 {
     /**
+     * Fallback factory
+     *
      * @var Factory
      */
     protected $fallbackFactory;
 
     /**
+     * Rule file
+     *
      * @var RuleInterface
      */
     protected $ruleFile;
 
     /**
+     * Rule locale file
+     *
      * @var RuleInterface
      */
     protected $ruleLocaleFile;
 
     /**
+     * Rule view file
+     *
      * @var RuleInterface
      */
     protected $ruleViewFile;
@@ -65,12 +73,14 @@ class Fallback implements FileInterface, LocaleInterface, ViewInterface
     protected $rootDirectory;
 
     /**
+     * Constructor
+     *
      * @param Filesystem $filesystem
      * @param Factory $fallbackFactory
      */
     public function __construct(Filesystem $filesystem, Factory $fallbackFactory)
     {
-        $this->rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(Filesystem::ROOT_DIR);
         $this->fallbackFactory = $fallbackFactory;
     }
 

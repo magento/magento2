@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -26,6 +26,8 @@ namespace Magento\View\Design;
 
 /**
  * Interface ThemeInterface
+ *
+ * @method int|null getId()
  */
 interface ThemeInterface
 {
@@ -95,4 +97,19 @@ interface ThemeInterface
      * @return bool
      */
     public function isPhysical();
+
+    /**
+     * Return the full theme inheritance sequence, from the root theme till a specified one
+     * Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
+     *
+     * @return ThemeInterface[]
+     */
+    public function getInheritedThemes();
+
+    /**
+     * Get theme id
+     *
+     * @return int
+     */
+    public function getId();
 }

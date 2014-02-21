@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,34 +29,36 @@
  */
 namespace Magento\Backend\Model\Config\Source\Storage\Media;
 
+use Magento\App\Arguments;
+
 class Database implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
-     * @var \Magento\App\Config
+     * @var Arguments
      */
-    protected $_config;
+    protected $_arguments;
 
     /**
-     * @param \Magento\App\Config
+     * @param Arguments $arguments
      */
-    public function __construct(\Magento\App\Config $config)
+    public function __construct(Arguments $arguments)
     {
-        $this->_config = $config;
+        $this->_arguments = $arguments;
     }
 
     /**
-     * Options getter
+     * Returns list of available resources
      *
      * @return array
      */
     public function toOptionArray()
     {
-        $connectionOptions = array();
-        foreach (array_keys($this->_config->getConnections()) as $connectionName) {
-            $connectionOptions[] = array('value' => $connectionName, 'label' => $connectionName);
+        $resourceOptions = array();
+        foreach (array_keys($this->_arguments->getResources()) as $resourceName) {
+            $resourceOptions[] = array('value' => $resourceName, 'label' => $resourceName);
         }
-        sort($connectionOptions);
-        reset($connectionOptions);
-        return $connectionOptions;
+        sort($resourceOptions);
+        reset($resourceOptions);
+        return $resourceOptions;
     }
 }

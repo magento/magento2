@@ -20,16 +20,17 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Controller\Adminhtml\System;
+
+use Magento\App\ResponseInterface;
 
 /**
  * System Configuration controller
  */
-namespace Magento\Backend\Controller\Adminhtml\System;
-
-class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
+class Config extends AbstractConfig
 {
     /**
      * @var \Magento\App\Response\Http\FileFactory
@@ -61,6 +62,7 @@ class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
     /**
      * Index action
      *
+     * @return void
      */
     public function indexAction()
     {
@@ -70,6 +72,7 @@ class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
     /**
      * Edit configuration section
      *
+     * @return void
      */
     public function editAction()
     {
@@ -87,7 +90,7 @@ class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
 
         $this->_view->loadLayout();
 
-        $this->_setActiveMenu('Magento_Adminhtml::system_config');
+        $this->_setActiveMenu('Magento_Backend::system_config');
         $this->_view->getLayout()->getBlock('menu')->setAdditionalCacheKeyInfo(array($current));
 
         $this->_addBreadcrumb(
@@ -101,6 +104,8 @@ class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
 
     /**
      * Save fieldset state through AJAX
+     *
+     * @return void
      */
     public function stateAction()
     {
@@ -117,6 +122,8 @@ class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
 
     /**
      * Export shipping table rates in csv format
+     *
+     * @return ResponseInterface
      */
     public function exportTableratesAction()
     {
@@ -132,6 +139,6 @@ class Config extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
         }
         $gridBlock->setWebsiteId($website->getId())->setConditionName($conditionName);
         $content = $gridBlock->getCsvFile();
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 }

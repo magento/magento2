@@ -18,10 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\DesignEditor\Model\Plugin;
+
+use Magento\Code\Plugin\InvocationChain;
 
 class ThemeCopyService
 {
@@ -42,9 +44,10 @@ class ThemeCopyService
      * Copy additional information about theme change time
      *
      * @param array $methodArguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param InvocationChain $invocationChain
+     * @return void
      */
-    public function aroundCopy(array $methodArguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
+    public function aroundCopy(array $methodArguments, InvocationChain $invocationChain)
     {
         $invocationChain->proceed($methodArguments);
 

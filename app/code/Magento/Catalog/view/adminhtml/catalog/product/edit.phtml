@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -54,9 +54,6 @@
 
     <?php if($this->getProductId()): ?>
         <?php echo $this->getDeleteButtonHtml() ?>
-        <?php if($this->getProductSetId() && $this->getIsConfigured()): ?>
-            <?php echo $this->getDuplicateButtonHtml() ?>
-        <?php endif; ?>
     <?php endif; ?>
     <?php if ($this->getProductSetId()): ?>
         <?php echo $this->getChangeAttributeSetButtonHtml() ?>
@@ -149,7 +146,7 @@ jQuery(function($) {
 
             $.each(this._masks, function(field, mask) {
                 var $field = $('#' + field);
-                if (!$field.val() && mask.length > 0 && !self.varRegexp.test(mask)) {
+                if (!$field.val() && mask && mask.length > 0 && !self.varRegexp.test(mask)) {
                     $field.val(mask);
                 }
                 $field.trigger('change');
@@ -182,13 +179,15 @@ jQuery(function($) {
             var self = this;
             var fieldReverseIndex = {};
             $.each(masks, function(field, mask) {
-                $.each(mask.toString().match(self.varsRegexp) || [], function(key, maskName) {
-                    var fieldName = maskName.slice(2, -2);
-                    if (!(fieldName in fieldReverseIndex)) {
-                        fieldReverseIndex[fieldName] = [];
-                    }
-                    fieldReverseIndex[fieldName].push(field);
-                })
+                if (mask) {
+                    $.each(mask.toString().match(self.varsRegexp) || [], function (key, maskName) {
+                        var fieldName = maskName.slice(2, -2);
+                        if (!(fieldName in fieldReverseIndex)) {
+                            fieldReverseIndex[fieldName] = [];
+                        }
+                        fieldReverseIndex[fieldName].push(field);
+                    })
+                }
             });
             return fieldReverseIndex;
         }

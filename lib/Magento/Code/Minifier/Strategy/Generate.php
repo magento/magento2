@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -49,15 +49,15 @@ class Generate implements \Magento\Code\Minifier\StrategyInterface
 
     /**
      * @param \Magento\Code\Minifier\AdapterInterface $adapter
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Code\Minifier\AdapterInterface $adapter,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->adapter = $adapter;
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
-        $this->pubViewCacheDir = $filesystem->getDirectoryWrite(\Magento\Filesystem::PUB_VIEW_CACHE);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->pubViewCacheDir = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR);
     }
 
     /**
@@ -65,6 +65,7 @@ class Generate implements \Magento\Code\Minifier\StrategyInterface
      *
      * @param string $originalFile path to original file relative to pub/view_cache
      * @param string $targetFile path relative to pub/view_cache
+     * @return void
      */
     public function minifyFile($originalFile, $targetFile)
     {

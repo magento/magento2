@@ -22,7 +22,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Widget\Model\Widget;
@@ -40,7 +40,7 @@ class Config
     protected $_widget;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -55,13 +55,13 @@ class Config
     protected $_widgetFactory;
 
     /**
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\Widget\Model\WidgetFactory $widgetFactory
      */
     public function __construct(
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Core\Helper\Data $coreHelper,
         \Magento\View\Url $viewUrl,
         \Magento\Widget\Model\WidgetFactory $widgetFactory
@@ -122,7 +122,7 @@ class Config
     /**
      * Encode list of widget types into query param
      *
-     * @param array $widgets List of widgets
+     * @param string[]|string $widgets List of widgets
      * @return string Query param value
      */
     public function encodeWidgetsToQuery($widgets)
@@ -136,7 +136,7 @@ class Config
      * Decode URL query param and return list of widgets
      *
      * @param string $queryParam Query param value to decode
-     * @return array Array of widget types
+     * @return string[] Array of widget types
      */
     public function decodeWidgetsFromQuery($queryParam)
     {

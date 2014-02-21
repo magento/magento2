@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,11 +53,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Core\Model\Registry'),
                 $objectManager->get('Magento\Core\Model\App\Emulation'),
                 $objectManager->get('Magento\Core\Model\StoreManager'),
-                $objectManager->create('Magento\Filesystem'),
+                $objectManager->create('Magento\App\Filesystem'),
                 $objectManager->create('Magento\View\Url'),
                 $objectManager->create('Magento\View\FileSystem'),
                 $objectManager->create('Magento\Core\Model\Store\Config'),
-                $objectManager->create('Magento\Core\Model\Config'),
+                $objectManager->create('Magento\App\ConfigInterface'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
                 $objectManager->get('Magento\Email\Model\Template\Config'),
             ))
@@ -239,6 +239,17 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->sendTransactional('wrong_id',
             array('name' => 'Sender Name', 'email' => 'sender@example.com'), 'recipient@example.com', 'Recipient Name'
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testGetDefaultEmailLogo()
+    {
+        $this->assertStringEndsWith(
+            'static/frontend/magento_plushe/en_US/Magento_Email/logo_email.gif',
+            $this->_model->getDefaultEmailLogo()
         );
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,6 +67,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Reports\Model\Resource\HelperFactory $helperFactory
      */
@@ -76,10 +77,11 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Reports\Model\Resource\HelperFactory $helperFactory
     ) {
-        parent::__construct($resource, $logger, $locale, $reportsFlagFactory, $dateTime);
+        parent::__construct($resource, $logger, $locale, $reportsFlagFactory, $dateTime, $timezoneValidator);
         $this->_productResource = $productResource;
         $this->_helperFactory = $helperFactory;
     }
@@ -87,6 +89,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -96,9 +99,9 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     /**
      * Aggregate products view data
      *
-     * @param mixed $from
-     * @param mixed $to
-     * @return \Magento\Sales\Model\Resource\Report\Bestsellers
+     * @param null|mixed $from
+     * @param null|mixed $to
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {

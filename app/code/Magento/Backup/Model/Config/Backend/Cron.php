@@ -18,19 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Model\Config\Backend;
 
 /**
  * Backup by cron backend model
  */
-namespace Magento\Backup\Model\Config\Backend;
-
 class Cron extends \Magento\Core\Model\Config\Value
 {
-    const CRON_STRING_PATH  = 'crontab/jobs/system_backup/schedule/cron_expr';
-    const CRON_MODEL_PATH   = 'crontab/jobs/system_backup/run/model';
+    const CRON_STRING_PATH  = 'crontab/default/jobs/system_backup/schedule/cron_expr';
+    const CRON_MODEL_PATH   = 'crontab/default/jobs/system_backup/run/model';
 
     const XML_PATH_BACKUP_ENABLED       = 'groups/backup/fields/enabled/value';
     const XML_PATH_BACKUP_TIME          = 'groups/backup/fields/time/value';
@@ -39,7 +38,7 @@ class Cron extends \Magento\Core\Model\Config\Value
     /**
      * Config value factory
      *
-     * @var \Magento\Core\Model\Config\Value
+     * @var \Magento\Core\Model\Config\ValueFactory
      */
     protected $_configValueFactory;
 
@@ -52,7 +51,7 @@ class Cron extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Config\ValueFactory $configValueFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -63,7 +62,7 @@ class Cron extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Config\ValueFactory $configValueFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -78,7 +77,7 @@ class Cron extends \Magento\Core\Model\Config\Value
     /**
      * Cron settings after save
      *
-     * @return \Magento\Backend\Model\Config\Backend\Log\Cron
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _afterSave()

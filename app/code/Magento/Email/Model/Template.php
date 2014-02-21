@@ -20,11 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_Email
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Email\Model;
+
+use Magento\Core\Exception;
+use Magento\Email\Model\Template\Filter;
+use Magento\Filter\Template as FilterTemplate;
 
 /**
  * Template model
@@ -82,10 +86,39 @@ class Template extends \Magento\Core\Model\Template
      */
     const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 
+    /**
+     * Email template filter
+     *
+     * @var FilterTemplate
+     */
     protected $_templateFilter;
+
+    /**
+     * Email template preprocessed flag
+     *
+     * @var bool
+     */
     protected $_preprocessFlag = false;
+
+    /**
+     * BCC list
+     *
+     * @var array
+     */
     protected $_bcc = array();
+
+    /**
+     * Return path
+     *
+     * @var string
+     */
     protected $_returnPath = '';
+
+    /**
+     * Reply address
+     *
+     * @var string
+     */
     protected $_replyTo = '';
 
     /**
@@ -94,7 +127,7 @@ class Template extends \Magento\Core\Model\Template
     protected $_sendingException = null;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -141,11 +174,11 @@ class Template extends \Magento\Core\Model\Template
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\Url $viewUrl
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Core\Model\ConfigInterface $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param array $data
@@ -158,11 +191,11 @@ class Template extends \Magento\Core\Model\Template
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\View\Url $viewUrl,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\ConfigInterface $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
         array $data = array()
@@ -179,6 +212,8 @@ class Template extends \Magento\Core\Model\Template
 
     /**
      * Initialize email template model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -186,8 +221,7 @@ class Template extends \Magento\Core\Model\Template
     }
 
     /**
-     * Return logo URL for emails
-     * Take logo from theme if custom logo is undefined
+     * Return logo URL for emails. Take logo from theme if custom logo is undefined
      *
      * @param  \Magento\Core\Model\Store|int|string $store
      * @return string
@@ -198,12 +232,26 @@ class Template extends \Magento\Core\Model\Template
         $fileName = $store->getConfig(self::XML_PATH_DESIGN_EMAIL_LOGO);
         if ($fileName) {
             $uploadDir = \Magento\Backend\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
-            $mediaDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+            $mediaDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
             if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
-                return $this->_storeManager->getStore()->getBaseUrl('media') . $uploadDir . '/' . $fileName;
+                return $this->_storeManager->getStore()
+                    ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . $uploadDir . '/' . $fileName;
             }
         }
-        return $this->_viewUrl->getViewFileUrl('Magento_Core::logo_email.gif');
+        return $this->getDefaultEmailLogo();
+    }
+
+    /**
+     * Get default email logo image
+     *
+     * @return string
+     */
+    public function getDefaultEmailLogo()
+    {
+        return $this->_viewUrl->getViewFileUrl(
+            'Magento_Email::logo_email.gif',
+            array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND)
+        );
     }
 
     /**
@@ -235,10 +283,10 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Declare template processing filter
      *
-     * @param   \Magento\Filter\Template $filter
-     * @return  \Magento\Email\Model\Template
+     * @param FilterTemplate $filter
+     * @return $this
      */
-    public function setTemplateFilter(\Magento\Filter\Template $filter)
+    public function setTemplateFilter(FilterTemplate $filter)
     {
         $this->_templateFilter = $filter;
         return $this;
@@ -247,7 +295,7 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Get filter object for template processing log
      *
-     * @return \Magento\Email\Model\Template\Filter
+     * @return Filter
      */
     public function getTemplateFilter()
     {
@@ -262,8 +310,8 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Load template by code
      *
-     * @param   string $templateCode
-     * @return   \Magento\Email\Model\Template
+     * @param string $templateCode
+     * @return $this
      */
     public function loadByCode($templateCode)
     {
@@ -275,7 +323,7 @@ class Template extends \Magento\Core\Model\Template
      * Load default email template
      *
      * @param string $templateId
-     * @return \Magento\Email\Model\Template
+     * @return $this
      */
     public function loadDefault($templateId)
     {
@@ -284,7 +332,7 @@ class Template extends \Magento\Core\Model\Template
         $templateTypeCode = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
         $this->setTemplateType($templateTypeCode);
 
-        $modulesDirectory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $modulesDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         $templateText = $modulesDirectory->readFile($modulesDirectory->getRelativePath($templateFile));
 
         if (preg_match('/<!--@subject\s*(.*?)\s*@-->/u', $templateText, $matches)) {
@@ -316,7 +364,7 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Return template id
      *
-     * return int|null
+     * @return int|null
      */
     public function getId()
     {
@@ -327,7 +375,7 @@ class Template extends \Magento\Core\Model\Template
      * Set id of template
      *
      * @param int $value
-     * @return \Magento\Email\Model\Template
+     * @return $this
      */
     public function setId($value)
     {
@@ -419,9 +467,9 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Get template code for include directive
      *
-     * @param   string $template
-     * @param   array $variables
-     * @return  string
+     * @param string $template
+     * @param array $variables
+     * @return string
      */
     public function getInclude($template, array $variables)
     {
@@ -438,11 +486,11 @@ class Template extends \Magento\Core\Model\Template
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param   array|string       $email        E-mail(s)
-     * @param   array|string|null  $name         receiver name(s)
-     * @param   array              $variables    template variables
-     * @return  boolean
-     **/
+     * @param array|string $email E-mail(s)
+     * @param array|string|null $name receiver name(s)
+     * @param array $variables template variables
+     * @return bool
+     */
     public function send($email, $name = null, array $variables = array())
     {
         if (!$this->isValidForSend()) {
@@ -541,14 +589,14 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Send transactional email to recipient
      *
-     * @param   int|string $templateId
-     * @param   string|array $sender sender information, can be declared as part of config path
-     * @param   string $email recipient email
-     * @param   string $name recipient name
-     * @param   array $vars variables which can be used in template
-     * @param   int|null $storeId
-     * @return  \Magento\Email\Model\Template
-     * @throws  \Magento\Core\Exception
+     * @param int|string $templateId
+     * @param string|array $sender sender information, can be declared as part of config path
+     * @param string $email recipient email
+     * @param string $name recipient name
+     * @param array $vars variables which can be used in template
+     * @param int|null $storeId
+     * @return $this
+     * @throws Exception
      */
     public function sendTransactional($templateId, $sender, $email, $name, $vars = array(), $storeId = null)
     {
@@ -564,7 +612,7 @@ class Template extends \Magento\Core\Model\Template
         }
 
         if (!$this->getId()) {
-            throw new \Magento\Core\Exception(__('Invalid transactional email code: %1', $templateId));
+            throw new Exception(__('Invalid transactional email code: %1', $templateId));
         }
 
         if (!is_array($sender)) {
@@ -589,9 +637,9 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Process email subject
      *
-     * @param   array $variables
-     * @return  string
-     * @throws  \Exception
+     * @param array $variables
+     * @return string
+     * @throws \Exception
      */
     public function getProcessedTemplateSubject(array $variables)
     {
@@ -620,7 +668,7 @@ class Template extends \Magento\Core\Model\Template
      * Add email BCC
      *
      * @param string|array $bcc
-     * @return \Magento\Email\Model\Template
+     * @return $this
      */
     public function addBcc($bcc)
     {
@@ -632,7 +680,7 @@ class Template extends \Magento\Core\Model\Template
      * Set Return Path
      *
      * @param string $email
-     * @return \Magento\Email\Model\Template
+     * @return $this
      */
     public function setReturnPath($email)
     {
@@ -644,7 +692,7 @@ class Template extends \Magento\Core\Model\Template
      * Add Reply-To header
      *
      * @param string $email
-     * @return \Magento\Email\Model\Template
+     * @return $this
      */
     public function setReplyTo($email)
     {
@@ -698,17 +746,17 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Validate email template code
      *
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Email\Model\Template
+     * @throws Exception
+     * @return $this
      */
     protected function _beforeSave()
     {
         $code = $this->getTemplateCode();
         if (empty($code)) {
-            throw new \Magento\Core\Exception(__('The template Name must not be empty.'));
+            throw new Exception(__('The template Name must not be empty.'));
         }
         if ($this->_getResource()->checkCodeUsage($this)) {
-            throw new \Magento\Core\Exception(__('Duplicate Of Template Name'));
+            throw new Exception(__('Duplicate Of Template Name'));
         }
         return parent::_beforeSave();
     }

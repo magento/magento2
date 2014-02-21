@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,31 +35,43 @@ class Url
     const XML_PATH_STATIC_FILE_SIGNATURE = 'dev/static/sign';
 
     /**
-     * @var \Magento\Filesystem
+     * File system
+     *
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
+     * View service
+     *
      * @var \Magento\View\Service
      */
     protected $_viewService;
 
     /**
+     * Publisher
+     *
      * @var \Magento\View\Publisher
      */
     protected $_publisher;
 
     /**
+     * Deployed file manager
+     *
      * @var \Magento\View\DeployedFilesManager
      */
     protected $_deployedFileManager;
 
     /**
+     * URL builder
+     *
      * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
+     * Config
+     *
      * @var \Magento\View\Url\ConfigInterface
      */
     protected $_config;
@@ -72,21 +84,32 @@ class Url
     protected $_fileUrlMap;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * View file system
+     *
+     * @var \Magento\View\FileSystem
+     */
+    protected $_viewFileSystem;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\UrlInterface $urlBuilder
-     * @param Url\ConfigInterface $config
-     * @param Service $viewService
-     * @param Publisher $publisher
-     * @param DeployedFilesManager $deployedFileManager
+     * @param \Magento\View\Url\ConfigInterface $config
+     * @param \Magento\View\Service $viewService
+     * @param \Magento\View\Publisher $publisher
+     * @param \Magento\View\DeployedFilesManager $deployedFileManager
+     * @param \Magento\View\FileSystem $viewFileSystem
      * @param array $fileUrlMap
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\UrlInterface $urlBuilder,
         \Magento\View\Url\ConfigInterface $config,
         \Magento\View\Service $viewService,
         \Magento\View\Publisher $publisher,
         \Magento\View\DeployedFilesManager $deployedFileManager,
+        \Magento\View\FileSystem $viewFileSystem,
         array $fileUrlMap = array()
     ) {
         $this->_filesystem = $filesystem;
@@ -95,6 +118,7 @@ class Url
         $this->_viewService = $viewService;
         $this->_publisher = $publisher;
         $this->_deployedFileManager = $deployedFileManager;
+        $this->_viewFileSystem = $viewFileSystem;
         $this->_fileUrlMap = $fileUrlMap;
     }
 
@@ -129,7 +153,7 @@ class Url
     public function getViewFilePublicPath($fileId, array $params = array())
     {
         $this->_viewService->updateDesignParams($params);
-        $filePath = $this->_viewService->extractScope($fileId, $params);
+        $filePath = $this->_viewService->extractScope($this->_viewFileSystem->normalizePath($fileId), $params);
 
         $publicFilePath = $this->_getFilesManager()->getPublicFilePath($filePath, $params);
 
@@ -152,14 +176,14 @@ class Url
             if (strpos($publicFilePath, $dir) === 0) {
                 $relativePath = ltrim(substr($publicFilePath, strlen($dir)), '\\/');
                 $url = $this->_urlBuilder->getBaseUrl(
-                    array(
-                        '_type' => $urlMap['key'],
-                        '_secure' => $isSecure
-                    )
-                ) . $relativePath;
+                        array(
+                            '_type' => $urlMap['key'],
+                            '_secure' => $isSecure
+                        )
+                    ) . $relativePath;
 
                 if ($this->_isStaticFilesSigned() && $this->_viewService->isViewFileOperationAllowed()) {
-                    $directory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+                    $directory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
                     $fileMTime = $directory->stat($directory->getRelativePath($publicFilePath))['mtime'];
                     $url .= '?' . $fileMTime;
                 }

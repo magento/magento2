@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,7 +39,7 @@ class Install
     protected $_response;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -51,13 +51,13 @@ class Install
     /**
      * @param \Magento\App\State $appState
      * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\App\ActionFlag $actionFlag
      */
     public function __construct(
         \Magento\App\State $appState,
         \Magento\App\ResponseInterface $response,
-        \Magento\Core\Model\Url $url,
+        \Magento\UrlInterface $url,
         \Magento\App\ActionFlag $actionFlag
     ) {
         $this->_appState = $appState;
@@ -71,7 +71,7 @@ class Install
      *
      * @param array $arguments
      * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return \Magento\App\ResponseInterface
+     * @return mixed
      */
     public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
     {

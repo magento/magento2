@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -33,53 +33,10 @@
                     <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="order/invoice/create/items/renderer/default.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="items/column/qty.phtml" group="column"/>
                     <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="items/column/name.phtml" group="column"/>
-                    <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name\Grouped" name="column_name_grouped" template="items/column/name.phtml" group="column"/>
                     <block class="Magento\View\Element\Text\ListText" name="order_item_extra_info"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Totalbar" name="order_totalbar" template="order/totalbar.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">
                         <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="order/totals/tax.phtml"/>
-                        <!--<block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="footer" template="order/totals/footer.phtml">
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="grand" template="order/totals/grand.phtml"/>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="paid" template="order/totals/paid.phtml"/>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="refunded" template="order/totals/refunded.phtml"/>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="due" template="order/totals/due.phtml"/>
-                        </block>
-                        <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="sales.order.view.totals.main" as="main" template="order/totals/main.phtml">
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="tax" template="order/totals/item.phtml">
-                                <action method="setSourceField">
-                                    <argument name="value" xsi:type="string">tax_amount</argument>
-                                </action>
-                                <action method="setLabel">
-                                    <argument name="value" xsi:type="string">Tax</argument>
-                                </action>
-                            </block>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="shipping" template="order/totals/shipping.phtml"/>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="discount" template="order/totals/discount.phtml"/>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="giftcert" template="order/totals/item.phtml">
-                                <action method="setSourceField">
-                                    <argument name="value" xsi:type="string">giftcert_amount</argument>
-                                </action>
-                                <action method="setLabel">
-                                    <argument name="value" xsi:type="string">Gift Certificate</argument>
-                                </action>
-                            </block>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="adjustment_positive" template="order/totals/item.phtml">
-                                <action method="setSourceField">
-                                    <argument name="value" xsi:type="string">adjustment_positive</argument>
-                                </action>
-                                <action method="setLabel">
-                                    <argument name="value" xsi:type="string">Adjustment Refund</argument>
-                                </action>
-                            </block>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Item" name="adjustment_negative" template="order/totals/item.phtml">
-                                <action method="setSourceField">
-                                    <argument name="value" xsi:type="string">adjustment_negative</argument>
-                                </action>
-                                <action method="setLabel">
-                                    <argument name="value" xsi:type="string">Adjustment Fee</argument>
-                                </action>
-                            </block>
-                        </block>-->
                     </block>
                 </block>
             </block>

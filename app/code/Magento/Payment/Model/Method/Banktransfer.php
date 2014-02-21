@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Payment
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model\Method;
 
 /**
  * Bank Transfer payment method model
  */
-namespace Magento\Payment\Model\Method;
-
 class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
 {
     const PAYMENT_METHOD_BANKTRANSFER_CODE = 'banktransfer';
@@ -46,6 +45,12 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      * @var string
      */
     protected $_formBlockType = 'Magento\Payment\Block\Form\Banktransfer';
+
+    /**
+     * Instructions block path
+     *
+     * @var string
+     */
     protected $_infoBlockType = 'Magento\Payment\Block\Info\Instructions';
 
     /**
@@ -57,5 +62,4 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
     {
         return trim($this->getConfigData('instructions'));
     }
-
 }

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Adminhtml
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,14 +38,14 @@ class ResetTest extends \PHPUnit_Framework_TestCase
     private $_resetRobotsBlock;
 
     /**
-     * @var \Magento\Core\Model\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreConfigMock;
 
     protected function setUp()
     {
         $this->coreConfigMock = $this->getMock(
-            'Magento\Core\Model\Config', array('getValue'), array(), '', false
+            'Magento\App\ConfigInterface', array(), array(), '', false
         );
 
         $this->_resetRobotsBlock = new Reset(

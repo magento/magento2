@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,9 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
+
+use Magento\App\ResponseInterface;
+use Magento\Backend\Block\Widget\Grid\ExportInterface;
 
 class Customer extends \Magento\Backend\App\Action
 {
@@ -53,6 +56,11 @@ class Customer extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * Add reports and customer breadcrumbs
+     *
+     * @return $this
+     */
     public function _initAction()
     {
         $act = $this->getRequest()->getActionName();
@@ -72,6 +80,11 @@ class Customer extends \Magento\Backend\App\Action
         return $this;
     }
 
+    /**
+     * New accounts action
+     *
+     * @return void
+     */
     public function accountsAction()
     {
         $this->_title->add(__('New Accounts Report'));
@@ -87,28 +100,41 @@ class Customer extends \Magento\Backend\App\Action
 
     /**
      * Export new accounts report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportAccountsCsvAction()
     {
         $this->_view->loadLayout();
         $fileName = 'new_accounts.csv';
-        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        /** @var ExportInterface $exportBlock */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
-        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile());
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
      * Export new accounts report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportAccountsExcelAction()
     {
         $this->_view->loadLayout();
         $fileName = 'new_accounts.xml';
-        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        /** @var ExportInterface $exportBlock */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
-        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile($fileName));
+        return $this->_fileFactory->create(
+            $fileName,
+            $exportBlock->getExcelFile($fileName),
+            \Magento\App\Filesystem::VAR_DIR
+        );
     }
 
+    /**
+     * Customers by number of orders action
+     *
+     * @return void
+     */
     public function ordersAction()
     {
         $this->_title->add(__('Order Count Report'));
@@ -122,28 +148,37 @@ class Customer extends \Magento\Backend\App\Action
 
     /**
      * Export customers most ordered report to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportOrdersCsvAction()
     {
         $this->_view->loadLayout();
         $fileName = 'customers_orders.csv';
-        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        /** @var ExportInterface $exportBlock */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
         return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile());
     }
 
     /**
      * Export customers most ordered report to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportOrdersExcelAction()
     {
         $this->_view->loadLayout();
         $fileName   = 'customers_orders.xml';
-        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        /** @var ExportInterface $exportBlock */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
         return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile($fileName));
     }
 
+    /**
+     * Customers by orders total action
+     *
+     * @return void
+     */
     public function totalsAction()
     {
         $this->_title->add(__('Order Total Report'));
@@ -157,28 +192,37 @@ class Customer extends \Magento\Backend\App\Action
 
     /**
      * Export customers biggest totals report to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportTotalsCsvAction()
     {
         $this->_view->loadLayout();
         $fileName = 'customer_totals.csv';
-        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        /** @var ExportInterface $exportBlock  */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
         return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile());
     }
 
     /**
      * Export customers biggest totals report to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportTotalsExcelAction()
     {
         $this->_view->loadLayout();
         $fileName = 'customer_totals.xml';
-        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
+        /** @var ExportInterface $exportBlock  */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
         return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile($fileName));
     }
 
+    /**
+     * Determine if action is allowed for reports module
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {

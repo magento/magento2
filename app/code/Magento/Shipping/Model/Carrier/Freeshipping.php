@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Shipping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,24 +55,24 @@ class Freeshipping
     protected $_rateResultFactory;
 
     /**
-     * @var \Magento\Shipping\Model\Rate\Result\MethodFactory
+     * @var \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory
      */
     protected $_rateMethodFactory;
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
-     * @param \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory
+     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Shipping\Model\Rate\Result\ErrorFactory $rateErrorFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
-        \Magento\Shipping\Model\Rate\Result\MethodFactory $rateMethodFactory,
+        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         array $data = array()
     ) {
         $this->_rateResultFactory = $rateResultFactory;
@@ -83,10 +83,10 @@ class Freeshipping
     /**
      * FreeShipping Rates Collector
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @return \Magento\Shipping\Model\Rate\Result|bool
      */
-    public function collectRates(\Magento\Shipping\Model\Rate\Request $request)
+    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;
@@ -100,7 +100,7 @@ class Freeshipping
         if (($request->getFreeShipping())
             || ($request->getBaseSubtotalInclTax() >= $this->getConfigData('free_shipping_subtotal'))
         ) {
-            /** @var \Magento\Shipping\Model\Rate\Result\Method $method */
+            /** @var \Magento\Sales\Model\Quote\Address\RateResult\Method $method */
             $method = $this->_rateMethodFactory->create();
 
             $method->setCarrier('freeshipping');
@@ -121,7 +121,7 @@ class Freeshipping
     /**
      * Allows free shipping when all product items have free shipping (promotions etc.)
      *
-     * @param \Magento\Shipping\Model\Rate\Request $request
+     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return void
      */
     protected function _updateFreeMethodQuote($request)
@@ -143,6 +143,9 @@ class Freeshipping
         }
     }
 
+    /**
+     * @return array
+     */
     public function getAllowedMethods()
     {
         return array('freeshipping'=>$this->getConfigData('name'));

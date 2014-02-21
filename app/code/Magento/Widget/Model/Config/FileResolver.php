@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Widget\Model\Config;
@@ -50,23 +50,23 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     protected $modulesDirectory;
 
     /**
-     * @param \Magento\Filesystem                   $filesystem
+     * @param \Magento\App\Filesystem                   $filesystem
      * @param \Magento\Module\Dir\Reader            $moduleReader
      * @param \Magento\Config\FileIteratorFactory   $iteratorFactory
      */
     public function __construct(
-        \Magento\Filesystem                 $filesystem,
+        \Magento\App\Filesystem                 $filesystem,
         \Magento\Module\Dir\Reader          $moduleReader,
         \Magento\Config\FileIteratorFactory $iteratorFactory
-    ){
-        $this->themesDirectory  = $filesystem->getDirectoryRead(\Magento\Filesystem::THEMES);
-        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+    ) {
+        $this->themesDirectory  = $filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
+        $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         $this->iteratorFactory  = $iteratorFactory;
         $this->_moduleReader    = $moduleReader;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($filename, $scope)
     {
@@ -75,8 +75,10 @@ class FileResolver implements \Magento\Config\FileResolverInterface
                 $iterator = $this->_moduleReader->getConfigurationFiles($filename);
                 break;
             case 'design':
-                $fileList = $this->themesDirectory->search('#/' . preg_quote($filename) . '$#');
-                $iterator = $this->iteratorFactory->create($this->themesDirectory, $fileList);
+                $iterator = $this->iteratorFactory->create(
+                    $this->themesDirectory,
+                    $this->themesDirectory->search('/*/*/etc/' . $filename)
+                );
                 break;
             default:
                 $iterator = $this->iteratorFactory->create($this->themesDirectory, array());;

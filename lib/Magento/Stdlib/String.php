@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     \Magento\Stdlib
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -86,7 +86,7 @@ class String
      * @param bool $keepWords
      * @param bool $trim
      * @param string $wordSeparatorRegex
-     * @return array
+     * @return string[]
      */
     public function split($value, $length = 1, $keepWords = false, $trim = false, $wordSeparatorRegex = '\s')
     {

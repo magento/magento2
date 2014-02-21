@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,6 +35,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product;
 
 class Edit extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/edit.phtml';
 
     /**
@@ -82,6 +85,9 @@ class Edit extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -102,7 +108,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Add elements in layout
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Edit
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -142,34 +148,44 @@ class Edit extends \Magento\Backend\Block\Widget
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return string
+     */
     public function getBackButtonHtml()
     {
         return $this->getChildHtml('back_button');
     }
 
+    /**
+     * @return string
+     */
     public function getCancelButtonHtml()
     {
         return $this->getChildHtml('reset_button');
     }
 
+    /**
+     * @return string
+     */
     public function getSaveButtonHtml()
     {
         return $this->getChildHtml('save_button');
     }
 
+    /**
+     * @return string
+     */
     public function getSaveAndEditButtonHtml()
     {
         return $this->getChildHtml('save_and_edit_button');
     }
 
+    /**
+     * @return string
+     */
     public function getDeleteButtonHtml()
     {
         return $this->getChildHtml('delete_button');
-    }
-
-    public function getDuplicateButtonHtml()
-    {
-        return $this->getChildHtml('duplicate_button');
     }
 
     /**
@@ -182,16 +198,25 @@ class Edit extends \Magento\Backend\Block\Widget
         return $this->getChildHtml('save-split-button');
     }
 
+    /**
+     * @return string
+     */
     public function getValidationUrl()
     {
         return $this->getUrl('catalog/*/validate', array('_current'=>true));
     }
 
+    /**
+     * @return string
+     */
     public function getSaveUrl()
     {
         return $this->getUrl('catalog/*/save', array('_current'=>true, 'back'=>null));
     }
 
+    /**
+     * @return string
+     */
     public function getSaveAndContinueUrl()
     {
         return $this->getUrl('catalog/*/save', array(
@@ -202,11 +227,17 @@ class Edit extends \Magento\Backend\Block\Widget
         ));
     }
 
+    /**
+     * @return mixed
+     */
     public function getProductId()
     {
         return $this->getProduct()->getId();
     }
 
+    /**
+     * @return mixed
+     */
     public function getProductSetId()
     {
         $setId = false;
@@ -216,16 +247,17 @@ class Edit extends \Magento\Backend\Block\Widget
         return $setId;
     }
 
-    public function getIsGrouped()
-    {
-        return $this->getProduct()->isGrouped();
-    }
-
+    /**
+     * @return string
+     */
     public function getDuplicateUrl()
     {
         return $this->getUrl('catalog/*/duplicate', array('_current'=>true));
     }
 
+    /**
+     * @return string
+     */
     public function getHeader()
     {
         if ($this->getProduct()->getId()) {
@@ -236,6 +268,9 @@ class Edit extends \Magento\Backend\Block\Widget
         return $header;
     }
 
+    /**
+     * @return string
+     */
     public function getAttributeSetName()
     {
         if ($setId = $this->getProduct()->getAttributeSetId()) {
@@ -245,19 +280,9 @@ class Edit extends \Magento\Backend\Block\Widget
         return '';
     }
 
-    public function getIsConfigured()
-    {
-        $result = true;
-
-        $product = $this->getProduct();
-        if ($product->isConfigurable()) {
-            $superAttributes = $product->getTypeInstance()->getUsedProductAttributeIds($product);
-            $result = !empty($superAttributes);
-        }
-
-        return $result;
-    }
-
+    /**
+     * @return string
+     */
     public function getSelectedTabId()
     {
         return addslashes(htmlspecialchars($this->getRequest()->getParam('tab')));

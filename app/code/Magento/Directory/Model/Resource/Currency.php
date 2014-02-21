@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,6 +48,7 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main and currency rate tables
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -143,6 +144,7 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Saving currency rates
      *
      * @param array $rates
+     * @return void
      * @throws \Magento\Core\Exception
      */
     public function saveRates($rates)
@@ -176,7 +178,6 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Directory\Model\Currency $model
      * @param string $path
-     *
      * @return array
      */
     public function getConfigCurrencies($model, $path)
@@ -201,7 +202,6 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string|array $currency
      * @param array $toCurrencies
-     *
      * @return array
      */
     public function getCurrencyRates($currency, $toCurrencies = null)

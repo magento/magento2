@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Review\Block\Customer;
 
 /**
  * Customer Reviews list block
@@ -32,8 +32,6 @@
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block\Customer;
-
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
     /**
@@ -44,6 +42,8 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     protected $_collection;
 
     /**
+     * Review resource model
+     *
      * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
      */
     protected $_collectionFactory;
@@ -64,8 +64,14 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     ) {
         $this->_collectionFactory = $collectionFactory;
         parent::__construct($context, $customerSession, $subscriberFactory, $data);
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * Initialize review collection
+     *
+     * @return $this
+     */
     protected function _initCollection()
     {
         $this->_collection = $this->_collectionFactory->create();
@@ -156,7 +162,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Format date in short format
      *
-     * @param $date
+     * @param string $date
      * @return string
      */
     public function dateFormat($date)
@@ -165,6 +171,8 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     }
 
     /**
+     * Add review summary
+     *
      * @return \Magento\View\Element\AbstractBlock
      */
     protected function _beforeToHtml()

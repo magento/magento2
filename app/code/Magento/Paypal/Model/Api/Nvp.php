@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,6 +29,8 @@
  * @TODO: move some parts to abstract, don't hesitate to throw exceptions on api calls
  */
 namespace Magento\Paypal\Model\Api;
+
+use Magento\Payment\Model\Cart;
 
 class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 {
@@ -454,9 +456,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @var array
      */
     protected $_lineItemTotalExportMap = array(
-        \Magento\Paypal\Model\Cart::TOTAL_SUBTOTAL => 'ITEMAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_TAX      => 'TAXAMT',
-        \Magento\Paypal\Model\Cart::TOTAL_SHIPPING => 'SHIPPINGAMT',
+        Cart::AMOUNT_SUBTOTAL => 'ITEMAMT',
+        Cart::AMOUNT_TAX      => 'TAXAMT',
+        Cart::AMOUNT_SHIPPING => 'SHIPPINGAMT',
     );
     protected $_lineItemExportItemsFormat = array(
         'id'     => 'L_NUMBER%d',
@@ -518,7 +520,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @var array
      */
     protected $_doReferenceTransactionRequest = array('REFERENCEID', 'PAYMENTACTION', 'AMT', 'ITEMAMT', 'SHIPPINGAMT',
-        'TAXAMT', 'INVNUM', 'NOTIFYURL'
+        'TAXAMT', 'INVNUM', 'NOTIFYURL', 'CURRENCYCODE'
     );
     protected $_doReferenceTransactionResponse = array('BILLINGAGREEMENTID', 'TRANSACTIONID');
 
@@ -1210,7 +1212,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         if (!$this->_cart) {
             return;
         }
-        $this->_cart->isDiscountAsItem(true);
+        $this->_cart->setTransferDiscountAsItem();
         return parent::_exportLineItems($request, $i);
     }
 

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,7 +56,7 @@ abstract class AbstractType
     protected $_isComposite = false;
 
     /**
-     * Is a configurable product type
+     * If product can be configured
      *
      * @var bool
      */
@@ -107,7 +107,7 @@ abstract class AbstractType
     const OPTION_PREFIX = 'option_';
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -125,6 +125,7 @@ abstract class AbstractType
      * Delete data specific for this product type
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @return void
      */
     abstract public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product);
 
@@ -185,7 +186,7 @@ abstract class AbstractType
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param array $data
@@ -198,7 +199,7 @@ abstract class AbstractType
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Logger $logger,
         array $data = array()
@@ -354,7 +355,7 @@ abstract class AbstractType
      */
     public function isSalable($product)
     {
-        $salable = $product->getStatus() == \Magento\Catalog\Model\Product\Status::STATUS_ENABLED;
+        $salable = $product->getStatus() == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
         if ($salable && $product->hasData('is_salable')) {
             $salable = $product->getData('is_salable');
         }
@@ -384,13 +385,13 @@ abstract class AbstractType
             return $options;
         }
         // try to found super product configuration
-        // (if product was buying within grouped product)
         $superProductConfig = $buyRequest->getSuperProductConfig();
         if (!empty($superProductConfig['product_id'])
             && !empty($superProductConfig['product_type'])
         ) {
             $superProductId = (int)$superProductConfig['product_id'];
             if ($superProductId) {
+                /** @var \Magento\Catalog\Model\Product $superProduct */
                 $superProduct = $this->_coreRegistry->registry('used_super_product_' . $superProductId);
                 if (!$superProduct) {
                     $superProduct = $this->_productFactory->create()->load($superProductId);
@@ -484,7 +485,7 @@ abstract class AbstractType
     /**
      * Process File Queue
      *
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function processFileQueue()
@@ -505,8 +506,8 @@ abstract class AbstractType
                         $path = dirname($dst);
 
                         try {
-                            $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT)->create($path);
-                        } catch (\Magento\Filesystem\Exception $e) {
+                            $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)->create($path);
+                        } catch (\Magento\Filesystem\FilesystemException $e) {
                             throw new \Magento\Core\Exception(
                                 __("We can't create writeable directory \"%1\".", $path)
                             );
@@ -541,6 +542,7 @@ abstract class AbstractType
      *                              (eg. ['operation'=>'move',
      *                                    'src_name'=>'filename',
      *                                    'dst_name'=>'filename2'])
+     * @return void
      */
     public function addFileQueue($queueOptions)
     {
@@ -608,7 +610,7 @@ abstract class AbstractType
      * Check if product can be bought
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function checkProductBuyState($product)
@@ -686,7 +688,7 @@ abstract class AbstractType
      * Save type related data
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      */
     public function save($product)
     {
@@ -704,6 +706,7 @@ abstract class AbstractType
      * Remove don't applicable attributes data
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @return void
      */
     protected function _removeNotApplicableAttributes($product)
     {
@@ -721,7 +724,7 @@ abstract class AbstractType
      * Before save type related data
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      */
     public function beforeSave($product)
     {
@@ -731,7 +734,7 @@ abstract class AbstractType
     }
 
     /**
-     * Check if product is composite (grouped, configurable, etc)
+     * Check if product is composite
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
@@ -742,7 +745,7 @@ abstract class AbstractType
     }
 
     /**
-     * Check if product is configurable
+     * Check if product can be configured
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
@@ -818,7 +821,7 @@ abstract class AbstractType
      * Default action to get weight of product
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return decimal
+     * @return float
      */
     public function getWeight($product)
     {
@@ -850,10 +853,10 @@ abstract class AbstractType
      *
      * @param array $options
      * @param \Magento\Object $option
-     * @param mixed $value
+     * @param int|float|null $value
      * @param \Magento\Catalog\Model\Product $product
      *
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      */
     public function updateQtyOption($options, \Magento\Object $option, $value, $product)
     {
@@ -891,7 +894,7 @@ abstract class AbstractType
      *
      * @param $store int|\Magento\Core\Model\Store
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      */
     public function setStoreFilter($store, $product)
     {
@@ -915,7 +918,7 @@ abstract class AbstractType
     /**
      * Prepare Quote Item Quantity
      *
-     * @param mixed $qty
+     * @param int|float $qty
      * @param \Magento\Catalog\Model\Product $product
      * @return float
      */
@@ -931,7 +934,7 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $optionProduct
      * @param \Magento\Sales\Model\Quote\Item\Option $option
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      */
     public function assignProductToOption($optionProduct, $option, $product)
     {
@@ -948,7 +951,7 @@ abstract class AbstractType
      * Setting specified product type variables
      *
      * @param array $config
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      */
     public function setConfig($config)
     {
@@ -1066,7 +1069,7 @@ abstract class AbstractType
      * Set image for product without image if possible
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return $this
      */
     public function setImageFromChildProduct(\Magento\Catalog\Model\Product $product)
     {

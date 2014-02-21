@@ -20,42 +20,43 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
 <?php /** @var $this \Magento\Weee\Block\Renderer\Weee\Tax */?>
 <div id="attribute-<?php echo $this->getElement()->getHtmlId(); ?>-container" class="field"
      data-element-id="<?php echo $this->getElement()->getHtmlId(); ?>"
-     data-mage-init="{fptAttribute:{
-        region: <?php echo $this->escapeHtml($this->helper('Magento\Directory\Helper\Data')->getRegionJson()) ?>,
-        itemsData: <?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getValues())); ?>,
-        bundlePriceType: '#price_type'
-        }}">
+     data-mage-init='{"fptAttribute":{
+        "region": <?php echo $this->escapeHtml($this->helper('Magento\Directory\Helper\Data')->getRegionJson()) ?>,
+        "itemsData": <?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getValues())); ?>,
+        "bundlePriceType": "#price_type"
+     }}'>
     <label class="label"><span><?php echo $this->getElement()->getLabel() ?></span></label>
 
     <div class="control">
         <table class="data-table" cellspacing="0">
             <thead>
-            <tr class="headings">
-                <th <?php if (!$this->isMultiWebsites()): ?>style="display:none"<?php endif; ?>><?php echo __('Website') ?></th>
-                <th><?php echo __('Country/State') ?><span class="required">*</span></th>
-                <th><?php echo __('Tax') ?><span class="required">*</span></th>
-                <th><?php echo __('Action') ?></th>
-            </tr>
+                <tr>
+                    <th class="col-website" <?php if (!$this->isMultiWebsites()): ?>style="display: none;"<?php endif; ?>><?php echo __('Website'); ?></th>
+                    <th class="col-country required"><?php echo __('Country/State'); ?></th>
+                    <th class="col-tax required"><?php echo __('Tax'); ?></th>
+                    <th class="col-action"><?php echo __('Action'); ?></th>
+                </tr>
             </thead>
-            <tbody data-role="fpt-item-container">
-            </tbody>
             <tfoot>
-            <tr>
-                <td colspan="4"><?php echo $this->getAddButtonHtml() ?></td>
-            </tr>
+                <tr>
+                    <td colspan="4"><?php echo $this->getAddButtonHtml(); ?></td>
+                </tr>
             </tfoot>
+            <tbody data-role="fpt-item-container" class="fpt-item-container">
+            </tbody>
         </table>
     </div>
+
     <script data-role="row-template" type="text/x-jquery-tmpl">
         <tr id="<?php echo $this->getElement()->getHtmlId() ?>_weee_tax_row_${index}" data-role="fpt-item-row">
-            <td <?php if (!$this->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
+            <td class="col-website" <?php if (!$this->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
                 <select name="<?php echo $this->getElement()->getName() ?>[${index}][website_id]"
                         class="<?php echo $this->getElement()->getClass() ?> website required-entry" data-role="select-website">
                     <?php foreach ($this->getWebsites() as $_websiteId => $_info): ?>
@@ -63,7 +64,7 @@
                     <?php endforeach ?>
                 </select>
             </td>
-            <td>
+            <td class="col-country">
                 <select id="<?php echo $this->getElement()->getName() ?>_weee_tax_row_${index}_country"
                         name="<?php echo $this->getElement()->getName() ?>[${index}][country]"
                         class="<?php echo $this->getElement()->getClass() ?> country required-entry" data-role="select-country">
@@ -77,12 +78,12 @@
                     <option value="0">*</option>
                 </select>
             </td>
-            <td>
+            <td class="col-tax">
                 <input name="<?php echo $this->getElement()->getName() ?>[${index}][price]"
                        class="<?php echo $this->getElement()->getClass() ?> required-entry validate-greater-than-zero"
                        type="text" value="${value}"/>
             </td>
-            <td>
+            <td class="col-action">
                 <input name="<?php echo $this->getElement()->getName() ?>[${index}][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
                 <?php echo $this->getChildHtml('delete_button') ?>
             </td>

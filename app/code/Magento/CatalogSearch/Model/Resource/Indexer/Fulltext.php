@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\CatalogSearch\Model\Resource\Indexer;
 
 /**
  * CatalogSearch fulltext indexer resource model
@@ -32,12 +32,12 @@
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource\Indexer;
-
 class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define catalog product table as main table
+     *
+     * @return void
      */
     protected function _construct()
     {

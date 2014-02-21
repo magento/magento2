@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,6 +44,7 @@ class Website extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -65,7 +66,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Product\Website
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function removeProducts($websiteIds, $productIds)
@@ -85,7 +86,7 @@ class Website extends \Magento\Core\Model\AbstractModel
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Product\Website
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function addProducts($websiteIds, $productIds)

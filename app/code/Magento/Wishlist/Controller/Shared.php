@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Wishlist
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Controller;
 
-class Shared extends \Magento\Wishlist\Controller\AbstractController
+class Shared extends AbstractController
 {
     /**
      * Core registry
@@ -45,14 +45,16 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
 
     /**
      * @param \Magento\App\Action\Context $context
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Core\Model\Registry $coreRegistry
      */
     public function __construct(
         \Magento\App\Action\Context $context,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         \Magento\Core\Model\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context);
+        parent::__construct($context, $formKeyValidator);
     }
 
     /**
@@ -80,6 +82,7 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
     /**
      * Shared wishlist view page
      *
+     * @return void
      */
     public function indexAction()
     {
@@ -106,6 +109,7 @@ class Shared extends \Magento\Wishlist\Controller\AbstractController
      * If Product has required options - redirect
      * to product view page with message about needed defined required options
      *
+     * @return \Zend_Controller_Response_Abstract
      */
     public function cartAction()
     {

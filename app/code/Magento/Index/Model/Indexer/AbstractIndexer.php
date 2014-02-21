@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Index
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,9 +30,15 @@
  */
 namespace Magento\Index\Model\Indexer;
 
+use Magento\Index\Model\Event;
+use Magento\Index\Model\IndexerInterface;
+
 abstract class AbstractIndexer extends \Magento\Core\Model\AbstractModel
-    implements \Magento\Index\Model\IndexerInterface
+    implements IndexerInterface
 {
+    /**
+     * @var array
+     */
     protected $_matchedEntities = array();
 
     /**
@@ -62,24 +68,26 @@ abstract class AbstractIndexer extends \Magento\Core\Model\AbstractModel
     /**
      * Register indexer required data inside event object
      *
-     * @param   \Magento\Index\Model\Event $event
+     * @param   Event $event
+     * @return  void
      */
-    abstract protected function _registerEvent(\Magento\Index\Model\Event $event);
+    abstract protected function _registerEvent(Event $event);
 
     /**
      * Process event based on event state data
      *
-     * @param   \Magento\Index\Model\Event $event
+     * @param   Event $event
+     * @return  $this
      */
-    abstract protected function _processEvent(\Magento\Index\Model\Event $event);
+    abstract protected function _processEvent(Event $event);
 
     /**
      * Register data required by process in event object
      *
-     * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Index\Model\IndexerInterface
+     * @param Event $event
+     * @return IndexerInterface
      */
-    public function register(\Magento\Index\Model\Event $event)
+    public function register(Event $event)
     {
         if ($this->matchEvent($event)) {
             $this->_registerEvent($event);
@@ -90,10 +98,10 @@ abstract class AbstractIndexer extends \Magento\Core\Model\AbstractModel
     /**
      * Process event
      *
-     * @param   \Magento\Index\Model\Event $event
-     * @return  \Magento\Index\Model\Indexer\AbstractIndexer
+     * @param   Event $event
+     * @return  $this
      */
-    public function processEvent(\Magento\Index\Model\Event $event)
+    public function processEvent(Event $event)
     {
         if ($this->matchEvent($event)) {
             $this->_processEvent($event);
@@ -104,10 +112,10 @@ abstract class AbstractIndexer extends \Magento\Core\Model\AbstractModel
     /**
      * Check if event can be matched by process
      *
-     * @param \Magento\Index\Model\Event $event
+     * @param Event $event
      * @return bool
      */
-    public function matchEvent(\Magento\Index\Model\Event $event)
+    public function matchEvent(Event $event)
     {
         $entity = $event->getEntity();
         $type   = $event->getType();
@@ -133,6 +141,8 @@ abstract class AbstractIndexer extends \Magento\Core\Model\AbstractModel
 
     /**
      * Rebuild all index data
+     *
+     * @return  void
      */
     public function reindexAll()
     {
@@ -143,10 +153,10 @@ abstract class AbstractIndexer extends \Magento\Core\Model\AbstractModel
      * Try dynamicly detect and call event hanler from resource model.
      * Handler name will be generated from event entity and type code
      *
-     * @param   \Magento\Index\Model\Event $event
-     * @return  \Magento\Index\Model\Indexer\AbstractIndexer
+     * @param   Event $event
+     * @return  $this
      */
-    public function callEventHandler(\Magento\Index\Model\Event $event)
+    public function callEventHandler(Event $event)
     {
         if ($event->getEntity()) {
             $method = $event->getEntity() . '_' . $event->getType();

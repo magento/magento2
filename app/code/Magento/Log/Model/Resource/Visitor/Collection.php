@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Log
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Log\Model\Resource\Visitor;
 
 /**
  * Visitor log collection
@@ -32,9 +32,6 @@
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Log\Model\Resource\Visitor;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -115,6 +112,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * Collection resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -133,7 +132,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter for customers only
      *
-     * @return \Magento\Log\Model\Resource\Visitor\Collection
+     * @return $this
      */
     public function showCustomersOnly()
     {
@@ -148,7 +147,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param string $fieldName
      * @param array $condition
-     * @return \Magento\Log\Model\Resource\Visitor\Collection
+     * @return $this
      */
     public function addFieldToFilter($fieldName, $condition = null)
     {
@@ -197,7 +196,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Return true if online filter used
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsOnlineFilterUsed()
     {
@@ -207,7 +206,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter visitors by specified store ids
      *
-     * @param array|int $storeIds
+     * @param int[]|int $storeIds
+     * @return void
      */
     public function addVisitorStoreFilter($storeIds)
     {

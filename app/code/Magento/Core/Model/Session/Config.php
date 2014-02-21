@@ -20,17 +20,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Session;
+
+use Magento\Session\Config\ConfigInterface;
 
 /**
  * Magento session configuration
  *
  * @method Config setSaveHandler()
  */
-class Config implements \Magento\Session\Config\ConfigInterface
+class Config implements ConfigInterface
 {
     /**
      * Configuration path for session save method
@@ -102,7 +104,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
     /**
      * List of boolean options
      *
-     * @var array
+     * @var string[]
      */
     protected $booleanOptions = array(
         'session.use_cookies',
@@ -117,7 +119,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
     protected $_appState;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -127,7 +129,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
      * @param \Magento\Stdlib\String $stringHelper
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\App\State $appState
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $saveMethod
      * @param null|string $savePath
      * @param null|string $cacheLimiter
@@ -138,7 +140,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
         \Magento\Stdlib\String $stringHelper,
         \Magento\App\RequestInterface $request,
         \Magento\App\State $appState,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $saveMethod = \Magento\Session\SaveHandlerInterface::DEFAULT_HANDLER,
         $savePath = null,
         $cacheLimiter = null
@@ -174,7 +176,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
         $domain = $this->_storeConfig->getConfig(self::XML_PATH_COOKIE_DOMAIN, $this->_storeManager->getStore());
         $domain = empty($domain) ? $this->_httpRequest->getHttpHost() : $domain;
         $this->setCookieDomain((string)$domain);
-        $this->setCookieSecure($this->_httpRequest->isSecure());
+
         $this->setCookieHttpOnly(
             $this->_storeConfig->getConfig(self::XML_PATH_COOKIE_HTTPONLY, $this->_storeManager->getStore())
         );
@@ -504,7 +506,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
      * Set storage option in backend configuration store
      *
      * @param string $option
-     * @param mixed $value
+     * @param string $value
      * @return $this
      * @throws \InvalidArgumentException
      */
@@ -522,7 +524,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
      * Retrieve a storage option from a backend configuration store
      *
      * @param string $option
-     * @return mixed
+     * @return string|bool
      */
     protected function getStorageOption($option)
     {
@@ -567,7 +569,7 @@ class Config implements \Magento\Session\Config\ConfigInterface
      * @param  string $method
      * @param  array $args
      * @return mixed
-     * @throws \BadMethodCallException on non-getter/setter method
+     * @throws \BadMethodCallException On non-getter/setter method
      */
     public function __call($method, $args)
     {

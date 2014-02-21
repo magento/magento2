@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,6 +57,7 @@ class Send extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -73,7 +74,8 @@ class Send extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\Model\Session $customerSession,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_customerSession = $customerSession;
         parent::__construct(
@@ -88,8 +90,10 @@ class Send extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -102,16 +106,25 @@ class Send extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this->_customerSession->getCustomer()->getName();
     }
 
+    /**
+     * @return string
+     */
     public function getEmail()
     {
         return (string)$this->_customerSession->getCustomer()->getEmail();
     }
 
+    /**
+     * @return mixed
+     */
     public function getProductId()
     {
         return $this->getRequest()->getParam('id');
     }
 
+    /**
+     * @return int
+     */
     public function getMaxRecipients()
     {
         $sendToFriendModel = $this->_coreRegistry->registry('send_to_friend_model');

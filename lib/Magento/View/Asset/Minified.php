@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,38 +29,51 @@ namespace Magento\View\Asset;
  */
 class Minified implements MergeableInterface
 {
-
     /**
+     * LocalInterface
+     *
      * @var LocalInterface
      */
     protected $originalAsset;
 
     /**
+     * Minfier
+     *
      * @var \Magento\Code\Minifier
      */
     protected $minifier;
 
     /**
+     * File
+     *
      * @var string
      */
     protected $file;
 
     /**
+     * URL
+     *
      * @var string
      */
     protected $url;
 
     /**
+     * View URL
+     *
      * @var \Magento\View\Url
      */
     protected $viewUrl;
 
     /**
+     * Logger
+     *
      * @var \Magento\Logger
      */
     protected $logger;
 
     /**
+     * Constructor
+     *
      * @param LocalInterface $asset
      * @param \Magento\Code\Minifier $minifier
      * @param \Magento\View\Url $viewUrl
@@ -110,6 +123,8 @@ class Minified implements MergeableInterface
 
     /**
      * Minify content of child asset
+     *
+     * @return void
      */
     protected function process()
     {

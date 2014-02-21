@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -81,7 +81,7 @@
                 <group>paypal</group>
                 <verify_peer>1</verify_peer>
             </paypal_standard>
-            <paypaluk_express>
+            <payflow_express>
                 <title>PayPal Express Checkout Payflow Edition</title>
                 <payment_action>Authorization</payment_action>
                 <line_items_enabled>1</line_items_enabled>
@@ -89,16 +89,18 @@
                 <visible_on_product>1</visible_on_product>
                 <group>paypal</group>
                 <verify_peer>1</verify_peer>
-            </paypaluk_express>
-            <paypaluk_direct>
+                <model>Magento\Paypal\Model\PayflowExpress</model>
+            </payflow_express>
+            <payflow_direct>
                 <title>PayPal Direct Payment Payflow Edition</title>
                 <payment_action>Authorization</payment_action>
                 <cctypes>VI,MC,AE</cctypes>
                 <useccv>1</useccv>
                 <group>paypal</group>
                 <verify_peer>1</verify_peer>
-            </paypaluk_direct>
-            <verisign>
+                <model>Magento\Paypal\Model\PayflowDirect</model>
+            </payflow_direct>
+            <payflowpro>
                 <model>Magento\Paypal\Model\Payflowpro</model>
                 <title>Payflow Pro</title>
                 <payment_action>Authorization</payment_action>
@@ -110,7 +112,7 @@
                 <pwd backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
                 <group>paypal</group>
                 <verify_peer>1</verify_peer>
-            </verisign>
+            </payflowpro>
             <paypal_billing_agreement>
                 <active>1</active>
                 <allow_billing_agreement_wizard>1</allow_billing_agreement_wizard>

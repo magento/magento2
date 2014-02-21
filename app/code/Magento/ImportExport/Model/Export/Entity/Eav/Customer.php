@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export\Entity\Eav;
 
 /**
  * Export entity customer model
@@ -33,8 +34,6 @@
  *
  * @method \Magento\Customer\Model\Resource\Attribute\Collection getAttributeCollection() getAttributeCollection()
  */
-namespace Magento\ImportExport\Model\Export\Entity\Eav;
-
 class Customer
     extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -75,21 +74,21 @@ class Customer
     /**
      * Array of attributes codes which are disabled for export
      *
-     * @var array
+     * @var string[]
      */
     protected $_disabledAttributes = array('default_billing', 'default_shipping');
 
     /**
      * Attributes with index (not label) value.
      *
-     * @var array
+     * @var string[]
      */
     protected $_indexValueAttributes = array('group_id', 'website_id', 'store_id');
 
     /**
      * Permanent entity columns.
      *
-     * @var array
+     * @var string[]
      */
     protected $_permanentAttributes = array(self::COLUMN_EMAIL, self::COLUMN_WEBSITE, self::COLUMN_STORE);
 
@@ -102,7 +101,7 @@ class Customer
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -112,7 +111,7 @@ class Customer
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -121,7 +120,7 @@ class Customer
         array $data = array()
     ) {
         parent::__construct(
-            $coreStoreConfig, $app, $collectionFactory, $resourceColFactory, $locale, $eavConfig, $data
+            $coreStoreConfig, $storeManager, $collectionFactory, $resourceColFactory, $locale, $eavConfig, $data
         );
 
         $this->_customerCollection = isset($data['customer_collection']) ? $data['customer_collection']
@@ -160,7 +159,7 @@ class Customer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _getHeaderColumns()
     {
@@ -172,7 +171,7 @@ class Customer
      * Export given customer data
      *
      * @param \Magento\Customer\Model\Customer $item
-     * @return string
+     * @return void
      */
     public function exportItem($item)
     {

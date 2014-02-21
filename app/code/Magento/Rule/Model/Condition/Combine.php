@@ -20,14 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Rule
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 
 namespace Magento\Rule\Model\Condition;
 
-class Combine extends \Magento\Rule\Model\Condition\AbstractCondition
+class Combine extends AbstractCondition
 {
     /**
      * Store all used condition models
@@ -47,10 +47,10 @@ class Combine extends \Magento\Rule\Model\Condition\AbstractCondition
     protected $_logger;
 
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
+     * @param Context $context
      * @param array $data
      */
-    public function __construct(\Magento\Rule\Model\Condition\Context $context, array $data = array())
+    public function __construct(Context $context, array $data = array())
     {
         $this->_conditionFactory = $context->getConditionFactory();
         $this->_logger = $context->getLogger();
@@ -80,7 +80,7 @@ class Combine extends \Magento\Rule\Model\Condition\AbstractCondition
      * It's made by performance reasons to avoid initialization of same models each time when rules are being processed.
      *
      * @param  string $modelClass
-     * @return \Magento\Rule\Model\Condition\AbstractCondition|bool
+     * @return AbstractCondition|bool
      */
     protected function _getNewConditionModelInstance($modelClass)
     {
@@ -303,6 +303,9 @@ class Combine extends \Magento\Rule\Model\Condition\AbstractCondition
         return $html;
     }
 
+    /**
+     * @return $this
+     */
     public function getNewChildElement()
     {
         return $this->getForm()->addField($this->getPrefix() . '__' . $this->getId() . '__new_child', 'select', array(
@@ -403,7 +406,7 @@ class Combine extends \Magento\Rule\Model\Condition\AbstractCondition
      * Set conditions, if current prefix is undefined use 'conditions' key
      *
      * @param array $conditions
-     * @return \Magento\Rule\Model\Condition\Combine
+     * @return $this
      */
     public function setConditions($conditions)
     {

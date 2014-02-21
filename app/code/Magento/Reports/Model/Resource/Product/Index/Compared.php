@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,6 +39,7 @@ class Compared extends \Magento\Reports\Model\Resource\Product\Index\AbstractInd
     /**
      * Initialize connection and main resource table
      *
+     * @return void
      */
     protected function _construct()
     {

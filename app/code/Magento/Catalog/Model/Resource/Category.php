@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@
  */
 namespace Magento\Catalog\Model\Resource;
 
-class Category extends \Magento\Catalog\Model\Resource\AbstractResource
+class Category extends AbstractResource
 {
     /**
      * Category tree object
@@ -143,7 +143,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Set store Id
      *
      * @param integer $storeId
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -184,7 +184,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * delete child categories
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _beforeDelete(\Magento\Object $object)
     {
@@ -208,7 +208,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Delete children categories of specific category
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     public function deleteChildren(\Magento\Object $object)
     {
@@ -241,7 +241,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * prepare path and increment children count for parent categories
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _beforeSave(\Magento\Object $object)
     {
@@ -281,7 +281,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * save related products ids and update path value
      *
      * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _afterSave(\Magento\Object $object)
     {
@@ -301,7 +301,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Update path field
      *
      * @param \Magento\Catalog\Model\Category $object
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _savePath($object)
     {
@@ -346,7 +346,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Save category products relation
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     protected function _saveCategoryProducts($category)
     {
@@ -647,7 +647,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * Return parent categories of category
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @return array
+     * @return \Magento\Object[]
      */
     public function getParentCategories($category)
     {
@@ -823,7 +823,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
      * @param \Magento\Catalog\Model\Category $category
      * @param \Magento\Catalog\Model\Category $newParent
      * @param null|int $afterCategoryId
-     * @return \Magento\Catalog\Model\Resource\Category
+     * @return $this
      */
     public function changeParent(\Magento\Catalog\Model\Category $category, \Magento\Catalog\Model\Category $newParent,
         $afterCategoryId = null
@@ -884,6 +884,7 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
 
         // Update category object to new data
         $category->addData($data);
+        $category->unsetData('path_ids');
 
         return $this;
     }
@@ -920,32 +921,19 @@ class Category extends \Magento\Catalog\Model\Resource\AbstractResource
                 ->from($table, 'position')
                 ->where('entity_id = :entity_id');
             $position = $adapter->fetchOne($select, array('entity_id' => $afterCategoryId));
-
-            $bind = array(
-                'position' => new \Zend_Db_Expr($positionField . ' + 1')
-            );
-            $where = array(
-                'parent_id = ?' => $newParent->getId(),
-                $positionField . ' > ?' => $position
-            );
-            $adapter->update($table, $bind, $where);
-        } elseif ($afterCategoryId !== null) {
-            $position = 0;
-            $bind = array(
-                'position' => new \Zend_Db_Expr($positionField . ' + 1')
-            );
-            $where = array(
-                'parent_id = ?' => $newParent->getId(),
-                $positionField . ' > ?' => $position
-            );
-            $adapter->update($table, $bind, $where);
+            $position += 1;
         } else {
-            $select = $adapter->select()
-                ->from($table, array('position' => new \Zend_Db_Expr('MIN(' . $positionField . ')')))
-                ->where('parent_id = :parent_id');
-            $position = $adapter->fetchOne($select, array('parent_id' => $newParent->getId()));
+            $position = 1;
         }
-        $position += 1;
+
+        $bind = array(
+            'position' => new \Zend_Db_Expr($positionField . ' + 1')
+        );
+        $where = array(
+            'parent_id = ?' => $newParent->getId(),
+            $positionField . ' >= ?' => $position
+        );
+        $adapter->update($table, $bind, $where);
 
         return $position;
     }

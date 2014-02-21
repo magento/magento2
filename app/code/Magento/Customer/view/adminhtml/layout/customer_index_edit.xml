@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -32,11 +32,6 @@
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-composite-configure-js">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_Catalog::catalog/product/composite/configure.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="varien-configurable-js">
-            <arguments>
-                <argument name="file" xsi:type="string">varien/configurable.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-customer-edit-tab-js-addresses.js">
@@ -62,12 +57,8 @@
     </referenceContainer>
     <referenceBlock name="customer_edit_tabs">
         <action method="addTab">
-            <argument name="name" xsi:type="string">customer_edit_tab_agreements</argument>
-            <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Customer\Edit\Tab\Agreement</argument>
-        </action>
-        <action method="addTab">
             <argument name="name" xsi:type="string">customer_edit_tab_recurring_profile</argument>
-            <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Customer\Edit\Tab\Recurring\Profile</argument>
+            <argument name="block" xsi:type="string">Magento\RecurringProfile\Block\Adminhtml\Customer\Edit\Tab\RecurringProfile</argument>
         </action>
     </referenceBlock>
 </layout>

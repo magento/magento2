@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\File\Storage;
 
 /**
@@ -32,7 +31,7 @@ namespace Magento\Core\Model\Resource\File\Storage;
 class File
 {
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -42,11 +41,11 @@ class File
     protected $_logger;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Logger $log
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Logger $log
     ) {
         $this->_logger = $log;
@@ -59,23 +58,21 @@ class File
      * @param string $dir
      * @return array
      */
-    public function getStorageData($dir = '')
+    public function getStorageData($dir = '/')
     {
         $files          = array();
         $directories    = array();
-
-        $directoryInstance = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        $directoryInstance = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
         if ($directoryInstance->isDirectory($dir)) {
-            foreach ($directoryInstance->read($dir) as $path) {
+            foreach ($directoryInstance->readRecursively($dir) as $path) {
                 $itemName = basename($path);
                 if ($itemName == '.svn' || $itemName == '.htaccess') {
                     continue;
                 }
-
                 if ($directoryInstance->isDirectory($path)) {
                     $directories[] = array(
                         'name' => $itemName,
-                        'path' => dirname($path)
+                        'path' => (dirname($path) == '.') ? '/' : dirname($path)
                     );
                 } else {
                     $files[] = $path;
@@ -90,11 +87,11 @@ class File
      * Clear files and directories in storage
      *
      * @param string $dir
-     * @return \Magento\Core\Model\Resource\File\Storage\File
+     * @return $this
      */
     public function clear($dir = '')
     {
-        $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         if ($directoryInstance->isDirectory($dir)) {
             foreach ($directoryInstance->read($dir) as $path) {
                 $directoryInstance->delete($path);
@@ -122,11 +119,11 @@ class File
             : $dir['name'];
 
         try {
-            $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA)->create($path);
+            $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR)->create($path);
         } catch (\Exception $e) {
             $this->_logger->log($e->getMessage());
             throw new \Magento\Core\Exception(
-                __('Unable to create directory: %1', \Magento\Filesystem::MEDIA . '/' . $path)
+                __('Unable to create directory: %1', \Magento\App\Filesystem::MEDIA_DIR . '/' . $path)
             );
         }
 
@@ -145,7 +142,7 @@ class File
     public function saveFile($filePath, $content, $overwrite = false)
     {
         try {
-            $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+            $directoryInstance = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
             if (!$directoryInstance->isFile($filePath) || ($overwrite && $directoryInstance->delete($filePath))) {
                 $directoryInstance->writeFile($filePath, $content);
                 return true;

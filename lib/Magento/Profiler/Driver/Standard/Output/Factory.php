@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Profiler\Driver\Standard\Output;
+
+use Magento\Profiler\Driver\Standard\OutputInterface;
 
 class Factory
 {
@@ -59,7 +61,7 @@ class Factory
      * Create instance of standard profiler driver output
      *
      * @param array $config
-     * @return \Magento\Profiler\Driver\Standard\OutputInterface
+     * @return OutputInterface
      * @throws \InvalidArgumentException If driver cannot be created
      */
     public function create(array $config)
@@ -76,7 +78,7 @@ class Factory
             }
         }
         $output = new $class($config);
-        if (!$output instanceof \Magento\Profiler\Driver\Standard\OutputInterface) {
+        if (!$output instanceof OutputInterface) {
             throw new \InvalidArgumentException(sprintf(
                 "Output class \"%s\" must implement \Magento\Profiler\Driver\Standard\OutputInterface.",
                 get_class($output)

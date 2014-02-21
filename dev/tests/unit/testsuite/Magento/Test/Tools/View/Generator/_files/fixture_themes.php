@@ -20,7 +20,7 @@
  *
  * @category    Tools
  * @package     unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,7 +60,7 @@ return array(
         ),
         'filesystem_glob_map' => array(
             array(
-                '#.*_.*#', '/base/dir/area_one/fixture/theme_one/',
+                '*_*', '/base/dir/area_one/fixture/theme_one/',
                 array('/base/dir/area_one/fixture/theme_one/Magento_Core'),
             ),
         ),
@@ -103,7 +103,7 @@ return array(
         ),
         'filesystem_glob_map' => array(
             array(
-                '#.*_.*#', '/base/dir/area_one/fixture/theme_two/',
+                '*_*', '/base/dir/area_one/fixture/theme_two/',
                 array(
                     '/base/dir/area_one/fixture/theme_two/Fixture_ModuleOne',
                     '/base/dir/area_one/fixture/theme_two/Fixture_ModuleTwo',
@@ -160,7 +160,7 @@ return array(
         ),
         'filesystem_glob_map' => array(
             array(
-                '#.*_.*#', '/base/dir/area_two/fixture/theme_three/',
+                '*_*', '/base/dir/area_two/fixture/theme_three/',
                 array(),
             ),
         ),

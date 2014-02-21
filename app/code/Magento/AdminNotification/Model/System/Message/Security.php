@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\AdminNotification\Model\System\Message;
@@ -27,7 +27,7 @@ class Security
     implements \Magento\AdminNotification\Model\System\MessageInterface
 {
     /**
-     * Cache kay for saving verification result
+     * Cache key for saving verification result
      */
     const VERIFICATION_RESULT_CACHE_KEY = 'configuration_files_access_level_verification';
 
@@ -55,7 +55,7 @@ class Security
     protected $_backendConfig;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -67,13 +67,13 @@ class Security
     /**
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
      */
     public function __construct(
         \Magento\App\CacheInterface $cache,
         \Magento\Backend\App\ConfigInterface $backendConfig,
-        \Magento\Core\Model\Config $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\HTTP\Adapter\CurlFactory $curlFactory
     ) {
         $this->_cache = $cache;

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Install
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,7 +39,7 @@ class End extends \Magento\Install\Block\AbstractBlock
     protected $_template = 'end.phtml';
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_coreConfig;
 
@@ -60,9 +60,9 @@ class End extends \Magento\Install\Block\AbstractBlock
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
      * @param \Magento\Session\Generic $session
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\AdminNotification\Model\Survey $survey
-     * @param $cryptKey
+     * @param string $cryptKey
      * @param array $data
      */
     public function __construct(
@@ -70,7 +70,7 @@ class End extends \Magento\Install\Block\AbstractBlock
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
         \Magento\Session\Generic $session,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\AdminNotification\Model\Survey $survey,
         $cryptKey,
         array $data = array()

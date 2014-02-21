@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,20 +31,35 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
+use Magento\Data\Tree\Node;
+
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 {
+    /**
+     * @var int[]
+     */
     protected $_selectedIds = array();
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         $this->setTemplate('catalog/category/checkboxes/tree.phtml');
     }
 
+    /**
+     * @return int[]
+     */
     public function getCategoryIds()
     {
         return $this->_selectedIds;
     }
 
+    /**
+     * @param mixed $ids
+     * @return $this
+     */
     public function setCategoryIds($ids)
     {
         if (empty($ids)) {
@@ -57,6 +72,11 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         return $this;
     }
 
+    /**
+     * @param array|Node $node
+     * @param int $level
+     * @return array
+     */
     protected function _getNodeJson($node, $level = 1)
     {
         $item = array();
@@ -93,6 +113,11 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         return $item;
     }
 
+    /**
+     * @param mixed|null $parentNodeCategory
+     * @param int $recursionLevel
+     * @return Node|array|null
+     */
     public function getRoot($parentNodeCategory=null, $recursionLevel=3)
     {
         return $this->getRootByIds($this->getCategoryIds());

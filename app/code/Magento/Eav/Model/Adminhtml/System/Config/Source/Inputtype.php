@@ -20,13 +20,18 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Eav\Model\Adminhtml\System\Config\Source;
 
 class Inputtype implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * Return array of options
+     *
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(

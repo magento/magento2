@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,6 +54,7 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -70,7 +71,8 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->arrayUtils = $arrayUtils;
         parent::__construct(
@@ -85,10 +87,10 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
     }
-
 
     /**
      * Retrieve product
@@ -107,10 +109,10 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
     /**
      * Decorate a plain array of arrays or objects
      *
-     * @param mixed $array
+     * @param array $array
      * @param string $prefix
      * @param bool $forceSetAll
-     * @return mixed
+     * @return array
      */
     public function decorateArray($array, $prefix = 'decorated_', $forceSetAll = false)
     {

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_DesignEditor
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\DesignEditor\Model;
@@ -34,7 +34,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\Core\Model\Layout';
 
     /**
-     * Url model classes that will be used instead of \Magento\Core\Model\Url in different vde modes
+     * Url model classes that will be used instead of \Magento\UrlInterface in different vde modes
      */
     const URL_MODEL_NAVIGATION_MODE_CLASS_NAME = 'Magento\DesignEditor\Model\Url\NavigationMode';
 
@@ -73,9 +73,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected $_backendSession;
 
     /**
-     * @var \Magento\Core\Model\Layout\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AreaEmulator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_layoutFactory;
+    protected $_areaEmulator;
 
     /**
      * @var \Magento\DesignEditor\Model\Url\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -123,7 +123,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             'Magento\Backend\Model\Session', array('setData', 'getData', 'unsetData'),
             array(), '', false
         );
-        $this->_layoutFactory = $this->getMock('Magento\Core\Model\Layout\Factory', array('createLayout'),
+        $this->_areaEmulator = $this->getMock('Magento\DesignEditor\Model\AreaEmulator', array('emulateLayoutArea'),
             array(), '', false
         );
         $this->_urlModelFactory = $this->getMock('Magento\DesignEditor\Model\Url\Factory', array('replaceClassName'),
@@ -148,11 +148,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnSelf());
 
-        $this->_application->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($storeManager));
-
-        $configMock = $this->getMock('Magento\Core\Model\Config', array('setNode'), array(), '', false);
+        $configMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $configMock->expects($this->any())
             ->method('setNode')
             ->with(
@@ -178,20 +174,21 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = new \Magento\DesignEditor\Model\State(
             $this->_backendSession,
-            $this->_layoutFactory,
+            $this->_areaEmulator,
             $this->_urlModelFactory,
             $this->_cacheStateMock,
             $this->_dataHelper,
             $this->_objectManager,
             $this->_application,
-            $this->_themeContext
+            $this->_themeContext,
+            $storeManager
         );
     }
 
     public function testConstruct()
     {
         $this->assertAttributeEquals($this->_backendSession, '_backendSession', $this->_model);
-        $this->assertAttributeEquals($this->_layoutFactory, '_layoutFactory', $this->_model);
+        $this->assertAttributeEquals($this->_areaEmulator, '_areaEmulator', $this->_model);
         $this->assertAttributeEquals($this->_urlModelFactory, '_urlModelFactory', $this->_model);
         $this->assertAttributeEquals($this->_cacheStateMock, '_cacheState', $this->_model);
         $this->assertAttributeEquals($this->_dataHelper, '_dataHelper', $this->_model);
@@ -256,9 +253,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->method('replaceClassName')
             ->with(self::URL_MODEL_NAVIGATION_MODE_CLASS_NAME);
 
-        $this->_layoutFactory->expects($this->once())
-            ->method('createLayout')
-            ->with(array('area' => self::AREA_CODE), self::LAYOUT_NAVIGATION_CLASS_NAME);
+        $this->_areaEmulator->expects($this->once())
+            ->method('emulateLayoutArea')
+            ->with(self::AREA_CODE);
         $controller = $this->getMock('Magento\Backend\Controller\Adminhtml\Action', array(), array(), '', false);
 
         $this->assertNull($this->_model->update(self::AREA_CODE, $request, $controller));

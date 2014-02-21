@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Rate value
      *
-     * @var decimal
+     * @var float
      */
     protected $_rate;
 
@@ -76,7 +76,8 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Set filter rate
      *
-     * @param double $rate
+     * @param float $rate
+     * @return void
      */
     public function setRate($rate)
     {
@@ -86,8 +87,8 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Filter value
      *
-     * @param   double $value
-     * @return  string
+     * @param float $value
+     * @return string
      */
     public function filter($value)
     {

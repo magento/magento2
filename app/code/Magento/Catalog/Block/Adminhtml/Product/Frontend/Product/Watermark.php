@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,6 +32,8 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Frontend\Product;
+
+use Magento\Data\Form\Element\AbstractElement;
 
 class Watermark
     extends \Magento\Backend\Block\AbstractBlock
@@ -80,7 +82,11 @@ class Watermark
         parent::__construct($context, $data);
     }
 
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    public function render(AbstractElement $element)
     {
         $html = $this->_getHeaderHtml($element);
         foreach ($this->_imageTypes as $key => $attribute) {
@@ -124,6 +130,10 @@ class Watermark
         return $html;
     }
 
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
     protected function _getHeaderHtml($element)
     {
         $id = $element->getHtmlId();
@@ -143,6 +153,10 @@ class Watermark
         return $html;
     }
 
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
     protected function _getFooterHtml($element)
     {
         $html = '</tbody></table></fieldset>';

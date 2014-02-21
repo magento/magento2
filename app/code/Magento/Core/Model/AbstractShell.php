@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,7 +40,7 @@ abstract class AbstractShell
     /**
      * Raw arguments, that should be parsed
      *
-     * @var array
+     * @var string[]
      */
     protected $_rawArgs     = array();
 
@@ -66,17 +66,17 @@ abstract class AbstractShell
     /**
      * Initializes application and parses input parameters
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $entryPoint
      * @throws \Exception
      */
-    public function __construct(\Magento\Filesystem $filesystem, $entryPoint)
+    public function __construct(\Magento\App\Filesystem $filesystem, $entryPoint)
     {
         if (isset($_SERVER['REQUEST_METHOD'])) {
             throw new \Exception('This script cannot be run from Browser. This is the shell script.');
         }
 
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $this->_entryPoint = $entryPoint;
         $this->_rawArgs = $_SERVER['argv'];
         $this->_applyPhpVariables();
@@ -86,8 +86,8 @@ abstract class AbstractShell
     /**
      * Sets raw arguments to be parsed
      *
-     * @param array $args
-     * @return \Magento\Core\Model\AbstractShell
+     * @param string[] $args
+     * @return $this
      */
     public function setRawArgs($args)
     {
@@ -99,7 +99,7 @@ abstract class AbstractShell
     /**
      * Parses .htaccess file and apply php settings to shell script
      *
-     * @return \Magento\Core\Model\AbstractShell
+     * @return $this
      */
     protected function _applyPhpVariables()
     {
@@ -127,7 +127,7 @@ abstract class AbstractShell
     /**
      * Parses input arguments
      *
-     * @return \Magento\Core\Model\AbstractShell
+     * @return $this
      */
     protected function _parseArgs()
     {
@@ -158,7 +158,7 @@ abstract class AbstractShell
     /**
      * Runs script
      *
-     * @return \Magento\Core\Model\AbstractShell
+     * @return $this
      */
     abstract public function run();
 

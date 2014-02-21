@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,7 +59,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $categories = $this->_helper->getStoreCategories();
         $this->assertInstanceOf('Magento\Data\Tree\Node\Collection', $categories);
         $index = 0;
-        $expectedPaths = array(array(3, '1/2/3'), array(6, '1/2/6'), array(7, '1/2/7'));
+        $expectedPaths = array(
+            array(3, '1/2/3'), array(6, '1/2/6'), array(7, '1/2/7'),
+            array(9, '1/2/9'), array(10, '1/2/10'), array(11, '1/2/11'),
+        );
         foreach ($categories as $category) {
             $this->assertInstanceOf('Magento\Data\Tree\Node', $category);
             $this->assertEquals($expectedPaths[$index][0], $category->getId());

@@ -20,12 +20,20 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Customer\Controller;
+
 use Magento\App\RequestInterface;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Customer\Service\V1\Dto\Customer;
+use Magento\Exception\AuthenticationException;
+use Magento\Exception\InputException;
+use Magento\Exception\NoSuchEntityException;
+use Magento\Exception\StateException;
 
 /**
  * Customer account controller
@@ -62,10 +70,10 @@ class Account extends \Magento\App\Action\Action
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    protected $_session;
 
     /**
-     * @var \Magento\Core\Model\UrlFactory
+     * @var \Magento\UrlFactory
      */
     protected $_urlFactory;
 
@@ -80,16 +88,17 @@ class Account extends \Magento\App\Action\Action
     protected $_formFactory;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory
-     */
-    protected $_addressFactory;
-
-    /**
      * Magento string lib
      *
      * @var \Magento\Stdlib\String
      */
     protected $string;
+
+    /** @var CustomerAccountServiceInterface  */
+    protected $_customerAccountService;
+
+    /** @var CustomerGroupV1Interface */
+    protected $_groupService;
 
     /**
      * @var \Magento\Core\App\Action\FormKeyValidator
@@ -102,41 +111,76 @@ class Account extends \Magento\App\Action\Action
     protected $escaper;
 
     /**
+     * @var \Magento\Newsletter\Model\SubscriberFactory
+     */
+    protected $_subscriberFactory;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Dto\RegionBuilder
+     */
+    protected $_regionBuilder;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Dto\AddressBuilder
+     */
+    protected $_addressBuilder;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Dto\CustomerBuilder
+     */
+    protected $_customerBuilder;
+
+    /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\UrlFactory $urlFactory
+     * @param \Magento\UrlFactory $urlFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\FormFactory $formFactory
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Escaper $escaper
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Service\V1\Dto\RegionBuilder $regionBuilder
+     * @param \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder
+     * @param \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\UrlFactory $urlFactory,
+        \Magento\UrlFactory $urlFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\FormFactory $formFactory,
-        \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Stdlib\String $string,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Escaper $escaper
+        \Magento\Escaper $escaper,
+        CustomerGroupServiceInterface $customerGroupService,
+        CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Customer\Service\V1\Dto\RegionBuilder $regionBuilder,
+        \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder,
+        \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder
     ) {
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
-        $this->_customerSession = $customerSession;
+        $this->_session = $customerSession;
         $this->_urlFactory = $urlFactory;
         $this->_customerFactory = $customerFactory;
         $this->_formFactory = $formFactory;
-        $this->_addressFactory = $addressFactory;
         $this->string = $string;
         $this->_formKeyValidator = $formKeyValidator;
+        $this->_customerAccountService = $customerAccountService;
+        $this->_groupService = $customerGroupService;
+        $this->_subscriberFactory = $subscriberFactory;
         $this->escaper = $escaper;
+        $this->_regionBuilder = $regionBuilder;
+        $this->_addressBuilder = $addressBuilder;
+        $this->_customerBuilder = $customerBuilder;
         parent::__construct($context);
     }
 
@@ -147,7 +191,7 @@ class Account extends \Magento\App\Action\Action
      */
     protected function _getSession()
     {
-        return $this->_customerSession;
+        return $this->_session;
     }
 
     /**
@@ -222,7 +266,7 @@ class Account extends \Magento\App\Action\Action
      */
     public function loginPostAction()
     {
-        if ($this->_getSession()->isLoggedIn()) {
+        if ($this->_getSession()->isLoggedIn() || !$this->_formKeyValidator->validate($this->getRequest())) {
             $this->_redirect('*/*/');
             return;
         }
@@ -231,29 +275,31 @@ class Account extends \Magento\App\Action\Action
             $login = $this->getRequest()->getPost('login');
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
-                    $this->_getSession()->login($login['username'], $login['password']);
-                    if ($this->_getSession()->getCustomer()->getIsJustConfirmed()) {
-                        $this->_welcomeCustomer($this->_getSession()->getCustomer(), true);
-                    }
-                } catch (\Magento\Core\Exception $e) {
+                    $customer = $this->_customerAccountService->authenticate($login['username'], $login['password']);
+                    $this->_getSession()->setCustomerDtoAsLoggedIn($customer);
+                    $this->_getSession()->regenerateId();
+                } catch (AuthenticationException $e) {
                     switch ($e->getCode()) {
-                        case \Magento\Customer\Model\Customer::EXCEPTION_EMAIL_NOT_CONFIRMED:
+                        case AuthenticationException::EMAIL_NOT_CONFIRMED:
                             $value = $this->_objectManager->get('Magento\Customer\Helper\Data')
                                 ->getEmailConfirmationUrl($login['username']);
-                            $message = __('This account is not confirmed.'
-                                    . ' <a href="%1">Click here</a> to resend confirmation email.', $value);
+                            $message = __(
+                                'This account is not confirmed.'
+                                . ' <a href="%1">Click here</a> to resend confirmation email.',
+                                $value
+                            );
                             break;
-                        case \Magento\Customer\Model\Customer::EXCEPTION_INVALID_EMAIL_OR_PASSWORD:
-                            $message = $e->getMessage();
-                            break;
+                        case AuthenticationException::INVALID_EMAIL_OR_PASSWORD:
                         default:
-                            $message = $e->getMessage();
+                            $message = __('Invalid login or password.');
                             break;
                     }
                     $this->messageManager->addError($message);
                     $this->_getSession()->setUsername($login['username']);
                 } catch (\Exception $e) {
-                    // $this->_objectManager->get('Magento\Logger')->logException($e); // PA DSS violation: this exception log can disclose customer password
+                    // PA DSS violation: this exception log can disclose customer password
+                    // $this->_objectManager->get('Magento\Logger')->logException($e);
+                    $this->messageManager->addError(__('There was an error validating the login and password.'));
                 }
             } else {
                 $this->messageManager->addError(__('Login and password are required.'));
@@ -286,7 +332,7 @@ class Account extends \Magento\App\Action\Action
                     $referer = $this->getRequest()->getParam(\Magento\Customer\Helper\Data::REFERER_QUERY_PARAM_NAME);
                     if ($referer) {
                         $referer = $this->_objectManager->get('Magento\Core\Helper\Data')->urlDecode($referer);
-                        if ($this->_url->isInternal($referer)) {
+                        if ($this->_url->isOwnOriginUrl()) {
                             $this->_getSession()->setBeforeAuthUrl($referer);
                         }
                     }
@@ -364,24 +410,27 @@ class Account extends \Magento\App\Action\Action
 
         try {
             $customer = $this->_extractCustomer();
-            $address = $this->_extractAddress($customer);
-            $this->_validateCustomer($customer, $address);
+            $address = $this->_extractAddress();
+            $result = $this->_customerAccountService->createAccount(
+                $customer,
+                is_null($address) ? array() : array($address),
+                $this->getRequest()->getParam('password'),
+                $this->_getSession()->getBeforeAuthUrl(),
+                ''
+            );
+            $this->_customerBuilder->populate($customer);
+            $this->_customerBuilder->setCustomerId($result->getCustomerId());
+            $customer = $this->_customerBuilder->create();
 
-            $customer->save()->setOrigData();
+            if ($this->getRequest()->getParam('is_subscribed', false)) {
+                $this->_subscriberFactory->create()->updateSubscription($result->getCustomerId(), true);
+            }
+
             $this->_eventManager->dispatch('customer_register_success',
                 array('account_controller' => $this, 'customer' => $customer)
             );
 
-            $newLinkToken = $this->_objectManager->get('Magento\Customer\Helper\Data')
-                ->generateResetPasswordLinkToken();
-            $customer->changeResetPasswordLinkToken($newLinkToken);
-
-            if ($customer->isConfirmationRequired()) {
-                $customer->sendNewAccountEmail(
-                    'confirmation',
-                    $this->_getSession()->getBeforeAuthUrl(),
-                    $this->_storeManager->getStore()->getId()
-                );
+            if ($result->getStatus() == CustomerAccountServiceInterface::ACCOUNT_CONFIRMATION) {
                 $email = $this->_objectManager->get('Magento\Customer\Helper\Data')->getEmailConfirmationUrl($customer->getEmail());
                 $this->messageManager->addSuccess(
                     __('Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href="%1">click here</a>.', $email)
@@ -389,24 +438,19 @@ class Account extends \Magento\App\Action\Action
                 $url = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
                 $this->getResponse()->setRedirect($this->_redirect->success($url));
             } else {
-                $this->_getSession()->setCustomerAsLoggedIn($customer);
+                $this->_getSession()->setCustomerDtoAsLoggedIn($customer);
                 $url = $this->_welcomeCustomer($customer);
                 $this->getResponse()->setRedirect($this->_redirect->success($url));
             }
             return;
-        } catch (\Magento\Core\Exception $e) {
-            if ($e->getCode() === \Magento\Customer\Model\Customer::EXCEPTION_EMAIL_EXISTS) {
-                $url = $this->_createUrl()->getUrl('customer/account/forgotpassword');
-                $message = __('There is already an account with this email address. If you are sure that it is your email address, <a href="%1">click here</a> to get your password and access your account.', $url);
-            } else {
-                $message = $e->getMessage();
-            }
+        } catch (StateException $e) {
+            $url = $this->_createUrl()->getUrl('customer/account/forgotpassword');
+            $message = __('There is already an account with this email address. If you are sure that it is your email address, <a href="%1">click here</a> to get your password and access your account.', $url);
             $this->messageManager->addError($message);
-        } catch (\Magento\Validator\ValidatorException $e) {
-            foreach ($e->getMessages() as $messages) {
-                foreach ($messages as $message) {
-                    $this->messageManager->addError($this->escaper->escapeHtml($message));
-                }
+        } catch (InputException $e) {
+            foreach ($e->getErrors() as $error) {
+                $message = InputException::translateError($error);
+                $this->messageManager->addError($this->escaper->escapeHtml($message));
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Cannot save the customer.'));
@@ -418,129 +462,130 @@ class Account extends \Magento\App\Action\Action
     }
 
     /**
-     * Do validation of customer and its address using validate methods in models
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @param \Magento\Customer\Model\Address|null $address
-     * @throws \Magento\Validator\ValidatorException
-     */
-    protected function _validateCustomer($customer, $address = null)
-    {
-        $errors = array();
-        if ($address) {
-            $addressErrors = $address->validate();
-            if (is_array($addressErrors)) {
-                $errors = array_merge($errors, $addressErrors);
-            }
-        }
-        $customerErrors = $customer->validate();
-        if (is_array($customerErrors)) {
-            $errors = array_merge($errors, $customerErrors);
-        }
-        if (count($errors) > 0) {
-            throw new \Magento\Validator\ValidatorException(array($errors));
-        }
-        // Empty password confirmation data (it is needed only for validation purposes and is not meant to be stored)
-        $customer->setConfirmation(null);
-    }
-
-    /**
      * Add address to customer during create account
      *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return \Magento\Customer\Model\Address|null
+     * @return \Magento\Customer\Service\V1\Dto\Address|null
      */
-    protected function _extractAddress($customer)
+    protected function _extractAddress()
     {
         if (!$this->getRequest()->getPost('create_address')) {
             return null;
         }
-        /* @var \Magento\Customer\Model\Address $address */
-        $address = $this->_createAddress();
-        /* @var \Magento\Customer\Model\Form $addressForm */
+
         $addressForm = $this->_createForm();
         $addressForm->setFormCode('customer_register_address')
-            ->setEntity($address);
+            ->setEntityType('customer_address');
+        $allowedAttributes = $addressForm->getAllowedAttributes();
 
-        $addressData = $addressForm->extractData($this->getRequest(), 'address', false);
-        $address->setId(null)
-            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
-        $addressForm->compactData($addressData);
-        $customer->addAddress($address);
-        return $address;
+        $addressData = [];
+
+        /** @var $attribute \Magento\Eav\Model\Attribute */
+        foreach ($allowedAttributes as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $value = $this->getRequest()->getParam($attributeCode);
+            if (is_null($value)) {
+                continue;
+            }
+            switch ($attributeCode) {
+                case 'region_id':
+                    $this->_regionBuilder->setRegionId($value);
+                    break;
+                case 'region':
+                    $this->_regionBuilder->setRegion($value);
+                    break;
+                default:
+                    $addressData[$attributeCode] = $value;
+            }
+        }
+        $this->_addressBuilder->populateWithArray($addressData);
+        $this->_addressBuilder->setRegion($this->_regionBuilder->create());
+
+        $this->_addressBuilder->setDefaultBilling($this->getRequest()->getParam('default_billing', false))
+            ->setDefaultShipping($this->getRequest()->getParam('default_shipping', false));
+        return $this->_addressBuilder->create();
     }
 
     /**
      * Extract customer entity from request
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return Customer
      */
     protected function _extractCustomer()
     {
-        /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = $this->_coreRegistry->registry('current_customer');
-        if (!$customer) {
-            $customer = $this->_createCustomer()->setId(null);
-        }
-        /* @var \Magento\Customer\Model\Form $customerForm */
         $customerForm = $this->_createForm();
         $customerForm->setFormCode('customer_account_create')
-            ->setEntity($customer);
-
-        $customerData = $customerForm->extractData($this->getRequest());
-        // Initialize customer group id
-        $customer->getGroupId();
-        $customerForm->compactData($customerData);
-        $customer->setPassword($this->getRequest()->getPost('password'));
-        $customer->setConfirmation($this->getRequest()->getPost('confirmation'));
-        if ($this->getRequest()->getParam('is_subscribed', false)) {
-            $customer->setIsSubscribed(1);
+            ->setEntityType('customer');
+        $allowedAttributes = $customerForm->getAllowedAttributes();
+        $isGroupIdEmpty = true;
+        /** @var $attribute \Magento\Eav\Model\Attribute */
+        $customerData = [];
+        foreach ($allowedAttributes as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            if ($attributeCode == 'group_id') {
+                $isGroupIdEmpty = false;
+            }
+            $customerData[$attributeCode] = $this->getRequest()->getParam($attributeCode);
         }
-        return $customer;
+        $this->_customerBuilder->populateWithArray($customerData);
+        $storeId = $this->_storeManager->getStore()->getId();
+        if ($isGroupIdEmpty) {
+            $this->_customerBuilder->setGroupId($this->_groupService->getDefaultGroup($storeId)->getId());
+        }
+
+        $this->_customerBuilder->setConfirmation($this->getRequest()->getParam('confirmation'));
+
+        return $this->_customerBuilder->create();
     }
 
     /**
-     * Add welcome message and send new account email.
-     * Returns success URL
+     * Adds welcome message and returns success URL
      *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @param bool $isJustConfirmed
      * @return string
      */
-    protected function _welcomeCustomer(\Magento\Customer\Model\Customer $customer, $isJustConfirmed = false)
+    protected function _welcomeCustomer()
+    {
+        $this->_addWelcomeMessage();
+
+        $successUrl = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
+        if (!$this->_objectManager->get('Magento\Core\Model\Store\Config')->getConfigFlag(
+                \Magento\Customer\Helper\Data::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD
+            )
+            && $this->_getSession()->getBeforeAuthUrl()
+        ) {
+            $successUrl = $this->_getSession()->getBeforeAuthUrl(true);
+        }
+        return $successUrl;
+    }
+
+    /**
+     * Adds a welcome message to the session
+     */
+    protected function _addWelcomeMessage()
     {
         $this->messageManager->addSuccess(
             __('Thank you for registering with %1.', $this->_storeManager->getStore()->getFrontendName())
         );
         if ($this->_isVatValidationEnabled()) {
             // Show corresponding VAT message to customer
-            $configAddressType = $this->_objectManager->get('Magento\Customer\Helper\Address')->getTaxCalculationAddressType();
+            $configAddressType = $this->_objectManager->get('Magento\Customer\Helper\Address')
+                ->getTaxCalculationAddressType();
             $editAddersUrl = $this->_createUrl()->getUrl('customer/address/edit');
             switch ($configAddressType) {
                 case \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING:
-                    $userPrompt = __('If you are a registered VAT customer, please click <a href="%1">here</a> to enter you shipping address for proper VAT calculation', $editAddersUrl);
+                    $userPrompt = __(
+                        'If you are a registered VAT customer, please click <a href="%1">here</a> to enter you shipping address for proper VAT calculation',
+                        $editAddersUrl
+                    );
                     break;
                 default:
-                    $userPrompt = __('If you are a registered VAT customer, please click <a href="%1">here</a> to enter you billing address for proper VAT calculation', $editAddersUrl);
+                    $userPrompt = __(
+                        'If you are a registered VAT customer, please click <a href="%1">here</a> to enter you billing address for proper VAT calculation',
+                        $editAddersUrl
+                    );
                     break;
             }
             $this->messageManager->addSuccess($userPrompt);
         }
-
-        $customer->sendNewAccountEmail(
-            $isJustConfirmed ? 'confirmed' : 'registered',
-            '',
-            $this->_storeManager->getStore()->getId()
-        );
-
-        $successUrl = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
-        if (!$this->_objectManager->get('Magento\Core\Model\Store\Config')->getConfigFlag(\Magento\Customer\Helper\Data::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD)
-            && $this->_getSession()->getBeforeAuthUrl()
-        ) {
-            $successUrl = $this->_getSession()->getBeforeAuthUrl(true);
-        }
-        return $successUrl;
     }
 
     /**
@@ -579,32 +624,6 @@ class Account extends \Magento\App\Action\Action
     }
 
     /**
-     * @param \Magento\Customer\Model\Customer $customer
-     * @param mixed $key
-     * @return bool|null
-     * @throws \Exception
-     */
-    protected function _checkCustomerActive($customer, $key)
-    {
-        $backUrl = $this->getRequest()->getParam('back_url', false);
-
-        // check if it is inactive
-        if ($customer->getConfirmation()) {
-            if ($customer->getConfirmation() !== $key) {
-                throw new \Exception(__('Wrong confirmation key.'));
-            }
-            $this->_activateCustomer($customer);
-
-            // log in and send greeting email, then die happy
-            $this->_getSession()->setCustomerAsLoggedIn($customer);
-            $successUrl = $this->_welcomeCustomer($customer, true);
-            $url = $backUrl ? $backUrl : $successUrl;
-            $this->getResponse()->setRedirect($this->_redirect->success($url));
-            return true;
-        }
-    }
-
-    /**
      * Confirm customer account by id and confirmation key
      */
     public function confirmAction()
@@ -616,26 +635,39 @@ class Account extends \Magento\App\Action\Action
         try {
             $customerId = $this->getRequest()->getParam('id', false);
             $key     = $this->getRequest()->getParam('key', false);
+            $backUrl = $this->getRequest()->getParam('back_url', false);
             if (empty($customerId) || empty($key)) {
                 throw new \Exception(__('Bad request.'));
             }
 
-            $customer = $this->_loadCustomerById($customerId);
-            if (true === $this->_checkCustomerActive($customer, $key)) {
-                return;
-            }
+            $customer = $this->_customerAccountService->activateAccount($customerId, $key);
 
-            // die happy
-            $url = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
-            $this->getResponse()->setRedirect($this->_redirect->success($url));
+            // log in and send greeting email, then die happy
+            $this->_getSession()->setCustomerDtoAsLoggedIn($customer);
+            $successUrl = $this->_welcomeCustomer();
+            $this->getResponse()->setRedirect($this->_redirect->success($backUrl ? $backUrl : $successUrl));
             return;
+        } catch (StateException $e) {
+            switch ($e->getCode()) {
+                case StateException::INVALID_STATE:
+                    return;
+                case StateException::INPUT_MISMATCH:
+                case StateException::EXPIRED:
+                    $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
+                    break;
+                default:
+                    $this->messageManager->addException($e, __('There was an error confirming the account.'));
+                    break;
+            }
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addException($e, __('There was an error confirming the account.'));
         } catch (\Exception $e) {
-            // die unhappy
-            $this->messageManager->addError($e->getMessage());
-            $url = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
-            $this->getResponse()->setRedirect($this->_redirect->error($url));
-            return;
+            $this->messageManager->addException($e, __('There was an error confirming the account'));
         }
+        // die unhappy
+        $url = $this->_createUrl()->getUrl('*/*/index', array('_secure' => true));
+        $this->getResponse()->setRedirect($this->_redirect->error($url));
+        return;
     }
 
     /**
@@ -670,7 +702,6 @@ class Account extends \Magento\App\Action\Action
      */
     public function confirmationAction()
     {
-        $customer = $this->_createCustomer();
         if ($this->_getSession()->isLoggedIn()) {
             $this->_redirect('*/*/');
             return;
@@ -679,7 +710,23 @@ class Account extends \Magento\App\Action\Action
         // try to confirm by email
         $email = $this->getRequest()->getPost('email');
         if ($email) {
-            $this->_confirmByEmail($customer, $email);
+            try {
+                $this->_customerAccountService->sendConfirmation($email);
+                $this->messageManager->addSuccess(__('Please, check your email for confirmation key.'));
+            } catch (StateException $e) {
+                $this->messageManager->addSuccess(__('This email does not require confirmation.'));
+            } catch (\Exception $e) {
+				$this->messageManager->addException($e, __('Wrong email.'));
+				$this->getResponse()->setRedirect(
+					$this->_createUrl()->getUrl(
+						'*/*/*',
+						array('email' => $email, '_secure' => true)
+					)
+				);
+				return;
+            }
+            $this->_getSession()->setUsername($email);
+            $this->getResponse()->setRedirect($this->_createUrl()->getUrl('*/*/index', array('_secure' => true)));
             return;
         }
 
@@ -723,22 +770,15 @@ class Account extends \Magento\App\Action\Action
                 return;
             }
 
-            /** @var $customer \Magento\Customer\Model\Customer */
-            $customer = $this->_createCustomer()
-                ->setWebsiteId($this->_storeManager->getStore()->getWebsiteId())
-                ->loadByEmail($email);
-
-            if ($customer->getId()) {
-                try {
-                    $newPasswordToken = $this->_objectManager->get('Magento\Customer\Helper\Data')
-                        ->generateResetPasswordLinkToken();
-                    $customer->changeResetPasswordLinkToken($newPasswordToken);
-                    $customer->sendPasswordResetConfirmationEmail();
-                } catch (\Exception $exception) {
-                    $this->messageManager->addError($exception->getMessage());
-                    $this->_redirect('*/*/forgotpassword');
-                    return;
-                }
+            try {
+                $this->_customerAccountService
+                    ->sendPasswordResetLink($email, $this->_storeManager->getStore()->getWebsiteId());
+            } catch (NoSuchEntityException $e) {
+                // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.
+            } catch (\Exception $exception) {
+                $this->messageManager->addException($exception, __('Unable to send password reset email.'));
+                $this->_redirect('*/*/forgotpassword');
+                return;
             }
             $email = $this->_objectManager->get('Magento\Escaper')->escapeHtml($email);
             $this->messageManager->addSuccess(
@@ -772,7 +812,7 @@ class Account extends \Magento\App\Action\Action
         $resetPasswordToken = (string)$this->getRequest()->getParam('token');
         $customerId = (int)$this->getRequest()->getParam('id');
         try {
-            $this->_validateResetPasswordLinkToken($customerId, $resetPasswordToken);
+            $this->_customerAccountService->validateResetPasswordLinkToken($customerId, $resetPasswordToken);
             $this->_view->loadLayout();
             // Pass received parameters to the reset forgotten password form
             $this->_view->getLayout()->getBlock('resetPassword')
@@ -780,9 +820,7 @@ class Account extends \Magento\App\Action\Action
                 ->setResetPasswordLinkToken($resetPasswordToken);
             $this->_view->renderLayout();
         } catch (\Exception $exception) {
-            $this->messageManager->addError(
-                __('Your password reset link has expired.')
-            );
+            $this->messageManager->addError(__('Your password reset link has expired.'));
             $this->_redirect('*/*/forgotpassword');
         }
     }
@@ -800,89 +838,37 @@ class Account extends \Magento\App\Action\Action
         $password = (string)$this->getRequest()->getPost('password');
         $passwordConfirmation = (string)$this->getRequest()->getPost('confirmation');
 
-        try {
-            $this->_validateResetPasswordLinkToken($customerId, $resetPasswordToken);
-        } catch (\Exception $exception) {
+        if ($password !== $passwordConfirmation) {
             $this->messageManager->addError(
-                __('Your password reset link has expired.')
+                __("New Password and Confirm New Password values didn't match.")
             );
-            $this->_redirect('*/*/');
             return;
         }
-
-        $errorMessages = array();
         if (iconv_strlen($password) <= 0) {
-            $errorMessages[] = __('New password field cannot be empty.');
-        }
-        /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->_createCustomer()->load($customerId);
-
-        $customer->setPassword($password);
-        $customer->setConfirmation($passwordConfirmation);
-        $validationErrors = $customer->validate();
-        if (is_array($validationErrors)) {
-            $errorMessages = array_merge($errorMessages, $validationErrors);
-        }
-
-        if (!empty($errorMessages)) {
-            $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
-            foreach ($errorMessages as $errorMessage) {
-                $this->messageManager->addError($errorMessage);
-            }
+            $this->messageManager->addError(
+                __('New password field cannot be empty.')
+            );
             $this->_redirect('*/*/createpassword', array(
-                'id' => $customerId,
-                'token' => $resetPasswordToken
-            ));
+                    'id' => $customerId,
+                    'token' => $resetPasswordToken
+                ));
             return;
         }
 
         try {
-            // Empty current reset password token i.e. invalidate it
-            $customer->setRpToken(null);
-            $customer->setRpTokenCreatedAt(null);
-            $customer->setConfirmation(null);
-            $customer->save();
+            $this->_customerAccountService->resetPassword($customerId, $password, $resetPasswordToken);
             $this->messageManager->addSuccess(
                 __('Your password has been updated.')
             );
             $this->_redirect('*/*/login');
+            return;
         } catch (\Exception $exception) {
-            $this->messageManager->addException($exception, __('Cannot save a new password.'));
+            $this->messageManager->addError(__('There was an error saving the new password.'));
             $this->_redirect('*/*/createpassword', array(
                 'id' => $customerId,
                 'token' => $resetPasswordToken
             ));
             return;
-        }
-    }
-
-    /**
-     * Check if password reset token is valid
-     *
-     * @param int $customerId
-     * @param string $resetPasswordLinkToken
-     * @throws \Magento\Core\Exception
-     */
-    protected function _validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken)
-    {
-        if (!is_int($customerId)
-            || !is_string($resetPasswordLinkToken)
-            || empty($resetPasswordLinkToken)
-            || empty($customerId)
-            || $customerId < 0
-        ) {
-            throw new \Magento\Core\Exception(__('Invalid password reset token.'));
-        }
-
-        /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->_createCustomer()->load($customerId);
-        if (!$customer || !$customer->getId()) {
-            throw new \Magento\Core\Exception(__('Wrong customer account specified.'));
-        }
-
-        $customerToken = $customer->getRpToken();
-        if (strcmp($customerToken, $resetPasswordLinkToken) !== 0 || $customer->isResetPasswordLinkTokenExpired()) {
-            throw new \Magento\Core\Exception(__('Your password reset link has expired.'));
         }
     }
 
@@ -984,7 +970,9 @@ class Account extends \Magento\App\Action\Action
                 $customer->setConfirmation(null);
                 $customer->save();
 
-                $customer->sendPasswordResetNotificationEmail('reset_frontend');
+                if ($this->getRequest()->getParam('change_password')) {
+                    $customer->sendPasswordResetNotificationEmail('reset_frontend');
+                }
 
                 $this->_getSession()->setCustomer($customer);
                 $this->messageManager->addSuccess(__('The account information has been saved.'));
@@ -1015,7 +1003,7 @@ class Account extends \Magento\App\Action\Action
     }
 
     /**
-     * @return \Magento\Core\Model\Url
+     * @return \Magento\UrlInterface
      */
     protected function _createUrl()
     {
@@ -1036,13 +1024,5 @@ class Account extends \Magento\App\Action\Action
     protected function _createForm()
     {
         return $this->_formFactory->create();
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Address
-     */
-    protected function _createAddress()
-    {
-        return $this->_addressFactory->create();
     }
 }

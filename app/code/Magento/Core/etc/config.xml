@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -88,40 +88,18 @@
             </media_storage_configuration>
             <filesystem>
                 <directory>
-                    <design>
-                        <read_only>1</read_only>
-                        <path>app/design</path>
-                    </design>
-                    <var>
+                    <media>
                         <read_only>0</read_only>
-                        <path>var</path>
-                        <allow_create_dirs>1</allow_create_dirs>
+                        <path>pub/media</path>
+                        <uri>pub/media</uri>
                         <permissions>511</permissions>
-                    </var>
-                    <tmp>
+                    </media>
+                    <static>
                         <read_only>0</read_only>
-                        <path>var/tmp</path>
-                        <allow_create_dirs>1</allow_create_dirs>
+                        <path>pub/static</path>
+                        <uri>pub/static</uri>
                         <permissions>511</permissions>
-                    </tmp>
-                    <cache>
-                        <read_only>0</read_only>
-                        <path>var/cache</path>
-                        <allow_create_dirs>1</allow_create_dirs>
-                        <permissions>511</permissions>
-                    </cache>
-                    <log>
-                        <read_only>0</read_only>
-                        <path>var/log</path>
-                        <allow_create_dirs>1</allow_create_dirs>
-                        <permissions>511</permissions>
-                    </log>
-                    <session>
-                        <read_only>0</read_only>
-                        <path>var/session</path>
-                        <allow_create_dirs>1</allow_create_dirs>
-                        <permissions>511</permissions>
-                    </session>
+                    </static>
                     <pub>
                         <read_only>0</read_only>
                         <path>pub</path>
@@ -129,34 +107,32 @@
                         <permissions>511</permissions>
                     </pub>
                     <pub_lib>
-                        <read_only>1</read_only>
+                        <read_only>0</read_only>
                         <path>pub/lib</path>
                         <uri>pub/lib</uri>
+                        <permissions>511</permissions>
                     </pub_lib>
-                    <media>
-                        <read_only>0</read_only>
-                        <path>pub/media</path>
-                        <uri>pub/media</uri>
-                        <permissions>511</permissions>
-                    </media>
-                    <upload>
-                        <read_only>0</read_only>
-                        <path>pub/media/upload</path>
-                        <uri>pub/media/upload</uri>
-                        <permissions>511</permissions>
-                    </upload>
-                    <static>
-                        <read_only>0</read_only>
-                        <path>pub/static</path>
-                        <uri>pub/static</uri>
-                        <permissions>511</permissions>
-                    </static>
                     <view_cache>
                         <read_only>0</read_only>
                         <path>pub/cache</path>
                         <uri>pub/cache</uri>
                         <permissions>511</permissions>
                     </view_cache>
+                    <tmp>
+                        <read_only>0</read_only>
+                        <path>var/tmp</path>
+                        <permissions>511</permissions>
+                    </tmp>
+                    <design>
+                        <read_only>1</read_only>
+                        <path>app/design</path>
+                    </design>
+                    <upload>
+                        <read_only>0</read_only>
+                        <path>pub/media/upload</path>
+                        <uri>pub/media/upload</uri>
+                        <permissions>511</permissions>
+                    </upload>
                     <ftp>
                         <read_only>0</read_only>
                         <permissions>511</permissions>

@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -67,7 +67,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_shell = new \Magento\Shell();
+        $this->_shell = new \Magento\Shell(new \Magento\OSInfo());
         $basePath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
         $basePath = str_replace('\\', '/', $basePath);
 
@@ -83,7 +83,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
         $this->_command = 'php ' . $basePath
             . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
-        $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom();
+        $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom(
+            new \Magento\Stdlib\BooleanUtils(),
+            new \Magento\ObjectManager\Config\Mapper\ArgumentParser()
+        );
         $this->_validator = new \Magento\Code\Validator();
         $this->_validator->add(new \Magento\Code\Validator\ConstructorIntegrity());
         $this->_validator->add(new \Magento\Code\Validator\ContextAggregation());
@@ -117,9 +120,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             if (\Magento\TestFramework\Utility\Classes::isVirtual($instanceName)) {
                 $instanceName = \Magento\TestFramework\Utility\Classes::resolveVirtualType($instanceName);
             }
-            $parameters = $parameters['parameters'];
-            if (!class_exists($instanceName)) {
-                $this->fail('Detected configuration of non existed class: ' . $instanceName);
+
+
+            if (!$this->_classExistsAsReal($instanceName)) {
+                continue;
             }
 
             $reflectionClass = new \ReflectionClass($instanceName);
@@ -129,6 +133,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 $this->fail('Class ' . $instanceName . ' does not have __constructor');
             }
 
+            $parameters = $parameters['parameters'];
             $classParameters = $constructor->getParameters();
             foreach ($classParameters as $classParameter) {
                 $parameterName = $classParameter->getName();
@@ -140,6 +145,24 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 . ' contains data for non-existed parameters: ' . implode(', ', array_keys($parameters));
             $this->assertEmpty($parameters, $message);
         }
+    }
+
+    /**
+     * Checks if class is a real one or generated Factory
+     * @param $instanceName class name
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @return bool
+     */
+    protected function _classExistsAsReal($instanceName)
+    {
+        if (class_exists($instanceName)) {
+            return true;
+        }
+        // check for generated factory
+        if (substr($instanceName, -7) == 'Factory' && class_exists(substr($instanceName, 0, -7))) {
+            return false;
+        }
+        $this->fail('Detected configuration of non existed class: ' . $instanceName);
     }
 
     /**

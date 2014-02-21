@@ -21,12 +21,12 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$mediaPath = $objectManager->get('Magento\Filesystem')->getPath(\Magento\Filesystem::MEDIA);
+$mediaPath = $objectManager->get('Magento\App\Filesystem')->getPath(\Magento\App\Filesystem::MEDIA_DIR);
 $additionalPath = $objectManager->get('Magento\Catalog\Model\Product\Media\Config')->getBaseMediaPath();
 $dir = $mediaPath . '/' . $additionalPath . '/m/a';
 if (!is_dir($dir)) {

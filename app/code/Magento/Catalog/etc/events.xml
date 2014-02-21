@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -29,8 +29,5 @@
     </event>
     <event name="page_block_html_topmenu_gethtml_before">
         <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Model\Observer" method="addCatalogToTopmenuItems" />
-    </event>
-    <event name="catalog_product_transition_product_type">
-        <observer name="type_transition" instance="Magento\Catalog\Model\Observer" method="transitionProductType" />
     </event>
 </config>

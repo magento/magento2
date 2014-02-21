@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <referenceBlock name="adminhtml.indexer.grid.container">
+        <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.indexer.grid" as="grid">
+            <arguments>
+                <argument name="use_ajax" xsi:type="string">0</argument>
+                <argument name="pager_visibility" xsi:type="string">0</argument>
+                <argument name="id" xsi:type="string">gridIndexer</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Indexer\Model\Indexer\Collection</argument>
+            </arguments>
+            <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.indexer.grid.grid.massaction" as="grid.massaction">
+                <arguments>
+                    <argument name="massaction_id_field" xsi:type="string">indexer_id</argument>
+                    <argument name="form_field_name" xsi:type="string">indexer_ids</argument>
+                    <argument name="use_select_all" xsi:type="string">1</argument>
+                    <argument name="options" xsi:type="array">
+                        <updater>Magento\Indexer\Block\Backend\Grid\ItemsUpdater</updater>
+                        <item name="change_mode_onthefly" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Update on Save</item>
+                            <item name="url" xsi:type="string">*/indexer/massOnTheFly</item>
+                        </item>
+                        <item name="change_mode_changelog" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Update by Schedule</item>
+                            <item name="url" xsi:type="string">*/indexer/massChangelog</item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+            <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.indexer.grid.columnSet">
+                <arguments>
+                    <argument name="id" xsi:type="string">indexer_grid</argument>
+                    <argument name="filter_visibility" xsi:type="string">0</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_title">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Indexer</argument>
+                        <argument name="width" xsi:type="string">180</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="index" xsi:type="string">title</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="column_css_class" xsi:type="string">indexer-title</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_description">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Description</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="index" xsi:type="string">description</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="column_css_class" xsi:type="string">indexer-description</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_mode">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Mode</argument>
+                        <argument name="width" xsi:type="string">150</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="getter" xsi:type="string">isScheduled</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Scheduled</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="column_css_class" xsi:type="string">indexer-mode</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_status">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Status</argument>
+                        <argument name="width" xsi:type="string">120</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="getter" xsi:type="string">getStatus</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="column_css_class" xsi:type="string">indexer-status</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_updated">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Updated</argument>
+                        <argument name="width" xsi:type="string">180</argument>
+                        <argument name="align" xsi:type="string">left</argument>
+                        <argument name="index" xsi:type="string">updated</argument>
+                        <argument name="type" xsi:type="string">datetime</argument>
+                        <argument name="getter" xsi:type="string">getLatestUpdated</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Updated</argument>
+                        <argument name="sortable" xsi:type="string">0</argument>
+                        <argument name="column_css_class" xsi:type="string">indexer-updated</argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </referenceBlock>
+</layout>

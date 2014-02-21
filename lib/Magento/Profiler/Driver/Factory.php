@@ -20,10 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Profiler\Driver;
+
+use Magento\Profiler\DriverInterface;
 
 class Factory
 {
@@ -57,7 +59,7 @@ class Factory
      * Create instance of profiler driver
      *
      * @param array $config|null
-     * @return \Magento\Profiler\DriverInterface
+     * @return DriverInterface
      * @throws \InvalidArgumentException
      */
     public function create(array $config = null)
@@ -74,7 +76,7 @@ class Factory
             }
         }
         $driver = new $class($config);
-        if (!$driver instanceof \Magento\Profiler\DriverInterface) {
+        if (!$driver instanceof DriverInterface) {
             throw new \InvalidArgumentException(sprintf(
                 "Driver class \"%s\" must implement \Magento\Profiler\DriverInterface.", get_class($driver)
             ));

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,6 +32,8 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
+
+use Magento\App\ResponseInterface;
 
 class Review extends \Magento\Backend\App\Action
 {
@@ -52,6 +54,11 @@ class Review extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * Add reports and reviews breadcrumbs
+     *
+     * @return $this
+     */
     public function _initAction()
     {
         $this->_view->loadLayout();
@@ -66,6 +73,11 @@ class Review extends \Magento\Backend\App\Action
         return $this;
     }
 
+    /**
+     * Customer Reviews Report action
+     *
+     * @return void
+     */
     public function customerAction()
     {
         $this->_title->add(__('Customer Reviews Report'));
@@ -81,27 +93,40 @@ class Review extends \Magento\Backend\App\Action
 
     /**
      * Export review customer report to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportCustomerCsvAction()
     {
         $this->_view->loadLayout(false);
         $fileName = 'review_customer.csv';
-        $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.block.report.review.customer.grid','grid.export');
-        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile());
+        $exportBlock = $this->_view
+            ->getLayout()
+            ->getChildBlock('adminhtml.block.report.review.customer.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
      * Export review customer report to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportCustomerExcelAction()
     {
         $this->_view->loadLayout(false);
         $fileName = 'review_customer.xml';
-        $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.block.report.review.customer.grid','grid.export');
-        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile());
+        $exportBlock = $this->_view
+            ->getLayout()
+            ->getChildBlock('adminhtml.block.report.review.customer.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
 
     }
 
+    /**
+     * Product reviews report action
+     *
+     * @return void
+     */
     public function productAction()
     {
         $this->_title->add(__('Product Reviews Report'));
@@ -109,34 +134,47 @@ class Review extends \Magento\Backend\App\Action
         $this->_initAction()
             ->_setActiveMenu('Magento_Review::report_review_product')
             ->_addBreadcrumb(
-            __('Products Report'),
-            __('Products Report')
-        );
+                __('Products Report'),
+                __('Products Report')
+            );
             $this->_view->renderLayout();
     }
 
     /**
      * Export review product report to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportProductCsvAction()
     {
         $this->_view->loadLayout(false);
         $fileName = 'review_product.csv';
-        $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.block.report.review.product.grid','grid.export');
-        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile());
+        $exportBlock = $this->_view
+            ->getLayout()
+            ->getChildBlock('adminhtml.block.report.review.product.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
      * Export review product report to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportProductExcelAction()
     {
         $this->_view->loadLayout(false);
         $fileName = 'review_product.xml';
-        $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.block.report.review.product.grid','grid.export');
-        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile());
+        $exportBlock = $this->_view
+            ->getLayout()
+            ->getChildBlock('adminhtml.block.report.review.product.grid', 'grid.export');
+        return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile(), \Magento\App\Filesystem::VAR_DIR);
     }
 
+    /**
+     * Details action
+     *
+     * @return void
+     */
     public function productDetailAction()
     {
         $this->_title->add(__('Details'));
@@ -153,6 +191,8 @@ class Review extends \Magento\Backend\App\Action
 
     /**
      * Export review product detail report to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportProductDetailCsvAction()
     {
@@ -160,11 +200,13 @@ class Review extends \Magento\Backend\App\Action
         $content    = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Review\Detail\Grid')
             ->getCsv();
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
      * Export review product detail report to ExcelXML format
+     *
+     * @return ResponseInterface
      */
     public function exportProductDetailExcelAction()
     {
@@ -172,9 +214,14 @@ class Review extends \Magento\Backend\App\Action
         $content    = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Review\Detail\Grid')
             ->getExcel($fileName);
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
+    /**
+     * Determine if action is allowed for reports module
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {

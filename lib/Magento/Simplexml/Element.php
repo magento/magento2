@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Simplexml
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,6 +52,7 @@ class Element extends \SimpleXMLElement
      * For future use
      *
      * @param \Magento\Simplexml\Element $element
+     * @return void
      */
     public function setParent($element)
     {
@@ -303,7 +304,7 @@ class Element extends \SimpleXMLElement
     /**
      * Converts meaningful xml characters to xml entities
      *
-     * @param  string
+     * @param string $value
      * @return string
      */
     public function xmlentities($value = null)
@@ -326,7 +327,7 @@ class Element extends \SimpleXMLElement
      * Appends $source to current node
      *
      * @param \Magento\Simplexml\Element $source
-     * @return \Magento\Simplexml\Element
+     * @return $this
      */
     public function appendChild($source)
     {
@@ -356,7 +357,7 @@ class Element extends \SimpleXMLElement
      *
      * @param \Magento\Simplexml\Element $source
      * @param boolean $overwrite
-     * @return \Magento\Simplexml\Element
+     * @return $this
      */
     public function extend($source, $overwrite=false)
     {
@@ -376,7 +377,7 @@ class Element extends \SimpleXMLElement
      *
      * @param \Magento\Simplexml\Element $source
      * @param boolean $overwrite
-     * @return \Magento\Simplexml\Element
+     * @return $this
      */
     public function extendChild($source, $overwrite=false)
     {
@@ -432,6 +433,14 @@ class Element extends \SimpleXMLElement
         return $this;
     }
 
+    /**
+     * Set node
+     *
+     * @param string $path
+     * @param string $value
+     * @param bool $overwrite
+     * @return $this
+     */
     public function setNode($path, $value, $overwrite=true)
     {
         $arr1 = explode('/', $path);
@@ -462,6 +471,7 @@ class Element extends \SimpleXMLElement
      * Unset self from the XML-node tree
      *
      * Note: trying to refer this object as a variable after "unsetting" like this will result in E_WARNING
+     * @return void
      */
     public function unsetSelf()
     {

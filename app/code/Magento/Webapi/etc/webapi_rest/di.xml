@@ -19,83 +19,75 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Authz\Model\UserLocatorInterface" type="Magento\Webapi\Model\Authz\UserLocator"/>
     <type name="Magento\Webapi\Model\Authz\UserLocator">
-        <param name="request">
-            <instance type="Magento\Webapi\Controller\Rest\Request"/>
-        </param>
+        <arguments>
+            <argument name="request" xsi:type="object">Magento\Webapi\Controller\Rest\Request</argument>
+        </arguments>
     </type>
     <preference for="Magento\App\FrontControllerInterface" type="Magento\Webapi\Controller\Rest" />
     <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
     <type name="Magento\Webapi\Controller\Rest\Request\Deserializer\Factory">
-        <param name="deserializers">
-            <value>
-                <application_json>
-                    <type>application/json</type>
-                    <model>Magento\Webapi\Controller\Rest\Request\Deserializer\Json</model>
-                </application_json>
-                <application_xml>
-                    <type>application/xml</type>
-                    <model>Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</model>
-                </application_xml>
-                <application_xhtml_xml>
-                    <type>application/xhtml+xml</type>
-                    <model>Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</model>
-                </application_xhtml_xml>
-                <text_xml>
-                    <type>text/xml</type>
-                    <model>Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</model>
-                </text_xml>
-            </value>
-        </param>
+        <arguments>
+            <argument name="deserializers" xsi:type="array">
+                <item name="application_json" xsi:type="array">
+                    <item name="type" xsi:type="string">application/json</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Json</item>
+                </item>
+                <item name="application_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
+                </item>
+                <item name="application_xhtml_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xhtml+xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
+                </item>
+                <item name="text_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">text/xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Webapi\Controller\Rest\Response\Renderer\Factory">
-        <param name="renders">
-            <value>
-                <default>
-                    <type>*/*</type>
-                    <model>Magento\Webapi\Controller\Rest\Response\Renderer\Json</model>
-                </default>
-                <application_json>
-                    <type>application/json</type>
-                    <model>Magento\Webapi\Controller\Rest\Response\Renderer\Json</model>
-                </application_json>
-                <text_xml>
-                    <type>text/xml</type>
-                    <model>Magento\Webapi\Controller\Rest\Response\Renderer\Xml</model>
-                </text_xml>
-                <application_xml>
-                    <type>application/xml</type>
-                    <model>Magento\Webapi\Controller\Rest\Response\Renderer\Xml</model>
-                </application_xml>
-                <application_xhtml_xml>
-                    <type>application/xhtml+xml</type>
-                    <model>Magento\Webapi\Controller\Rest\Response\Renderer\Xml</model>
-                </application_xhtml_xml>
-            </value>
-        </param>
+        <arguments>
+            <argument name="renders" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="type" xsi:type="string">*/*</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Response\Renderer\Json</item>
+                </item>
+                <item name="application_json" xsi:type="array">
+                    <item name="type" xsi:type="string">application/json</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Response\Renderer\Json</item>
+                </item>
+                <item name="text_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">text/xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Response\Renderer\Xml</item>
+                </item>
+                <item name="application_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Response\Renderer\Xml</item>
+                </item>
+                <item name="application_xhtml_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xhtml+xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Response\Renderer\Xml</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Webapi\Controller\Rest">
-        <param name="request">
-            <instance type="Magento\Webapi\Controller\Rest\Request\Proxy"/>
-        </param>
-        <param name="response">
-            <instance type="Magento\Webapi\Controller\Rest\Response\Proxy"/>
-        </param>
-        <param name="router">
-            <instance type="Magento\Webapi\Controller\Rest\Router\Proxy"/>
-        </param>
-        <param name="oauthHelper">
-            <instance type="Magento\Oauth\Helper\Request\Proxy"/>
-        </param>
-        <param name="authorizationService">
-            <instance type="Magento\Authz\Service\AuthorizationV1Interface\Proxy" />
-        </param>
+        <arguments>
+            <argument name="request" xsi:type="object">Magento\Webapi\Controller\Rest\Request\Proxy</argument>
+            <argument name="response" xsi:type="object">Magento\Webapi\Controller\Rest\Response\Proxy</argument>
+            <argument name="router" xsi:type="object">Magento\Webapi\Controller\Rest\Router\Proxy</argument>
+            <argument name="oauthHelper" xsi:type="object">Magento\Oauth\Helper\Request\Proxy</argument>
+            <argument name="authorizationService" xsi:type="object">Magento\Authz\Service\AuthorizationV1Interface\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Authz\Service\AuthorizationV1">
         <plugin name="webapiRestAuthorizationV1" type="Magento\Webapi\Model\Plugin\AuthorizationServiceV1" />

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,15 +35,22 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 class Image extends \Magento\Data\Form\Element\Image
 {
+    /**
+     * @return bool|string
+     */
     protected function _getUrl()
     {
         $url = false;
         if ($this->getValue()) {
-            $url = $this->_urlBuilder->getBaseUrl('media') . 'catalog/product/' . $this->getValue();
+            $url = $this->_urlBuilder
+                ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . $this->getValue();
         }
         return $url;
     }
-    
+
+    /**
+     * @return string
+     */
     protected function _getDeleteCheckbox()
     {
         $html = '';

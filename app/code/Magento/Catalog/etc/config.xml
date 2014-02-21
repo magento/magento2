@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -48,6 +48,9 @@
                 <parse_url_directives>1</parse_url_directives>
             </frontend>
             <product>
+                <flat>
+                    <max_index_count>64</max_index_count>
+                </flat>
                 <default_tax_group>2</default_tax_group>
             </product>
             <seo>

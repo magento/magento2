@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Wishlist
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,6 +35,18 @@ namespace Magento\Wishlist\Block\Customer\Wishlist;
 
 class Items extends \Magento\View\Element\Template
 {
+
+    /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
+    }
     /**
      * Retrieve table column object list
      *
@@ -44,7 +56,7 @@ class Items extends \Magento\View\Element\Template
     {
         $columns = array();
         foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $child) {
-            if ($child->isEnabled()){
+            if ($child->isEnabled()) {
                 $columns[] = $child;
             }
         }

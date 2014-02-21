@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\File\Storage;
 
 /**
@@ -42,7 +41,7 @@ abstract class AbstractStorage extends \Magento\Core\Model\Resource\Db\AbstractD
      * Sets name of connection the resource will use
      *
      * @param string $name
-     * @return \Magento\Core\Model\Resource\File\Storage\AbstractStorage
+     * @return $this
      */
     public function setConnectionName($name)
     {

@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Connect\Command;
 
 final class Package
@@ -43,9 +42,10 @@ extends \Magento\Connect\Command
 
     /**
      * Package command callback
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
+     * @param string[] $params
      * @return void
      */
     public function doPackage($command, $options, $params)
@@ -80,10 +80,11 @@ extends \Magento\Connect\Command
 
     /**
      * Display/get dependencies
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
-     * @return void/array
+     * @param string[] $params
+     * @return void
      */
     public function doPackageDependencies($command, $options, $params)
     {
@@ -115,6 +116,12 @@ extends \Magento\Connect\Command
         }
     }
 
+    /**
+     * @param string $command
+     * @param array $options
+     * @param string[] $params
+     * @return void
+     */
     public function doConvert($command, $options, $params)
     {
         $this->cleanupParams($params);

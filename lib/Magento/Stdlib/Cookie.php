@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,7 +55,7 @@ class Cookie
      * @param string $domain
      * @param bool|int|string $secure
      * @param bool|string $httponly
-     * @return \Magento\Stdlib\Cookie
+     * @return $this
      */
     public function set($name, $value, $period = null, $path = null, $domain = null, $secure = null, $httponly = null)
     {
@@ -90,7 +90,7 @@ class Cookie
      * @param string $domain
      * @param bool|int|string $secure
      * @param string|bool $httponly
-     * @return \Magento\Stdlib\Cookie
+     * @return $this
      */
     public function renew($name, $period = null, $path = null, $domain = null, $secure = null, $httponly = null)
     {

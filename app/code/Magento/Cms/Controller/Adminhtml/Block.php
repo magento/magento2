@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Controller\Adminhtml;
 
 /**
  * Cms manage blocks controller
@@ -32,8 +32,6 @@
  * @package    Magento_Cms
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Controller\Adminhtml;
-
 class Block extends \Magento\Backend\App\Action
 {
     /**
@@ -58,7 +56,7 @@ class Block extends \Magento\Backend\App\Action
     /**
      * Init actions
      *
-     * @return \Magento\Cms\Controller\Adminhtml\Block
+     * @return $this
      */
     protected function _initAction()
     {
@@ -72,6 +70,8 @@ class Block extends \Magento\Backend\App\Action
 
     /**
      * Index action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -83,6 +83,8 @@ class Block extends \Magento\Backend\App\Action
 
     /**
      * Create new CMS block
+     *
+     * @return void
      */
     public function newAction()
     {
@@ -92,6 +94,8 @@ class Block extends \Magento\Backend\App\Action
 
     /**
      * Edit CMS block
+     *
+     * @return void
      */
     public function editAction()
     {
@@ -130,6 +134,8 @@ class Block extends \Magento\Backend\App\Action
 
     /**
      * Save action
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -181,6 +187,8 @@ class Block extends \Magento\Backend\App\Action
 
     /**
      * Delete action
+     *
+     * @return void
      */
     public function deleteAction()
     {

@@ -20,18 +20,19 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Review\Block\Product\View;
 
 /**
  * Product view other block
  */
-namespace Magento\Review\Block\Product\View;
-
 class Other extends \Magento\View\Element\Template
 {
     /**
+     * Core model registry
      * @var \Magento\Core\Model\Registry
      */
     protected $_registry;
@@ -51,6 +52,8 @@ class Other extends \Magento\View\Element\Template
     }
 
     /**
+     * Get product object
+     *
      * @return \Magento\Catalog\Model\Product
      */
     public function getProduct()

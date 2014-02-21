@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Tax
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,6 +56,9 @@ class Rule extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * @return $this
+     */
     public function indexAction()
     {
         $this->_title->add(__('Tax Rules'));
@@ -65,11 +68,17 @@ class Rule extends \Magento\Backend\App\Action
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function newAction()
     {
         $this->_forward('edit');
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $this->_title->add(__('Tax Rules'));
@@ -100,6 +109,9 @@ class Rule extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function saveAction()
     {
         $postData = $this->getRequest()->getPost();
@@ -133,6 +145,9 @@ class Rule extends \Magento\Backend\App\Action
         $this->getResponse()->setRedirect($this->getUrl('tax/rule'));
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $ruleId = (int)$this->getRequest()->getParam('rule');
@@ -163,7 +178,7 @@ class Rule extends \Magento\Backend\App\Action
     /**
      * Initialize action
      *
-     * @return \Magento\Backend\App\Action
+     * @return $this
      */
     protected function _initAction()
     {
@@ -174,6 +189,9 @@ class Rule extends \Magento\Backend\App\Action
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Tax::manage_tax');

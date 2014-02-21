@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard\Tab\Products;
 
 /**
  * Adminhtml dashboard most viewed products grid
@@ -31,9 +32,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard\Tab\Products;
-
 class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
@@ -43,28 +41,32 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\Resource\Product\CollectionFactory $productsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\Resource\Product\CollectionFactory $productsFactory,
         array $data = array()
     ) {
         $this->_productsFactory = $productsFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('productsReviewedGrid');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareCollection()
     {
         if ($this->getParam('website')) {
@@ -87,6 +89,9 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareCollection();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('name', array(
@@ -119,6 +124,9 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareColumns();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRowUrl($row)
     {
         $params = array('id'=>$row->getId());

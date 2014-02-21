@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -78,9 +78,17 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStatus()
     {
-        $this->assertEquals(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED, $this->_model->getStatus());
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED);
-        $this->assertEquals(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED, $this->_model->getStatus());
+        $this->assertEquals(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
+            $this->_model->getStatus()
+        );
+
+        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+
+        $this->assertEquals(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
+            $this->_model->getStatus()
+        );
     }
 
     public function testGetSetTypeInstance()
@@ -201,7 +209,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributeText()
     {
         $this->assertNull($this->_model->getAttributeText('status'));
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->assertEquals('Enabled', $this->_model->getAttributeText('status'));
     }
 
@@ -283,8 +291,8 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $mediaDirectory = $objectManager->get('Magento\Filesystem')
-            ->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
+            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
         $mediaDirectory->delete($config->getBaseMediaPath());
     }

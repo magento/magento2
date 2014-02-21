@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Store;
@@ -60,9 +60,9 @@ class StorageFactory
     protected $_log;
 
     /**
-     * @var \Magento\Core\Model\AppInterface
+     * @var \Magento\Session\SidResolverInterface
      */
-    protected $_app;
+    protected $_sidResolver;
 
     /**
      * @var \Magento\App\State
@@ -78,7 +78,7 @@ class StorageFactory
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\AppInterface $app
+     * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\App\State $appState
      * @param string $defaultStorageClassName
      * @param string $installedStoreClassName
@@ -88,7 +88,7 @@ class StorageFactory
         \Magento\ObjectManager $objectManager,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Logger $logger,
-        \Magento\Core\Model\AppInterface $app,
+        \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\App\State $appState,
         $defaultStorageClassName = 'Magento\Core\Model\Store\Storage\DefaultStorage',
         $installedStoreClassName = 'Magento\Core\Model\Store\Storage\Db',
@@ -100,7 +100,7 @@ class StorageFactory
         $this->_eventManager = $eventManager;
         $this->_log = $logger;
         $this->_appState = $appState;
-        $this->_app = $app;
+        $this->_sidResolver = $sidResolver;
         $this->_writerModel = $writerModel;
     }
 
@@ -131,7 +131,7 @@ class StorageFactory
             if ($className === $this->_installedStoreClassName) {
                 $useSid = $instance->getStore()
                     ->getConfig(\Magento\Core\Model\Session\SidResolver::XML_PATH_USE_FRONTEND_SID);
-                $this->_app->setUseSessionInUrl($useSid);
+                $this->_sidResolver->setUseSessionInUrl($useSid);
 
                 $this->_eventManager->dispatch('core_app_init_current_store_after');
 

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,15 +34,20 @@
 
 namespace Magento\Newsletter\Block\Adminhtml;
 
+use Magento\Newsletter\Model\Resource\Queue\Collection;
+
 class Subscriber extends \Magento\Backend\Block\Template
 {
     /**
      * Queue collection
      *
-     * @var \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @var Collection
      */
     protected $_queueCollection = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'subscriber/list.phtml';
 
     /**
@@ -67,7 +72,7 @@ class Subscriber extends \Magento\Backend\Block\Template
     /**
      * Prepares block to render
      *
-     * @return \Magento\Newsletter\Block\Adminhtml\Subscriber
+     * @return $this
      */
     protected function _beforeToHtml()
     {
@@ -77,7 +82,7 @@ class Subscriber extends \Magento\Backend\Block\Template
     /**
      * Return queue collection with loaded neversent queues
      *
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @return Collection
      */
     public function getQueueCollection()
     {
@@ -92,6 +97,11 @@ class Subscriber extends \Magento\Backend\Block\Template
         return $this->_queueCollection;
     }
 
+    /**
+     * Get add option for queue
+     *
+     * @return mixed
+     */
     public function getShowQueueAdd()
     {
         return $this->getChildBlock('grid')->getShowQueueAdd();

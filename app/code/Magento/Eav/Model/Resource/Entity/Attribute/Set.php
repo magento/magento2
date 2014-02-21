@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Resource\Entity\Attribute;
 
 /**
  * Eav attribute set resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Entity\Attribute;
-
 class Set extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -56,6 +54,7 @@ class Set extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -66,7 +65,7 @@ class Set extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Perform actions after object save
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Set
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {

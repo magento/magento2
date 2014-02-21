@@ -20,11 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Tax
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Tax\Block\Adminhtml\Frontend\Region;
+
+use Magento\Data\Form\Element\AbstractElement;
 
 class Updater
     extends \Magento\Backend\Block\System\Config\Form\Field
@@ -48,7 +50,11 @@ class Updater
         parent::__construct($context, $data);
     }
 
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(AbstractElement $element)
     {
         $html = parent::_getElementHtml($element);
 

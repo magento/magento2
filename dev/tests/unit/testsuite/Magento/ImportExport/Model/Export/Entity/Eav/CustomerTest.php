@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -87,9 +87,19 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+
+        $storeManager->expects($this->any())
+            ->method('getWebsites')
+            ->will($this->returnCallback(array($this, 'getWebsites')));
+
+        $storeManager->expects($this->any())
+            ->method('getStores')
+            ->will($this->returnCallback(array($this, 'getStores')));
+
         $this->_model = new \Magento\ImportExport\Model\Export\Entity\Eav\Customer(
             $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\App', array(), array(), '', false),
+            $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', array(), array(), '', false),
             $this->getMock(
                 'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory', array(), array(), '', false
@@ -113,16 +123,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $websiteManager = $this->getMock('stdClass', array('getWebsites'));
-        $websiteManager->expects($this->once())
-            ->method('getWebsites')
-            ->will($this->returnCallback(array($this, 'getWebsites')));
-
-        $storeManager = $this->getMock('stdClass', array('getStores'));
-        $storeManager->expects($this->once())
-            ->method('getStores')
-            ->will($this->returnCallback(array($this, 'getStores')));
-
         $translator = $this->getMock('stdClass');
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -142,8 +142,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         }
 
         $data = array(
-            'website_manager'              => $websiteManager,
-            'store_manager'                => $storeManager,
             'translator'                   => $translator,
             'attribute_collection'         => $attributeCollection,
             'page_size'                    => 1,

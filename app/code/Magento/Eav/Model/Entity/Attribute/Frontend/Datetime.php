@@ -20,11 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
 class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
@@ -49,7 +47,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
     /**
      * Retrieve attribute value
      *
-     * @param $object
+     * @param \Magento\Object $object
      * @return mixed
      */
     public function getValue(\Magento\Object $object)

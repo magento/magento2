@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,6 +66,7 @@ class Proxy
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {
@@ -136,6 +137,8 @@ class Proxy
     /**
      * Check whether element should be displayed
      *
+     * @param string $websiteCode
+     * @param string $storeCode
      * @return bool
      */
     public function isVisible($websiteCode = '', $storeCode = '')
@@ -198,6 +201,7 @@ class Proxy
      * Populate form fieldset with group data
      *
      * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @return void
      */
     public function populateFieldset(\Magento\Data\Form\Element\Fieldset $fieldset)
     {

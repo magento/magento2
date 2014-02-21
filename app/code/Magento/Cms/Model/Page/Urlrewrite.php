@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Model\Page;
 
 /**
  * @method \Magento\Cms\Model\Resource\Page\Urlrewrite getResource() getResource()
@@ -31,13 +32,12 @@
  * @method \Magento\Cms\Model\Page\Urlrewrite setCmsPageId() setCmsPageId(int)
  * @method \Magento\Cms\Model\Page\Urlrewrite setUrlRewriteId() setUrlRewriteId(int)
  */
-namespace Magento\Cms\Model\Page;
-
 class Urlrewrite extends \Magento\Core\Model\AbstractModel
 {
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {

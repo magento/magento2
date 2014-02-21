@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Widget\Grid;
 
 class Extended
@@ -63,7 +62,7 @@ class Extended
     /**
      * Grid export types
      *
-     * @var array
+     * @var \Magento\Object[]
      */
     protected $_exportTypes = array();
 
@@ -119,7 +118,7 @@ class Extended
     /**
      * Columns to group by
      *
-     * @var array
+     * @var string[]
      */
     protected $_groupedColumn = array();
 
@@ -151,9 +150,9 @@ class Extended
      */
     protected $_emptyTextCss    = 'a-center';
 
-    /*
-    * @var boolean
-    */
+    /**
+     * @var bool
+     */
     protected $_isCollapsed;
 
     /**
@@ -166,7 +165,7 @@ class Extended
     /**
      * SubTotals
      *
-     * @var array
+     * @var \Magento\Object[]
      */
     protected $_subtotals = array();
 
@@ -187,18 +186,21 @@ class Extended
      */
     protected $_path = 'export';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->_emptyText = __('We couldn\'t find any records.');
 
-        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
      * Initialize child blocks
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -258,7 +260,7 @@ class Extended
      *
      * @param   string $url
      * @param   string $label
-     * @return  \Magento\Backend\Block\Widget\Grid
+     * @return  $this
      */
     public function addExportType($url, $label)
     {
@@ -275,8 +277,9 @@ class Extended
      * Add column to grid
      *
      * @param   string $columnId
-     * @param   array || \Magento\Object $column
-     * @return  \Magento\Backend\Block\Widget\Grid
+     * @param   array|\Magento\Object $column
+     * @return  $this
+     * @throws  \Exception
      */
     public function addColumn($columnId, $column)
     {
@@ -301,7 +304,7 @@ class Extended
      * Remove existing column
      *
      * @param string $columnId
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function removeColumn($columnId)
     {
@@ -320,7 +323,7 @@ class Extended
      * @param   string $columnId
      * @param   array|\Magento\Object $column
      * @param   string $after
-     * @return  \Magento\Backend\Block\Widget\Grid
+     * @return  $this
      */
     public function addColumnAfter($columnId, $column, $after)
     {
@@ -334,7 +337,7 @@ class Extended
      *
      * @param string $columnId
      * @param string $after
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function addColumnsOrder($columnId, $after)
     {
@@ -355,7 +358,7 @@ class Extended
     /**
      * Sort columns by predefined order
      *
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function sortColumnsByOrder()
     {
@@ -385,7 +388,7 @@ class Extended
     /**
      * Initialize grid columns
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareColumns()
     {
@@ -396,7 +399,7 @@ class Extended
     /**
      * Prepare grid massaction block
      *
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     protected function _prepareMassactionBlock()
     {
@@ -411,7 +414,7 @@ class Extended
     /**
      * Prepare grid massaction actions
      *
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     protected function _prepareMassaction()
     {
@@ -421,7 +424,7 @@ class Extended
     /**
      * Prepare grid massaction column
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareMassactionColumn()
     {
@@ -454,7 +457,7 @@ class Extended
     /**
      * Apply sorting and filtering to collection
      *
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -473,7 +476,7 @@ class Extended
     /**
      * Process collection after loading
      *
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     protected function _afterLoadCollection()
     {
@@ -483,7 +486,7 @@ class Extended
     /**
      * Initialize grid before rendering
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended|void
+     * @return $this
      */
     protected function _prepareGrid()
     {
@@ -517,7 +520,7 @@ class Extended
      * Set massaction row identifier field
      *
      * @param  string    $idField
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function setMassactionIdField($idField)
     {
@@ -539,7 +542,7 @@ class Extended
      * Set massaction row identifier filter
      *
      * @param string $idFilter
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function setMassactionIdFilter($idFilter)
     {
@@ -561,7 +564,7 @@ class Extended
      * Set massaction block name
      *
      * @param  string    $blockName
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function setMassactionBlockName($blockName)
     {
@@ -572,7 +575,7 @@ class Extended
     /**
      * Retrieve massaction block
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Extended
+     * @return $this
      */
     public function getMassactionBlock()
     {
@@ -631,7 +634,7 @@ class Extended
      * Set label for empty cell
      *
      * @param string $label
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function setEmptyCellLabel($label)
     {
@@ -642,7 +645,7 @@ class Extended
     /**
      * Return row url for js event handlers
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Object
+     * @param \Magento\Catalog\Model\Product|\Magento\Object $item
      * @return string
      */
     public function getRowUrl($item)
@@ -691,7 +694,7 @@ class Extended
      *
      * @param \Magento\Object $item
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
-     * @return integer|boolean
+     * @return int|false
      */
     public function getRowspan($item, $column)
     {
@@ -706,7 +709,7 @@ class Extended
      *
      * @param string|object $column
      * @param string $value
-     * @return boolean|\Magento\Backend\Block\Widget\Grid
+     * @return boolean|$this
      */
     public function isColumnGrouped($column, $value = null)
     {
@@ -746,7 +749,7 @@ class Extended
      * Retrieve subtotal item
      *
      * @param \Magento\Object $item
-     * @return \Magento\Object
+     * @return \Magento\Object|string
      */
     public function getSubTotalItem($item)
     {
@@ -773,7 +776,8 @@ class Extended
     /**
      * Set visibility of column headers
      *
-     * @param boolean $visible
+     * @param bool $visible
+     * @return void
      */
     public function setHeadersVisibility($visible=true)
     {
@@ -793,7 +797,8 @@ class Extended
     /**
      * Set visibility of filter
      *
-     * @param boolean $visible
+     * @param bool $visible
+     * @return void
      */
     public function setFilterVisibility($visible=true)
     {
@@ -814,7 +819,7 @@ class Extended
      * Set empty text for grid
      *
      * @param string $text
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function setEmptyText($text)
     {
@@ -836,7 +841,7 @@ class Extended
      * Set empty text CSS class
      *
      * @param string $cssClass
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function setEmptyTextClass($cssClass)
     {
@@ -856,8 +861,9 @@ class Extended
 
     /**
      * Set flag whether is collapsed
-     * @param $isCollapsed
-     * @return \Magento\Backend\Block\Widget\Grid\ColumnSet
+     *
+     * @param bool $isCollapsed
+     * @return $this
      */
     public function setIsCollapsed($isCollapsed)
     {
@@ -867,7 +873,8 @@ class Extended
 
     /**
      * Retrieve flag is collapsed
-     * @return mixed
+     *
+     * @return bool
      */
     public function getIsCollapsed()
     {
@@ -888,7 +895,7 @@ class Extended
     /**
      * Retrieve Headers row array for Export
      *
-     * @return array
+     * @return string[]
      */
     protected function _getExportHeaders()
     {
@@ -904,7 +911,7 @@ class Extended
     /**
      * Retrieve Totals row array for Export
      *
-     * @return array
+     * @return string[]
      */
     protected function _getExportTotals()
     {
@@ -924,7 +931,7 @@ class Extended
      *
      * @param string $callback
      * @param array $args additional arguments for callback method
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return void
      */
     public function _exportIterateCollection($callback, array $args)
     {
@@ -959,6 +966,7 @@ class Extended
      *
      * @param \Magento\Object $item
      * @param \Magento\Filesystem\File\WriteInterface $stream
+     * @return void
      */
     protected function _exportCsvItem(\Magento\Object $item, \Magento\Filesystem\File\WriteInterface $stream)
     {
@@ -1090,7 +1098,7 @@ class Extended
      *  Get a row data of the particular columns
      *
      * @param \Magento\Object $data
-     * @return array
+     * @return string[]
      */
     public function getRowRecord(\Magento\Object $data)
     {
@@ -1190,7 +1198,7 @@ class Extended
     /**
      * Retrieve grid export types
      *
-     * @return array|bool
+     * @return \Magento\Object[]|false
      */
     public function getExportTypes()
     {
@@ -1200,6 +1208,7 @@ class Extended
      * Set collection object
      *
      * @param \Magento\Data\Collection $collection
+     * @return void
      */
     public function setCollection($collection)
     {
@@ -1220,7 +1229,7 @@ class Extended
      * Set subtotals
      *
      * @param boolean $flag
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     public function setCountSubTotals($flag = true)
     {
@@ -1241,8 +1250,8 @@ class Extended
     /**
      * Set subtotal items
      *
-     * @param array $items
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @param \Magento\Object[] $items
+     * @return $this
      */
     public function setSubTotals(array $items)
     {
@@ -1253,7 +1262,7 @@ class Extended
     /**
      * Retrieve subtotal items
      *
-     * @return array
+     * @return \Magento\Object[]
      */
     public function getSubTotals()
     {

@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,17 +33,17 @@ class FileFactory
     protected $_response;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         \Magento\App\ResponseInterface $response,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->_response = $response;
         $this->_filesystem = $filesystem;
@@ -55,6 +55,7 @@ class FileFactory
      * @param string $fileName
      * @param string|array $content set to null to avoid starting output, $contentLength should be set explicitly in
      *                              that case
+     * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength explicit content length, if strlen($content) isn't applicable
      * @throws \Exception
@@ -65,9 +66,14 @@ class FileFactory
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function create($fileName, $content, $contentType = 'application/octet-stream', $contentLength = null)
-    {
-        $filesystem = $this->_filesystem;
+    public function create(
+        $fileName,
+        $content,
+        $baseDir = \Magento\App\Filesystem::ROOT_DIR,
+        $contentType = 'application/octet-stream',
+        $contentLength = null
+    ) {
+        $dir = $this->_filesystem->getDirectoryWrite($baseDir);
         $isFile = false;
         $file = null;
         if (is_array($content)) {
@@ -77,7 +83,7 @@ class FileFactory
             if ($content['type'] == 'filename') {
                 $isFile = true;
                 $file = $content['value'];
-                $contentLength = $filesystem->getFileSize($file);
+                $contentLength = $dir->stat($file)['size'];
             }
         }
 
@@ -91,24 +97,22 @@ class FileFactory
 
         if (!is_null($content)) {
             if ($isFile) {
-                $this->_response->clearBody();
-                $this->_response->sendHeaders();
-
-                if (!$filesystem->isFile($file)) {
+                if (!$dir->isFile($file)) {
                     throw new \Exception(__('File not found'));
                 }
-                $stream = $filesystem->fileOpen($file, 'r');
-                while ($buffer = $filesystem->fileRead($stream, 1024)) {
-                    print $buffer;
+                $this->_response->sendHeaders();
+                $stream = $dir->openFile($file, 'r');
+                while (!$stream->eof()) {
+                    echo $stream->read(1024);
                 }
+                $stream->close();
                 flush();
-                $filesystem->fileClose($stream);
                 if (!empty($content['rm'])) {
-                    $filesystem->deleteFile($file);
+                    $dir->delete($file);
                 }
-
                 exit(0);
             } else {
+                $this->_response->clearBody();
                 $this->_response->setBody($content);
             }
         }

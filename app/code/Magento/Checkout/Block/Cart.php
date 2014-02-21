@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -66,6 +66,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->_cartHelper = $cartHelper;
         $this->_catalogUrlBuilder = $catalogUrlBuilder;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

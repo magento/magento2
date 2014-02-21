@@ -22,13 +22,16 @@
  *
  * @category    Magento
  * @package     Magento_AdminNotification
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\AdminNotification\Block;
 
 class Inbox extends \Magento\Backend\Block\Widget\Grid\Container
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_controller = 'adminhtml';
@@ -37,6 +40,9 @@ class Inbox extends \Magento\Backend\Block\Widget\Grid\Container
         parent::_construct();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();

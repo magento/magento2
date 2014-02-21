@@ -20,9 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import;
+
+use Magento\Filesystem\Directory\Write;
+use Magento\ImportExport\Model\Import\AbstractSource;
 
 /**
  * Import adapter model
@@ -31,18 +35,16 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Import;
-
 class Adapter
 {
     /**
      * Adapter factory. Checks for availability, loads and create instance of import adapter object.
      *
      * @param string $type Adapter type ('csv', 'xml' etc.)
-     * @param \Magento\Filesystem\Directory\Write $directory
+     * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
-     * @throws \Exception
-     * @return \Magento\ImportExport\Model\Import\AbstractSource
+     * @return AbstractSource
+     * @throws \Magento\Core\Exception
      */
     public static function factory($type, $directory, $options = null)
     {
@@ -56,7 +58,7 @@ class Adapter
         }
         $adapter = new $adapterClass($options, $directory);
 
-        if (! $adapter instanceof \Magento\ImportExport\Model\Import\AbstractSource) {
+        if (! $adapter instanceof AbstractSource) {
             throw new \Magento\Core\Exception(
                 __('Adapter must be an instance of \Magento\ImportExport\Model\Import\AbstractSource')
             );
@@ -68,8 +70,8 @@ class Adapter
      * Create adapter instance for specified source file.
      *
      * @param string $source Source file path.
-     * @param \Magento\Filesystem\Directory\Write $directory
-     * @return \Magento\ImportExport\Model\Import\AbstractSource
+     * @param Write $directory
+     * @return AbstractSource
      */
     public static function findAdapterFor($source, $directory)
     {

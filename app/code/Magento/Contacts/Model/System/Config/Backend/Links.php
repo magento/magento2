@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Contacts
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,7 +35,7 @@ class Links extends \Magento\Backend\Model\Config\Backend\Cache
     /**
      * Cache tags to clean
      *
-     * @var array
+     * @var string[]
      */
     protected $_cacheTags = array(\Magento\Core\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG);
 

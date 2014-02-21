@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
@@ -27,9 +27,14 @@ return array(
             'attributeOne' => '10',
             'attributeTwo' => '20',
             'subnode' => array(
-                'attributeThree' => '40',
-                'attributeFour' => '40',
-                'value' => 'Value1',
+                array(
+                    'attributeThree' => '30',
+                ),
+                array(
+                    'attributeThree' => '40',
+                    'attributeFour' => '40',
+                    'value' => 'Value1',
+                ),
             ),
             'books' => array(
                 'attributeFive' => '50'

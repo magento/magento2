@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -31,7 +31,7 @@
 <div class="grid-title">
     <span class="title"><?php echo __('Google Content Items') ?></span>
 </div>
-<div data-mage-init="{loader: {}}" data-container="googleContent">
+<div data-mage-init='{"loader": {}}' data-container="googleContent">
 <?php echo $this->getChildHtml('item') ?>
 </div>
 
@@ -39,7 +39,7 @@
     <div class="page-actions"><?php echo $this->getAddButtonHtml() ?></div>
     <span class="title"><?php echo __('Available Products') ?></span>
 </div>
-<div data-mage-init="{loader: {}}" data-container="products">
+<div data-mage-init='{"loader": {}}' data-container="products">
 <?php echo $this->getChildHtml('product') ?>
 </div>
 

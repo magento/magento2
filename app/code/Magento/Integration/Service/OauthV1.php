@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Service;
 
 use Magento\Oauth\OauthInterface;
@@ -41,28 +40,44 @@ use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
  */
 class OauthV1 implements OauthV1Interface
 {
-    /** @var  \Magento\Core\Model\StoreManagerInterface */
+    /**
+     * @var  \Magento\Core\Model\StoreManagerInterface
+     */
     protected $_storeManager;
 
-    /** @var  ConsumerFactory */
+    /**
+     * @var  ConsumerFactory
+     */
     protected $_consumerFactory;
 
-    /** @var  TokenFactory */
+    /**
+     * @var  TokenFactory
+     */
     protected $_tokenFactory;
 
-    /** @var  IntegrationOauthHelper */
+    /**
+     * @var  IntegrationOauthHelper
+     */
     protected $_dataHelper;
 
-    /** @var  \Magento\HTTP\ZendClient */
+    /**
+     * @var  \Magento\HTTP\ZendClient
+     */
     protected $_httpClient;
 
-    /** @var \Magento\Logger */
+    /**
+     * @var \Magento\Logger
+     */
     protected $_logger;
 
-    /** @var OauthHelper */
+    /**
+     * @var OauthHelper
+     */
     protected $_oauthHelper;
 
-    /** @var TokenProvider */
+    /**
+     * @var TokenProvider
+     */
     protected $_tokenProvider;
 
     /**

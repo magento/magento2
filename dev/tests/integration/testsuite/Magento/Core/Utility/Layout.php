@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -102,9 +102,9 @@ class Layout
             'design'             => $objectManager->get('Magento\View\DesignInterface'),
             'blockFactory'       => $objectManager->create('Magento\View\Element\BlockFactory', array()),
             'structure'          => $objectManager->create('Magento\Data\Structure', array()),
-            'argumentProcessor'  => $objectManager->create('Magento\Core\Model\Layout\Argument\Processor', array()),
+            'argumentParser'     => $objectManager->get('Magento\View\Layout\Argument\Parser'),
+            'argumentInterpreter'=> $objectManager->get('layoutArgumentInterpreter'),
             'scheduledStructure' => $objectManager->create('Magento\Core\Model\Layout\ScheduledStructure', array()),
-            'dataServiceGraph'   => $objectManager->create('Magento\Core\Model\DataService\Graph', array()),
             'coreStoreConfig'    => $objectManager->create('Magento\Core\Model\Store\Config'),
             'appState'           => $objectManager->get('Magento\App\State'),
             'messageManager'     => $objectManager->get('Magento\Message\ManagerInterface'),

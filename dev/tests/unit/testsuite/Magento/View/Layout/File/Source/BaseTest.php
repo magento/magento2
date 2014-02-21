@@ -18,14 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View\Layout\File\Source;
 
-use Magento\Filesystem,
-    Magento\Filesystem\Directory\Read,
+use Magento\Filesystem\Directory\Read,
     Magento\View\Layout\File\Factory;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
@@ -49,15 +48,23 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->directory = $this->getMock(
             'Magento\Filesystem\Directory\Read',
-            array('getAbsolutePath', 'search'), array(), '', false
+            array(),
+            array(),
+            '',
+            false
         );
         $filesystem = $this->getMock(
-            'Magento\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false
+            'Magento\App\Filesystem',
+            array('getDirectoryRead', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Filesystem::MODULES)
+            ->with(\Magento\App\Filesystem::MODULES_DIR)
             ->will($this->returnValue($this->directory));
+
         $this->fileFactory = $this->getMock('Magento\View\Layout\File\Factory', array(), array(), '', false);
         $this->model = new Base($filesystem, $this->fileFactory);
     }
@@ -99,8 +106,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ->expects($this->at($key))
                 ->method('create')
                 ->with(sprintf($handlePath, $file['module'], $file['handle']), $moduleName)
-                ->will($this->returnValue($checkResult[$key]))
-            ;
+                ->will($this->returnValue($checkResult[$key]));
         }
 
         $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
@@ -122,7 +128,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array(
-                    array('handle' => 'preset/4', 'module' => 'Fourth'),
+                    array('handle' => 'preset/4', 'module' => 'Four'),
                 ),
                 'preset/4',
             ),

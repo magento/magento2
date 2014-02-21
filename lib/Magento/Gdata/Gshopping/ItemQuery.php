@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Gdata
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -79,7 +79,7 @@ class ItemQuery extends \Zend_Gdata_Query
      * Set language code
      *
      * @param string $language code
-     * @return \Magento\Gdata\Gshopping\ItemQuery
+     * @return $this
      */
     public function setLanguage($language)
     {
@@ -101,7 +101,7 @@ class ItemQuery extends \Zend_Gdata_Query
      * Set target country code
      *
      * @param string $targetCountry code
-     * @return \Magento\Gdata\Gshopping\ItemQuery
+     * @return $this
      */
     public function setTargetCountry($targetCountry)
     {
@@ -123,7 +123,7 @@ class ItemQuery extends \Zend_Gdata_Query
      * Set default feed's URI
      *
      * @param string $uri URI
-     * @return \Magento\Gdata\Gshopping\ItemQuery
+     * @return $this
      */
     public function setFeedUri($uri)
     {

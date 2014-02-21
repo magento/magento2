@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,20 +40,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
 
@@ -206,7 +204,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->getMassactionBlock()->addItem('print_shipping_label', array(
             'label' => __('Print Shipping Labels'),
-            'url' => $this->getUrl('sales/order_shipment/massPrintShippingLabel'),
+            'url' => $this->getUrl('adminhtml/order_shipment/massPrintShippingLabel'),
         ));
 
         return $this;

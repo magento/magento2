@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller\Soap;
@@ -29,7 +29,6 @@ class Request extends \Magento\Webapi\Controller\Request
 {
     /**
      * Identify versions of resources that should be used for API configuration generation.
-     * TODO : This is getting called twice within a single request. Need to cache.
      *
      * @return array
      * @throws \Magento\Webapi\Exception When GET parameters are invalid
@@ -55,7 +54,7 @@ class Request extends \Magento\Webapi\Controller\Request
     /**
      * Extract the resources query param value and return associative array of the form 'resource' => 'version'
      *
-     * @param string $param eg <pre> testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1 </pre>
+     * @param string $param eg <pre> testModule1AllSoapAndRestV1,testModule2AllSoapNoRestV1 </pre>
      * @return array <pre> eg array (
      *      'testModule1AllSoapAndRest' => 'V1',
      *       'testModule2AllSoapNoRest' => 'V1',
@@ -65,7 +64,6 @@ class Request extends \Magento\Webapi\Controller\Request
     protected function _convertRequestParamToServiceArray($param)
     {
         $serviceSeparator = ',';
-        //TODO: This should be a globally used pattern in Webapi module
         $serviceVerPattern = "[a-zA-Z\d]*V[\d]+";
         $regexp = "/^($serviceVerPattern)([$serviceSeparator]$serviceVerPattern)*$/";
         //Check if the $param is of valid format

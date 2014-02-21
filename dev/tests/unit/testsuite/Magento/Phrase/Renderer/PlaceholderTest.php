@@ -18,27 +18,80 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Phrase\Renderer;
 
 class PlaceholderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Phrase\Renderer\Placeholder
-     */
+    /** @var Placeholder */
     protected $_renderer;
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_renderer = $objectManagerHelper->getObject('Magento\Phrase\Renderer\Placeholder');
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_renderer = $objectManager->getObject('Magento\Phrase\Renderer\Placeholder');
     }
 
-    public function testRenderPlaceholder()
+    /**
+     * @param string $text The text with placeholders
+     * @param array $arguments The arguments supplying values for the placeholders
+     * @param string $result The result of Phrase rendering
+     *
+     * @dataProvider renderPlaceholderDataProvider
+     */
+    public function testRenderPlaceholder($text, array $arguments, $result)
     {
-        $result = 'text param1 param2';
-        $this->assertEquals($result, $this->_renderer->render('text %1 %2', array('param1', 'param2')));
+        $this->assertEquals($result, $this->_renderer->render($text, $arguments));
+    }
+
+    /**
+     * @return array
+     */
+    public function renderPlaceholderDataProvider()
+    {
+        return [
+            [
+                'text %1 %2',
+                ['one', 'two'],
+                'text one two'
+            ],
+            [
+                'text %one %two',
+                ['one' => 'one', 'two' => 'two'],
+                'text one two'
+            ],
+            [
+                '%one text %two %1',
+                ['one' => 'one', 'two' => 'two', 'three'],
+                'one text two three'
+            ],
+            [
+                'text %1 %two %2 %3 %five %4 %5',
+                ['one', 'two' => 'two', 'three', 'four', 'five' => 'five', 'six', 'seven'],
+                'text one two three four five six seven'
+            ],
+            [
+                '%one text %two text %three %1 %2',
+                ['two' => 'two', 'one' => 'one', 'three' => 'three', 'four', 'five'],
+                'one text two text three four five'
+            ],
+            [
+                '%three text %two text %1',
+                ['two' => 'two', 'three' => 'three', 'one'],
+                'three text two text one'
+            ],
+            [
+                'text %1 text %2 text',
+                [],
+                'text %1 text %2 text'
+            ],
+            [
+                '%1 text %2',
+                ['one'],
+                'one text %2'
+            ]
+        ];
     }
 }

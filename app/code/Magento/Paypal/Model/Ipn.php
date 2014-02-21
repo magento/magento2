@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,7 +44,7 @@ class Ipn
     /**
      * Recurring profile instance
      *
-     * @var \Magento\Sales\Model\Recurring\Profile
+     * @var \Magento\RecurringProfile\Model\Profile
      */
     protected $_recurringProfile;
 
@@ -90,15 +90,15 @@ class Ipn
     protected $_configFactory;
 
     /**
-     * @var \Magento\Sales\Model\Recurring\ProfileFactory
+     * @var \Magento\RecurringProfile\Model\ProfileFactory
      */
-    protected $_profileFactory;
+    protected $_recurringProfileFactory;
 
     /**
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\App\ResponseInterface $responseHttp
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Magento\Sales\Model\Recurring\ProfileFactory $profileFactory
+     * @param \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory
      * @param \Magento\Paypal\Model\Info $paypalInfo
      * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
      */
@@ -106,14 +106,14 @@ class Ipn
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\App\ResponseInterface $responseHttp,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Magento\Sales\Model\Recurring\ProfileFactory $profileFactory,
+        \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory,
         \Magento\Paypal\Model\Info $paypalInfo,
         \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_responseHttp = $responseHttp;
         $this->_configFactory = $configFactory;
-        $this->_profileFactory = $profileFactory;
+        $this->_recurringProfileFactory = $recurringProfileFactory;
         $this->_info = $paypalInfo;
         $this->_logAdapterFactory = $logAdapterFactory;
     }
@@ -141,7 +141,7 @@ class Ipn
      */
     public function processIpnRequest(array $request, \Zend_Http_Client_Adapter_Interface $httpAdapter = null)
     {
-        $this->_request   = $request;
+        $this->_request = $request;
         $this->_debugData = array('ipn' => $request);
         ksort($this->_debugData['ipn']);
 
@@ -213,7 +213,7 @@ class Ipn
             if (!$this->_order->getId()) {
                 $this->_debugData['exception'] = sprintf('Wrong order ID: "%s".', $id);
                 $this->_debug();
-                $this->_responseHttp->setHeader('HTTP/1.1','503 Service Unavailable')->sendResponse();
+                $this->_responseHttp->setHeader('HTTP/1.1', '503 Service Unavailable')->sendResponse();
                 exit;
             }
             // re-initialize config with the method code and store id
@@ -232,7 +232,7 @@ class Ipn
     /**
      * Load recurring profile
      *
-     * @return \Magento\Sales\Model\Recurring\Profile
+     * @return \Magento\RecurringProfile\Model\Profile
      * @throws \Exception
      */
     protected function _getRecurringProfile()
@@ -240,7 +240,7 @@ class Ipn
         if (empty($this->_recurringProfile)) {
             // get proper recurring profile
             $internalReferenceId = $this->_request['rp_invoice_id'];
-            $this->_recurringProfile = $this->_profileFactory->create()
+            $this->_recurringProfile = $this->_recurringProfileFactory->create()
                 ->loadByInternalReferenceId($internalReferenceId);
             if (!$this->_recurringProfile->getId()) {
                 throw new \Exception(
@@ -275,7 +275,9 @@ class Ipn
             }
             if (strtolower($merchantEmail) != strtolower($receiverEmail)) {
                 throw new \Exception(sprintf(
-                    'The requested %s and configured %s merchant emails do not match.', $receiverEmail, $merchantEmail
+                    'The requested %s and configured %s merchant emails do not match.',
+                    $receiverEmail,
+                    $merchantEmail
                 ));
             }
         }
@@ -327,7 +329,12 @@ class Ipn
         /**
          *  Add IPN comment about registered dispute
          */
-        $message = __('IPN "%1". A dispute has been resolved and closed. %2 Transaction amount %3.', ucfirst($reasonCode), $notificationAmount, $reasonComment);
+        $message = __(
+            'IPN "%1". A dispute has been resolved and closed. %2 Transaction amount %3.',
+            ucfirst($reasonCode),
+            $notificationAmount,
+            $reasonComment
+        );
         $this->_order->addStatusHistoryComment($message)
             ->setIsCustomerNotified(false)
             ->save();
@@ -346,7 +353,13 @@ class Ipn
         /**
          *  Add IPN comment about registered dispute
          */
-        $message = __('IPN "%1". Case type "%2". Case ID "%3" %4', ucfirst($caseType), $caseTypeLabel, $caseId, $reasonComment);
+        $message = __(
+            'IPN "%1". Case type "%2". Case ID "%3" %4',
+            ucfirst($caseType),
+            $caseTypeLabel,
+            $caseId,
+            $reasonComment
+        );
         $this->_order->addStatusHistoryComment($message)
             ->setIsCustomerNotified(false)
             ->save();
@@ -362,9 +375,10 @@ class Ipn
         $notificationAmount = $this->_order
             ->getBaseCurrency()
             ->formatTxt($this->_request['mc_gross'] + $this->_request['mc_fee']);
-        $paymentStatus = $this->_filterPaymentStatus(isset($this->_request['payment_status'])
-            ? $this->_request['payment_status']
-            : null
+        $paymentStatus = $this->_filterPaymentStatus(
+            isset($this->_request['payment_status'])
+                ? $this->_request['payment_status']
+                : null
         );
         $orderStatus = ($paymentStatus == \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVERSED)
             ? \Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED
@@ -372,7 +386,13 @@ class Ipn
         /**
          * Change order status to PayPal Reversed/PayPal Cancelled Reversal if it is possible.
          */
-        $message = __('IPN "%1". %2 Transaction amount %3. Transaction ID: "%4"', $this->_request['payment_status'], $reasonComment, $notificationAmount, $this->_request['txn_id']);
+        $message = __(
+            'IPN "%1". %2 Transaction amount %3. Transaction ID: "%4"',
+            $this->_request['payment_status'],
+            $reasonComment,
+            $notificationAmount,
+            $this->_request['txn_id']
+        );
         $this->_order->setStatus($orderStatus);
         $this->_order->save();
         $this->_order->addStatusHistoryComment($message, $orderStatus)
@@ -414,7 +434,7 @@ class Ipn
                     $this->_registerMasspaymentsSuccess();
                     break;
 
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVERSED:// break is intentionally omitted
+                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVERSED: //break is intentionally omitted
                 case \Magento\Paypal\Model\Info::PAYMENTSTATUS_UNREVERSED:
                     $this->_registerPaymentReversal();
                     break;
@@ -449,60 +469,48 @@ class Ipn
         try {
             // handle payment_status
             $paymentStatus = $this->_filterPaymentStatus($this->_request['payment_status']);
+            if ($paymentStatus != \Magento\Paypal\Model\Info::PAYMENTSTATUS_COMPLETED) {
+                throw new \Exception("Cannot handle payment status '{$paymentStatus}'.");
+            }
+            // Register recurring payment notification, create and process order
+            $price = $this->getRequestData('mc_gross') - $this->getRequestData('tax')
+                - $this->getRequestData('shipping');
+            $productItemInfo = new \Magento\Object;
+            $type = trim($this->getRequestData('period_type'));
+            if ($type == 'Trial') {
+                $productItemInfo->setPaymentType(\Magento\RecurringProfile\Model\PaymentTypeInterface::TRIAL);
+            } elseif ($type == 'Regular') {
+                $productItemInfo->setPaymentType(\Magento\RecurringProfile\Model\PaymentTypeInterface::REGULAR);
+            }
+            $productItemInfo->setTaxAmount($this->getRequestData('tax'));
+            $productItemInfo->setShippingAmount($this->getRequestData('shipping'));
+            $productItemInfo->setPrice($price);
 
-            switch ($paymentStatus) {
-                // paid
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_COMPLETED:
-                    $this->_registerRecurringProfilePaymentCapture();
-                    break;
+            $order = $this->_recurringProfile->createOrder($productItemInfo);
 
-                default:
-                    throw new \Exception("Cannot handle payment status '{$paymentStatus}'.");
+            $payment = $order->getPayment();
+            $payment->setTransactionId($this->getRequestData('txn_id'))
+                ->setCurrencyCode($this->getRequestData('mc_currency'))
+                ->setPreparedMessage($this->_createIpnComment(''))
+                ->setIsTransactionClosed(0);
+            $order->save();
+            $this->_recurringProfile->addOrderRelation($order->getId());
+            $payment->registerCaptureNotification($this->getRequestData('mc_gross'));
+            $order->save();
+
+            // notify customer
+            $invoice = $payment->getCreatedInvoice();
+            if ($invoice) {
+                $message = __('You notified customer about invoice #%1.', $invoice->getIncrementId());
+                $order->sendNewOrderEmail()->addStatusHistoryComment($message)
+                    ->setIsCustomerNotified(true)
+                    ->save();
             }
         } catch (\Magento\Core\Exception $e) {
-// TODO: add to payment profile comments
-//            $comment = $this->_createIpnComment(__('Note: %1', $e->getMessage()), true);
-//            $comment->save();
+            //TODO: add to payment profile comments
+            //$comment = $this->_createIpnComment(__('Note: %1', $e->getMessage()), true);
+            //$comment->save();
             throw $e;
-        }
-    }
-
-    /**
-     * Register recurring payment notification, create and process order
-     */
-    protected function _registerRecurringProfilePaymentCapture()
-    {
-        $price = $this->getRequestData('mc_gross') - $this->getRequestData('tax') -  $this->getRequestData('shipping');
-        $productItemInfo = new \Magento\Object;
-        $type = trim($this->getRequestData('period_type'));
-        if ($type == 'Trial') {
-            $productItemInfo->setPaymentType(\Magento\Sales\Model\Recurring\Profile::PAYMENT_TYPE_TRIAL);
-        } elseif ($type == 'Regular') {
-            $productItemInfo->setPaymentType(\Magento\Sales\Model\Recurring\Profile::PAYMENT_TYPE_REGULAR);
-        }
-        $productItemInfo->setTaxAmount($this->getRequestData('tax'));
-        $productItemInfo->setShippingAmount($this->getRequestData('shipping'));
-        $productItemInfo->setPrice($price);
-
-        $order = $this->_recurringProfile->createOrder($productItemInfo);
-
-        $payment = $order->getPayment();
-        $payment->setTransactionId($this->getRequestData('txn_id'))
-            ->setCurrencyCode($this->getRequestData('mc_currency'))
-            ->setPreparedMessage($this->_createIpnComment(''))
-            ->setIsTransactionClosed(0);
-        $order->save();
-        $this->_recurringProfile->addOrderRelation($order->getId());
-        $payment->registerCaptureNotification($this->getRequestData('mc_gross'));
-        $order->save();
-
-        // notify customer
-        $invoice = $payment->getCreatedInvoice();
-        if ($invoice) {
-            $message = __('You notified customer about invoice #%1.', $invoice->getIncrementId());
-            $order->sendNewOrderEmail()->addStatusHistoryComment($message)
-                ->setIsCustomerNotified(true)
-                ->save();
         }
     }
 
@@ -528,11 +536,10 @@ class Ipn
         // notify customer
         $invoice = $payment->getCreatedInvoice();
         if ($invoice && !$this->_order->getEmailSent()) {
-            $this->_order->sendNewOrderEmail()->addStatusHistoryComment(
-                __('You notified customer about invoice #%1.', $invoice->getIncrementId())
-            )
-            ->setIsCustomerNotified(true)
-            ->save();
+            $this->_order->sendNewOrderEmail()
+                ->addStatusHistoryComment(__('You notified customer about invoice #%1.', $invoice->getIncrementId()))
+                ->setIsCustomerNotified(true)
+                ->save();
         }
     }
 
@@ -579,11 +586,11 @@ class Ipn
 
         // TODO: there is no way to close a capture right now
 
-        $creditmemo = $payment->getCreatedCreditmemo();
-        if ($creditmemo) {
-            $creditmemo->sendEmail();
+        $creditMemo = $payment->getCreatedCreditmemo();
+        if ($creditMemo) {
+            $creditMemo->sendEmail();
             $this->_order->addStatusHistoryComment(
-                __('You notified customer about creditmemo #%1.', $creditmemo->getIncrementId())
+                __('You notified customer about creditmemo #%1.', $creditMemo->getIncrementId())
             )->setIsCustomerNotified(true)->save();
         }
     }

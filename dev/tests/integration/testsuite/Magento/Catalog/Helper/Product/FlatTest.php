@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,27 +38,6 @@ class FlatTest extends \PHPUnit_Framework_TestCase
     {
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Catalog\Helper\Product\Flat');
-    }
-
-    public function testGetFlag()
-    {
-        $flag = $this->_helper->getFlag();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Flat\Flag', $flag);
-    }
-
-    public function testIsBuilt()
-    {
-        $this->assertFalse($this->_helper->isBuilt());
-        $flag = $this->_helper->getFlag();
-        try {
-            $flag->setIsBuilt(true);
-            $this->assertTrue($this->_helper->isBuilt());
-
-            $flag->setIsBuilt(false);
-        } catch (\Exception $e) {
-            $flag->setIsBuilt(false);
-            throw $e;
-        }
     }
 
     public function testIsEnabledDefault()

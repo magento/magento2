@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Newsletter
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,7 +56,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         if ($store != 'default') {
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\ConfigInterface')
                 ->setValue(\Magento\Core\Model\View\Design::XML_PATH_THEME_ID, $design, 'store', $store);
         }
         $this->_model->emulateDesign($store, 'frontend');

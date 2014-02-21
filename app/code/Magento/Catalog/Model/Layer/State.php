@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Layer;
 
 /**
  * Layered navigation state model
@@ -31,15 +32,13 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Layer;
-
 class State extends \Magento\Object
 {
     /**
      * Add filter item to layer state
      *
      * @param   \Magento\Catalog\Model\Layer\Filter\Item $filter
-     * @return  \Magento\Catalog\Model\Layer\State
+     * @return  $this
      */
     public function addFilter($filter)
     {
@@ -52,8 +51,8 @@ class State extends \Magento\Object
     /**
      * Set layer state filter items
      *
-     * @param   array $filters
-     * @return  \Magento\Catalog\Model\Layer\State
+     * @param  array $filters
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function setFilters($filters)

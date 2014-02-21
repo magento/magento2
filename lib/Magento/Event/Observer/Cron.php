@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Event
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ namespace Magento\Event\Observer;
 class Cron extends \Magento\Event\Observer
 {
     /**
-     * Checkes the observer's cron string against event's name
+     * Checks the observer's cron string against event's name
      * 
      * Supports $this->setCronExpr('* 0-5,10-59/5 2-10,15-25 january-june/2 mon-fri')
      *
@@ -59,7 +59,10 @@ class Cron extends \Magento\Event\Observer
             && $this->matchCronExpression($e[3], $d['mon'])
             && $this->matchCronExpression($e[4], $d['wday']);
     }
-    
+
+    /**
+     * @return int
+     */
     public function getNow()
     {
         if (!$this->hasNow()) {
@@ -67,7 +70,12 @@ class Cron extends \Magento\Event\Observer
         }
         return $this->getData('now');
     }
-    
+
+    /**
+     * @param string $expr
+     * @param int $num
+     * @return bool
+     */
     public function matchCronExpression($expr, $num)
     {
         // handle ALL match
@@ -118,7 +126,11 @@ class Cron extends \Magento\Event\Observer
         $value = $this->getNumeric($expr);
         return ($value!==false) && ($num==$value) && ($num%$mod===0);
     }
-    
+
+    /**
+     * @param int|string $value
+     * @return bool|string
+     */
     public function getNumeric($value) 
     {
         static $data = array(

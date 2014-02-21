@@ -20,19 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Product\Widget;
 
 /**
  * Reports Recently Compared Products Widget
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Product\Widget;
-
 class Compared
     extends \Magento\Reports\Block\Product\Compared
     implements \Magento\Widget\Block\BlockInterface
@@ -40,6 +37,7 @@ class Compared
     /**
      * Internal constructor
      *
+     * @return void
      */
     protected function _construct()
     {

@@ -22,12 +22,15 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Session;
 
-class SidResolver implements \Magento\Session\SidResolverInterface
+use Magento\Session\SessionManagerInterface;
+use Magento\Session\SidResolverInterface;
+
+class SidResolver implements SidResolverInterface
 {
     /**
      * Config path for flag whether use SID on frontend
@@ -55,6 +58,21 @@ class SidResolver implements \Magento\Session\SidResolverInterface
     protected $sidNameMap;
 
     /**
+     * Use session var instead of SID for session in URL
+     *
+     * @var bool
+     */
+    protected $_useSessionVar = false;
+
+    /**
+     * Use session in URL flag
+     *
+     * @var bool
+     * @see \Magento\UrlInterface
+     */
+    protected $_useSessionInUrl = true;
+
+    /**
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\App\RequestInterface $request
@@ -73,10 +91,10 @@ class SidResolver implements \Magento\Session\SidResolverInterface
     }
 
     /**
-     * @param \Magento\Session\SessionManagerInterface $session
+     * @param SessionManagerInterface $session
      * @return string
      */
-    public function getSid(\Magento\Session\SessionManagerInterface $session)
+    public function getSid(SessionManagerInterface $session)
     {
         $sidKey = null;
         if ($this->coreStoreConfig->getConfig(self::XML_PATH_USE_FRONTEND_SID)
@@ -91,15 +109,59 @@ class SidResolver implements \Magento\Session\SidResolverInterface
     /**
      * Get session id query param
      *
-     * @param \Magento\Session\SessionManagerInterface $session
+     * @param SessionManagerInterface $session
      * @return string
      */
-    public function getSessionIdQueryParam(\Magento\Session\SessionManagerInterface $session)
+    public function getSessionIdQueryParam(SessionManagerInterface $session)
     {
         $sessionName = $session->getName();
         if ($sessionName && isset($this->sidNameMap[$sessionName])) {
             return $this->sidNameMap[$sessionName];
         }
         return self::SESSION_ID_QUERY_PARAM;
+    }
+
+    /**
+     * Set use session var instead of SID for URL
+     *
+     * @param bool $var
+     * @return $this
+     */
+    public function setUseSessionVar($var)
+    {
+        $this->_useSessionVar = (bool)$var;
+        return $this;
+    }
+
+    /**
+     * Retrieve use flag session var instead of SID for URL
+     *
+     * @return bool
+     */
+    public function getUseSessionVar()
+    {
+        return $this->_useSessionVar;
+    }
+
+    /**
+     * Set Use session in URL flag
+     *
+     * @param bool $flag
+     * @return $this
+     */
+    public function setUseSessionInUrl($flag = true)
+    {
+        $this->_useSessionInUrl = (bool)$flag;
+        return $this;
+    }
+
+    /**
+     * Retrieve use session in URL flag
+     *
+     * @return bool
+     */
+    public function getUseSessionInUrl()
+    {
+        return $this->_useSessionInUrl;
     }
 }

@@ -18,41 +18,55 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\File\Storage;
 
-class Response
+use Magento\App\Response\Http;
+
+class Response extends Http
 {
     /**
-     * Application object manager
-     *
-     * @var \Magento\ObjectManager
+     * @var \Magento\File\Transfer\Adapter\Http
      */
-    protected $_objectManager;
+    protected $_transferAdapter;
 
-    public function __construct(\Magento\ObjectManager $objectManager = null)
+    /**
+     * Full path to file
+     *
+     * @var string
+     */
+    protected $_filePath;
+
+    /**
+     * @param \Magento\File\Transfer\Adapter\Http $transferAdapter
+     */
+    public function __construct(\Magento\File\Transfer\Adapter\Http $transferAdapter)
     {
-        $this->_objectManager = $objectManager;
+        $this->_transferAdapter = $transferAdapter;
     }
 
     /**
-     * Send the file to client
+     * Send response
      *
-     * @param string|array $filePath
+     * @return void
      */
-    public function sendFile($filePath)
+    public function sendResponse()
     {
-        $transfer = $this->_objectManager->create('Magento\File\Transfer\Adapter\Http');
-        $transfer->send($filePath);
+        if ($this->_filePath && $this->getHttpResponseCode() == 200) {
+            $this->_transferAdapter->send($this->_filePath);
+        } else {
+            parent::sendResponse();
+        }
     }
 
     /**
-     * Return page header
+     * @param string $path
+     * @return void
      */
-    public function sendNotFound()
+    public function setFilePath($path)
     {
-        header('HTTP/1.0 404 Not Found');
+        $this->_filePath = $path;
     }
 }

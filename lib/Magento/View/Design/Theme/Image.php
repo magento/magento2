@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,31 +42,43 @@ class Image
     const PREVIEW_IMAGE_HEIGHT = 800;
 
     /**
+     * Image factory
+     *
      * @var \Magento\Image\Factory
      */
     protected $_imageFactory;
 
     /**
+     * Image uploader
+     *
      * @var Image\Uploader
      */
     protected $_uploader;
 
     /**
+     * Theme image path
+     *
      * @var Image\PathInterface
      */
     protected $_themeImagePath;
 
     /**
+     * Logger
+     *
      * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
+     * Theme
+     *
      * @var \Magento\View\Design\ThemeInterface
      */
     protected $_theme;
 
     /**
+     * Media directory
+     *
      * @var WriteInterface
      */
     protected $_mediaDirectory;
@@ -74,7 +86,7 @@ class Image
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Image\Factory $imageFactory
      * @param Image\Uploader $uploader
      * @param Image\PathInterface $themeImagePath
@@ -82,14 +94,14 @@ class Image
      * @param \Magento\View\Design\ThemeInterface $theme
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Image\Factory $imageFactory,
         Image\Uploader $uploader,
         Image\PathInterface $themeImagePath,
         \Magento\Logger $logger,
         \Magento\View\Design\ThemeInterface $theme = null
     ) {
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $this->_imageFactory = $imageFactory;
         $this->_uploader = $uploader;
         $this->_themeImagePath = $themeImagePath;
@@ -101,7 +113,7 @@ class Image
      * Create preview image
      *
      * @param string $imagePath
-     * @return Image
+     * @return $this
      */
     public function createPreviewImage($imagePath)
     {
@@ -170,7 +182,7 @@ class Image
      * Upload and create preview image
      *
      * @param string $scope the request key for file
-     * @return Image
+     * @return $this
      */
     public function uploadPreviewImage($scope)
     {

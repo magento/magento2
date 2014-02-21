@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,17 +50,17 @@ class Minifier
 
     /**
      * @param \Magento\Code\Minifier\StrategyInterface $strategy
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $directoryName
      */
     public function __construct(
         \Magento\Code\Minifier\StrategyInterface $strategy,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $directoryName
     ) {
         $this->_strategy = $strategy;
-        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
-        $this->pubViewCacheDir = $filesystem->getDirectoryRead(\Magento\Filesystem::PUB_VIEW_CACHE);
+        $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        $this->pubViewCacheDir = $filesystem->getDirectoryRead(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR);
         $this->directoryName = $directoryName;
     }
 

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,9 +45,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $paymentData = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
         $string = $this->getMock('Magento\Stdlib\String', array(), array(), '', false);
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $translate = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false);
-        $filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
-        $shippingConfig = $this->getMock('Magento\Shipping\Model\Config', array(), array(), '', false);
+        $translate = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $pdfItemsFactory = $this->getMock('Magento\Sales\Model\Order\Pdf\ItemsFactory', array(), array(), '', false);
         $localeMock = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false, false);
 
@@ -108,7 +107,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         // Test model
         /** @var \Magento\Sales\Model\Order\Pdf\AbstractPdf $model */
         $model = $this->getMockForAbstractClass('Magento\Sales\Model\Order\Pdf\AbstractPdf',
-            array($paymentData, $string, $coreStoreConfig, $translate, $filesystem, $shippingConfig,
+            array($paymentData, $string, $coreStoreConfig, $translate, $filesystem,
                 $pdfConfig, $pdfTotalFactory, $pdfItemsFactory, $localeMock),
             '', true, false, true, array('drawLineBlocks')
         );

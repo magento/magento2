@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -61,8 +61,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         }
         $this->_testDir = realpath(__DIR__ . '/_files') . '/';
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
-        $this->_varDir = $filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/references/';
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
+        $this->_varDir = $filesystem->getPath(\Magento\App\Filesystem::VAR_DIR) . '/references/';
         mkdir($this->_varDir, 0777, true);
 
         $this->_formatter = new Formatter();

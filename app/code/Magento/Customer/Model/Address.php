@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -160,7 +160,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Retrieve address entity attributes
      *
-     * @return array
+     * @return \Magento\Customer\Model\Attribute[]
      */
     public function getAttributes()
     {
@@ -172,6 +172,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             $this->setData('attributes', $attributes);
         }
         return $attributes;
+    }
+
+    /**
+     * Get attributes created by default
+     *
+     * @return string[]
+     */
+    public function getDefaultAttributeCodes()
+    {
+        return $this->_getResource()->getDefaultAttributes();
     }
 
     public function __clone()

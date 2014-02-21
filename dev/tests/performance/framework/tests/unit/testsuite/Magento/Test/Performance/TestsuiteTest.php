@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     performance_tests
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -77,7 +77,7 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
         $this->_fixtureDir = __DIR__ . '/_files';
         $fixtureConfigData = include($this->_fixtureDir . '/config_data.php');
 
-        $shell = $this->getMock('Magento\Shell', array('execute'));
+        $shell = $this->getMock('Magento\Shell', array('execute'), array(), '', false);
         $this->_config = new \Magento\TestFramework\Performance\Config(
             $fixtureConfigData,
             $this->_fixtureDir,
@@ -199,9 +199,9 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
         });
         $this->_object->run();
         $this->assertEquals(array(
-            $this->_fixtureDir . '/scenario_error.jmx',
-            $this->_fixtureDir . '/scenario_failure.jmx',
-            $this->_fixtureDir . '/scenario.jmx'
+            realpath($this->_fixtureDir . '/scenario_error.jmx'),
+            realpath($this->_fixtureDir . '/scenario_failure.jmx'),
+            realpath($this->_fixtureDir . '/scenario.jmx'),
         ), $notifications);
     }
 

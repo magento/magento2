@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Install\App\Action\Plugin;
@@ -49,13 +49,13 @@ class DirTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $filesystem = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $this->varDirectory = $this->getMock(
             'Magento\Filesystem\Directory\Write', array('read', 'isDirectory', 'delete'), array(), '', false
         );
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::VAR_DIR)
+            ->with(\Magento\App\Filesystem::VAR_DIR)
             ->will($this->returnValue($this->varDirectory));
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->plugin = new \Magento\Install\App\Action\Plugin\Dir(

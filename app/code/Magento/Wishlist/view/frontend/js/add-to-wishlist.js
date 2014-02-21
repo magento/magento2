@@ -17,7 +17,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
@@ -27,23 +27,27 @@
             bundleInfo: '[id^=bundle-option-]',
             configurableInfo: '.super-attribute-select',
             groupedInfo: '#super-product-table input',
-            downloadableInfo: '.options-list input',
+            downloadableInfo: '#downloadable-links-list input',
             customOptionsInfo: '.product-custom-option'
         },
         _create: function () {
-            this.addToWishlist();
+            this._bind();
         },
-        addToWishlist: function () {
-            this._on({
-                'click [data-action="add-to-wishlist"]': function (event) {
-                    var url = $(event.target).closest('a').attr('href'),
-                        productInfo = this.options[this.options.productType + 'Info'],
-                        additionalData = $(this.options.customOptionsInfo).serialize();
-                    if (productInfo !== undefined) {
-                        additionalData += $(productInfo).serialize();
-                    }
-                    $(event.target).closest('a').attr('href', url + (url.indexOf('?') == -1 ? '?' : '&') + additionalData);
-                }
+        _bind: function() {
+            var changeCustomOption = 'change ' + this.options.customOptionsInfo,
+                changeProductInfo = 'change ' + this.options[this.options.productType + 'Info'],
+                events = {};
+            events[changeCustomOption] = '_updateWishlistData';
+            events[changeProductInfo] = '_updateWishlistData';
+            this._on(events);
+        },
+        _updateWishlistData: function(event) {
+            var dataToAdd = {};
+            dataToAdd[$(event.currentTarget).attr('name')] = $(event.currentTarget).val();
+            $('[data-action="add-to-wishlist"]').each(function(index, element) {
+                var params = $(element).data('post');
+                params.data = $.extend({}, params.data, dataToAdd);
+                $(element).data('post', params);
             });
         }
     });

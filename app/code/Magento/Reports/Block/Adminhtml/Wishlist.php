@@ -20,29 +20,51 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml;
 
 /**
  * Adminhtml wishlist report page content block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml;
-
 class Wishlist extends \Magento\Backend\Block\Template
 {
-
+    /**
+     * @var int
+     */
     public $wishlists_count;
+
+    /**
+     * @var int
+     */
     public $items_bought;
+
+    /**
+     * @var int
+     */
     public $shared_count;
+
+    /**
+     * @var int
+     */
     public $referrals_count;
+
+    /**
+     * @var int
+     */
     public $conversions_count;
+
+    /**
+     * @var int
+     */
     public $customer_with_wishlist;
 
+    /**
+     * @var string
+     */
     protected $_template = 'report/wishlist.phtml';
 
     /**
@@ -66,6 +88,9 @@ class Wishlist extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return $this
+     */
     public function _beforeToHtml()
     {
         $this->setChild(

@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    \Magento\Stdlib
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,10 +74,10 @@ class ArrayUtils
      * $forceSetAll true will cause to set all possible values for all elements.
      * When false (default), only non-empty values will be set.
      *
-     * @param mixed $array
+     * @param array $array
      * @param string $prefix
      * @param bool $forceSetAll
-     * @return mixed
+     * @return array
      */
     public function decorateArray($array, $prefix = 'decorated_', $forceSetAll = false)
     {
@@ -127,7 +127,7 @@ class ArrayUtils
      *
      * @param \Magento\Object $element
      * @param string $key
-     * @param mixed $value
+     * @param bool $value
      * @param bool $isSkipped
      */
     private function _decorateArrayObject($element, $key, $value, $isSkipped)

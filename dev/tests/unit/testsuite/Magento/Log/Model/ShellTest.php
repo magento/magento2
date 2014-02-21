@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Log\Model;
@@ -43,7 +43,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_factoryMock = $this->getMock('Magento\Log\Model\Shell\Command\Factory', array(), array(), '', false);
-        $filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_model = $this->getMock('Magento\Log\Model\Shell',
             array('_applyPhpVariables'),
             array($filesystemMock, 'entryPoint.php', $this->_factoryMock)

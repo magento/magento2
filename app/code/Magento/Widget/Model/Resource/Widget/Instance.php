@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,11 +34,14 @@
  */
 namespace Magento\Widget\Model\Resource\Widget;
 
+use Magento\Core\Model\AbstractModel;
+
 class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,9 +52,9 @@ class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Perform actions after object load
      *
      * @param \Magento\Widget\Model\Widget\Instance $object
-     * @return \Magento\Widget\Model\Resource\Widget\Instance
+     * @return $this
      */
-    protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object)
     {
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select()
@@ -66,9 +69,9 @@ class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Perform actions after object save
      *
      * @param \Magento\Widget\Model\Widget\Instance $object
-     * @return \Magento\Widget\Model\Resource\Widget\Instance
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $pageTable         = $this->getTable('widget_instance_page');
         $pageLayoutTable   = $this->getTable('widget_instance_page_layout');
@@ -131,7 +134,7 @@ class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Widget\Model\Widget\Instance $widgetInstance
      * @param array $pageGroupData
-     * @return array of inserted layout updates ids
+     * @return string[] of inserted layout updates ids
      */
     protected function _saveLayoutUpdates($widgetInstance, $pageGroupData)
     {
@@ -189,10 +192,10 @@ class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Perform actions before object delete.
      * Collect page ids and layout update ids and set to object for further delete
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Widget\Model\Resource\Widget\Instance
+     * @param AbstractModel $object
+     * @return $this
      */
-    protected function _beforeDelete(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeDelete(AbstractModel $object)
     {
         $writeAdapter = $this->_getWriteAdapter();
         $select = $writeAdapter->select()
@@ -213,9 +216,9 @@ class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete layout updates by layout update ids collected in _beforeSave
      *
      * @param \Magento\Widget\Model\Widget\Instance $object
-     * @return \Magento\Widget\Model\Resource\Widget\Instance
+     * @return $this
      */
-    protected function _afterDelete(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterDelete(AbstractModel $object)
     {
         $this->_deleteLayoutUpdates($object->getLayoutUpdateIdsToDelete());
         return parent::_afterDelete($object);
@@ -225,7 +228,7 @@ class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete widget instance pages by given ids
      *
      * @param array $pageIds
-     * @return \Magento\Widget\Model\Resource\Widget\Instance
+     * @return $this
      */
     protected function _deleteWidgetInstancePages($pageIds)
     {
@@ -246,7 +249,7 @@ class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete layout updates by given ids
      *
      * @param array $layoutUpdateIds
-     * @return \Magento\Widget\Model\Resource\Widget\Instance
+     * @return $this
      */
     protected function _deleteLayoutUpdates($layoutUpdateIds)
     {
@@ -267,7 +270,7 @@ class Instance extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Get store ids to which specified item is assigned
      *
      * @param int $id
-     * @return array
+     * @return string[]
      */
     public function lookupStoreIds($id)
     {

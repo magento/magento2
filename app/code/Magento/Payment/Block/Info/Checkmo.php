@@ -20,19 +20,27 @@
  *
  * @category    Magento
  * @package     Magento_Payment
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Payment\Block\Info;
 
 class Checkmo extends \Magento\Payment\Block\Info
 {
 
+    /**
+     * @var string
+     */
     protected $_payableTo;
+
+    /**
+     * @var string
+     */
     protected $_mailingAddress;
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Payment::info/checkmo.phtml';
 
     /**
@@ -64,7 +72,7 @@ class Checkmo extends \Magento\Payment\Block\Info
     /**
      * Enter description here...
      *
-     * @return \Magento\Payment\Block\Info\Checkmo
+     * @return $this
      */
     protected function _convertAdditionalData()
     {
@@ -79,6 +87,9 @@ class Checkmo extends \Magento\Payment\Block\Info
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function toPdf()
     {
         $this->setTemplate('Magento_Payment::info/pdf/checkmo.phtml');

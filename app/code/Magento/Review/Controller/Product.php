@@ -20,22 +20,20 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Controller;
+
+use Magento\App\RequestInterface;
+use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Review\Model\Review;
 
 /**
  * Review controller
  *
- * @category   Magento
- * @package    Magento_Review
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Controller;
-
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-
 class Product extends \Magento\App\Action\Action
 {
     /**
@@ -46,54 +44,81 @@ class Product extends \Magento\App\Action\Action
     protected $_coreRegistry = null;
 
     /**
+     * Customer session model
+     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * @var \Magento\Review\Model\Session
+     * Generic session
+     *
+     * @var \Magento\Session\Generic
      */
     protected $_reviewSession;
 
     /**
+     * Catalog catgory model
+     *
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $_categoryFactory;
 
     /**
+     * Logger
+     *
      * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
+     * Catalog product model
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Review model
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
 
     /**
+     * Rating model
+     *
      * @var \Magento\Rating\Model\RatingFactory
      */
     protected $_ratingFactory;
 
     /**
+     * Core session model
+     *
      * @var \Magento\Core\Model\Session
      */
     protected $_session;
 
     /**
+     * Catalog design model
+     *
      * @var \Magento\Catalog\Model\Design
      */
     protected $_catalogDesign;
 
     /**
+     * Core model store manager interface
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
+
+    /**
+     * Core form key validator
+     *
+     * @var \Magento\Core\App\Action\FormKeyValidator
+     */
+    protected $_formKeyValidator;
 
     /**
      * @param \Magento\App\Action\Context $context
@@ -108,6 +133,7 @@ class Product extends \Magento\App\Action\Action
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Session\Generic $reviewSession
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
         \Magento\App\Action\Context $context,
@@ -121,7 +147,8 @@ class Product extends \Magento\App\Action\Action
         \Magento\Core\Model\Session $session,
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Session\Generic $reviewSession,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
@@ -134,6 +161,7 @@ class Product extends \Magento\App\Action\Action
         $this->_ratingFactory = $ratingFactory;
         $this->_session = $session;
         $this->_catalogDesign = $catalogDesign;
+        $this->_formKeyValidator = $formKeyValidator;
 
         parent::__construct($context);
     }
@@ -170,7 +198,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Initialize and check product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return CatalogProduct
      */
     protected function _initProduct()
     {
@@ -207,7 +235,7 @@ class Product extends \Magento\App\Action\Action
      * Return false if product was not loaded or has incorrect status.
      *
      * @param int $productId
-     * @return bool|\Magento\Catalog\Model\Product
+     * @return bool|CatalogProduct
      */
     protected function _loadProduct($productId)
     {
@@ -218,7 +246,7 @@ class Product extends \Magento\App\Action\Action
         $product = $this->_productFactory->create()
             ->setStoreId($this->_storeManager->getStore()->getId())
             ->load($productId);
-        /* @var $product \Magento\Catalog\Model\Product */
+        /* @var $product CatalogProduct */
         if (!$product->getId() || !$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility()) {
             return false;
         }
@@ -233,8 +261,8 @@ class Product extends \Magento\App\Action\Action
      * Load review model with data by passed id.
      * Return false if review was not loaded or review is not approved.
      *
-     * @param $reviewId
-     * @return bool|\Magento\Review\Model\Review
+     * @param int $reviewId
+     * @return bool|Review
      */
     protected function _loadReview($reviewId)
     {
@@ -243,8 +271,11 @@ class Product extends \Magento\App\Action\Action
         }
 
         $review = $this->_reviewFactory->create()->load($reviewId);
-        /* @var $review \Magento\Review\Model\Review */
-        if (!$review->getId() || !$review->isApproved() || !$review->isAvailableOnStore($this->_storeManager->getStore())) {
+        /* @var $review Review */
+        if (!$review->getId()
+            || !$review->isApproved()
+            || !$review->isAvailableOnStore($this->_storeManager->getStore())
+        ) {
             return false;
         }
 
@@ -255,9 +286,16 @@ class Product extends \Magento\App\Action\Action
 
     /**
      * Submit new review action
+     *
+     * @return void
      */
     public function postAction()
     {
+        if (!$this->_formKeyValidator->validate($this->getRequest())) {
+            $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
+            return;
+        }
+
         $data = $this->_reviewSession->getFormData(true);
         if ($data) {
             $rating = array();
@@ -273,14 +311,14 @@ class Product extends \Magento\App\Action\Action
             $session    = $this->_session;
             /* @var $session \Magento\Core\Model\Session */
             $review     = $this->_reviewFactory->create()->setData($data);
-            /* @var $review \Magento\Review\Model\Review */
+            /* @var $review Review */
 
             $validate = $review->validate();
             if ($validate === true) {
                 try {
-                    $review->setEntityId($review->getEntityIdByCode(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE))
+                    $review->setEntityId($review->getEntityIdByCode(Review::ENTITY_PRODUCT_CODE))
                         ->setEntityPkValue($product->getId())
-                        ->setStatusId(\Magento\Review\Model\Review::STATUS_PENDING)
+                        ->setStatusId(Review::STATUS_PENDING)
                         ->setCustomerId($this->_customerSession->getCustomerId())
                         ->setStoreId($this->_storeManager->getStore()->getId())
                         ->setStores(array($this->_storeManager->getStore()->getId()))
@@ -323,6 +361,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Show list of product's reviews
      *
+     * @return void
      */
     public function listAction()
     {
@@ -357,6 +396,7 @@ class Product extends \Magento\App\Action\Action
     /**
      * Show details of one review
      *
+     * @return void
      */
     public function viewAction()
     {
@@ -380,6 +420,8 @@ class Product extends \Magento\App\Action\Action
     /**
      * Load specific layout handles by product type id
      *
+     * @param Product $product
+     * @return void
      */
     protected function _initProductLayout($product)
     {

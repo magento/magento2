@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Theme
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -102,12 +102,12 @@ class CssTest extends \PHPUnit_Framework_TestCase
     {
         $method = self::getMethod('_getAdditionalElementTypes');
 
-        /** @var $configModel \Magento\Core\Model\Config */
-        $configModel = $this->getMock('Magento\Core\Model\Config', null, array(), '', false);
+        /** @var $configModel \Magento\App\ConfigInterface */
+        $configModel = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
 
         $this->_objectManager->expects($this->any())
             ->method('get')
-            ->with('Magento\Core\Model\Config')
+            ->with('Magento\App\ConfigInterface')
             ->will($this->returnValue($configModel));
 
         $result = $method->invokeArgs($this->_model, array());

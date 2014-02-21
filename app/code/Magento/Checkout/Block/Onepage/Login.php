@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,8 +54,8 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Checkout\Helper\Data $checkoutData
      * @param \Magento\Message\ManagerInterface $messageManager
      * @param array $data
@@ -66,8 +66,8 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Message\ManagerInterface $messageManager,
         array $data = array()
@@ -81,10 +81,11 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $configCacheType,
             $customerSession,
             $resourceSession,
-            $countryCollFactory,
-            $regionCollFactory,
+            $countryCollectionFactory,
+            $regionCollectionFactory,
             $data
         );
+        $this->_isScopePrivate = true;
     }
 
     protected function _construct()

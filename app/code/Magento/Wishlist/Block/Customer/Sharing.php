@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Wishlist
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,7 +39,7 @@ class Sharing extends \Magento\View\Element\Template
     /**
      * Entered Data cache
      *
-     * @param array
+     * @var array|null
      */
     protected $_enteredData = null;
 
@@ -70,12 +70,13 @@ class Sharing extends \Magento\View\Element\Template
         $this->_wishlistConfig = $wishlistConfig;
         $this->_wishlistSession = $wishlistSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
      * Prepare Global Layout
      *
-     * @return \Magento\Wishlist\Block\Customer\Sharing
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -99,7 +100,7 @@ class Sharing extends \Magento\View\Element\Template
      * Retrieve Entered Data by key
      *
      * @param string $key
-     * @return mixed
+     * @return string|null
      */
     public function getEnteredData($key)
     {
@@ -109,8 +110,7 @@ class Sharing extends \Magento\View\Element\Template
 
         if (!$this->_enteredData || !isset($this->_enteredData[$key])) {
             return null;
-        }
-        else {
+        } else {
             return $this->escapeHtml($this->_enteredData[$key]);
         }
     }

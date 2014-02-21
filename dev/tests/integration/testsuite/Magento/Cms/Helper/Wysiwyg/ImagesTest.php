@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Cms\Helper\Wysiwyg;
@@ -27,8 +27,8 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetStorageRoot()
     {
-        $path = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')->getPath(
-            \Magento\Filesystem::MEDIA
+        $path = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem')->getPath(
+            \Magento\App\Filesystem::MEDIA_DIR
         );
         $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Cms\Helper\Wysiwyg\Images');

@@ -21,7 +21,7 @@
  * @category    tests
  * @package     static
  * @subpackage  Legacy
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -324,7 +324,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             '/getOptions\(\)\s*->get(Base|App|Code|Design|Etc|Lib|Locale|Js|Media'
                 .'|Var|Tmp|Cache|Log|Session|Upload|Export)?Dir\(/S',
             $content,
-            'The class \Magento\Core\Model\Config\Options is obsolete. Replacement suggestion: \Magento\Filesystem'
+            'The class \Magento\Core\Model\Config\Options is obsolete. Replacement suggestion: \Magento\App\Filesystem'
         );
     }
 
@@ -396,7 +396,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             list($constant, $class, $replacement) = $row;
             if ($class) {
                 $fullyQualified = "{$class}::{$constant}";
-                $regex = preg_quote($fullyQualified, '/');
+                $fullyQualified = strtr($fullyQualified, array('\\' => '\\\\'));
+                $regex = preg_quote($fullyQualified);
                 if ($this->_isClassOrInterface($content, $class)) {
                     $regex .= '|' . $this->_getClassConstantDefinitionRegExp($constant)
                         . '|' . preg_quote("self::{$constant}", '/')
@@ -412,7 +413,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $fullyQualified = $constant;
                 $regex = preg_quote($constant, '/');
             }
-            $this->_assertNotRegExp('/[^a-z\d_]' . $regex . '[^a-z\d_]/iS', $content,
+            $this->_assertNotRegExp('/[^a-z\d_](' . $regex . ')[^a-z\d_]/iS', $content,
                 $this->_suggestReplacement(sprintf("Constant '%s' is obsolete.", $fullyQualified), $replacement)
             );
         }

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -82,7 +82,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     /**
      * Init Select
      *
-     * @return \Magento\Reports\Model\Resource\Review\Customer\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -94,7 +94,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     /**
      * Join customers
      *
-     * @return \Magento\Reports\Model\Resource\Review\Customer\Collection
+     * @return $this
      */
     protected function _joinCustomers()
     {

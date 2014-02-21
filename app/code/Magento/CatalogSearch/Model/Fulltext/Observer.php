@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,7 +59,7 @@ class Observer
     /**
      * Backend url
      *
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -79,7 +79,7 @@ class Observer
      * Construct
      *
      * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -87,7 +87,7 @@ class Observer
      */
     public function __construct(
         \Magento\Backend\Model\Session $backendSession,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

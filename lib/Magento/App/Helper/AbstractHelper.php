@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,7 +52,7 @@ abstract class AbstractHelper
      *
      * @var \Magento\TranslateInterface
      */
-    protected $_translator;
+    protected $_inlineFactory;
 
     /**
      * @var \Magento\Module\Manager
@@ -96,7 +96,7 @@ abstract class AbstractHelper
      */
     public function __construct(\Magento\App\Helper\Context $context)
     {
-        $this->_translator = $context->getTranslator();
+        $this->_inlineFactory = $context->getInlineFactory();
         $this->_moduleManager = $context->getModuleManager();
         $this->_logger = $context->getLogger();
         $this->_request = $context->getRequest();

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -499,5 +499,21 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<div id="container1-2" class="class12">Test11Test12</div>', $result);
         $result = $this->_layout->renderElement('container2', false);
         $this->assertEquals('<div id="container2-2" class="class22">Test21Test22</div>', $result);
+    }
+
+    public function testIsCacheable()
+    {
+        $this->_layout->setXml(simplexml_load_file(__DIR__ . '/_files/layout/cacheable.xml',
+            'Magento\View\Layout\Element'));
+        $this->_layout->generateElements();
+        $this->assertTrue($this->_layout->isCacheable());
+    }
+
+    public function testIsNonCacheable()
+    {
+        $this->_layout->setXml(simplexml_load_file(__DIR__ . '/_files/layout/non_cacheable.xml',
+            'Magento\View\Layout\Element'));
+        $this->_layout->generateElements();
+        $this->assertFalse($this->_layout->isCacheable());
     }
 }

@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Mage
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -63,17 +63,9 @@ return array(
     'bundle/stock_index' => 'catalog_product_bundle_stock_index',
     'captcha/log' => 'captcha_log',
     'catalog/category' => 'catalog_category_entity',
-    'catalog/category_anchor_indexer_idx' => 'catalog_category_anc_categs_index_idx',
-    'catalog/category_anchor_indexer_tmp' => 'catalog_category_anc_categs_index_tmp',
-    'catalog/category_anchor_products_indexer_idx' => 'catalog_category_anc_products_index_idx',
-    'catalog/category_anchor_products_indexer_tmp' => 'catalog_category_anc_products_index_tmp',
     'catalog/category_flat' => 'catalog_category_flat',
     'catalog/category_product' => 'catalog_category_product',
-    'catalog/category_product_enabled_indexer_idx' => 'catalog_category_product_index_enbl_idx',
-    'catalog/category_product_enabled_indexer_tmp' => 'catalog_category_product_index_enbl_tmp',
     'catalog/category_product_index' => 'catalog_category_product_index',
-    'catalog/category_product_indexer_idx' => 'catalog_category_product_index_idx',
-    'catalog/category_product_indexer_tmp' => 'catalog_category_product_index_tmp',
     'catalog/compare_item' => 'catalog_compare_item',
     'catalog/eav_attribute' => 'catalog_eav_attribute',
     'catalog/product' => 'catalog_product_entity',
@@ -85,7 +77,6 @@ return array(
     'catalog/product_eav_decimal_indexer_tmp' => 'catalog_product_index_eav_decimal_tmp',
     'catalog/product_eav_indexer_idx' => 'catalog_product_index_eav_idx',
     'catalog/product_eav_indexer_tmp' => 'catalog_product_index_eav_tmp',
-    'catalog/product_enabled_index' => 'catalog_product_enabled_index',
     'catalog/product_flat' => 'catalog_product_flat',
     'catalog/product_index_eav' => 'catalog_product_index_eav',
     'catalog/product_index_eav_decimal' => 'catalog_product_index_eav_decimal',
@@ -278,13 +269,11 @@ return array(
     'oscommerce/oscommerce_type' => 'oscommerce_import_type',
     'paybox/api_debug' => 'paybox_api_debug',
     'paybox/question_number' => 'paybox_question_number',
-    'paygate/authorizenet_debug' => 'paygate_authorizenet_debug',
-    'paypal/api_debug' => 'paypal_api_debug',
+    'paygate/authorizenet_debug' => 'authorizenet_debug',
     'paypal/cert' => 'paypal_cert',
     'paypal/payment_transaction' => 'paypal_payment_transaction',
     'paypal/settlement_report' => 'paypal_settlement_report',
     'paypal/settlement_report_row' => 'paypal_settlement_report_row',
-    'paypaluk/api_debug' => 'paypaluk_api_debug',
     'persistent/session' => 'persistent_session',
     'poll/poll' => 'poll',
     'poll/poll_answer' => 'poll_answer',
@@ -313,8 +302,8 @@ return array(
     'sales/bestsellers_aggregated_daily' => 'sales_bestsellers_aggregated_daily',
     'sales/bestsellers_aggregated_monthly' => 'sales_bestsellers_aggregated_monthly',
     'sales/bestsellers_aggregated_yearly' => 'sales_bestsellers_aggregated_yearly',
-    'sales/billing_agreement' => 'sales_billing_agreement',
-    'sales/billing_agreement_order' => 'sales_billing_agreement_order',
+    'sales/billing_agreement' => 'paypal_billing_agreement',
+    'sales/billing_agreement_order' => 'paypal_billing_agreement_order',
     'sales/creditmemo' => 'sales_flat_creditmemo',
     'sales/creditmemo_comment' => 'sales_flat_creditmemo_comment',
     'sales/creditmemo_grid' => 'sales_flat_creditmemo_grid',
@@ -347,8 +336,8 @@ return array(
     'sales/quote_item' => 'sales_flat_quote_item',
     'sales/quote_item_option' => 'sales_flat_quote_item_option',
     'sales/quote_payment' => 'sales_flat_quote_payment',
-    'sales/recurring_profile' => 'sales_recurring_profile',
-    'sales/recurring_profile_order' => 'sales_recurring_profile_order',
+    'sales/recurring_profile' => 'recurring_profile',
+    'sales/recurring_profile_order' => 'recurring_profile_order',
     'sales/refunded_aggregated' => 'sales_refunded_aggregated',
     'sales/refunded_aggregated_order' => 'sales_refunded_aggregated_order',
     'sales/shipment' => 'sales_flat_shipment',

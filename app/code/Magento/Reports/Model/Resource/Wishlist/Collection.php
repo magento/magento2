@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -74,6 +74,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -84,7 +85,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set wishlist table name
      *
      * @param string $value
-     * @return \Magento\Reports\Model\Resource\Wishlist\Collection
+     * @return $this
      */
     public function setWishlistTable($value)
     {
@@ -93,7 +94,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * retrieve wishlist table name
+     * Retrieve wishlist table name
      *
      * @return string
      */

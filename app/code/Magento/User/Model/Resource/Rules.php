@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Model\Resource;
 
 /**
@@ -77,6 +76,7 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -87,6 +87,7 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Save ACL resources
      *
      * @param \Magento\User\Model\Rules $rule
+     * @return void
      * @throws \Magento\Core\Exception
      */
     public function saveRel(\Magento\User\Model\Rules $rule)

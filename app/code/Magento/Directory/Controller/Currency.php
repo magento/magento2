@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,6 +31,9 @@ namespace Magento\Directory\Controller;
 
 class Currency extends \Magento\App\Action\Action
 {
+    /**
+     * @return void
+     */
     public function switchAction()
     {
         /** @var \Magento\Core\Model\StoreManagerInterface $storeManager */

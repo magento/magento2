@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Index
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Index\Model\Resource\Process;
 
 /**
  * Index Process Collection
@@ -32,13 +32,12 @@
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Index\Model\Resource\Process;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Initialize resource
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +47,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add count of unprocessed events to process collection
      *
-     * @return \Magento\Index\Model\Resource\Process\Collection
+     * @return $this
      */
     public function addEventsStats()
     {

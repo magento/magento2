@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model;
 
 /**
  * Backend menu model
  */
-namespace Magento\Backend\Model;
-
 class Menu extends \ArrayObject
 {
     /**
@@ -67,6 +66,7 @@ class Menu extends \ArrayObject
      * @param \Magento\Backend\Model\Menu\Item $item
      * @param string $parentId
      * @param int $index
+     * @return void
      * @throws \InvalidArgumentException
      */
     public function add(\Magento\Backend\Model\Menu\Item $item, $parentId = null, $index = null)
@@ -120,6 +120,7 @@ class Menu extends \ArrayObject
      * @param string $itemId
      * @param string $toItemId
      * @param int $sortIndex
+     * @return void
      * @throws \InvalidArgumentException
      */
     public function move($itemId, $toItemId, $sortIndex = null)
@@ -238,7 +239,7 @@ class Menu extends \ArrayObject
      *
      * @param \Magento\Backend\Model\Menu $menu
      * @param string $itemId
-     * @param array $parents
+     * @param array &$parents
      * @return bool
      */
     protected function _findParentItems($menu, $itemId, &$parents)

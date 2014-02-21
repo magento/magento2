@@ -20,15 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles;
 
 /**
  * Quick style file uploader
  */
-namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles;
-
 class ImageUploader extends \Magento\Object
 {
     /**
@@ -44,7 +44,7 @@ class ImageUploader extends \Magento\Object
     protected $_storagePath;
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -56,7 +56,7 @@ class ImageUploader extends \Magento\Object
     /**
      * Allowed extensions
      *
-     * @var array
+     * @var string[]
      */
     protected $_allowedExtensions = array('jpg', 'jpeg', 'gif', 'png');
 
@@ -65,12 +65,12 @@ class ImageUploader extends \Magento\Object
      * Generic constructor of change instance
      *
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         array $data = array()
     ) {
         $this->_uploaderFactory = $uploaderFactory;
@@ -96,7 +96,7 @@ class ImageUploader extends \Magento\Object
      * Set storage path
      *
      * @param string $path
-     * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\ImageUploader
+     * @return $this
      */
     public function setStoragePath($path)
     {
@@ -150,11 +150,11 @@ class ImageUploader extends \Magento\Object
      * Remove file
      *
      * @param string $file
-     * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\ImageUploader
+     * @return $this
      */
     public function removeFile($file)
     {
-        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $path = $directory->getRelativePath($this->getStoragePath() . '/' . $file);
         if ($directory->isExist($path)) {
             $directory->delete($path);

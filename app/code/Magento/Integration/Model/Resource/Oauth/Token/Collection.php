@@ -20,17 +20,16 @@
  *
  * @category    Magento
  * @package     Magento_Oauth
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Integration\Model\Resource\Oauth\Token;
 
 /**
  * OAuth token resource collection model
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Integration\Model\Resource\Oauth\Token;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -48,7 +47,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * Method use for show applications list (token-consumer)
      *
-     * @return \Magento\Integration\Model\Resource\Oauth\Token\Collection
+     * @return $this
      */
     public function joinConsumerAsApplication()
     {
@@ -66,7 +65,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by admin ID
      *
      * @param int $adminId
-     * @return \Magento\Integration\Model\Resource\Oauth\Token\Collection
+     * @return $this
      */
     public function addFilterByAdminId($adminId)
     {
@@ -78,7 +77,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by customer ID
      *
      * @param int $customerId
-     * @return \Magento\Integration\Model\Resource\Oauth\Token\Collection
+     * @return $this
      */
     public function addFilterByCustomerId($customerId)
     {
@@ -90,7 +89,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by consumer ID
      *
      * @param int $consumerId
-     * @return \Magento\Integration\Model\Resource\Oauth\Token\Collection
+     * @return $this
      */
     public function addFilterByConsumerId($consumerId)
     {
@@ -102,7 +101,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by type
      *
      * @param string $type
-     * @return \Magento\Integration\Model\Resource\Oauth\Token\Collection
+     * @return $this
      */
     public function addFilterByType($type)
     {
@@ -114,7 +113,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by ID
      *
      * @param array|int $tokenId
-     * @return \Magento\Integration\Model\Resource\Oauth\Token\Collection
+     * @return $this
      */
     public function addFilterById($tokenId)
     {
@@ -126,7 +125,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add filter by "Is Revoked" status
      *
      * @param bool|int $flag
-     * @return \Magento\Integration\Model\Resource\Oauth\Token\Collection
+     * @return $this
      */
     public function addFilterByRevoked($flag)
     {

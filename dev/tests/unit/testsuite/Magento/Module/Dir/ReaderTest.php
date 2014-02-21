@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -62,7 +62,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_dirsMock = $this->getMock('Magento\Module\Dir', array(), array(), '', false, false);
         $this->_baseConfigMock = $this->getMock('Magento\Core\Model\Config\Base', array(), array(), '', false, false);
         $this->_moduleListMock = $this->getMock('Magento\Module\ModuleListInterface');
-        $filesystemMock = $this->getMock('\Magento\Filesystem', array(), array(), '', false, false);
+        $filesystemMock = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false, false);
         $fileIteratorFactoryMock = $this->getMock('\Magento\Config\FileIteratorFactory', array(), array(),
             '', false, false);
 

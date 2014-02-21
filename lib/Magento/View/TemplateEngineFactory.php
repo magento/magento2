@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,16 +32,22 @@ use Magento\ObjectManager;
 class TemplateEngineFactory
 {
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Engines
+     *
      * @var array
      */
     protected $engines;
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      * @param array $engines Format: array('<name>' => 'TemplateEngine\Class', ...)
      */
@@ -56,7 +62,7 @@ class TemplateEngineFactory
     /**
      * Retrieve a template engine instance by its unique name
      *
-     * @param $name
+     * @param string $name
      * @return TemplateEngineInterface
      * @throws \UnexpectedValueException If template engine doesn't implement the necessary interface
      * @throws \InvalidArgumentException If template engine doesn't exist

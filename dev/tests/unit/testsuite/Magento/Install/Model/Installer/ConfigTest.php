@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Install
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,7 +40,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystemMock;
 
@@ -58,10 +58,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
 
-        $this->_filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_filesystemMock->expects($this->any())
             ->method('getPath')
-            ->with(\Magento\Filesystem::CONFIG)
+            ->with(\Magento\App\Filesystem::CONFIG_DIR)
             ->will($this->returnValue(TESTS_TEMP_DIR));
         $this->_filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,7 +40,7 @@ class BackgroundUploader
     /**
      * Add form elements
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\BackgroundUploader
+     * @return $this
      */
     protected function _addFields()
     {
@@ -81,7 +81,7 @@ class BackgroundUploader
     /**
      * Add element types used in composite font element
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\BackgroundUploader
+     * @return $this
      */
     protected function _addElementTypes()
     {

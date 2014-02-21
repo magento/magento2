@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,6 +43,7 @@ class Html extends \Magento\View\Element\Template
 
     /**
      * Add block data
+     * @return void
      */
     protected function _construct()
     {
@@ -57,7 +58,7 @@ class Html extends \Magento\View\Element\Template
         $this->addBodyClass($this->_request->getFullActionName('-'));
 
         if ($this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            $this->_app->setUseSessionVar(true);
+            $this->_sidResolver->setUseSessionVar(true);
         }
     }
 
@@ -119,7 +120,7 @@ class Html extends \Magento\View\Element\Template
 
         // buld url
         if (!empty($logo)) {
-            $logo = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\Core\Model\Store::URL_TYPE_MEDIA)) . $logo;
+            $logo = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\UrlInterface::URL_TYPE_MEDIA)) . $logo;
         } else {
             $logo = '';
         }
@@ -141,7 +142,7 @@ class Html extends \Magento\View\Element\Template
      * Set header title
      *
      * @param string $title
-     * @return \Magento\Theme\Block\Html
+     * @return $this
      */
     public function setHeaderTitle($title)
     {
@@ -163,7 +164,7 @@ class Html extends \Magento\View\Element\Template
      * Add CSS class to page body tag
      *
      * @param string $className
-     * @return \Magento\Theme\Block\Html
+     * @return $this
      */
     public function addBodyClass($className)
     {
@@ -214,7 +215,7 @@ class Html extends \Magento\View\Element\Template
     protected function _afterToHtml($html)
     {
         if ($this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            $this->_app->setUseSessionVar(false);
+            $this->_sidResolver->setUseSessionVar(false);
             \Magento\Profiler::start('CACHE_URL');
             $html = $this->_urlBuilder->sessionUrlVar($html);
             \Magento\Profiler::stop('CACHE_URL');

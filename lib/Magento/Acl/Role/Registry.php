@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Acl
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ class Registry extends \Zend_Acl_Role_Registry
      *
      * @param \Zend_Acl_Role_Interface|string $role
      * @param array|Zend_Acl_Role_Interface|string $parents
-     * @return \Magento\Acl\Role\Registry
+     * @return $this
      * @throws \Zend_Acl_Role_Registry_Exception
      */
     public function addParent($role, $parents)

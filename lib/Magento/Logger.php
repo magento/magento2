@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,15 +42,15 @@ class Logger
     protected $_loggers = array();
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $defaultFile
      */
-    public function __construct(\Magento\Filesystem $filesystem, $defaultFile = '')
+    public function __construct(\Magento\App\Filesystem $filesystem, $defaultFile = '')
     {
         $this->_filesystem = $filesystem;
         $this->addStreamLog(self::LOGGER_SYSTEM, $defaultFile)
@@ -72,7 +72,7 @@ class Logger
     {
         $file = $fileOrWrapper ?: "{$loggerKey}.log";
         if (!preg_match('#^[a-z][a-z0-9+.-]*\://#i', $file)) {
-            $logDir = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::LOG);
+            $logDir = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::LOG_DIR);
             $logDir->create();
             $file = $logDir->getAbsolutePath($file);
         }

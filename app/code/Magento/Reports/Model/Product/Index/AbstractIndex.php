@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -106,7 +106,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare customer/visitor, store data before save
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -186,7 +186,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * On customer loggin merge visitor/customer index
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     public function updateCustomerFromVisitor()
     {
@@ -197,7 +197,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Purge visitor data by customer (logout)
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     public function purgeVisitorByCustomer()
     {
@@ -218,7 +218,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Calculate count of product index items cache
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     public function calculate()
     {
@@ -263,7 +263,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Clean index (visitors)
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     public function clean()
     {
@@ -273,8 +273,8 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
 
     /**
      * Add product ids to current visitor/customer log
-     * @param array $productIds
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @param string[] $productIds
+     * @return $this
      */
     public function registerIds($productIds)
     {

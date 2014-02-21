@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,11 +30,15 @@ namespace Magento\View;
 class DeployedFilesManager implements \Magento\View\PublicFilesManagerInterface
 {
     /**
+     * View service
+     *
      * @var \Magento\View\Service
      */
     protected $_viewService;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Service $viewService
      */
     public function __construct(\Magento\View\Service $viewService)

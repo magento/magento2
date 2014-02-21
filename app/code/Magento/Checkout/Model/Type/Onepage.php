@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -243,13 +243,10 @@ class Onepage
             }
         }
 
-        /**
-         * Reset multishipping flag before any manipulations with quote address
-         * addAddress method for quote object related on this flag
-         */
-        if ($this->getQuote()->getIsMultiShipping()) {
-            $this->getQuote()->setIsMultiShipping(false);
-            $this->getQuote()->save();
+        $quote = $this->getQuote();
+        if ($quote->isMultipleShippingAddresses()) {
+            $quote->removeAllAddresses();
+            $quote->save();
         }
 
         /*
@@ -258,7 +255,7 @@ class Onepage
         */
         $customer = $customerSession->getCustomer();
         if ($customer) {
-            $this->getQuote()->assignCustomer($customer);
+            $quote->assignCustomer($customer);
         }
         return $this;
     }
@@ -660,12 +657,15 @@ class Onepage
 
     /**
      * Validate quote state to be integrated with one page checkout process
+     *
+     * @throws \Magento\Core\Exception
      */
-    public function validate()
+    protected function validate()
     {
-        $quote  = $this->getQuote();
-        if ($quote->getIsMultiShipping()) {
-            throw new \Magento\Core\Exception(__('Invalid checkout type'));
+        $quote = $this->getQuote();
+
+        if ($quote->isMultipleShippingAddresses()) {
+            throw new \Magento\Core\Exception(__('There are more than one shipping address.'));
         }
 
         if ($quote->getCheckoutMethod() == self::METHOD_GUEST
@@ -703,6 +703,8 @@ class Onepage
 
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $quote->getCustomer();
+        // Need to set proper attribute id or future updates will cause data loss.
+        $customer->setData('attribute_set_id', 1);
         /** @var $customerBilling \Magento\Customer\Model\Address */
         $customerBilling = $billing->exportCustomerAddress();
         $customer->addAddress($customerBilling);
@@ -845,12 +847,6 @@ class Onepage
             $this->_checkoutSession->setLastOrderId($order->getId())
                 ->setRedirectUrl($redirectUrl)
                 ->setLastRealOrderId($order->getIncrementId());
-
-            // as well a billing agreement can be created
-            $agreement = $order->getPayment()->getBillingAgreement();
-            if ($agreement) {
-                $this->_checkoutSession->setLastBillingAgreementId($agreement->getId());
-            }
         }
 
         // add recurring profiles information to the session

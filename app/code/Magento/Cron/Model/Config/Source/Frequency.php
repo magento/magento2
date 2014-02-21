@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Cron
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,13 +29,18 @@ namespace Magento\Cron\Model\Config\Source;
 
 class Frequency implements \Magento\Core\Model\Option\ArrayInterface
 {
-
+    /**
+     * @var array
+     */
     protected static $_options;
 
     const CRON_DAILY    = 'D';
     const CRON_WEEKLY   = 'W';
     const CRON_MONTHLY  = 'M';
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         if (!self::$_options) {
@@ -56,5 +61,4 @@ class Frequency implements \Magento\Core\Model\Option\ArrayInterface
         }
         return self::$_options;
     }
-
 }

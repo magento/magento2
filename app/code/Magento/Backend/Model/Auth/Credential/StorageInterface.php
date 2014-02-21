@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Backend\Model\Auth\Credential;
 
 /**
  * Backend Auth Credential Storage interface
@@ -32,31 +32,31 @@
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Model\Auth\Credential;
-
 interface StorageInterface
 {
     /**
      * Authenticate process.
      *
-     * @abstract
      * @param string $username
      * @param string $password
+     * @return bool
      */
     public function authenticate($username, $password);
 
     /**
      * Login action. Check if given username and password are valid
      *
-     * @abstract
      * @param $username
      * @param $password
+     * @return $this
+     * @abstract
      */
     public function login($username, $password);
 
     /**
      * Reload loaded (already authenticated) credential storage
      *
+     * @return $this
      * @abstract
      */
     public function reload();
@@ -64,16 +64,17 @@ interface StorageInterface
     /**
      * Check if user has available resources
      *
-     * @abstract
      * @return bool
+     * @abstract
      */
     public function hasAvailableResources();
 
     /**
      * Set user has available resources
      *
-     * @abstract
      * @param bool $hasResources
+     * @return $this
+     * @abstract
      */
     public function setHasAvailableResources($hasResources);
 }

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_GiftMessage
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -97,7 +97,6 @@ $installer->createGiftMessageSetup(array('resourceName' => 'catalog_setup'))->ad
         'default'       => '',
         'apply_to'      => '',
         'input_renderer'   => 'Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form\Config',
-        'is_configurable'  => 0,
         'visible_on_front' => false
     )
 );

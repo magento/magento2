@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Captcha
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Captcha\Model;
@@ -76,7 +76,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', array(), array(), '', false);
         $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', array(), array(), '', false);
-        $this->_filesystem = $this->getMock('Magento\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 

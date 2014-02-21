@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -111,13 +111,8 @@ class Price
             'extra'     => null
         );
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = $attributeType;
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = $this->_eavResourceHelper->getDdlTypeByColumnType($attributeType);
-            $column['nullable'] = true;
-        }
+        $column['type']     = $this->_eavResourceHelper->getDdlTypeByColumnType($attributeType);
+        $column['nullable'] = true;
 
         return array($attributeCode => $column);
     }

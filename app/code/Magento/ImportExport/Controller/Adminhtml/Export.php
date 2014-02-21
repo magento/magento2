@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,7 +55,7 @@ class Export extends \Magento\Backend\App\Action
     /**
      * Initialize layout.
      *
-     * @return \Magento\ImportExport\Controller\Adminhtml\Export
+     * @return $this
      */
     protected function _initAction()
     {
@@ -79,7 +79,7 @@ class Export extends \Magento\Backend\App\Action
     /**
      * Load data with filter applying and create file for download.
      *
-     * @return \Magento\ImportExport\Controller\Adminhtml\Export
+     * @return $this
      */
     public function exportAction()
     {
@@ -92,6 +92,7 @@ class Export extends \Magento\Backend\App\Action
                 return $this->_fileFactory->create(
                     $model->getFileName(),
                     $model->export(),
+                    \Magento\App\Filesystem::VAR_DIR,
                     $model->getContentType()
                 );
             } catch (\Magento\Core\Exception $e) {

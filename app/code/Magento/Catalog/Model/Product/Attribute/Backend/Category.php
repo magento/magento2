@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,7 +39,7 @@ class Category extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * Set category ids to product data
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return $this
      */
     public function afterLoad($object)
     {

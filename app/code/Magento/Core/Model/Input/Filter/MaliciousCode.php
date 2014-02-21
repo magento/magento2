@@ -20,11 +20,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Core\Model\Input\Filter;
 
 class MaliciousCode implements \Zend_Filter_Interface
@@ -32,7 +30,7 @@ class MaliciousCode implements \Zend_Filter_Interface
     /**
      * Regular expressions for cutting malicious code
      *
-     * @var array
+     * @var string[]
      */
     protected $_expressions = array(
         //comments, must be first
@@ -57,7 +55,7 @@ class MaliciousCode implements \Zend_Filter_Interface
      * Filter value
      *
      * @param string|array $value
-     * @return string|array         Filtered value
+     * @return string|array Filtered value
      */
     public function filter($value)
     {
@@ -68,7 +66,7 @@ class MaliciousCode implements \Zend_Filter_Interface
      * Add expression
      *
      * @param string $expression
-     * @return \Magento\Core\Model\Input\Filter\MaliciousCode
+     * @return $this
      */
     public function addExpression($expression)
     {
@@ -82,7 +80,7 @@ class MaliciousCode implements \Zend_Filter_Interface
      * Set expressions
      *
      * @param array $expressions
-     * @return \Magento\Core\Model\Input\Filter\MaliciousCode
+     * @return $this
      */
     public function setExpressions(array $expressions)
     {

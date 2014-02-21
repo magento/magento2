@@ -20,14 +20,15 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Backend\Model\Config\Structure;
 
-abstract class AbstractElement
-    implements \Magento\Backend\Model\Config\Structure\ElementInterface
+use Magento\Core\Model\StoreManagerInterface;
+
+abstract class AbstractElement implements ElementInterface
 {
     /**
      * Element data
@@ -44,18 +45,18 @@ abstract class AbstractElement
     protected $_scope;
 
     /**
-     * Application object
+     * Store manager
      *
-     * @var \Magento\Core\Model\App
+     * @var StoreManagerInterface
      */
-    protected $_application;
+    protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\App $application
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\App $application)
+    public function __construct(StoreManagerInterface $storeManager)
     {
-        $this->_application = $application;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -77,6 +78,7 @@ abstract class AbstractElement
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {
@@ -158,7 +160,7 @@ abstract class AbstractElement
             \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault'),
         );
 
-        if ($this->_application->isSingleStoreMode()) {
+        if ($this->_storeManager->isSingleStoreMode()) {
             $result = !$this->_hasVisibilityValue('hide_in_single_store_mode')
                 && array_sum($showInScope);
             return $result;

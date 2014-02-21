@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,7 +33,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
 
-class Grid extends \Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid
+use Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid;
+
+class Grid extends AbstractGrid
 {
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
@@ -42,27 +44,25 @@ class Grid extends \Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_module = 'catalog';
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Prepare product attributes grid collection object
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -76,7 +76,7 @@ class Grid extends \Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid
     /**
      * Prepare product attributes grid columns
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid
+     * @return $this
      */
     protected function _prepareColumns()
     {

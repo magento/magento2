@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -36,6 +36,7 @@
     /** @var $_product \Magento\Catalog\Model\Product */
     $_product = $this->getProduct();
     $_msrpPrice = "";
+    $priceElementId = 'product-price-' . $_product->getId() . $this->getIdSuffix();
 ?>
     <div class="price-box map-info">
     <?php $_price = $this->helper('Magento\Tax\Helper\Data')->getPrice($_product, $_product->getMsrp()) ?>

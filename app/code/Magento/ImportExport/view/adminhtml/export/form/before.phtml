@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -42,7 +42,6 @@
          */
         modifyFilterGrid: function() {
             if ($('entity') && $F('entity') && $F('entity') != 'catalog_product') {
-                if ($F('entity') == 'customer') {
                     $$('col:first-child').each(function(el) {
                         el.show();
                     });
@@ -52,17 +51,6 @@
                     $$('td.a-center').each(function(el) {
                         el.show();
                     });
-                } else {
-                    $$('col:first-child').each(function(el) {
-                        el.hide();
-                    });
-                    $$('th.no-link:first-child').each(function(el) {
-                        el.hide();
-                    });
-                    $$('td.a-center').each(function(el) {
-                        el.hide();
-                    });
-                }
             }
         },
 
@@ -73,9 +61,6 @@
             if ($('entity') && $F('entity')) {
                 var url    = "<?php echo $this->getUrl('*/*/getFilter') ?>";
                 var entity = $F('entity');
-                if (entity != 'catalog_product') {
-                    entity = 'customer';
-                }
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;
                     url += ((url.slice(-1) != '/') ? '/' : '') + 'entity/' + entity;

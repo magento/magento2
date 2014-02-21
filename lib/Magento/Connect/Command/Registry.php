@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,9 +32,10 @@ extends \Magento\Connect\Command
 
     /**
      * List-installed callback
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
+     * @param string[] $params
      * @return void
      */
     public function doList($command, $options, $params)
@@ -69,9 +70,10 @@ extends \Magento\Connect\Command
 
     /**
      * list-files callback
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
+     * @param string[] $params
      * @return void
      */
     public function doFileList($command, $options, $params)
@@ -127,10 +129,11 @@ extends \Magento\Connect\Command
     /**
      * Installed package info
      * info command callback
+     *
      * @param string $command
      * @param array $options
-     * @param array $params
-     * @return
+     * @param string[] $params
+     * @return void
      */
     public function doInfo($command, $options, $params)
     {

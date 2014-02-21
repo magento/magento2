@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_User
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -171,7 +171,8 @@ if (!$installer->getConnection()->isTableExists($installer->getTable('admin_user
             ), 'User Password')
         ->addColumn('created', \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, null, array(
             'nullable'  => false,
-            ), 'User Created Time')
+            'default'   => \Magento\DB\Ddl\Table::TIMESTAMP_INIT,
+        ), 'User Created Time')
         ->addColumn('modified', \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, null, array(
             ), 'User Modified Time')
         ->addColumn('logdate', \Magento\DB\Ddl\Table::TYPE_TIMESTAMP, null, array(

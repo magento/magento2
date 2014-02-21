@@ -18,15 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\User\Block\Role\Grid;
+
+use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Acl role user grid.
  */
-namespace Magento\User\Block\Role\Grid;
-
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -50,7 +51,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -59,19 +59,23 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Core\Model\Registry $coreRegistry,
         \Magento\User\Model\RoleFactory $roleFactory,
         array $data = array()
     ) {
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_roleFactory = $roleFactory;
     }
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -82,6 +86,10 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setUseAjax(true);
     }
 
+    /**
+     * @param Column $column
+     * @return $this
+     */
     protected function _addColumnFilterToCollection($column)
     {
         if ($column->getId() == 'in_role_users') {
@@ -102,6 +110,9 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         $roleId = $this->getRequest()->getParam('rid');
@@ -111,6 +122,9 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('in_role_users', array(
@@ -187,12 +201,19 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         $roleId = $this->getRequest()->getParam('rid');
         return $this->getUrl('*/*/editrolegrid', array('rid' => $roleId));
     }
 
+    /**
+     * @param bool $json
+     * @return string|array
+     */
     public function getUsers($json=false)
     {
         if ( $this->getRequest()->getParam('in_role_user') != "" ) {

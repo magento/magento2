@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -64,7 +64,9 @@ class Storage extends \Magento\Backend\App\Action
     {
         session_write_close();
 
-        if (!isset($_REQUEST['storage'])) {
+        $requestStorage = $this->getRequest()->getParam('storage');
+        $requestConnection = $this->getRequest()->getParam('connection');
+        if (!isset($requestStorage)) {
             return;
         }
 
@@ -80,9 +82,9 @@ class Storage extends \Magento\Backend\App\Action
             ->setFlagData(array())
             ->save();
 
-        $storage = array('type' => (int) $_REQUEST['storage']);
-        if (isset($_REQUEST['connection']) && !empty($_REQUEST['connection'])) {
-            $storage['connection'] = $_REQUEST['connection'];
+        $storage = array('type' => $requestStorage);
+        if (isset($requestConnection) && !empty($requestConnection)) {
+            $storage['connection'] = $requestConnection;
         }
 
         try {

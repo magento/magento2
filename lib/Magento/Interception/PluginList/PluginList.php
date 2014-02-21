@@ -20,73 +20,80 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  * 
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Interception\PluginList;
 
+use Magento\Config\ReaderInterface;
+use Magento\Config\ScopeInterface;
+use Magento\Config\CacheInterface;
+use Magento\Config\Data\Scoped;
+use Magento\Interception\Definition;
+use Magento\Interception\PluginList as InterceptionPluginList;
+use Magento\ObjectManager\Config;
+use Magento\ObjectManager\Relations;
+use Magento\ObjectManager\Definition\Compiled;
 use Zend\Soap\Exception\InvalidArgumentException;
 
-class PluginList
-    extends \Magento\Config\Data\Scoped
-    implements \Magento\Interception\PluginList
+class PluginList extends Scoped implements InterceptionPluginList
 {
     /**
      * Type config
      *
-     * @var \Magento\ObjectManager\Config
+     * @var Config
      */
     protected $_omConfig;
 
     /**
      * Class relations information provider
      *
-     * @var \Magento\ObjectManager\Relations
+     * @var Relations
      */
     protected $_relations;
 
     /**
      * List of interception methods per plugin
      *
-     * @var \Magento\Interception\Definition
+     * @var Definition
      */
     protected $_definitions;
 
     /**
      * List of interceptable application classes
      *
-     * @var \Magento\ObjectManager\Definition\Compiled
+     * @var Compiled
      */
     protected $_classDefinitions;
 
     /**
      * Scope inheritance scheme
      *
-     * @var array
+     * @var string[]
      */
     protected $_scopePriorityScheme = array('global');
 
     /**
-     * @param \Magento\Config\ReaderInterface $reader
-     * @param \Magento\Config\ScopeInterface $configScope
-     * @param \Magento\Config\CacheInterface $cache
-     * @param \Magento\ObjectManager\Relations $relations
-     * @param \Magento\ObjectManager\Config $omConfig
-     * @param \Magento\Interception\Definition $definitions
-     * @param array $scopePriorityScheme
+     * @param ReaderInterface $reader
+     * @param ScopeInterface $configScope
+     * @param CacheInterface $cache
+     * @param Relations $relations
+     * @param Config $omConfig
+     * @param Definition $definitions
+     * @param string[] $scopePriorityScheme
      * @param string $cacheId
-     * @param \Magento\ObjectManager\Definition\Compiled $classDefinitions
+     * @param Compiled $classDefinitions
      */
     public function __construct(
-        \Magento\Config\ReaderInterface $reader,
-        \Magento\Config\ScopeInterface $configScope,
-        \Magento\Config\CacheInterface $cache,
-        \Magento\ObjectManager\Relations $relations,
-        \Magento\ObjectManager\Config $omConfig,
-        \Magento\Interception\Definition $definitions,
+        ReaderInterface $reader,
+        ScopeInterface $configScope,
+        CacheInterface $cache,
+        Relations $relations,
+        Config $omConfig,
+        Definition $definitions,
         array $scopePriorityScheme,
         $cacheId = 'plugins',
-        \Magento\ObjectManager\Definition\Compiled $classDefinitions = null
+        Compiled $classDefinitions = null
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);
         $this->_omConfig = $omConfig;
@@ -101,7 +108,7 @@ class PluginList
      *
      * @param string $type
      * @return array
-     * @throws \Zend\Soap\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _inheritPlugins($type)
@@ -180,6 +187,11 @@ class PluginList
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $type
+     * @param string $method
+     * @param string $scenario
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getPlugins($type, $method, $scenario)
@@ -198,6 +210,7 @@ class PluginList
     /**
      * Load configuration for current scope
      *
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _loadScopedData()

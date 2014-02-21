@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Cron
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@ class Db implements \Magento\Config\ConverterInterface
     /**
      * Convert data
      *
-     * @param mixed $source
+     * @param array $source
      * @return array
      */
     public function convert($source)
@@ -75,6 +75,7 @@ class Db implements \Magento\Config\ConverterInterface
      * @param array  $jobConfig
      * @param string $jobName
      * @param array  $result
+     * @return void
      */
     protected function _processConfigParam(array $jobConfig, $jobName, array &$result)
     {
@@ -88,6 +89,7 @@ class Db implements \Magento\Config\ConverterInterface
      * @param array  $jobConfig
      * @param string $jobName
      * @param array  $result
+     * @return void
      */
     protected function _processScheduleParam(array $jobConfig, $jobName, array &$result)
     {
@@ -102,6 +104,7 @@ class Db implements \Magento\Config\ConverterInterface
      * @param array  $jobConfig
      * @param string $jobName
      * @param array  $result
+     * @return void
      */
     protected function _processRunModel(array $jobConfig, $jobName, array &$result)
     {

@@ -20,7 +20,7 @@
  *
  * @category    Tools
  * @package     unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,7 +42,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
     protected $_tmpDir;
 
     /**
-     * @var \Magento\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
@@ -54,13 +54,18 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $methods = array('getDirectoryWrite', 'getPath', '__wakeup');
-        $this->filesystem = $this->getMock('Magento\Filesystem', $methods, array(), '', false);
+        $this->filesystem = $this->getMock('Magento\App\Filesystem', $methods, array(), '', false);
         $this->filesystem->expects($this->any())
             ->method('getPath')
-            ->with(\Magento\Filesystem::ROOT)
-            ->will($this->returnValue(BP));
+            ->with(\Magento\App\Filesystem::ROOT_DIR)
+            ->will($this->returnValue(str_replace('\\', '/', BP)));
 
-        $this->_cssUrlResolver = new \Magento\View\Url\CssResolver($this->filesystem);
+        $viewFilesystem = $this->getMock('Magento\View\Filesystem', array('normalizePath'), array(), '', false);
+        $viewFilesystem->expects($this->any())
+            ->method('normalizePath')
+            ->will($this->returnArgument(0));
+
+        $this->_cssUrlResolver = new \Magento\View\Url\CssResolver($this->filesystem, $viewFilesystem);
         $this->_tmpDir = TESTS_TEMP_DIR . '/tool_theme_deployment';
 
         $this->filesystemAdapter = new \Magento\Filesystem\Driver\File();
@@ -108,7 +113,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
                 $conflictPermitted,
                 $conflictForbidden,
                 'Conflicts: the following extensions are added both to permitted and forbidden lists: ' .
-                    'conflict1, conflict2',
+                'conflict1, conflict2',
             ),
         );
     }
@@ -118,11 +123,6 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
         $permitted = __DIR__ . '/_files/ThemeDeployment/run/permitted.php';
         $forbidden = __DIR__ . '/_files/ThemeDeployment/run/forbidden.php';
         $fixture = include __DIR__ . '/_files/ThemeDeployment/run/fixture.php';
-
-        $this->filesystem->expects($this->any())
-            ->method('getPath')
-            ->with(\Magento\Filesystem::ROOT)
-            ->will($this->returnValue(BP));
 
         $object = new \Magento\Tools\View\Generator\ThemeDeployment($this->_cssUrlResolver, $this->_tmpDir, $permitted,
             $forbidden);

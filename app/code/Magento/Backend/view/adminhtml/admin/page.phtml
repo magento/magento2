@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -32,7 +32,7 @@
     <?php echo $this->getChildHtml('head') ?>
 </head>
 
-<body id="html-body"<?php echo $this->getBodyClass() ? ' class="' . $this->getBodyClass() . '"' : ''; ?> data-container="body" data-mage-init="{loaderAjax: {}, loader: {}}">
+<body id="html-body"<?php echo $this->getBodyClass() ? ' class="' . $this->getBodyClass() . '"' : ''; ?> data-container="body" data-mage-init='{"loaderAjax":{},"loader":{}}'>
     <div class="wrapper">
         <?php echo $this->getChildHtml('notification_window'); ?>
         <?php echo $this->getChildHtml('global_notices') ?>

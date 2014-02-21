@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,6 +42,20 @@ class Template extends \Magento\View\Element\AbstractBlock
      * @var array
      */
     protected $_priceBlockTypes = array();
+
+    /**
+     * @param \Magento\View\Element\Context $context
+     * @param array $priceBlockTypes
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Context $context,
+        array $priceBlockTypes = array(),
+        array $data = array()
+    ) {
+        $this->_priceBlockTypes = $priceBlockTypes;
+        parent::__construct($context, $data);
+    }
 
     /**
      * Retrieve array of Price Block Types

@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -166,5 +166,15 @@ class Bootstrap
     public static function setObjectManager(\Magento\ObjectManager $objectManager)
     {
         self::$_objectManager = $objectManager;
+    }
+
+    /**
+     * Get bootstrap object
+     *
+     * @return \Magento\TestFramework\Bootstrap
+     */
+    public function getBootstrap()
+    {
+        return $this->_bootstrap;
     }
 }

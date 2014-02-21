@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Centinel
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Centinel\Model;
@@ -39,10 +39,15 @@ class Api extends \Magento\Object
     /**
      * Fields that should be replaced in debug with '***'
      *
-     * @var array
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = array('TransactionPwd', 'CardNumber', 'CardExpMonth', 'CardExpYear');
 
+    /**
+     * Array of ISO 4217 Currency codes and numbers
+     *
+     * @var array
+     */
     protected static $_iso4217Currencies = array(
         'AED' => '784', 'AFN' => '971',
         'ALL' => '008', 'AMD' => '051', 'ANG' => '532', 'AOA' => '973', 'ARS' => '032', 'AUD' => '036', 'AWG' => '533',
@@ -122,7 +127,7 @@ class Api extends \Magento\Object
     /**
      * Return transaction type. according centinel documetation it should be "C"
      *
-     * @return "C"
+     * @return string
      */
     protected function _getTransactionType()
     {
@@ -152,10 +157,10 @@ class Api extends \Magento\Object
     /**
      * Call centinel api methods by given method name and data
      *
-     * @param $method string
-     * @param $data array
-     *
+     * @param string $method
+     * @param array $data
      * @return \CentinelClient
+     * @throws \Exception
      */
     protected function _call($method, $data)
     {
@@ -209,7 +214,8 @@ class Api extends \Magento\Object
     /**
      * Call centinel api lookup method
      *
-     * @return \Magento\Centinel\Model\Api
+     * @param \Magento\Object $data
+     * @return \Magento\Object
      */
     public function callLookup($data)
     {
@@ -247,7 +253,8 @@ class Api extends \Magento\Object
     /**
      * Call centinel api authentication method
      *
-     * @return \Magento\Centinel\Model\Api
+     * @param \Magento\Object $data
+     * @return \Magento\Object
      */
     public function callAuthentication($data)
     {
@@ -272,7 +279,8 @@ class Api extends \Magento\Object
     /**
      * Log debug data to file
      *
-     * @param mixed $debugData
+     * @param array $debugData
+     * @return void
      */
     protected function _debug($debugData)
     {

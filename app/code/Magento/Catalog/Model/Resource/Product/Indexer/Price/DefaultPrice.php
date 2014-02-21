@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Indexer\Price;
 
 /**
  * Default Product Type Price Indexer Resource model
@@ -33,11 +33,9 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Indexer\Price;
-
 class DefaultPrice
     extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
-    implements \Magento\Catalog\Model\Resource\Product\Indexer\Price\PriceInterface
+    implements PriceInterface
 {
     /**
      * Product type code
@@ -87,6 +85,7 @@ class DefaultPrice
     /**
      * Define main price index table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -97,7 +96,7 @@ class DefaultPrice
      * Set Product Type code
      *
      * @param string $typeCode
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
      */
     public function setTypeId($typeCode)
     {
@@ -123,7 +122,7 @@ class DefaultPrice
      * Set Product Type Composite flag
      *
      * @param bool $flag
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
      */
     public function setIsComposite($flag)
     {
@@ -144,7 +143,8 @@ class DefaultPrice
     /**
      * Reindex temporary (price result data) for all products
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
+     * @throws \Exception
      */
     public function reindexAll()
     {
@@ -166,7 +166,7 @@ class DefaultPrice
      * Reindex temporary (price result data) for defined product(s)
      *
      * @param int|array $entityIds
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
      */
     public function reindexEntity($entityIds)
     {
@@ -194,7 +194,7 @@ class DefaultPrice
     /**
      * Prepare final price temporary index table
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
      */
     protected function _prepareDefaultFinalPriceTable()
     {
@@ -215,8 +215,8 @@ class DefaultPrice
     /**
      * Prepare products default final price in temporary index table
      *
-     * @param int|array $entityIds  the entity ids limitation
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @param int|array $entityIds the entity ids limitation
+     * @return $this
      */
     protected function _prepareFinalPriceData($entityIds = null)
     {
@@ -262,7 +262,7 @@ class DefaultPrice
             ->where('e.type_id = ?', $this->getTypeId());
 
         // add enable products limitation
-        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $statusCond, true);
         if ($this->_coreData->isModuleEnabled('Magento_Tax')) {
             $taxClassId = $this->_addAttributeToSelect($select, 'tax_class_id', 'e.entity_id', 'cs.store_id');
@@ -366,7 +366,7 @@ class DefaultPrice
     /**
      * Prepare table structure for custom option temporary aggregation data
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
      */
     protected function _prepareCustomOptionAggregateTable()
     {
@@ -377,7 +377,7 @@ class DefaultPrice
     /**
      * Prepare table structure for custom option prices data
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
      */
     protected function _prepareCustomOptionPriceTable()
     {
@@ -388,7 +388,7 @@ class DefaultPrice
     /**
      * Apply custom option minimal and maximal price to temporary final price index table
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
      */
     protected function _applyCustomOption()
     {
@@ -569,7 +569,7 @@ class DefaultPrice
     /**
      * Mode Final Prices index to primary temporary index table
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+     * @return $this
      */
     protected function _movePriceDataToIndexTable()
     {
@@ -623,10 +623,10 @@ class DefaultPrice
      * Register data required by product type process in event object
      *
      * @param \Magento\Index\Model\Event $event
+     * @return void
      */
     public function registerEvent(\Magento\Index\Model\Event $event)
     {
-
     }
 
     /**

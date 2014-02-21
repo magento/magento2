@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
@@ -48,7 +48,7 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Prepare data before save
      *
      * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\Store
+     * @return $this
      */
     protected function _beforeSave($object)
     {

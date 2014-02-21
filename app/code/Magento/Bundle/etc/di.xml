@@ -19,26 +19,33 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Bundle\Model\Source\Option\Type">
-        <param name="options">
-            <value>
-                <select>Drop-down</select>
-                <radio>Radio Buttons</radio>
-                <checkbox>Checkbox</checkbox>
-                <multi>Multiple Select</multi>
-            </value>
-        </param>
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="select" xsi:type="string">Drop-down</item>
+                <item name="radio" xsi:type="string">Radio Buttons</item>
+                <item name="checkbox" xsi:type="string">Checkbox</item>
+                <item name="multi" xsi:type="string">Multiple Select</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <bundle_setup>Magento\Catalog\Model\Resource\Setup</bundle_setup>
-            </value>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="bundle_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\CatalogPrice">
+        <arguments>
+            <argument name="priceModelPool" xsi:type="array">
+                <item name="bundle" xsi:type="string">Magento\Bundle\Model\Product\CatalogPrice</item>
+            </argument>
+        </arguments>
     </type>
 </config>

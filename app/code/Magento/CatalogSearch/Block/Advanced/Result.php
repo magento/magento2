@@ -20,54 +20,57 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Advanced search result
- *
- * @category   Magento
- * @package    Magento_CatalogSearch
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogSearch\Block\Advanced;
 
-class Result extends \Magento\View\Element\Template
+use Magento\Catalog\Model\Layer;
+use Magento\CatalogSearch\Model\Advanced;
+use Magento\CatalogSearch\Model\Resource\Advanced\Collection;
+use Magento\UrlFactory;
+use Magento\View\Element\AbstractBlock;
+use Magento\View\Element\Template;
+use Magento\View\Element\Template\Context;
+
+/**
+ * Advanced search result
+ */
+class Result extends Template
 {
     /**
      * Url factory
      *
-     * @var \Magento\Core\Model\UrlFactory
+     * @var UrlFactory
      */
     protected $_urlFactory;
 
     /**
      * Catalog layer
      *
-     * @var \Magento\Catalog\Model\Layer
+     * @var Layer
      */
     protected $_catalogLayer;
 
     /**
      * Catalog search advanced
      *
-     * @var \Magento\CatalogSearch\Model\Advanced
+     * @var Advanced
      */
     protected $_catalogSearchAdvanced;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
-     * @param \Magento\Core\Model\UrlFactory $urlFactory
+     * @param Context $context
+     * @param Advanced $catalogSearchAdvanced
+     * @param Layer $catalogLayer
+     * @param UrlFactory $urlFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
-        \Magento\Catalog\Model\Layer $catalogLayer,
-        \Magento\Core\Model\UrlFactory $urlFactory,
+        Context $context,
+        Advanced $catalogSearchAdvanced,
+        Layer $catalogLayer,
+        UrlFactory $urlFactory,
         array $data = array()
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
@@ -76,56 +79,81 @@ class Result extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return AbstractBlock
+     */
     protected function _prepareLayout()
     {
-        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+        $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
+        if ($breadcrumbs) {
             $breadcrumbs->addCrumb('home', array(
-                'label'=>__('Home'),
-                'title'=>__('Go to Home Page'),
-                'link' => $this->_storeManager->getStore()->getBaseUrl(),
+                'label' => __('Home'),
+                'title' => __('Go to Home Page'),
+                'link'  => $this->_storeManager->getStore()->getBaseUrl(),
             ))->addCrumb('search', array(
-                'label'=>__('Catalog Advanced Search'),
-                'link'=>$this->getUrl('*/*/')
+                'label' => __('Catalog Advanced Search'),
+                'link'  => $this->getUrl('*/*/')
             ))->addCrumb('search_result', array(
-                'label'=>__('Results')
+                'label' => __('Results')
             ));
         }
         return parent::_prepareLayout();
     }
 
+    /**
+     * Set order options
+     *
+     * @return void
+     */
     public function setListOrders() {
         $category = $this->_catalogLayer->getCurrentCategory();
         /* @var $category \Magento\Catalog\Model\Category */
+        $category = $this->_catalogLayer->getCurrentCategory();
 
         $availableOrders = $category->getAvailableSortByOptions();
         unset($availableOrders['position']);
 
-        $this->getChildBlock('search_result_list')
-            ->setAvailableOrders($availableOrders);
+        $this->getChildBlock('search_result_list')->setAvailableOrders($availableOrders);
     }
 
-    public function setListModes() {
-        $this->getChildBlock('search_result_list')
-            ->setModes(array(
-                'grid' => __('Grid'),
-                'list' => __('List'))
-            );
+    /**
+     * Set view mode options
+     *
+     * @return void
+     */
+    public function setListModes()
+    {
+        $this->getChildBlock('search_result_list')->setModes(array('grid' => __('Grid'), 'list' => __('List')));
     }
 
-    public function setListCollection() {
+    /**
+     * @return void
+     */
+    public function setListCollection()
+    {
         $this->getChildBlock('search_result_list')
            ->setCollection($this->_getProductCollection());
     }
 
-    protected function _getProductCollection(){
+    /**
+     * @return Collection
+     */
+    protected function _getProductCollection()
+    {
         return $this->getSearchModel()->getProductCollection();
     }
 
+    /**
+     * @return Advanced
+     */
     public function getSearchModel()
     {
         return $this->_catalogSearchAdvanced;
     }
 
+    /**
+     * @return mixed
+     */
     public function getResultCount()
     {
         if (!$this->getData('result_count')) {
@@ -135,11 +163,17 @@ class Result extends \Magento\View\Element\Template
         return $this->getData('result_count');
     }
 
+    /**
+     * @return string
+     */
     public function getProductListHtml()
     {
         return $this->getChildHtml('search_result_list');
     }
 
+    /**
+     * @return string
+     */
     public function getFormUrl()
     {
         return $this->_urlFactory->create()
@@ -147,6 +181,9 @@ class Result extends \Magento\View\Element\Template
             ->getUrl('*/*/', array('_escape' => true));
     }
 
+    /**
+     * @return array
+     */
     public function getSearchCriterias()
     {
         $searchCriterias = $this->getSearchModel()->getSearchCriterias();

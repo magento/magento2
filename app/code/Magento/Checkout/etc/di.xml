@@ -19,26 +19,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <checkout_setup>Magento\Checkout\Model\Resource\Setup</checkout_setup>
-            </value>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="checkout_setup" xsi:type="string">Magento\Checkout\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>checkout</value>
-        </param>
+        <arguments>
+            <argument name="namespace" xsi:type="string">checkout</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Checkout\Model\Session">
-        <param name="storage">
-            <instance type="Magento\Checkout\Model\Session\Storage" />
-        </param>
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Checkout\Model\Session\Storage</argument>
+        </arguments>
     </type>
 </config>

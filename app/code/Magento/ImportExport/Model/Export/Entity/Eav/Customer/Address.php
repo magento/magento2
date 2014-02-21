@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export\Entity\Eav\Customer;
 
 /**
  * Export customer address entity model
@@ -34,8 +35,6 @@
  *
  * @method \Magento\Customer\Model\Resource\Address\Attribute\Collection getAttributeCollection() getAttributeCollection()
  */
-namespace Magento\ImportExport\Model\Export\Entity\Eav\Customer;
-
 class Address
     extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -72,7 +71,7 @@ class Address
     /**
      * Permanent entity columns
      *
-     * @var array
+     * @var string[]
      */
     protected $_permanentAttributes = array(self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID);
 
@@ -108,7 +107,9 @@ class Address
     protected $_customerEntity;
 
     /**
-     * Existing customers information. In form of:
+     * Existing customers information.
+     *
+     * In form of:
      *
      * [customer e-mail] => array(
      *    [website id 1] => customer_id 1,
@@ -123,7 +124,7 @@ class Address
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -135,7 +136,7 @@ class Address
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -145,8 +146,15 @@ class Address
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory,
         array $data = array()
     ) {
-        parent::__construct($coreStoreConfig, $app, $collectionFactory, $resourceColFactory, $locale, $eavConfig,
-            $data);
+        parent::__construct(
+            $coreStoreConfig,
+            $storeManager,
+            $collectionFactory,
+            $resourceColFactory,
+            $locale,
+            $eavConfig,
+            $data
+        );
 
         $this->_customerCollection = isset($data['customer_collection']) ? $data['customer_collection']
             : $customerColFactory->create();
@@ -164,7 +172,7 @@ class Address
     /**
      * Initialize existent customers data
      *
-     * @return \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address
+     * @return $this
      */
     protected function _initCustomers()
     {
@@ -187,7 +195,7 @@ class Address
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _getHeaderColumns()
     {
@@ -231,7 +239,7 @@ class Address
      * Export given customer address data plus related customer data (required for import)
      *
      * @param \Magento\Customer\Model\Address $item
-     * @return string
+     * @return void
      */
     public function exportItem($item)
     {
@@ -260,7 +268,7 @@ class Address
      * Set parameters (push filters from post into export customer model)
      *
      * @param array $parameters
-     * @return \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address
+     * @return $this
      */
     public function setParameters(array $parameters)
     {

@@ -20,11 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_User
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Block\User\Edit\Tab;
+
+use Magento\Backend\Block\Widget\Grid\Column;
 
 class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -34,7 +35,6 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      * @var \Magento\Core\Model\Registry
      */
     protected $_coreRegistry = null;
-
 
     /**
      * @var \Magento\User\Model\Resource\Role\CollectionFactory
@@ -48,7 +48,6 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\User\Model\Resource\Role\CollectionFactory $userRolesFactory
@@ -57,7 +56,6 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\User\Model\Resource\Role\CollectionFactory $userRolesFactory,
@@ -67,9 +65,14 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_jsonEncoder = $jsonEncoder;
         $this->_userRolesFactory = $userRolesFactory;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -80,6 +83,10 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setUseAjax(true);
     }
 
+    /**
+     * @param Column $column
+     * @return $this
+     */
     protected function _addColumnFilterToCollection($column)
     {
         if ($column->getId() == 'assigned_user_role') {
@@ -100,6 +107,9 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         $collection = $this->_userRolesFactory->create();
@@ -108,6 +118,9 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
 
@@ -129,12 +142,19 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         $userPermissions = $this->_coreRegistry->registry('permissions_user');
         return $this->getUrl('*/*/rolesGrid', array('user_id' => $userPermissions->getUserId()));
     }
 
+    /**
+     * @param bool $json
+     * @return array|string
+     */
     public function getSelectedRoles($json=false)
     {
         if ( $this->getRequest()->getParam('user_roles') != "" ) {

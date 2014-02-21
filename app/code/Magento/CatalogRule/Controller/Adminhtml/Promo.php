@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogRule
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,9 +33,13 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml;
 
-class Promo extends \Magento\Backend\App\Action
-{
+use Magento\Backend\App\Action;
 
+class Promo extends Action
+{
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_view->loadLayout();
@@ -44,6 +48,9 @@ class Promo extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_CatalogRule::promo');

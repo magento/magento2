@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Image
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Image\Adapter;
@@ -33,7 +33,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
      */
     public function testWatermark($imagePath, $expectedMessage)
     {
-        $filesystem = $this->getMockBuilder('Magento\Filesystem')->disableOriginalConstructor()->getMock();
+        $filesystem = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
         $this->setExpectedException('LogicException', $expectedMessage);
         $object = new \Magento\Image\Adapter\ImageMagick($filesystem);
         $object->watermark($imagePath);

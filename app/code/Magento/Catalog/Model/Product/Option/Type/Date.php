@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product\Option\Type;
 
 /**
  * Catalog product option date type
@@ -31,12 +32,10 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Option\Type;
-
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
     /**
-     * @var mixed
+     * @var string
      */
     protected $_formattedOptionValue = null;
 
@@ -66,9 +65,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Validate user input for option
      *
-     * @throws \Magento\Core\Exception
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
-     * @return \Magento\Catalog\Model\Product\Option\Type\DefaultType
+     * @return $this
+     * @throws \Magento\Core\Exception
      */
     public function validateUserValue($values)
     {
@@ -115,7 +114,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             } elseif (!$timeValid) {
                 throw new \Magento\Core\Exception(__('Please specify time required option(s).'));
             } else {
-                throw new \Magento\Core\Exception(__('Please specify the product required option(s).'));
+                throw new \Magento\Core\Exception(__('Please specify the product\'s required option(s).'));
             }
         } else {
             $this->setUserValue(null);
@@ -128,8 +127,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Prepare option value for cart
      *
+     * @return string|null Prepared option value
      * @throws \Magento\Core\Exception
-     * @return mixed Prepared option value
      */
     public function prepareForCart()
     {
@@ -255,7 +254,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Prepare option value for info buy request
      *
      * @param string $optionValue
-     * @return mixed
+     * @return array
      */
     public function prepareOptionValueForRequest($optionValue)
     {
@@ -296,7 +295,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Year range start
      *
-     * @return mixed
+     * @return string|false
      */
     public function getYearStart()
     {
@@ -311,7 +310,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Year range end
      *
-     * @return mixed
+     * @return string|false
      */
     public function getYearEnd()
     {
@@ -327,7 +326,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Save internal value of option in infoBuy_request
      *
      * @param string $internalValue Datetime value in internal format
-     * @return \Magento\Catalog\Model\Product\Option\Type\Date
+     * @return void
      */
     protected function _setInternalInRequest($internalValue)
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,13 +40,11 @@ class Create extends \Magento\Backend\App\Action
     /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\App\Action\Title $title
      */
     public function __construct(
         Action\Context $context,
         \Magento\Catalog\Helper\Product $productHelper
-    )
-    {
+    ) {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);
     }
@@ -366,8 +364,7 @@ class Create extends \Magento\Backend\App\Action
             $this->_getOrderCreateModel()->initFromOrder($order);
 
             $this->_redirect('sales/*');
-        }
-        else {
+        } else {
             $this->_redirect('sales/order/');
         }
     }
@@ -388,12 +385,10 @@ class Create extends \Magento\Backend\App\Action
         try {
             $this->_initSession()
                 ->_processData();
-        }
-        catch (\Magento\Core\Exception $e){
+        } catch (\Magento\Core\Exception $e) {
             $this->_reloadQuote();
             $this->messageManager->addError($e->getMessage());
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->_reloadQuote();
             $this->messageManager->addException($e, $e->getMessage());
         }
@@ -440,8 +435,7 @@ class Create extends \Magento\Backend\App\Action
         try {
             $this->_initSession()
                 ->_processData();
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->_reloadQuote();
             $errorMessage = $e->getMessage();
         }
@@ -519,18 +513,17 @@ class Create extends \Magento\Backend\App\Action
         } catch (\Magento\Payment\Model\Info\Exception $e) {
             $this->_getOrderCreateModel()->saveQuote();
             $message = $e->getMessage();
-            if( !empty($message) ) {
+            if (!empty($message)) {
                 $this->messageManager->addError($message);
             }
             $this->_redirect('sales/*/');
-        } catch (\Magento\Core\Exception $e){
+        } catch (\Magento\Core\Exception $e) {
             $message = $e->getMessage();
-            if( !empty($message) ) {
+            if (!empty($message)) {
                 $this->messageManager->addError($message);
             }
             $this->_redirect('sales/*/');
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Order saving error: %1', $e->getMessage()));
             $this->_redirect('sales/*/');
         }
@@ -543,7 +536,20 @@ class Create extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
+        return $this->_authorization->isAllowed($this->_getAclResource());
+    }
+
+    /**
+     * Get acl resource
+     *
+     * @return string
+    */
+    protected function _getAclResource()
+    {
         $action = strtolower($this->getRequest()->getActionName());
+        if (in_array($action, array('index', 'save', 'cancel')) && $this->_getSession()->getReordered()) {
+            $action = 'reorder';
+        }
         switch ($action) {
             case 'index':
             case 'save':
@@ -559,10 +565,10 @@ class Create extends \Magento\Backend\App\Action
                 $aclResource = 'Magento_Sales::actions';
                 break;
         }
-        return $this->_authorization->isAllowed($aclResource);
+        return $aclResource;
     }
 
-    /*
+    /**
      * Ajax handler to response configuration fieldset of composite product in order
      *
      * @return \Magento\Sales\Controller\Adminhtml\Order\Create
@@ -584,7 +590,7 @@ class Create extends \Magento\Backend\App\Action
             ->renderConfigureResult($configureResult);
     }
 
-    /*
+    /**
      * Ajax handler to response configuration fieldset of composite product in quote items
      *
      * @return \Magento\Sales\Controller\Adminhtml\Order\Create

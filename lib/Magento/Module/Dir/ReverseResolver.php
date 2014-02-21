@@ -20,30 +20,33 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Module\Dir;
 
+use Magento\Module\ModuleListInterface;
+use Magento\Module\Dir as ModuleDir;
+
 class ReverseResolver
 {
     /**
-     * @var \Magento\Module\ModuleListInterface
+     * @var ModuleListInterface
      */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Module\Dir
+     * @var ModuleDir
      */
     protected $_moduleDirs;
 
     /**
-     * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Module\Dir $moduleDirs
+     * @param ModuleListInterface $moduleList
+     * @param ModuleDir $moduleDirs
      */
     public function __construct(
-        \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Module\Dir $moduleDirs
+        ModuleListInterface $moduleList,
+        ModuleDir $moduleDirs
     ) {
         $this->_moduleList = $moduleList;
         $this->_moduleDirs = $moduleDirs;

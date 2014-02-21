@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Resource\Product;
 
+use Magento\Core\Model\Store;
 
 /**
  * Catalog Product Flat resource model
@@ -32,8 +34,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product;
-
 class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -75,11 +75,12 @@ class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Init connection and resource table
      *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init('catalog_product_flat', 'entity_id');
-        $this->_storeId = (int)$this->_storeManager->getStore()->getId();
+        $this->setStoreId(null);
     }
 
     /**
@@ -95,15 +96,18 @@ class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Set store for resource model
      *
-     * @param mixed $store
-     * @return \Magento\Catalog\Model\Resource\Product\Flat
+     * @param null|string|bool|int|Store $store
+     * @return $this
      */
     public function setStoreId($store)
     {
         if (is_int($store)) {
             $this->_storeId = $store;
         } else {
-            $this->_storeId = (int)$this->_storeManager->getStore($store)->getId();
+            $this->_storeId = $this->_storeManager->getStore()->getId();
+        }
+        if (empty($this->_storeId)) {
+            $this->_storeId = (int)$this->_storeManager->getDefaultStoreView()->getId();
         }
         return $this;
     }
@@ -216,7 +220,7 @@ class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Retrieve entity id field name in entity table
-     * Rewrited for EAV collection compatible
+     * Rewrote for EAV collection compatibility
      *
      * @return string
      */

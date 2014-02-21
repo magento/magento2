@@ -20,25 +20,22 @@
  *
  * @category    Magento
  * @package     Magento_Sitemap
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sitemap\Model\Resource\Cms;
 
 /**
  * Sitemap cms page collection model
  *
- * @category    Magento
- * @package     Magento_Sitemap
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sitemap\Model\Resource\Cms;
-
 class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Init resource model (catalog/category)
      *
+     * @return void
      */
     protected function _construct()
     {

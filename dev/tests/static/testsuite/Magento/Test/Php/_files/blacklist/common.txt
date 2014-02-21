@@ -8,12 +8,15 @@ app/code/Magento/Backend/Model/Menu/Config.php
 app/code/Magento/Backend/Block/Widget/Grid
 app/code/Magento/Backend/view
 app/code/Magento/Core/Model/Config/Element.php
+app/code/Magento/ConfigurableProduct/view
 app/code/Magento/DesignEditor/view
 app/code/Magento/Email/view
 app/code/Magento/Integration/view
 app/code/Magento/Theme/view
 app/code/Magento/User/view
 app/code/Magento/Webapi/view
+app/code/Magento/GroupedProduct/view
+app/code/Magento/RecurringProfile/view
 dev/tests/integration/framework/Magento/TestFramework/Db/Mysql.php
 dev/tests/integration/framework/Magento/TestFramework/Db/Adapter/Mysql.php
 dev/tests/integration/framework/Magento/TestFramework/Db/ConnectionAdapter.php

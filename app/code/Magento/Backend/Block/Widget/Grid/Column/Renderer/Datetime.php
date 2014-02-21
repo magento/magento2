@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,13 +34,15 @@ class Datetime
 {
     /**
      * Date format string
+     *
+     * @var string
      */
     protected static $_format = null;
 
     /**
      * Retrieve datetime format
      *
-     * @return unknown
+     * @return string|null
      */
     protected function _getFormat()
     {

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,7 +41,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
         $stringMock = $this->getMock('Magento\Stdlib\String', array(), array(), '', false, false);
         $storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false, false);
-        $translateMock = $this->getMock('Magento\Core\Model\Translate', array(), array(), '', false, false);
+        $translateMock = $this->getMock('Magento\TranslateInterface', array(), array(), '', false, false);
         $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false, false);
         $directoryMock->expects($this->any())
             ->method('getAbsolutePath')
@@ -52,7 +52,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                     }
                 )
             );
-        $filesystemMock = $this->getMock('Magento\Filesystem', array(), array(), '', false, false);
+        $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false, false);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnValue($directoryMock));
@@ -60,8 +60,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->will($this->returnValue($directoryMock));
 
-        $shippingConfigMock = $this->getMock('Magento\Shipping\Model\Config', array(), array(), '', false,
-            false);
         $this->_pdfConfigMock =
             $this->getMock('Magento\Sales\Model\Order\Pdf\Config', array(), array(), '', false, false);
         $totalFactoryMock = $this->getMock('Magento\Sales\Model\Order\Pdf\Total\Factory', array(), array(), '', false,
@@ -79,7 +77,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             $storeConfigMock,
             $translateMock,
             $filesystemMock,
-            $shippingConfigMock,
             $this->_pdfConfigMock,
             $totalFactoryMock,
             $pdfItemsFactoryMock,

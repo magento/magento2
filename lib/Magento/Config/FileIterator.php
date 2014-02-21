@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Config;
@@ -30,26 +30,36 @@ namespace Magento\Config;
 class FileIterator implements \Iterator, \Countable
 {
     /**
+     * Cache
+     *
      * @var array
      */
     protected $cached = array();
 
     /**
+     * Paths
+     *
      * @var array
      */
     protected $paths = array();
 
     /**
+     * Position
+     *
      * @var int
      */
     protected $position;
 
     /**
+     * Read directory
+     *
      * @var \Magento\Filesystem\Directory\ReadInterface
      */
     protected $directoryRead;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Filesystem\Directory\ReadInterface $directory
      * @param array $paths
      */
@@ -63,7 +73,9 @@ class FileIterator implements \Iterator, \Countable
     }
 
     /**
+     *Rewind
      *
+     * @return void
      */
     function rewind()
     {
@@ -71,6 +83,8 @@ class FileIterator implements \Iterator, \Countable
     }
 
     /**
+     * Current
+     *
      * @return string
      */
     function current()
@@ -83,6 +97,8 @@ class FileIterator implements \Iterator, \Countable
     }
 
     /**
+     * Key
+     *
      * @return mixed
      */
     function key()
@@ -91,7 +107,9 @@ class FileIterator implements \Iterator, \Countable
     }
 
     /**
+     * Next
      *
+     * @return void
      */
     function next()
     {
@@ -99,6 +117,8 @@ class FileIterator implements \Iterator, \Countable
     }
 
     /**
+     * Valid
+     *
      * @return bool
      */
     function valid()
@@ -107,18 +127,22 @@ class FileIterator implements \Iterator, \Countable
     }
 
     /**
+     * Convert to an array
+     *
      * @return array
      */
     public function toArray()
     {
         $result = [];
-        foreach($this as $item) {
+        foreach ($this as $item) {
             $result[$this->key()] = $item;
         }
         return $result;
     }
 
     /**
+     * Count
+     *
      * @return int
      */
     public function count()

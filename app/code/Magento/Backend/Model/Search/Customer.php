@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Search;
 
 /**
  * Search Customer Model
@@ -31,8 +32,6 @@
  * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Model\Search;
-
 class Customer extends \Magento\Object
 {
     /**
@@ -62,7 +61,7 @@ class Customer extends \Magento\Object
     /**
      * Load search results
      *
-     * @return \Magento\Backend\Model\Search\Customer
+     * @return $this
      */
     public function load()
     {

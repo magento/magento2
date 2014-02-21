@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block\Adminhtml\Add;
 
 /**
  * Adminhtml add product review form
@@ -31,9 +32,6 @@
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Review\Block\Adminhtml\Add;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -44,6 +42,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_reviewData = null;
 
     /**
+     * Core system store model
+     *
      * @var \Magento\Core\Model\System\Store
      */
     protected $_systemStore;
@@ -69,6 +69,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * Prepare add review form
+     *
+     * @return void
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */

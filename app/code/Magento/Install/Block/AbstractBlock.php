@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Install
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
  
@@ -72,6 +72,7 @@ abstract class AbstractBlock extends \Magento\View\Element\Template
         $this->_installer = $installer;
         $this->_installWizard = $installWizard;
         $this->_session = $session;
+        $this->_isScopePrivate = true;
     }
 
 

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,13 +36,26 @@
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
+use Magento\Eav\Exception;
+
 class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
+    /**
+     * Get allowed chars
+     *
+     * @return string
+     */
     public function getAllowedChars()
     {
         return '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     }
 
+    /**
+     * Get next id
+     *
+     * @return string
+     * @throws Exception
+     */
     public function getNextId()
     {
         $lastId = $this->getLastId();

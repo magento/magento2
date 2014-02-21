@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Entity;
 
+use Magento\Eav\Exception;
 
 /**
  * EAV Entity attribute model
@@ -34,8 +36,6 @@
  * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity;
-
 class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
 {
     /**
@@ -57,6 +57,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
     protected $_eventObject = 'attribute';
 
     const CACHE_TAG         = 'EAV_ATTRIBUTE';
+
+    /**
+     * @var string
+     */
     protected $_cacheTag    = 'EAV_ATTRIBUTE';
 
     /**
@@ -176,7 +180,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
     /**
      * Load entity_attribute_id into $this by $this->attribute_set_id
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return $this
      */
     public function loadEntityAttributeIdBySet()
     {
@@ -195,7 +199,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
     /**
      * Prepare data for save
      *
-     * @return \Magento\Eav\Model\Entity\Attribute
+     * @return $this
+     * @throws Exception
      */
     protected function _beforeSave()
     {
@@ -203,7 +208,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
         if (isset($this->_data['attribute_code'])
             && $this->_catalogProductFactory->create()->isReservedAttribute($this)
         ) {
-            throw new \Magento\Eav\Exception(__('The attribute code \'%1\' is reserved by system. Please try another attribute code', $this->_data['attribute_code']));
+            throw new Exception(__('The attribute code \'%1\' is reserved by system. Please try another attribute code', $this->_data['attribute_code']));
         }
 
         /**
@@ -214,7 +219,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
                               'StringLength',
                               array('max' => self::ATTRIBUTE_CODE_MAX_LENGTH))
         ) {
-            throw new \Magento\Eav\Exception(__('Maximum length of attribute code must be less than %1 symbols', self::ATTRIBUTE_CODE_MAX_LENGTH));
+            throw new Exception(__('Maximum length of attribute code must be less than %1 symbols', self::ATTRIBUTE_CODE_MAX_LENGTH));
         }
 
         $defaultValue   = $this->getDefaultValue();
@@ -224,7 +229,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
             if (!\Zend_Locale_Format::isNumber($defaultValue,
                                               array('locale' => $this->_locale->getLocaleCode()))
             ) {
-                throw new \Magento\Eav\Exception(__('Invalid default decimal value'));
+                throw new Exception(__('Invalid default decimal value'));
             }
 
             try {
@@ -233,7 +238,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
                 );
                 $this->setDefaultValue($filter->filter($defaultValue));
             } catch (\Exception $e) {
-                throw new \Magento\Eav\Exception(__('Invalid default decimal value'));
+                throw new Exception(__('Invalid default decimal value'));
             }
         }
 
@@ -253,7 +258,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
                     $defaultValue = $this->_locale->date($defaultValue, $format, null, false)->toValue();
                     $this->setDefaultValue($defaultValue);
                 } catch (\Exception $e) {
-                    throw new \Magento\Eav\Exception(__('Invalid default date'));
+                    throw new Exception(__('Invalid default date'));
                 }
             }
         }
@@ -270,7 +275,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
     /**
      * Save additional data
      *
-     * @return \Magento\Eav\Model\Entity\Attribute
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -373,7 +378,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
     /**
      * Return array of labels of stores
      *
-     * @return array
+     * @return string[]
      */
     public function getStoreLabels()
     {
@@ -387,6 +392,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
     /**
      * Return store label of attribute
      *
+     * @param int|null $storeId
      * @return string
      */
     public function getStoreLabel($storeId = null)

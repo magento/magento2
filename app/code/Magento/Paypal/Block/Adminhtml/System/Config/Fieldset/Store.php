@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Paypal
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,18 +43,18 @@ class Store
     protected $_template = 'Magento_Paypal::system/config/fieldset/store.phtml';
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_coreConfig;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         array $data = array()
     ) {
         parent::__construct($context, $data);
@@ -85,9 +85,9 @@ class Store
             'express'   => 'payment/paypal_express/active',
             'wps'       => 'payment/paypal_standard/active',
             'wpp'       => 'payment/paypal_direct/active',
-            'wpppe'     => 'payment/paypaluk_direct/active',
-            'verisign'  => 'payment/verisign/active',
-            'expresspe' => 'payment/paypaluk_express/active'
+            'wpppe'     => 'payment/payflow_direct/active',
+            'payflowpro'  => 'payment/payflowpro/active',
+            'expresspe' => 'payment/payflow_express/active'
         );
         // Retrieve a code of the current website
         $website = $this->getRequest()->getParam('website');

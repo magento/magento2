@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard\Tab\Customers;
 
 /**
  * Adminhtml dashboard most active buyers
@@ -31,9 +32,6 @@
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard\Tab\Customers;
-
 class Most extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
@@ -43,28 +41,32 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('customersMostGrid');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create();
@@ -94,6 +96,9 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareCollection();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('name', array(
@@ -136,6 +141,9 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
         return parent::_prepareColumns();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRowUrl($row)
     {
         return $this->getUrl('customer/index/edit', array('id'=>$row->getCustomerId()));

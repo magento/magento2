@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tax\Model\Resource\Rule\Grid;
@@ -30,7 +30,7 @@ class Collection extends \Magento\Tax\Model\Resource\Calculation\Rule\Collection
     /**
      * Process loaded collection data
      *
-     * @return \Magento\Tax\Model\Resource\Rule\Grid\Collection
+     * @return $this
      */
     protected function _afterLoadData()
     {
@@ -43,9 +43,9 @@ class Collection extends \Magento\Tax\Model\Resource\Calculation\Rule\Collection
     }
 
     /**
-     * @param array|string $field
-     * @param null $condition
-     * @return \Magento\Tax\Model\Resource\Rule\Grid\Collection
+     * @param string|array $field
+     * @param null|string|array $condition
+     * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {

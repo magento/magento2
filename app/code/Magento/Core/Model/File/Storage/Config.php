@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  * 
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\File\Storage;
@@ -52,16 +52,16 @@ class Config
 
     /**
      * @param \Magento\Core\Model\File\Storage $storage
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param string $cacheFile
      */
     public function __construct(
         \Magento\Core\Model\File\Storage $storage,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $cacheFile
     ) {
         $this->config = $storage->getScriptConfig();
-        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::PUB);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_DIR);
         $this->cacheFilePath = $cacheFile;
     }
 
@@ -87,6 +87,8 @@ class Config
 
     /**
      * Save config in cache file
+     *
+     * @return void
      */
     public function save()
     {

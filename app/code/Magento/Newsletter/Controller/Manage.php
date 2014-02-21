@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Newsletter\Controller;
 
 use Magento\App\Action\NotFoundException;
@@ -83,6 +82,11 @@ class Manage extends \Magento\App\Action\Action
         return parent::dispatch($request);
     }
 
+    /**
+     * Managing newsletter subscription page
+     *
+     * @return void
+     */
     public function indexAction()
     {
         $this->_view->loadLayout();
@@ -95,6 +99,11 @@ class Manage extends \Magento\App\Action\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * Save newsletter subscription preference action
+     *
+     * @return void|null
+     */
     public function saveAction()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {

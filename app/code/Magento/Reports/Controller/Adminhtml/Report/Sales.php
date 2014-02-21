@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,12 +33,15 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
-class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
+use Magento\App\ResponseInterface;
+use Magento\Reports\Model\Flag;
+
+class Sales extends AbstractReport
 {
     /**
      * Add report/sales breadcrumbs
      *
-     * @return \Magento\Reports\Controller\Adminhtml\Report\Sales
+     * @return $this
      */
     public function _initAction()
     {
@@ -47,11 +50,16 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         return $this;
     }
 
+    /**
+     * Sales report action
+     *
+     * @return void
+     */
     public function salesAction()
     {
         $this->_title->add(__('Sales Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_ORDER_FLAG_CODE, 'sales');
+        $this->_showLastExecutionTime(Flag::REPORT_ORDER_FLAG_CODE, 'sales');
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_salesroot_sales')
@@ -68,11 +76,16 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         $this->_view->renderLayout();
     }
 
+    /**
+     * Best sellers report action
+     *
+     * @return void
+     */
     public function bestsellersAction()
     {
         $this->_title->add(__('Best Sellers Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_BESTSELLERS_FLAG_CODE, 'bestsellers');
+        $this->_showLastExecutionTime(Flag::REPORT_BESTSELLERS_FLAG_CODE, 'bestsellers');
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_products_bestsellers')
@@ -91,6 +104,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export bestsellers report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportBestsellersCsvAction()
     {
@@ -102,6 +117,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export bestsellers report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportBestsellersExcelAction()
     {
@@ -114,7 +131,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
     /**
      * Refresh statistics for last 25 hours
      *
-     * @return \Magento\Reports\Controller\Adminhtml\Report\Sales
+     * @return void
      */
     public function refreshRecentAction()
     {
@@ -124,7 +141,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
     /**
      * Refresh statistics for all period
      *
-     * @return \Magento\Reports\Controller\Adminhtml\Report\Sales
+     * @return void
      */
     public function refreshLifetimeAction()
     {
@@ -133,6 +150,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export sales report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportSalesCsvAction()
     {
@@ -144,6 +163,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export sales report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportSalesExcelAction()
     {
@@ -153,11 +174,16 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Tax report action
+     *
+     * @return void
+     */
     public function taxAction()
     {
         $this->_title->add(__('Tax Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_TAX_FLAG_CODE, 'tax');
+        $this->_showLastExecutionTime(Flag::REPORT_TAX_FLAG_CODE, 'tax');
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_salesroot_tax')
@@ -176,6 +202,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export tax report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportTaxCsvAction()
     {
@@ -187,6 +215,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export tax report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportTaxExcelAction()
     {
@@ -196,11 +226,16 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Shipping report action
+     *
+     * @return void
+     */
     public function shippingAction()
     {
         $this->_title->add(__('Shipping Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_SHIPPING_FLAG_CODE, 'shipping');
+        $this->_showLastExecutionTime(Flag::REPORT_SHIPPING_FLAG_CODE, 'shipping');
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_salesroot_shipping')
@@ -219,6 +254,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export shipping report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportShippingCsvAction()
     {
@@ -230,6 +267,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export shipping report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportShippingExcelAction()
     {
@@ -239,11 +278,16 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Invoice report action
+     *
+     * @return void
+     */
     public function invoicedAction()
     {
         $this->_title->add(__('Invoice Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_INVOICE_FLAG_CODE, 'invoiced');
+        $this->_showLastExecutionTime(Flag::REPORT_INVOICE_FLAG_CODE, 'invoiced');
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_salesroot_invoiced')
@@ -262,6 +306,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export invoiced report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportInvoicedCsvAction()
     {
@@ -273,6 +319,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export invoiced report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportInvoicedExcelAction()
     {
@@ -282,11 +330,16 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Refunds report action
+     *
+     * @return void
+     */
     public function refundedAction()
     {
         $this->_title->add(__('Refunds Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_REFUNDED_FLAG_CODE, 'refunded');
+        $this->_showLastExecutionTime(Flag::REPORT_REFUNDED_FLAG_CODE, 'refunded');
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_salesroot_refunded')
@@ -305,6 +358,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export refunded report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportRefundedCsvAction()
     {
@@ -316,6 +371,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export refunded report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportRefundedExcelAction()
     {
@@ -325,11 +382,16 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Coupons report action
+     *
+     * @return void
+     */
     public function couponsAction()
     {
         $this->_title->add(__('Coupons Report'));
 
-        $this->_showLastExecutionTime(\Magento\Reports\Model\Flag::REPORT_COUPONS_FLAG_CODE, 'coupons');
+        $this->_showLastExecutionTime(Flag::REPORT_COUPONS_FLAG_CODE, 'coupons');
 
         $this->_initAction()
             ->_setActiveMenu('Magento_Reports::report_salesroot_coupons')
@@ -348,6 +410,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export coupons report grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportCouponsCsvAction()
     {
@@ -359,6 +423,8 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
 
     /**
      * Export coupons report grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportCouponsExcelAction()
     {
@@ -368,11 +434,21 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\AbstractReport
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName));
     }
 
+    /**
+     * Refresh report statistics action
+     *
+     * @return void
+     */
     public function refreshStatisticsAction()
     {
         $this->_forward('index', 'report_statistics');
     }
 
+    /**
+     * Determine if action is allowed for reports module
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {

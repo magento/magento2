@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Controller\Adminhtml;
@@ -35,16 +35,23 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
      */
     protected $_response;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_objectManager;
+
     protected function setUp()
     {
         $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->_response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
+        $this->_objectManager = $this->getMock('Magento\ObjectManager');
     }
 
     protected function tearDown()
     {
         $this->_request = null;
         $this->_response = null;
+        $this->_objectManager = null;
     }
 
     public function testTunnelAction()
@@ -64,12 +71,11 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         );
         $helper->expects($this->any())->method('getChartDataHash')->will($this->returnValue($fixture));
 
-        $objectManager = $this->getMock('Magento\ObjectManager');
-        $objectManager->expects($this->at(0))
+        $this->_objectManager->expects($this->at(0))
             ->method('get')
             ->with('Magento\Backend\Helper\Dashboard\Data')
             ->will($this->returnValue($helper));
-        $objectManager->expects($this->at(1))
+        $this->_objectManager->expects($this->at(1))
             ->method('create')
             ->with('Magento\HTTP\ZendClient')
             ->will($this->returnValue($httpClient));
@@ -85,7 +91,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $this->_response->expects(
             $this->once())->method('setBody')->with('success_msg')->will($this->returnValue($this->_response));
         $this->_response->expects($this->any())->method('getBody')->will($this->returnValue('success_msg'));
-        $controller = $this->_factory($this->_request, $this->_response, $objectManager);
+        $controller = $this->_factory($this->_request, $this->_response);
         $controller->tunnelAction();
         $this->assertEquals('success_msg', $controller->getResponse()->getBody());
     }
@@ -118,19 +124,18 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         );
         $helper->expects($this->any())->method('getChartDataHash')->will($this->returnValue($fixture));
 
-        $objectManager = $this->getMock('Magento\ObjectManager');
-        $objectManager->expects($this->at(0))
+        $this->_objectManager->expects($this->at(0))
             ->method('get')
             ->with('Magento\Backend\Helper\Dashboard\Data')
             ->will($this->returnValue($helper));
         $exceptionMock = new \Exception();
-        $objectManager->expects($this->at(1))
+        $this->_objectManager->expects($this->at(1))
             ->method('create')
             ->with('Magento\HTTP\ZendClient')
             ->will($this->throwException($exceptionMock));
         $loggerMock = $this->getMock('Magento\Logger', array('logException'), array(), '', false);
         $loggerMock->expects($this->once())->method('logException')->with($exceptionMock);
-        $objectManager->expects($this->at(2))
+        $this->_objectManager->expects($this->at(2))
             ->method('get')
             ->with('Magento\Logger')
             ->will($this->returnValue($loggerMock));
@@ -145,7 +150,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
             ->with(503)
             ->will($this->returnValue($this->_response));
         $this->_response->expects($this->once())->method('getHttpResponseCode')->will($this->returnValue(503));
-        $controller = $this->_factory($this->_request, $this->_response, $objectManager);
+        $controller = $this->_factory($this->_request, $this->_response);
         $controller->tunnelAction();
         $this->assertEquals(503, $controller->getResponse()->getHttpResponseCode());
     }
@@ -155,18 +160,14 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
      *
      * @param Magento\App\Request\Http $request
      * @param \Magento\App\Response\Http|null $response
-     * @param \Magento\ObjectManager|null $objectManager
      * @return \Magento\Backend\Controller\Adminhtml\Dashboard|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _factory($request, $response = null, $objectManager = null)
+    protected function _factory($request, $response = null)
     {
         if (!$response) {
             /** @var $response \Magento\App\ResponseInterface|PHPUnit_Framework_MockObject_MockObject */
             $response = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
             $response->headersSentThrowsException = false;
-        }
-        if (!$objectManager) {
-            $objectManager = new \Magento\ObjectManager\ObjectManager();
         }
         $rewriteFactory = $this->getMock('Magento\Core\Model\Url\RewriteFactory', array('create'), array(), '', false);
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -177,7 +178,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $arguments = array(
             'request' => $request,
             'response' => $response,
-            'objectManager' => $objectManager,
+            'objectManager' => $this->_objectManager,
             'frontController' => $varienFront,
         );
         $context = $helper->getObject('Magento\Backend\App\Action\Context', $arguments);

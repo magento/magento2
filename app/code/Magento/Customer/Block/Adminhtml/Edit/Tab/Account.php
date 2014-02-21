@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -299,7 +299,7 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
             $prefix = $form->getHtmlIdPrefix();
 
             $note = __('Please select a website which contains store view');
-            $form->getElement('website_id')->setAfterElementHtml(
+            $form->getElement('website_id')->setAfterElementJs(
                 '<script type="text/javascript">'
                 . "
                 var {$prefix}_websites = " . $this->_jsonEncoder->encode($websites) . ";

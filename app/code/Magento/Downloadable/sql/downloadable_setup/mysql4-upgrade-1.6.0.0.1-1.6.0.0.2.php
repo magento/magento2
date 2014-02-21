@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Downloadable
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,7 +29,7 @@
 $installFile = __DIR__ . '/upgrade-1.6.0.0.1-1.6.0.0.2.php';
 
 /** @var \Magento\Filesystem\Directory\Read $moduleDirectory */
-$moduleDirectory = $this->getFilesystem()->getDirectoryRead(\Magento\Filesystem::MODULES);
+$moduleDirectory = $this->getFilesystem()->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
 if ($moduleDirectory->isExist($moduleDirectory->getRelativePath($installFile))) {
     include $installFile;
 }

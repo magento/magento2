@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Model\ProductTypes;
@@ -39,4 +39,29 @@ interface ConfigInterface
      * @return array
      */
     public function getAll();
+
+    /**
+     * Check whether product type is set of products
+     *
+     * @param string $typeId
+     * @return bool
+     */
+    public function isProductSet($typeId);
+
+    /**
+     * Get composable types
+     *
+     * @return array
+     */
+    public function getComposableTypes();
+
+
+    /**
+     * Get list of product types that comply with condition
+     *
+     * @param string $customAttributeName
+     * @param string $value
+     * @return array
+     */
+    public function filter($customAttributeName, $value = 'true');
 }

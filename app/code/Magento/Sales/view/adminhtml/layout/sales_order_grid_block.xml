@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -80,7 +80,7 @@
                         </item>
                         <item name="print_shipping_label" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Print Shipping Labels</item>
-                            <item name="url" xsi:type="string">sales/order_shipment/massPrintShippingLabel</item>
+                            <item name="url" xsi:type="string">adminhtml/order_shipment/massPrintShippingLabel</item>
                         </item>
                     </argument>
                 </arguments>

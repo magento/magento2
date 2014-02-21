@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_SalesRule
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -87,6 +87,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      */
     public function validate(\Magento\Object $object)
     {
+        //@todo reimplement this method when is fixed MAGETWO-5713
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $object->getProduct();
         if (!($product instanceof \Magento\Catalog\Model\Product)) {
@@ -97,12 +98,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             ->setQuoteItemPrice($object->getPrice()) // possible bug: need to use $object->getBasePrice()
             ->setQuoteItemRowTotal($object->getBaseRowTotal());
 
-        $valid = parent::validate($product);
-        if (!$valid && $product->getTypeId() == \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE) {
-            $children = $object->getChildren();
-            $valid = $children && $this->validate($children[0]);
-        }
-
-        return $valid;
+        return parent::validate($product);
     }
 }

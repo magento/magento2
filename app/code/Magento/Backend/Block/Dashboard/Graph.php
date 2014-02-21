@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard;
 
 /**
  * Adminhtml dashboard google chart block
@@ -31,9 +32,6 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard;
-
 class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {
     /**
@@ -111,6 +109,9 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      */
     protected $_htmlId = '';
 
+    /**
+     * @var string
+     */
     protected $_template = 'dashboard/graph.phtml';
 
     /**
@@ -149,7 +150,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     /**
      * Set data rows
      *
-     * @param mixed $rows
+     * @param array $rows
      * @return void
      */
     public function setDataRows($rows)
@@ -173,7 +174,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Get series
      *
      * @param string $seriesId
-     * @return mixed
+     * @return array|false
      */
     public function getSeries($seriesId)
     {
@@ -554,6 +555,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
     /**
      * @param \Magento\Backend\Helper\Dashboard\AbstractDashboard $dataHelper
+     * @return void
      */
     public function setDataHelper(\Magento\Backend\Helper\Dashboard\AbstractDashboard $dataHelper)
     {

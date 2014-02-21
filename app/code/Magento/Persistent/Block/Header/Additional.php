@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Persistent
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Persistent\Block\Header;
 
 /**
  * Remember Me block
@@ -31,9 +32,6 @@
  * @package     Magento_Persistent
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Persistent\Block\Header;
-
 class Additional extends \Magento\View\Element\Html\Link
 {
     /**
@@ -55,6 +53,17 @@ class Additional extends \Magento\View\Element\Html\Link
     ) {
         $this->_persistentSession = $persistentSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
+    }
+
+    /**
+     * Retrieve unset cookie link
+     *
+     * @return string
+     */
+    public function getHref()
+    {
+        return $this->getUrl('persistent/index/unsetCookie');
     }
 
     /**
@@ -66,9 +75,6 @@ class Additional extends \Magento\View\Element\Html\Link
     {
         $text = __('(Not %1?)', $this->escapeHtml($this->_persistentSession->getCustomer()->getName()));
 
-        $this->setAnchorText($text);
-        $this->setHref($this->getUrl('persistent/index/unsetCookie'));
-
-        return parent::_toHtml();
+        return '<span><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml($text) . '</a></span>';
     }
 }

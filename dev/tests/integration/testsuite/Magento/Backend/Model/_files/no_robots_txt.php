@@ -21,13 +21,13 @@
  * @category    Magento
  * @package     Magento_Adminhtml
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /** @var \Magento\Filesystem\Directory\Write $rootDirectory */
 $rootDirectory =  \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::ROOT);
+    ->get('Magento\App\Filesystem')->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
 if ($rootDirectory->isExist('robots.txt')) {
     $rootDirectory->delete('robots.txt');
 }

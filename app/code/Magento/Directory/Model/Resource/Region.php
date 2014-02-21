@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -57,6 +57,8 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Define main and locale region name tables
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -109,7 +111,7 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $countryId
      * @param string $value
      * @param string $field
-     * @return \Magento\Directory\Model\Resource\Region
+     * @return $this
      */
     protected function _loadByCountry($object, $countryId, $value, $field)
     {
@@ -142,7 +144,7 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param string $regionCode
      * @param string $countryId
      *
-     * @return \Magento\Directory\Model\Resource\Region
+     * @return $this
      */
     public function loadByCode(\Magento\Directory\Model\Region $region, $regionCode, $countryId)
     {
@@ -155,7 +157,7 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Directory\Model\Region $region
      * @param string $regionName
      * @param string $countryId
-     * @return \Magento\Directory\Model\Resource\Region
+     * @return $this
      */
     public function loadByName(\Magento\Directory\Model\Region $region, $regionName, $countryId)
     {

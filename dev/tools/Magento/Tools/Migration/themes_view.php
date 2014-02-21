@@ -20,7 +20,7 @@
  *
  * @category   Tools
  * @package    system_configuration
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require_once __DIR__ . '/../../../../../app/bootstrap.php';
@@ -28,9 +28,9 @@ $rootDir = realpath(__DIR__ . '/../../../../..');
 try {
     $entryPoint = new \Magento\App\EntryPoint\EntryPoint($rootDir, array());
 
-    $objectManager = new \Magento\App\ObjectManager($config);
-    /** @var $configModel \Magento\Core\Model\Config */
-    $configModel = $objectManager->get('Magento\Core\Model\Config');
+    $objectManager = new \Magento\App\ObjectManager();
+    /** @var $configModel \Magento\App\ReinitableConfigInterface */
+    $configModel = $objectManager->get('Magento\App\ReinitableConfigInterface');
     $configModel->reinit();
     $config = array();
 

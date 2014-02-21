@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -103,6 +103,8 @@ class View extends \Magento\View\Element\Template
 
     /**
      * Initialize blocks names
+     *
+     * @return void
      */
     protected function _initBlocks()
     {
@@ -165,7 +167,7 @@ class View extends \Magento\View\Element\Template
     /**
      * Get all fiterable attributes of current category
      *
-     * @return array
+     * @return mixed
      */
     protected function _getFilterableAttributes()
     {

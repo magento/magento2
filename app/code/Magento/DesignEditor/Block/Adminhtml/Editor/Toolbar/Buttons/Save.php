@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons;
 
 /**
  * Save button block
@@ -31,8 +32,6 @@
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons\Save setHasThemeAssigned(bool $flag)
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons\Save setMode(bool $flag)
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons;
-
 class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
 {
     /**
@@ -99,7 +98,7 @@ class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
     /**
      * Whether button is disabled
      *
-     * @return mixed
+     * @return bool
      */
     public function getDisabled()
     {

@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 
 /**
  * Catalog product SKU backend attribute model
@@ -33,6 +32,8 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
+
+use Magento\Catalog\Model\Product;
 
 class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -65,7 +66,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Validate SKU
      *
-     * @param \Magento\Catalog\Model\Product $object
+     * @param Product $object
      * @throws \Magento\Core\Exception
      * @return bool
      */
@@ -88,7 +89,8 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Generate and set unique SKU to product
      *
-     * @param $object \Magento\Catalog\Model\Product
+     * @param Product $object
+     * @return void
      */
     protected function _generateUniqueSku($object)
     {
@@ -109,8 +111,8 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Make SKU unique before save
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Sku
+     * @param Product $object
+     * @return $this
      */
     public function beforeSave($object)
     {
@@ -122,7 +124,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Return increment needed for SKU uniqueness
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @param \Magento\Catalog\Model\Product $object
+     * @param Product $object
      * @return int
      */
     protected function _getLastSimilarAttributeValueIncrement($attribute, $object)

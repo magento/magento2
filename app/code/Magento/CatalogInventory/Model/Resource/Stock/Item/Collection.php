@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -26,6 +26,8 @@
  * Stock item collection resource model
  */
 namespace Magento\CatalogInventory\Model\Resource\Stock\Item;
+
+use Magento\CatalogInventory\Model\Stock;
 
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -40,7 +42,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -59,6 +61,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -68,12 +71,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add stock filter to collection
      *
-     * @param mixed $stock
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Item\Collection
+     * @param Stock|string|array $stock
+     * @return $this
      */
     public function addStockFilter($stock)
     {
-        if ($stock instanceof \Magento\CatalogInventory\Model\Stock) {
+        if ($stock instanceof Stock) {
             $this->addFieldToFilter('main_table.stock_id', $stock->getId());
         } else {
             $this->addFieldToFilter('main_table.stock_id', $stock);
@@ -85,7 +88,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add product filter to collection
      *
      * @param array $products
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Item\Collection
+     * @return $this
      */
     public function addProductsFilter($products)
     {
@@ -109,7 +112,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Join Stock Status to collection
      *
      * @param int $storeId
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Item\Collection
+     * @return $this
      */
     public function joinStockStatus($storeId = null)
     {
@@ -128,8 +131,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add Managed Stock products filter to collection
      *
-     * @param boolean $isStockManagedInConfig
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Item\Collection
+     * @param bool $isStockManagedInConfig
+     * @return $this
      */
     public function addManagedFilter($isStockManagedInConfig)
     {
@@ -147,7 +150,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param string $comparisonMethod
      * @param float $qty
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Item\Collection
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function addQtyFilter($comparisonMethod, $qty)
@@ -170,7 +173,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Initialize select object
      *
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Item\Collection
+     * @return $this
      */
     protected function _initSelect()
     {

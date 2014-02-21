@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,8 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
+
+use Magento\Catalog\Model\Product;
 
 class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -60,8 +62,8 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Set inventory data to custom attribute
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @param Product $object
+     * @return $this
      */
     public function afterLoad($object)
     {
@@ -80,8 +82,8 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Prepare inventory data from custom attribute
      *
-     * @param \Magento\Catalog\Model\Product $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|void
+     * @param Product $object
+     * @return void
      */
     public function beforeSave($object)
     {
@@ -99,7 +101,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Validate
      *
-     * @param \Magento\Catalog\Model\Product $object
+     * @param Product $object
      * @throws \Magento\Core\Exception
      * @return bool
      */

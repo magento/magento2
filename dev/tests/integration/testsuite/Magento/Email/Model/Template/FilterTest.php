@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -111,8 +111,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/_files/design')
+            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
             )
         ));
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

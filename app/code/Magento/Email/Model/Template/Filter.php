@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Email
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,6 +54,11 @@ class Filter extends \Magento\Filter\Template
      */
     protected $_modifiers = array('nl2br'  => '');
 
+    /**
+     * Store id
+     *
+     * @var int
+     */
     protected $_storeId = null;
 
     /**
@@ -165,7 +170,7 @@ class Filter extends \Magento\Filter\Template
      * Set use absolute links flag
      *
      * @param bool $flag
-     * @return \Magento\Email\Model\Template\Filter
+     * @return $this
      */
     public function setUseAbsoluteLinks($flag)
     {
@@ -178,7 +183,7 @@ class Filter extends \Magento\Filter\Template
      * Doesn't set anything intentionally, since SID is not allowed in any kind of emails
      *
      * @param bool $flag
-     * @return \Magento\Email\Model\Template\Filter
+     * @return $this
      */
     public function setUseSessionInUrl($flag)
     {
@@ -189,8 +194,8 @@ class Filter extends \Magento\Filter\Template
     /**
      * Setter
      *
-     * @param boolean $plainTemplateMode
-     * @return \Magento\Email\Model\Template\Filter
+     * @param bool $plainTemplateMode
+     * @return $this
      */
     public function setPlainTemplateMode($plainTemplateMode)
     {
@@ -201,8 +206,8 @@ class Filter extends \Magento\Filter\Template
     /**
      * Setter
      *
-     * @param integer $storeId
-     * @return \Magento\Email\Model\Template\Filter
+     * @param int $storeId
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -211,8 +216,7 @@ class Filter extends \Magento\Filter\Template
     }
 
     /**
-     * Getter
-     * if $_storeId is null return Design store id
+     * Getter. If $_storeId is null, return design store id.
      *
      * @return integer
      */
@@ -227,10 +231,10 @@ class Filter extends \Magento\Filter\Template
     /**
      * Retrieve Block html directive
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param array $construction
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function blockDirective($construction)
     {
@@ -272,7 +276,7 @@ class Filter extends \Magento\Filter\Template
     /**
      * Retrieve layout html directive
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function layoutDirective($construction)
@@ -351,7 +355,7 @@ class Filter extends \Magento\Filter\Template
     /**
      * Retrieve View URL directive
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function viewDirective($construction)
@@ -364,20 +368,21 @@ class Filter extends \Magento\Filter\Template
     /**
      * Retrieve media file URL directive
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function mediaDirective($construction)
     {
         $params = $this->_getIncludeParameters($construction[2]);
-        return $this->_storeManager->getStore()->getBaseUrl('media') . $params['url'];
+        return $this->_storeManager->getStore()
+            ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
     /**
      * Retrieve store URL directive
      * Support url and direct_url properties
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function storeDirective($construction)
@@ -415,7 +420,7 @@ class Filter extends \Magento\Filter\Template
      * Supported options:
      *     allowed_tags - Comma separated html tags that have not to be converted
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function escapehtmlDirective($construction)
@@ -436,7 +441,7 @@ class Filter extends \Magento\Filter\Template
     /**
      * Var directive with modifiers support
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function varDirective($construction)
@@ -514,7 +519,7 @@ class Filter extends \Magento\Filter\Template
      * {{protocol http="http://url" https="https://url"}
      * also allow additional parameter "store"
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function protocolDirective($construction)
@@ -541,7 +546,7 @@ class Filter extends \Magento\Filter\Template
     /**
      * Store config directive
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function configDirective($construction)
@@ -558,7 +563,7 @@ class Filter extends \Magento\Filter\Template
     /**
      * Custom Variable directive
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function customvarDirective($construction)
@@ -584,9 +589,9 @@ class Filter extends \Magento\Filter\Template
      * Filter the string as template.
      * Rewrited for logging exceptions
      *
-     * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      * @param string $value
      * @return string
+     * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      */
     public function filter($value)
     {

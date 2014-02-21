@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -38,7 +38,7 @@ $_orderUrl = $this->helper('Magento\Authorizenet\Helper\Data')->getPlaceOrderFro
 
 <!-- IFRAME for request to Authorize.net -->
 <iframe id="directpost-iframe" data-container="authorize-net-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost" style="display:none;width:100%;background-color:transparent" src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
-<form class="form" id="co-directpost-form" action="#" method="post" data-mage-init="{directpost: {methodCode:'<?php echo $_code ?>', controller:'<?php echo $_controller ?>', orderSaveUrl:'<?php echo $_orderUrl ?>', cgiUrl:'<?php echo $_method->getCgiUrl() ?>', nativeAction:'<?php echo $this->getUrl('checkout/onepage/saveOrder', array('_secure' => $this->getRequest()->isSecure())) ?>'}, validation: []}">
+<form class="form" id="co-directpost-form" action="#" method="post" data-mage-init='{"directpost":{"methodCode":"<?php echo $_code ?>", "controller":"<?php echo $_controller ?>", "orderSaveUrl":"<?php echo $_orderUrl ?>", "cgiUrl":"<?php echo $_method->getCgiUrl() ?>", "nativeAction":"<?php echo $this->getUrl('checkout/onepage/saveOrder', array('_secure' => $this->getRequest()->isSecure())) ?>"}, "validation":[]}'>
     <fieldset class="fieldset ccard <?php echo $_code ?>" id="payment_form_<?php echo $_code ?>">
         <legend class="legend"><span><?php echo __('Credit Card Information') ?></span></legend><br />
         <div class="field required type">
@@ -56,7 +56,7 @@ $_orderUrl = $this->helper('Magento\Authorizenet\Helper\Data')->getPlaceOrderFro
         <div class="field required number">
             <label for="<?php echo $_code ?>_cc_number" class="label"><span><?php echo __('Credit Card Number') ?></span></label>
             <div class="control">
-                <input type="text" id="<?php echo $_code ?>_cc_number" data-container="cc-number" name="payment[cc_number]" title="<?php echo __('Credit Card Number') ?>" class="input-text" value="" data-validate='{required:true, "validate-cc-number":"#<?php echo $_code ?>_cc_type", "validate-cc-type":"#<?php echo $_code ?>_cc_type"}' autocomplete="off"/>
+                <input type="number" id="<?php echo $_code ?>_cc_number" data-container="cc-number" name="payment[cc_number]" title="<?php echo __('Credit Card Number') ?>" class="input-text" value="" data-validate='{required:true, "validate-cc-number":"#<?php echo $_code ?>_cc_type", "validate-cc-type":"#<?php echo $_code ?>_cc_type"}' autocomplete="off"/>
             </div>
         </div>
         <div class="field required date" id="<?php echo $_code ?>_cc_type_exp_div">
@@ -90,12 +90,12 @@ $_orderUrl = $this->helper('Magento\Authorizenet\Helper\Data')->getPlaceOrderFro
         <div class="field required cvv" id="<?php echo $_code ?>_cc_type_cvv_div">
             <label for="<?php echo $_code ?>_cc_cid" class="label"><span><?php echo __('Card Verification Number') ?></span></label>
             <div class="control">
-                <input type="text" title="<?php echo __('Card Verification Number') ?>" data-container="cc-cvv" class="input-text cvv" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{required:true, "validate-cc-cvn":"#<?php echo $_code ?>_cc_type"}' autocomplete="off"/>
+                <input type="number" title="<?php echo __('Card Verification Number') ?>" data-container="cc-cvv" class="input-text cvv" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{required:true, "validate-cc-cvn":"#<?php echo $_code ?>_cc_type"}' autocomplete="off"/>
                 <div class="note">
-                    <a href="#" id="directpost-cvv-what-is-this" class="action cvv" data-mage-init='{toggleAdvanced: {toggleContainers:"#directpost-tool-tip"}}'><span><?php echo __('What is this?') ?></span></a>
+                    <a href="#" id="directpost-cvv-what-is-this" class="action cvv" data-mage-init='{"toggleAdvanced": {"toggleContainers":"#directpost-tool-tip"}}'><span><?php echo __('What is this?') ?></span></a>
                 </div>
                 <div class="tooltip hidden" id="directpost-tool-tip">
-                    <a href="#" id="directpost-tool-tip-close" title="<?php echo __('Close') ?>" data-mage-init='{toggleAdvanced: {toggleContainers:"#directpost-tool-tip"}}' class="action close">
+                    <a href="#" id="directpost-tool-tip-close" title="<?php echo __('Close') ?>" data-mage-init='{"toggleAdvanced": {"toggleContainers":"#directpost-tool-tip"}}' class="action close">
                         <span><?php echo __('Close') ?></span>
                     </a>
                     <div class="content"><img src="<?php echo $this->getViewFileUrl('Magento_Checkout::cvv.gif') ?>" alt="<?php echo __('Card Verification Number Visual Reference') ?>" title="<?php echo __('Card Verification Number Visual Reference') ?>" /></div>

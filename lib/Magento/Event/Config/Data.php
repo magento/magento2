@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Event\Config;
@@ -43,8 +43,8 @@ class Data extends \Magento\Config\Data\Scoped
      * @param \Magento\Event\Config\Reader $reader
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Config\CacheInterface $cache
-     * @param string $cacheId
      * @param \Magento\App\State $appState
+     * @param string $cacheId
      */
     public function __construct(
         \Magento\Event\Config\Reader $reader,
@@ -60,9 +60,9 @@ class Data extends \Magento\Config\Data\Scoped
     /**
      * Get config value by key
      *
-     * @param string $path
-     * @param mixed $default
-     * @return mixed
+     * @param null|string $path
+     * @param null|mixed $default
+     * @return null|mixed
      */
     public function get($path = null, $default = null)
     {

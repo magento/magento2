@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     default_default
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -51,14 +51,14 @@
         <label class="label"><span><?php echo __('Resources') ?></span></label>
 
         <div class="control">
-            <div class="tree x-tree" data-role="resource-tree" data-mage-init="<?php
+            <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?php
             echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode(array(
-                "rolesTree" => array(
+                'rolesTree' => array(
                     "treeInitData" => $this->getTree(),
                     "treeInitSelectedData" => $this->getSelectedResources(),
                 )
             )));
-            ?>"></div>
+            ?>'></div>
         </div>
     </div>
 </fieldset>

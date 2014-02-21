@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Sales
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -112,7 +112,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order_paid_with_verisign.php
+     * @magentoDataFixture Magento/Sales/_files/order_paid_with_payflowpro.php
      */
     public function testInitFromOrderCcInformationDeleted()
     {

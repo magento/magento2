@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller;
@@ -60,8 +60,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Authz\Service\AuthorizationV1Interface */
     protected $_authzServiceMock;
 
-    const SERVICE_METHOD = \Magento\Webapi\Model\Rest\Config::KEY_METHOD;
-    const SERVICE_ID = \Magento\Webapi\Model\Rest\Config::KEY_CLASS;
+    const SERVICE_METHOD = 'testMethod';
+    const SERVICE_ID = 'Magento\Webapi\Controller\TestService';
 
     protected function setUp()
     {
@@ -89,7 +89,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_serviceMock = $this->getMockBuilder('stdClass')
+        $this->_serviceMock = $this->getMockBuilder(self::SERVICE_ID)
             ->setMethods(array(self::SERVICE_METHOD))
             ->disableOriginalConstructor()
             ->getMock();
@@ -110,6 +110,12 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $errorProcessorMock = $this->getMock('Magento\Webapi\Controller\ErrorProcessor', [], [], '', false);
+        $errorProcessorMock->expects($this->any())->method('maskException')->will($this->returnArgument(0));
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $serializer = $objectManager->getObject('Magento\Webapi\Controller\ServiceArgsSerializer');
+
         /** Init SUT. */
         $this->_restController = new \Magento\Webapi\Controller\Rest(
             $this->_requestMock,
@@ -119,7 +125,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
             $this->_appStateMock,
             $this->_oauthServiceMock,
             $this->_oauthHelperMock,
-            $this->_authzServiceMock
+            $this->_authzServiceMock,
+            $serializer,
+            $errorProcessorMock
         );
 
         // Set default expectations used by all tests
@@ -133,6 +141,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->_serviceMock));
         $this->_responseMock->expects($this->any())->method('prepareResponse')->will($this->returnValue(array()));
         $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue(array()));
+        $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(null));
 
         parent::setUp();
     }
@@ -227,29 +236,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(\Magento\Webapi\Exception::HTTP_BAD_REQUEST, $exceptionArray[0]->getHttpCode());
     }
 
-    /**
-     * Test incorrect format type response from service methods
-     */
-    public function testInvalidReturnTypeFromService()
-    {
-        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
-        $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue("invalid"));
-        $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
-        $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
-        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-
-        // Override default prepareResponse. It should never be called in this case
-        $this->_responseMock->expects($this->never())->method('prepareResponse');
-
-        $expectedMsg = 'The method "' . self::SERVICE_METHOD . '" of service "'
-            . self::SERVICE_ID . '" must return an array.';
-
-        $this->_restController->dispatch($this->_requestMock);
-        $this->assertTrue($this->_responseMock->isException());
-        $exceptionArray = $this->_responseMock->getException();
-        $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
-    }
-
     public function testAuthorizationFailed()
     {
         $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
@@ -261,5 +247,13 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
+    }
+}
+
+class TestService
+{
+    public function testMethod()
+    {
+        return null;
     }
 }

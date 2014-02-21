@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,12 +42,12 @@ class Session
     protected $_cookie;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $_cookieCheckActions;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\UrlInterface
      */
     protected $_url;
 
@@ -76,18 +76,18 @@ class Session
      * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Stdlib\Cookie $cookie
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param string $sessionNamespace
-     * @param array $cookieCheckActions
+     * @param string[] $cookieCheckActions
      */
     public function __construct(
         \Magento\App\ActionFlag $flag,
         \Magento\App\ResponseInterface $response,
         \Magento\Core\Model\Session $session,
         \Magento\Stdlib\Cookie $cookie,
-        \Magento\Core\Model\Url $url,
+        \Magento\UrlInterface $url,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Session\SidResolverInterface $sidResolver,
         $sessionNamespace = '',
@@ -107,7 +107,7 @@ class Session
     /**
      * @param array $arguments
      * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return array
+     * @return mixed
      */
     public function aroundDispatch(array $arguments = array(), \Magento\Code\Plugin\InvocationChain $invocationChain)
     {
@@ -147,7 +147,7 @@ class Session
      */
     protected function _forward(\Magento\App\RequestInterface $request)
     {
-        $request->initForwared();
+        $request->initForward();
         $request->setActionName('noCookies');
         $request->setControllerName('index');
         $request->setModuleName('core');

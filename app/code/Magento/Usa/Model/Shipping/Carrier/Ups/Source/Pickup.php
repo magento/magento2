@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -36,6 +36,9 @@ class Pickup extends \Magento\Usa\Model\Shipping\Carrier\Ups\Source\Generic
      */
     protected $_code = 'pickup';
 
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         $ups = $this->_shippingUps->getCode($this->_code);

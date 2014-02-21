@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Install
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -46,12 +46,20 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     protected $_request;
 
+    /**
+     * @var array
+     */
     protected $_configData = array();
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
+
+    /**
+     * @var \Magento\Filesystem\Directory\ReadInterface
+     */
+    protected $_pubDirectory;
 
     /**
      * @var \Magento\Filesystem\Directory\Write
@@ -73,14 +81,14 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
         \Magento\App\RequestInterface $request,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Message\ManagerInterface $messageManager
     ) {
@@ -88,10 +96,15 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_request = $request;
         $this->_storeManager = $storeManager;
         $this->_filesystem = $filesystem;
-        $this->_configDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::CONFIG);
+        $this->_pubDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::PUB_LIB_DIR);
+        $this->_configDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::CONFIG_DIR);
         $this->messageManager = $messageManager;
     }
 
+    /**
+     * @param array $data
+     * @return $this
+     */
     public function setConfigData($data)
     {
         if (is_array($data)) {
@@ -100,6 +113,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getConfigData()
     {
         return $this->_configData;
@@ -107,15 +123,17 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
 
     /**
      * Generate installation data and record them into local.xml using local.xml.template
+     *
+     * @return void
      */
     public function install()
     {
         $data = $this->getConfigData();
 
         $defaults = array(
-            'root_dir' => $this->_filesystem->getPath(\Magento\Filesystem::ROOT),
-            'app_dir'  => $this->_filesystem->getPath(\Magento\Filesystem::APP),
-            'var_dir'  => $this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR),
+            'root_dir' => $this->_filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR),
+            'app_dir'  => $this->_filesystem->getPath(\Magento\App\Filesystem::APP_DIR),
+            'var_dir'  => $this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR),
             'base_url' => $this->_request->getDistroBaseUrl(),
         );
         foreach ($defaults as $index => $value) {
@@ -162,6 +180,9 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_configDirectory->changePermissions($this->_localConfigFile, 0777);
     }
 
+    /**
+     * @return \Magento\Object
+     */
     public function getFormData()
     {
         $uri = \Zend_Uri::factory($this->_storeManager->getStore()->getBaseUrl('web'));
@@ -192,17 +213,15 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      * Check validity of a base URL
      *
      * @param string $baseUrl
+     * @return void
      * @throws \Magento\Core\Exception
      * @throws \Exception
      */
     protected function _checkUrl($baseUrl)
     {
         try {
-            $directory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::PUB_LIB);
-            $files = $directory->search('/.+\.(html?|js|css|gif|jpe?g|png)$/');
-
-            $staticFile = isset($files[0]) ? $files[0] : null;
-            $staticUrl = $baseUrl . $this->_filesystem->getUri(\Magento\Filesystem::PUB_LIB) . '/' . $staticFile;
+            $staticFile = $this->_findFirstFileRelativePath('', '/.+\.(html?|js|css|gif|jpe?g|png)$/');
+            $staticUrl = $baseUrl . $this->_filesystem->getUri(\Magento\App\Filesystem::PUB_LIB_DIR) . '/' . $staticFile;
             $client = new \Magento\HTTP\ZendClient($staticUrl);
             $response = $client->request('GET');
         } catch (\Exception $e){
@@ -219,6 +238,39 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         }
     }
 
+    /**
+     * Find a relative path to a first file located in a directory or its descendants
+     *
+     * @param string $dir Directory to search for a file within
+     * @param string $pattern PCRE pattern a file name has to match
+     * @return string|null
+     */
+    protected function _findFirstFileRelativePath($dir, $pattern = '/.*/')
+    {
+        $childDirs = array();
+        foreach ($this->_pubDirectory->read($dir) as $itemName) {
+            $itemPath = $dir . '/' . $itemName;
+            if ($this->_pubDirectory->isFile($itemPath)) {
+                if (preg_match($pattern, $itemName)) {
+                    return $itemName;
+                }
+            } else {
+                $childDirs[$itemName] = $itemPath;
+            }
+        }
+        foreach ($childDirs as $dirName => $dirPath) {
+            $filePath = $this->_findFirstFileRelativePath($dirPath, $pattern);
+            if ($filePath) {
+                return $dirName . '/' . $filePath;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param string $date
+     * @return $this
+     */
     public function replaceTmpInstallDate($date = 'now')
     {
         $stamp    = strtotime((string) $date);
@@ -229,6 +281,10 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @return $this
+     */
     public function replaceTmpEncryptKey($key)
     {
         $localXml = $this->_configDirectory->readFile($this->_localConfigFile);

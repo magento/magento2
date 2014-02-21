@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Index
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Index\Model;
+
+use Magento\Index\Model\Indexer;
 
 /**
  * @method \Magento\Index\Model\Resource\Event _getResource()
@@ -41,8 +44,6 @@
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Index\Model;
-
 class Event extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -68,11 +69,13 @@ class Event extends \Magento\Core\Model\AbstractModel
 
     /**
      * Process object which currently working with event
+     *
+     * @var null|Process $process
      */
     protected $_process = null;
 
     /**
-     * @var \Magento\Index\Model\Indexer
+     * @var Indexer
      */
     protected $_indexer;
 
@@ -84,7 +87,7 @@ class Event extends \Magento\Core\Model\AbstractModel
     /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Index\Model\Indexer $indexer
+     * @param Indexer $indexer
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -93,7 +96,7 @@ class Event extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Index\Model\Indexer $indexer,
+        Indexer $indexer,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -106,6 +109,8 @@ class Event extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize resource
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -127,7 +132,7 @@ class Event extends \Magento\Core\Model\AbstractModel
     /**
      * Get related process object
      *
-     * @return \Magento\Index\Model\Process|null
+     * @return Process|null
      */
     public function getProcess()
     {
@@ -136,6 +141,9 @@ class Event extends \Magento\Core\Model\AbstractModel
 
     /**
      * Specify namespace for old and new data
+     *
+     * @param string $namespace
+     * @return $this
      */
     public function setDataNamespace($namespace)
     {
@@ -146,7 +154,7 @@ class Event extends \Magento\Core\Model\AbstractModel
     /**
      * Reset old and new data arrays
      *
-     * @return \Magento\Index\Model\Event
+     * @return $this
      */
     public function resetData()
     {
@@ -165,7 +173,7 @@ class Event extends \Magento\Core\Model\AbstractModel
      *
      * @param string|int $processId
      * @param string $status
-     * @return  \Magento\Index\Model\Event
+     * @return  $this
      */
     public function addProcessId($processId, $status = \Magento\Index\Model\Process::EVENT_STATUS_NEW)
     {
@@ -219,7 +227,7 @@ class Event extends \Magento\Core\Model\AbstractModel
      * Used for events duplicated protection
      *
      * @param array $data
-     * @return \Magento\Index\Model\Event
+     * @return $this
      */
     public function mergePreviousData($data)
     {
@@ -240,7 +248,7 @@ class Event extends \Magento\Core\Model\AbstractModel
     /**
      * Clean new data, unset data for done processes
      *
-     * @return \Magento\Index\Model\Event
+     * @return $this
      */
     public function cleanNewData()
     {
@@ -269,9 +277,10 @@ class Event extends \Magento\Core\Model\AbstractModel
     /**
      * Get event old data array
      *
-     * @deprecated since 1.6.2.0
      * @param bool $useNamespace
      * @return array
+     *
+     * @deprecated since 1.6.2.0
      */
     public function getOldData($useNamespace = true)
     {
@@ -301,10 +310,11 @@ class Event extends \Magento\Core\Model\AbstractModel
     /**
      * Add new values to old data array (overwrite if value with same key exist)
      *
-     * @deprecated since 1.6.2.0
      * @param array|string $key
      * @param null|mixed $value
-     * @return \Magento\Index\Model\Event
+     * @return $this
+     *
+     * @deprecated since 1.6.2.0
      */
     public function addOldData($key, $value = null)
     {
@@ -316,7 +326,7 @@ class Event extends \Magento\Core\Model\AbstractModel
      *
      * @param array|string $key
      * @param null|mixed $value
-     * @return \Magento\Index\Model\Event
+     * @return $this
      */
     public function addNewData($key, $value = null)
     {
@@ -361,7 +371,7 @@ class Event extends \Magento\Core\Model\AbstractModel
     /**
      * Serelaize old and new data arrays before saving
      *
-     * @return \Magento\Index\Model\Event
+     * @return $this
      */
     protected function _beforeSave()
     {

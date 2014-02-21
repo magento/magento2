@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\App\Response\Http;
@@ -31,7 +31,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_auth;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -57,18 +57,18 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
 
     /**
      * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\App\ActionFlag $flag
      * @param \Magento\Backend\Helper\Data $helper
      */
     public function __construct(
         \Magento\App\ResponseInterface $response,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\Model\Session $session,
         \Magento\App\ActionFlag $flag,
         \Magento\Backend\Helper\Data $helper
@@ -104,15 +104,21 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
      * @param string $fileName
      * @param string|array $content set to null to avoid starting output, $contentLength should be set explicitly in
      * that case
+     * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength    explicit content length, if strlen($content) isn't applicable
      * @return \Magento\App\ResponseInterface
      */
-    public function create($fileName, $content, $contentType = 'application/octet-stream', $contentLength = null)
-    {
+    public function create(
+        $fileName,
+        $content,
+        $baseDir = \Magento\App\Filesystem::ROOT_DIR,
+        $contentType = 'application/octet-stream',
+        $contentLength = null
+    ) {
         if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
             return $this->_redirect($this->_backendUrl->getStartupPageUrl());
         }
-        return parent::create($fileName, $content, $contentType, $contentLength);
+        return parent::create($fileName, $content, $baseDir, $contentType, $contentLength);
     }
 }

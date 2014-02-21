@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  */
@@ -37,7 +37,7 @@ class Standard extends \Magento\Core\App\Router\Base
     /**
      * Routers that must not been matched
      *
-     * @var array
+     * @var string[]
      */
     protected $_excludedRouters = array('admin', 'vde');
 
@@ -62,7 +62,7 @@ class Standard extends \Magento\Core\App\Router\Base
      * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
      * @param \Magento\App\RouterListInterface $routerList
      * @param \Magento\ObjectManager $objectManager
@@ -79,7 +79,7 @@ class Standard extends \Magento\Core\App\Router\Base
         \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
         \Magento\App\RouterListInterface $routerList,
         \Magento\ObjectManager $objectManager,
@@ -150,7 +150,7 @@ class Standard extends \Magento\Core\App\Router\Base
      * Modify request path to imitate basic request
      *
      * @param \Magento\App\RequestInterface $request
-     * @return \Magento\DesignEditor\Controller\Varien\Router\Standard
+     * @return $this
      */
     protected function _prepareVdeRequest(\Magento\App\RequestInterface $request)
     {

@@ -20,12 +20,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  * 
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Interception\Definition;
 
-class Compiled implements \Magento\Interception\Definition
+use Magento\Interception\Definition;
+
+class Compiled implements Definition
 {
     /**
      * List of plugin definitions
@@ -46,7 +48,7 @@ class Compiled implements \Magento\Interception\Definition
      * Retrieve list of methods
      *
      * @param string $type
-     * @return array
+     * @return string[]
      */
     public function getMethodList($type)
     {

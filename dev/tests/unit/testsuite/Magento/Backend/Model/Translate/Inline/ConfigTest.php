@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Model\Translate\Inline;
@@ -31,10 +31,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $backendConfig = $this->getMockForAbstractClass('Magento\Backend\App\ConfigInterface');
         $backendConfig
             ->expects($this->once())
-            ->method('getFlag')
+            ->method('isSetFlag')
             ->with($this->equalTo('dev/translate_inline/active_admin'))
             ->will($this->returnValue($result));
-        $config = new Config($backendConfig);
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $config = $objectManager->getObject(
+            '\Magento\Backend\Model\Translate\Inline\Config',
+            array(
+                'config' => $backendConfig
+            )
+        );
         $this->assertEquals($result, $config->isActive('any'));
     }
 }

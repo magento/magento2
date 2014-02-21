@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,57 +29,117 @@ namespace Magento\Test\Integrity\Theme;
 
 class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
-    public function testViewFilesFromThemes()
+    /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\View\FileSystem
+     */
+    protected $viewFileSystem;
+
+    /**
+     * @var \Magento\App\Filesystem
+     */
+    protected $filesystem;
+
+    protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->configure(array(
-            'preferences' => array(
-                'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'
-            )
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager();
+        $this->viewFileSystem = $this->objectManager->get('Magento\View\FileSystem');
+        $this->filesystem = $this->objectManager->get('Magento\App\Filesystem');
+        $this->objectManager->configure(array(
+            'preferences' => array('Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data')
         ));
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testViewLessFilesPreProcessing()
+    {
+        $errorHandlerMock = $this->getMock('Magento\Less\PreProcessor\ErrorHandlerInterface',
+            array('processException'));
+        $this->objectManager->addSharedInstance($errorHandlerMock, 'Magento\Less\PreProcessor\ErrorHandler');
+        $errorHandlerMock->expects($this->any())->method('processException')->will($this->returnCallback(
+            function ($exception) {
+                /** @var $exception \Exception */
+                $this->fail($exception->getMessage());
+            }
+        ));
+        /** @var $lessPreProcessor \Magento\Less\PreProcessor */
+        $lessPreProcessor = $this->objectManager->create('Magento\Less\PreProcessor');
+        $directoryRead = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        /**
+         * Solution for \Magento\View\Layout\File\Source\Base aggregator, it depends on theme and area
+         */
+        $theme = $this->objectManager->create('Magento\View\Design\ThemeInterface');
+        $theme->setArea('frontend');
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
             /**
-             * @param string $area
-             * @param string $themeId
              * @param string $file
-             * @throws \PHPUnit_Framework_AssertionFailedError|Exception
+             * @param string $area
              */
-            function ($area, $themeId, $file) {
-                try {
-                    $params = array('area' => $area, 'themeId' => $themeId);
-                    $viewFile = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
-                        ->get('Magento\View\FileSystem')
-                        ->getViewFile($file, $params);
-                    $this->assertFileExists($viewFile);
-
-                    $fileParts = explode(\Magento\View\Service::SCOPE_SEPARATOR, $file);
-                    if (count($fileParts) > 1) {
-                        $params['module'] = $fileParts[0];
+            function ($file, $area) use ($lessPreProcessor, $directoryRead, $theme) {
+                $fileInfo = pathinfo($file);
+                if ($fileInfo['extension'] == 'css') {
+                    $lessFile = "{$fileInfo['dirname']}/{$fileInfo['filename']}.less";
+                    $params = array('area' => $area, 'themeModel' => $theme);
+                    $cssSourceFile = $this->viewFileSystem->getViewFile($file, $params);
+                    $lessSourceFile = $this->viewFileSystem->getViewFile($lessFile, $params);
+                    if ($directoryRead->isExist($directoryRead->getRelativePath($cssSourceFile))
+                        && $directoryRead->isExist($directoryRead->getRelativePath($lessSourceFile))
+                    ) {
+                        $this->fail("Duplicate files: '{$lessSourceFile}', '{$cssSourceFile}'");
+                    } elseif ($directoryRead->isExist($directoryRead->getRelativePath($lessSourceFile))) {
+                        $this->assertFileExists($lessPreProcessor->processLessInstructions($lessFile, $params));
                     }
-                    if (pathinfo($file, PATHINFO_EXTENSION) == 'css') {
-                        $errors = array();
-                        $content = file_get_contents($viewFile);
-                        preg_match_all(\Magento\View\Url\CssResolver::REGEX_CSS_RELATIVE_URLS, $content, $matches);
-                        foreach ($matches[1] as $relativePath) {
-                            $path = $this->_addCssDirectory($relativePath, $file);
-                            $pathFile = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
-                                ->get('Magento\View\FileSystem')
-                                ->getViewFile($path, $params);
-                            if (!is_file($pathFile)) {
-                                $errors[] = $relativePath;
-                            }
-                        }
-                        if (!empty($errors)) {
-                            $this->fail('Cannot find file(s): ' . implode(', ', $errors));
-                        }
-                    }
-                } catch (\PHPUnit_Framework_AssertionFailedError $e) {
-                    throw $e;
-                } catch (\Exception $e) {
-                    $this->fail($e->getMessage());
                 }
             },
-            $this->viewFilesFromThemesDataProvider()
+            $this->viewFilesFromThemesDataProvider([$theme])
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testViewFilesFromThemes()
+    {
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             * @param string $area
+             * @param string $themeId
+             */
+            function ($file, $area, $themeId) {
+                $params = array('area' => $area, 'themeId' => $themeId);
+                $viewFile = $this->viewFileSystem->getViewFile($file, $params);
+                $this->assertFileExists($viewFile);
+
+                $fileParts = explode(\Magento\View\Service::SCOPE_SEPARATOR, $file);
+                if (count($fileParts) > 1) {
+                    $params['module'] = $fileParts[0];
+                }
+                if (pathinfo($file, PATHINFO_EXTENSION) == 'css') {
+                    $files = array();
+                    $content = file_get_contents($viewFile);
+                    preg_match_all(\Magento\View\Url\CssResolver::REGEX_CSS_RELATIVE_URLS, $content, $matches);
+                    foreach ($matches[1] as $relativePath) {
+                        $path = $this->_addCssDirectory($relativePath, $file);
+                        $pathFile = $this->viewFileSystem->getViewFile($path, $params);
+                        if (!is_file($pathFile)) {
+                            $files[] = $relativePath;
+                        }
+                    }
+                    if (!empty($files)) {
+                        $this->fail('Cannot find file(s): ' . implode(', ', $files));
+                    }
+                }
+            },
+            $this->viewFilesFromThemesDataProvider($this->_getDesignThemes())
         );
     }
 
@@ -115,64 +175,76 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     /**
      * Collect getViewUrl() and similar calls from themes
      *
+     * @param \Magento\Core\Model\Theme[] $themes
      * @return array
      */
-    public function viewFilesFromThemesDataProvider()
+    public function viewFilesFromThemesDataProvider($themes)
     {
-        $themes = $this->_getDesignThemes();
-
         // Find files, declared in views
         $files = array();
-        /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themes as $theme) {
-            $this->_collectGetViewUrlInvokes($theme, $files);
+            $this->_collectViewUrlInvokes($theme, $files);
+            $this->_collectViewLayoutDeclarations($theme, $files);
         }
 
         // Populate data provider in correspondence of themes to view files
         $result = array();
-        /** @var $theme \Magento\View\Design\ThemeInterface */
         foreach ($themes as $theme) {
             if (!isset($files[$theme->getId()])) {
                 continue;
             }
             foreach (array_unique($files[$theme->getId()]) as $file) {
-                $result["{$theme->getId()}/{$file}"] = array($theme->getArea(), $theme->getId(), $file);
+                $result["{$theme->getId()}/{$file}"] = array(
+                    'file'  => $file,
+                    'area'  => $theme->getArea(),
+                    'theme' => $theme->getId()
+                );
             }
         }
         return array_values($result);
     }
 
     /**
-     * Collect getViewUrl() from theme templates
+     * Collect getViewFileUrl() from theme templates
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\Core\Model\Theme $theme
      * @param array &$files
      */
-    protected function _collectGetViewUrlInvokes($theme, &$files)
+    protected function _collectViewUrlInvokes($theme, &$files)
     {
         $searchDir = $theme->getCustomization()->getThemeFilesPath();
+        if (empty($searchDir)) {
+            return;
+        }
         $dirLength = strlen($searchDir);
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($searchDir)) as $fileInfo) {
             // Check that file path is valid
             $relativePath = substr($fileInfo->getPath(), $dirLength);
-            if (!$this->_validateTemplatePath($relativePath)) {
-                continue;
-            }
-
-            // Scan file for references to other files
-            foreach ($this->_findReferencesToViewFile($fileInfo) as $file) {
-                $files[$theme->getId()][] = $file;
+            if ($this->_validateTemplatePath($relativePath)) {
+                // Scan file for references to other files
+                foreach ($this->_findReferencesToViewFile($fileInfo) as $file) {
+                    $files[$theme->getId()][] = $file;
+                }
             }
         }
+    }
 
+    /**
+     * Collect view files declarations into layout
+     *
+     * @param \Magento\Core\Model\Theme $theme
+     * @param array &$files
+     */
+    protected function _collectViewLayoutDeclarations($theme, &$files)
+    {
         // Collect "addCss" and "addJs" from theme layout
         /** @var \Magento\View\Layout\ProcessorInterface $layoutUpdate */
-        $layoutUpdate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Layout\ProcessorInterface', array('theme' => $theme));
+        $layoutUpdate = $this->objectManager->create('Magento\View\Layout\ProcessorInterface',
+            array('theme' => $theme));
         $fileLayoutUpdates = $layoutUpdate->getFileLayoutUpdatesXml();
         $elements = $fileLayoutUpdates->xpath(
             '//block[@class="Magento\Theme\Block\Html\Head\Css" or @class="Magento\Theme\Block\Html\Head\Script"]'
-                . '/arguments/argument[@name="file"]'
+            . '/arguments/argument[@name="file"]'
         );
         if ($elements) {
             foreach ($elements as $filenameNode) {
@@ -213,14 +285,14 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     /**
      * Scan specified file for getViewUrl() pattern
      *
-     * @param SplFileInfo $fileInfo
+     * @param \SplFileInfo $fileInfo
      * @return array
      */
-    protected function _findReferencesToViewFile(SplFileInfo $fileInfo)
+    protected function _findReferencesToViewFile(\SplFileInfo $fileInfo)
     {
         $result = array();
         if (preg_match_all(
-            '/\$this->getViewUrl\(\'([^\']+?)\'\)/', file_get_contents($fileInfo->getRealPath()), $matches)
+            '/\$this->getViewFileUrl\(\'([^\']+?)\'\)/', file_get_contents($fileInfo->getRealPath()), $matches)
         ) {
             foreach ($matches[1] as $viewFile) {
                 if ($this->_isFileForDisabledModule($viewFile)) {
@@ -240,7 +312,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     {
         $this->markTestIncomplete('Should be fixed when static when we have static folder jslib implemented');
         $this->assertFileExists(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')->getPath('jslib')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem')->getPath('jslib')
                 . '/' . $file
         );
     }

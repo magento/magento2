@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -69,7 +69,7 @@ class Flag extends \Magento\Core\Model\Flag
      * Pass error to flag
      *
      * @param \Exception $e
-     * @return \Magento\Core\Model\File\Storage\Flag
+     * @return $this
      */
     public function passError(\Exception $e)
     {

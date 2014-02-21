@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -76,13 +76,13 @@
     <event name="controller_action_predispatch_paypal_express_start">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
-    <event name="controller_action_predispatch_paypaluk_express_start">
+    <event name="controller_action_predispatch_paypal_payflowexpress_start">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
     <event name="controller_action_predispatch_googlecheckout_redirect_checkout">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
-    <event name="controller_action_predispatch_checkout_multishipping_index">
+    <event name="controller_action_predispatch_multishipping_checkout_index">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
     <event name="render_block">

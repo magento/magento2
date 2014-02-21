@@ -20,10 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Resource\Attribute;
 
+use Magento\Core\Model\Website;
 
 /**
  * EAV additional attribute resource collection (Using Forms)
@@ -32,8 +34,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Attribute;
-
 abstract class Collection
     extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
 {
@@ -45,7 +45,7 @@ abstract class Collection
     /**
      * Current website scope instance
      *
-     * @var \Magento\Core\Model\Website
+     * @var Website
      */
     protected $_website;
 
@@ -134,8 +134,8 @@ abstract class Collection
     /**
      * Set Website scope
      *
-     * @param \Magento\Core\Model\Website|int $website
-     * @return \Magento\Eav\Model\Resource\Attribute\Collection
+     * @param Website|int $website
+     * @return $this
      */
     public function setWebsite($website)
     {
@@ -147,7 +147,7 @@ abstract class Collection
     /**
      * Return current website scope instance
      *
-     * @return \Magento\Core\Model\Website
+     * @return Website
      */
     public function getWebsite()
     {
@@ -160,7 +160,7 @@ abstract class Collection
     /**
      * Initialize collection select
      *
-     * @return \Magento\Eav\Model\Resource\Attribute\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -238,7 +238,7 @@ abstract class Collection
      * Entity type is defined.
      *
      * @param  int $type
-     * @return \Magento\Eav\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function setEntityTypeFilter($type)
     {
@@ -248,7 +248,7 @@ abstract class Collection
     /**
      * Specify filter by "is_visible" field
      *
-     * @return \Magento\Eav\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function addVisibleFilter()
     {
@@ -258,7 +258,7 @@ abstract class Collection
     /**
      * Exclude system hidden attributes
      *
-     * @return \Magento\Eav\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function addSystemHiddenFilter()
     {
@@ -272,7 +272,7 @@ abstract class Collection
     /**
      * Exclude system hidden attributes but include password hash
      *
-     * @return \Magento\Customer\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function addSystemHiddenFilterWithPasswordHash()
     {
@@ -291,7 +291,7 @@ abstract class Collection
     /**
      * Add exclude hidden frontend input attribute filter to collection
      *
-     * @return \Magento\Eav\Model\Resource\Attribute\Collection
+     * @return $this
      */
     public function addExcludeHiddenFrontendFilter()
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,9 +40,8 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Core\Model\Translate $translate
-     * @param \Magento\Filesystem $filesystem,
-     * @param \Magento\Shipping\Model\Config $shippingConfig
+     * @param \Magento\TranslateInterface $translate
+     * @param \Magento\App\Filesystem $filesystem,
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
@@ -56,9 +55,8 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Stdlib\String $string,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\Translate $translate,
-        \Magento\Filesystem $filesystem,
-        \Magento\Shipping\Model\Config $shippingConfig,
+        \Magento\TranslateInterface $translate,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
@@ -73,7 +71,6 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $coreStoreConfig,
             $translate,
             $filesystem,
-            $shippingConfig,
             $pdfConfig,
             $pdfTotalFactory,
             $pdfItemsFactory,

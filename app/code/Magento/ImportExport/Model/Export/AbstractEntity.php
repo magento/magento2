@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export;
+
+use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 
 /**
  * Export entity abstract model
@@ -31,8 +34,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Export;
-
 abstract class AbstractEntity
 {
     /**#@+
@@ -48,16 +49,9 @@ abstract class AbstractEntity
     /**#@-*/
 
     /**
-     * Website manager (currently \Magento\Core\Model\App works as website manager)
+     * Store manager
      *
-     * @var \Magento\Core\Model\App
-     */
-    protected $_websiteManager;
-
-    /**
-     * Store manager (currently \Magento\Core\Model\App works as store manager)
-     *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -120,7 +114,7 @@ abstract class AbstractEntity
     /**
      * Source model
      *
-     * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
+     * @var AbstractAdapter
      */
     protected $_writer;
 
@@ -141,7 +135,7 @@ abstract class AbstractEntity
     /**
      * Disabled attributes
      *
-     * @var array
+     * @var string[]
      */
     protected $_disabledAttributes = array();
 
@@ -182,21 +176,20 @@ abstract class AbstractEntity
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_websiteManager = isset($data['website_manager']) ? $data['website_manager'] : $app;
-        $this->_storeManager   = isset($data['store_manager']) ? $data['store_manager'] : $app;
+        $this->_storeManager   = $storeManager;
         $this->_attributeCollection = isset($data['attribute_collection']) ? $data['attribute_collection']
             : $collectionFactory->create(static::ATTRIBUTE_COLLECTION_NAME);
         $this->_pageSize = isset($data['page_size']) ? $data['page_size']
@@ -208,7 +201,7 @@ abstract class AbstractEntity
     /**
      * Initialize stores hash
      *
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @return $this
      */
     protected function _initStores()
     {
@@ -225,12 +218,12 @@ abstract class AbstractEntity
      * Initialize website values
      *
      * @param bool $withDefault
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @return $this
      */
     protected function _initWebsites($withDefault = false)
     {
         /** @var $website \Magento\Core\Model\Website */
-        foreach ($this->_websiteManager->getWebsites($withDefault) as $website) {
+        foreach ($this->_storeManager->getWebsites($withDefault) as $website) {
             $this->_websiteIdToCode[$website->getId()] = $website->getCode();
         }
         return $this;
@@ -241,7 +234,7 @@ abstract class AbstractEntity
      *
      * @param string $errorCode Error code or simply column name
      * @param int $errorRowNum Row number
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @return $this
      */
     public function addRowError($errorCode, $errorRowNum)
     {
@@ -258,7 +251,7 @@ abstract class AbstractEntity
      *
      * @param string $errorCode Error code
      * @param string $message Message template
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @return $this
      */
     public function addMessageTemplate($errorCode, $message)
     {
@@ -278,6 +271,7 @@ abstract class AbstractEntity
      * Export one item
      *
      * @param \Magento\Core\Model\AbstractModel $item
+     * @return void
      */
     abstract public function exportItem($item);
 
@@ -285,6 +279,7 @@ abstract class AbstractEntity
      * Iterate through given collection page by page and export items
      *
      * @param \Magento\Data\Collection\Db $collection
+     * @return void
      */
     protected function _exportCollectionByPages(\Magento\Data\Collection\Db $collection)
     {
@@ -403,8 +398,8 @@ abstract class AbstractEntity
     /**
      * Inner writer object getter
      *
-     * @throws \Exception
-     * @return \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
+     * @return AbstractAdapter
+     * @throws \Magento\Core\Exception
      */
     public function getWriter()
     {
@@ -418,8 +413,8 @@ abstract class AbstractEntity
     /**
      * Set parameters
      *
-     * @param array $parameters
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @param string[] $parameters
+     * @return $this
      */
     public function setParameters(array $parameters)
     {
@@ -431,10 +426,10 @@ abstract class AbstractEntity
     /**
      * Writer model setter
      *
-     * @param \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter $writer
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @param AbstractAdapter $writer
+     * @return $this
      */
-    public function setWriter(\Magento\ImportExport\Model\Export\Adapter\AbstractAdapter $writer)
+    public function setWriter(AbstractAdapter $writer)
     {
         $this->_writer = $writer;
 
@@ -445,6 +440,7 @@ abstract class AbstractEntity
      * Set export file name
      *
      * @param null|string $fileName
+     * @return void
      */
     public function setFileName($fileName)
     {
@@ -464,7 +460,7 @@ abstract class AbstractEntity
     /**
      * Retrieve list of disabled attributes codes
      *
-     * @return array
+     * @return string[]
      */
     public function getDisabledAttributes()
     {

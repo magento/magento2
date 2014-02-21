@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\ObjectManager\Config;
@@ -59,19 +59,21 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedError, $actualError);
     }
 
+    /**
+     * Get array of invalid xml strings
+     *
+     * @return array
+     */
+    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    {
+        return include(__DIR__ . '/_files/invalidConfigXmlArray.php');
+    }
+
     public function testSchemaCorrectlyIdentifiesValidXml()
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/valid_config.xml');
         $actualResult = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
 
-        $this->assertEmpty($actualResult);
-    }
-
-    /**
-     * Data provider with invalid xml array according to events.xsd
-     */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
-    {
-        return include(__DIR__ . '/_files/invalidConfigXmlArray.php');
+        $this->assertEmpty($actualResult, join("\n", $actualResult));
     }
 }

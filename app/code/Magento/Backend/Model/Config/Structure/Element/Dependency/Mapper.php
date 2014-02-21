@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,30 +38,30 @@ class Mapper
     /**
      * Dependency Field model
      *
-     * @var \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory
+     * @var FieldFactory
      */
     protected $_fieldFactory;
 
     /**
-     * Application object
+     * Store Manager
      *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
-    protected $_application;
+    protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator
-     * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+     * @param FieldFactory $fieldFactory
      */
     public function __construct(
-        \Magento\Core\Model\App $application,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator,
-        \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+        FieldFactory $fieldFactory
     ) {
 
         $this->_fieldLocator = $fieldLocator;
-        $this->_application = $application;
+        $this->_storeManager = $storeManager;
         $this->_fieldFactory = $fieldFactory;
     }
 
@@ -88,7 +88,7 @@ class Mapper
             * based on not shown field (not rendered field)
             */
             if (false == $dependentField->isVisible()) {
-                $valueInStore = $this->_application
+                $valueInStore = $this->_storeManager
                     ->getStore($storeCode)
                     ->getConfig($dependentField->getPath($fieldPrefix));
                 $shouldAddDependency = !$field->isValueSatisfy($valueInStore);

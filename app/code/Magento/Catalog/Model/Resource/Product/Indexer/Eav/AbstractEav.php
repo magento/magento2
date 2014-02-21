@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
 
 /**
  * Catalog Product Eav Attributes abstract indexer resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
-
 abstract class AbstractEav
     extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
 {
@@ -63,8 +61,8 @@ abstract class AbstractEav
     /**
      * Rebuild all index data
      *
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
+     * @throws \Exception
      */
     public function reindexAll()
     {
@@ -91,7 +89,7 @@ abstract class AbstractEav
      *
      *
      * @param int|array $processIds
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
      * @throws \Exception
      */
     public function reindexEntities($processIds)
@@ -141,7 +139,7 @@ abstract class AbstractEav
      *
      * @param int $attributeId
      * @param bool $isIndexable
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
      */
     public function reindexAttribute($attributeId, $isIndexable = true)
     {
@@ -171,7 +169,7 @@ abstract class AbstractEav
     /**
      * Remove Not Visible products from temporary data index
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
      */
     protected function _removeNotVisibleEntityFromIndex()
     {
@@ -199,8 +197,8 @@ abstract class AbstractEav
     /**
      * Prepare data index for product relations
      *
-     * @param array $parentIds  the parent entity ids limitation
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @param array $parentIds the parent entity ids limitation
+     * @return $this
      */
     protected function _prepareRelationIndex($parentIds = null)
     {
@@ -263,7 +261,8 @@ abstract class AbstractEav
      * Remove index data from index by attribute id
      *
      * @param int $attributeId
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
+     * @throws \Exception
      */
     protected function _removeAttributeIndexData($attributeId)
     {
@@ -285,7 +284,7 @@ abstract class AbstractEav
      * Synchronize temporary index table with index table by attribute id
      *
      * @param int $attributeId
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
      * @throws \Exception
      */
     protected function _synchronizeAttributeIndexData($attributeId)

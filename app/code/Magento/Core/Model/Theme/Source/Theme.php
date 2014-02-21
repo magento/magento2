@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -40,12 +40,12 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 class Theme extends AbstractSource
 {
     /**
-     * @var \Magento\View\Design\Theme\Label
+     * @var Label
      */
     protected $themeLabel;
 
     /**
-     * @param \Magento\View\Design\Theme\Label $themeLabel
+     * @param Label $themeLabel
      */
     public function __construct(Label $themeLabel)
     {
@@ -56,7 +56,7 @@ class Theme extends AbstractSource
      * Retrieve All Design Theme Options
      *
      * @param bool $withEmpty add empty (please select) values to result
-     * @return array
+     * @return Label[]
      */
     public function getAllOptions($withEmpty = true)
     {

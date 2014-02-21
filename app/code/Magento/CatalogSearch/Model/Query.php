@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_CatalogSearch
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -54,7 +54,20 @@
  */
 namespace Magento\CatalogSearch\Model;
 
-class Query extends \Magento\Core\Model\AbstractModel
+use Magento\CatalogSearch\Model\Resource\Query\Collection as QueryCollection;
+use Magento\CatalogSearch\Model\Resource\Query\CollectionFactory as QueryCollectionFactory;
+use Magento\CatalogSearch\Model\Resource\Search\Collection;
+use Magento\CatalogSearch\Model\Resource\Search\CollectionFactory;
+use Magento\Core\Model\AbstractModel;
+use Magento\Core\Model\Context;
+use Magento\Core\Model\Registry;
+use Magento\Core\Model\Resource\AbstractResource;
+use Magento\Core\Model\Store\Config;
+use Magento\Core\Model\StoreManagerInterface;
+use Magento\Data\Collection\Db;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+
+class Query extends AbstractModel
 {
     /**
      * Event prefix
@@ -78,53 +91,53 @@ class Query extends \Magento\Core\Model\AbstractModel
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var Config
      */
     protected $_coreStoreConfig;
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Search collection factory
      *
-     * @var \Magento\CatalogSearch\Model\Resource\Search\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_searchCollectionFactory;
 
     /**
      * Query collection factory
      *
-     * @var \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory
+     * @var QueryCollectionFactory
      */
     protected $_queryCollectionFactory;
 
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queryCollectionFactory
-     * @param \Magento\CatalogSearch\Model\Resource\Search\CollectionFactory $searchCollectionFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param QueryCollectionFactory $queryCollectionFactory
+     * @param CollectionFactory $searchCollectionFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Config $coreStoreConfig
+     * @param AbstractResource $resource
+     * @param Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\CatalogSearch\Model\Resource\Query\CollectionFactory $queryCollectionFactory,
-        \Magento\CatalogSearch\Model\Resource\Search\CollectionFactory $searchCollectionFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        QueryCollectionFactory $queryCollectionFactory,
+        CollectionFactory $searchCollectionFactory,
+        StoreManagerInterface $storeManager,
+        Config $coreStoreConfig,
+        AbstractResource $resource = null,
+        Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_queryCollectionFactory = $queryCollectionFactory;
@@ -146,7 +159,7 @@ class Query extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve search collection
      *
-     * @return \Magento\CatalogSearch\Model\Resource\Search\Collection
+     * @return Collection
      */
     public function getSearchCollection()
     {
@@ -156,7 +169,7 @@ class Query extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve collection of search results
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     public function getResultCollection()
     {
@@ -181,7 +194,7 @@ class Query extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve collection of suggest queries
      *
-     * @return \Magento\CatalogSearch\Model\Resource\Query\Collection
+     * @return QueryCollection
      */
     public function getSuggestCollection()
     {
@@ -199,7 +212,7 @@ class Query extends \Magento\Core\Model\AbstractModel
      * Load Query object by query string
      *
      * @param string $text
-     * @return \Magento\CatalogSearch\Model\Query
+     * @return $this
      */
     public function loadByQuery($text)
     {
@@ -213,7 +226,7 @@ class Query extends \Magento\Core\Model\AbstractModel
      * Load Query object only by query text (skip 'synonym For')
      *
      * @param string $text
-     * @return \Magento\CatalogSearch\Model\Query
+     * @return $this
      */
     public function loadByQueryText($text)
     {
@@ -227,7 +240,7 @@ class Query extends \Magento\Core\Model\AbstractModel
      * Set Store Id
      *
      * @param int $storeId
-     * @return \Magento\CatalogSearch\Model\Query
+     * @return void
      */
     public function setStoreId($storeId)
     {
@@ -250,7 +263,7 @@ class Query extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare save query for result
      *
-     * @return \Magento\CatalogSearch\Model\Query
+     * @return $this
      */
     public function prepare()
     {

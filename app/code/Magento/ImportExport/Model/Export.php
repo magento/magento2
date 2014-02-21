@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model;
 
 /**
  * Export model
@@ -31,8 +32,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model;
-
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {
     const FILTER_ELEMENT_GROUP = 'export_filter';
@@ -77,7 +76,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
 
     /**
      * @param \Magento\Logger $logger
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Core\Model\Log\AdapterFactory $adapterFactory
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      * @param \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory
@@ -86,7 +85,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     public function __construct(
         \Magento\Logger $logger,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Core\Model\Log\AdapterFactory $adapterFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory,
@@ -102,8 +101,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Create instance of entity adapter and return it
      *
-     * @throws \Magento\Core\Exception
      * @return \Magento\ImportExport\Model\Export\Entity\AbstractEntity|\Magento\ImportExport\Model\Export\AbstractEntity
+     * @throws \Magento\Core\Exception
      */
     protected function _getEntityAdapter()
     {
@@ -147,8 +146,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Get writer object.
      *
-     * @throws \Magento\Core\Exception
      * @return \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
+     * @throws \Magento\Core\Exception
      */
     protected function _getWriter()
     {
@@ -181,8 +180,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Export data.
      *
-     * @throws \Magento\Core\Exception
      * @return string
+     * @throws \Magento\Core\Exception
      */
     public function export()
     {
@@ -227,8 +226,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      *
      * @static
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
-     * @throws \Exception
      * @return string
+     * @throws \Magento\Core\Exception
      */
     public static function getAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -263,8 +262,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Override standard entity getter.
      *
-     * @throw \Exception
      * @return string
+     * @throws \Magento\Core\Exception
      */
     public function getEntity()
     {
@@ -287,8 +286,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Override standard entity getter.
      *
-     * @throw \Exception
      * @return string
+     * @throws \Magento\Core\Exception
      */
     public function getFileFormat()
     {

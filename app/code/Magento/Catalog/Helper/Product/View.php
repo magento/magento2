@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -129,10 +129,11 @@ class View extends \Magento\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\App\Action\Action $controller
+     * @param null|\Magento\Object $params
      *
      * @return \Magento\Catalog\Helper\Product\View
      */
-    public function initProductLayout($product, $controller)
+    public function initProductLayout($product, $controller, $params = null)
     {
         $settings = $this->_catalogDesign->getDesignSettings($product);
 
@@ -142,9 +143,30 @@ class View extends \Magento\App\Helper\AbstractHelper
 
         $update = $this->_view->getLayout()->getUpdate();
         $update->addHandle('default');
+
+        if ($params && $params->getBeforeHandles()) {
+            foreach ($params->getBeforeHandles() as $handle) {
+                $this->_view->addPageLayoutHandles(
+                    array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId()),
+                    $handle
+                );
+            }
+        }
+
         $this->_view->addPageLayoutHandles(
             array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId())
         );
+
+        if ($params && $params->getAfterHandles()) {
+            foreach ($params->getAfterHandles() as $handle) {
+                $this->_view->addPageLayoutHandles(
+                    array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId()),
+                    $handle
+                );
+
+            }
+        }
+
         $this->_view->loadLayoutUpdates();
         // Apply custom layout update once layout is loaded
         $layoutUpdates = $settings->getLayoutUpdates();
@@ -229,7 +251,7 @@ class View extends \Magento\App\Helper\AbstractHelper
 
         $this->_catalogSession->setLastViewedProductId($product->getId());
 
-        $this->initProductLayout($product, $controller);
+        $this->initProductLayout($product, $controller, $params);
 
         if ($controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
             $this->_view->getLayout()->initMessages($this->messageGroups);

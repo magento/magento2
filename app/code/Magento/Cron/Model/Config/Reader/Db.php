@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Cron
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,21 +39,21 @@ class Db
     protected $_converter;
 
     /**
-     * @var \Magento\Core\Model\Config\Section\Reader\DefaultReader
+     * @var \Magento\App\Config\Scope\ReaderInterface
      */
-    protected $_defaultReader;
+    protected $_reader;
 
     /**
      * Initialize parameters
      *
-     * @param \Magento\Core\Model\Config\Section\Reader\DefaultReader $defaultReader
-     * @param \Magento\Cron\Model\Config\Converter\Db                 $converter
+     * @param \Magento\App\Config\Scope\ReaderInterface $defaultReader
+     * @param \Magento\Cron\Model\Config\Converter\Db $converter
      */
     public function __construct(
-        \Magento\Core\Model\Config\Section\Reader\DefaultReader $defaultReader,
+        \Magento\App\Config\Scope\ReaderInterface $defaultReader,
         \Magento\Cron\Model\Config\Converter\Db $converter
     ) {
-        $this->_defaultReader = $defaultReader;
+        $this->_reader = $defaultReader;
         $this->_converter = $converter;
     }
 
@@ -64,6 +64,6 @@ class Db
      */
     public function get()
     {
-        return $this->_converter->convert($this->_defaultReader->read());
+        return $this->_converter->convert($this->_reader->read());
     }
 }

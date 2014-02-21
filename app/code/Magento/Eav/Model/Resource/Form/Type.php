@@ -20,10 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Resource\Form;
 
+use Magento\Eav\Model\Form\Type as FormType;
+use Magento\Core\Model\AbstractModel;
 
 /**
  * Eav Form Type Resource Model
@@ -32,13 +35,12 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Form;
-
 class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -52,12 +54,12 @@ class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Load an object
      *
-     * @param \Magento\Eav\Model\Form\Type $object
+     * @param FormType|AbstractModel $object
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
-     * @return \Magento\Eav\Model\Resource\Form\Type
+     * @return $this
      */
-    public function load(\Magento\Core\Model\AbstractModel $object, $value, $field = null)
+    public function load(AbstractModel $object, $value, $field = null)
     {
         if (is_null($field) && !is_numeric($value)) {
             $field = 'code';
@@ -68,7 +70,7 @@ class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Retrieve form type entity types
      *
-     * @param \Magento\Eav\Model\Form\Type $object
+     * @param FormType $object
      * @return array
      */
     public function getEntityTypes($object)
@@ -91,10 +93,10 @@ class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @see \Magento\Core\Model\Resource\Db\AbstractDb#_afterSave($object)
      *
-     * @param \Magento\Eav\Model\Form\Type $object
-     * @return \Magento\Eav\Model\Resource\Form\Type
+     * @param FormType|AbstractModel $object
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         if ($object->hasEntityTypes()) {
             $new = $object->getEntityTypes();

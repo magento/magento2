@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,43 +33,68 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
+use Magento\Core\Model\Store\Group;
+use Magento\Core\Model\Website;
+
 class Websites
     extends \Magento\Backend\Block\Widget
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+    /**
+     * @return Website[]
+     */
     public function getWebsiteCollection()
     {
         return $this->_storeManager->getWebsites();
     }
 
-    public function getGroupCollection(\Magento\Core\Model\Website $website)
+    /**
+     * @param Website $website
+     * @return Group[]
+     */
+    public function getGroupCollection(Website $website)
     {
         return $website->getGroups();
     }
 
-    public function getStoreCollection(\Magento\Core\Model\Store\Group $group)
+    /**
+     * @param Group $group
+     * @return array
+     */
+    public function getStoreCollection(Group $group)
     {
         return $group->getStores();
     }
 
     /**
-     * ######################## TAB settings #################################
+     * Tab settings
+     *
+     * @return string
      */
     public function getTabLabel()
     {
         return __('Websites');
     }
 
+    /**
+     * @return string
+     */
     public function getTabTitle()
     {
         return __('Websites');
     }
 
+    /**
+     * @return bool
+     */
     public function canShowTab()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isHidden()
     {
         return false;

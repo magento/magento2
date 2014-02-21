@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_ImportExport
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -110,14 +110,18 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $translator = $this->getMock('Magento\Core\Model\Translate', array('isAllowed'), array(), '', false);
-        $translator->expects($this->any())
+        $translateInline = $this->getMock('\Magento\Translate\InlineInterface', array(), array(), '', false);
+        $translateInline->expects($this->any())
             ->method('isAllowed')
             ->will($this->returnValue(false));
-        $context = $this->getMock('Magento\App\Helper\Context', array('getTranslator'), array(), '', false);
-        $context->expects($this->any())->method('getTranslator')->will($this->returnValue($translator));
+        $inlineFactory = $this->getMock('\Magento\Translate\InlineFactory', array(), array(), '', false);
+        $inlineFactory->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($translateInline));
+        $context = $this->getMock('Magento\App\Helper\Context', array('getInlineFactory'), array(), '', false);
+        $context->expects($this->any())->method('getInlineFactory')->will($this->returnValue($inlineFactory));
         $data = array(
-            'translator' => $translator,
+            'inlineFactory' => $inlineFactory,
             'context' => $context,
             'locale' => $this->getMock('Magento\Core\Model\Locale', array(), array(), '', false),
             'dateModel' => $this->getMock('Magento\Core\Model\Date', array(), array(), '', false)

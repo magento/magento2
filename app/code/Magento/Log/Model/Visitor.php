@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Log
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,7 +50,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     protected $_skipRequestLogging = false;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $_ignoredUserAgents;
 
@@ -62,7 +62,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_coreConfig;
 
@@ -73,7 +73,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      */
     protected $_ignores;
 
-    /*
+    /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -121,14 +121,14 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Session\SessionManagerInterface $session
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\HTTP\Header $httpHeader
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param array $ignoredUserAgents
+     * @param string[] $ignoredUserAgents
      * @param array $ignores
      * @param array $data
      */
@@ -140,7 +140,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Session\SessionManagerInterface $session,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\HTTP\Header $httpHeader,
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,
@@ -169,6 +169,8 @@ class Visitor extends \Magento\Core\Model\AbstractModel
 
     /**
      * Object initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -194,7 +196,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize visitor information from server data
      *
-     * @return \Magento\Log\Model\Visitor
+     * @return $this
      */
     public function initServerData()
     {
@@ -240,6 +242,11 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         return $url;
     }
 
+    /**
+     * Return First Visit data in internal format.
+     *
+     * @return string
+     */
     public function getFirstVisitAt()
     {
         if (!$this->hasData('first_visit_at')) {
@@ -248,6 +255,11 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         return $this->getData('first_visit_at');
     }
 
+    /**
+     * Return Last Visit data in internal format.
+     *
+     * @return string
+     */
     public function getLastVisitAt()
     {
         if (!$this->hasData('last_visit_at')) {
@@ -341,6 +353,8 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Create binding of checkout quote
+     *
      * @param \Magento\Event\Observer $observer
      * @return $this
      */
@@ -357,6 +371,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Destroy binding of checkout quote
      * @param \Magento\Event\Observer $observer
      * @return $this
      */
@@ -371,6 +386,9 @@ class Visitor extends \Magento\Core\Model\AbstractModel
 
     /**
      * Methods for research (depends from customer online admin section)
+     *
+     * @param array $data
+     * @return $this
      */
     public function addIpData($data)
     {
@@ -380,6 +398,8 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Load customer data into $data
+     *
      * @param object $data
      * @return $this
      */
@@ -400,6 +420,8 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Load quote data into $data
+     *
      * @param object $data
      * @return $this
      */
@@ -414,6 +436,8 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Returns true if the module is required
+     *
      * @param \Magento\Event\Observer $observer
      * @return bool
      */

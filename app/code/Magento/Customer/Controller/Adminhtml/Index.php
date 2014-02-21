@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Customer\Controller\Adminhtml;
@@ -47,17 +47,52 @@ class Index extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
+     * @var \Magento\Customer\Model\CustomerFactory
+     */
+    protected $_customerFactory = null;
+
+    /**
+     * @var \Magento\Customer\Model\AddressFactory
+     */
+    protected $_addressFactory = null;
+
+    /**
+     * @var \Magento\Customer\Helper\Data
+     */
+    protected $_dataHelper = null;
+
+    /**
+     * Registry key where current customer DTO stored
+     * @todo switch to use ID instead and remove after refactoring of all occurrences
+     */
+    const REGISTRY_CURRENT_CUSTOMER = 'current_customer';
+
+    /**
+     * Registry key where current customer ID is stored
+     */
+    const REGISTRY_CURRENT_CUSTOMER_ID = 'current_customer_id';
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Customer\Model\AddressFactory $addressFactory
+     * @param \Magento\Customer\Helper\Data $helper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\App\Response\Http\FileFactory $fileFactory
+        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Customer\Model\AddressFactory $addressFactory,
+        \Magento\Customer\Helper\Data $helper
     ) {
         $this->_fileFactory = $fileFactory;
         $this->_coreRegistry = $coreRegistry;
+        $this->_customerFactory = $customerFactory;
+        $this->_addressFactory = $addressFactory;
+        $this->_dataHelper = $helper;
         parent::__construct($context);
     }
 
@@ -78,7 +113,7 @@ class Index extends \Magento\Backend\App\Action
             $customer->load($customerId);
         }
 
-        $this->_coreRegistry->register('current_customer', $customer);
+        $this->_coreRegistry->register(self::REGISTRY_CURRENT_CUSTOMER, $customer);
         return $this;
     }
 
@@ -135,7 +170,7 @@ class Index extends \Magento\Backend\App\Action
         $this->_setActiveMenu('Magento_Customer::customer_manage');
 
         /* @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->_coreRegistry->registry('current_customer');
+        $customer = $this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER);
 
         // set entered data if was error when we do save
         $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getCustomerData(true);
@@ -212,7 +247,7 @@ class Index extends \Magento\Backend\App\Action
     public function deleteAction()
     {
         $this->_initCustomer();
-        $customer = $this->_coreRegistry->registry('current_customer');
+        $customer = $this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER);
         if ($customer->getId()) {
             try {
                 $customer->delete();
@@ -236,39 +271,50 @@ class Index extends \Magento\Backend\App\Action
         if ($originalRequestData) {
             try {
                 // optional fields might be set in request for future processing by observers in other modules
-                $accountData = $this->_extractCustomerData();
+                $customerData = $this->_extractCustomerData();
                 $addressesData = $this->_extractCustomerAddressData();
-
                 $request = $this->getRequest();
+                $isExistingCustomer = (bool)$customerId;
 
-                $eventManager = $this->_eventManager;
-                $beforeSaveCallback = function ($customer) use ($request, $eventManager) {
-                    $eventManager->dispatch('adminhtml_customer_prepare_save', array(
-                        'customer'  => $customer,
-                        'request'   => $request
-                    ));
-                };
-                $afterSaveCallback = function ($customer) use ($request, $eventManager) {
-                    $eventManager->dispatch('adminhtml_customer_save_after', array(
-                        'customer' => $customer,
-                        'request'  => $request
-                    ));
-                };
-
-                /** @var \Magento\Customer\Service\Customer $customerService */
-                $customerService = $this->_objectManager->get('Magento\Customer\Service\Customer');
-                $customerService->setIsAdminStore(true);
-                $customerService->setBeforeSaveCallback($beforeSaveCallback);
-                $customerService->setAfterSaveCallback($afterSaveCallback);
-                if ($customerId) {
-                    /** @var \Magento\Customer\Model\Customer $customer */
-                    $customer = $customerService->update($customerId, $accountData, $addressesData);
+                /** @var \Magento\Customer\Model\Customer $customer */
+                $customer = null;
+                if ($isExistingCustomer) {
+                    // load the customer from the db
+                    $customer = $this->_loadCustomerById($customerId);
                 } else {
-                    /** @var \Magento\Customer\Model\Customer $customer */
-                    $customer = $customerService->create($accountData, $addressesData);
+                    // create a new customer
+                    $customer = $this->_customerFactory->create();
+                    // Need to set proper attribute id or future updates will cause data loss.
+                    $customer->setData('attribute_set_id', 1);
+                    $this->_preparePasswordForSave($customer, $customerData);
                 }
 
-                $this->_objectManager->get('Magento\Core\Model\Registry')->register('current_customer', $customer);
+                // Before save
+                foreach ($customerData as $property => $value) {
+                        $customer->setDataUsingMethod($property, $value);
+                }
+                $this->_prepareCustomerAddressesForSave($customer, $addressesData);
+                $this->_eventManager->dispatch('adminhtml_customer_prepare_save', array(
+                    'customer'  => $customer,
+                    'request'   => $request
+                ));
+
+                // Save customer
+                $customer->save();
+
+                // After save
+                $this->_eventManager->dispatch('adminhtml_customer_save_after', array(
+                    'customer' => $customer,
+                    'request'  => $request
+                ));
+                $this->_sendWelcomeEmail($customer, $customerData);
+                if ($isExistingCustomer) {
+                    $this->_changePassword($customer, $customerData);
+                }
+
+                // Done Saving customer, finish save action
+                $this->_objectManager->get('Magento\Core\Model\Registry')
+                    ->register(self::REGISTRY_CURRENT_CUSTOMER, $customer);
                 $this->messageManager->addSuccess(__('You saved the customer.'));
 
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
@@ -305,6 +351,163 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
+     * Load customer by its ID
+     *
+     * @param int|string $customerId
+     * @return \Magento\Customer\Model\Customer
+     * @throws \Magento\Core\Exception
+     */
+    private function _loadCustomerById($customerId)
+    {
+        $customer = $this->_customerFactory->create();
+        $customer->load($customerId);
+        if (!$customer->getId()) {
+            throw new \Magento\Core\Exception(__("The customer with the specified ID not found."));
+        }
+
+        return $customer;
+    }
+
+    /**
+     * Save customer addresses.
+     *
+     * @param \Magento\Customer\Model\Customer $customer
+     * @param array $addressesData
+     * @throws \Magento\Core\Exception
+     */
+    private function _prepareCustomerAddressesForSave($customer, array $addressesData)
+    {
+        $hasChanges = $customer->hasDataChanges();
+        $actualAddressesIds = array();
+        foreach ($addressesData as $addressData) {
+            $addressId = null;
+            if (array_key_exists('entity_id', $addressData)) {
+                $addressId = $addressData['entity_id'];
+                unset($addressData['entity_id']);
+            }
+
+            if (null !== $addressId) {
+                $address = $customer->getAddressItemById($addressId);
+                if (!$address || !$address->getId()) {
+                    throw new \Magento\Core\Exception(
+                        __('The address with the specified ID not found.')
+                    );
+                }
+            } else {
+                $address = $this->_addressFactory->create();
+                $address->setCustomerId($customer->getId());
+                // Add customer address into addresses collection
+                $customer->addAddress($address);
+            }
+            $address->addData($addressData);
+            $hasChanges = $hasChanges || $address->hasDataChanges();
+
+            // Set post_index for detect default billing and shipping addresses
+            $address->setPostIndex($addressId);
+
+            $actualAddressesIds[] = $address->getId();
+        }
+
+        /** @var \Magento\Customer\Model\Address $address */
+        foreach ($customer->getAddressesCollection() as $address) {
+            if (!in_array($address->getId(), $actualAddressesIds)) {
+                $address->setData('_deleted', true);
+                $hasChanges = true;
+            }
+        }
+        $customer->setDataChanges($hasChanges);
+    }
+
+    /**
+     * Send welcome email to customer
+     *
+     * @param \Magento\Customer\Model\Customer $customer
+     * @param array $customerData
+     */
+    private function _sendWelcomeEmail($customer, array $customerData)
+    {
+        $isSendEmail = !empty($customerData['sendemail']);
+
+        if ($customer->getWebsiteId()
+            && ($isSendEmail || $this->_isAutogeneratePassword($customerData))
+        ) {
+            $isNewCustomer = !(bool)$customer->getOrigData($customer->getIdFieldName());
+            $storeId = $customer->getSendemailStoreId();
+
+            if ($isNewCustomer) {
+                $newLinkToken = $this->_dataHelper->generateResetPasswordLinkToken();
+                $customer->changeResetPasswordLinkToken($newLinkToken);
+                $customer->sendNewAccountEmail('registered', '', $storeId);
+            } elseif (!$customer->getConfirmation()) {
+                // Confirm not confirmed customer
+                $customer->sendNewAccountEmail('confirmed', '', $storeId);
+            }
+        }
+    }
+
+    /**
+     * Check if password should be generated automatically
+     *
+     * @param array $customerData
+     * @return bool
+     */
+    private function _isAutogeneratePassword(array $customerData)
+    {
+        return !empty($customerData['autogenerate_password']);
+    }
+
+    /**
+     * Change customer password
+     *
+     * @param \Magento\Customer\Model\Customer $customer
+     * @param array $customerData
+     */
+    private function _changePassword($customer, array $customerData)
+    {
+        if (!empty($customerData['password']) || $this->_isAutogeneratePassword($customerData)) {
+            $newPassword = $this->_getCustomerPassword($customer, $customerData);
+            $customer->changePassword($newPassword);
+            $customer->sendPasswordReminderEmail();
+        }
+    }
+
+    /**
+     * Get customer password
+     *
+     * @param \Magento\Customer\Model\Customer $customer
+     * @param array $customerData
+     * @return string|null
+     */
+    private function _getCustomerPassword($customer, array $customerData)
+    {
+        $password = null;
+
+        if ($this->_isAutogeneratePassword($customerData)) {
+            $password = $customer->generatePassword();
+        } elseif (isset($customerData['password'])) {
+            $password = $customerData['password'];
+        }
+
+        return $password;
+    }
+
+    /**
+     * Set customer password
+     *
+     * @param \Magento\Customer\Model\Customer $customer
+     * @param array $customerData
+     */
+    private function _preparePasswordForSave($customer, array $customerData)
+    {
+        $password = $this->_getCustomerPassword($customer, $customerData);
+        if (!is_null($password)) {
+            // 'force_confirmed' should be set in admin area only
+            $customer->setForceConfirmed(true);
+            $customer->setPassword($password);
+        }
+    }
+
+    /**
      * Reset password handler
      */
     public function resetPasswordAction()
@@ -325,9 +528,11 @@ class Index extends \Magento\Backend\App\Action
             $newPasswordToken = $this->_objectManager->get('Magento\Customer\Helper\Data')
                 ->generateResetPasswordLinkToken();
             $customer->changeResetPasswordLinkToken($newPasswordToken);
-            $resetUrl = $this->_objectManager->create('Magento\Core\Model\Url')
-                ->getUrl('customer/account/createPassword',
-                    array('_query' => array('id' => $customer->getId(), 'token' => $newPasswordToken))
+            $resetUrl = $this->_objectManager->create('Magento\UrlInterface')
+                ->getUrl('customer/account/createPassword', array(
+                        '_query' => array('id' => $customer->getId(), 'token' => $newPasswordToken),
+                        '_store' => $customer->getStoreId()
+                    )
                 );
             $customer->setResetPasswordUrl($resetUrl);
             $customer->sendPasswordReminderEmail();
@@ -472,7 +677,7 @@ class Index extends \Magento\Backend\App\Action
         $fileName = 'customers.csv';
         $content = $this->_view->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Grid')->getCsvFile();
 
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -482,7 +687,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $fileName = 'customers.xml';
         $content = $this->_view->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Grid')->getExcelFile();
-        return $this->_fileFactory->create($fileName, $content);
+        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 
     /**
@@ -512,7 +717,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $this->_initCustomer();
         $subscriber = $this->_objectManager->create('Magento\Newsletter\Model\Subscriber')
-            ->loadByCustomer($this->_coreRegistry->registry('current_customer'));
+            ->loadByCustomer($this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER));
 
         $this->_coreRegistry->register('subscriber', $subscriber);
         $this->_view->loadLayout()->renderLayout();
@@ -521,7 +726,7 @@ class Index extends \Magento\Backend\App\Action
     public function wishlistAction()
     {
         $this->_initCustomer();
-        $customer = $this->_coreRegistry->registry('current_customer');
+        $customer = $this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER);
         $itemId = (int)$this->getRequest()->getParam('delete');
         if ($customer->getId() && $itemId) {
             try {
@@ -566,7 +771,7 @@ class Index extends \Magento\Backend\App\Action
                 ->setWebsite(
                     $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getWebsite($websiteId)
                 )
-                ->loadByCustomer($this->_coreRegistry->registry('current_customer'));
+                ->loadByCustomer($this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER));
             $item = $quote->getItemById($deleteItemId);
             if ($item && $item->getId()) {
                 $quote->removeItem($deleteItemId);
@@ -612,7 +817,7 @@ class Index extends \Magento\Backend\App\Action
         $this->_initCustomer();
         $this->_view->loadLayout();
         $this->_view->getLayout()->getBlock('admin.customer.reviews')
-            ->setCustomerId($this->_coreRegistry->registry('current_customer')->getId())
+            ->setCustomerId($this->_coreRegistry->registry(self::REGISTRY_CURRENT_CUSTOMER)->getId())
             ->setUseAjax(true);
         $this->_view->renderLayout();
     }
@@ -849,10 +1054,10 @@ class Index extends \Magento\Backend\App\Action
             throw new NotFoundException();
         }
 
-        /** @var \Magento\Filesystem $filesystem */
-        $filesystem = $this->_objectManager->get('Magento\Filesystem');
-        $directory = $filesystem->getDirectoryRead(\Magento\Filesystem:: MEDIA);
-        $fileName = 'customer/' . $file;
+        /** @var \Magento\App\Filesystem $filesystem */
+        $filesystem = $this->_objectManager->get('Magento\App\Filesystem');
+        $directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
+        $fileName = 'customer' . '/' . ltrim($file, '/');
         $path = $directory->getAbsolutePath($fileName);
         if (!$directory->isFile($fileName)
             && !$this->_objectManager->get('Magento\Core\Helper\File\Storage')
@@ -877,7 +1082,7 @@ class Index extends \Magento\Backend\App\Action
                     $contentType = 'application/octet-stream';
                     break;
             }
-            $stat = $directory->stat($fileName);
+            $stat = $directory->stat($path);
             $contentLength = $stat['size'];
             $contentModify = $stat['mtime'];
 
@@ -893,10 +1098,14 @@ class Index extends \Magento\Backend\App\Action
             echo $directory->readFile($fileName);
         } else {
             $name = pathinfo($path, PATHINFO_BASENAME);
-            $this->_fileFactory->create($name, array(
-                'type'  => 'filename',
-                'value' => $fileName
-            ))->sendResponse();
+            $this->_fileFactory->create(
+                $name,
+                array(
+                    'type'  => 'filename',
+                    'value' => $fileName
+                ),
+                \Magento\App\Filesystem::MEDIA_DIR
+            )->sendResponse();
         }
 
         exit();

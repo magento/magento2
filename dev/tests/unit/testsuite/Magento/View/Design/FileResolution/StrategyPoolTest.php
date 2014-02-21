@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\View\Design\FileResolution;
@@ -46,7 +46,7 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     protected $appState;
 
     /**
-     * @var \Magento\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
@@ -59,10 +59,10 @@ class StrategyPoolTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
         $this->appState = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $this->filesystem = $this->getMock('Magento\Filesystem', array('getPath'), array(), '', false);
+        $this->filesystem = $this->getMock('Magento\App\Filesystem', array('getPath'), array(), '', false);
         $pathMap = array(
-            array(\Magento\Filesystem::VAR_DIR, 'base_dir/var'),
-            array(\Magento\Filesystem::ROOT, 'base_dir')
+            array(\Magento\App\Filesystem::VAR_DIR, 'base_dir/var'),
+            array(\Magento\App\Filesystem::ROOT_DIR, 'base_dir')
         );
         $this->filesystem->expects($this->any())
             ->method('getPath')

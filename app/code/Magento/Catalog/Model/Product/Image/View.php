@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -114,7 +114,7 @@ class View extends \Magento\Object
      * @param \Magento\Catalog\Model\Product $product
      * @param string $location
      * @param string $module
-     * @return \Magento\Catalog\Model\Product\Image\View
+     * @return $this
      */
     public function init(\Magento\Catalog\Model\Product $product, $location, $module = null)
     {
@@ -208,7 +208,7 @@ class View extends \Magento\Object
      * Getter config view config var by suffix
      *
      * @param string $suffix
-     * @return string mixed
+     * @return string|false
      */
     protected function _getImageVar($suffix)
     {

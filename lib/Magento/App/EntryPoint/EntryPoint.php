@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App\EntryPoint;
@@ -28,7 +28,6 @@ namespace Magento\App\EntryPoint;
 use Magento\App\State,
     Magento\App\EntryPointInterface,
     Magento\ObjectManager;
-use Magento\Webapi\Exception;
 
 class EntryPoint implements EntryPointInterface
 {
@@ -70,16 +69,19 @@ class EntryPoint implements EntryPointInterface
      *
      * @param string $applicationName
      * @param array $arguments
-     * @return int
      */
     public function run($applicationName, array $arguments = array())
     {
         try {
+            \Magento\Profiler::start('magento');
             if (!$this->_locator) {
                 $locatorFactory = new \Magento\App\ObjectManagerFactory();
                 $this->_locator = $locatorFactory->create($this->_rootDir, $this->_parameters);
             }
-            return $this->_locator->create($applicationName, $arguments)->execute();
+            $application = $this->_locator->create($applicationName, $arguments);
+            $response = $application->launch();
+            \Magento\Profiler::stop('magento');
+            $response->sendResponse();
         } catch (\Exception $exception) {
             if (isset($this->_parameters[state::PARAM_MODE])
                 && $this->_parameters[State::PARAM_MODE] == State::MODE_DEVELOPER
@@ -98,7 +100,6 @@ class EntryPoint implements EntryPointInterface
                 }
                 print $message;
             }
-            return 1;
         }
     }
 }

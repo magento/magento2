@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,8 +33,16 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Widget;
 
-class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
+use Magento\Backend\Block\Widget\Grid;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Extended;
+use Magento\Data\Form\Element\AbstractElement;
+
+class Chooser extends Extended
 {
+    /**
+     * @var array
+     */
     protected $_selectedProducts = array();
 
     /**
@@ -59,7 +67,6 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
@@ -69,7 +76,6 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
@@ -81,11 +87,13 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_collectionFactory = $collectionFactory;
         $this->_resourceCategory = $resourceCategory;
         $this->_resourceProduct = $resourceProduct;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Block construction, prepare grid params
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -97,10 +105,10 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare chooser element HTML
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element Form Element
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @param AbstractElement $element Form Element
+     * @return AbstractElement
      */
-    public function prepareElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    public function prepareElementHtml(AbstractElement $element)
     {
         $uniqId = $this->mathRandom->getUniqueHash($element->getId());
         $sourceUrl = $this->getUrl('catalog/product_widget/chooser', array(
@@ -208,8 +216,8 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Filter checked/unchecked rows in grid
      *
-     * @param \Magento\Backend\Block\Widget\Grid\Column $column
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser
+     * @param Column $column
+     * @return $this
      */
     protected function _addColumnFilterToCollection($column)
     {
@@ -229,7 +237,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare products collection, defined collection filters (category, product type)
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return Extended
      */
     protected function _prepareCollection()
     {
@@ -262,7 +270,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare columns for products grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return Extended
      */
     protected function _prepareColumns()
     {
@@ -325,7 +333,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * Setter
      *
      * @param array $selectedProducts
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser
+     * @return $this
      */
     public function setSelectedProducts($selectedProducts)
     {

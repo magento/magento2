@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,7 +45,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * List of internal storages
      *
-     * @var array
+     * @var int[]
      */
     protected $_internalStorageList = array(
         \Magento\Core\Model\File\Storage::STORAGE_MEDIA_FILE_SYSTEM
@@ -71,7 +71,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     protected $_filesystemStorage;
 
     /**
-     * @var \Magento\Core\Model\ConfigInterface
+     * @var \Magento\App\ConfigInterface
      */
     protected $config;
 
@@ -80,14 +80,14 @@ class Storage extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\File\Storage $storage
      * @param \Magento\Core\Model\File\Storage\File $filesystemStorage
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\App\ConfigInterface $config
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Model\File\Storage $storage,
         \Magento\Core\Model\File\Storage\File $filesystemStorage,
-        \Magento\Core\Model\ConfigInterface $config
+        \Magento\App\ConfigInterface $config
     ) {
         $this->_filesystemStorage = $filesystemStorage;
         $this->_coreFileStorageDb = $coreFileStorageDb;

@@ -20,11 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Code
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Code\Generator\CodeGenerator;
+
+use \Zend\Code\Generator\MethodGenerator;
+use \Zend\Code\Generator\PropertyGenerator;
 
 class Zend extends \Zend\Code\Generator\ClassGenerator
     implements \Magento\Code\Generator\CodeGenerator\CodeGeneratorInterface
@@ -98,7 +101,7 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
      * Set class dock block
      *
      * @param array $docBlock
-     * @return \Magento\Code\Generator\CodeGenerator\Zend
+     * @return $this
      */
     public function setClassDocBlock(array $docBlock)
     {
@@ -112,12 +115,12 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
      * addMethods()
      *
      * @param array $methods
-     * @return \Magento\Code\Generator\CodeGenerator\Zend
+     * @return $this
      */
     public function addMethods(array $methods)
     {
         foreach ($methods as $methodOptions) {
-            $methodObject = new \Zend\Code\Generator\MethodGenerator();
+            $methodObject = new MethodGenerator();
             $this->_setDataToObject($methodObject, $methodOptions, $this->_methodOptions);
 
             if (isset($methodOptions['parameters']) && is_array($methodOptions['parameters'])
@@ -148,11 +151,11 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
     /**
      * Add method from MethodGenerator
      *
-     * @param  \Zend\Code\Generator\MethodGenerator $method
-     * @return \Magento\Code\Generator\CodeGenerator\Zend
+     * @param  MethodGenerator $method
+     * @return $this
      * @throws \InvalidArgumentException
      */
-    public function addMethodFromGenerator(\Zend\Code\Generator\MethodGenerator $method)
+    public function addMethodFromGenerator(MethodGenerator $method)
     {
         if (!is_string($method->getName())) {
             throw new \InvalidArgumentException(
@@ -167,13 +170,13 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
      * addProperties()
      *
      * @param array $properties
-     * @return \Magento\Code\Generator\CodeGenerator\Zend
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function addProperties(array $properties)
     {
         foreach ($properties as $propertyOptions) {
-            $propertyObject = new \Zend\Code\Generator\PropertyGenerator();
+            $propertyObject = new PropertyGenerator();
             $this->_setDataToObject($propertyObject, $propertyOptions, $this->_propertyOptions);
 
             if (isset($propertyOptions['docblock'])) {
@@ -194,11 +197,11 @@ class Zend extends \Zend\Code\Generator\ClassGenerator
     /**
      * Add property from PropertyGenerator
      *
-     * @param  \Zend\Code\Generator\PropertyGenerator $property
+     * @param  PropertyGenerator $property
+     * @return $this
      * @throws \InvalidArgumentException
-     * @return \Magento\Code\Generator\CodeGenerator\Zend
      */
-    public function addPropertyFromGenerator(\Zend\Code\Generator\PropertyGenerator $property)
+    public function addPropertyFromGenerator(PropertyGenerator $property)
     {
         if (!is_string($property->getName())) {
             throw new \InvalidArgumentException(

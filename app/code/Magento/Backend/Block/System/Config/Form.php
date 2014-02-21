@@ -20,11 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Backend\Block\System\Config;
 
 /**
@@ -35,7 +33,6 @@ namespace Magento\Backend\Block\System\Config;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-
     const SCOPE_DEFAULT = 'default';
     const SCOPE_WEBSITES = 'websites';
     const SCOPE_STORES   = 'stores';
@@ -90,7 +87,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configFactory;
 
     /**
-     * \Magento\Data\FormFactory
+     * Magento\Data\FormFactory
      *
      * @var \Magento\Data\FormFactory
      */
@@ -120,7 +117,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Form field factory
      *
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -132,7 +129,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Backend\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory
      * @param \Magento\Backend\Block\System\Config\Form\Field\Factory $fieldFactory
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param array $data
      */
     public function __construct(
@@ -143,7 +140,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Backend\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
         \Magento\Backend\Block\System\Config\Form\Field\Factory $fieldFactory,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
@@ -163,7 +160,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize objects required to render config form
      *
-     * @return \Magento\Backend\Block\System\Config\Form
+     * @return $this
      */
     protected function _initObjects()
     {
@@ -184,7 +181,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize form
      *
-     * @return \Magento\Backend\Block\System\Config\Form
+     * @return $this
      */
     public function initForm()
     {
@@ -210,6 +207,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Config\Structure\Element\Group $group
      * @param \Magento\Backend\Model\Config\Structure\Element\Section $section
      * @param \Magento\Data\Form\AbstractForm $form
+     * @return void
      */
     protected function _initGroup(
         \Magento\Backend\Model\Config\Structure\Element\Group $group,
@@ -276,7 +274,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Config\Structure\Element\Section $section
      * @param string $fieldPrefix
      * @param string $labelPrefix
-     * @return \Magento\Backend\Block\System\Config\Form
+     * @return $this
      */
     public function initFields(
         \Magento\Data\Form\Element\Fieldset $fieldset,
@@ -317,9 +315,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Field $field
      * @param \Magento\Data\Form\Element\Fieldset $fieldset
-     * @param $path
+     * @param string $path
      * @param string $fieldPrefix
      * @param string $labelPrefix
+     * @return void
      */
     protected function _initElement(
         \Magento\Backend\Model\Config\Structure\Element\Field $field,
@@ -403,6 +402,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param array $dependencies
      * @param string $elementId
      * @param string $elementName
+     * @return void
      */
     protected function _populateDependenciesBlock(array $dependencies, $elementId, $elementName)
     {
@@ -457,9 +457,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     *
-     *
-     * @return \Magento\Backend\Block\Widget\Form|\Magento\View\Element\AbstractBlock|void
+     * @return \Magento\Backend\Block\Widget\Form|\Magento\View\Element\AbstractBlock
      */
     protected function _beforeToHtml()
     {
@@ -670,7 +668,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Get css class for "requires" functionality
      *
      * @param \Magento\Backend\Model\Config\Structure\Element\Field $field
-     * @param $fieldPrefix
+     * @param string $fieldPrefix
      * @return string
      */
     protected function _getRequiresCssClass(\Magento\Backend\Model\Config\Structure\Element\Field $field, $fieldPrefix)

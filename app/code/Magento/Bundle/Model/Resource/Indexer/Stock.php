@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Bundle
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -161,7 +161,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
             ->group(array('e.entity_id', 'cw.website_id', 'cis.stock_id'));
 
         // add limitation of status
-        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
 
         if ($this->_isManageStock()) {

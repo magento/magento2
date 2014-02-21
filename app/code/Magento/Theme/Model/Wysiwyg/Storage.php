@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Theme
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -86,18 +86,18 @@ class Storage
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Theme\Helper\Storage $helper
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Image\AdapterFactory $imageFactory
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Theme\Helper\Storage $helper,
         \Magento\ObjectManager $objectManager,
         \Magento\Image\AdapterFactory $imageFactory
     ) {
-        $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
         $this->_helper = $helper;
         $this->_objectManager = $objectManager;
         $this->_imageFactory = $imageFactory;
@@ -244,7 +244,7 @@ class Storage
         if (!$this->mediaWriteDirectory->isExist($currentPath)) {
             throw new \Magento\Core\Exception(__('We cannot find a directory with this name.'));
         }
-        $paths = $this->mediaWriteDirectory->search('#.*#', $currentPath);
+        $paths = $this->mediaWriteDirectory->search('.*', $currentPath);
         $directories = array();
         foreach ($paths as $path) {
             if ($this->mediaWriteDirectory->isDirectory($path)) {
@@ -261,7 +261,7 @@ class Storage
      */
     public function getFilesCollection()
     {
-        $paths = $this->mediaWriteDirectory->search('#.*#', $this->_helper->getCurrentPath());
+        $paths = $this->mediaWriteDirectory->search('.*', $this->_helper->getCurrentPath());
         $files = array();
         $requestParams = $this->_helper->getRequestParams();
         $storageType = $this->_helper->getStorageType();

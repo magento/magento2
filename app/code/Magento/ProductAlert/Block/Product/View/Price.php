@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_ProductAlert
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,18 +34,18 @@ class Price extends \Magento\ProductAlert\Block\Product\View
     /**
      * Prepare price info
      *
-     * @return void
+     * @param string $template
+     * @return \Magento\View\Element\Template
      */
-    protected function _prepareLayout()
+    public function setTemplate($template)
     {
-        parent::_prepareLayout();
         if (!$this->_helper->isPriceAlertAllowed()
             || !$this->_product || false === $this->_product->getCanShowPrice()
         ) {
-            $this->setTemplate('');
-            return;
+            $template = '';
+        } else {
+            $this->setSignupUrl($this->_helper->getSaveUrl('price'));
         }
-        $this->setSignupUrl($this->_helper->getSaveUrl('price'));
+        return parent::setTemplate($template);
     }
-
 }

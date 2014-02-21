@@ -20,12 +20,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Event\Invoker;
 
 use Zend\Stdlib\Exception\LogicException;
+use \Magento\Event\Observer;
 
 class InvokerDefault implements \Magento\Event\InvokerInterface
 {
@@ -57,9 +58,10 @@ class InvokerDefault implements \Magento\Event\InvokerInterface
      * Dispatch event
      *
      * @param array $configuration
-     * @param \Magento\Event\Observer $observer
+     * @param Observer $observer
+     * @return void
      */
-    public function dispatch(array $configuration, \Magento\Event\Observer $observer)
+    public function dispatch(array $configuration, Observer $observer)
     {
         /** Check whether event observer is disabled */
         if (isset($configuration['disabled']) && true === $configuration['disabled']) {
@@ -79,8 +81,8 @@ class InvokerDefault implements \Magento\Event\InvokerInterface
      *
      * @param object $object
      * @param string $method
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Event\InvokerInterface
+     * @param Observer $observer
+     * @return $this
      * @throws \LogicException
      */
     protected function _callObserverMethod($object, $method, $observer)

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,7 +35,7 @@ $pattern = array(
     'sku' => 'product_dynamic_%s',
     'price' => 10,
     'visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
-    'status' => \Magento\Catalog\Model\Product\Status::STATUS_ENABLED,
+    'status' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
     'tax_class_id' => 0,
 
     // actually it saves without stock data, but by default system won't show on the frontend products out of stock

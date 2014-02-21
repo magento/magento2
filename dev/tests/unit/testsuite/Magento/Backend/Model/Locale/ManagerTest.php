@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,7 +35,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translator;
 
@@ -62,7 +62,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getUser')
             ->will($this->returnValue($userMock));
 
-        $this->_translator = $this->getMock('Magento\Core\Model\Translate',
+        $this->_translator = $this->getMock('Magento\TranslateInterface',
             array(), array(), '', false);
 
         $this->_translator->expects($this->any())

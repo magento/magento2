@@ -20,11 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Review
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Review\Block\Customer;
+
+use Magento\Review\Model\Resource\Review\Product\Collection;
 
 /**
  * Recent Customer Reviews Block
@@ -32,6 +34,8 @@ namespace Magento\Review\Block\Customer;
 class Recent extends \Magento\View\Element\Template
 {
     /**
+     * Customer list template name
+     *
      * @var string
      */
     protected $_template = 'customer/list.phtml';
@@ -39,11 +43,19 @@ class Recent extends \Magento\View\Element\Template
     /**
      * Product reviews collection
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\Collection
+     * @var Collection
      */
     protected $_collection;
 
     /**
+     * Review resource model
+     *
+     * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
+     */
+    protected $_collectionFactory;
+
+    /**
+     * Customer session model
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -60,9 +72,10 @@ class Recent extends \Magento\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
-        $this->_collection = $collectionFactory->create();
+        $this->_collectionFactory = $collectionFactory;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -85,8 +98,13 @@ class Recent extends \Magento\View\Element\Template
         ));
     }
 
+    /**
+     * Initialize review collection
+     * @return $this
+     */
     protected function _initCollection()
     {
+        $this->_collection = $this->_collectionFactory->create();
         $this->_collection
             ->addStoreFilter($this->_storeManager->getStore()->getId())
             ->addCustomerFilter($this->_customerSession->getCustomerId())
@@ -97,11 +115,20 @@ class Recent extends \Magento\View\Element\Template
         return $this;
     }
 
+    /**
+     * Get number of reviews
+     *
+     * @return int
+     */
     public function count()
     {
         return $this->_getCollection()->getSize();
     }
 
+    /**
+     * Initialize and return collection of reviews
+     * @return Collection
+     */
     protected function _getCollection()
     {
         if (!$this->_collection) {
@@ -110,31 +137,63 @@ class Recent extends \Magento\View\Element\Template
         return $this->_collection;
     }
 
+    /**
+     * Return collection of reviews
+     *
+     * @return Collection
+     */
     public function getCollection()
     {
         return $this->_getCollection();
     }
 
+    /**
+     * Return review customer view url
+     *
+     * @return string
+     */
     public function getReviewLink()
     {
         return $this->getUrl('review/customer/view/');
     }
 
+    /**
+     * Return catalog product view url
+     *
+     * @return string
+     */
     public function getProductLink()
     {
         return $this->getUrl('catalog/product/view/');
     }
 
+    /**
+     * Format review date
+     *
+     * @param string $date
+     * @return string
+     */
     public function dateFormat($date)
     {
         return $this->formatDate($date, \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
     }
 
+    /**
+     * Return review customer url
+     *
+     * @return string
+     */
     public function getAllReviewsUrl()
     {
         return $this->getUrl('review/customer');
     }
 
+    /**
+     * Return review customer view url for a specific customer/review
+     *
+     * @param int $id
+     * @return string
+     */
     public function getReviewUrl($id)
     {
         return $this->getUrl('review/customer/view', array('id' => $id));

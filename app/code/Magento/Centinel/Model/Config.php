@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Centinel
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -53,23 +53,27 @@ class Config
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * Core config interface
+     *
+     * @var \Magento\App\ConfigInterface
      */
     protected $_coreConfig;
 
     /**
+     * Encryptor interface
+     *
      * @var \Magento\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\Encryption\EncryptorInterface $encryptor
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -81,7 +85,7 @@ class Config
      * Set store to congif model
      *
      * @param int|\Magento\Core\Model\Store $store
-     * @return \Magento\Centinel\Model\Config
+     * @return $this
      */
     public function setStore($store)
     {

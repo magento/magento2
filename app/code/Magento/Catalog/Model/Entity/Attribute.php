@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Entity;
+
+use \Magento\Catalog\Model\Attribute\LockValidatorInterface;
 
 /**
  * Product attribute extension with event dispatching
@@ -53,8 +56,6 @@
  * @method \Magento\Catalog\Model\Entity\Attribute setUsedInProductListing(int $value)
  * @method int getUsedForSortBy()
  * @method \Magento\Catalog\Model\Entity\Attribute setUsedForSortBy(int $value)
- * @method int getIsConfigurable()
- * @method \Magento\Catalog\Model\Entity\Attribute setIsConfigurable(int $value)
  * @method string getApplyTo()
  * @method \Magento\Catalog\Model\Entity\Attribute setApplyTo(string $value)
  * @method int getIsVisibleInAdvancedSearch()
@@ -70,17 +71,31 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Entity;
 
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
+    /**
+     * Event Prefix
+     *
+     * @var string
+     */
     protected $_eventPrefix = 'catalog_entity_attribute';
+
+    /**
+     * Event Object
+     *
+     * @var string
+     */
     protected $_eventObject = 'attribute';
+
     const MODULE_NAME = 'Magento_Catalog';
 
     /**
-     * Class constructor
-     *
+     * @var LockValidatorInterface
+     */
+    protected $attrLockValidator;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Helper\Data $coreData
@@ -91,6 +106,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
+     * @param LockValidatorInterface $lockValidator
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -106,10 +122,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
+        LockValidatorInterface $lockValidator,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
+        $this->attrLockValidator = $lockValidator;
         parent::__construct(
             $context,
             $registry,
@@ -135,9 +153,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      */
     protected function _beforeSave()
     {
-        if ($this->_getResource()->isUsedBySuperProducts($this)) {
-            throw new \Magento\Eav\Exception(__('This attribute is used in configurable products'));
+        try {
+            $this->attrLockValidator->validate($this);
+        } catch (\Magento\Core\Exception $exception) {
+            throw new \Magento\Eav\Exception($exception->getMessage());
         }
+
         $this->setData('modulePrefix', self::MODULE_NAME);
         return parent::_beforeSave();
     }

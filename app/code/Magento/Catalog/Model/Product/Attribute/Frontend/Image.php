@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -65,7 +65,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
         $image = $product->getData($this->getAttribute()->getAttributeCode());
         if ($image) {
             $url = $this->_storeManager->getStore($product->getStore())
-                ->getBaseUrl('media') . 'catalog/product/' . $image;
+                ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . $image;
         } else {
             $url = false;
         }

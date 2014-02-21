@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,6 +33,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 class Inventory extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/tab/inventory.phtml';
 
     /**
@@ -82,6 +85,9 @@ class Inventory extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return array
+     */
     public function getBackordersOption()
     {
         if ($this->_catalogData->isModuleEnabled('Magento_CatalogInventory')) {
@@ -125,11 +131,6 @@ class Inventory extends \Magento\Backend\Block\Widget
         return $this->getProduct()->getStockItem();
     }
 
-    public function isConfigurable()
-    {
-        return $this->getProduct()->isConfigurable();
-    }
-
     public function getFieldValue($field)
     {
         if ($this->getStockItem()) {
@@ -139,6 +140,10 @@ class Inventory extends \Magento\Backend\Block\Widget
         return $this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field);
     }
 
+    /**
+     * @param string $field
+     * @return string|null
+     */
     public function getConfigFieldValue($field)
     {
         if ($this->getStockItem()) {
@@ -150,6 +155,10 @@ class Inventory extends \Magento\Backend\Block\Widget
         return $this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field);
     }
 
+    /**
+     * @param string $field
+     * @return string|null
+     */
     public function getDefaultConfigValue($field)
     {
         return $this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field);
@@ -158,13 +167,16 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * Is readonly stock
      *
-     * @return boolean
+     * @return bool
      */
     public function isReadonly()
     {
         return $this->getProduct()->getInventoryReadonly();
     }
 
+    /**
+     * @return bool
+     */
     public function isNew()
     {
         if ($this->getProduct()->getId()) {
@@ -173,6 +185,9 @@ class Inventory extends \Magento\Backend\Block\Widget
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getFieldSuffix()
     {
         return 'product';
@@ -191,7 +206,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * Check if product type is virtual
      *
-     * @return boolean
+     * @return bool
      */
     public function isVirtual()
     {

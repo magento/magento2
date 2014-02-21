@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect\Model\Extension;
 
 /**
  * Extension packages files collection
@@ -31,7 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect\Model\Extension;
 
 class Collection extends \Magento\Data\Collection\Filesystem
 {
@@ -41,11 +41,19 @@ class Collection extends \Magento\Data\Collection\Filesystem
      * @var string
      */
     protected $_allowedDirsMask     = '/^[a-z0-9\.\-]+$/i';
+
+    /**
+     * @var string
+     */
     protected $_allowedFilesMask    = '/^[a-z0-9\.\-\_]+\.(xml|ser)$/i';
+
+    /**
+     * @var string
+     */
     protected $_disallowedFilesMask = '/^package\.xml$/i';
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
@@ -58,13 +66,13 @@ class Collection extends \Magento\Data\Collection\Filesystem
      * Set base dir
      *
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Filesystem $filesystem)
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\App\Filesystem $filesystem)
     {
         parent::__construct($entityFactory);
         $this->filesystem = $filesystem;
-        $this->connectDirectory = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+        $this->connectDirectory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $this->connectDirectory->create('connect');
         $this->addTargetDir($this->connectDirectory->getAbsolutePath('connect'));
     }

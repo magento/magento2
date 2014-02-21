@@ -19,7 +19,7 @@
  *
  * @category    Mage
  * @package     Magento_Adminhtml
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 if (typeof Mage == 'undefined') {
@@ -58,6 +58,7 @@ if (typeof Mage.GoogleShopping == 'undefined') {
 
         startAction: function (form) {
             jQuery.ajax({
+                url: form.action,
                 'type': 'post',
                 'data': form.serialize(true),
                 'success': Mage.GoogleShopping.onSuccess.bind(Mage.GoogleShopping, this),

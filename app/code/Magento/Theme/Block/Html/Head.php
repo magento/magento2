@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -107,7 +107,7 @@ class Head extends \Magento\View\Element\Template
      *
      * @param string $title
      * @param string $href
-     * @return \Magento\Theme\Block\Html\Head
+     * @return $this
      */
     public function addRss($title, $href)
     {
@@ -123,10 +123,10 @@ class Head extends \Magento\View\Element\Template
     }
 
     /**
+     * Render HTML for the added head items
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
-     * Render HTML for the added head items
      *
      * @return string
      */
@@ -208,6 +208,7 @@ class Head extends \Magento\View\Element\Template
                 $result .= sprintf($template, $asset->getUrl());
             }
         } catch (\Magento\Exception $e) {
+            $this->_logger->logException($e);
             $result .= sprintf($template, $this->_getNotFoundUrl());
         }
         return $result;
@@ -290,7 +291,7 @@ class Head extends \Magento\View\Element\Template
     /**
      * Same as getTitle(), but return only first item from chunk for backend pages
      *
-     * @return mixed|string
+     * @return mixed
      */
     public function getShortTitle()
     {
@@ -386,7 +387,8 @@ class Head extends \Magento\View\Element\Template
         $folderName = \Magento\Backend\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
         $storeConfig = $this->_storeConfig->getConfig('design/head/shortcut_icon');
         $path = $folderName . '/' . $storeConfig;
-        $faviconFile = $this->_storeManager->getStore()->getBaseUrl('media') . $path;
+        $faviconFile = $this->_storeManager->getStore()
+            ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . $path;
 
         if (!is_null($storeConfig) && $this->_isFile($path)) {
             $url = $faviconFile;
@@ -404,10 +406,10 @@ class Head extends \Magento\View\Element\Template
      */
     protected function _isFile($filename)
     {
-        if ($this->_fileStorageDatabase->checkDbUsage() && !$this->mediaDirectory->isFile($filename)) {
+        if ($this->_fileStorageDatabase->checkDbUsage() && !$this->getMediaDirectory()->isFile($filename)) {
             $this->_fileStorageDatabase->saveFileToFilesystem($filename);
         }
-        return $this->mediaDirectory->isFile($filename);
+        return $this->getMediaDirectory()->isFile($filename);
     }
 
     /**

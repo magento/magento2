@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -26,6 +26,7 @@ namespace Magento\Webapi\Model\Plugin;
 
 use Magento\Authz\Model\UserIdentifier;
 use Magento\Integration\Model\Integration;
+use Magento\Webapi\Model\IntegrationConfig;
 
 /**
  * Plugin for Magento\Core\Model\Resource\Setup model to manage resource permissions of
@@ -36,7 +37,7 @@ class Setup
     /**
      * API Integration config
      *
-     * @var Config
+     * @var IntegrationConfig
      */
     protected $_integrationConfig;
 
@@ -65,13 +66,13 @@ class Setup
     /**
      * Construct Setup plugin instance
      *
-     * @param \Magento\Webapi\Model\IntegrationConfig $integrationConfig
+     * @param IntegrationConfig $integrationConfig
      * @param \Magento\Authz\Service\AuthorizationV1 $authzService
      * @param \Magento\Integration\Service\IntegrationV1Interface $integrationService
      * @param \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
      */
     public function __construct(
-        \Magento\Webapi\Model\IntegrationConfig $integrationConfig,
+        IntegrationConfig $integrationConfig,
         \Magento\Authz\Service\AuthorizationV1 $authzService,
         \Magento\Integration\Service\IntegrationV1Interface $integrationService,
         \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
@@ -85,8 +86,8 @@ class Setup
     /**
      * Process integration resource permissions after the integration is created
      *
-     * @param array $integrationNames Name of integrations passed as array from the invocation chain
-     * @return array
+     * @param string[] $integrationNames Name of integrations passed as array from the invocation chain
+     * @return string[]
      */
     public function afterInitIntegrationProcessing($integrationNames)
     {

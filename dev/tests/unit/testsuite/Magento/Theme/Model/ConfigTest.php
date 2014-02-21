@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Theme
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -58,7 +58,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_layoutCacheMock;
 
     /**
-     * @var \Magento\Core\Model\Config\Storage\WriterInterface
+     * @var \Magento\App\Config\Storage\WriterInterface
      */
     protected $_storeConfigWriter;
 
@@ -86,7 +86,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_layoutCacheMock = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
 
         $this->_storeConfigWriter = $this->getMock(
-            'Magento\Core\Model\Config\Storage\WriterInterface', array('save', 'delete')
+            'Magento\App\Config\Storage\WriterInterface', array('save', 'delete')
         );
 
         $this->_model = new \Magento\Theme\Model\Config(
@@ -128,7 +128,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_configData->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->with('scope', \Magento\Core\Model\Config::SCOPE_STORES)
+            ->with('scope', \Magento\Core\Model\ScopeInterface::SCOPE_STORES)
             ->will($this->returnValue($this->_configData));
 
         $this->_configData->expects($this->at(2))
@@ -171,7 +171,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_configData->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->with('scope', \Magento\Core\Model\Config::SCOPE_STORES)
+            ->with('scope', \Magento\Core\Model\ScopeInterface::SCOPE_STORES)
             ->will($this->returnValue($this->_configData));
 
         $this->_configData->expects($this->at(2))

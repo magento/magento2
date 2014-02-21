@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Db\Collection;
 
 /**
  * Abstract Core Resource Collection
@@ -32,8 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Db\Collection;
-
 abstract class AbstractCollection extends \Magento\Data\Collection\Db
 {
     /**
@@ -125,7 +123,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -147,10 +145,10 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Initialization here
      *
+     * @return void
      */
     protected function _construct()
     {
-
     }
 
     /**
@@ -171,7 +169,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * Set main collection table
      *
      * @param string $table
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     public function setMainTable($table)
     {
@@ -191,7 +189,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Init collection select
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -216,7 +214,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Init fields for select
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelectFields()
     {
@@ -288,7 +286,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Initialize initial fields to select like id field
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initInitialFieldsToSelect()
     {
@@ -304,7 +302,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      *
      * @param string|array $field
      * @param string|null $alias
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     public function addFieldToSelect($field, $alias = null)
     {
@@ -350,7 +348,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * @param string $alias
      * @param string $expression
      * @param array|string $fields
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     public function addExpressionFieldToSelect($alias, $expression, $fields)
     {
@@ -373,8 +371,8 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * Removes field from select
      *
      * @param string|null $field
-     * @param boolean $isAlias Alias identifier
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @param bool $isAlias Alias identifier
+     * @return $this
      */
     public function removeFieldFromSelect($field, $isAlias = false)
     {
@@ -398,7 +396,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Removes all fields from select
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     public function removeAllFieldsFromSelect()
     {
@@ -412,7 +410,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      *
      * @param string $model
      * @param string $resourceModel
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _init($model, $resourceModel)
     {
@@ -425,7 +423,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * Set model name for collection items
      *
      * @param string $model
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     public function setModel($model)
     {
@@ -440,7 +438,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * Get model instance
      *
      * @param array $args
-     * @return \Magento\Object
+     * @return string
      */
     public function getModelName($args = array())
     {
@@ -451,6 +449,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * Set resource model name for collection items
      *
      * @param string $model
+     * @return void
      */
     public function setResourceModel($model)
     {
@@ -514,7 +513,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      * @param string $table
      * @param string $cond
      * @param string $cols
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     public function join($table, $cond, $cols = '*')
     {
@@ -542,7 +541,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Redeclare before load method for adding event
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _beforeLoad()
     {
@@ -559,8 +558,8 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Set reset items data changed flag
      *
-     * @param boolean $flag
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @param bool $flag
+     * @return $this
      */
     public function setResetItemsDataChanged($flag)
     {
@@ -571,7 +570,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Set flag data has changed to all collection items
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     public function resetItemsDataChanged()
     {
@@ -585,7 +584,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Redeclare after load method for specifying collection items original data
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -608,7 +607,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
     /**
      * Save all the entities in the collection
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     public function save()
     {

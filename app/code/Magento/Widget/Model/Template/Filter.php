@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -51,9 +51,9 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\View\LayoutFactory $layoutFactory
+     * @param \Magento\App\State $appState
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
-     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Stdlib\String $string,
@@ -88,7 +88,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
     /**
      * Generate widget
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function widgetDirective($construction)

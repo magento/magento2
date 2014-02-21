@@ -23,28 +23,13 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  static_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\TestFramework\Dependency;
 
 class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
 {
-    /**
-     * Cases to search dependencies
-     *
-     * @var array
-     */
-    protected $_cases = array(
-        '_caseAttributeModule',
-        '_caseElementBlock',
-        '_caseElementAction',
-        '_caseLayoutHandle',
-        '_caseLayoutHandleParent',
-        '_caseLayoutHandleUpdate',
-        '_caseLayoutReference',
-    );
-
     /**
      * Default modules list.
      *
@@ -101,22 +86,6 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
     protected $_mapLayoutHandles = array();
 
     /**
-     * List of exceptions
-     *
-     * Format: array(
-     *  '{Exception_Type}' => '{Source}'
-     * )
-     *
-     * @var array
-     */
-    protected $_exceptions = array();
-
-    /**
-     * Display exceptions
-     */
-    const EXCEPTION_ALLOWED = false;
-
-    /**
      * Unknown layout handle
      */
     const EXCEPTION_TYPE_UNKNOWN_HANDLE = 'UNKNOWN_HANDLE';
@@ -133,22 +102,16 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
 
     /**
      * Constructor
+     *
+     * @param array $mapRouters
+     * @param array $mapLayoutBlocks
+     * @param array $mapLayoutHandles
      */
-    public function __construct()
+    public function __construct(array $mapRouters, array $mapLayoutBlocks, array $mapLayoutHandles)
     {
-        $args = func_get_args();
-        if (count($args)) {
-            if (isset($args[0]['mapRouters'])) {
-                $this->_mapRouters = $args[0]['mapRouters'];
-            }
-            if (isset($args[0]['mapLayoutBlocks'])) {
-                $this->_mapLayoutBlocks = $args[0]['mapLayoutBlocks'];
-            }
-            if (isset($args[0]['mapLayoutHandles'])) {
-                $this->_mapLayoutHandles = $args[0]['mapLayoutHandles'];
-            }
-        }
-
+        $this->_mapRouters = $mapRouters;
+        $this->_mapLayoutBlocks = $mapLayoutBlocks;
+        $this->_mapLayoutHandles = $mapLayoutHandles;
         $this->_namespaces = implode('|', \Magento\TestFramework\Utility\Files::init()->getNamespaces());
     }
 
@@ -167,43 +130,18 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
             return array();
         }
 
-        $this->_exceptions = array();
+        $attributes = $this->_caseAttributeModule($currentModule, $contents);
+        $blocks = $this->_caseElementBlock($currentModule, $contents);
+        $actions = $this->_caseElementAction($currentModule, $contents);
+        $handle = $this->_caseLayoutHandle($currentModule, $file, $contents);
+        $handleParents = $this->_caseLayoutHandleParent($currentModule, $file, $contents);
+        $handleUpdates = $this->_caseLayoutHandleUpdate($currentModule, $file, $contents);
+        $references = $this->_caseLayoutReference($currentModule, $file, $contents);
 
-        $dependencies = array();
-        foreach ($this->_cases as $case) {
-            if (method_exists($this, $case)) {
-                $result = $this->$case($currentModule, $fileType, $file, $contents);
-                if (count($result)) {
-                    $dependencies = array_merge($dependencies, $result);
-                }
-            }
-        }
-        return array_merge($dependencies, $this->_applyExceptions());
-    }
-
-    /**
-     * Apply exceptions
-     *
-     * @return array
-     */
-    protected function _applyExceptions()
-    {
-        if (!self::EXCEPTION_ALLOWED) {
-            return array();
-        }
-
-        $result = array();
-        foreach ($this->_exceptions as $type => $source) {
-            if (is_array($source)) {
-                $source = array_keys($source);
-            }
-            $result[] = array(
-                'exception' => $type,
-                'module' => '',
-                'source' => $source,
-            );
-        }
-        return $result;
+        $dependencies = array_merge(
+            $attributes, $blocks, $actions, $handle, $handleParents, $handleUpdates, $references
+        );
+        return $dependencies;
     }
 
     /**
@@ -212,19 +150,14 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      * Ex.: <element module="{module}">
      *
      * @param $currentModule
-     * @param $fileType
-     * @param $file
      * @param $contents
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _caseAttributeModule($currentModule, $fileType, $file, &$contents)
+    protected function _caseAttributeModule($currentModule, &$contents)
     {
         $patterns = array(
-            \Magento\Test\Integrity\DependencyTest::TYPE_SOFT =>
             '/(?<source><.+module\s*=\s*[\'"](?<namespace>' . $this->_namespaces . ')[_\\\\]'
-                . '(?<module>[A-Z][a-zA-Z]+)[\'"].*>)/',
+                . '(?<module>[A-Z][a-zA-Z]+)[\'"].*>)/' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
         );
         return $this->_checkDependenciesByRegexp($currentModule, $contents, $patterns);
     }
@@ -236,22 +169,17 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      *      <block template="{path}">
      *
      * @param $currentModule
-     * @param $fileType
-     * @param $file
      * @param $contents
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _caseElementBlock($currentModule, $fileType, $file, &$contents)
+    protected function _caseElementBlock($currentModule, &$contents)
     {
         $patterns = array(
-            \Magento\Test\Integrity\DependencyTest::TYPE_HARD =>
             '/(?<source><block.*class\s*=\s*[\'"](?<namespace>' . $this->_namespaces . ')[_\\\\]'
-                . '(?<module>[A-Z][a-zA-Z]+)[_\\\\](?:[A-Z][a-zA-Z]+[_\\\\]?){1,}[\'"].*>)/',
-            \Magento\Test\Integrity\DependencyTest::TYPE_SOFT =>
+                . '(?<module>[A-Z][a-zA-Z]+)[_\\\\]'
+                . '(?:[A-Z][a-zA-Z]+[_\\\\]?){1,}[\'"].*>)/' => \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
             '/(?<source><block.*template\s*=\s*[\'"](?<namespace>' . $this->_namespaces . ')[_\\\\]'
-                . '(?<module>[A-Z][a-zA-Z]+)::[\w\/\.]+[\'"].*>)/',
+                . '(?<module>[A-Z][a-zA-Z]+)::[\w\/\.]+[\'"].*>)/' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
         );
         return $this->_checkDependenciesByRegexp($currentModule, $contents, $patterns);
     }
@@ -265,28 +193,24 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      *      <element helper="{name}">
      *
      * @param $currentModule
-     * @param $fileType
-     * @param $file
      * @param $contents
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _caseElementAction($currentModule, $fileType, $file, &$contents)
+    protected function _caseElementAction($currentModule, &$contents)
     {
         $patterns = array(
-            \Magento\Test\Integrity\DependencyTest::TYPE_SOFT =>
             '/(?<source><block\s*>(?<namespace>' . $this->_namespaces . ')[_\\\\]'
-                . '(?<module>[A-Z][a-zA-Z]+)[_\\\\](?:[A-Z][a-zA-Z]+[_\\\\]?){1,}<\/block\s*>)/',
-            \Magento\Test\Integrity\DependencyTest::TYPE_SOFT =>
+                . '(?<module>[A-Z][a-zA-Z]+)[_\\\\]'
+                . '(?:[A-Z][a-zA-Z]+[_\\\\]?){1,}<\/block\s*>)/' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
             '/(?<source><template\s*>(?<namespace>' . $this->_namespaces . ')[_\\\\]'
-                . '(?<module>[A-Z][a-zA-Z]+)::[\w\/\.]+<\/template\s*>)/',
-            \Magento\Test\Integrity\DependencyTest::TYPE_SOFT =>
+                . '(?<module>[A-Z][a-zA-Z]+)::[\w\/\.]+'
+                . '<\/template\s*>)/' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
             '/(?<source><file\s*>(?<namespace>' . $this->_namespaces . ')[_\\\\]'
-                . '(?<module>[A-Z][a-zA-Z]+)::[\w\/\.-]+<\/file\s*>)/',
-            \Magento\Test\Integrity\DependencyTest::TYPE_SOFT =>
+                . '(?<module>[A-Z][a-zA-Z]+)::[\w\/\.-]+'
+                . '<\/file\s*>)/' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
             '/(?<source><.*helper\s*=\s*[\'"](?<namespace>' . $this->_namespaces . ')[_\\\\]'
-                . '(?<module>[A-Z][a-zA-Z]+)[_\\\\](?:[A-Z][a-z]+[_\\\\]?){1,}::[\w]+[\'"].*>)/',
+                . '(?<module>[A-Z][a-zA-Z]+)[_\\\\](?:[A-Z][a-z]+[_\\\\]?){1,}::[\w]+'
+                . '[\'"].*>)/' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
         );
         return $this->_checkDependenciesByRegexp($currentModule, $contents, $patterns);
     }
@@ -297,28 +221,33 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      * Ex.: <layout><{name}>...</layout>
      *
      * @param $currentModule
-     * @param $fileType
      * @param $file
      * @param $contents
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _caseLayoutHandle($currentModule, $fileType, $file, &$contents)
+    protected function _caseLayoutHandle($currentModule, $file, &$contents)
     {
-        $xml = simplexml_load_file($file);
+        $xml = simplexml_load_string($contents);
+        if (!$xml) {
+            return array();
+        }
 
         $area = $this->_getAreaByFile($file);
 
         $result = array();
         foreach ((array)$xml->xpath('/layout/child::*') as $element) {
             $check = $this->_checkDependencyLayoutHandle($currentModule, $area, $element->getName());
-            $module = isset($check['module']) ? $check['module'] : null;
-            if ($module) {
-                $result[$module] = array(
-                    'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                    'source' => $element->getName(),
-                );
+            $modules = isset($check['module']) ? $check['module'] : null;
+            if ($modules) {
+                if (!is_array($modules)) {
+                    $modules = [$modules];
+                }
+                foreach ($modules as $module) {
+                    $result[$module] = array(
+                        'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
+                        'source' => $element->getName(),
+                    );
+                }
             }
         }
         return $this->_getUniqueDependencies($result);
@@ -330,28 +259,33 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      * Ex.: <layout_name  parent="{name}">
      *
      * @param $currentModule
-     * @param $fileType
      * @param $file
      * @param $contents
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _caseLayoutHandleParent($currentModule, $fileType, $file, &$contents)
+    protected function _caseLayoutHandleParent($currentModule, $file, &$contents)
     {
-        $xml = simplexml_load_file($file);
+        $xml = simplexml_load_string($contents);
+        if (!$xml) {
+            return array();
+        }
 
         $area = $this->_getAreaByFile($file);
 
         $result = array();
         foreach ((array)$xml->xpath('/layout/child::*/@parent') as $element) {
             $check = $this->_checkDependencyLayoutHandle($currentModule, $area, (string)$element);
-            $module = isset($check['module']) ? $check['module'] : null;
-            if ($module) {
-                $result[$module] = array(
-                    'type' => \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
-                    'source' => (string)$element,
-                );
+            $modules = isset($check['module']) ? $check['module'] : null;
+            if ($modules) {
+                if (!is_array($modules)) {
+                    $modules = [$modules];
+                }
+                foreach ($modules as $module) {
+                    $result[$module] = array(
+                        'type' => \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
+                        'source' => (string)$element,
+                    );
+                }
             }
         }
         return $this->_getUniqueDependencies($result);
@@ -363,28 +297,33 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      * Ex.: <update handle="{name}" />
      *
      * @param $currentModule
-     * @param $fileType
      * @param $file
      * @param $contents
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _caseLayoutHandleUpdate($currentModule, $fileType, $file, &$contents)
+    protected function _caseLayoutHandleUpdate($currentModule, $file, &$contents)
     {
-        $xml = simplexml_load_file($file);
+        $xml = simplexml_load_string($contents);
+        if (!$xml) {
+            return array();
+        }
 
         $area = $this->_getAreaByFile($file);
 
         $result = array();
         foreach ((array)$xml->xpath('//update/@handle') as $element) {
             $check = $this->_checkDependencyLayoutHandle($currentModule, $area, (string)$element);
-            $module = isset($check['module']) ? $check['module'] : null;
-            if ($module) {
-                $result[$module] = array(
-                    'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                    'source' => (string)$element,
-                );
+            $modules = isset($check['module']) ? $check['module'] : null;
+            if ($modules) {
+                if (!is_array($modules)) {
+                    $modules = [$modules];
+                }
+                foreach ($modules as $module) {
+                    $result[$module] = array(
+                        'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
+                        'source' => (string)$element,
+                    );
+                }
             }
         }
         return $this->_getUniqueDependencies($result);
@@ -396,16 +335,16 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      * Ex.: <reference name="{name}">
      *
      * @param $currentModule
-     * @param $fileType
      * @param $file
      * @param $contents
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _caseLayoutReference($currentModule, $fileType, $file, &$contents)
+    protected function _caseLayoutReference($currentModule, $file, &$contents)
     {
-        $xml = simplexml_load_file($file);
+        $xml = simplexml_load_string($contents);
+        if (!$xml) {
+            return array();
+        }
 
         $area = $this->_getAreaByFile($file);
 
@@ -434,7 +373,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
     protected function _checkDependenciesByRegexp($currentModule, &$contents, $patterns = array())
     {
         $result = array();
-        foreach ($patterns as $type => $pattern) {
+        foreach ($patterns as $pattern => $type) {
             if (preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
                 foreach ($matches as $match) {
                     $module = $match['namespace'] . '\\' . $match['module'];
@@ -472,9 +411,9 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $router = implode('_', $chunks);
         if (isset($this->_mapRouters[$router])) {
             // CASE 1: Single dependency
-            $module = $this->_mapRouters[$router];
-            if ($currentModule != $module) {
-                return array('module' => $module);
+            $modules = $this->_mapRouters[$router];
+            if (!in_array($currentModule, $modules)) {
+                return array('module' => $modules);
             }
         }
 
@@ -495,14 +434,8 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
             if (isset($modules[$defaultModule])) {
                 return array('module' => $defaultModule);
             }
-
-            // CASE 5: \Exception - Undefined dependency
-            $undefinedDependency = implode(', ', $modules);
-            $this->_exceptions[self::EXCEPTION_TYPE_UNDEFINED_DEPENDENCY][$undefinedDependency] = $undefinedDependency;
         }
 
-        // CASE 6: \Exception - Undefined handle
-        $this->_exceptions[self::EXCEPTION_TYPE_UNKNOWN_HANDLE][$handle] = $handle;
         return array();
     }
 
@@ -538,14 +471,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
             if (isset($modules[$defaultModule])) {
                 return array('module' => $defaultModule);
             }
-
-            // CASE 4: \Exception - Undefined dependency
-            $undefinedDependency = implode(', ', $modules);
-            $this->_exceptions[self::EXCEPTION_TYPE_UNDEFINED_DEPENDENCY][$undefinedDependency] = $undefinedDependency;
         }
-
-        // CASE 5: \Exception - Undefined block
-        $this->_exceptions[self::EXCEPTION_TYPE_UNKNOWN_BLOCK][$block] = $block;
         return array();
     }
 

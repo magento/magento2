@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -60,6 +60,11 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     protected $_requestMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_currencyMock;
+
+    /**
      * @var \Magento\Object
      */
     protected $_row;
@@ -80,6 +85,21 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             ->method('getIndex')
             ->will($this->returnValue('columnIndex'));
 
+        $this->_currencyMock = $this->getMock('Magento\Directory\Model\Currency', array(), array(), '', false);
+        $this->_currencyMock->expects($this->any())
+            ->method('load')
+            ->will($this->returnSelf());
+        $currencyFactoryMock = $this->getMock(
+            'Magento\Directory\Model\CurrencyFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
+        $currencyFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->_currencyMock));
+
         $this->_row = new \Magento\Object(array('columnIndex' => '10'));
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -87,7 +107,8 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             'storeManager' => $this->_storeManagerMock,
             'locale' => $this->_localeMock,
             'currencyLocator' => $this->_curLocatorMock,
-            'request' => $this->_requestMock
+            'request' => $this->_requestMock,
+            'currencyFactory' => $currencyFactoryMock
             )
         );
 
@@ -111,16 +132,8 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderWithDefaultCurrency()
     {
-        $currencyMock = $this->getMock('Magento\Directory\Model\Currency', array(), array(), '', false);
-        $currencyMock->expects($this->once())->method('getRate')->with('defaultCurrency')
+        $this->_currencyMock->expects($this->once())->method('getRate')->with('defaultCurrency')
             ->will($this->returnValue(1.5));
-
-        $storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
-        $storeMock->expects($this->once())->method('getBaseCurrency')->will($this->returnValue($currencyMock));
-
-        $this->_storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
 
         $this->_curLocatorMock->expects($this->any())
             ->method('getDefaultCurrency')

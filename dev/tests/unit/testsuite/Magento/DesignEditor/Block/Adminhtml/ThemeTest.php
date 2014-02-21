@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_DesignEditor
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,9 +29,9 @@ namespace Magento\DesignEditor\Block\Adminhtml;
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @cover \Magento\DesignEditor\Block\Adminhtml\Theme::addButton
-     * @cover \Magento\DesignEditor\Block\Adminhtml\Theme::clearButtons
-     * @cover \Magento\DesignEditor\Block\Adminhtml\Theme::getButtonsHtml
+     * @covers \Magento\DesignEditor\Block\Adminhtml\Theme::addButton
+     * @covers \Magento\DesignEditor\Block\Adminhtml\Theme::clearButtons
+     * @covers \Magento\DesignEditor\Block\Adminhtml\Theme::getButtonsHtml
      */
     public function testButtons()
     {

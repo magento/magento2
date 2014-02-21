@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -61,14 +61,6 @@
                 <field id="redirect_to_cart" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>After Adding a Product Redirect to Shopping Cart</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="grouped_product_image" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Grouped Product Image</label>
-                    <source_model>Magento\Catalog\Model\Config\Source\Product\Thumbnail</source_model>
-                </field>
-                <field id="configurable_product_image" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Configurable Product Image</label>
-                    <source_model>Magento\Catalog\Model\Config\Source\Product\Thumbnail</source_model>
                 </field>
             </group>
             <group id="cart_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">

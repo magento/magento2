@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,12 +33,14 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
+use Magento\Data\Collection;
+
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
      * Retrieve list of gallery images
      *
-     * @return array|\Magento\Data\Collection
+     * @return array|Collection
      */
     public function getGalleryImages()
     {
@@ -58,5 +60,40 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             $params['image'] = $image->getValueId();
         }
         return $this->getUrl('catalog/product/gallery', $params);
+    }
+
+    /**
+     * Get gallery image url
+     *
+     * @param \Magento\Object $image
+     * @param string $type
+     * @param boolean $whiteBorders
+     * @param null|number $width
+     * @param null|number $height
+     * @return string
+     */
+    public function getImageUrl($image, $type, $whiteBorders = false, $width = null, $height = null)
+    {
+        $product = $this->getProduct();
+        $img  = $this->_imageHelper->init($product, $type, $image->getFile());
+        if ($whiteBorders) {
+            $img->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE);
+        }
+        if ($width || $height) {
+            $img->resize($width, $height);
+        }
+        return (string)$img;
+    }
+
+    /**
+     * Is product main image
+     *
+     * @param \Magento\Object $image
+     * @return bool
+     */
+    public function isMainImage($image)
+    {
+        $product = $this->getProduct();
+        return $product->getImage() == $image->getFile();
     }
 }

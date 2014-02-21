@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Indexer;
 
 /**
  * Catalog Product Eav Indexer Resource Model
@@ -32,9 +32,7 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Indexer;
-
-class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
+class Eav extends AbstractIndexer
 {
     /**
      * EAV Indexers by type
@@ -77,6 +75,7 @@ class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexe
     /**
      * Define main index table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -122,7 +121,7 @@ class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexe
      * when product was saved and assigned categories was changed.
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav
+     * @return $this
      */
     public function catalogProductSave(\Magento\Index\Model\Event $event)
     {
@@ -148,7 +147,7 @@ class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexe
      * Process Product Delete
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav
+     * @return $this
      */
     public function catalogProductDelete(\Magento\Index\Model\Event $event)
     {
@@ -169,7 +168,7 @@ class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexe
      * Process Product Mass Update
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav
+     * @return $this
      */
     public function catalogProductMassAction(\Magento\Index\Model\Event $event)
     {
@@ -190,7 +189,7 @@ class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexe
      * Process Catalog Eav Attribute Save
      *
      * @param \Magento\Index\Model\Event $event
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav
+     * @return $this
      */
     public function catalogEavAttributeSave(\Magento\Index\Model\Event $event)
     {
@@ -209,7 +208,7 @@ class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexe
     /**
      * Rebuild all index data
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav
+     * @return $this
      */
     public function reindexAll()
     {
@@ -231,7 +230,7 @@ class Eav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexe
     public function getIdxTable($table = null)
     {
         if ($this->useIdxTable()) {
-           return $this->getTable('catalog_product_index_eav_idx');
+            return $this->getTable('catalog_product_index_eav_idx');
         }
         return $this->getTable('catalog_product_index_eav_tmp');
     }

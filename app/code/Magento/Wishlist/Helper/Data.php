@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Wishlist
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -111,6 +111,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
+     * @var \Magento\Core\Helper\PostData
+     */
+    protected $_postDataHelper;
+
+    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\Registry $coreRegistry
@@ -118,6 +123,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\Helper\PostData $postDataHelper
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
@@ -126,7 +132,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\Helper\PostData $postDataHelper
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_coreData = $coreData;
@@ -134,6 +141,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $this->_customerSession = $customerSession;
         $this->_wishlistFactory = $wishlistFactory;
         $this->_storeManager = $storeManager;
+        $this->_postDataHelper = $postDataHelper;
         parent::__construct($context);
     }
 
@@ -161,6 +169,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Set current customer
      *
      * @param \Magento\Customer\Model\Customer $customer
+     * @return void
      */
     public function setCustomer(\Magento\Customer\Model\Customer $customer)
     {
@@ -274,20 +283,20 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve URL for removing item from wishlist
+     * Retrieve params for removing item from wishlist
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
      */
-    public function getRemoveUrl($item)
+    public function getRemoveParams($item)
     {
-        return $this->_getUrl('wishlist/index/remove',
-            array('item' => $item->getWishlistItemId())
-        );
+        $url = $this->_getUrl('wishlist/index/remove');
+        $params = array('item' => $item->getWishlistItemId());
+        return $this->_postDataHelper->getPostData($url, $params);
     }
 
     /**
-     * Retrieve URL for removing item from wishlist
+     * Retrieve URL for configuring item from wishlist
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
@@ -295,67 +304,18 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getConfigureUrl($item)
     {
         return $this->_getUrl('wishlist/index/configure', array(
-            'item' => $item->getWishlistItemId()
+            'id' => $item->getWishlistItemId()
         ));
     }
 
     /**
-     * Retrieve url for adding product to wishlist
-     *
-     * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     *
-     * @return  string|bool
-     */
-    public function getAddUrl($item)
-    {
-        return $this->getAddUrlWithParams($item);
-    }
-
-    /**
-     * Retrieve url for adding product to wishlist
-     *
-     * @param int $itemId
-     *
-     * @return  string
-     */
-    public function getMoveFromCartUrl($itemId)
-    {
-        return $this->_getUrl('wishlist/index/fromcart', array('item' => $itemId));
-    }
-
-    /**
-     * Retrieve url for updating product in wishlist
-     *
-     * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
-     *
-     * @return  string|bool
-     */
-    public function getUpdateUrl($item)
-    {
-        $itemId = null;
-        if ($item instanceof \Magento\Catalog\Model\Product) {
-            $itemId = $item->getWishlistItemId();
-        }
-        if ($item instanceof \Magento\Wishlist\Model\Item) {
-            $itemId = $item->getId();
-        }
-
-        if ($itemId) {
-            return $this->_getUrl('wishlist/index/updateItemOptions', array('id' => $itemId));
-        }
-
-        return false;
-    }
-
-    /**
-     * Retrieve url for adding product to wishlist with params
+     * Retrieve params for adding product to wishlist
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @param array $params
-     *
-     * @return  string|bool
+     * @return string
      */
-    public function getAddUrlWithParams($item, array $params = array())
+    public function getAddParams($item, array $params = array())
     {
         $productId = null;
         if ($item instanceof \Magento\Catalog\Model\Product) {
@@ -365,16 +325,61 @@ class Data extends \Magento\App\Helper\AbstractHelper
             $productId = $item->getProductId();
         }
 
+        $url = $this->_getUrlStore($item)->getUrl('wishlist/index/add');
         if ($productId) {
             $params['product'] = $productId;
-            return $this->_getUrlStore($item)->getUrl('wishlist/index/add', $params);
+        }
+
+        return $this->_postDataHelper->getPostData($url, $params);
+    }
+
+    /**
+     * Retrieve params for adding product to wishlist
+     *
+     * @param int $itemId
+     *
+     * @return string
+     */
+    public function getMoveFromCartParams($itemId)
+    {
+        $url = $this->_getUrl('wishlist/index/fromcart');
+        $params = array('item' => $itemId);
+        return $this->_postDataHelper->getPostData($url, $params);
+    }
+
+    /**
+     * Retrieve params for updating product in wishlist
+     *
+     * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
+     *
+     * @return  string|false
+     */
+    public function getUpdateParams($item)
+    {
+        $itemId = null;
+        if ($item instanceof \Magento\Catalog\Model\Product) {
+            $itemId = $item->getWishlistItemId();
+            $productId = $item->getId();
+        }
+        if ($item instanceof \Magento\Wishlist\Model\Item) {
+            $itemId = $item->getId();
+            $productId = $item->getProduct()->getId();
+        }
+
+        $url = $this->_getUrl('wishlist/index/updateItemOptions');
+        if ($itemId) {
+            $params = array(
+                'id' => $itemId,
+                'product' => $productId
+            );
+            return $this->_postDataHelper->getPostData($url, $params);
         }
 
         return false;
     }
 
     /**
-     * Retrieve URL for adding item to shoping cart
+     * Retrieve URL for adding item to shopping cart
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string
@@ -385,7 +390,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
             $this->_getUrl('*/*/*', array(
                 '_current'      => true,
                 '_use_rewrite'  => true,
-                '_store_to_url' => true,
+                '_scope_to_url' => true,
             ))
         );
 
@@ -398,7 +403,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve URL for adding item to shoping cart from shared wishlist
+     * Retrieve URL for adding item to shopping cart from shared wishlist
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string
@@ -408,7 +413,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $continueUrl  = $this->_coreData->urlEncode($this->_getUrl('*/*/*', array(
             '_current'      => true,
             '_use_rewrite'  => true,
-            '_store_to_url' => true,
+            '_scope_to_url' => true,
         )));
 
         $urlParamName = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
@@ -460,7 +465,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve customer name
      *
-     * @return string|null
+     * @return string|void
      */
     public function getCustomerName()
     {
@@ -473,7 +478,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve RSS URL
      *
-     * @param $wishlistId
+     * @param int|string|null $wishlistId
      * @return string
      */
     public function getRssUrl($wishlistId = null)
@@ -530,7 +535,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Method called after wishlist modifications and trigger 'wishlist_items_renewed' event.
      * Depends from configuration.
      *
-     * @return \Magento\Wishlist\Helper\Data
+     * @return $this
      */
     public function calculate()
     {

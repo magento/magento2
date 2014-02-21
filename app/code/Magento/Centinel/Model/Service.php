@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Centinel
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,18 +55,11 @@ class Service extends \Magento\Object
     );
 
     /**
-     * Is API model configured
-     *
-     * @var bool
-     */
-    protected $_isConfigured = false;
-
-    /**
-     * Validation api model
+     * Validation api model factory
      *
      * @var \Magento\Centinel\Model\Api
      */
-    protected $_api;
+    protected $_apiFactory;
 
     /**
      * Config
@@ -104,6 +97,8 @@ class Service extends \Magento\Object
     protected $_validationState;
 
     /**
+     * Url prefix
+     *
      * @var string
      */
     protected $_urlPrefix;
@@ -112,10 +107,10 @@ class Service extends \Magento\Object
      * @var \Magento\Data\Form\FormKey
      */
     protected $formKey;
-    
+
     /**
      * @param \Magento\Centinel\Model\Config $config
-     * @param \Magento\Centinel\Model\Api $api
+     * @param \Magento\Centinel\Model\ApiFactory $apiFactory
      * @param \Magento\UrlInterface $url
      * @param \Magento\Session\SessionManagerInterface $centinelSession
      * @param \Magento\Centinel\Model\StateFactory $stateFactory
@@ -125,7 +120,7 @@ class Service extends \Magento\Object
      */
     public function __construct(
         \Magento\Centinel\Model\Config $config,
-        \Magento\Centinel\Model\Api $api,
+        \Magento\Centinel\Model\ApiFactory $apiFactory,
         \Magento\UrlInterface $url,
         \Magento\Session\SessionManagerInterface $centinelSession,
         \Magento\Centinel\Model\StateFactory $stateFactory,
@@ -134,7 +129,7 @@ class Service extends \Magento\Object
         array $data = array()
     ) {
         $this->_config = $config;
-        $this->_api = $api;
+        $this->_apiFactory = $apiFactory;
         $this->_url = $url;
         $this->_centinelSession = $centinelSession;
         $this->_stateFactory = $stateFactory;
@@ -195,20 +190,16 @@ class Service extends \Magento\Object
      */
     protected function _getApi()
     {
-        if ($this->_isConfigured) {
-            return $this->_api;
-        }
-
         $config = $this->_getConfig();
-        $this->_api
+        $api = $this->_apiFactory->create();
+        $api
            ->setProcessorId($config->getProcessorId())
            ->setMerchantId($config->getMerchantId())
            ->setTransactionPwd($config->getTransactionPwd())
            ->setIsTestMode($config->getIsTestMode())
            ->setDebugFlag($config->getDebugFlag())
            ->setApiEndpointUrl($this->getCustomApiEndpointUrl());
-        $this->_isConfigured = true;
-        return $this->_api;
+        return $api;
     }
 
     /**
@@ -234,6 +225,7 @@ class Service extends \Magento\Object
     /**
      * Drop validation state model
      *
+     * @return void
      */
     protected function _resetValidationState()
     {
@@ -263,6 +255,7 @@ class Service extends \Magento\Object
      * Process lookup validation and init new validation state model
      *
      * @param \Magento\Object $data
+     * @return void
      */
     public function lookup($data)
     {
@@ -287,6 +280,8 @@ class Service extends \Magento\Object
      * Process authenticate validation
      *
      * @param \Magento\Object $data
+     * @return void
+     * @throws \Exception
      */
     public function authenticate($data)
     {
@@ -310,6 +305,7 @@ class Service extends \Magento\Object
      * Workflow state is stored validation state model
      *
      * @param \Magento\Object $data
+     * @return void
      * @throws \Magento\Core\Exception
      */
     public function validate($data)
@@ -356,12 +352,11 @@ class Service extends \Magento\Object
     /**
      * Reset validation state and drop api object
      *
-     * @return \Magento\Centinel\Model\Service
+     * @return $this
      */
     public function reset()
     {
         $this->_resetValidationState();
-        $this->_api = null;
         return $this;
     }
 
@@ -430,9 +425,9 @@ class Service extends \Magento\Object
     /**
      * Export cmpi lookups and authentication information stored in session into array
      *
-     * @param mixed $to
-     * @param array $map
-     * @return mixed
+     * @param array|object $to
+     * @param array|bool $map
+     * @return array|object
      */
     public function exportCmpiData($to, $map = false)
     {

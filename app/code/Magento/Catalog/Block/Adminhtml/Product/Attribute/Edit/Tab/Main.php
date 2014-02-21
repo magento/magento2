@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,12 +33,14 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
+use Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain;
+
+class Main extends AbstractMain
 {
     /**
      * Adding product form elements for editing attribute
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -92,12 +94,8 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
             if (isset($type['hide_fields'])) {
                 $_hiddenFields[$type['value']] = $type['hide_fields'];
             }
-            if (isset($type['disabled_types'])) {
-                $_disabledTypes[$type['value']] = $type['disabled_types'];
-            }
         }
         $this->_coreRegistry->register('attribute_type_hidden_fields', $_hiddenFields);
-        $this->_coreRegistry->register('attribute_type_disabled_types', $_disabledTypes);
 
         $frontendInputValues = array_merge($frontendInputElm->getValues(), $additionalTypes);
         $frontendInputElm->setValues($frontendInputValues);

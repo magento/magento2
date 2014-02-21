@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Cron
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Cron\Model\Config\Reader;
@@ -28,7 +28,7 @@ namespace Magento\Cron\Model\Config\Reader;
 class DbTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Config\Section\Reader\DefaultReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Core\Model\Config\Scope\Reader\DefaultReader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_defaultReader;
 
@@ -47,7 +47,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_defaultReader = $this->getMockBuilder('Magento\Core\Model\Config\Section\Reader\DefaultReader')
+        $this->_defaultReader = $this->getMockBuilder('Magento\Core\Model\Config\Scope\Reader\DefaultReader')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_converter = new \Magento\Cron\Model\Config\Converter\Db();

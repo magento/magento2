@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Cms
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Page;
 
 /**
  * Admin CMS page
@@ -31,8 +32,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Page;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -100,8 +99,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         if ($this->_coreRegistry->registry('cms_page')->getId()) {
             return __("Edit Page '%1'", $this->escapeHtml($this->_coreRegistry->registry('cms_page')->getTitle()));
-        }
-        else {
+        } else {
             return __('New Page');
         }
     }

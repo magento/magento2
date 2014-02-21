@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller\Rest\Router;
@@ -43,7 +43,7 @@ class Route extends \Zend_Controller_Router_Route
      * Set service class.
      *
      * @param string $serviceClass
-     * @return \Magento\Webapi\Controller\Rest\Router\Route
+     * @return $this
      */
     public function setServiceClass($serviceClass)
     {
@@ -65,7 +65,7 @@ class Route extends \Zend_Controller_Router_Route
      * Set service method name.
      *
      * @param string $serviceMethod
-     * @return \Magento\Webapi\Controller\Rest\Router\Route
+     * @return $this
      */
     public function setServiceMethod($serviceMethod)
     {
@@ -87,7 +87,7 @@ class Route extends \Zend_Controller_Router_Route
      * Set if the route is secure
      *
      * @param boolean $secure
-     * @return \Magento\Webapi\Controller\Rest\Router\Route
+     * @return $this
      */
     public function setSecure($secure)
     {
@@ -109,6 +109,7 @@ class Route extends \Zend_Controller_Router_Route
      * Set ACL resources list.
      *
      * @param array $aclResources
+     * @return void
      */
     public function setAclResources($aclResources)
     {

@@ -20,23 +20,18 @@
  *
  * @category    Magento
  * @package     Magento_Sitemap
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sitemap\Model;
 
 /**
  * Sitemap module observer
  *
- * @category   Magento
- * @package    Magento_Sitemap
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sitemap\Model;
-
 class Observer
 {
-
     /**
      * Enable/disable configuration
      */
@@ -45,7 +40,7 @@ class Observer
     /**
      * Cronjob expression configuration
      */
-    const XML_PATH_CRON_EXPR = 'crontab/jobs/generate_sitemaps/schedule/cron_expr';
+    const XML_PATH_CRON_EXPR = 'crontab/default/jobs/generate_sitemaps/schedule/cron_expr';
 
     /**
      * Error email template configuration
@@ -80,20 +75,20 @@ class Observer
     protected $_templateFactory;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translateModel;
 
     /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Model\Translate $translateModel
+     * @param \Magento\TranslateInterface $translateModel
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory,
-        \Magento\Core\Model\Translate $translateModel,
+        \Magento\TranslateInterface $translateModel,
         \Magento\Email\Model\TemplateFactory $templateFactory
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -106,6 +101,7 @@ class Observer
      * Generate sitemaps
      *
      * @param \Magento\Cron\Model\Schedule $schedule
+     * @return void
      */
     public function scheduledGenerateSitemaps($schedule)
     {

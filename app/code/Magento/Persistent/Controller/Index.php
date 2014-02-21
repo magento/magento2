@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Persistent
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Persistent\Controller;
 
 /**
  * Persistent front controller
  */
-namespace Magento\Persistent\Controller;
-
 class Index extends \Magento\App\Action\Action
 {
     /**
@@ -83,7 +82,7 @@ class Index extends \Magento\App\Action\Action
      * Set whether clear checkout session when logout
      *
      * @param bool $clear
-     * @return \Magento\Persistent\Controller\Index
+     * @return $this
      */
     public function setClearCheckoutSession($clear = true)
     {
@@ -103,6 +102,8 @@ class Index extends \Magento\App\Action\Action
 
     /**
      * Unset persistent cookie action
+     *
+     * @return void
      */
     public function unsetCookieAction()
     {
@@ -116,7 +117,7 @@ class Index extends \Magento\App\Action\Action
     /**
      * Revert all persistent data
      *
-     * @return \Magento\Persistent\Controller\Index
+     * @return $this
      */
     protected function _cleanup()
     {
@@ -133,6 +134,8 @@ class Index extends \Magento\App\Action\Action
 
     /**
      * Save onepage checkout method to be register
+     *
+     * @return void
      */
     public function saveMethodAction()
     {
@@ -153,6 +156,8 @@ class Index extends \Magento\App\Action\Action
     /**
      * Add appropriate session message and redirect to shopping cart
      * used for google checkout and paypal express checkout
+     *
+     * @return void
      */
     public function expressCheckoutAction()
     {

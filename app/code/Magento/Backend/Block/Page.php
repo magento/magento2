@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,11 +35,15 @@ namespace Magento\Backend\Block;
 
 class Page extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'admin/page.phtml';
 
     /**
      * Class constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -51,7 +55,7 @@ class Page extends \Magento\Backend\Block\Template
     /**
      * Get current language
      *
-     * @return unknown
+     * @return string
      */
     public function getLang()
     {
@@ -65,7 +69,7 @@ class Page extends \Magento\Backend\Block\Template
      * Add CSS class to page body tag
      *
      * @param string $className
-     * @return \Magento\Backend\Block\Page
+     * @return $this
      */
     public function addBodyClass($className)
     {

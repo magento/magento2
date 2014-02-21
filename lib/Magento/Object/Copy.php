@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -102,6 +102,42 @@ class Copy
         ));
 
         return $target;
+    }
+
+    /**
+     * Get data from object|array to object|array containing fields
+     * from fieldset matching an aspect.
+     *
+     * @param string $fieldset
+     * @param string $aspect a field name
+     * @param array|\Magento\Object $source
+     * @param string $root
+     * @return array $data
+     */
+    public function getDataFromFieldset($fieldset, $aspect, $source, $root='global')
+    {
+        if (!(is_array($source) || $source instanceof \Magento\Object)) {
+            return null;
+        }
+        $fields = $this->_fieldsetConfig->getFieldset($fieldset, $root);
+        if (is_null($fields)) {
+            return null;
+        }
+
+        $data = array();
+        foreach ($fields as $code => $node) {
+            if (empty($node[$aspect])) {
+                continue;
+            }
+
+            $value = $this->_getFieldsetFieldValue($source, $code);
+
+            $targetCode = (string)$node[$aspect];
+            $targetCode = $targetCode == '*' ? $code : $targetCode;
+            $data[$targetCode] = $value;
+        }
+
+        return $data;
     }
 
     /**

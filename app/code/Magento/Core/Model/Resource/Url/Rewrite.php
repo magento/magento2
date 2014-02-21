@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Url;
 
 /**
  * Url rewrite resource model class
@@ -32,8 +32,6 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Url;
-
 class Rewrite extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -48,7 +46,7 @@ class Rewrite extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize array fields
      *
-     * @return \Magento\Core\Model\Resource\Url\Rewrite
+     * @return $this
      */
     protected function _initUniqueFields()
     {
@@ -92,7 +90,7 @@ class Rewrite extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string $idPath
      * @param int|\Magento\Core\Model\Store $store
-     * @return string|false
+     * @return string
      */
     public function getRequestPathByIdPath($idPath, $store)
     {
@@ -123,7 +121,7 @@ class Rewrite extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param   \Magento\Core\Model\Url\Rewrite $object
      * @param   array|string $path
-     * @return  \Magento\Core\Model\Resource\Url\Rewrite
+     * @return  $this
      */
     public function loadByRequestPath(\Magento\Core\Model\Url\Rewrite $object, $path)
     {

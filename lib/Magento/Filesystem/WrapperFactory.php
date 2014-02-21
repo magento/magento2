@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,7 +43,10 @@ class WrapperFactory
      */
     protected $directoryList;
 
-    public function __construct(\Magento\Filesystem\DirectoryList $directoryList)
+    /**
+     * @param DirectoryList $directoryList
+     */
+    public function __construct(DirectoryList $directoryList)
     {
         $this->directoryList = $directoryList;
     }
@@ -53,8 +56,9 @@ class WrapperFactory
      *
      * @param string $protocolCode
      * @param DriverInterface $driver
+     * @return WrapperInterface
      */
-    public function get($protocolCode, \Magento\Filesystem\DriverInterface $driver)
+    public function get($protocolCode, DriverInterface $driver)
     {
         $wrapperClass = $this->directoryList->getProtocolConfig($protocolCode)['driver'];
 

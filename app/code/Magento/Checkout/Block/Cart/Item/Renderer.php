@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,7 +42,6 @@ class Renderer extends \Magento\View\Element\Template
     protected $_checkoutSession;
     protected $_item;
     protected $_productUrl;
-    protected $_productThumbnail;
 
     /**
      * Whether qty will be converted to number
@@ -66,11 +65,6 @@ class Renderer extends \Magento\View\Element\Template
     protected $_productConfig = null;
 
     /**
-     * @var \Magento\Catalog\Helper\Image
-     */
-    protected $_imageHelper;
-
-    /**
      * @var \Magento\Core\Helper\Url
      */
     protected $_urlHelper;
@@ -79,6 +73,11 @@ class Renderer extends \Magento\View\Element\Template
      * @var \Magento\Message\ManagerInterface
      */
     protected $messageManager;
+
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $_imageHelper;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
@@ -98,12 +97,13 @@ class Renderer extends \Magento\View\Element\Template
         \Magento\Message\ManagerInterface $messageManager,
         array $data = array()
     ) {
-        $this->_urlHelper = $urlHelper;
         $this->_imageHelper = $imageHelper;
+        $this->_urlHelper = $urlHelper;
         $this->_productConfig = $productConfig;
         $this->_checkoutSession = $checkoutSession;
         $this->messageManager = $messageManager;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -138,35 +138,24 @@ class Renderer extends \Magento\View\Element\Template
         return $this->getItem()->getProduct();
     }
 
-    public function overrideProductThumbnail($productThumbnail)
+    /**
+     * Get product thumbnail image
+     *
+     * @return \Magento\Catalog\Model\Product\Image
+     */
+    public function getProductThumbnail()
     {
-        $this->_productThumbnail = $productThumbnail;
-        return $this;
+        return $this->_imageHelper->init($this->getProductForThumbnail(), 'thumbnail');
     }
 
     /**
-     * Thumbnail image getter
+     * Identify the product from which thumbnail should be taken.
      *
-     * @return \Magento\Catalog\Helper\Image
+     * @return \Magento\Catalog\Model\Product
      */
-    protected function _getThumbnail()
+    public function getProductForThumbnail()
     {
-        if (is_null($this->_productThumbnail)) {
-            $product = $this->getProduct();
-            if ($this->getProduct()->isConfigurable()) {
-                $children = $this->getItem()->getChildren();
-                if (isset($children[0])
-                    && $children[0]->getProduct()->getThumbnail()
-                    && $children[0]->getProduct()->getThumbnail() != 'no_selection'
-                ) {
-                    $product = $children[0]->getProduct();
-                }
-            }
-            $thumbnail = $this->_imageHelper->init($product, 'thumbnail');
-        } else {
-            $thumbnail = $this->_productThumbnail;
-        }
-        return $thumbnail;
+        return $this->getProduct();
     }
 
     /**
@@ -176,7 +165,7 @@ class Renderer extends \Magento\View\Element\Template
      */
     public function getProductThumbnailUrl()
     {
-        return (string) $this->_getThumbnail()->resize($this->getThumbnailSize());
+        return (string)$this->getProductThumbnail()->resize($this->getThumbnailSize());
     }
 
     /**
@@ -196,7 +185,9 @@ class Renderer extends \Magento\View\Element\Template
      */
     public function getProductThumbnailSidebarUrl()
     {
-        return (string) $this->_getThumbnail()->resize($this->getThumbnailSidebarSize())->setWatermarkSize('30x10');
+        return (string)$this->getProductThumbnail()
+            ->resize($this->getThumbnailSidebarSize())
+            ->setWatermarkSize('30x10');
     }
 
     /**
@@ -238,8 +229,7 @@ class Renderer extends \Magento\View\Element\Template
 
         if ($product->isVisibleInSiteVisibility()) {
             return true;
-        }
-        else {
+        } else {
             if ($product->hasUrlDataObject()) {
                 $data = $product->getUrlDataObject();
                 if (in_array($data->getVisibility(), $product->getVisibleInSiteVisibilities())) {

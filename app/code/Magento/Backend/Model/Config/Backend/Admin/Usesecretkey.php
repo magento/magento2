@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,7 +32,7 @@ namespace Magento\Backend\Model\Config\Backend\Admin;
 class Usesecretkey extends \Magento\Core\Model\Config\Value
 {
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -40,8 +40,8 @@ class Usesecretkey extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -50,8 +50,8 @@ class Usesecretkey extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\App\ConfigInterface $config,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -60,6 +60,9 @@ class Usesecretkey extends \Magento\Core\Model\Config\Value
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return $this
+     */
     protected function _afterSave()
     {
         $this->_backendUrl->renewSecretUrls();

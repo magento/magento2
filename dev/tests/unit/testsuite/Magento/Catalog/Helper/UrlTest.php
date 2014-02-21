@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,7 +29,7 @@ namespace Magento\Catalog\Helper;
 
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Core\Model\Config */
+    /** @var \Magento\App\ConfigInterface */
     protected $_configMock;
 
     /** @var  \Magento\Catalog\Helper\Product\Url */
@@ -38,7 +38,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $contextMock = $this->getMockBuilder('Magento\App\Helper\Context')->disableOriginalConstructor()->getMock();
-        $this->_configMock = $this->getMockBuilder('Magento\Core\Model\Config')
+        $this->_configMock = $this->getMockBuilder('Magento\App\ConfigInterface')
             ->disableOriginalConstructor()->getMock();
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->_urlHelper = new \Magento\Catalog\Helper\Product\Url(

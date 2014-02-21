@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Tax
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,8 +34,14 @@ namespace Magento\Tax\Block\Adminhtml\Rate;
 
 class Title extends \Magento\View\Element\Template
 {
+    /**
+     * @var array
+     */
     protected $_titles;
 
+    /**
+     * @var string
+     */
     protected $_template = 'rate/title.phtml';
 
     /**
@@ -65,6 +71,9 @@ class Title extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return array
+     */
     public function getTitles()
     {
         if (is_null($this->_titles)) {
@@ -82,6 +91,9 @@ class Title extends \Magento\View\Element\Template
         return $this->_titles;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStores()
     {
         $stores = $this->getData('stores');

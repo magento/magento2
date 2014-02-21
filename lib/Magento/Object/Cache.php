@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Object
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -265,6 +265,7 @@ class Cache
      * Cleanup by class name for objects of subclasses too
      *
      * @param string $class
+     * @return void
      */
     public function deleteByClass($class)
     {
@@ -279,6 +280,7 @@ class Cache
      * Cleanup objects by tags
      *
      * @param array|string $tags
+     * @return true
      */
     public function deleteByTags($tags)
     {
@@ -320,6 +322,12 @@ class Cache
         return false;
     }
 
+    /**
+     * Find objects by ids
+     *
+     * @param string[] $ids
+     * @return array
+     */
     public function findByIds($ids)
     {
         $objects = array();
@@ -331,6 +339,12 @@ class Cache
         return $objects;
     }
 
+    /**
+     * Find object by hash
+     *
+     * @param string $hash
+     * @return object
+     */
     public function findByHash($hash)
     {
         return isset($this->_hashes[$hash]) ? $this->_objects[$this->_hashes[$hash]] : null;
@@ -363,6 +377,7 @@ class Cache
      * Find by class name for objects of subclasses too
      *
      * @param string $class
+     * @return array
      */
     public function findByClass($class)
     {
@@ -375,6 +390,13 @@ class Cache
         return $objects;
     }
 
+    /**
+     * Debug
+     *
+     * @param string $idx
+     * @param object|null $object
+     * @return void
+     */
     public function debug($idx, $object=null)
     {
         $bt = debug_backtrace();
@@ -392,7 +414,7 @@ class Cache
     /**
      * Return debug information by ids
      *
-     * @param array|integer $ids
+     * @param array|string $ids
      * @return array
      */
     public function debugByIds($ids)

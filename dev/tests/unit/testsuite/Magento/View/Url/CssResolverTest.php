@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,12 +33,81 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filesystem = $this->getMock('Magento\Filesystem', array('getPath', '__wakeup'), array(), '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array('getPath', '__wakeup'), array(), '', false);
         $filesystem->expects($this->any())
             ->method('getPath')
-            ->with(\Magento\Filesystem::ROOT)
+            ->with(\Magento\App\Filesystem::ROOT_DIR)
             ->will($this->returnValue('/base_dir/'));
-        $this->object = new CssResolver($filesystem);
+        $viewFilesystem = $this->getMock('Magento\View\Filesystem', array('normalizePath'), array(), '', false);
+        $viewFilesystem->expects($this->any())
+            ->method('normalizePath')
+            ->will($this->returnValueMap(array(
+                array(
+                    '/does/not/matter.css',
+                    '/does/not/matter.css'
+                ),
+                array(
+                    '/base_dir/pub/assets/new/location/any_new_name.css',
+                    '/base_dir/pub/assets/new/location/any_new_name.css'
+                ),
+                array(
+                    '/base_dir\pub/assets\new/location/any_new_name.css',
+                    '/base_dir\pub/assets\new/location/any_new_name.css'
+                ),
+                array(
+                    '/base_dir/pub/assets/referenced/di/any_new_name.css',
+                    '/base_dir/pub/assets/referenced/di/any_new_name.css'
+                ),
+                array(
+                    '/base_dir/pub/any_new_name.css',
+                    '/base_dir/pub/any_new_name.css'
+                ),
+                array(
+                    '/not/base_dir/pub/new/file.css',
+                    '/not/base_dir/pub/new/file.css'
+                ),
+                array(
+                    '/base_dir/pub/css/file.css',
+                    '/base_dir/pub/css/file.css'
+                ),
+                array(
+                    '/not/base_dir/pub/css/file.css',
+                    '/not/base_dir/pub/css/file.css'
+                ),
+                array(
+                    '/base_dir/pub/new/file.css',
+                    '/base_dir/pub/new/file.css'
+                ),
+                array(
+                    '/base_dir/pub/assets/referenced/dir/../images/h2.gif',
+                    '/base_dir/pub/assets/referenced/images/h2.gif'
+                ),
+                array(
+                    '/base_dir/pub/assets/referenced/dir/Magento_Theme::favicon.ico',
+                    '/base_dir/pub/assets/referenced/dir/Magento_Theme::favicon.ico'
+                ),
+                array(
+                    '/base_dir/pub/assets/referenced/dir/original.css',
+                    '/base_dir/pub/assets/referenced/dir/original.css'
+                ),
+                array(
+                    '/base_dir/pub/assets/referenced/dir/body.gif',
+                    '/base_dir/pub/assets/referenced/dir/body.gif'
+                ),
+                array(
+                    '/base_dir/pub/dir/body.gif',
+                    '/base_dir/pub/dir/body.gif'
+                ),
+                array(
+                    '/base_dir/pub/css/body.gif',
+                    '/base_dir/pub/css/body.gif'
+                ),
+                array(
+                    '/not/base_dir/pub/css/body.gif',
+                    '/not/base_dir/pub/css/body.gif'
+                )
+            )));
+        $this->object = new CssResolver($filesystem, $viewFilesystem);
     }
 
     /**
@@ -60,12 +129,6 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
         $fixturePath = __DIR__ . '/_files/';
         $callback = function ($relativeUrl) {
             return '/base_dir/pub/assets/referenced/dir/' . $relativeUrl;
-        };
-        $callbackWindows = function ($relativeUrl) {
-            return '/base_dir/pub\assets/referenced\dir/' . $relativeUrl;
-        };
-        $callbackByOrigPath = function ($relativeUrl, $originalPath) {
-            return dirname($originalPath) . '/' . $relativeUrl;
         };
 
         $object = new \Magento\Object(array('resolved_path' => array('body.gif' => '/base_dir/pub/dir/body.gif')));
@@ -89,27 +152,6 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
                 $callback,
                 $result,
             ),
-            'back slashes in referenced name' => array(
-                $source,
-                '/does/not/matter.css',
-                '/base_dir/pub/assets/new/location/any_new_name.css',
-                $callbackWindows,
-                $result,
-            ),
-            'same directory' => array(
-                $source,
-                '/does/not/matter.css',
-                '/base_dir/pub/assets/referenced/dir/any_new_name.css',
-                $callback,
-                $source,
-            ),
-            'directory with superset name' => array(
-                'body {background: url(body.gif);}',
-                '/base_dir/pub/assets/referenced/dir/original.css',
-                '/base_dir/pub/assets/referenced/dirname/any_new_name.css',
-                null,
-                'body {background: url(../dir/body.gif);}',
-            ),
             'directory with subset name' => array(
                 'body {background: url(body.gif);}',
                 '/base_dir/pub/assets/referenced/dir/original.css',
@@ -123,20 +165,6 @@ class CssResolverTest extends \PHPUnit_Framework_TestCase
                 '/base_dir/pub/any_new_name.css',
                 $objectCallback,
                 'body {background: url(dir/body.gif);}',
-            ),
-            'default resolution without a callback' => array(
-                'body {background: url(../body.gif);}',
-                '/base_dir/pub/original/subdir/original_name.css',
-                '/base_dir/pub/new/subdir/any_new_name.css',
-                null,
-                'body {background: url(../../original/body.gif);}',
-            ),
-            'callback must receive original path' => array(
-                'body {background: url(../body.gif);}',
-                '/base_dir/pub/original/subdir/original_name.css',
-                '/base_dir/pub/new/subdir/any_new_name.css',
-                $callbackByOrigPath,
-                'body {background: url(../../original/body.gif);}',
             ),
         );
     }

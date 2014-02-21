@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Theme
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -77,7 +77,7 @@ class General
     /**
      * Create a form element with necessary controls
      *
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\General|\Magento\Backend\Block\Widget\Form
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -113,7 +113,7 @@ class General
      *
      * @param \Magento\Data\Form $form
      * @param array $formData
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\General
+     * @return $this
      */
     protected function _addThemeFieldset($form, $formData)
     {
@@ -210,7 +210,7 @@ class General
     /**
      * No field notes if theme is not editable
      *
-     * @param $text
+     * @param string $text
      * @return string
      */
     protected function _filterFieldNote($text)
@@ -287,7 +287,7 @@ class General
     /**
      * Get theme default values while inheriting other theme
      *
-     * @param $themesCollections
+     * @param array $themesCollections
      * @return array
      */
     protected function _getDefaultsInherited($themesCollections)

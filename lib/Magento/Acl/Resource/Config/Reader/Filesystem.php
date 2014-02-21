@@ -18,13 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Acl\Resource\Config\Reader;
 
 class Filesystem extends \Magento\Config\Reader\Filesystem
 {
+    /**
+     * List of id attributes for merge
+     *
+     * @var array
+     */
+    protected $_idAttributes = array(
+        '/config/acl/resources(/resource)+' => 'id',
+    );
+
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
      * @param \Magento\Config\ConverterInterface $converter
@@ -42,7 +51,7 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'acl.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Acl\Resource\Config\Dom',
+        $domDocumentClass = 'Magento\Config\Dom',
         $defaultScope = 'global'
     ) {
         parent::__construct(

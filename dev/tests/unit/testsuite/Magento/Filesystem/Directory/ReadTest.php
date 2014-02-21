@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Filesystem\Directory;
@@ -79,25 +79,8 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testStat()
     {
         $this->driver->expects($this->once())
-            ->method('isExists')
-            ->will($this->returnValue(true));
-        $this->driver->expects($this->once())
             ->method('stat')
             ->will($this->returnValue(array('some-stat-data')));
         $this->assertEquals(array('some-stat-data'), $this->read->stat('correct-path'));
     }
-
-    /**
-     * @expectedException \Magento\Filesystem\FilesystemException
-     */
-    public function testAssertExist()
-    {
-        $this->driver->expects($this->once())
-            ->method('isExists')
-            ->will($this->returnValue(false));
-        $this->read->stat('wrong-path');
-    }
-
-
-
 }

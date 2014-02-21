@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Gdata
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,7 +35,9 @@ namespace Magento\Gdata\Gshopping\Extension;
 class Tax extends \Zend_Gdata_App_Extension_Element
 {
     /**
-     * @var string The XML namespace prefix
+     * The XML namespace prefix
+     *
+     * @var string
      */
     protected $_rootNamespace = 'scp';
 
@@ -84,6 +86,7 @@ class Tax extends \Zend_Gdata_App_Extension_Element
      * objects are created and stored in an array.
      *
      * @param \DOMNode $child The \DOMNode needed to be handled
+     * @return void
      */
     protected function takeChildFromDOM($child)
     {

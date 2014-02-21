@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -41,15 +41,12 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
 
 ?>
 <?php if (count($_tierPrices) > 0): ?>
-    <ul class="<?php echo ($this->getInGrouped() ? 'tier prices grouped items' : 'prices tier items'); ?>">
-        <?php if ($this->getInGrouped()): ?>
-            <?php $_tierPrices = $this->getTierPrices($_product); ?>
-        <?php endif; ?>
+    <ul class="<?php echo ($this->hasListClass() ? $this->getListClass() : 'prices tier items'); ?>">
         <?php $this->helper('Magento\Weee\Helper\Data')->processTierPrices($_product, $_tierPrices); ?>
         <?php foreach ($_tierPrices as $_index => $_price): ?>
             <li class="item">
                 <?php if ($_catalogHelper->canApplyMsrp($_product)): ?>
-                    <?php if ($this->getInGrouped()): ?>
+                    <?php if ($this->getShowDetailedPrice() === false): ?>
                         <?php echo __('Buy %1 for', $_price['price_qty']) ?>:
                     <?php else: ?>
                         <?php echo __('Buy %1', $_price['price_qty']) ?>
@@ -181,7 +178,7 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
 
                 <?php endif; // Can apply MSRP ?>
 
-                <?php if (!$this->getInGrouped()): ?>
+                <?php if ($this->getShowDetailedPrice() !== false): ?>
                     <?php if(($_product->getPrice() == $_product->getFinalPrice() && $_product->getPrice() > $_price['price'])
                         || ($_product->getPrice() != $_product->getFinalPrice() &&  $_product->getFinalPrice() > $_price['price'])): ?>
                         <?php echo __('and') ?>&nbsp;<strong class="benefit"><?php echo __('save')?>&nbsp;<span class="percent tier-<?php echo $_index;?>"><?php echo $_price['savePercent']?></span>%
@@ -191,11 +188,24 @@ if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay($_product, array(1,
         <?php if ($_catalogHelper->isShowPriceOnGesture($_product)):?>
             <?php $popupId = 'msrp-popup-' . $_product->getId() . $this->getRandomString(20); ?>
             <?php
-            $addToCartUrl = $this->getProduct()->isSalable()
-                ? $this->getAddToCartUrl($_product, array('qty' => $_price['price_qty']))
-                : '';
+            $tierPriceData = [
+                'addToCartUrl' => $this->getProduct()->isSalable()
+                        ? $this->getAddToCartUrl($_product, array('qty' => $_price['price_qty']))
+                        : '',
+                'name' => $_product->getName(),
+                'price' => $_price['real_price_html'],
+                'msrp' => $this->helper('Magento\Core\Helper\Data')->currency($_product->getMsrp(), true, false),
+            ];
+            if ($this->getCanDisplayQty() !== false) {
+                $tierPriceData['qty'] = $_price['price_qty'];
+            }
             ?>
-            <a href="#" id="<?php echo($popupId);?>" data-tier-price='{addToCartUrl:"<?php echo $addToCartUrl; ?>", name:"<?php echo $_product->getName() ?>", price:<?php echo json_encode($_price['real_price_html']) ?>, msrp:"<?php echo $this->helper('Magento\Core\Helper\Data')->currency($_product->getMsrp(),true,false) ?>"<?php if (!$this->getInGrouped()): ?>, qty:"<?php echo $_price['price_qty']?>"<?php endif ?>}'><?php echo __('Click for price'); ?></a>
+            <a href="#"
+               id="<?php echo($popupId);?>"
+               data-tier-price="<?php $this->escapeHtml(
+                   $this->helper('Magento\Core\Helper\Data')->jsonEncode($tierPriceData)
+               )?>"
+            ><?php echo __('Click for price'); ?></a>
         <?php else: ?>
             <span class="msrp-price-hide-message">
                 <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,26 +30,36 @@ namespace Magento\View\Asset;
 class MinifyService
 {
     /**
+     * Config
+     *
      * @var ConfigInterface
      */
     protected $config;
 
     /**
+     * ObjectManager
+     *
      * @var \Magento\ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Enabled
+     *
      * @var array
      */
     protected $enabled = array();
 
     /**
+     * Minfiers
+     *
      * @var \Magento\Code\Minifier[]
      */
     protected $minifiers = array();
 
     /**
+     * Applicaiton State
+     *
      * @var \Magento\App\State
      */
     protected $appState;
@@ -57,21 +67,23 @@ class MinifyService
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
+     * Constructor
+     *
      * @param ConfigInterface $config
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\App\State $appState
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         ConfigInterface $config,
         \Magento\ObjectManager $objectManager,
         \Magento\App\State $appState,
-        \Magento\Filesystem $filesystem
+        \Magento\App\Filesystem $filesystem
     ) {
         $this->config = $config;
         $this->objectManager = $objectManager;
@@ -126,7 +138,7 @@ class MinifyService
                         ->create('Magento\Code\Minifier\Strategy\Generate', $strategyParams);
             }
             $baseDir = $this->_filesystem
-                ->getDirectoryRead(\Magento\Filesystem::PUB_VIEW_CACHE)
+                ->getDirectoryRead(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
                 ->getAbsolutePath('minify');
 
             $this->minifiers[$contentType] = $this->objectManager->create('Magento\Code\Minifier',
@@ -142,7 +154,7 @@ class MinifyService
     /**
      * Check if minification is enabled for specified content type
      *
-     * @param $contentType
+     * @param string $contentType
      * @return bool
      */
     protected function isEnabled($contentType)
@@ -156,7 +168,7 @@ class MinifyService
     /**
      * Get minification adapter by specified content type
      *
-     * @param $contentType
+     * @param string $contentType
      * @return mixed
      * @throws \Magento\Exception
      */

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -44,11 +44,18 @@ namespace Magento\Core\Model\Translate;
 
 class String extends \Magento\Core\Model\AbstractModel
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Core\Model\Resource\Translate\String');
     }
 
+    /**
+     * @param string $string
+     * @return $this
+     */
     public function setString($string)
     {
         $this->setData('string', $string);

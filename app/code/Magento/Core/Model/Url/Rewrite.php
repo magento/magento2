@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -59,12 +59,11 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     const TYPE_CATEGORY = 1;
     const TYPE_PRODUCT  = 2;
     const TYPE_CUSTOM   = 3;
-    const REWRITE_REQUEST_PATH_ALIAS = 'rewrite_request_path';
 
     /**
      * Cache tag for clear cache in after save and after delete
      *
-     * @var mixed | array | string | boolean
+     * @var array|string|boolean
      */
     protected $_cacheTag = false;
 
@@ -86,11 +85,17 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     protected $_storeManager;
 
     /**
+     * @var \Magento\App\ResponseInterface
+     */
+    protected $response;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\App $app
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -101,6 +106,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\App $app,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\ResponseInterface $response,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -108,9 +114,13 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_app = $app;
         $this->_storeManager = $storeManager;
+        $this->response = $response;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Core\Model\Resource\Url\Rewrite');
@@ -119,7 +129,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     /**
      * Clean cache for front-end menu
      *
-     * @return  \Magento\Core\Model\Url\Rewrite
+     * @return  $this
      */
     protected function _afterSave()
     {
@@ -137,7 +147,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
      * If $path is array - we must load possible records and choose one matching earlier record in array
      *
      * @param   mixed $path
-     * @return  \Magento\Core\Model\Url\Rewrite
+     * @return  $this
      */
     public function loadByRequestPath($path)
     {
@@ -149,12 +159,20 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param int $path
+     * @return $this
+     */
     public function loadByIdPath($path)
     {
         $this->setId(null)->load($path, 'id_path');
         return $this;
     }
 
+    /**
+     * @param mixed $tags
+     * @return $this
+     */
     public function loadByTags($tags)
     {
         $this->setId(null);
@@ -183,6 +201,10 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param mixed $key
+     * @return bool
+     */
     public function hasOption($key)
     {
         $optArr = explode(',', $this->getOptions());
@@ -190,6 +212,10 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         return array_search($key, $optArr) !== false;
     }
 
+    /**
+     * @param mixed $tags
+     * @return $this
+     */
     public function addTag($tags)
     {
         $curTags = $this->getTags();
@@ -210,6 +236,10 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param mixed $tags
+     * @return $this
+     */
     public function removeTag($tags)
     {
         $curTags = $this->getTags();
@@ -289,6 +319,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
             $this->setStoreId($currentStore->getId())->loadByIdPath($this->getIdPath());
 
             $this->_app->getCookie()->set(\Magento\Core\Model\Store::COOKIE_NAME, $currentStore->getCode(), true);
+            $this->response->setVary(\Magento\Core\Model\Store::ENTITY, $currentStore->getCode());
             $targetUrl = $request->getBaseUrl(). '/' . $this->getRequestPath();
 
             $this->_sendRedirectHeaders($targetUrl, true);
@@ -299,12 +330,13 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         }
 
 
-        $request->setAlias(self::REWRITE_REQUEST_PATH_ALIAS, $this->getRequestPath());
+        $request->setAlias(\Magento\Url::REWRITE_REQUEST_PATH_ALIAS, $this->getRequestPath());
         $external = substr($this->getTargetPath(), 0, 6);
         $isPermanentRedirectOption = $this->hasOption('RP');
         if ($external === 'http:/' || $external === 'https:') {
             $destinationStoreCode = $this->_storeManager->getStore($this->getStoreId())->getCode();
             $this->_app->getCookie()->set(\Magento\Core\Model\Store::COOKIE_NAME, $destinationStoreCode, true);
+            $this->response->setVary(\Magento\Core\Model\Store::ENTITY, $destinationStoreCode);
 
             $this->_sendRedirectHeaders($this->getTargetPath(), $isPermanentRedirectOption);
         } else {
@@ -334,6 +366,9 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         return true;
     }
 
+    /**
+     * @return bool|string
+     */
     protected function _getQueryString()
     {
         if (!empty($_SERVER['QUERY_STRING'])) {
@@ -355,6 +390,9 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         return false;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStoreId()
     {
         return $this->_getData('store_id');
@@ -365,6 +403,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
      *
      * @param string $url
      * @param bool $isPermanent
+     * @return void
      */
     protected function _sendRedirectHeaders($url, $isPermanent = false)
     {

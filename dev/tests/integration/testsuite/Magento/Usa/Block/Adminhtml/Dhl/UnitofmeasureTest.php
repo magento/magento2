@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,11 +34,6 @@ class UnitofmeasureTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
-            'Magento\Core\Model\Layout' => array(
-                'parameters' => array('area' => 'adminhtml')
-            )
-        ));
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Usa\Block\Adminhtml\Dhl\Unitofmeasure */

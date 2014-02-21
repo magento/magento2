@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Customer
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -71,7 +71,7 @@ class Multiaction
      *
      * @param  array $action
      * @param  \Magento\Object $row
-     * @return string
+     * @return bool|string
      */
     protected function _toLinkHtml($action, \Magento\Object $row)
     {
@@ -81,12 +81,10 @@ class Multiaction
             if ($product->canConfigure()) {
                 $style = '';
                 $onClick = sprintf('onclick="return %s.configureItem(%s)"', $action['control_object'], $row->getId());
+                return sprintf('<a href="%s" %s %s>%s</a>', $action['url'], $style, $onClick, $action['caption']);
             } else {
-                $style = 'style="color: #CCC;"';
-                $onClick = '';
+                return false;
             }
-
-            return sprintf('<a href="%s" %s %s>%s</a>', $action['url'], $style, $onClick, $action['caption']);
         } else {
             return parent::_toLinkHtml($action, $row);
         }

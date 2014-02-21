@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\App\Cache;
@@ -101,6 +101,7 @@ class TypeList implements \Magento\App\Cache\TypeListInterface
      * Save invalidated cache types
      *
      * @param array $types
+     * @return void
      */
     protected function _saveInvalidatedTypes($types)
     {
@@ -159,6 +160,7 @@ class TypeList implements \Magento\App\Cache\TypeListInterface
      * Mark specific cache type(s) as invalidated
      *
      * @param string|array $typeCode
+     * @return void
      */
     public function invalidate($typeCode)
     {
@@ -176,6 +178,7 @@ class TypeList implements \Magento\App\Cache\TypeListInterface
      * Clean cached data for specific cache type
      *
      * @param string $typeCode
+     * @return void
      */
     public function cleanType($typeCode)
     {

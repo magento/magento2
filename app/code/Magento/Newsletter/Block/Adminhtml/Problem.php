@@ -20,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Newsletter\Block\Adminhtml;
+
+use Magento\Newsletter\Model\Resource\Problem\Collection;
 
 /**
  * Newsletter problem block template.
@@ -31,11 +34,12 @@
  * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Block\Adminhtml;
-
 class Problem extends \Magento\Backend\Block\Template
 {
 
+    /**
+     * @var string
+     */
     protected $_template = 'problem/list.phtml';
 
     /**
@@ -45,18 +49,21 @@ class Problem extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Newsletter\Model\Resource\Problem\Collection $problemCollection
+     * @param Collection $problemCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Newsletter\Model\Resource\Problem\Collection $problemCollection,
+        Collection $problemCollection,
         array $data = array()
     ) {
         $this->_problemCollection = $problemCollection;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -65,6 +72,11 @@ class Problem extends \Magento\Backend\Block\Template
             ->addQueueInfo();
     }
 
+    /**
+     * Prepare for the newsletter block layout
+     *
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $this->setChild('deleteButton',
@@ -89,16 +101,31 @@ class Problem extends \Magento\Backend\Block\Template
         return parent::_prepareLayout();
     }
 
+    /**
+     * Get the html element for unsubscribe button
+     *
+     * @return $string
+     */
     public function getUnsubscribeButtonHtml()
     {
         return $this->getChildHtml('unsubscribeButton');
     }
 
+    /**
+     * Get the html element for delete button
+     *
+     * @return $string
+     */
     public function getDeleteButtonHtml()
     {
         return $this->getChildHtml('deleteButton');
     }
 
+    /**
+     * Return true if the size is greater than 0
+     *
+     * @return bool
+     */
     public function getShowButtons()
     {
         return $this->_problemCollection->getSize() > 0;

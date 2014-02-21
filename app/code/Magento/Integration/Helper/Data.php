@@ -18,10 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Helper;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
@@ -54,7 +53,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Check if integration is created using config file
      *
-     * @param $integrationData
+     * @param array $integrationData
      * @return bool true if integration is created using Config file
      */
     public function isConfigType($integrationData)

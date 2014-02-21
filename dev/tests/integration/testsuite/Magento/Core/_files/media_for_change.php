@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Core
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
@@ -43,10 +43,17 @@ foreach ($files as $file) {
     touch($themeDir . '/' . $file, $mTime);
 }
 
+
+$appInstallDir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir();
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
+    \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+        \Magento\App\Filesystem::THEMES_DIR => array('path' => "$appInstallDir/media_for_change"),
+    )
+));
+
 /** @var $registration \Magento\Core\Model\Theme\Registration */
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Core\Model\Theme\Registration');
 $registration->register(
-    $designDir,
     '*/*/theme.xml'
 );

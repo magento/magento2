@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -122,13 +122,14 @@ abstract class AbstractCollection
     /**
      * Retrieve Product Index table name
      *
+     * @return string
      */
     abstract protected function _getTableName();
 
     /**
      * Join index table
      *
-     * @return \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @return $this
      */
     protected function _joinIdxTable()
     {
@@ -151,7 +152,7 @@ abstract class AbstractCollection
     /**
      * Add Viewed Products Index to Collection
      *
-     * @return \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @return $this
      */
     public function addIndexFilter()
     {
@@ -166,7 +167,7 @@ abstract class AbstractCollection
      * Add filter by product ids
      *
      * @param array $ids
-     * @return \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @return $this
      */
     public function addFilterByIds($ids)
     {
@@ -202,7 +203,7 @@ abstract class AbstractCollection
      * Set customer id, that will be used in 'whereCondition'
      *
      * @param int $id
-     * @return \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @return $this
      */
     public function setCustomerId($id)
     {
@@ -214,7 +215,7 @@ abstract class AbstractCollection
      * Add order by "added at"
      *
      * @param string $dir
-     * @return \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @return $this
      */
     public function setAddedAtOrder($dir = self::SORT_ORDER_DESC)
     {
@@ -228,7 +229,7 @@ abstract class AbstractCollection
      * Add exclude Product Ids
      *
      * @param int|array $productIds
-     * @return \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @return $this
      */
     public function excludeProductIds($productIds)
     {

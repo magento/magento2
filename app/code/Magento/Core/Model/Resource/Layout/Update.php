@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Resource\Layout;
 
 /**
  * Layout update resource model
  */
-namespace Magento\Core\Model\Resource\Layout;
-
 class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -88,7 +87,7 @@ class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _getFetchUpdatesByHandleSelect($loadAllUpdates = false)
     {
-        //TODO Why it also loads layout updates for store_id=0, isn't it Admin Store View?
+        //@todo Why it also loads layout updates for store_id=0, isn't it Admin Store View?
         //If 0 means 'all stores' why it then refers by foreign key to Admin in `core_store` and not to something named
         // 'All Stores'?
 
@@ -112,7 +111,7 @@ class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Update a "layout update link" if relevant data is provided
      *
      * @param \Magento\Core\Model\Layout\Update|\Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Layout\Update
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {

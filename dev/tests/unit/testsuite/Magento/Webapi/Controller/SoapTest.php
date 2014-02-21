@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Webapi\Controller;
@@ -198,18 +198,15 @@ EXPECTED_MESSAGE;
         $this->_appStateMock->expects($this->any())
             ->method('isInstalled')
             ->will($this->returnValue(true));
-        $soapResponse = 'Some some response';
-        $this->_soapServerMock->expects($this->any())
-            ->method('handle')
-            ->will($this->returnValue($soapResponse));
+        $this->_soapServerMock->expects($this->once())
+            ->method('handle');
         $_SERVER['HTTP_AUTHORIZATION'] = 'OAuth access_token';
         $this->_oauthServiceMock->expects($this->once())
             ->method('validateAccessToken')
             ->will($this->returnValue(true));
-
-        $this->_soapController->dispatch($this->_requestMock);
+        $response = $this->_soapController->dispatch($this->_requestMock);
+        $this->assertEquals(200, $response->getHttpResponseCode());
         unset($_SERVER['HTTP_AUTHORIZATION']);
-        $this->assertEquals($soapResponse, $this->_responseMock->getBody());
     }
 
     /**

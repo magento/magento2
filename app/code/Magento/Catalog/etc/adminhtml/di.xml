@@ -19,47 +19,61 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <preference for="Magento\Catalog\Model\Product\Type\Grouped" type="Magento\Catalog\Model\Product\Type\Grouped\Backend" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <preference for="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite" />
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute">
-        <param name="attributeLabelCache">
-            <instance type="Magento\App\Cache\Type\Translate" />
-        </param>
+        <arguments>
+            <argument name="attributeLabelCache" xsi:type="object">Magento\App\Cache\Type\Translate</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Session">
-        <param name="sessionName">
-            <value>adminhtml</value>
-        </param>
+        <arguments>
+            <argument name="sessionName" xsi:type="string">adminhtml</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark">
-        <param name="imageTypes">
-            <value>
-                <small>
-                    <title>Small</title>
-                    <attribute>small_image</attribute>
-                </small>
-                <main>
-                    <title>Main</title>
-                    <attribute>image</attribute>
-                </main>
-                <cart>
-                    <title>Thumbnail</title>
-                    <attribute>thumbnail</attribute>
-                </cart>
-                <custom>
-                    <title>Custom image</title>
-                    <attribute>custom_image</attribute>
-                </custom>
-            </value>
-        </param>
+        <arguments>
+            <argument name="imageTypes" xsi:type="array">
+                <item name="small" xsi:type="array">
+                    <item name="title" xsi:type="string">Small</item>
+                    <item name="attribute" xsi:type="string">small_image</item>
+                </item>
+                <item name="main" xsi:type="array">
+                    <item name="title" xsi:type="string">Main</item>
+                    <item name="attribute" xsi:type="string">image</item>
+                </item>
+                <item name="cart" xsi:type="array">
+                    <item name="title" xsi:type="string">Thumbnail</item>
+                    <item name="attribute" xsi:type="string">thumbnail</item>
+                </item>
+                <item name="custom" xsi:type="array">
+                    <item name="title" xsi:type="string">Custom image</item>
+                    <item name="attribute" xsi:type="string">custom_image</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Flat\AbstractFlat">
-        <param name="isAvailable">
-            <value type="bool">false</value>
-        </param>
+        <arguments>
+            <argument name="isAvailable" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
+        <arguments>
+            <argument name="constructors" xsi:type="array">
+                <item name="crossSell" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\CrossSell</item>
+                <item name="upSell" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\UpSell</item>
+                <item name="related" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\Related</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Copier">
+        <arguments>
+            <argument name="copyConstructor" xsi:type="object">Magento\Catalog\Model\Product\CopyConstructor\Composite</argument>
+        </arguments>
     </type>
 </config>

@@ -21,12 +21,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Authorization\Policy;
 
-class Acl implements \Magento\Authorization\Policy
+use Magento\Acl\Builder;
+use Magento\Authorization\Policy;
+
+class Acl implements Policy
 {
     /**
      * @var \Magento\Acl\Builder
@@ -34,9 +37,9 @@ class Acl implements \Magento\Authorization\Policy
     protected $_aclBuilder;
 
     /**
-     * @param \Magento\Acl\Builder $aclBuilder
+     * @param Builder $aclBuilder
      */
-    public function __construct(\Magento\Acl\Builder $aclBuilder)
+    public function __construct(Builder $aclBuilder)
     {
         $this->_aclBuilder = $aclBuilder;
     }
@@ -46,7 +49,7 @@ class Acl implements \Magento\Authorization\Policy
      *
      * @param string $roleId
      * @param string $resourceId
-     * @param mixed $privilege
+     * @param string $privilege
      * @return bool
      */
     public function isAllowed($roleId, $resourceId, $privilege = null)

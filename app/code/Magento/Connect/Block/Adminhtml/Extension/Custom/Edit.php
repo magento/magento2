@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,6 +39,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Constructor
      *
      * Initializes edit form container, adds necessary buttons
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -74,16 +76,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-    * Get header of page
-    *
-    * @return string
-    */
+     * Get header of page
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         return __('New Extension');
     }
 
-    /*
+    /**
      * Get form submit URL
      *
      * @return string

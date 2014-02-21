@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Bundle
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -50,7 +50,6 @@ class Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Bundle\Helper\Data $bundleData
@@ -58,7 +57,6 @@ class Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Bundle\Helper\Data $bundleData,
@@ -66,7 +64,7 @@ class Grid
     ) {
         $this->_bundleData = $bundleData;
         $this->_productFactory = $productFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     protected function _construct()
@@ -115,7 +113,6 @@ class Grid
     {
         $collection = $this->_productFactory->create()->getCollection()
             ->setOrder('id')
-            ->setStore($this->getStore())
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
@@ -123,7 +120,7 @@ class Grid
             ->addAttributeToFilter('entity_id', array('nin' => $this->_getSelectedProducts()))
             ->addAttributeToFilter('type_id', array('in' => $this->getAllowedSelectionTypes()))
             ->addFilterByRequiredOptions()
-            ->addStoreFilter();
+            ->addStoreFilter(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
 
         if ($this->getFirstShow()) {
             $collection->addIdFilter('-1');
@@ -169,8 +166,6 @@ class Grid
             'header'    => __('Price'),
             'align'     => 'center',
             'type'      => 'currency',
-            'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
-            'rate'      => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
             'index'     => 'price',
             'header_css_class'=> 'col-price',
             'column_css_class'=> 'col-price'
@@ -206,11 +201,6 @@ class Grid
         } else {
             return array();
         }
-    }
-
-    public function getStore()
-    {
-        return $this->_storeManager->getStore();
     }
 
     /**

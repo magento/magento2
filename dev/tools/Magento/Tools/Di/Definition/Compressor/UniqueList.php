@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tools\Di\Definition\Compressor;
@@ -40,8 +40,8 @@ class UniqueList
      */
     public function getNumber($item)
     {
-        if (in_array($item, $this->_items)) {
-            return array_search($item, $this->_items);
+        if (in_array($item, $this->_items, true)) {
+            return array_search($item, $this->_items, true);
         } else {
             $this->_items[] = $item;
             return count($this->_items) - 1;

@@ -20,15 +20,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\App;
 
-use Magento\App\Config,
+use Magento\App\Arguments,
     Magento\Profiler,
-    Magento\Filesystem;
+    Magento\App\Filesystem;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -64,70 +64,68 @@ class ObjectManagerFactory
      */
     public function create($rootDir, array $arguments)
     {
-        $directories = new \Magento\Filesystem\DirectoryList(
-            $rootDir,
-            isset($arguments[\Magento\Filesystem::PARAM_APP_DIRS])
-                ? $arguments[\Magento\Filesystem::PARAM_APP_DIRS]
-                : array()
+        $directories = isset($arguments[\Magento\App\Filesystem::PARAM_APP_DIRS])
+            ? $arguments[\Magento\App\Filesystem::PARAM_APP_DIRS]
+            : array();
+        $directoryList = new \Magento\App\Filesystem\DirectoryList($rootDir, $directories);
+
+        \Magento\Autoload\IncludePath::addIncludePath(
+            array($directoryList->getDir(\Magento\App\Filesystem::GENERATION_DIR))
         );
 
-        \Magento\Autoload\IncludePath::addIncludePath(array($directories->getDir(\Magento\Filesystem::GENERATION)));
-
-        $options = new Config(
-            $arguments,
-            new Config\Loader(
-                $directories,
-                isset($arguments[Config\Loader::PARAM_CUSTOM_FILE])
-                    ? $arguments[Config\Loader::PARAM_CUSTOM_FILE]
-                    : null
-            )
-        );
+        $appArguments = $this->createAppArguments($directoryList, $arguments);
 
         $definitionFactory = new \Magento\ObjectManager\DefinitionFactory(
             new \Magento\Filesystem\Driver\File(),
-            $directories->getDir(\Magento\Filesystem::DI),
-            $directories->getDir(\Magento\Filesystem::GENERATION),
-            $options->get('definition.format', 'serialized')
+            $directoryList->getDir(\Magento\App\Filesystem::DI_DIR),
+            $directoryList->getDir(\Magento\App\Filesystem::GENERATION_DIR),
+            $appArguments->get('definition.format', 'serialized')
         );
 
-        $definitions = $definitionFactory->createClassDefinition($options->get('definitions'));
+        $definitions = $definitionFactory->createClassDefinition($appArguments->get('definitions'));
         $relations = $definitionFactory->createRelations();
         $configClass = $this->_configClassName;
         /** @var \Magento\ObjectManager\Config\Config $diConfig */
         $diConfig = new $configClass($relations, $definitions);
-        $appMode = $options->get(State::PARAM_MODE, State::MODE_DEFAULT);
+        $appMode = $appArguments->get(State::PARAM_MODE, State::MODE_DEFAULT);
 
-        $configData = $this->_loadPrimaryConfig($directories->getDir(\Magento\Filesystem::ROOT), $appMode);
+        $configData = $this->_loadPrimaryConfig($directoryList, $appMode);
 
         if ($configData) {
             $diConfig->extend($configData);
         }
 
-        $factory = new \Magento\ObjectManager\Factory\Factory($diConfig, null, $definitions, $options->get());
+        $booleanUtils = new \Magento\Stdlib\BooleanUtils();
+        $argFactory = new \Magento\ObjectManager\Config\Argument\ObjectFactory($diConfig);
+        $argInterpreter = $this->createArgumentInterpreter($booleanUtils, $argFactory, $appArguments);
+        $factory = new \Magento\ObjectManager\Factory\Factory($diConfig, $argInterpreter, $argFactory, $definitions);
 
         $className = $this->_locatorClassName;
-        /** @var \Magento\ObjectManager $locator */
-        $locator = new $className($factory, $diConfig, array(
-            'Magento\App\Config' => $options,
-            'Magento\Filesystem\DirectoryList' => $directories
+        /** @var \Magento\ObjectManager $objectManager */
+        $objectManager = new $className($factory, $diConfig, array(
+            'Magento\App\Arguments' => $appArguments,
+            'Magento\App\Filesystem\DirectoryList' => $directoryList,
+            'Magento\Filesystem\DirectoryList' => $directoryList,
+            'Magento\Stdlib\BooleanUtils' => $booleanUtils,
         ));
 
-        \Magento\App\ObjectManager::setInstance($locator);
+        $argFactory->setObjectManager($objectManager);
+        \Magento\App\ObjectManager::setInstance($objectManager);
 
-        /** @var \Magento\Filesystem\DirectoryList\Verification $verification */
-        $verification = $locator->get('Magento\Filesystem\DirectoryList\Verification');
+        /** @var \Magento\App\Filesystem\DirectoryList\Verification $verification */
+        $verification = $objectManager->get('Magento\App\Filesystem\DirectoryList\Verification');
         $verification->createAndVerifyDirectories();
 
-        $diConfig->setCache($locator->get('Magento\App\ObjectManager\ConfigCache'));
-        $locator->configure(
-            $locator->get('Magento\App\ObjectManager\ConfigLoader')->load('global')
+        $diConfig->setCache($objectManager->get('Magento\App\ObjectManager\ConfigCache'));
+        $objectManager->configure(
+            $objectManager->get('Magento\App\ObjectManager\ConfigLoader')->load('global')
         );
-        $locator->get('Magento\Config\ScopeInterface')->setCurrentScope('global');
-        $locator->get('Magento\App\Resource')->setCache($locator->get('Magento\App\CacheInterface'));
+        $objectManager->get('Magento\Config\ScopeInterface')->setCurrentScope('global');
+        $objectManager->get('Magento\App\Resource')->setCache($objectManager->get('Magento\App\CacheInterface'));
 
         $relations = $definitionFactory->createRelations();
 
-        $interceptionConfig = $locator->create('Magento\Interception\Config\Config', array(
+        $interceptionConfig = $objectManager->create('Magento\Interception\Config\Config', array(
             'relations' => $relations,
             'omConfig' => $diConfig,
             'classDefinitions' => $definitions instanceof \Magento\ObjectManager\Definition\Compiled
@@ -135,33 +133,93 @@ class ObjectManagerFactory
                 : null,
         ));
 
-        $pluginList = $this->_createPluginList($locator, $relations, $definitionFactory, $diConfig, $definitions);
+        $pluginList = $this->_createPluginList($objectManager, $relations, $definitionFactory, $diConfig, $definitions);
 
-        $factory = $locator->create('Magento\Interception\FactoryDecorator', array(
+        $factory = $objectManager->create('Magento\Interception\FactoryDecorator', array(
             'factory' => $factory,
             'config' => $interceptionConfig,
             'pluginList' => $pluginList
         ));
-        $locator->setFactory($factory);
+        $objectManager->setFactory($factory);
 
-        $directoryListConfig = $locator->get('Magento\Filesystem\DirectoryList\Configuration');
-        $directoryListConfig->configure($directories);
+        $this->configureDirectories($objectManager);
 
-        return $locator;
+        return $objectManager;
+    }
+
+    /**
+     * Create instance of application arguments
+     *
+     * @param Filesystem\DirectoryList $directoryList
+     * @param array $arguments
+     * @return Arguments
+     */
+    protected function createAppArguments(\Magento\App\Filesystem\DirectoryList $directoryList, array $arguments)
+    {
+        return new \Magento\App\Arguments(
+            $arguments,
+            new \Magento\App\Arguments\Loader(
+                $directoryList,
+                isset($arguments[\Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE])
+                    ? $arguments[\Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE]
+                    : null
+            )
+        );
+    }
+
+    /**
+     * Return newly created instance on an argument interpreter, suitable for processing DI arguments
+     *
+     * @param \Magento\Stdlib\BooleanUtils $booleanUtils
+     * @param \Magento\ObjectManager\Config\Argument\ObjectFactory $objFactory
+     * @param \Magento\App\Arguments $appArguments
+     * @return \Magento\Data\Argument\InterpreterInterface
+     */
+    protected function createArgumentInterpreter(
+        \Magento\Stdlib\BooleanUtils $booleanUtils,
+        \Magento\ObjectManager\Config\Argument\ObjectFactory $objFactory,
+        \Magento\App\Arguments $appArguments
+    ) {
+        $constInterpreter = new \Magento\Data\Argument\Interpreter\Constant();
+        $result = new \Magento\Data\Argument\Interpreter\Composite(
+            array(
+                'boolean' => new \Magento\Data\Argument\Interpreter\Boolean($booleanUtils),
+                'string' => new \Magento\Data\Argument\Interpreter\String($booleanUtils),
+                'number' => new \Magento\Data\Argument\Interpreter\Number(),
+                'null' => new \Magento\Data\Argument\Interpreter\NullType(),
+                'const' => $constInterpreter,
+                'object' => new \Magento\ObjectManager\Config\Argument\Interpreter\Object($booleanUtils, $objFactory),
+                'init_parameter' => new \Magento\App\Arguments\ArgumentInterpreter($appArguments, $constInterpreter),
+            ),
+            \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE
+        );
+        // Add interpreters that reference the composite
+        $result->addInterpreter('array', new \Magento\Data\Argument\Interpreter\ArrayType($result));
+        return $result;
+    }
+
+    /**
+     * @param \Magento\ObjectManager $objectManager
+     */
+    protected function configureDirectories(\Magento\ObjectManager $objectManager)
+    {
+        $directoryList = $objectManager->get('Magento\App\Filesystem\DirectoryList');
+        $directoryListConfig = $objectManager->get('Magento\App\Filesystem\DirectoryList\Configuration');
+        $directoryListConfig->configure($directoryList);
     }
 
     /**
      * Load primary config data
      *
-     * @param string $configDirectoryPath
+     * @param \Magento\Filesystem\DirectoryList $directoryList
      * @param string $appMode
      * @return array
      * @throws \Magento\BootstrapException
      */
-    protected function _loadPrimaryConfig($configDirectoryPath, $appMode)
+    protected function _loadPrimaryConfig($directoryList, $appMode)
     {
         $configData = null;
-        $primaryLoader = new \Magento\App\ObjectManager\ConfigLoader\Primary($configDirectoryPath, $appMode);
+        $primaryLoader = new \Magento\App\ObjectManager\ConfigLoader\Primary($directoryList, $appMode);
         try {
             $configData = $primaryLoader->load();
         } catch (\Exception $e) {
@@ -173,7 +231,7 @@ class ObjectManagerFactory
     /**
      * Crete plugin list object
      *
-     * @param \Magento\ObjectManager $locator
+     * @param \Magento\ObjectManager $objectManager
      * @param \Magento\ObjectManager\Relations $relations
      * @param \Magento\ObjectManager\DefinitionFactory $definitionFactory
      * @param \Magento\ObjectManager\Config\Config $diConfig
@@ -181,13 +239,13 @@ class ObjectManagerFactory
      * @return \Magento\Interception\PluginList\PluginList
      */
     protected function _createPluginList(
-        \Magento\ObjectManager $locator,
+        \Magento\ObjectManager $objectManager,
         \Magento\ObjectManager\Relations $relations,
         \Magento\ObjectManager\DefinitionFactory $definitionFactory,
         \Magento\ObjectManager\Config\Config $diConfig,
         \Magento\ObjectManager\Definition $definitions
     ) {
-        return $locator->create('Magento\Interception\PluginList\PluginList', array(
+        return $objectManager->create('Magento\Interception\PluginList\PluginList', array(
             'relations' => $relations,
             'definitions' => $definitionFactory->createPluginDefinition(),
             'omConfig' => $diConfig,

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Adminhtml
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -77,14 +77,24 @@ class Attribute extends \Magento\Backend\App\Action
         return parent::dispatch($request);
     }
 
+    /**
+     * @return $this
+     */
     protected function _initAction()
     {
         $this->_title->add(__('Product Attributes'));
 
         if ($this->getRequest()->getParam('popup')) {
-            $this->_view->loadLayout(
-                array('popup', $this->_view->getDefaultLayoutHandle() . '_popup')
-            );
+            if ($this->getRequest()->getParam('product_tab') == 'variations') {
+                $this->_view->loadLayout(
+                    array('popup', 'catalog_product_attribute_edit_product_tab_variations_popup')
+                );
+            } else {
+                $this->_view->loadLayout(
+                    array('popup', 'catalog_product_attribute_edit_popup')
+                );
+            }
+
             $this->_view->getLayout()->getBlock('root')->addBodyClass('attribute-popup');
         } else {
             $this->_view->loadLayout();
@@ -102,6 +112,9 @@ class Attribute extends \Magento\Backend\App\Action
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_initAction()
@@ -111,11 +124,17 @@ class Attribute extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function newAction()
     {
         $this->_forward('edit');
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $id = $this->getRequest()->getParam('attribute_id');
@@ -164,9 +183,11 @@ class Attribute extends \Magento\Backend\App\Action
             ->setIsPopup((bool)$this->getRequest()->getParam('popup'));
 
         $this->_view->renderLayout();
-
     }
 
+    /**
+     * @return void
+     */
     public function validateAction()
     {
         $response = new \Magento\Object();
@@ -234,6 +255,9 @@ class Attribute extends \Magento\Backend\App\Action
         return $code;
     }
 
+    /**
+     * @return void
+     */
     public function saveAction()
     {
         $data = $this->getRequest()->getPost();
@@ -245,7 +269,7 @@ class Attribute extends \Magento\Backend\App\Action
             if (!empty($data['new_attribute_set_name'])) {
                 /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
                 $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set');
-                $name = $this->_objectManager->get('Magento\Backend\Helper\Data')
+                $name = $this->_objectManager->get('Magento\Filter\FilterManager')
                     ->stripTags($data['new_attribute_set_name']);
                 $name = trim($name);
                 $attributeSet->setEntityTypeId($this->_entityTypeId)
@@ -338,7 +362,6 @@ class Attribute extends \Magento\Backend\App\Action
             }
 
             $data += array(
-                'is_configurable' => 0,
                 'is_filterable' => 0,
                 'is_filterable_in_search' => 0,
                 'apply_to' => array(),
@@ -416,6 +439,9 @@ class Attribute extends \Magento\Backend\App\Action
         $this->_redirect('catalog/*/');
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $id = $this->getRequest()->getParam('attribute_id');
@@ -446,17 +472,6 @@ class Attribute extends \Magento\Backend\App\Action
         }
         $this->messageManager->addError(__('We can\'t find an attribute to delete.'));
         $this->_redirect('catalog/*/');
-    }
-
-    /**
-     * Search for attributes by part of attribute's label in admin store
-     */
-    public function suggestConfigurableAttributesAction()
-    {
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
-            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Product\Configurable\AttributeSelector')
-                ->getSuggestedAttributes($this->getRequest()->getParam('label_part'))
-        ));
     }
 
     /**

@@ -19,7 +19,7 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
@@ -36,7 +36,7 @@
             <div class="box address billing">
                 <strong class="subtitle">
                     <span><?php echo __('Default Billing Address') ?></span>
-                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($this->getAddressById($_pAddsses)) ?>">
+                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($_pAddsses) ?>">
                         <span><?php echo __('Change Billing Address') ?></span>
                     </a>
                 </strong>
@@ -55,7 +55,7 @@
             <div class="box address shipping">
                 <strong class="subtitle">
                     <span><?php echo __('Default Shipping Address') ?></span>
-                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($this->getAddressById($_pAddsses)) ?>">
+                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($_pAddsses) ?>">
                         <span><?php echo __('Change Shipping Address') ?></span>
                     </a>
                 </strong>

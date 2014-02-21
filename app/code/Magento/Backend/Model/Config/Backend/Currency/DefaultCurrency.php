@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -30,14 +30,13 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Currency;
 
-class DefaultCurrency
-    extends \Magento\Backend\Model\Config\Backend\Currency\AbstractCurrency
+class DefaultCurrency extends AbstractCurrency
 {
     /**
      * Check default currency is available in installed currencies
      * Check default currency is available in allowed currencies
      *
-     * @return \Magento\Backend\Model\Config\Backend\Currency\DefaultCurrency
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _afterSave()

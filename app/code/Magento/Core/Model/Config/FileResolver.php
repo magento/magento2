@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Config;
@@ -35,18 +35,20 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     protected $_moduleReader;
 
     /**
+     * File iterator factory
+     *
      * @var \Magento\Config\FileIteratorFactory
      */
     protected $iteratorFactory;
 
     /**
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
         \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Config\FileIteratorFactory $iteratorFactory
     ) {
         $this->iteratorFactory = $iteratorFactory;
@@ -55,16 +57,16 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($filename, $scope)
     {
         switch ($scope) {
             case 'primary':
-                $directory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::CONFIG);
+                $directory = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::CONFIG_DIR);
                 $iterator = $this->iteratorFactory->create(
                     $directory,
-                    $directory->search('#' . preg_quote($filename) . '$#')
+                    $directory->search('{' . $filename . ',*/' . $filename . '}')
                 );
                 break;
             case 'global':

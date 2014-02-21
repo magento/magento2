@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Controller\Adminhtml;
 
 /**
  * Import controller
@@ -31,8 +32,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Controller\Adminhtml;
-
 class Import extends \Magento\Backend\App\Action
 {
     /**
@@ -47,7 +46,7 @@ class Import extends \Magento\Backend\App\Action
     /**
      * Initialize layout.
      *
-     * @return \Magento\ImportExport\Controller\Adminhtml\Import
+     * @return $this
      */
     protected function _initAction()
     {
@@ -69,6 +68,8 @@ class Import extends \Magento\Backend\App\Action
 
     /**
      * Index action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -82,6 +83,8 @@ class Import extends \Magento\Backend\App\Action
 
     /**
      * Start import process action
+     *
+     * @return void
      */
     public function startAction()
     {
@@ -114,6 +117,8 @@ class Import extends \Magento\Backend\App\Action
 
     /**
      * Validate uploaded files action
+     *
+     * @return void
      */
     public function validateAction()
     {
@@ -134,7 +139,8 @@ class Import extends \Magento\Backend\App\Action
                 $import = $this->_objectManager->create('Magento\ImportExport\Model\Import')->setData($data);
                 $source = \Magento\ImportExport\Model\Import\Adapter::findAdapterFor(
                     $import->uploadSource(),
-                    $this->_objectManager->create('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::ROOT)
+                    $this->_objectManager->create('Magento\App\Filesystem')
+                        ->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)
                 );
                 $validationResult = $import->validateSource($source);
 
@@ -183,6 +189,7 @@ class Import extends \Magento\Backend\App\Action
      *
      * @param \Magento\ImportExport\Model\Import $import
      * @param \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result $resultBlock
+     * @return void
      */
     protected function _processValidationError(\Magento\ImportExport\Model\Import $import,
         \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result $resultBlock

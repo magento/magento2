@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Translate
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,7 +31,7 @@
 namespace Magento\Translate;
 
 abstract class AbstractAdapter extends \Zend_Translate_Adapter
-    implements \Magento\Translate\AdapterInterface
+    implements AdapterInterface
 {
     /**
      * Load translation data
@@ -54,9 +54,9 @@ abstract class AbstractAdapter extends \Zend_Translate_Adapter
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param string $messageId
-     * @param boolean $original
+     * @param bool $original
      * @param null $locale
-     * @return boolean
+     * @return false
      */
     public function isTranslated($messageId, $original = false, $locale = null)
     {
@@ -68,7 +68,7 @@ abstract class AbstractAdapter extends \Zend_Translate_Adapter
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param string|\Zend_Locale $locale
-     * @return \Zend_Translate_Adapter
+     * @return $this
      */
     public function setLocale($locale)
     {

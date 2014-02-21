@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -56,7 +56,9 @@ class Element extends \Magento\Simplexml\Element
     /**#@-*/
 
     /**
-     * @return Element
+     * Prepare the element
+     *
+     * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -90,6 +92,8 @@ class Element extends \Magento\Simplexml\Element
     }
 
     /**
+     * Get block name
+     *
      * @return bool|string
      */
     public function getBlockName()
@@ -150,7 +154,7 @@ class Element extends \Magento\Simplexml\Element
     /**
      * Add parent element name to parent attribute
      *
-     * @return Element
+     * @return $this
      */
     public function prepareBlock()
     {
@@ -163,7 +167,9 @@ class Element extends \Magento\Simplexml\Element
     }
 
     /**
-     * @return Element
+     * Prepare references
+     *
+     * @return $this
      */
     public function prepareReference()
     {
@@ -173,7 +179,7 @@ class Element extends \Magento\Simplexml\Element
     /**
      * Add parent element name to block attribute
      *
-     * @return Element
+     * @return $this
      */
     public function prepareAction()
     {
@@ -184,10 +190,22 @@ class Element extends \Magento\Simplexml\Element
     }
 
     /**
-     * @return Element
+     * Prepare action argument
+     *
+     * @return $this
      */
     public function prepareActionArgument()
     {
         return $this;
+    }
+
+    /**
+     * Returns information is this element allows caching
+     *
+     * @return bool
+     */
+    public function isCacheable()
+    {
+        return !(boolean)count($this->xpath('//' . self::TYPE_BLOCK . '[@cacheable="false"]'));
     }
 }

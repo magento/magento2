@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -38,21 +38,29 @@ class Path
     const DIR_NAME = 'theme_customization';
 
     /**
+     * File name
+     *
      * @var string
      */
     protected $filename;
 
     /**
-     * @var \Magento\Filesystem
+     * File system
+     *
+     * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * Media directory read
+     *
      * @var \Magento\Filesystem\Directory\Read
      */
     protected $mediaDirectoryRead;
 
     /**
+     * Theme directory read
+     *
      * @var \Magento\Filesystem\Directory\Read
      */
     protected $themeDirectoryRead;
@@ -60,17 +68,17 @@ class Path
     /**
      * Constructor
      *
-     * @param \Magento\Filesystem $filesystem
-     * @param $filename
+     * @param \Magento\App\Filesystem $filesystem
+     * @param string $filename
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         $filename = \Magento\View\ConfigInterface::CONFIG_FILE_NAME
     ) {
         $this->filesystem           = $filesystem;
         $this->filename             = $filename;
-        $this->mediaDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
-        $this->themeDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\Filesystem::THEMES);
+        $this->mediaDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->themeDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
     }
 
     /**

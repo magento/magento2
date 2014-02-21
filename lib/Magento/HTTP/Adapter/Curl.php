@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_HTTP
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -85,10 +85,10 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
             curl_setopt($this->_getResource(), $option, $value);
         }
 
-        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : 0;
+        $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : true;
         curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYPEER, $verifyPeer);
 
-        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 0;
+        $verifyHost = isset($this->_config['verifyhost']) ? $this->_config['verifyhost'] : 2;
         curl_setopt($this->_getResource(), CURLOPT_SSL_VERIFYHOST, $verifyHost);
 
         foreach ($this->_config as $param => $curlOption) {
@@ -103,7 +103,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Set array of additional cURL options
      *
      * @param array $options
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function setOptions(array $options = array())
     {
@@ -116,7 +116,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      *
      * @param  int $option      the CURLOPT_* constants
      * @param  mixed $value
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function addOption($option, $value)
     {
@@ -128,7 +128,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * Set the configuration array for the adapter
      *
      * @param array $config
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function setConfig($config = array())
     {
@@ -139,11 +139,12 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Connect to the remote server
      *
-     * @deprecated since 1.4.0.0-rc1
      * @param string  $host
      * @param int     $port
      * @param boolean $secure
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
+     *
+     * @deprecated since 1.4.0.0-rc1
      */
     public function connect($host, $port = 80, $secure = false)
     {
@@ -215,7 +216,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     /**
      * Close the connection to the server
      *
-     * @return \Magento\HTTP\Adapter\Curl
+     * @return $this
      */
     public function close()
     {

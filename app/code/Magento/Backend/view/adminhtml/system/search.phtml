@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
@@ -46,9 +46,9 @@
 <div class="search">
     <form action="#" id="form-search">
         <label for="search-global">
-            <input type="text" id="search-global" name="query" data-mage-init="<?php
+            <input type="text" id="search-global" name="query" data-mage-init='<?php
             echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getWidgetInitOptions()))
-            ?>">
+            ?>'>
         </label>
         <button type="submit" title="<?php echo __('Search') ?>"><?php echo __('Search') ?></button>
     </form>

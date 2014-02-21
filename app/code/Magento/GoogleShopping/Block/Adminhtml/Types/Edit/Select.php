@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_GoogleShopping
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Block\Adminhtml\Types\Edit;
 
 /**
  * Adminhtml Google Content attributes select block
@@ -31,11 +32,10 @@
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Block\Adminhtml\Types\Edit;
-
 class Select extends \Magento\Backend\Block\Template
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'types/edit/select.phtml';
-
 }

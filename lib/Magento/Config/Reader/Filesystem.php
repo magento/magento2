@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  */
@@ -88,6 +88,8 @@ class Filesystem implements \Magento\Config\ReaderInterface
     protected $_isValidated;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Config\FileResolverInterface $fileResolver
      * @param \Magento\Config\ConverterInterface $converter
      * @param \Magento\Config\SchemaLocatorInterface $schemaLocator
@@ -142,25 +144,22 @@ class Filesystem implements \Magento\Config\ReaderInterface
     }
 
     /**
+     * Read configuration files
+     *
      * @param array $fileList
      * @return array
      * @throws \Magento\Exception
      */
     protected function _readFiles($fileList)
     {
-        /** @var \Magento\Config\Dom $domDocument */
-        $domDocument = null;
+        /** @var \Magento\Config\Dom $configMerger */
+        $configMerger = null;
         foreach ($fileList as $key => $content) {
             try {
-                if (is_null($domDocument)) {
-                    $class = $this->_domDocumentClass;
-                    $domDocument = new $class(
-                        $content,
-                        $this->_idAttributes,
-                        $this->_perFileSchema
-                    );
+                if (!$configMerger) {
+                    $configMerger = $this->_createConfigMerger($this->_domDocumentClass, $content);
                 } else {
-                    $domDocument->merge($content);
+                    $configMerger->merge($content);
                 }
             } catch (\Magento\Config\Dom\ValidationException $e) {
                 throw new \Magento\Exception("Invalid XML in file " . $key . ":\n" . $e->getMessage());
@@ -168,16 +167,35 @@ class Filesystem implements \Magento\Config\ReaderInterface
         }
         if ($this->_isValidated) {
             $errors = array();
-            if ($domDocument && !$domDocument->validate($this->_schemaFile, $errors)) {
+            if ($configMerger && !$configMerger->validate($this->_schemaFile, $errors)) {
                 $message = "Invalid Document \n";
                 throw new \Magento\Exception($message . implode("\n", $errors));
             }
         }
 
         $output = array();
-        if ($domDocument) {
-            $output = $this->_converter->convert($domDocument->getDom());
+        if ($configMerger) {
+            $output = $this->_converter->convert($configMerger->getDom());
         }
         return $output;
+    }
+
+    /**
+     * Return newly created instance of a config merger
+     *
+     * @param string $mergerClass
+     * @param string $initialContents
+     * @return \Magento\Config\Dom
+     * @throws \UnexpectedValueException
+     */
+    protected function _createConfigMerger($mergerClass, $initialContents)
+    {
+        $result = new $mergerClass($initialContents, $this->_idAttributes, null, $this->_perFileSchema);
+        if (!($result instanceof \Magento\Config\Dom)) {
+            throw new \UnexpectedValueException(
+                "Instance of the DOM config merger is expected, got $mergerClass instead."
+            );
+        }
+        return $result;
     }
 }

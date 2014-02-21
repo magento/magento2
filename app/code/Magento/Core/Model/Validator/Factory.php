@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Validator;
@@ -33,14 +33,14 @@ class Factory
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translator;
 
     /**
      * Validator config files
      *
-     * @var array
+     * @var array|null
      */
     protected $_configFiles = null;
 
@@ -49,12 +49,12 @@ class Factory
      *
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\Core\Model\Translate $translator
+     * @param \Magento\TranslateInterface $translator
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\Core\Model\Translate $translator
+        \Magento\TranslateInterface $translator
     ) {
         $this->_objectManager = $objectManager;
         $this->_translator = $translator;
@@ -65,14 +65,16 @@ class Factory
 
     /**
      * Create and set default translator to \Magento\Validator\AbstractValidator.
+     *
+     * @return void
      */
     protected function _initializeDefaultTranslator()
     {
         $translateAdapter = $this->_translator;
         $objectManager = $this->_objectManager;
-        // Pass translations to \Magento\Core\Model\Translate from validators
+        // Pass translations to \Magento\TranslateInterface from validators
         $translatorCallback = function () use ($translateAdapter, $objectManager) {
-            /** @var \Magento\Core\Model\Translate $translateAdapter */
+            /** @var \Magento\TranslateInterface $translateAdapter */
             return $translateAdapter->translate(func_get_args());
         };
         /** @var \Magento\Translate\Adapter $translator */

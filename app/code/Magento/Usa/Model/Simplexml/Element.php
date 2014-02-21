@@ -20,21 +20,17 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Usa\Model\Simplexml;
 
 /**
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
  *
- * @category Magento
- * @package  Magento_Usa
  * @author   Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Usa\Model\Simplexml;
-
-class Element extends \SimpleXMLElement
+class Element extends \Magento\Simplexml\Element
 {
     /**
      * Adds an attribute to the SimpleXML element
@@ -49,7 +45,7 @@ class Element extends \SimpleXMLElement
         if (!is_null($value)) {
             $value = $this->xmlentities($value);
         }
-        return parent::addAttribute($name, $value, $namespace);
+        parent::addAttribute($name, $value, $namespace);
     }
 
     /**
@@ -71,10 +67,10 @@ class Element extends \SimpleXMLElement
     /**
      * Converts meaningful xml characters to xml entities
      *
-     * @param string
+     * @param string|null $value
      * @return string
      */
-    public function xmlentities($value)
+    public function xmlentities($value = null)
     {
         $value = str_replace('&amp;', '&', $value);
         $value = str_replace('&', '&amp;', $value);

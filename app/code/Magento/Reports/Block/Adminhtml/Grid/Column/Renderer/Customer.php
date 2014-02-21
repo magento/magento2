@@ -20,28 +20,24 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
 /**
  * Adminhtml Report Customers Reviews renderer
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
-
 class Customer
     extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
-     * @return  string
+     * @param \Magento\Object $row
+     * @return string
      */
     public function render(\Magento\Object $row)
     {
@@ -52,7 +48,7 @@ class Customer
         }
 
         return sprintf('<a href="%s">%s</a>',
-            $this->getUrl('adminhtml/catalog_product_review', array('customerId' => $id)),
+            $this->getUrl('catalog/product_review/', array('customerId' => $id)),
             __('Show Reviews')
         );
     }

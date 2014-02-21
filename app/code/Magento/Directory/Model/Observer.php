@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Directory
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -33,7 +33,7 @@ namespace Magento\Directory\Model;
 
 class Observer
 {
-    const CRON_STRING_PATH = 'crontab/jobs/currency_rates_update/schedule/cron_expr';
+    const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
     const IMPORT_ENABLE = 'currency/import/enabled';
     const IMPORT_SERVICE = 'currency/import/service';
 
@@ -54,7 +54,7 @@ class Observer
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\Core\Model\Translate
+     * @var \Magento\TranslateInterface
      */
     protected $_translate;
 
@@ -76,7 +76,7 @@ class Observer
     /**
      * @param \Magento\Directory\Model\Currency\Import\Factory $importFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Translate $translate
+     * @param \Magento\TranslateInterface $translate
      * @param \Magento\Email\Model\TemplateFactory $emailTemplateFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -84,7 +84,7 @@ class Observer
     public function __construct(
         \Magento\Directory\Model\Currency\Import\Factory $importFactory,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Translate $translate,
+        \Magento\TranslateInterface $translate,
         \Magento\Email\Model\TemplateFactory $emailTemplateFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -97,6 +97,10 @@ class Observer
         $this->_currencyFactory = $currencyFactory;
     }
 
+    /**
+     * @param mixed $schedule
+     * @return void
+     */
     public function scheduledUpdateCurrencyRates($schedule)
     {
         $importWarnings = array();

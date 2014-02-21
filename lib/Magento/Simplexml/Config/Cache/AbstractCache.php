@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Simplexml
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -55,7 +55,7 @@ abstract class AbstractCache extends \Magento\Object
      * Add configuration component to stats
      *
      * @param string $component Filename of the configuration component file
-     * @return \Magento\Simplexml\Config\Cache\AbstractCache
+     * @return $this
      */
     public function addComponent($component)
     {
@@ -88,6 +88,9 @@ abstract class AbstractCache extends \Magento\Object
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getComponentsHash()
     {
         $sum = '';

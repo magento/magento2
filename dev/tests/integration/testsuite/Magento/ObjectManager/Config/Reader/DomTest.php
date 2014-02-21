@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\ObjectManager\Config\Reader;
@@ -36,7 +36,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     protected $_fileList;
 
     /**
-     * @var \Magento\App\Config\FileResolver\Primary
+     * @var \Magento\App\Arguments\FileResolver\Primary
      */
     protected $_fileResolverMock;
 
@@ -46,7 +46,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     protected $_mergedConfig;
 
     /**
-     * @var \Magento\App\Config\ValidationState
+     * @var \Magento\App\Arguments\ValidationState
      */
     protected $_validationState;
 
@@ -69,12 +69,13 @@ class DomTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_fileResolverMock = $this->getMock(
-            'Magento\App\Config\FileResolver\Primary', array(), array(), '', false
+            'Magento\App\Arguments\FileResolver\Primary', array(), array(), '', false
         );
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
-        $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom();
+        $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\ObjectManager\Config\Mapper\Dom');
         $this->_validationState =
-            new \Magento\App\Config\ValidationState(\Magento\App\State::MODE_DEFAULT);
+            new \Magento\App\Arguments\ValidationState(\Magento\App\State::MODE_DEFAULT);
         $this->_schemaLocator = new \Magento\ObjectManager\Config\SchemaLocator();
 
         $this->_mergedConfig = new \DOMDocument();

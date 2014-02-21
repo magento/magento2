@@ -20,9 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Widget
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
 /**
  * A chooser for container for widget instances
@@ -32,8 +33,6 @@
  * @method \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container setTheme($theme)
  * @method \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container setArea($area)
  */
-namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
-
 class Container extends \Magento\View\Element\Html\Select
 {
     /**
@@ -66,6 +65,8 @@ class Container extends \Magento\View\Element\Html\Select
 
     /**
      * Assign attributes for the HTML select element
+     *
+     * @return void
      */
     protected function _construct()
     {

@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -26,7 +26,7 @@ namespace Magento\View\Layout\File\Source;
 
 use Magento\View\Layout\File\SourceInterface;
 use Magento\View\Design\ThemeInterface;
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\Filesystem\Directory\ReadInterface;
 use Magento\View\Layout\File\Factory;
 
@@ -36,16 +36,22 @@ use Magento\View\Layout\File\Factory;
 class Base implements SourceInterface
 {
     /**
+     * File factory
+     *
      * @var Factory
      */
     private $fileFactory;
 
     /**
+     * Modules directory
+     *
      * @var ReadInterface
      */
     protected $modulesDirectory;
 
     /**
+     * Constructor
+     *
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      */
@@ -53,7 +59,7 @@ class Base implements SourceInterface
         Filesystem $filesystem,
         Factory $fileFactory
     ) {
-        $this->modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES);
+        $this->modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES_DIR);
         $this->fileFactory = $fileFactory;
     }
 
@@ -68,22 +74,12 @@ class Base implements SourceInterface
     {
         $namespace = $module = '*';
         $area = $theme->getArea();
-        $patternForSearch = str_replace(
-            array('/', '\*'),
-            array('\/', '[\S]+'),
-            preg_quote("~{$namespace}/{$module}/view/{$area}/layout/{$filePath}.xml~")
-        );
-        $files = $this->modulesDirectory->search($patternForSearch);
-        foreach ($files as $key => $file) {
-            $files[$key] = $this->modulesDirectory->getAbsolutePath($file);
-        }
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/"
-            . preg_quote($area)
-            . "/layout/"
-            . preg_quote(rtrim($filePath, '*'))
-            . "[^/]*\.xml$#i";
+        $files = $this->modulesDirectory->search("$namespace/$module/view/{$area}/layout/{$filePath}.xml");
         $result = array();
-        foreach ($files as $filename) {
+        $filePath = strtr(preg_quote($filePath), array('\*' => '[^/]+'));
+        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/layout/" . $filePath . "\.xml$#i";
+        foreach ($files as $file) {
+            $filename = $this->modulesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;
             }

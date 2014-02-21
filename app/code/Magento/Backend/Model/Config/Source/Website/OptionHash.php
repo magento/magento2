@@ -20,11 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Backend\Model\Config\Source\Website;
+
+use Magento\Core\Model\System\Store;
 
 class OptionHash
     implements \Magento\Core\Model\Option\ArrayInterface
@@ -32,14 +34,14 @@ class OptionHash
     /**
      * System Store Model
      *
-     * @var \Magento\Core\Model\System\Store
+     * @var Store
      */
     protected $_systemStore;
 
     /**
-     * @param \Magento\Core\Model\System\Store
+     * @param Store $systemStore
      */
-    public function __construct(\Magento\Core\Model\System\Store $systemStore)
+    public function __construct(Store $systemStore)
     {
         $this->_systemStore = $systemStore;
     }

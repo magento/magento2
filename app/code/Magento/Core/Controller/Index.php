@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -28,6 +28,9 @@ namespace Magento\Core\Controller;
 
 class Index extends \Magento\App\Action\Action
 {
+    /**
+     * @return void
+     */
     public function indexAction()
     {
 
@@ -35,6 +38,8 @@ class Index extends \Magento\App\Action\Action
 
     /**
      * 404 not found action
+     *
+     * @return void
      */
     public function notFoundAction()
     {
@@ -45,6 +50,8 @@ class Index extends \Magento\App\Action\Action
 
     /**
      * No cookies action
+     *
+     * @return void
      */
     public function noCookiesAction()
     {

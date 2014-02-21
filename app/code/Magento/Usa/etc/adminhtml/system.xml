@@ -21,7 +21,7 @@
  *
  * @category    Magento
  * @package     Magento_Usa
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -168,12 +168,12 @@
                 </field>
                 <field id="shipment_days" translate="label" type="multiselect" sortOrder="1390" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Domestic Shipment Days</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Locale\Weekdays</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Weekdaycodes</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
                 <field id="intl_shipment_days" translate="label" type="multiselect" sortOrder="1400" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>International Shipment Days</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Locale\Weekdays</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Weekdaycodes</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="1950" showInDefault="1" showInWebsite="1" showInStore="0">

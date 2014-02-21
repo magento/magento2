@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Framework
  * @subpackage  Config
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -48,7 +48,7 @@ abstract class AbstractXml
     /**
      * Instantiate with the list of files to merge
      *
-     * @param $configFiles
+     * @param array $configFiles
      * @throws \InvalidArgumentException
      */
     public function __construct($configFiles)
@@ -89,7 +89,7 @@ abstract class AbstractXml
      *
      * @param array $configFiles
      * @return \DOMDocument
-     * @throws \Magento\Exception if a non-existing or invalid XML-file passed
+     * @throws \Magento\Exception If a non-existing or invalid XML-file passed
      */
     protected function _merge($configFiles)
     {
@@ -110,8 +110,8 @@ abstract class AbstractXml
      * Perform xml validation
      *
      * @param string $file
-     * @return \Magento\Config\AbstractXml
-     * @throws \Magento\Exception if invalid XML-file passed
+     * @return $this
+     * @throws \Magento\Exception If invalid XML-file passed
      */
     protected function _performValidate($file = null)
     {
@@ -145,7 +145,7 @@ abstract class AbstractXml
                 ? $this->getPerFileSchemaFile()
                 : null;
             $this->_domConfig =
-                new \Magento\Config\Dom($this->_getInitialXml(), $this->_getIdAttributes(), $schemaFile);
+                new \Magento\Config\Dom($this->_getInitialXml(), $this->_getIdAttributes(), null, $schemaFile);
         }
         return $this->_domConfig;
     }

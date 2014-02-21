@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -42,9 +42,9 @@ interface DesignInterface
     /**
      * Set package area
      *
-     * @deprecated
      * @param string $area
      * @return DesignInterface
+     * @deprecated
      */
     public function setArea($area);
 
@@ -59,7 +59,7 @@ interface DesignInterface
      * Set theme path
      *
      * @param Design\ThemeInterface|int|string $theme
-     * @param string $area
+     * @param string|null $area
      * @return DesignInterface
      */
     public function setDesignTheme($theme, $area = null);
@@ -67,7 +67,7 @@ interface DesignInterface
     /**
      * Get default theme which declared in configuration
      *
-     * @param string $area
+     * @param string|null $area
      * @param array $params
      * @return string
      */

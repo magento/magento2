@@ -20,15 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_ImportExport
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import\Source;
 
 /**
  * CSV import adapter
  */
-namespace Magento\ImportExport\Model\Import\Source;
-
 class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 {
     /**
@@ -95,6 +94,8 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 
     /**
      * Rewind the \Iterator to the first element (\Iterator interface)
+     *
+     * @return void
      */
     public function rewind()
     {

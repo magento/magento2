@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -34,7 +34,7 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\ConfigInterface
+     * @var \Magento\App\ConfigInterface
      */
     protected $_config;
 
@@ -50,12 +50,12 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\ConfigInterface $config
+     * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Resource\Store\CollectionFactory $factory
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\ConfigInterface $config,
+        \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Resource\Store\CollectionFactory $factory
     ) {
         $this->_storeManager = $storeManager;
@@ -67,8 +67,8 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
      * Retrieve store config value
      *
      * @param string $path
-     * @param mixed $store
-     * @return mixed
+     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @return string|null
      */
     public function getConfig($path, $store = null)
     {
@@ -79,7 +79,7 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
      * Retrieve store config flag
      *
      * @param string $path
-     * @param mixed $store
+     * @param null|string|bool|int|\Magento\Core\Model\Store $store
      * @return bool
      */
     public function getConfigFlag($path, $store = null)
@@ -91,7 +91,7 @@ class Config implements \Magento\Core\Model\Store\ConfigInterface
     /**
      * Retrieve store Ids for $path with checking
      *
-     * if empty $allowValues then retrieve all stores values
+     * If empty $allowValues then retrieve all stores values
      *
      * return array($storeId => $pathValue)
      *

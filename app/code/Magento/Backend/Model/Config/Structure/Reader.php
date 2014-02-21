@@ -21,7 +21,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Model\Config\Structure;
@@ -36,30 +36,15 @@ class Reader extends \Magento\Config\Reader\Filesystem
     protected $_idAttributes = array(
         '/config/system/tab' => 'id',
         '/config/system/section' => 'id',
-        '/config/system/section/group' => 'id',
-        '/config/system/section/group/field' => 'id',
-        '/config/system/section/group/field/depends/field' => 'id',
-        '/config/system/section/group/group' => 'id',
-        '/config/system/section/group/group/field' => 'id',
-        '/config/system/section/group/group/field/depends/field' => 'id',
-        '/config/system/section/group/group/group' => 'id',
-        '/config/system/section/group/group/group/field' => 'id',
-        '/config/system/section/group/group/group/field/depends/field' => 'id',
-        '/config/system/section/group/group/group/group' => 'id',
-        '/config/system/section/group/group/group/group/field' => 'id',
-        '/config/system/section/group/group/group/group/field/depends/field' => 'id',
-        '/config/system/section/group/group/group/group/group' => 'id',
-        '/config/system/section/group/group/group/group/group/field' => 'id',
-        '/config/system/section/group/group/group/group/group/field/depends/field' => 'id',
-        '/config/system/section/group/field/options/option' => 'label',
-        '/config/system/section/group/group/field/options/option' => 'label',
-        '/config/system/section/group/group/group/field/options/option' => 'label',
-        '/config/system/section/group/group/group/group/field/options/option' => 'label',
+        '/config/system/section(/group)+' => 'id',
+        '/config/system/section(/group)+/field' => 'id',
+        '/config/system/section(/group)+/field/depends/field' => 'id',
+        '/config/system/section(/group)+/field/options/option' => 'label',
     );
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Backend\Model\Config\Structure\Converter $converter
+     * @param Converter $converter
      * @param \Magento\Backend\Model\Config\SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
      * @param string $fileName
@@ -69,7 +54,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Backend\Model\Config\Structure\Converter $converter,
+        Converter $converter,
         \Magento\Backend\Model\Config\SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'system.xml',

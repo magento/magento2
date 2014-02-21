@@ -20,13 +20,14 @@
  *
  * @category    Magento
  * @package     Magento_Backend
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-class Design extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+
+class Design extends Action
 {
     /**
      * Core registry
@@ -36,42 +37,62 @@ class Design extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Core\Filter\Date
+     */
+    protected $dateFilter;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Core\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Core\Filter\Date $dateFilter
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->dateFilter = $dateFilter;
         parent::__construct($context);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Store Design'));
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::system_design_schedule');
+        $this->_setActiveMenu('Magento_Backend::system_design_schedule');
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function gridAction()
     {
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function newAction()
     {
         $this->_forward('edit');
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $this->_title->add(__('Store Design'));
 
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::system_design_schedule');
+        $this->_setActiveMenu('Magento_Backend::system_design_schedule');
         $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
         $id  = (int)$this->getRequest()->getParam('id');
@@ -86,15 +107,21 @@ class Design extends \Magento\Backend\App\Action
         $this->_coreRegistry->register('design', $design);
 
         $this->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit'));
-        $this->_addLeft($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit\Tabs', 'design_tabs'));
+        $this->_addLeft(
+            $this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit\Tabs', 'design_tabs')
+        );
 
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function saveAction()
     {
         $data = $this->getRequest()->getPost();
         if ($data) {
+            $data['design'] = $this->_filterPostData($data['design']);
             $id = (int) $this->getRequest()->getParam('id');
 
             $design = $this->_objectManager->create('Magento\Core\Model\Design');
@@ -121,6 +148,9 @@ class Design extends \Magento\Backend\App\Action
         $this->_redirect('adminhtml/*/');
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $id = $this->getRequest()->getParam('id');
@@ -139,8 +169,25 @@ class Design extends \Magento\Backend\App\Action
         $this->getResponse()->setRedirect($this->getUrl('adminhtml/*/'));
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Adminhtml::design');
+    }
+
+    /**
+     * Filtering posted data. Converting localized data if needed
+     *
+     * @param array $data
+     * @return array|null
+     */
+    protected function _filterPostData($data)
+    {
+        $inputFilter = new \Zend_Filter_Input(
+            array('date_from' => $this->dateFilter, 'date_to' => $this->dateFilter), array(), $data);
+        $data = $inputFilter->getUnescaped();
+        return $data;
     }
 }

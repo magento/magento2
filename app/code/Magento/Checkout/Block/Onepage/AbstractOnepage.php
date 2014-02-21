@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Checkout
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,12 +52,12 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     /**
      * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
      */
-    protected $_regionCollFactory;
+    protected $_regionCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
      */
-    protected $_countryCollFactory;
+    protected $_countryCollectionFactory;
 
     /**
      * @var \Magento\Core\Helper\Data
@@ -70,8 +70,8 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -80,17 +80,18 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         array $data = array()
     ) {
         $this->_coreData = $coreData;
         $this->_configCacheType = $configCacheType;
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $resourceSession;
-        $this->_countryCollFactory = $countryCollFactory;
-        $this->_regionCollFactory = $regionCollFactory;
+        $this->_countryCollectionFactory = $countryCollectionFactory;
+        $this->_regionCollectionFactory = $regionCollectionFactory;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -148,7 +149,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     public function getCountryCollection()
     {
         if (!$this->_countryCollection) {
-            $this->_countryCollection = $this->_countryCollFactory->create()->loadByStore();
+            $this->_countryCollection = $this->_countryCollectionFactory->create()->loadByStore();
         }
         return $this->_countryCollection;
     }
@@ -156,7 +157,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     public function getRegionCollection()
     {
         if (!$this->_regionCollection) {
-            $this->_regionCollection = $this->_regionCollFactory->create()
+            $this->_regionCollection = $this->_regionCollectionFactory->create()
                 ->addCountryFilter($this->getAddress()->getCountryId())
                 ->load();
         }

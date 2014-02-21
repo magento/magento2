@@ -20,10 +20,11 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Eav\Model\Entity;
 
 /**
  * Entity type model
@@ -58,8 +59,6 @@
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity;
-
 class Type extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -93,7 +92,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      */
     protected $_attSetFactory;
 
-    /***
+    /**
      * @var \Magento\Eav\Model\Entity\StoreFactory
      */
     protected $_storeFactory;
@@ -134,6 +133,8 @@ class Type extends \Magento\Core\Model\AbstractModel
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -144,7 +145,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      * Load type by code
      *
      * @param string $code
-     * @return \Magento\Eav\Model\Entity\Type
+     * @return $this
      */
     public function loadByCode($code)
     {
@@ -287,7 +288,7 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve entity table prefix name
      *
-     * @return string
+     * @return null|string
      */
     public function getValueTablePrefix()
     {

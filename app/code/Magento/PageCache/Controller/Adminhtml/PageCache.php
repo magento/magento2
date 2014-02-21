@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_PageCache
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -32,38 +32,39 @@ namespace Magento\PageCache\Controller\Adminhtml;
 class PageCache extends \Magento\Backend\App\Action
 {
     /**
-     * Clean external cache action
-     *
-     * @return void
+     * @var \Magento\Backend\App\Response\Http\FileFactory
      */
-    public function cleanAction()
-    {
-        try {
-            $pageCacheData = $this->_objectManager->get('Magento\PageCache\Helper\Data');
-            if ($pageCacheData->isEnabled()) {
-                $pageCacheData->getCacheControlInstance()->clean();
-                $this->messageManager->addSuccess(
-                    __('The external full page cache has been cleaned.')
-                );
-            }
-        } catch (\Magento\Core\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException(
-                $e,
-                __('Something went wrong while clearing the external full page cache.')
-            );
-        }
-        $this->_redirect('adminhtml/cache/index');
+    protected $fileFactory;
+
+    /**
+     * @var \Magento\PageCache\Model\Config
+     */
+    protected $config;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\PageCache\Model\Config $config
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\App\Response\Http\FileFactory $fileFactory,
+        \Magento\PageCache\Model\Config $config
+    ) {
+        parent::__construct($context);
+        $this->config = $config;
+        $this->fileFactory = $fileFactory;
     }
 
     /**
-     * Check current user permission on resource and privilege
+     * Export Varnish Configuration as .vcl
      *
-     * @return bool
+     * @return \Magento\App\ResponseInterface
      */
-    protected function _isAllowed()
+    public function exportVarnishConfigAction()
     {
-        return $this->_authorization->isAllowed('Magento_PageCache::page_cache');
+        $fileName = 'varnish.vcl';
+        $content = $this->config->getVclFile();
+        return $this->fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
     }
 }

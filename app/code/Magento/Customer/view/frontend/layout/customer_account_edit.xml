@@ -19,7 +19,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
@@ -31,6 +31,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Form\Edit" name="customer_edit" template="form/edit.phtml"/>
+        <block class="Magento\Customer\Block\Form\Edit" name="customer_edit" template="form/edit.phtml" cacheable="false"/>
     </referenceContainer>
 </layout>

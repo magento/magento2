@@ -20,20 +20,17 @@
  *
  * @category    Magento
  * @package     Magento_Reports
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Product;
 
 
 /**
  * Reports Recently Products Abstract Block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Product;
-
 abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
@@ -75,6 +72,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Reports\Model\Product\Index\Factory $indexFactory
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -92,7 +90,8 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Reports\Model\Product\Index\Factory $indexFactory,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         parent::__construct(
             $context,
@@ -106,10 +105,12 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
         $this->_productVisibility = $productVisibility;
         $this->_indexFactory = $indexFactory;
+        $this->_isScopePrivate = true;
     }
 
     /**

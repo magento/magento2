@@ -20,10 +20,9 @@
  *
  * @category    Magento
  * @package     Magento_Index
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Index\Block\Adminhtml\Process;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -56,7 +55,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Index\Model\Resource\Process\CollectionFactory $factory
      * @param \Magento\Index\Model\Process $indexProcess
@@ -65,14 +63,13 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Index\Model\Resource\Process\CollectionFactory $factory,
         \Magento\Index\Model\Process $indexProcess,
         \Magento\Index\Model\EventRepository $eventRepository,
         array $data = array()
     ) {
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
         $this->_eventRepository = $eventRepository;
         $this->_indexProcess = $indexProcess;
         $this->_collectionFactory = $factory;
@@ -80,6 +77,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * Class constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -92,7 +91,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid collection
      *
-     * @return \Magento\Index\Block\Adminhtml\Process\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -105,7 +104,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add name and description to collection elements
      *
-     * @return \Magento\Index\Block\Adminhtml\Process\Grid
+     * @return $this
      */
     protected function _afterLoadCollection()
     {
@@ -128,7 +127,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid columns
      *
-     * @return \Magento\Index\Block\Adminhtml\Process\Grid
+     * @return $this
      */
     protected function _prepareColumns()
     {
@@ -293,7 +292,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add mass-actions to grid
      *
-     * @return \Magento\Index\Block\Adminhtml\Process\Grid
+     * @return $this
      */
     protected function _prepareMassaction()
     {

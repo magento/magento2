@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\App;
@@ -26,7 +26,7 @@ namespace Magento\Backend\App;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Config\SectionPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Config\ScopePool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $sectionPool;
 
@@ -38,8 +38,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->sectionPool = $this->getMock(
-            'Magento\Core\Model\Config\SectionPool',
-            array('getSection', 'clean'),
+            'Magento\App\Config\ScopePool',
+            array('getScope', 'clean'),
             array(),
             '',
             false
@@ -59,7 +59,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedValue));
         $this->sectionPool
             ->expects($this->once())
-            ->method('getSection')
+            ->method('getScope')
             ->with($this->equalTo('default'), $this->isNull())
             ->will($this->returnValue($configData));
         $this->assertEquals($expectedValue, $this->model->getValue($path));
@@ -76,7 +76,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($path), $this->equalTo($value));
         $this->sectionPool
             ->expects($this->once())
-            ->method('getSection')
+            ->method('getScope')
             ->with($this->equalTo('default'), $this->isNull())
             ->will($this->returnValue($configData));
         $this->model->setValue($path, $value);
@@ -91,9 +91,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @param mixed $configValue
      * @param bool $expectedResult
-     * @dataProvider getFlagDataProvider
+     * @dataProvider isSetFlagDataProvider
      */
-    public function testGetFlag($configValue, $expectedResult)
+    public function testIsSetFlag($configValue, $expectedResult)
     {
         $path = 'some path';
         $configData = $this->getConfigDataMock('getValue');
@@ -104,13 +104,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($configValue));
         $this->sectionPool
             ->expects($this->once())
-            ->method('getSection')
+            ->method('getScope')
             ->with($this->equalTo('default'), $this->isNull())
             ->will($this->returnValue($configData));
-        $this->assertEquals($expectedResult, $this->model->getFlag($path));
+        $this->assertEquals($expectedResult, $this->model->isSetFlag($path));
     }
 
-    public function getFlagDataProvider()
+    public function isSetFlagDataProvider()
     {
         return array(
             array(0, false),
@@ -126,10 +126,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * Get ConfigData mock
      *
      * @param $mockedMethod
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Config\Data
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Config\Data
      */
     protected function getConfigDataMock($mockedMethod)
     {
-        return $this->getMock('Magento\Core\Model\Config\Data', array($mockedMethod), array(), '', false);
+        return $this->getMock('Magento\App\Config\Data', array($mockedMethod), array(), '', false);
     }
 }

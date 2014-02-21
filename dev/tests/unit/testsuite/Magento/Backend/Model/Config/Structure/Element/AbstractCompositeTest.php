@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -37,7 +37,7 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_applicationMock;
+    protected $_storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -63,18 +63,18 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
         $this->_iteratorMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Iterator', array(), array(), '', false
         );
-        $this->_applicationMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Backend\Model\Config\Structure\Element\AbstractComposite',
-            array($this->_applicationMock, $this->_iteratorMock)
+            array($this->_storeManagerMock, $this->_iteratorMock)
         );
     }
 
     protected function tearDown()
     {
         unset($this->_iteratorMock);
-        unset($this->_applicationMock);
+        unset($this->_storeManagerMock);
         unset($this->_model);
     }
 
@@ -106,7 +106,7 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testIsVisibleReturnsTrueIfThereAreVisibleChildren()
     {
-        $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
         $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
         $this->_model->setData(array('showInDefault' => 'true'), 'default');
@@ -115,7 +115,7 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testIsVisibleReturnsTrueIfElementHasFrontEndModel()
     {
-        $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(array(
             'showInDefault' => 'true',
             'frontend_model' => 'Model_Name'
@@ -125,7 +125,7 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testIsVisibleReturnsFalseIfElementHasNoChildrenAndFrontendModel()
     {
-        $this->_applicationMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(array('showInDefault' => 'true'), 'default');
         $this->assertFalse($this->_model->isVisible());
     }

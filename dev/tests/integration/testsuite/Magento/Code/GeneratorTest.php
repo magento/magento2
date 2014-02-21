@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Code
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Code;
@@ -64,7 +64,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_includePath = get_include_path();
 
         $this->varDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Filesystem')->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
+            ->get('Magento\App\Filesystem')->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $generationDirectory = $this->varDirectory->getAbsolutePath('generation');
 
         \Magento\Autoload\IncludePath::addIncludePath($generationDirectory);

@@ -20,11 +20,13 @@
  *
  * @category    Magento
  * @package     Magento_Catalog
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product\ProductList;
+
+use Magento\Catalog\Model\Resource\Product\Collection;
+use Magento\View\Element\AbstractBlock;
 
 /**
  * Catalog product related items block
@@ -40,6 +42,9 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     protected $_mapRenderer = 'msrp_noform';
 
+    /**
+     * @var Collection
+     */
     protected $_itemCollection;
 
     /**
@@ -79,6 +84,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
+     * @param array $priceBlockTypes
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -97,7 +103,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Checkout\Model\Resource\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
-        array $data = array()
+        array $data = array(),
+        array $priceBlockTypes = array()
     ) {
         $this->_checkoutCart = $checkoutCart;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -114,10 +121,15 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $data
+            $data,
+            $priceBlockTypes
         );
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareData()
     {
         $product = $this->_coreRegistry->registry('product');
@@ -148,12 +160,18 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _beforeToHtml()
     {
         $this->_prepareData();
         return parent::_beforeToHtml();
     }
 
+    /**
+     * @return Collection
+     */
     public function getItems()
     {
         return $this->_itemCollection;

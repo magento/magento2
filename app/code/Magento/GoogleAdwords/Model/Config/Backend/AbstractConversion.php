@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\GoogleAdwords\Model\Config\Backend;
@@ -31,7 +31,7 @@ namespace Magento\GoogleAdwords\Model\Config\Backend;
 abstract class AbstractConversion extends \Magento\Core\Model\Config\Value
 {
     /**
-     * @var \Magento\Validator\Composite\VarienObject
+     * @var \Magento\Validator\Object
      */
     protected $_validatorComposite;
 
@@ -44,8 +44,8 @@ abstract class AbstractConversion extends \Magento\Core\Model\Config\Value
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Validator\Composite\VarienObjectFactory $validatorCompositeFactory
+     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\Validator\ObjectFactory $validatorCompositeFactory
      * @param \Magento\GoogleAdwords\Model\Validator\Factory $validatorFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -55,8 +55,8 @@ abstract class AbstractConversion extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\Validator\Composite\VarienObjectFactory $validatorCompositeFactory,
+        \Magento\App\ConfigInterface $config,
+        \Magento\Validator\ObjectFactory $validatorCompositeFactory,
         \Magento\GoogleAdwords\Model\Validator\Factory $validatorFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,

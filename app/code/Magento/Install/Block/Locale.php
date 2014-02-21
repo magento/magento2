@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Install
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -52,8 +52,8 @@ class Locale extends \Magento\Install\Block\AbstractBlock
     /**
      * Set locale code
      *
-     * @param $localeCode
-     * @return \Magento\Install\Block\Locale
+     * @param string $localeCode
+     * @return $this
      */
     public function setLocaleCode($localeCode)
     {

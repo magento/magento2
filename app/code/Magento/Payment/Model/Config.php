@@ -20,17 +20,19 @@
  *
  * @category    Magento
  * @package     Magento_Payment
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model;
+
+use Magento\Core\Model\Store;
+use Magento\Payment\Model\Method\AbstractMethod;
 
 /**
  * Payment configuration model
  *
  * Used for retrieving configuration data by payment models
  */
-namespace Magento\Payment\Model;
-
 class Config
 {
     /**
@@ -68,14 +70,14 @@ class Config
      * Construct
      *
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Config\DataInterface $dataStorage
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\App\ConfigInterface $coreConfig,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Config\DataInterface $dataStorage
@@ -90,8 +92,8 @@ class Config
     /**
      * Retrieve active system payments
      *
-     * @param   mixed $store
-     * @return  array
+     * @param null|string|bool|int|Store $store
+     * @return array
      */
     public function getActiveMethods($store=null)
     {
@@ -113,7 +115,7 @@ class Config
     /**
      * Retrieve all system payments
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return array
      */
     public function getAllMethods($store=null)
@@ -132,8 +134,8 @@ class Config
     /**
      * @param string $code
      * @param string $config
-     * @param mixed $store
-     * @return \Magento\Payment\Model\Method\AbstractMethod
+     * @param null|string|bool|int|Store $store
+     * @return AbstractMethod
      */
     protected function _getMethod($code, $config, $store = null)
     {
@@ -149,7 +151,7 @@ class Config
             return false;
         }
 
-        /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+        /** @var AbstractMethod $method */
         $method = $this->_methodFactory->create($modelName);
         $method->setId($code)->setStore($store);
         $this->_methods[$code] = $method;
@@ -164,6 +166,16 @@ class Config
     public function getCcTypes()
     {
         return $this->_dataStorage->get('credit_cards');
+    }
+
+    /**
+     * Retrieve array of payment methods information
+     *
+     * @return array
+     */
+    public function getMethodsInfo()
+    {
+        return $this->_dataStorage->get('methods');
     }
 
     /**

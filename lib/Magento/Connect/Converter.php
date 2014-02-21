@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Magento
  *
@@ -21,9 +20,12 @@
  *
  * @category    Magento
  * @package     Magento_Connect
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
+
+use Magento\Archive;
 
 /**
  * Class for convertiong old magento PEAR packages to new one
@@ -32,25 +34,28 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Connect;
-
 final class Converter
 {
+    /**
+     * @var Archive
+     */
     protected $_archiver;
 
     /**
      *
-     * @return \Magento\Archive
+     * @return Archive
      */
     public function arc()
     {
         if(!$this->_archiver) {
-            $this->_archiver = new \Magento\Archive();
+            $this->_archiver = new Archive();
         }
         return $this->_archiver;
     }
 
+    /**
+     * @return Package
+     */
     public function newPackage()
     {
         return new \Magento\Connect\Package();
@@ -65,13 +70,18 @@ final class Converter
         return new Pear_Package_Parser_v2();
     }
 
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
 
     }
 
-
+    /**
+     * @param string $channel
+     * @return string|string[]
+     */
     public function convertChannelName($channel)
     {
         return str_replace("connect.magentocommerce.com/", "", $channel);
@@ -79,37 +89,46 @@ final class Converter
 
     /**
      * Convert package dependencies - urls - by ref
-     * @param array $deps  ref to array
-     * @return void
+     *
+     * @param array $oldDeps  ref to array
+     * @return array
      */
     public function convertPackageDependencies($oldDeps)
     {
         $out = array();
-        if(empty($oldDeps['required']['package'])) {
+        if (empty($oldDeps['required']['package'])) {
             return $out;
         }
         $deps = $oldDeps['required']['package'];
-        if(!isset($deps[0])) {
+        if (!isset($deps[0])) {
             $deps = array($deps);
         }
-        for($i=0, $c=count($deps); $i<$c; $i++) {
+        for ($i=0, $c=count($deps); $i<$c; $i++) {
             $deps[$i]['min_version'] = isset($deps[$i]['min']) ? $deps[$i]['min'] : false;
             $deps[$i]['max_version'] = isset($deps[$i]['max']) ? $deps[$i]['max'] : false;
             $deps[$i]['channel'] = $this->convertChannelName($deps[$i]['channel']);
             $out[] = $deps[$i];
         }
-         
+
         return $out;
     }
 
+    /**
+     * @param array $oldLicense
+     * @return array|int|float|bool|string
+     */
     public function convertLicense($oldLicense)
     {
-        if(is_scalar($oldLicense)) {
+        if (is_scalar($oldLicense)) {
             return $oldLicense;
         }
         return array($oldLicense['_content'], $oldLicense['attribs']['uri']);
     }
 
+    /**
+     * @param array $maintainers
+     * @return array
+     */
     public function convertMaintainers($maintainers)
     {
         if(!is_array($maintainers) || !count($maintainers)) {
@@ -122,15 +141,19 @@ final class Converter
         return $out;
     }
 
+    /**
+     * @var array
+     */
     protected $fileMap = array();
 
-    
+
     /**
-     * Conver pear package object to magento object
+     * Convert pear package object to magento object
+     *
      * @param Pear_Package_V2 $pearObject
      * @return \Magento\Connect\Package
+     * @throws \Exception
      */
-
     public function convertPackageObject($pearObject)
     {
         $data = array();
@@ -142,22 +165,22 @@ final class Converter
             'name'         => null,
             'version'      => array('getterArgs' => array('release')
         ),
-            'package_deps' => array( 'getter'=>'getDependencies', 
-                                     'converter'=>'convertPackageDependencies', 
+            'package_deps' => array( 'getter'=>'getDependencies',
+                                     'converter'=>'convertPackageDependencies',
                                      'setter'=>'setDependencyPackages',
         ),
             'stability'    => array( 'getter'=>'getState',
-                                     'getterArgs' => array('release'), 
+                                     'getterArgs' => array('release'),
         ),
             'license'      => array( 'getterArgs' => array(true),
                                      'converter' => 'convertLicense',
-                                     'noArrayWrap' => true,                                    
+                                     'noArrayWrap' => true,
         ),
             'summary'      => null,
-            'description'  => null,                              
-            'notes'        => null,                              
-            'date'         => null,                              
-            'time'         => null,         
+            'description'  => null,
+            'notes'        => null,
+            'date'         => null,
+            'time'         => null,
             'authors'      => array( 'converter' => 'convertMaintainers',
                                      'getter' => 'getMaintainers',
         ),
@@ -234,9 +257,11 @@ final class Converter
 
     /**
      * Convert PEAR package to Magento package
+     *
      * @param string $sourceFile  path to PEAR .tgz
      * @param string|false $destFile    path to newly-created Magento .tgz, false to specify auto
-     * @return bool
+     * @return string|false
+     * @throws \Exception
      */
     public function convertPearToMage($sourceFile, $destFile = false)
     {
@@ -281,10 +306,10 @@ final class Converter
                     $destFile .= "." . $pathinfo['extension'];
                 }
             }
-            
+
             $target = new \Magento\Connect\Package\Target("target.xml");
-            $targets = $target->getTargets();                        
-            $mageObject->setTarget($target);            
+            $targets = $target->getTargets();
+            $mageObject->setTarget($target);
             $validRoles = array_keys($targets);
             $data = $pearObject->getFilelist();
             $pathSource = dirname($pearObject->getPackageFile())
@@ -309,14 +334,14 @@ final class Converter
                     }
                 }
                 $filesToDo[] = array ('name'=> $name, 'role'=>$role);
-            }                        
+            }
             $cwd = getcwd();
             @chdir($outDir);
             foreach($filesToDo as $fileToDo) {
                 $mageObject->addContent($fileToDo['name'], $fileToDo['role']);
             }
             $mageObject->save(getcwd());
-            @chdir($cwd);            
+            @chdir($cwd);
             $filename = $outDir . '/' . $mageObject->getReleaseFilename() . '.tgz';
             if(@file_exists($targetArchive)) {
                 @unlink($targetArchive);

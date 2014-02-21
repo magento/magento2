@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Newsletter
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Newsletter\Model\Resource\Queue;
 
 /**
  * Newsletter queue collection.
@@ -32,8 +32,6 @@
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource\Queue;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -63,7 +61,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Date $date
-     * @param mixed $connection
+     * @param null|\Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -82,6 +80,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Initializes collection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -92,7 +91,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Joines templates information
      *
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @return $this
      */
     public function addTemplateInfo()
     {
@@ -107,7 +106,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Adds subscribers info to selelect
      *
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @return $this
      */
     protected function _addSubscriberInfoToSelect()
     {
@@ -134,7 +133,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param bool $printQuery
      * @param bool $logQuery
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -147,7 +146,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Joines subscribers information
      *
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @return $this
      */
     public function addSubscribersInfo()
     {
@@ -160,8 +159,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * to add specific filter or adds reguler filter
      *
      * @param string $field
-     * @param mixed $condition
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @param null|string|array $condition
+     * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -177,7 +176,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Returns ids from queue_link table
      *
      * @param string $field
-     * @param mixed $condition
+     * @param null|string|array $condition
      * @return array
      */
     protected function _getIdsFromLink($field, $condition)
@@ -207,7 +206,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set filter for queue by subscriber.
      *
      * @param int $subscriberId
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @return $this
      */
     public function addSubscriberFilter($subscriberId)
     {
@@ -223,7 +222,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add filter by only ready fot sending item
      *
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @return $this
      */
     public function addOnlyForSendingFilter()
     {
@@ -239,7 +238,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add filter by only not sent items
      *
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @return $this
      */
     public function addOnlyUnsentFilter()
     {
@@ -261,8 +260,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter collection by specified store ids
      *
-     * @param array|int $storeIds
-     * @return \Magento\Newsletter\Model\Resource\Queue\Collection
+     * @param int[]|int $storeIds
+     * @return $this
      */
     public function addStoreFilter($storeIds)
     {

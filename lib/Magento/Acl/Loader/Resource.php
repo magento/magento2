@@ -20,34 +20,39 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Acl\Loader;
+
+use Magento\Acl;
+use Magento\Acl\Resource as AclResource;
+use Magento\Acl\Resource\ProviderInterface;
+use Magento\Acl\ResourceFactory;
 
 class Resource implements \Magento\Acl\LoaderInterface
 {
     /**
      * Acl resource config
      *
-     * @var \Magento\Acl\Resource\ProviderInterface $resourceProvider
+     * @var ProviderInterface $resourceProvider
      */
     protected $_resourceProvider;
 
     /**
      * Resource factory
      *
-     * @var \Magento\Acl\ResourceFactory
+     * @var ResourceFactory
      */
     protected $_resourceFactory;
 
     /**
-     * @param \Magento\Acl\Resource\ProviderInterface $resourceProvider
-     * @param \Magento\Acl\ResourceFactory $resourceFactory
+     * @param ProviderInterface $resourceProvider
+     * @param ResourceFactory $resourceFactory
      */
     public function __construct(
-        \Magento\Acl\Resource\ProviderInterface $resourceProvider,
-        \Magento\Acl\ResourceFactory $resourceFactory
+        ProviderInterface $resourceProvider,
+        ResourceFactory $resourceFactory
     ) {
         $this->_resourceProvider = $resourceProvider;
         $this->_resourceFactory = $resourceFactory;
@@ -56,9 +61,10 @@ class Resource implements \Magento\Acl\LoaderInterface
     /**
      * Populate ACL with resources from external storage
      *
-     * @param \Magento\Acl $acl
+     * @param Acl $acl
+     * @return void
      */
-    public function populateAcl(\Magento\Acl $acl)
+    public function populateAcl(Acl $acl)
     {
         $this->_addResourceTree($acl, $this->_resourceProvider->getAclResources(), null);
     }
@@ -66,18 +72,19 @@ class Resource implements \Magento\Acl\LoaderInterface
     /**
      * Add list of nodes and their children to acl
      *
-     * @param \Magento\Acl $acl
+     * @param Acl $acl
      * @param array $resources
-     * @param \Magento\Acl\Resource $parent
+     * @param AclResource $parent
+     * @return void
      * @throws \InvalidArgumentException
      */
-    protected function _addResourceTree(\Magento\Acl $acl, array $resources, \Magento\Acl\Resource $parent = null)
+    protected function _addResourceTree(Acl $acl, array $resources, AclResource $parent = null)
     {
         foreach ($resources as $resourceConfig) {
             if (!isset($resourceConfig['id'])) {
                 throw new \InvalidArgumentException('Missing ACL resource identifier');
             }
-            /** @var $resource \Magento\Acl\Resource */
+            /** @var $resource AclResource */
             $resource = $this->_resourceFactory->createResource(array('resourceId' => $resourceConfig['id']));
             $acl->addResource($resource, $parent);
             if (isset($resourceConfig['children'])) {

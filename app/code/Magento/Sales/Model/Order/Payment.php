@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -155,13 +155,6 @@ class Payment extends \Magento\Payment\Model\Info
     protected $_order;
 
     /**
-     * Billing agreement instance that may be created during payment processing
-     *
-     * @var \Magento\Sales\Model\Billing\Agreement
-     */
-    protected $_billingAgreement = null;
-
-    /**
      * Whether can void
      * @var string
      */
@@ -197,12 +190,7 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * @var \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory
      */
-    protected $_transactionCollFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Billing\AgreementFactory
-     */
-    protected $_agreementFactory;
+    protected $_transactionCollectionFactory;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -216,8 +204,7 @@ class Payment extends \Magento\Payment\Model\Info
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
      * @param \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory
-     * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollFactory
-     * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
+     * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -230,8 +217,7 @@ class Payment extends \Magento\Payment\Model\Info
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
-        \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollFactory,
-        \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory,
+        \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -239,8 +225,7 @@ class Payment extends \Magento\Payment\Model\Info
     ) {
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_transactionFactory = $transactionFactory;
-        $this->_transactionCollFactory = $transactionCollFactory;
-        $this->_agreementFactory = $agreementFactory;
+        $this->_transactionCollectionFactory = $transactionCollectionFactory;
         $this->_storeManager = $storeManager;
         parent::__construct($context, $registry, $paymentData, $encryptor, $resource, $resourceCollection, $data);
     }
@@ -373,8 +358,6 @@ class Payment extends \Magento\Payment\Model\Info
                 }
             }
         }
-
-        $this->_createBillingAgreement();
 
         $orderIsNotified = null;
         if ($stateObject->getState() && $stateObject->getStatus()) {
@@ -816,8 +799,8 @@ class Payment extends \Magento\Payment\Model\Info
         $creditmemo->setPaymentRefundDisallowed(true)
             ->setAutomaticallyCreated(true)
             ->register()
-            ->addComment(__('The credit memo has been created automatically.'))
-            ->save();
+            ->addComment(__('The credit memo has been created automatically.'));
+        $creditmemo->save();
 
         $this->_updateTotals(array(
             'amount_refunded' => $creditmemo->getGrandTotal(),
@@ -1305,16 +1288,6 @@ class Payment extends \Magento\Payment\Model\Info
     }
 
     /**
-     * Get the billing agreement, if any
-     *
-     * @return \Magento\Sales\Model\Billing\Agreement|null
-     */
-    public function getBillingAgreement()
-    {
-        return $this->_billingAgreement;
-    }
-
-    /**
      * Totals updater utility method
      * Updates self totals by keys in data array('key' => $delta)
      *
@@ -1418,7 +1391,7 @@ class Payment extends \Magento\Payment\Model\Info
     {
         if (!$txnId) {
             if ($txnType && $this->getId()) {
-                $collection = $this->_transactionCollFactory->create()
+                $collection = $this->_transactionCollectionFactory->create()
                     ->setOrderFilter($this->getOrder())
                     ->addPaymentIdFilter($this->getId())
                     ->addTxnTypeFilter($txnType)
@@ -1548,27 +1521,6 @@ class Payment extends \Magento\Payment\Model\Info
         }
 
         return $this;
-    }
-
-    /**
-     * Generate billing agreement object if there is billing agreement data
-     * Adds it to order as related object
-     */
-    protected function _createBillingAgreement()
-    {
-        if ($this->getBillingAgreementData()) {
-            $order = $this->getOrder();
-            $agreement = $this->_agreementFactory->create()->importOrderPayment($this);
-            if ($agreement->isValid()) {
-                $message = __('Created billing agreement #%1.', $agreement->getReferenceId());
-                $order->addRelatedObject($agreement);
-                $this->_billingAgreement = $agreement;
-            } else {
-                $message = __('We couldn\'t create a billing agreement for this order.');
-            }
-            $comment = $order->addStatusHistoryComment($message);
-            $order->addRelatedObject($comment);
-        }
     }
 
     /**

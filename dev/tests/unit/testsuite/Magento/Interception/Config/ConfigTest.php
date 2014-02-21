@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -39,48 +39,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_configScopeMock;
-
     protected function setUp()
     {
-        $fixtureBasePath = __DIR__ . '/..';
-        $fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
-        $fileResolverMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap(array(
-                array(
-                    'di.xml',
-                    'global',
-                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/di.xml'))
-                ),
-                array(
-                    'di.xml',
-                    'backend',
-                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/backend/di.xml'))
-                ),
-                array(
-                    'di.xml',
-                    'frontend',
-                    array(file_get_contents($fixtureBasePath . '/Custom/Module/etc/frontend/di.xml'))
-                ),
-            )));
+        $readerMap = include(__DIR__ . '/../_files/reader_mock_map.php');
+        $readerMock = $this->getMock('\Magento\ObjectManager\Config\Reader\Dom', array(), array(), '', false);
+        $readerMock->expects($this->any())
+            ->method('read')
+            ->will($this->returnValueMap($readerMap));
 
-        $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())
-            ->method('isValidated')
-            ->will($this->returnValue(true));
-
-        $reader = new \Magento\ObjectManager\Config\Reader\Dom(
-            $fileResolverMock,
-            new \Magento\ObjectManager\Config\Mapper\Dom(),
-            new \Magento\ObjectManager\Config\SchemaLocator(),
-            $validationStateMock
-        );
-        $this->_configScopeMock = $this->getMock('Magento\Config\ScopeListInterface');
-        $this->_configScopeMock->expects($this->any())
+        $configScopeMock = $this->getMock('Magento\Config\ScopeListInterface');
+        $configScopeMock->expects($this->any())
             ->method('getAllScopes')
             ->will($this->returnValue(array('global', 'backend', 'frontend')));
         $cacheMock = $this->getMock('Magento\Cache\FrontendInterface');
@@ -94,8 +62,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getInstanceType')
             ->will($this->returnArgument(0));
         $this->_model = new \Magento\Interception\Config\Config(
-            $reader,
-            $this->_configScopeMock,
+            $readerMock,
+            $configScopeMock,
             $cacheMock,
             new \Magento\ObjectManager\Relations\Runtime(),
             $omConfigMock,

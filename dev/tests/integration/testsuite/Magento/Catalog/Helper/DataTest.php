@@ -21,7 +21,7 @@
  * @category    Magento
  * @package     Magento_Catalog
  * @subpackage  integration_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -114,21 +114,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $objectManager->get('Magento\Core\Model\Registry')->unregister('attribute_type_hidden_fields');
         } catch (\Exception $e) {
             $objectManager->get('Magento\Core\Model\Registry')->unregister('attribute_type_hidden_fields');
-            throw $e;
-        }
-    }
-
-    public function testGetAttributeDisabledTypes()
-    {
-        $this->assertEquals(array(), $this->_helper->getAttributeDisabledTypes());
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('attribute_type_disabled_types', 'test');
-        try {
-            $this->assertEquals('test', $this->_helper->getAttributeDisabledTypes());
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('attribute_type_disabled_types');
-        } catch (\Exception $e) {
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('attribute_type_disabled_types');
             throw $e;
         }
     }

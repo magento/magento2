@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Email
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -43,28 +43,28 @@ class Info extends \Magento\Object
     /**
      * Name list of "Bcc" recipients
      *
-     * @var array
+     * @var string[]
      */
     protected $_bccNames = array();
 
     /**
      * Email list of "Bcc" recipients
      *
-     * @var array
+     * @var string[]
      */
     protected $_bccEmails = array();
 
     /**
      * Name list of "To" recipients
      *
-     * @var array
+     * @var string[]
      */
     protected $_toNames = array();
 
     /**
      * Email list of "To" recipients
      *
-     * @var array
+     * @var string[]
      */
     protected $_toEmails = array();
 
@@ -74,7 +74,7 @@ class Info extends \Magento\Object
      *
      * @param string $email
      * @param string|null $name
-     * @return \Magento\Email\Model\Info
+     * @return $this
      */
     public function addBcc($email, $name = null)
     {
@@ -88,7 +88,7 @@ class Info extends \Magento\Object
      *
      * @param string $email
      * @param string|null $name
-     * @return \Magento\Email\Model\Info
+     * @return $this
      */
     public function addTo($email, $name = null)
     {
@@ -100,7 +100,7 @@ class Info extends \Magento\Object
     /**
      * Get the name list of "Bcc" recipients
      *
-     * @return array
+     * @return string[]
      */
     public function getBccNames()
     {
@@ -110,7 +110,7 @@ class Info extends \Magento\Object
     /**
      * Get the email list of "Bcc" recipients
      *
-     * @return array
+     * @return string[]
      */
     public function getBccEmails()
     {
@@ -120,7 +120,7 @@ class Info extends \Magento\Object
     /**
      * Get the name list of "To" recipients
      *
-     * @return array
+     * @return string[]
      */
     public function getToNames()
     {
@@ -130,7 +130,7 @@ class Info extends \Magento\Object
     /**
      * Get the email list of "To" recipients
      *
-     * @return array
+     * @return string[]
      */
     public function getToEmails()
     {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Centinel
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -64,7 +64,7 @@ class Observer extends \Magento\Object
      * Set cmpi data to payment
      *
      * @param \Magento\Object $observer
-     * @return \Magento\Centinel\Model\Observer
+     * @return $this
      */
     public function salesEventConvertQuoteToOrder($observer)
     {
@@ -81,7 +81,7 @@ class Observer extends \Magento\Object
      * Add cmpi data to info block
      *
      * @param \Magento\Object $observer
-     * @return \Magento\Centinel\Model\Observer
+     * @return void|$this
      */
     public function paymentInfoBlockPrepareSpecificInformation($observer)
     {
@@ -112,7 +112,7 @@ class Observer extends \Magento\Object
      * Add centinel logo block into payment form
      *
      * @param \Magento\Object $observer
-     * @return \Magento\Centinel\Model\Observer
+     * @return $this
      */
     public function paymentFormBlockToHtmlBefore($observer)
     {
@@ -132,7 +132,7 @@ class Observer extends \Magento\Object
      * Reset validation data
      *
      * @param \Magento\Object $observer
-     * @return \Magento\Centinel\Model\Observer
+     * @return $this
      */
     public function checkoutSubmitAllAfter($observer)
     {

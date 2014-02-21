@@ -20,7 +20,7 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\Locale\Hierarchy\Config;
@@ -38,14 +38,14 @@ class FileResolver implements \Magento\Config\FileResolverInterface
     protected $iteratorFactory;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Config\FileIteratorFactory $iteratorFactory
     ) {
-        $this->directoryRead = $filesystem->getDirectoryRead(\Magento\Filesystem::APP);
+        $this->directoryRead = $filesystem->getDirectoryRead(\Magento\App\Filesystem::APP_DIR);
         $this->iteratorFactory = $iteratorFactory;
     }
 
@@ -58,7 +58,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
         if ($this->directoryRead->isExist('locale')) {
             $result = $this->iteratorFactory->create(
                 $this->directoryRead,
-                $this->directoryRead->search('#' . preg_quote($filename) . '$#', 'locale')
+                $this->directoryRead->search('/locale/*/' . $filename)
             );
         }
         return $result;

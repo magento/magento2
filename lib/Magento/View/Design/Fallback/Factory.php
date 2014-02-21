@@ -18,13 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\View\Design\Fallback;
 
-use Magento\Filesystem;
+use Magento\App\Filesystem;
 use Magento\View\Design\Fallback\Rule\Composite;
 use Magento\View\Design\Fallback\Rule\ModularSwitch;
 use Magento\View\Design\Fallback\Rule\RuleInterface;
@@ -39,6 +39,8 @@ use Magento\View\Design\Fallback\Rule\Theme;
 class Factory
 {
     /**
+     * File system
+     *
      * @var Filesystem
      */
     protected $filesystem;
@@ -60,7 +62,7 @@ class Factory
      */
     public function createLocaleFileRule()
     {
-        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES_DIR);
         return new Theme(
             new Simple("$themesDir/<area>/<theme_path>/i18n/<locale>")
         );
@@ -73,8 +75,8 @@ class Factory
      */
     public function createFileRule()
     {
-        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
-        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES_DIR);
+        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES_DIR);
         return new ModularSwitch(
             new Theme(
                 new Simple(
@@ -103,9 +105,9 @@ class Factory
      */
     public function createViewFileRule()
     {
-        $themesDir = $this->filesystem->getPath(Filesystem::THEMES);
-        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES);
-        $pubLibDir = $this->filesystem->getPath(Filesystem::PUB_LIB);
+        $themesDir = $this->filesystem->getPath(Filesystem::THEMES_DIR);
+        $modulesDir = $this->filesystem->getPath(Filesystem::MODULES_DIR);
+        $pubLibDir = $this->filesystem->getPath(Filesystem::PUB_LIB_DIR);
         return new ModularSwitch(
             new Composite(
                 array(

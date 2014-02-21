@@ -23,7 +23,7 @@
  * @category    Magento
  * @package     Magento_Backend
  * @subpackage  unit_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -41,7 +41,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_applicationMock;
+    protected $_storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -66,11 +66,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dsGraphMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_depMapperMock;
 
     /**
@@ -83,7 +78,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->_iteratorMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Iterator', array(), array(), '', false
         );
-        $this->_applicationMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->_backendFactoryMock = $this->getMock(
             'Magento\Backend\Model\Config\BackendFactory', array(), array(), '', false
         );
@@ -96,20 +91,16 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->_blockFactoryMock = $this->getMock(
             'Magento\View\Element\BlockFactory', array(), array(), '', false
         );
-        $this->_dsGraphMock = $this->getMock(
-            'Magento\Core\Model\DataService\Graph', array(), array(), '', false
-        );
         $this->_depMapperMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper', array(), array(), '', false
         );
 
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Field(
-            $this->_applicationMock,
+            $this->_storeManagerMock,
             $this->_backendFactoryMock,
             $this->_sourceFactoryMock,
             $this->_commentFactoryMock,
             $this->_blockFactoryMock,
-            $this->_dsGraphMock,
             $this->_depMapperMock
         );
     }
@@ -117,7 +108,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_iteratorMock);
-        unset($this->_applicationMock);
+        unset($this->_storeManagerMock);
         unset($this->_backendFactoryMock);
         unset($this->_sourceFactoryMock);
         unset($this->_commentFactoryMock);
@@ -399,53 +390,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             array('label' => 'val1', 'value' => 'var1'),
             array('subvar1' => 'subval1')
         );
-        $this->assertEquals($expected, $this->_model->getOptions());
-    }
-
-    public function testGetOptionsWithServiceOptions()
-    {
-        $option = array(
-            array('customLabel' => 'test', 'customId' => 0),
-            array('customLabel' => 'test2', 'customId' => 1)
-        );
-        $this->_dsGraphMock->expects($this->once())
-            ->method('get')
-            ->with('serviceCallName')
-            ->will($this->returnValue($option));
-
-        $expected = array(
-            array('label' => __('test'), 'value' => 0),
-            array('label' => __('test2'), 'value' => 1)
-        );
-        $options = array(
-            'service_call'      => 'serviceCallName',
-            'idField'           => 'customId',
-            'labelField'        => 'customLabel',
-            'includeSelectLine' => 'false',
-        );
-        $this->_model->setData(array('source_service' => $options), 'scope');
-        $this->assertEquals($expected, $this->_model->getOptions());
-    }
-
-    public function testGetOptionsWithServiceOptionsButNoFieldNamesSpecified()
-    {
-        $option = array(
-            array('name' => 'test', 'id' => 0),
-            array('name' => 'test2', 'id' => 1)
-        );
-        $this->_dsGraphMock->expects($this->once())
-            ->method('get')
-            ->with('serviceCallName')
-            ->will($this->returnValue($option));
-
-        $expected = array(
-            array('label' => __('test'), 'value' => 0),
-            array('label' => __('test2'), 'value' => 1)
-        );
-        $options = array(
-            'service_call' => 'serviceCallName',
-        );
-        $this->_model->setData(array('source_service' => $options), 'scope');
         $this->assertEquals($expected, $this->_model->getOptions());
     }
 

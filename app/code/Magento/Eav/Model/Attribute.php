@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Eav
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,6 +35,8 @@
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Eav\Model;
+
+use Magento\Core\Model\Website;
 
 abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
@@ -54,15 +56,15 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * Active Website instance
      *
-     * @var \Magento\Core\Model\Website
+     * @var Website
      */
     protected $_website;
 
     /**
      * Set active website instance
      *
-     * @param \Magento\Core\Model\Website|int $website
-     * @return \Magento\Eav\Model\Attribute
+     * @param Website|int $website
+     * @return $this
      */
     public function setWebsite($website)
     {
@@ -73,7 +75,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * Return active website instance
      *
-     * @return \Magento\Core\Model\Website
+     * @return Website
      */
     public function getWebsite()
     {
@@ -87,7 +89,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * Processing object after save data
      *
-     * @return \Magento\Eav\Model\Attribute
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -130,7 +132,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Set validate rules
      *
      * @param array|string $rules
-     * @return \Magento\Eav\Model\Attribute
+     * @return $this
      */
     public function setValidateRules($rules)
     {

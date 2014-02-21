@@ -1,6 +1,6 @@
 <?php
 /**
- * Magento application object manager. Configures and application application
+ * Application configuration object. Used to access configuration when application is initialized and installed.
  *
  * Magento
  *
@@ -20,121 +20,69 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\App;
 
-class Config
+class Config implements \Magento\App\ConfigInterface
 {
     /**
-     * Config data
-     *
-     * @var array
+     * Config cache tag
      */
-    protected $_data;
+    const CACHE_TAG = 'CONFIG';
 
     /**
-     * Configuration loader
-     *
-     * @var \Magento\App\Config\Loader
+     * @var \Magento\App\Config\ScopePool
      */
-    protected $_loader;
+    protected $_scopePool;
 
     /**
-     * Application options
-     *
-     * @var array
+     * @param \Magento\App\Config\ScopePool $scopePool
      */
-    protected $_parameters;
-
-    /**
-     * @param array $parameters
-     * @param Config\Loader $loader
-     */
-    public function __construct(array $parameters, Config\Loader $loader)
+    public function __construct(\Magento\App\Config\ScopePool $scopePool)
     {
-        $this->_loader = $loader;
-        $this->_parameters = $parameters;
-        $this->_data = array_replace_recursive($this->_parseParams($loader->load()), $parameters);
+        $this->_scopePool = $scopePool;
     }
 
     /**
-     * @param array $input
-     * @return array
-     */
-    protected function _parseParams(array $input)
-    {
-        $stack = $input;
-        unset($stack['resource']);
-        unset($stack['connection']);
-        $separator = '.';
-        $output = array();
-
-        while ($stack) {
-            list($key, $value) = each($stack);
-            unset($stack[$key]);
-            if (is_array($value)) {
-                if (count($value)) {
-                    foreach ($value as $subKey => $node) {
-                        $build[$key . $separator . $subKey] = $node;
-                    }
-                } else {
-                    $build[$key] = null;
-                }
-                $stack = $build + $stack;
-                continue;
-            }
-            $output[$key] = $value;
-        }
-        $output['connection'] = isset($input['connection']) ? $input['connection'] : array();
-        $output['resource'] = isset($input['resource']) ? $input['resource'] : array();
-        return $output;
-    }
-
-    /**
-     * Retrieve connection configuration by connection name
+     * Retrieve config value by path and scope
      *
-     * @param string $connectionName
-     * @return array
+     * @param string $path
+     * @param string $scope
+     * @param string $scopeCode
+     * @return mixed
      */
-    public function getConnection($connectionName)
+    public function getValue($path = null, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
-        return isset($this->_data['connection'][$connectionName])
-            ? $this->_data['connection'][$connectionName]
-            : null;
+        return $this->_scopePool->getScope($scope, $scopeCode)->getValue($path);
     }
 
     /**
-     * Retrieve list of connections
+     * Set config value in the corresponding config scope
      *
-     * @return array
+     * @param string $path
+     * @param mixed $value
+     * @param string $scope
+     * @param null|string $scopeCode
+     * @return void
      */
-    public function getConnections()
+    public function setValue($path, $value, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
-        return isset($this->_data['connection']) ? $this->_data['connection'] : array();
+        $this->_scopePool->getScope($scope, $scopeCode)->setValue($path, $value);
     }
 
     /**
-     * Retrieve key
+     * Retrieve config flag
      *
-     * @param string $key
-     * @param mixed $defaultValue
-     * @return array|null
+     * @param string $path
+     * @param string $scope
+     * @param null|string $scopeCode
+     * @return bool
      */
-    public function get($key = null, $defaultValue = null)
+    public function isSetFlag($path, $scope = \Magento\BaseScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
-        if ($key === null) {
-            return $this->_data;
-        }
-        return isset($this->_data[$key]) ? $this->_data[$key] : $defaultValue;
-    }
-
-    /**
-     * Reload local.xml
-     */
-    public function reload()
-    {
-        $this->_data = array_replace_recursive($this->_parseParams($this->_loader->load()), $this->_parameters);
+        return (bool)$this->getValue($path, $scope, $scopeCode);
     }
 }

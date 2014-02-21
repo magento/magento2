@@ -20,7 +20,7 @@
  *
  * @category   Magento
  * @package    Magento_Image
- * @copyright  Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -35,7 +35,7 @@ abstract class AbstractAdapter implements AdapterInterface
 {
     /**
      * Background color
-     * @var mixed
+     * @var int|string
      */
     public $imageBackgroundColor = 0;
 
@@ -55,32 +55,110 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     const DEFAULT_FONT_SIZE = 15;
 
+    /**
+     * @var  int
+     */
     protected $_fileType;
+
+    /**
+     * @var  string
+     */
     protected $_fileName ;
+
+    /**
+     * @var  string
+     */
     protected $_fileMimeType;
+
+    /**
+     * @var  string
+     */
     protected $_fileSrcName;
+
+    /**
+     * @var  string
+     */
     protected $_fileSrcPath;
+
+    /**
+     * @var resource
+     */
     protected $_imageHandler;
+
+    /**
+     * @var  int
+     */
     protected $_imageSrcWidth;
+
+    /**
+     * @var  int
+     */
     protected $_imageSrcHeight;
+
+    /**
+     * @var array
+     */
     protected $_requiredExtensions;
+
+    /**
+     * @var  string
+     */
     protected $_watermarkPosition;
+
+    /**
+     * @var  int
+     */
     protected $_watermarkWidth;
-    protected $_watermarkHeigth;
+
+    /**
+     * @var  int
+     */
+    protected $_watermarkHeight;
+
+    /**
+     * @var  int
+     */
     protected $_watermarkImageOpacity;
+
+    /**
+     * @var  int
+     */
     protected $_quality;
+
+    /**
+     * @var int
+     */
     protected $_fontSize = self::DEFAULT_FONT_SIZE;
 
+    /**
+     * @var  bool
+     */
     protected $_keepAspectRatio;
+
+    /**
+     * @var  bool
+     */
     protected $_keepFrame;
+
+    /**
+     * @var  bool
+     */
     protected $_keepTransparency;
+
+    /**
+     * @var  array
+     */
     protected $_backgroundColor;
+
+    /**
+     * @var  bool
+     */
     protected $_constrainOnly;
 
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -94,8 +172,23 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected $logger;
 
+    /**
+     * Open image for processing
+     *
+     * @param string $fileName
+     * @return void
+     */
     abstract public function open($fileName);
 
+    /**
+     * Save image to specific path.
+     * If some folders of path does not exist they will be created
+     *
+     * @param null|string $destination
+     * @param null|string $newName
+     * @return void
+     * @throws \Exception  If destination path is not writable
+     */
     abstract public function save($destination = null, $newName = null);
 
     /**
@@ -105,14 +198,52 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     abstract public function getImage();
 
+    /**
+     * Change the image size
+     *
+     * @param null|int $width
+     * @param null|int $height
+     * @return void
+     */
     abstract public function resize($width=null, $height=null);
 
+    /**
+     * Rotate image on specific angle
+     *
+     * @param int $angle
+     * @return void
+     */
     abstract public function rotate($angle);
 
+    /**
+     * Crop image
+     *
+     * @param int $top
+     * @param int $left
+     * @param int $right
+     * @param int $bottom
+     * @return bool
+     */
     abstract public function crop($top = 0, $left = 0, $right = 0, $bottom = 0);
 
+    /**
+     * Add watermark to image
+     *
+     * @param string $imagePath
+     * @param int $positionX
+     * @param int $positionY
+     * @param int $opacity
+     * @param bool $tile
+     * @return void
+     */
     abstract public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false);
 
+    /**
+     * Checks required dependencies
+     *
+     * @return void
+     * @throws \Exception If some of dependencies are missing
+     */
     abstract public function checkDependencies();
 
     /**
@@ -120,12 +251,14 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $text
      * @param string $font Path to font file
-     * @return \Magento\Image\Adapter\AbstractAdapter
+     * @return AbstractAdapter
      */
     abstract public function createPngFromString($text, $font = '');
 
     /**
      * Reassign image dimensions
+     *
+     * @return void
      */
     abstract public function refreshImageDimensions();
 
@@ -141,12 +274,12 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initialize default values
      *
-     * @param \Magento\Filesystem $filesystem,
+     * @param \Magento\App\Filesystem $filesystem
      * @param array $data
      */
-    public function __construct(\Magento\Filesystem $filesystem, array $data = array()) {
+    public function __construct(\Magento\App\Filesystem $filesystem, array $data = array()) {
         $this->_filesystem      = $filesystem;
-        $this->directoryWrite   = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $this->directoryWrite   = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
     }
 
     /**
@@ -191,7 +324,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Set watermark position
      *
-     * @return \Magento\Image\Adapter\AbstractAdapter
+     * @param string $position
+     * @return $this
      */
     public function setWatermarkPosition($position)
     {
@@ -202,7 +336,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Get watermark position
      *
-     * @return \Magento\Image\Adapter\AbstractAdapter
+     * @return string
      */
     public function getWatermarkPosition()
     {
@@ -212,7 +346,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Set watermark opacity
      *
-     * @return \Magento\Image\Adapter\AbstractAdapter
+     * @param int $imageOpacity
+     * @return $this
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -233,7 +368,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Set watermark width
      *
-     * @return \Magento\Image\Adapter\AbstractAdapter
+     * @param int $width
+     * @return $this
      */
     public function setWatermarkWidth($width)
     {
@@ -254,11 +390,12 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Set watermark height
      *
-     * @return \Magento\Image\Adapter\AbstractAdapter
+     * @param int $height
+     * @return $this
      */
-    public function setWatermarkHeight($heigth)
+    public function setWatermarkHeight($height)
     {
-        $this->_watermarkHeigth = $heigth;
+        $this->_watermarkHeight = $height;
         return $this;
     }
 
@@ -269,9 +406,8 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function getWatermarkHeight()
     {
-        return $this->_watermarkHeigth;
+        return $this->_watermarkHeight;
     }
-
 
     /**
      * Get/set keepAspectRatio
@@ -346,8 +482,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Get/set keepBackgroundColor
      *
-     * @param array $value
-     * @return array
+     * @param null|array $value
+     * @return array|null
      */
     public function backgroundColor($value = null)
     {
@@ -368,6 +504,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Assign file dirname and basename to object properties
      *
+     * @return void
      */
     protected function _getFileAttributes()
     {
@@ -380,10 +517,10 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Adapt resize values based on image configuration
      *
-     * @throws \Exception
      * @param int $frameWidth
      * @param int $frameHeight
      * @return array
+     * @throws \Exception
      */
     protected function _adaptResizeValues($frameWidth, $frameHeight)
     {
@@ -445,7 +582,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $frameWidth
      * @param int $frameHeight
-     * @return array
+     * @return int[]
      */
     protected function _checkAspectRatio($frameWidth, $frameHeight)
     {
@@ -474,6 +611,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $frameWidth
      * @param int $frameHeight
+     * @return void
      * @throws \Exception
      */
     protected function _checkDimensions($frameWidth, $frameHeight)
@@ -510,7 +648,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Return supported image formats
      *
-     * @return array
+     * @return string[]
      */
     public function getSupportedFormats()
     {
@@ -520,10 +658,10 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Create destination folder if not exists and return full file path
      *
-     * @throws \Exception
      * @param string $destination
      * @param string $newName
      * @return string
+     * @throws \Exception
      */
     protected function _prepareDestination($destination = null, $newName = null)
     {

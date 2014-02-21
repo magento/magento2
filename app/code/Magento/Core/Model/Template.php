@@ -20,10 +20,10 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model;
 
 /**
  * Template model class
@@ -32,9 +32,7 @@
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model;
-
-abstract class Template extends \Magento\Core\Model\AbstractModel
+abstract class Template extends AbstractModel
 {
     /**
      * Types of template
@@ -64,9 +62,9 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initial environment information
-     * @see self::_applyDesignConfig()
      *
      * @var \Magento\Object|null
+     * @see self::_applyDesignConfig()
      */
     protected $_initialEnvironmentInfo = null;
 
@@ -97,7 +95,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
     protected $_appEmulation;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -128,7 +126,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
     /**
      * Applying of design config
      *
-     * @return \Magento\Core\Model\Template
+     * @return $this
      */
     protected function _applyDesignConfig()
     {
@@ -145,7 +143,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
     /**
      * Revert design settings to previous
      *
-     * @return \Magento\Core\Model\Template
+     * @return $this
      */
     protected function _cancelDesignConfig()
     {
@@ -182,7 +180,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
      * Initialize design information for template processing
      *
      * @param array $config
-     * @return \Magento\Core\Model\Template
+     * @return $this
      * @throws \Magento\Exception
      */
     public function setDesignConfig(array $config)
@@ -200,6 +198,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
      *
      * @param int|string $storeId
      * @param string $area
+     * @return void
      */
     public function emulateDesign($storeId, $area=self::DEFAULT_DESIGN_AREA)
     {
@@ -218,6 +217,7 @@ abstract class Template extends \Magento\Core\Model\AbstractModel
     /**
      * Revert to last design config, used before emulation
      *
+     * @return void
      */
     public function revertDesign()
     {

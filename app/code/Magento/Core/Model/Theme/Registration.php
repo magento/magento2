@@ -20,17 +20,18 @@
  *
  * @category    Magento
  * @package     Magento_Core
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Theme;
+
+use Magento\App\Filesystem;
+use Magento\Core\Exception;
+use \Magento\View\Design\ThemeInterface;
 
 /**
  * Theme registration model class
  */
-namespace Magento\Core\Model\Theme;
-
-use \Magento\View\Design\ThemeInterface;
-
 class Registration
 {
     /**
@@ -41,7 +42,7 @@ class Registration
     /**
      * Collection of themes in file-system
      *
-     * @var \Magento\Core\Model\Theme\Collection
+     * @var Collection
      */
     protected $_themeCollection;
 
@@ -75,23 +76,23 @@ class Registration
      *
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
      * @param Collection $filesystemCollection
-     * @param \Magento\Filesystem $filesystem
+     * @param Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Theme\CollectionFactory    $collectionFactory,
-        \Magento\Core\Model\Theme\Collection                    $filesystemCollection,
-        \Magento\Filesystem                                     $filesystem
+        \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory,
+        Collection $filesystemCollection,
+        Filesystem $filesystem
     ) {
-        $this->_collectionFactory   = $collectionFactory;
-        $this->_themeCollection     = $filesystemCollection;
-        $this->directoryRead        = $filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        $this->_collectionFactory = $collectionFactory;
+        $this->_themeCollection = $filesystemCollection;
+        $this->directoryRead = $filesystem->getDirectoryRead(Filesystem::MEDIA_DIR);
     }
 
     /**
      * Theme registration
      *
      * @param string $pathPattern
-     * @return \Magento\View\Design\ThemeInterface
+     * @return $this
      */
     public function register($pathPattern = '')
     {
@@ -114,10 +115,10 @@ class Registration
      * Register theme and recursively all its ascendants
      * Second param is optional and is used to prevent circular references in inheritance chain
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param ThemeInterface &$theme
      * @param array $inheritanceChain
-     * @return \Magento\Core\Model\Theme\Collection
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws Exception
      */
     protected function _registerThemeRecursively(&$theme, $inheritanceChain = array())
     {
@@ -132,7 +133,7 @@ class Registration
 
         $tempId = $theme->getFullPath();
         if (in_array($tempId, $inheritanceChain)) {
-            throw new \Magento\Core\Exception(__('Circular-reference in theme inheritance detected for "%1"', $tempId));
+            throw new Exception(__('Circular-reference in theme inheritance detected for "%1"', $tempId));
         }
         $inheritanceChain[] = $tempId;
         $parentTheme = $theme->getParentTheme();
@@ -142,7 +143,7 @@ class Registration
         }
 
         $this->_savePreviewImage($theme);
-        $theme->setType(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL);
+        $theme->setType(ThemeInterface::TYPE_PHYSICAL);
         $theme->save();
 
         return $this;
@@ -151,7 +152,7 @@ class Registration
     /**
      * Save preview image for theme
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return $this
      */
     protected function _savePreviewImage(ThemeInterface $theme)
@@ -171,7 +172,7 @@ class Registration
      * Get theme from DB by full path
      *
      * @param string $fullPath
-     * @return \Magento\View\Design\ThemeInterface
+     * @return ThemeInterface
      */
     public function getThemeFromDb($fullPath)
     {
@@ -181,12 +182,12 @@ class Registration
     /**
      * Checks all physical themes that they were not deleted
      *
-     * @return \Magento\Core\Model\Theme\Registration
+     * @return $this
      */
     public function checkPhysicalThemes()
     {
         $themes = $this->_collectionFactory->create()->addTypeFilter(ThemeInterface::TYPE_PHYSICAL);
-        /** @var $theme \Magento\View\Design\ThemeInterface */
+        /** @var $theme ThemeInterface */
         foreach ($themes as $theme) {
             if (!$this->_themeCollection->hasTheme($theme)) {
                 $theme->setType(ThemeInterface::TYPE_VIRTUAL)->save();
@@ -198,7 +199,7 @@ class Registration
     /**
      * Check whether all themes have correct parent theme by type
      *
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return $this
      */
     public function checkAllowedThemeRelations()
     {
@@ -206,7 +207,7 @@ class Registration
             list($parentType, $childType) = $typesSequence;
             $collection = $this->_collectionFactory->create();
             $collection->addTypeRelationFilter($parentType, $childType);
-            /** @var $theme \Magento\View\Design\ThemeInterface */
+            /** @var $theme ThemeInterface */
             foreach ($collection as $theme) {
                 $parentId = $this->_getResetParentId($theme);
                 if ($theme->getParentId() != $parentId) {
@@ -220,10 +221,10 @@ class Registration
     /**
      * Reset parent themes by type
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return int|null
      */
-    protected function _getResetParentId(\Magento\View\Design\ThemeInterface $theme)
+    protected function _getResetParentId(ThemeInterface $theme)
     {
         $parentTheme = $theme->getParentTheme();
         while ($parentTheme) {

@@ -20,7 +20,7 @@
  *
  * @category    Magento
  * @package     Magento_Backup
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -45,7 +45,7 @@ class Snapshot extends \Magento\Backup\Filesystem
     /**
      * Filesystem instance
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
@@ -55,11 +55,11 @@ class Snapshot extends \Magento\Backup\Filesystem
     protected $_backupFactory;
 
     /**
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\App\Filesystem $filesystem
      * @param Factory $backupFactory
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
+        \Magento\App\Filesystem $filesystem,
         \Magento\Backup\Factory $backupFactory
     ) {
         $this->_filesystem = $filesystem;
@@ -136,7 +136,7 @@ class Snapshot extends \Magento\Backup\Filesystem
         return $this->_backupFactory->create(\Magento\Backup\Factory::TYPE_DB)
             ->setBackupExtension('gz')
             ->setTime($this->getTime())
-            ->setBackupsDir($this->_filesystem->getPath(\Magento\Filesystem::VAR_DIR))
+            ->setBackupsDir($this->_filesystem->getPath(\Magento\App\Filesystem::VAR_DIR))
             ->setResourceModel($this->getResourceModel());
     }
 

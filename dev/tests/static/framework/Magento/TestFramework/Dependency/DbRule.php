@@ -23,7 +23,7 @@
  * @category    Magento
  * @package     Magento
  * @subpackage  static_tests
- * @copyright   Copyright (c) 2013 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\TestFramework\Dependency;
@@ -39,16 +39,12 @@ class DbRule implements \Magento\TestFramework\Dependency\RuleInterface
 
     /**
      * Constructor
+     *
+     * @param array $tables
      */
-    public function __construct()
+    public function __construct(array $tables)
     {
-        $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/*.php';
-
-        $this->_moduleTableMap = array();
-        foreach (glob($replaceFilePattern) as $fileName) {
-            $tables = @include $fileName;
-            $this->_moduleTableMap = array_merge($this->_moduleTableMap, $tables);
-        }
+        $this->_moduleTableMap = $tables;
     }
 
     /**
