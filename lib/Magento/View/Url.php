@@ -35,31 +35,43 @@ class Url
     const XML_PATH_STATIC_FILE_SIGNATURE = 'dev/static/sign';
 
     /**
+     * File system
+     *
      * @var \Magento\App\Filesystem
      */
     protected $_filesystem;
 
     /**
+     * View service
+     *
      * @var \Magento\View\Service
      */
     protected $_viewService;
 
     /**
+     * Publisher
+     *
      * @var \Magento\View\Publisher
      */
     protected $_publisher;
 
     /**
+     * Deployed file manager
+     *
      * @var \Magento\View\DeployedFilesManager
      */
     protected $_deployedFileManager;
 
     /**
+     * URL builder
+     *
      * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
+     * Config
+     *
      * @var \Magento\View\Url\ConfigInterface
      */
     protected $_config;
@@ -72,18 +84,22 @@ class Url
     protected $_fileUrlMap;
 
     /**
+     * View file system
+     *
      * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\UrlInterface $urlBuilder
-     * @param Url\ConfigInterface $config
-     * @param Service $viewService
-     * @param Publisher $publisher
-     * @param DeployedFilesManager $deployedFileManager
-     * @param \Magento\View\FileSystem $viewFileSystem,
+     * @param \Magento\View\Url\ConfigInterface $config
+     * @param \Magento\View\Service $viewService
+     * @param \Magento\View\Publisher $publisher
+     * @param \Magento\View\DeployedFilesManager $deployedFileManager
+     * @param \Magento\View\FileSystem $viewFileSystem
      * @param array $fileUrlMap
      */
     public function __construct(

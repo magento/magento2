@@ -36,6 +36,10 @@ class Observer
      */
     protected $_shippingFactory;
 
+    /**
+     * @param \Magento\Core\Model\LocaleInterface $coreLocale
+     * @param \Magento\Sales\Model\Resource\Report\ShippingFactory $shippingFactory
+     */
     public function __construct(
         \Magento\Core\Model\LocaleInterface $coreLocale,
         \Magento\Sales\Model\Resource\Report\ShippingFactory $shippingFactory

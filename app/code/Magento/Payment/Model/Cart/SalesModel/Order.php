@@ -21,11 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model\Cart\SalesModel;
 
 /**
  * Wrapper for \Magento\Sales\Model\Order sales model
  */
-namespace Magento\Payment\Model\Cart\SalesModel;
 
 class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
 {
@@ -45,9 +45,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
     }
 
     /**
-     * Get all items from shopping sales model
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getAllItems()
     {
@@ -67,7 +65,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
     }
 
     /**
-     * @return float|null
+     * {@inheritdoc}
      */
     public function getBaseSubtotal()
     {
@@ -75,7 +73,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
     }
 
     /**
-     * @return float|null
+     * {@inheritdoc}
      */
     public function getBaseTaxAmount()
     {
@@ -83,7 +81,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
     }
 
     /**
-     * @return float|null
+     * {@inheritdoc}
      */
     public function getBaseShippingAmount()
     {
@@ -91,7 +89,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
     }
 
     /**
-     * @return float|null
+     * {@inheritdoc}
      */
     public function getBaseDiscountAmount()
     {
@@ -99,11 +97,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
     }
 
     /**
-     * Wrapper for \Magento\Object getDataUsingMethod method
-     *
-     * @param string $key
-     * @param mixed $args
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getDataUsingMethod($key, $args = null)
     {
@@ -111,9 +105,7 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
     }
 
     /**
-     * Return object that contains tax related fields
-     *
-     * @return \Magento\Sales\Model\Order
+     * {@inheritdoc}
      */
     public function getTaxContainer()
     {

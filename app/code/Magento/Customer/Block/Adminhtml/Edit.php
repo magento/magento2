@@ -116,7 +116,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Prepare form html. Add block for configurable product modification interface
+     * Prepare form html. Add block for composite product modification interface
      *
      * @return string
      */

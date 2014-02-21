@@ -111,14 +111,9 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             'extra'     => null
         );
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = 'int';
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = \Magento\DB\Ddl\Table::TYPE_INTEGER;
-            $column['nullable'] = true;
-            $column['comment']  = $attributeCode . ' tax column';
-        }
+        $column['type']     = \Magento\DB\Ddl\Table::TYPE_INTEGER;
+        $column['nullable'] = true;
+        $column['comment']  = $attributeCode . ' tax column';
 
         return array($attributeCode => $column);
    }

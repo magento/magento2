@@ -118,6 +118,7 @@ class DesignAbstraction extends \Magento\View\Element\Html\Select
      * Add design abstractions information to the options
      *
      * @param array $designAbstractions
+     * @return void
      */
     protected function _addDesignAbstractionOptions(array $designAbstractions)
     {

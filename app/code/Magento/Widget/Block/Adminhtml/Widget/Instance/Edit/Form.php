@@ -38,7 +38,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form before rendering HTML
      *
-     * @return \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Form
+     * @return $this
      */
     protected function _prepareForm()
     {

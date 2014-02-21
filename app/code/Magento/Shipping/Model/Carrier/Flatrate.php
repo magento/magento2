@@ -23,17 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Model\Carrier;
 
+use Magento\Shipping\Model\Rate\Result;
 
 /**
  * Flat rate shipping model
  *
- * @category   Magento
- * @package    Magento_Shipping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Shipping\Model\Carrier;
-
 class Flatrate
     extends \Magento\Shipping\Model\Carrier\AbstractCarrier
     implements \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -81,7 +79,7 @@ class Flatrate
 
     /**
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return Result|bool
      */
     public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
@@ -110,7 +108,7 @@ class Flatrate
         }
         $this->setFreeBoxes($freeBoxes);
 
-        /** @var \Magento\Shipping\Model\Rate\Result $result */
+        /** @var Result $result */
         $result = $this->_rateResultFactory->create();
         if ($this->getConfigData('type') == 'O') { // per order
             $shippingPrice = $this->getConfigData('price');
@@ -136,7 +134,6 @@ class Flatrate
                 $shippingPrice = '0.00';
             }
 
-
             $method->setPrice($shippingPrice);
             $method->setCost($shippingPrice);
 
@@ -146,6 +143,9 @@ class Flatrate
         return $result;
     }
 
+    /**
+     * @return array
+     */
     public function getAllowedMethods()
     {
         return array('flatrate'=>$this->getConfigData('name'));

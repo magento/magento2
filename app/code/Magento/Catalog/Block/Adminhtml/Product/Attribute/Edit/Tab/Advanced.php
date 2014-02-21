@@ -197,8 +197,6 @@ class Advanced extends Generic
             }
         }
 
-        $yesnoSource = $this->_yesNo->toOptionArray();
-
         $scopes = array(
             \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE =>__('Store View'),
             \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE =>__('Website'),
@@ -217,12 +215,7 @@ class Advanced extends Generic
             'values'=> $scopes
         ), 'attribute_code');
 
-
-        $fieldset->addField('is_configurable', 'select', array(
-            'name' => 'is_configurable',
-            'label' => __('Use To Create Configurable Product'),
-            'values' => $yesnoSource,
-        ));
+        $this->_eventManager->dispatch('product_attribute_form_build', array('form' => $form));
         $this->setForm($form);
         return $this;
     }

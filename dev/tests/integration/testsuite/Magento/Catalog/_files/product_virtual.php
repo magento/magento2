@@ -37,5 +37,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
     ->setPrice(10)
     ->setTaxClassId(0)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->save();

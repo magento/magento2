@@ -185,7 +185,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             ->where('e.type_id=?', $this->getTypeId());
 
         // add enable products limitation
-        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $statusCond, true);
         if ($this->_coreData->isModuleEnabled('Magento_Tax')) {
             $taxClassId = $this->_addAttributeToSelect($select, 'tax_class_id', 'e.entity_id', 'cs.store_id');

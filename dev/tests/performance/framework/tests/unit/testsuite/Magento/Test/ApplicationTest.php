@@ -232,7 +232,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyFixturesSuperSetNoInstallation()
     {
-        $this->_shell->expects($this->exactly(5)) // Initial uninstall/install only
+        $this->_shell->expects($this->exactly(8)) // Initial uninstall/install only
             ->method('execute');
 
         $fixture1 = $this->_getFixtureFiles(array('fixture1'));
@@ -254,11 +254,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($this->logicalNot($this->stringContains('--uninstall')), $this->contains($this->_installerScript));
 
-        $this->_shell->expects($this->at(4))
+        $this->_shell->expects($this->at(6))
             ->method('execute')
             ->with($this->stringContains('--uninstall'), $this->contains($this->_installerScript));
 
-        $this->_shell->expects($this->at(5))
+        $this->_shell->expects($this->at(7))
             ->method('execute')
             ->with($this->logicalNot($this->stringContains('--uninstall')), $this->contains($this->_installerScript));
 

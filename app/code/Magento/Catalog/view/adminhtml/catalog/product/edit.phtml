@@ -54,9 +54,6 @@
 
     <?php if($this->getProductId()): ?>
         <?php echo $this->getDeleteButtonHtml() ?>
-        <?php if($this->getProductSetId() && $this->getIsConfigured()): ?>
-            <?php echo $this->getDuplicateButtonHtml() ?>
-        <?php endif; ?>
     <?php endif; ?>
     <?php if ($this->getProductSetId()): ?>
         <?php echo $this->getChangeAttributeSetButtonHtml() ?>

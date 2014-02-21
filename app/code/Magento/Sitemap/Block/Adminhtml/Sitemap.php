@@ -23,20 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sitemap\Block\Adminhtml;
 
 /**
  * Adminhtml catalog (google) sitemaps block
- *
- * @category   Magento
- * @package    Magento_Sitemap
  */
-namespace Magento\Sitemap\Block\Adminhtml;
-
 class Sitemap extends \Magento\Backend\Block\Widget\Grid\Container
 {
-
     /**
      * Block constructor
+     *
+     * @return void
      */
     protected function _construct()
     {

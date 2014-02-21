@@ -23,16 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Customer\Model\Customer" type="Magento\Customer\Model\Backend\Customer" />
     <type name="Magento\Customer\Model\Session">
-        <param name="sessionName">
-            <value>adminhtml</value>
-        </param>
+        <arguments>
+            <argument name="sessionName" xsi:type="string">adminhtml</argument>
+        </arguments>
     </type>
     <type name="Magento\Customer\Model\Resource\Customer\Collection">
-        <param name="modelName">
-            <value>Magento\Customer\Model\Backend\Customer</value>
-        </param>
+        <arguments>
+            <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>
+        </arguments>
     </type>
 </config>

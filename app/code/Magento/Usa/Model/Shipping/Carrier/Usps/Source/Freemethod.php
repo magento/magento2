@@ -29,6 +29,9 @@ namespace Magento\Usa\Model\Shipping\Carrier\Usps\Source;
 
 class Freemethod extends \Magento\Usa\Model\Shipping\Carrier\Usps\Source\Method
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         $arr = parent::toOptionArray();

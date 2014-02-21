@@ -126,7 +126,7 @@ class Checkout extends \Magento\Checkout\Controller\Action
                 $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             }
 
-            if (!$this->_objectManager->get('Magento\Checkout\Helper\Data')->isMultishippingCheckoutAvailable()) {
+            if (!$this->_objectManager->get('Magento\Multishipping\Helper\Data')->isMultishippingCheckoutAvailable()) {
                 $error = $this->_getCheckout()->getMinimumAmountError();
                 $this->messageManager->addError($error);
                 $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());

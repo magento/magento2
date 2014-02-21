@@ -37,7 +37,7 @@ namespace Magento\Usa\Model\Shipping\Carrier\Ups\Source;
 class Mode implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {

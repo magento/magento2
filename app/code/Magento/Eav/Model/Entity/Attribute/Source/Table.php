@@ -182,45 +182,26 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $isMulti = $this->getAttribute()->getFrontend()->getInputType() == 'multiselect';
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $columns[$attributeCode] = array(
-                'type'      => $isMulti ? 'varchar(255)' : 'int',
+        $type = ($isMulti) ? \Magento\DB\Ddl\Table::TYPE_TEXT : \Magento\DB\Ddl\Table::TYPE_INTEGER;
+        $columns[$attributeCode] = array(
+            'type'      => $type,
+            'length'    => $isMulti ? '255' : null,
+            'unsigned'  => false,
+            'nullable'   => true,
+            'default'   => null,
+            'extra'     => null,
+            'comment'   => $attributeCode . ' column'
+        );
+        if (!$isMulti) {
+            $columns[$attributeCode . '_value'] = array(
+                'type'      => \Magento\DB\Ddl\Table::TYPE_TEXT,
+                'length'    => 255,
                 'unsigned'  => false,
-                'is_null'   => true,
-                'default'   => null,
-                'extra'     => null
-            );
-            if (!$isMulti) {
-                $columns[$attributeCode . '_value'] = array(
-                    'type'      => 'varchar(255)',
-                    'unsigned'  => false,
-                    'is_null'   => true,
-                    'default'   => null,
-                    'extra'     => null
-                );
-            }
-        } else {
-            $type = ($isMulti) ? \Magento\DB\Ddl\Table::TYPE_TEXT : \Magento\DB\Ddl\Table::TYPE_INTEGER;
-            $columns[$attributeCode] = array(
-                'type'      => $type,
-                'length'    => $isMulti ? '255' : null,
-                'unsigned'  => false,
-                'nullable'   => true,
+                'nullable'  => true,
                 'default'   => null,
                 'extra'     => null,
                 'comment'   => $attributeCode . ' column'
             );
-            if (!$isMulti) {
-                $columns[$attributeCode . '_value'] = array(
-                    'type'      => \Magento\DB\Ddl\Table::TYPE_TEXT,
-                    'length'    => 255,
-                    'unsigned'  => false,
-                    'nullable'  => true,
-                    'default'   => null,
-                    'extra'     => null,
-                    'comment'   => $attributeCode . ' column'
-                );
-            }
         }
 
         return $columns;

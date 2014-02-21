@@ -41,7 +41,7 @@ $product->setTypeId('simple')
     ->setMetaDescription('meta description')
 
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
 
     ->setStockData(array(
         'use_config_manage_stock' => 0,

@@ -26,4 +26,5 @@
 <config>
     <preference for="Magento\ImportExport\Model\Import\ConfigInterface" type="Magento\ImportExport\Model\Import\Config" />
     <preference for="Magento\ImportExport\Model\Export\ConfigInterface" type="Magento\ImportExport\Model\Export\Config" />
+    <preference for="Magento\ImportExport\Model\Export\RowCustomizerInterface" type="Magento\ImportExport\Model\Export\RowCustomizer\Composite" />
 </config>

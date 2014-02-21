@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Model\Config\Backend;
 
 /**
  * Backup by cron backend model
  */
-namespace Magento\Backup\Model\Config\Backend;
-
 class Cron extends \Magento\Core\Model\Config\Value
 {
     const CRON_STRING_PATH  = 'crontab/default/jobs/system_backup/schedule/cron_expr';
@@ -78,7 +77,7 @@ class Cron extends \Magento\Core\Model\Config\Value
     /**
      * Cron settings after save
      *
-     * @return \Magento\Backend\Model\Config\Backend\Log\Cron
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _afterSave()

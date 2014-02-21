@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Block;
 
 /**
  * Base payment iformation block
  */
-namespace Magento\Payment\Block;
-
 class Info extends \Magento\View\Element\Template
 {
     /**
@@ -38,6 +37,9 @@ class Info extends \Magento\View\Element\Template
      */
     protected $_paymentSpecificInformation = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Payment::info/default.phtml';
 
     /**
@@ -156,7 +158,7 @@ class Info extends \Magento\View\Element\Template
     /**
      * Prepare information specific to current payment method
      *
-     * @param \Magento\Object|array $transport
+     * @param null|\Magento\Object|array $transport
      * @return \Magento\Object
      */
     protected function _prepareSpecificInformation($transport = null)

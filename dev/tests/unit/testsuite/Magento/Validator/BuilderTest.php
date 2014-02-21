@@ -27,6 +27,11 @@
 
 namespace Magento\Validator;
 
+/**
+ * Class BuilderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -34,9 +39,23 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /**
+     * @var \Magento\ObjectManager\ObjectManager
+     */
+    protected $_realObjectManager;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $argInterpreter = $this->getMock('\Magento\Data\Argument\InterpreterInterface', array(), array(), '', false);
+        $argObjectFactory =
+            $this->getMock('\Magento\ObjectManager\Config\Argument\ObjectFactory', array(), array(), '', false);
+        $config = new \Magento\ObjectManager\Config\Config(new \Magento\ObjectManager\Relations\Runtime());
+        $factory = new \Magento\ObjectManager\Factory\Factory(
+            $config, $argInterpreter, $argObjectFactory, null
+        );
+        $this->_realObjectManager = new \Magento\ObjectManager\ObjectManager($factory, $config);
     }
 
     /**
@@ -53,12 +72,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $builder = $this->_objectManager->getObject(
             'Magento\Validator\Builder',
             array(
-                'constraintFactory'
-                    => new \Magento\Validator\ConstraintFactory(new \Magento\ObjectManager\ObjectManager()),
-                'validatorFactory'
-                    => new \Magento\ValidatorFactory(new \Magento\ObjectManager\ObjectManager()),
-                'oneValidatorFactory'
-                    => new \Magento\Validator\UniversalFactory(new \Magento\ObjectManager\ObjectManager()),
+                'constraintFactory' => new \Magento\Validator\ConstraintFactory($this->_realObjectManager),
+                'validatorFactory' => new \Magento\ValidatorFactory($this->_realObjectManager),
+                'oneValidatorFactory' => new \Magento\Validator\UniversalFactory($this->_realObjectManager),
                 'constraints' => $constraints
             )
         );
@@ -85,7 +101,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             'alias' => 'name_alias',
             'class' => 'Magento\Validator\Test\StringLength',
             'options' => array(
-                'arguments' => array('min' => 1, 'max' => new \Magento\Validator\Constraint\Option(20))
+                'arguments' => array(
+                    'options' => array('min' => 1, 'max' => new \Magento\Validator\Constraint\Option(20))
+                )
             ),
             'property' => 'name',
             'type' => 'property',
@@ -211,15 +229,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             array('Magento\Validator\Test\Callback', 'getId')
         );
         $someMethod = array('method' => 'getMessages');
-        $methodWithArgs = array('method' => 'setMax', 'arguments' => array(100));
-        $constructorArgs = array('arguments' => array(array('max' => '50')));
+        $methodWithArgs = array('method' => 'someMethod', 'arguments' => array('some_value_to_pass'));
         $callbackConfig = array('callback' => $callback);
 
         $configuredConstraint = array(
             'alias' => 'current_alias',
-            'class' => 'Magento\Validator\Test\NotEmpty',
+            'class' => 'Some\Validator\Class',
             'options' => array(
-                'arguments' => array(array('min' => 1)),
+                'arguments' => array('some_argument' => 'some_value'),
                 'callback' => array($callback),
                 'methods' => array($someMethod)
             ),
@@ -228,15 +245,15 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         );
         $emptyConstraint = array(
             'alias' => 'current_alias',
-            'class' => 'Magento\Validator\Test\NotEmpty',
+            'class' => 'Some\Validator\Class',
             'options' => null,
             'property' => 'int',
             'type' => 'property'
         );
         $constraintWithArgs = array(
             'alias' => 'current_alias',
-            'class' => 'Magento\Validator\Test\NotEmpty',
-            'options' => array('arguments' => array(array('min' => 1))),
+            'class' => 'Some\Validator\Class',
+            'options' => array('arguments' => array('some_argument' => 'some_value')),
             'property' => 'int',
             'type' => 'property'
         );
@@ -251,8 +268,25 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 $callbackConfig, array($this->_getExpectedConstraints($emptyConstraint, 'callback', array($callback)))),
 
             'constraint options initialized with arguments' => array(
-                array($emptyConstraint), 'current_alias', $constructorArgs,
-                array($this->_getExpectedConstraints($emptyConstraint, 'arguments', array(array('max' => '50'))))
+                array($emptyConstraint),
+                'current_alias',
+                array('arguments' => array('some_argument' => 'some_value')),
+                array(
+                    $this->_getExpectedConstraints($emptyConstraint, 'arguments',
+                        array('some_argument' => 'some_value')
+                    ),
+                ),
+            ),
+
+            'constraint options arguments overwritten by newer arguments' => array(
+                array($configuredConstraint),
+                'current_alias',
+                array('arguments' => array('some_argument' => 'some_value')),
+                array(
+                    $this->_getExpectedConstraints($configuredConstraint, 'arguments',
+                        array('some_argument' => 'some_value')
+                    ),
+                ),
             ),
 
             'methods initialized' => array(
@@ -314,7 +348,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         }
         $constraints = array(array(
             'alias' => 'alias',
-            'class' => 'Magento\Validator\Test\True',
+            'class' => 'Some\Validator\Class',
             'options' => $options,
             'type' => 'entity'
         ));
@@ -339,7 +373,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
         $constraints = array(array(
             'alias' => 'alias',
-            'class' => 'Magento\Validator\Test\True',
+            'class' => 'Some\Validator\Class',
             'options' => null,
             'type' => 'entity'
         ));
@@ -411,7 +445,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     'options' => null,
                     'type' => 'entity'
                 )),
-                'validatorFactory' => new \Magento\ValidatorFactory(new \Magento\ObjectManager\ObjectManager()),
+                'validatorFactory' => new \Magento\ValidatorFactory($this->_realObjectManager),
             )
         );
         $builder->createValidator();
@@ -431,7 +465,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     {
         $constraints = array(array(
             'alias' => 'alias',
-            'class' => 'Magento\Validator\Test\True',
+            'class' => 'Some\Validator\Class',
             'options' => null,
             'type' => 'entity'
         ));

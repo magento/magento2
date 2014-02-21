@@ -23,14 +23,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Payment\Model\Method;
 
 class Ccsave extends \Magento\Payment\Model\Method\Cc
 {
+    /**
+     * @var string
+     */
     protected $_code        = 'ccsave';
+
+    /**
+     * @var bool
+     */
     protected $_canSaveCc   = true;
+
+    /**
+     * @var string
+     */
     protected $_formBlockType = 'Magento\Payment\Block\Form\Ccsave';
+
+    /**
+     * @var string
+     */
     protected $_infoBlockType = 'Magento\Payment\Block\Info\Ccsave';
 }

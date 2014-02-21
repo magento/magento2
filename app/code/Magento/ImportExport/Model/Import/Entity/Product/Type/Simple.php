@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import\Entity\Product\Type;
 
 /**
  * Import entity simple product type
@@ -31,15 +32,13 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Import\Entity\Product\Type;
-
 class Simple
     extends \Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType
 {
     /**
      * Attributes' codes which will be allowed anyway, independently from its visibility property.
      *
-     * @var array
+     * @var string[]
      */
     protected $_forcedAttributesCodes = array(
         'related_tgtr_position_behavior', 'related_tgtr_position_limit',

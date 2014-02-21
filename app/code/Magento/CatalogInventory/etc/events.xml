@@ -43,7 +43,7 @@
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="addInventoryDataToCollection" />
     </event>
     <event name="sales_quote_item_qty_set_after">
-        <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="checkQuoteItemQty" />
+        <observer name="inventory" instance="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator" method="validate" />
     </event>
     <event name="checkout_submit_all_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="checkoutAllSubmitAfter" />

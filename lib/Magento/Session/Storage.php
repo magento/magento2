@@ -38,6 +38,8 @@ class Storage extends \Magento\Object implements StorageInterface
     protected $namespace;
 
     /**
+     * Constructor
+     *
      * @param string $namespace
      * @param array $data
      */

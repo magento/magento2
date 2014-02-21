@@ -23,8 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Weee\Model\Resource;
+
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Condition\ConditionInterface;
 
 /**
  * Wee tax resource model
@@ -50,6 +52,8 @@ class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -91,8 +95,8 @@ class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Update products discount persent
      *
-     * @param mixed $condition
-     * @return \Magento\Weee\Model\Resource\Tax
+     * @param Product|ConditionInterface|int $condition
+     * @return $this
      */
     public function updateProductsDiscountPercent($condition)
     {
@@ -102,8 +106,8 @@ class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Update tax percents for WEEE based on products condition
      *
-     * @param mixed $productCondition
-     * @return \Magento\Weee\Model\Resource\Tax
+     * @param Product|ConditionInterface|int $productCondition
+     * @return $this
      */
     protected function _updateDiscountPercents($productCondition = null)
     {
@@ -115,10 +119,10 @@ class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         $deleteCondition = '';
         if ($productCondition) {
-            if ($productCondition instanceof \Magento\Catalog\Model\Product) {
+            if ($productCondition instanceof Product) {
                 $select->where('product_id = ?', (int)$productCondition->getId());
                 $deleteCondition = $adapter->quoteInto('entity_id=?', (int)$productCondition->getId());
-            } elseif ($productCondition instanceof \Magento\Catalog\Model\Product\Condition\ConditionInterface) {
+            } elseif ($productCondition instanceof ConditionInterface) {
                 $productCondition = $productCondition->getIdsSelect($adapter)->__toString();
                 $select->where("product_id IN ({$productCondition})");
                 $deleteCondition = "entity_id IN ({$productCondition})";

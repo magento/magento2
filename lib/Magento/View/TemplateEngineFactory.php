@@ -32,16 +32,22 @@ use Magento\ObjectManager;
 class TemplateEngineFactory
 {
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Engines
+     *
      * @var array
      */
     protected $engines;
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      * @param array $engines Format: array('<name>' => 'TemplateEngine\Class', ...)
      */
@@ -56,7 +62,7 @@ class TemplateEngineFactory
     /**
      * Retrieve a template engine instance by its unique name
      *
-     * @param $name
+     * @param string $name
      * @return TemplateEngineInterface
      * @throws \UnexpectedValueException If template engine doesn't implement the necessary interface
      * @throws \InvalidArgumentException If template engine doesn't exist

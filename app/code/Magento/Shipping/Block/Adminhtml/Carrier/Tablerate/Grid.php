@@ -23,17 +23,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Block\Adminhtml\Carrier\Tablerate;
 
 /**
  * Shipping carrier table rate grid block
  * WARNING: This grid used for export table rates
  *
- * @category    Magento
- * @package     Magento_Shipping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Shipping\Block\Adminhtml\Carrier\Tablerate;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -95,7 +92,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Set current website
      *
      * @param int $websiteId
-     * @return \Magento\Shipping\Block\Adminhtml\Carrier\Tablerate\Grid
+     * @return $this
      */
     public function setWebsiteId($websiteId)
     {
@@ -119,8 +116,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Set current website
      *
-     * @param int $websiteId
-     * @return \Magento\Shipping\Block\Adminhtml\Carrier\Tablerate\Grid
+     * @param string $name
+     * @return $this
      */
     public function setConditionName($name)
     {

@@ -48,6 +48,9 @@
                 <parse_url_directives>1</parse_url_directives>
             </frontend>
             <product>
+                <flat>
+                    <max_index_count>64</max_index_count>
+                </flat>
                 <default_tax_group>2</default_tax_group>
             </product>
             <seo>

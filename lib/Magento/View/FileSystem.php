@@ -37,11 +37,15 @@ class FileSystem
     protected $_resolutionPool;
 
     /**
+     * View service
+     *
      * @var Service
      */
     protected $_viewService;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Design\FileResolution\StrategyPool $resolutionPool
      * @param Service $viewService
      */

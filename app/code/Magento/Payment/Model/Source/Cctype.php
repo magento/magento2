@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model\Source;
 
 /**
  * Payment CC Types Source Model
  */
-namespace Magento\Payment\Model\Source;
-
 class Cctype implements \Magento\Core\Model\Option\ArrayInterface
 {
     /**
@@ -66,8 +65,8 @@ class Cctype implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * Setter for allowed types
      *
-     * @param $values
-     * @return \Magento\Payment\Model\Source\Cctype
+     * @param array $values
+     * @return $this
      */
     public function setAllowedTypes(array $values)
     {
@@ -75,6 +74,9 @@ class Cctype implements \Magento\Core\Model\Option\ArrayInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         /**

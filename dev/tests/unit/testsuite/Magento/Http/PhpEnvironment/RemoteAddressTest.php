@@ -35,7 +35,7 @@ class RemoteAddressTest extends \PHPUnit_Framework_TestCase
     protected $_request;
 
     /**
-     * @var TestFramework\Helper\ObjectManager
+     * @var \Magento\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
 

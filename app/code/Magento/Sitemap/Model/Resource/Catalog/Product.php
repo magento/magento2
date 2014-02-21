@@ -23,17 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sitemap\Model\Resource\Catalog;
 
 /**
  * Sitemap resource product collection model
  *
- * @category    Magento
- * @package     Magento_Sitemap
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sitemap\Model\Resource\Catalog;
-
 class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     const NOT_SELECTED_IMAGE = 'no_selection';
@@ -84,7 +80,7 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_productVisibility;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Status
+     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
      */
     protected $_productStatus;
 
@@ -103,13 +99,24 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected $_mediaConfig;
 
+    /**
+     * @param \Magento\App\Resource $resource
+     * @param \Magento\Sitemap\Helper\Data $sitemapData
+     * @param \Magento\Catalog\Model\Resource\Product $productResource
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
+     * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute
+     * @param \Magento\Eav\Model\ConfigFactory $eavConfigFactory
+     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+     */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Catalog\Model\Product\Status $productStatus,
+        \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute,
         \Magento\Eav\Model\ConfigFactory $eavConfigFactory,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -125,6 +132,9 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
         parent::__construct($resource);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('catalog_product_entity', 'entity_id');
@@ -179,6 +189,7 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int $storeId
      * @param string $attributeCode
+     * @return void
      */
     protected function _joinAttribute($storeId, $attributeCode)
     {
@@ -207,9 +218,9 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Get attribute data bu attribute code
+     * Get attribute data by attribute code
      *
-     * @param $attributeCode
+     * @param string $attributeCode
      * @return array
      */
     protected function _getAttribute($attributeCode)
@@ -232,7 +243,7 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Get category collection array
      *
      * @param null|string|bool|int|\Magento\Core\Model\Store $storeId
-     * @return array
+     * @return array|bool
      */
     public function getCollection($storeId)
     {
@@ -323,6 +334,7 @@ class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Object $product
      * @param int $storeId
+     * @return void
      */
     protected function _loadProductImages($product, $storeId)
     {

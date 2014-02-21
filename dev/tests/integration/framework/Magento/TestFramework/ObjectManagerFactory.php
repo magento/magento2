@@ -57,6 +57,33 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
     protected $_pluginList = null;
 
     /**
+     * Proxy over arguments instance, used by the application and all the DI stuff
+     *
+     * @var App\Arguments\Proxy
+     */
+    protected $appArgumentsProxy;
+
+    /**
+     * Override the parent method and return proxied instance instead, so that we can reset the actual app arguments
+     * instance for all its clients at any time
+     *
+     * @param \Magento\App\Filesystem\DirectoryList $directoryList
+     * @param array $arguments
+     * @return App\Arguments\Proxy
+     * @throws \Magento\Exception
+     */
+    protected function createAppArguments(\Magento\App\Filesystem\DirectoryList $directoryList, array $arguments)
+    {
+        if ($this->appArgumentsProxy) {
+            // Framework constraint: this is ambiguous situation, because it is not clear what to do with older instance
+            throw new \Magento\Exception('Only one creation of application arguments is supported');
+        }
+        $appArguments = parent::createAppArguments($directoryList, $arguments);
+        $this->appArgumentsProxy = new App\Arguments\Proxy($appArguments);
+        return $this->appArgumentsProxy;
+    }
+
+    /**
      * Restore locator instance
      *
      * @param ObjectManager $objectManager
@@ -80,7 +107,12 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
         $objectManager->addSharedInstance($directoryList, 'Magento\Filesystem\DirectoryList');
         $objectManager->configure(array(
             'Magento\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
-                'parameters' => array('canSaveMap' => false)
+                'arguments' => array(
+                    'canSaveMap' => array(
+                        \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'boolean',
+                        'value' => false
+                    ),
+                )
             ),
             'default_setup' => array(
                 'type' => 'Magento\TestFramework\Db\ConnectionAdapter'
@@ -94,13 +126,10 @@ class ObjectManagerFactory extends \Magento\App\ObjectManagerFactory
             ),
         ));
 
-        $options = new \Magento\App\Arguments(
-            $arguments,
-            new \Magento\App\Arguments\Loader($directoryList)
-        );
+        $appArguments = parent::createAppArguments($directoryList, $arguments);
+        $this->appArgumentsProxy->setSubject($appArguments);
+        $objectManager->addSharedInstance($appArguments, 'Magento\App\Arguments');
 
-        $objectManager->addSharedInstance($options, 'Magento\App\Arguments');
-        $objectManager->getFactory()->setArguments($options->get());
         $objectManager->configure(
             $objectManager->get('Magento\App\ObjectManager\ConfigLoader')->load('global')
         );

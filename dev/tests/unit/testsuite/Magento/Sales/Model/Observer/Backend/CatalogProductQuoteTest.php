@@ -79,19 +79,6 @@ class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
         $this->_model->catalogProductSaveAfter($this->_observerMock);
     }
 
-    /**
-     * @param int $productId
-     * @param int $productStatus
-     * @dataProvider statusUpdateDataProvider
-     */
-    public function testStatusUpdate($productId, $productStatus)
-    {
-        $this->_eventMock->expects($this->once())->method('getStatus')->will($this->returnValue($productStatus));
-        $this->_eventMock->expects($this->once())->method('getProductId')->will($this->returnValue($productId));
-        $this->_quoteMock->expects($this->any())->method('markQuotesRecollect');
-        $this->_model->catalogProductStatusUpdate($this->_observerMock);
-    }
-
     public function statusUpdateDataProvider()
     {
         return array(

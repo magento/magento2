@@ -31,7 +31,7 @@
         <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateDiscountPercents" />
     </event>
     <event name="catalog_product_view_config">
-        <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateConfigurableProductOptions" />
+        <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateProductOptions" />
     </event>
     <event name="bundle_product_view_config">
         <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateBundleProductOptions" />

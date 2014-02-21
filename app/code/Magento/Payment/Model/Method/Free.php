@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model\Method;
 
 /**
  * Free payment method
  */
-namespace Magento\Payment\Model\Method;
-
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
@@ -40,6 +39,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Payment Method features
+     *
      * @var bool
      */
     protected $_canAuthorize = true;

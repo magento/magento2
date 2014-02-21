@@ -27,6 +27,4 @@
     <indexer name="catalog_product_attribute" instance="Magento\Catalog\Model\Product\Indexer\Eav" />
     <indexer name="catalog_product_price" instance="Magento\Catalog\Model\Product\Indexer\Price" />
     <indexer name="catalog_url" instance="Magento\Catalog\Model\Indexer\Url" />
-    <indexer name="catalog_product_flat" instance="Magento\Catalog\Model\Product\Indexer\Flat" />
-    <indexer name="catalog_category_product" instance="Magento\Catalog\Model\Category\Indexer\Product" />
 </config>

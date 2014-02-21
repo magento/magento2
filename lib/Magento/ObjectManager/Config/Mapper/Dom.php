@@ -1,7 +1,5 @@
 <?php
 /**
- * ObjectManager configuration DOM mapper
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,8 +23,30 @@
  */
 namespace Magento\ObjectManager\Config\Mapper;
 
+use Magento\Stdlib\BooleanUtils;
+
 class Dom implements \Magento\Config\ConverterInterface
 {
+    /**
+     * @var BooleanUtils
+     */
+    private $booleanUtils;
+
+    /**
+     * @var ArgumentParser
+     */
+    private $argumentParser;
+
+    /**
+     * @param BooleanUtils $booleanUtils
+     * @param ArgumentParser $argumentParser
+     */
+    public function __construct(BooleanUtils $booleanUtils, ArgumentParser $argumentParser)
+    {
+        $this->booleanUtils = $booleanUtils;
+        $this->argumentParser = $argumentParser;
+    }
+
     /**
      * Convert configuration in DOM format to assoc array that can be used by object manager
      *
@@ -57,17 +77,17 @@ class Dom implements \Magento\Config\ConverterInterface
                     $typeData = array();
                     $typeNodeAttributes = $node->attributes;
                     $typeNodeShared = $typeNodeAttributes->getNamedItem('shared');
-                    if (!is_null($typeNodeShared)) {
-                        $typeData['shared'] = ($typeNodeShared->nodeValue == 'false') ? false : true;
+                    if ($typeNodeShared) {
+                        $typeData['shared'] = $this->booleanUtils->toBoolean($typeNodeShared->nodeValue);
                     }
                     if ($node->nodeName == 'virtualType') {
                         $attributeType = $typeNodeAttributes->getNamedItem('type');
                         // attribute type is required for virtual type only in merged configuration
-                        if (!is_null($attributeType)) {
+                        if ($attributeType) {
                             $typeData['type'] = $attributeType->nodeValue;
                         }
                     }
-                    $typeParameters = array();
+                    $typeArguments = array();
                     $typePlugins = array();
                     /** @var \DOMNode $typeChildNode */
                     foreach ($node->childNodes as $typeChildNode) {
@@ -75,40 +95,16 @@ class Dom implements \Magento\Config\ConverterInterface
                             continue;
                         }
                         switch ($typeChildNode->nodeName) {
-                            case 'param':
-                                $paramData = array();
-                                /** @var \DOMNode $paramChildNode */
-                                foreach ($typeChildNode->childNodes as $paramChildNode) {
-                                    if ($paramChildNode->nodeType != XML_ELEMENT_NODE) {
+                            case 'arguments':
+                                /** @var \DOMNode $argumentNode */
+                                foreach ($typeChildNode->childNodes as $argumentNode) {
+                                    if ($argumentNode->nodeType != XML_ELEMENT_NODE) {
                                         continue;
                                     }
-                                    switch ($paramChildNode->nodeName) {
-                                        case 'instance':
-                                            $instanceSharedNode = $paramChildNode->attributes->getNamedItem('shared');
-                                            $paramData = array(
-                                                'instance' => $paramChildNode->attributes
-                                                    ->getNamedItem('type')
-                                                    ->nodeValue,
-                                            );
-                                            if ($instanceSharedNode) {
-                                                $paramData['shared'] = ($instanceSharedNode->nodeValue == 'false')
-                                                    ? false : true;
-                                            }
-                                            break;
-                                        case 'value':
-                                            $paramData = $this->_processValueNode($paramChildNode);
-                                            break;
-                                        case 'array':
-                                            $paramData = $this->_processArrayNode($paramChildNode);
-                                            break;
-                                        default:
-                                            throw new \Exception(
-                                                "Invalid application config. Unknown node: {$paramChildNode->nodeName}."
-                                            );
-                                    }
+                                    $argumentName = $argumentNode->attributes->getNamedItem('name')->nodeValue;
+                                    $argumentData = $this->argumentParser->parse($argumentNode);
+                                    $typeArguments[$argumentName] = $argumentData;
                                 }
-                                $typeParameters[$typeChildNode->attributes->getNamedItem('name')->nodeValue]
-                                    = $paramData;
                                 break;
                             case 'plugin':
                                 $pluginAttributes = $typeChildNode->attributes;
@@ -119,7 +115,8 @@ class Dom implements \Magento\Config\ConverterInterface
                                     'sortOrder' => ($pluginSortOrderNode) ? (int)$pluginSortOrderNode->nodeValue : 0,
                                 );
                                 if ($pluginDisabledNode) {
-                                    $pluginData['disabled'] = ($pluginDisabledNode->nodeValue == 'true') ? true : false;
+                                    $pluginData['disabled']
+                                        = $this->booleanUtils->toBoolean($pluginDisabledNode->nodeValue);
                                 }
                                 if ($pluginTypeNode) {
                                     $pluginData['instance'] = $pluginTypeNode->nodeValue;
@@ -133,7 +130,7 @@ class Dom implements \Magento\Config\ConverterInterface
                         }
                     }
 
-                    $typeData['parameters'] = $typeParameters;
+                    $typeData['arguments'] = $typeArguments;
                     if (!empty($typePlugins)) {
                         $typeData['plugins'] = $typePlugins;
                     }
@@ -144,121 +141,6 @@ class Dom implements \Magento\Config\ConverterInterface
             }
         }
 
-        return $output;
-    }
-
-    /**
-     * Get value of array node
-     *
-     * Expected structure:
-     * <array>
-     *     <item key="key1"><value>...</value></value>
-     *     <item key="key2">
-     *         <array>...</array>
-     *     </item>
-     * </array>
-     *
-     * Which will convert to: array('key1' => ..., 'key2' => array(...))
-     *
-     * @param \DOMNode $valueNode
-     * @return array
-     * @throws \Exception
-     */
-    protected function _processArrayNode(\DOMNode $valueNode)
-    {
-        $result = array();
-        foreach ($valueNode->childNodes as $item) {
-            if ($item->nodeType != XML_ELEMENT_NODE) {
-                continue;
-            }
-            if ($item->nodeName != 'item') {
-                throw new \Exception("Unexpected node {$item->nodeName} under 'array' node.");
-            }
-            $count = 0;
-            $key = (string)$item->attributes->getNamedItem('key')->nodeValue;
-            foreach ($item->childNodes as $subItem) {
-                if ($subItem->nodeType != XML_ELEMENT_NODE) {
-                    continue;
-                }
-                $count++;
-                if ($count > 1) {
-                    throw new \Exception("The 'item' node expects one and only one child node.");
-                }
-                switch ($subItem->nodeName) {
-                    case 'value':
-                        $result[$key] = $this->_processValueNode($subItem);
-                        break;
-                    case 'array':
-                        $result[$key] = $this->_processArrayNode($subItem);
-                        break;
-                    default:
-                        throw new \Exception("Unexpected node {$subItem->nodeName} under 'item' node.");
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Retrieve value of the given node
-     * Treat all child nodes as an assoc array
-     *
-     * @param \DOMNode $valueNode
-     * @return array|string
-     * @throws \InvalidArgumentException
-     * @todo this method has high cyclomatic complexity in order to avoid performance issues
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _processValueNode(\DOMNode $valueNode)
-    {
-        $output = array();
-        $childNodesCount = $valueNode->childNodes->length;
-        $valueNodeType = $valueNode->attributes->getNamedItem('type');
-        if ($valueNodeType && 'null' == $valueNodeType->nodeValue) {
-            return null;
-        }
-        
-        /** @var \DOMNode $node */
-        foreach ($valueNode->childNodes as $node) {
-            if ($node->nodeType == XML_ELEMENT_NODE) {
-                $nodeType = $node->attributes->getNamedItem('type');
-                if ($nodeType && 'null' == $nodeType->nodeValue) {
-                    $output[$node->nodeName] = null;
-                }
-            } elseif (($node->nodeType == XML_TEXT_NODE || $node->nodeType == XML_CDATA_SECTION_NODE)
-                && $childNodesCount == 1
-            ) {
-                // process DomText or \DOMCharacterData node only if it is a single child of its parent
-                $output = trim($node->nodeValue);
-                if ($valueNodeType) {
-                    switch ($valueNodeType->nodeValue) {
-                        case 'const':
-                            $output = constant($output);
-                            break;
-                        case 'argument':
-                            $output = array('argument' => constant($output));
-                            break;
-                        case 'bool':
-                            $output = strtolower($output) == 'true' || $output == '1';
-                            break;
-                        case 'int':
-                            if (!preg_match('/^[0-9]*$/', $output)) {
-                                throw new \InvalidArgumentException('Invalid integer value');
-                            }
-                            $output = (int)$output;
-                            break;
-                        case 'string':
-                            $pattern = $valueNode->attributes->getNamedItem('pattern')->nodeValue;
-                            if (!preg_match('/^' . $pattern . '$/', $output)) {
-                                throw new \InvalidArgumentException('Invalid string value format');
-                            }
-                            break;
-                        default:
-                            throw new \InvalidArgumentException('Unknown parameter type');
-                    }
-                }
-            }
-        }
         return $output;
     }
 }

@@ -27,7 +27,7 @@
  */
 namespace Magento\Paypal\Model\Billing\Agreement;
 
-class OrdersUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterface
+class OrdersUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
 {
     /**
      * @var \Magento\Core\Model\Registry

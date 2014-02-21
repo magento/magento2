@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Page;
 
 /**
  * Adminhtml cms pages grid
@@ -31,8 +32,6 @@
  * @package    Magento_Cms
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Page;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -72,6 +71,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -80,6 +82,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultDir('ASC');
     }
 
+    /**
+     * Prepare collection
+     *
+     * @return \Magento\Backend\Block\Widget\Grid
+     */
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create();
@@ -90,6 +97,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareCollection();
     }
 
+    /**
+     * Prepare columns
+     *
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     */
     protected function _prepareColumns()
     {
         $baseUrl = $this->getUrl();
@@ -159,13 +171,25 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * After load collection
+     *
+     * @return void
+     */
     protected function _afterLoadCollection()
     {
         $this->getCollection()->walk('afterLoad');
         parent::_afterLoadCollection();
     }
 
-    protected function _filterStoreCondition($collection, $column)
+    /**
+     * Filter store condition
+     *
+     * @param $collection
+     * @param \Magento\Object $column
+     * @return void
+     */
+    protected function _filterStoreCondition($collection, \Magento\Object $column)
     {
         if (!$value = $column->getFilter()->getValue()) {
             return;
@@ -177,6 +201,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Row click url
      *
+     * @param \Magento\Object $row
      * @return string
      */
     public function getRowUrl($row)

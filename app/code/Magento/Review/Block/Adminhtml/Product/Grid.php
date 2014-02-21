@@ -46,7 +46,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
-     * @param \Magento\Catalog\Model\Product\Status $status
+     * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
@@ -61,7 +61,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
-        \Magento\Catalog\Model\Product\Status $status,
+        \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
@@ -143,7 +143,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
                 'width'     => '90px',
                 'index'     => 'status',
                 'type'      => 'options',
-                'source'    => 'Magento\Catalog\Model\Product\Status',
+                'source'    => 'Magento\Catalog\Model\Product\Attribute\Source\Status',
                 'options'   => $this->_status->getOptionArray(),
         ));
 

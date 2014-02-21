@@ -32,7 +32,7 @@ interface FileInterface
     /**
      * Set customization service model
      *
-     * @param \Magento\View\Design\Theme\Customization\FileInterface $service
+     * @param Customization\FileInterface $service
      * @return $this
      */
     public function setCustomizationService(Customization\FileInterface $service);

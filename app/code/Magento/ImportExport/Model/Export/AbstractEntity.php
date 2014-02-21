@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export;
+
+use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 
 /**
  * Export entity abstract model
@@ -31,8 +34,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Export;
-
 abstract class AbstractEntity
 {
     /**#@+
@@ -113,7 +114,7 @@ abstract class AbstractEntity
     /**
      * Source model
      *
-     * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
+     * @var AbstractAdapter
      */
     protected $_writer;
 
@@ -134,7 +135,7 @@ abstract class AbstractEntity
     /**
      * Disabled attributes
      *
-     * @var array
+     * @var string[]
      */
     protected $_disabledAttributes = array();
 
@@ -200,7 +201,7 @@ abstract class AbstractEntity
     /**
      * Initialize stores hash
      *
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @return $this
      */
     protected function _initStores()
     {
@@ -217,7 +218,7 @@ abstract class AbstractEntity
      * Initialize website values
      *
      * @param bool $withDefault
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @return $this
      */
     protected function _initWebsites($withDefault = false)
     {
@@ -233,7 +234,7 @@ abstract class AbstractEntity
      *
      * @param string $errorCode Error code or simply column name
      * @param int $errorRowNum Row number
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @return $this
      */
     public function addRowError($errorCode, $errorRowNum)
     {
@@ -250,7 +251,7 @@ abstract class AbstractEntity
      *
      * @param string $errorCode Error code
      * @param string $message Message template
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @return $this
      */
     public function addMessageTemplate($errorCode, $message)
     {
@@ -270,6 +271,7 @@ abstract class AbstractEntity
      * Export one item
      *
      * @param \Magento\Core\Model\AbstractModel $item
+     * @return void
      */
     abstract public function exportItem($item);
 
@@ -277,6 +279,7 @@ abstract class AbstractEntity
      * Iterate through given collection page by page and export items
      *
      * @param \Magento\Data\Collection\Db $collection
+     * @return void
      */
     protected function _exportCollectionByPages(\Magento\Data\Collection\Db $collection)
     {
@@ -395,8 +398,8 @@ abstract class AbstractEntity
     /**
      * Inner writer object getter
      *
-     * @throws \Exception
-     * @return \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
+     * @return AbstractAdapter
+     * @throws \Magento\Core\Exception
      */
     public function getWriter()
     {
@@ -410,8 +413,8 @@ abstract class AbstractEntity
     /**
      * Set parameters
      *
-     * @param array $parameters
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @param string[] $parameters
+     * @return $this
      */
     public function setParameters(array $parameters)
     {
@@ -423,10 +426,10 @@ abstract class AbstractEntity
     /**
      * Writer model setter
      *
-     * @param \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter $writer
-     * @return \Magento\ImportExport\Model\Export\AbstractEntity
+     * @param AbstractAdapter $writer
+     * @return $this
      */
-    public function setWriter(\Magento\ImportExport\Model\Export\Adapter\AbstractAdapter $writer)
+    public function setWriter(AbstractAdapter $writer)
     {
         $this->_writer = $writer;
 
@@ -437,6 +440,7 @@ abstract class AbstractEntity
      * Set export file name
      *
      * @param null|string $fileName
+     * @return void
      */
     public function setFileName($fileName)
     {
@@ -456,7 +460,7 @@ abstract class AbstractEntity
     /**
      * Retrieve list of disabled attributes codes
      *
-     * @return array
+     * @return string[]
      */
     public function getDisabledAttributes()
     {

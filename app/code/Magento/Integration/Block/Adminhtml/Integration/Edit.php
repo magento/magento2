@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Block\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
@@ -63,6 +62,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Initialize Integration edit page
      *
+     * @return void
      */
     protected function _construct()
     {

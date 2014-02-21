@@ -40,7 +40,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Widget\Model\Config\Converter $converter
+     * @param Converter $converter
      * @param \Magento\Config\SchemaLocatorInterface $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
      * @param string $fileName
@@ -50,7 +50,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Widget\Model\Config\Converter $converter,
+        Converter $converter,
         \Magento\Config\SchemaLocatorInterface $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'widget.xml',
@@ -75,7 +75,6 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @param string $file
      * @return array
-     * @throws \Magento\Exception
      */
     public function readFile($file)
     {

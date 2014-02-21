@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model;
 
 /**
  * Payment Observer
  */
-namespace Magento\Payment\Model;
-
 class Observer
 {
     /**
@@ -66,7 +65,7 @@ class Observer
      * Set forced canCreditmemo flag
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Payment\Model\Observer
+     * @return $this
      */
     public function salesOrderBeforeSave($observer)
     {
@@ -110,6 +109,7 @@ class Observer
 
     /**
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function updateOrderStatusForPaymentMethods(\Magento\Event\Observer $observer)
     {

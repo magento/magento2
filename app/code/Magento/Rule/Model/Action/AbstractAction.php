@@ -23,14 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rule\Model\Action;
 
+use Magento\Data\Form;
+use Magento\Data\Form\Element\AbstractElement;
 
 /**
  * Quote rule action abstract
  */
-namespace Magento\Rule\Model\Action;
-
-abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\Model\Action\ActionInterface
+abstract class AbstractAction extends \Magento\Object implements ActionInterface
 {
     /**
      * @var \Magento\View\Url
@@ -69,6 +70,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         }
     }
 
+    /**
+     * @return Form
+     */
     public function getForm()
     {
         return $this->getRule()->getForm();
@@ -90,6 +94,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         return $out;
     }
 
+    /**
+     * @return string
+     */
     public function asXml()
     {
         $xml = "<type>" . $this->getType() . "</type>"
@@ -99,6 +106,10 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         return $xml;
     }
 
+    /**
+     * @param array $arr
+     * @return $this
+     */
     public function loadArray(array $arr)
     {
         $this->addData(array(
@@ -154,6 +165,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getOperatorSelectOptions()
     {
         $opt = array();
@@ -239,6 +253,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         return $str;
     }
 
+    /**
+     * @return AbstractElement
+     */
     public function getTypeElement()
     {
         return $this->getForm()->addField('action:' . $this->getId() . ':type', 'hidden', array(
@@ -248,6 +265,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         ));
     }
 
+    /**
+     * @return $this
+     */
     public function getAttributeElement()
     {
         return $this->getForm()->addField('action:' . $this->getId() . ':attribute', 'select', array(
@@ -258,6 +278,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
     }
 
+    /**
+     * @return $this
+     */
     public function getOperatorElement()
     {
         return $this->getForm()->addField('action:' . $this->getId() . ':operator', 'select', array(
@@ -268,6 +291,9 @@ abstract class AbstractAction extends \Magento\Object implements \Magento\Rule\M
         ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
     }
 
+    /**
+     * @return $this
+     */
     public function getValueElement()
     {
         return $this->getForm()->addField('action:' . $this->getId() . ':value', 'text', array(

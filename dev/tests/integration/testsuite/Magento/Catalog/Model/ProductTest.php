@@ -84,7 +84,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setName('Simple Product')->setSku(uniqid())->setPrice(10)
             ->setMetaTitle('meta title')->setMetaKeyword('meta keyword')->setMetaDescription('meta description')
             ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
         ;
         $crud = new \Magento\TestFramework\Entity($this->_model, array('sku' => uniqid()));
         $crud->testCrud();
@@ -155,7 +155,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->assertNotEmpty($duplicate->getId());
             $this->assertNotEquals($duplicate->getId(), $this->_model->getId());
             $this->assertNotEquals($duplicate->getSku(), $this->_model->getSku());
-            $this->assertEquals(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED, $duplicate->getStatus());
+            $this->assertEquals(
+                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
+                $duplicate->getStatus()
+            );
             $this->assertEquals(\Magento\Core\Model\Store::DEFAULT_STORE_ID, $duplicate->getStoreId());
             $this->_undo($duplicate);
         } catch (\Exception $e) {
@@ -191,16 +194,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Product::isConfigurable
-     */
-    public function testIsConfigurable()
-    {
-        $this->assertFalse($this->_model->isConfigurable());
-        $this->_model->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE);
-        $this->assertTrue($this->_model->isConfigurable());
-    }
-
-    /**
      * @covers \Magento\Catalog\Model\Product::getVisibleInCatalogStatuses
      * @covers \Magento\Catalog\Model\Product::getVisibleStatuses
      * @covers \Magento\Catalog\Model\Product::isVisibleInCatalog
@@ -210,16 +203,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testVisibilityApi()
     {
         $this->assertEquals(
-            array(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED), $this->_model->getVisibleInCatalogStatuses()
+            array(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED),
+            $this->_model->getVisibleInCatalogStatuses()
         );
         $this->assertEquals(
-            array(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED), $this->_model->getVisibleStatuses()
+            array(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED),
+            $this->_model->getVisibleStatuses()
         );
 
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED);
+        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
         $this->assertFalse($this->_model->isVisibleInCatalog());
 
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->assertTrue($this->_model->isVisibleInCatalog());
 
         $this->assertEquals(array(
@@ -305,18 +300,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->fromArray(array('sku' => 'sku', 'name' => 'name', 'stock_item' => array('key' => 'value')));
         $this->assertEquals(array('sku' => 'sku', 'name' => 'name'), $this->_model->getData());
-    }
-
-    public function testIsComposite()
-    {
-        $this->assertFalse($this->_model->isComposite());
-
-        /** @var $model \Magento\Catalog\Model\Product */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product',
-            array('data' => array('type_id' => \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE))
-        );
-        $this->assertTrue($model->isComposite());
     }
 
     /**
@@ -429,7 +412,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setSku(uniqid('', true) . uniqid('', true) . uniqid('', true))->setPrice(10)->setMetaTitle('meta title')
             ->setMetaKeyword('meta keyword')->setMetaDescription('meta description')
             ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
             ->setCollectExceptionMessages(true)
         ;
         $validationResult = $this->_model->validate();

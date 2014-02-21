@@ -55,7 +55,7 @@ class Export extends \Magento\Backend\App\Action
     /**
      * Initialize layout.
      *
-     * @return \Magento\ImportExport\Controller\Adminhtml\Export
+     * @return $this
      */
     protected function _initAction()
     {
@@ -79,7 +79,7 @@ class Export extends \Magento\Backend\App\Action
     /**
      * Load data with filter applying and create file for download.
      *
-     * @return \Magento\ImportExport\Controller\Adminhtml\Export
+     * @return $this
      */
     public function exportAction()
     {

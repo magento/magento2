@@ -167,4 +167,14 @@ class Bootstrap
     {
         self::$_objectManager = $objectManager;
     }
+
+    /**
+     * Get bootstrap object
+     *
+     * @return \Magento\TestFramework\Bootstrap
+     */
+    public function getBootstrap()
+    {
+        return $this->_bootstrap;
+    }
 }

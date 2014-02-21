@@ -35,6 +35,7 @@ interface MergeStrategyInterface
      * @param array $publicFiles List of full file paths to merge
      * @param string $destinationFile Full file path for merged file
      * @param string $contentType Asset content type
+     * @return void
      */
     public function mergeFiles(array $publicFiles, $destinationFile, $contentType);
 }

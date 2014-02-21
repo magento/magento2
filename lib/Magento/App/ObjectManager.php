@@ -1,7 +1,5 @@
 <?php
 /**
- * Magento application object manager. Configures and application application
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -27,6 +25,8 @@ namespace Magento\App;
 use Magento\ObjectManager\Factory;
 
 /**
+ * A wrapper around object manager with workarounds to access it in client code
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManager extends \Magento\ObjectManager\ObjectManager
@@ -35,11 +35,6 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
      * @var \Magento\App\ObjectManager
      */
     protected static $_instance;
-
-    /**
-     * @var \Magento\ObjectManager\Relations
-     */
-    protected $_compiledRelations;
 
     /**
      * Retrieve object manager
@@ -76,7 +71,7 @@ class ObjectManager extends \Magento\ObjectManager\ObjectManager
      * @param array $sharedInstances
      */
     public function __construct(
-        Factory $factory = null, \Magento\ObjectManager\Config $config = null, array $sharedInstances = array()
+        Factory $factory, \Magento\ObjectManager\Config $config, array $sharedInstances = array()
     ) {
         parent::__construct($factory, $config, $sharedInstances);
         self::$_instance = $this;

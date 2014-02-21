@@ -25,6 +25,9 @@
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Service\V1\Dto\Customer;
+use Magento\Exception\NoSuchEntityException;
+use Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 
 /**
  * Test class for \Magento\Customer\Block\Widget\Name.
@@ -48,7 +51,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
     const PREFIX_STORE_LABEL = 'Prefix';
     /**#@-*/
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject | AttributeMetadata */
     private $_attributeMetadata;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Data */
@@ -60,24 +63,32 @@ class NameTest extends \PHPUnit_Framework_TestCase
     /** @var  Name */
     private $_block;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject | CustomerMetadataServiceInterface */
+    private $_metadataService;
+
     public function setUp()
     {
-        $this->_escaper = $this->getMock('Magento\Escaper', array(), array(), '', false);
-        $context = $this->getMock('Magento\View\Element\Template\Context', array(), array(), '', false);
+        $this->_escaper = $this->getMock('Magento\Escaper', [], [], '', false);
+        $context = $this->getMock('Magento\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->_escaper));
 
-        $addressHelper = $this->getMock('Magento\Customer\Helper\Address', array(), array(), '', false);
-        $metadataService = $this->getMockForAbstractClass(
-            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', array(), '', false
+        $addressHelper = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
+        $this->_metadataService = $this->getMockForAbstractClass(
+            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', [], '', false
         );
-        $this->_customerHelper = $this->getMock('Magento\Customer\Helper\Data', array(), array(), '', false);
-        $this->_attributeMetadata =
-            $this->getMock('Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', array(), array(), '', false);
-        $metadataService
+        $this->_customerHelper = $this->getMock('Magento\Customer\Helper\Data', [], [], '', false);
+        $this->_attributeMetadata = $this->getMock(
+            'Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->_metadataService
             ->expects($this->any())
             ->method('getAttributeMetadata')->will($this->returnValue($this->_attributeMetadata));
 
-        $this->_block = new Name($context, $addressHelper, $metadataService, $this->_customerHelper);
+        $this->_block = new Name($context, $addressHelper, $this->_metadataService, $this->_customerHelper);
     }
 
     /**
@@ -85,11 +96,45 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function testShowPrefix()
     {
-        $this->_setUpShowAttribute(array(Customer::PREFIX => self::PREFIX));
+        $this->_setUpShowAttribute([Customer::PREFIX => self::PREFIX]);
         $this->assertTrue($this->_block->showPrefix());
 
         $this->_attributeMetadata->expects($this->at(0))->method('isVisible')->will($this->returnValue(false));
         $this->assertFalse($this->_block->showPrefix());
+    }
+
+    public function testShowPrefixWithException()
+    {
+        $this->_metadataService
+            ->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will($this->throwException(new NoSuchEntityException('field', 'value')));
+        $this->assertFalse($this->_block->showPrefix());
+    }
+
+    /**
+     * @param $method
+     * @dataProvider methodDataProvider
+     */
+    public function testMethodWithNoSuchEntityException($method)
+    {
+        $this->_metadataService
+            ->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will($this->throwException(new NoSuchEntityException('field', 'value')));
+        $this->assertFalse($this->_block->$method());
+    }
+
+    public function methodDataProvider()
+    {
+        return [
+            'showPrefix' => ['showPrefix'],
+            'isPrefixRequired' => ['isPrefixRequired'],
+            'showMiddlename' => ['showMiddlename'],
+            'isMiddlenameRequired' => ['isMiddlenameRequired'],
+            'showSuffix' => ['showSuffix'],
+            'isSuffixRequired' => ['isSuffixRequired'],
+        ];
     }
 
     /**
@@ -103,7 +148,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testShowMiddlename()
     {
-        $this->_setUpShowAttribute(array(Customer::MIDDLENAME, self::MIDDLENAME));
+        $this->_setUpShowAttribute([Customer::MIDDLENAME, self::MIDDLENAME]);
         $this->assertTrue($this->_block->showMiddlename());
     }
 
@@ -115,7 +160,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testShowSuffix()
     {
-        $this->_setUpShowAttribute(array(Customer::SUFFIX => self::SUFFIX));
+        $this->_setUpShowAttribute([Customer::SUFFIX => self::SUFFIX]);
         $this->assertTrue($this->_block->showSuffix());
     }
 
@@ -131,14 +176,14 @@ class NameTest extends \PHPUnit_Framework_TestCase
          * Added some padding so that the trim() call on Customer::getPrefix() will remove it. Also added
          * special characters so that the escapeHtml() method returns a htmlspecialchars translated value.
          */
-        $customer = new Customer(array(Customer::PREFIX => '  <' . self::PREFIX . '>  '));
+        $customer = new Customer([Customer::PREFIX => '  <' . self::PREFIX . '>  ']);
         $this->_block->setObject($customer);
 
-        $prefixOptions = array(
+        $prefixOptions = [
             'Mrs' => 'Mrs',
             'Ms' => 'Ms',
             'Miss' => 'Miss'
-        );
+        ];
 
         $prefix = '&lt;' . self::PREFIX . '&gt;';
         $expectedOptions = $prefixOptions;
@@ -153,11 +198,11 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPrefixOptionsEmpty()
     {
-        $customer = new Customer(array(Customer::PREFIX => self::PREFIX));
+        $customer = new Customer([Customer::PREFIX => self::PREFIX]);
         $this->_block->setObject($customer);
 
         $this->_customerHelper
-            ->expects($this->once())->method('getNamePrefixOptions')->will($this->returnValue(array()));
+            ->expects($this->once())->method('getNamePrefixOptions')->will($this->returnValue([]));
 
         $this->assertEmpty($this->_block->getPrefixOptions());
     }
@@ -168,12 +213,12 @@ class NameTest extends \PHPUnit_Framework_TestCase
          * Added padding and special characters to show that trim() works on Customer::getSuffix() and that
          * a properly htmlspecialchars translated value is returned.
          */
-        $customer = new Customer(array(Customer::SUFFIX => '  <' . self::SUFFIX . '>  '));
+        $customer = new Customer([Customer::SUFFIX => '  <' . self::SUFFIX . '>  ']);
         $this->_block->setObject($customer);
 
-        $suffixOptions = array(
+        $suffixOptions = [
             'Sr' => 'Sr'
-        );
+        ];
 
         $suffix = '&lt;' . self::SUFFIX . '&gt;';
         $expectedOptions = $suffixOptions;
@@ -188,11 +233,11 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuffixOptionsEmpty()
     {
-        $customer = new Customer(array(Customer::SUFFIX => self::SUFFIX));
+        $customer = new Customer([Customer::SUFFIX => self::SUFFIX]);
         $this->_block->setObject($customer);
 
         $this->_customerHelper
-            ->expects($this->once())->method('getNameSuffixOptions')->will($this->returnValue(array()));
+            ->expects($this->once())->method('getNameSuffixOptions')->will($this->returnValue([]));
 
         $this->assertEmpty($this->_block->getSuffixOptions());
     }
@@ -236,16 +281,16 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function getContainerClassNameProvider()
     {
-        return array(
-            array(false, false, false, self::DEFAULT_CLASS_NAME),
-            array(true,  false, false, self::DEFAULT_CLASS_NAME . self::CONTAINER_CLASS_NAME_PREFIX),
-            array(false, true,  false, self::DEFAULT_CLASS_NAME . self::CONTAINER_CLASS_NAME_MIDDLENAME),
-            array(false, false, true,  self::DEFAULT_CLASS_NAME . self::CONTAINER_CLASS_NAME_SUFFIX),
-            array(true,  true,  true,
+        return [
+            [false, false, false, self::DEFAULT_CLASS_NAME],
+            [true,  false, false, self::DEFAULT_CLASS_NAME . self::CONTAINER_CLASS_NAME_PREFIX],
+            [false, true,  false, self::DEFAULT_CLASS_NAME . self::CONTAINER_CLASS_NAME_MIDDLENAME],
+            [false, false, true,  self::DEFAULT_CLASS_NAME . self::CONTAINER_CLASS_NAME_SUFFIX],
+            [true,  true,  true,
                 self::DEFAULT_CLASS_NAME . self::CONTAINER_CLASS_NAME_PREFIX .
                 self::CONTAINER_CLASS_NAME_MIDDLENAME . self::CONTAINER_CLASS_NAME_SUFFIX
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -271,10 +316,19 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function getStoreLabelProvider()
     {
-        return array(
-            array(self::INVALID_ATTRIBUTE_CODE, '', ''),
-            array(self::PREFIX_ATTRIBUTE_CODE, self::PREFIX_STORE_LABEL, self::PREFIX_STORE_LABEL)
-        );
+        return [
+            [self::INVALID_ATTRIBUTE_CODE, '', ''],
+            [self::PREFIX_ATTRIBUTE_CODE, self::PREFIX_STORE_LABEL, self::PREFIX_STORE_LABEL]
+        ];
+    }
+
+    public function testGetStoreLabelWithException()
+    {
+        $this->_metadataService
+            ->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will($this->throwException(new NoSuchEntityException('field', 'value')));
+        $this->assertSame('', $this->_block->getStoreLabel('attributeCode'));
     }
 
     /**

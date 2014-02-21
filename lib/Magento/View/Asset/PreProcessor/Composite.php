@@ -32,21 +32,29 @@ use \Magento\View\Asset\PreProcessorFactory;
 class Composite implements PreProcessorInterface
 {
     /**
+     * Pre-processor config
+     *
      * @var array
      */
     protected $preProcessorsConfig = array();
 
     /**
+     * Asset type pre-processor
+     *
      * @var PreProcessorInterface[]
      */
     protected $assetTypePreProcessors = array();
 
     /**
+     * Pre-processor factory
+     *
      * @var \Magento\View\Asset\PreProcessorFactory
      */
     protected $preProcessorFactory;
 
     /**
+     * Constructor
+     *
      * @param PreProcessorFactory $preProcessorFactory
      * @param array $preProcessorsConfig
      */

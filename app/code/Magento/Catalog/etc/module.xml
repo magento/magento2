@@ -24,17 +24,19 @@
  */
 -->
 <config>
-    <module name="Magento_Catalog" version="1.6.0.0.24" active="true">
+    <module name="Magento_Catalog" version="1.6.0.0.26" active="true">
         <sequence>
             <module name="Magento_Eav"/>
             <module name="Magento_Cms"/>
             <module name="Magento_Index"/>
+            <module name="Magento_Indexer"/>
             <module name="Magento_Customer"/>
         </sequence>
         <depends>
             <module name="Magento_Eav"/>
             <module name="Magento_Cms"/>
             <module name="Magento_Index"/>
+            <module name="Magento_Indexer"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Core"/>
             <module name="Magento_Theme"/>
@@ -55,7 +57,6 @@
             <module name="Magento_Weee"/>
             <module name="Magento_ProductAlert"/>
             <module name="Magento_Rating"/>
-            <module name="Magento_Indexer"/>
         </depends>
     </module>
 </config>

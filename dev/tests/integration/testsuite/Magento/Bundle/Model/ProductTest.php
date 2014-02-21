@@ -82,7 +82,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setName('Bundle Product')->setSku(uniqid())->setPrice(10)
             ->setMetaTitle('meta title')->setMetaKeyword('meta keyword')->setMetaDescription('meta description')
             ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
         ;
         $crud = new \Magento\TestFramework\Entity($this->_model, array('sku' => uniqid()));
         $crud->testCrud();

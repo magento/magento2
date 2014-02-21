@@ -27,10 +27,16 @@
 
 namespace Magento\Rule\Block;
 
+use Magento\Data\Form\Element\AbstractElement;
+
 class Newchild extends \Magento\View\Element\AbstractBlock
     implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    public function render(AbstractElement $element)
     {
         $element->addClass('element-value-changer');
         $html = '&nbsp;<span class="rule-param rule-param-new-child"' . ($element->getParamId() ? ' id="' . $element->getParamId() . '"' : '') . '>';

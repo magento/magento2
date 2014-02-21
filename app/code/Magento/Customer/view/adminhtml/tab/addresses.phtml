@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /* @var $this \Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses */ ?>
 <script data-template="tab-address-content" type="text/x-jquery-tmpl">
     <div>
         {{if prefix || firstname || middlename || lastname || suffix}}
@@ -50,15 +51,21 @@
         <span><?php echo __('Customer Addresses') ?></span>
     </legend>
     <br />
-
-    <div id="address-tabs" data-mage-init='{"addressTabs":{"itemCount": <?php echo count($addressCollection) ?>,
-            deleteConfirmPrompt: "<?php echo __('Are you sure you want to delete this address?') ?>",
-            regionsUrl: "<?php echo $this->getRegionsUrl(); ?>",
-            optionalZipCountries: <?php echo $this->helper("Magento\Directory\Helper\Data")->getCountriesWithOptionalZip(true) ?>,
-            requiredStateForCountries: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithStatesRequired(true) ?>,
-            showAllRegions: <?php echo (string)$this->helper('Magento\Directory\Helper\Data')->isShowNonRequiredState() ? 1 : 0; ?>,
-            defaultCountries: <?php echo $this->getDefaultCountriesJson(); ?>,
-            templatePrefix: "<?php echo $this->getTemplatePrefix() ?>" }}'>
+    <?php
+    $mageInitializationData = $this->jsonEncode([
+        'addressTabs' => [
+            'itemCount'                     => count($addressCollection),
+            'deleteConfirmPrompt'           => __('Are you sure you want to delete this address?'),
+            'regionsUrl'                    => $this->getRegionsUrl(),
+            'optionalZipCountries'          => $this->getOptionalZipCountries(),
+            'requiredStateForCountries'     => $this->getRequiredStateForCountries(),
+            'showAllRegions'                => $this->getShowAllRegions(),
+            'defaultCountries'              => $this->getDefaultCountries(),
+            'templatePrefix'                => $this->getTemplatePrefix(),
+        ]
+    ]);
+    ?>
+    <div id="address-tabs" data-mage-init='<?= $this->escapeHtml($mageInitializationData)?>'>
         <ul class="address-list" id="address_list">
             <?php $_iterator = 0; ?>
             <?php if(count($addressCollection)): ?>

@@ -46,6 +46,8 @@ interface ThemeProviderInterface
     public function getThemeCustomizations($area, $type = \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL);
 
     /**
+     * Get theme by id
+     *
      * @param int $themeId
      * @return \Magento\View\Design\ThemeInterface
      */

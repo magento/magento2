@@ -114,14 +114,9 @@ class View
             'extra'     => null
         );
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = 'int';
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = \Magento\DB\Ddl\Table::TYPE_INTEGER;
-            $column['nullable'] = true;
-            $column['comment']  = 'Bundle Price View ' . $attributeCode . ' column';
-        }
+        $column['type']     = \Magento\DB\Ddl\Table::TYPE_INTEGER;
+        $column['nullable'] = true;
+        $column['comment']  = 'Bundle Price View ' . $attributeCode . ' column';
 
         return array($attributeCode => $column);
    }

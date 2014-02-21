@@ -27,6 +27,7 @@ namespace Magento\Customer\Service\V1;
 use Magento\Customer\Model\Converter;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Exception\InputException;
+use Magento\Exception\NoSuchEntityException;
 use Magento\Validator\ValidatorException;
 
 /**
@@ -123,20 +124,36 @@ class CustomerService implements CustomerServiceInterface
             $exception->addError(InputException::INVALID_FIELD_VALUE, 'email', $customerModel->getEmail());
         }
 
-        $dob = $this->_customerMetadataService->getCustomerAttributeMetadata('dob');
-        if ($dob->isRequired() && '' == trim($customerModel->getDob())) {
+        $dob = $this->_getAttributeMetadata('dob');
+        if (!is_null($dob) && $dob->isRequired() && '' == trim($customerModel->getDob())) {
             $exception->addError(InputException::REQUIRED_FIELD, 'dob', '');
         }
-        $taxvat = $this->_customerMetadataService->getCustomerAttributeMetadata('taxvat');
-        if ($taxvat->isRequired() && '' == trim($customerModel->getTaxvat())) {
+
+        $taxvat = $this->_getAttributeMetadata('taxvat');
+        if (!is_null($taxvat) && $taxvat->isRequired() && '' == trim($customerModel->getTaxvat())) {
             $exception->addError(InputException::REQUIRED_FIELD, 'taxvat', '');
         }
-        $gender = $this->_customerMetadataService->getCustomerAttributeMetadata('gender');
-        if ($gender->isRequired() && '' == trim($customerModel->getGender())) {
+
+        $gender = $this->_getAttributeMetadata('gender');
+        if (!is_null($gender) && $gender->isRequired() && '' == trim($customerModel->getGender())) {
             $exception->addError(InputException::REQUIRED_FIELD, 'gender', '');
         }
+
         if ($exception->getErrors()) {
             throw $exception;
+        }
+    }
+
+    /**
+     * @param $attributeCode
+     * @return Dto\Eav\AttributeMetadata|null
+     */
+    protected function _getAttributeMetadata($attributeCode)
+    {
+        try {
+            return $this->_customerMetadataService->getCustomerAttributeMetadata($attributeCode);
+        } catch (NoSuchEntityException $e) {
+            return null;
         }
     }
 }

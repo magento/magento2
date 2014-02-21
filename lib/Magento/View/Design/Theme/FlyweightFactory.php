@@ -30,21 +30,29 @@ namespace Magento\View\Design\Theme;
 class FlyweightFactory
 {
     /**
+     * Theme provider
+     *
      * @var ThemeProviderInterface
      */
     protected $themeProvider;
 
     /**
+     * Themes
+     *
      * @var \Magento\View\Design\ThemeInterface[]
      */
     protected $themes = array();
 
     /**
+     * Themes by path
+     *
      * @var \Magento\View\Design\ThemeInterface[]
      */
     protected $themesByPath = array();
 
     /**
+     * Constructor
+     *
      * @param ThemeProviderInterface $themeProvider
      */
     public function __construct(
@@ -113,7 +121,7 @@ class FlyweightFactory
      * Add theme to shared collection
      *
      * @param \Magento\View\Design\ThemeInterface $themeModel
-     * @return FlyweightFactory
+     * @return $this
      */
     protected function _addTheme(\Magento\View\Design\ThemeInterface $themeModel)
     {

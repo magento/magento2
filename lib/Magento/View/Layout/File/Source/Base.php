@@ -36,16 +36,22 @@ use Magento\View\Layout\File\Factory;
 class Base implements SourceInterface
 {
     /**
+     * File factory
+     *
      * @var Factory
      */
     private $fileFactory;
 
     /**
+     * Modules directory
+     *
      * @var ReadInterface
      */
     protected $modulesDirectory;
 
     /**
+     * Constructor
+     *
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      */

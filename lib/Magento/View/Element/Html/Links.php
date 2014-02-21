@@ -30,6 +30,8 @@ namespace Magento\View\Element\Html;
 class Links extends \Magento\View\Element\Template
 {
     /**
+     * Get links
+     *
      * @return \Magento\View\Element\Html\Link[]
      */
     public function getLinks()

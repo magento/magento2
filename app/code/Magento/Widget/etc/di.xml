@@ -23,39 +23,31 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Widget\Model\Config\Reader">
-        <param name="fileName">
-            <value>widget.xml</value>
-        </param>
-        <param name="schemaLocator">
-            <instance type="Magento\Widget\Model\Config\SchemaLocator" />
-        </param>
-        <param name="fileResolver">
-            <instance type="Magento\Widget\Model\Config\FileResolver" />
-        </param>
+        <arguments>
+            <argument name="fileName" xsi:type="string">widget.xml</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Widget\Model\Config\SchemaLocator</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Widget\Model\Config\FileResolver</argument>
+        </arguments>
     </type>
     <type name="Magento\Widget\Model\Config\Data">
-        <param name='reader'>
-            <instance type="Magento\Widget\Model\Config\Reader" />
-        </param>
-        <param name="cacheId">
-            <value>widget_config</value>
-        </param>
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Widget\Model\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">widget_config</argument>
+        </arguments>
     </type>
     <type name="Magento\Cms\Model\Template\FilterProvider">
-        <param name="pageFilter">
-            <value>Magento\Widget\Model\Template\Filter</value>
-        </param>
-        <param name="blockFilter">
-            <value>Magento\Widget\Model\Template\Filter</value>
-        </param>
+        <arguments>
+            <argument name="pageFilter" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>
+            <argument name="blockFilter" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="widget_setup"><value>Magento\Core\Model\Resource\Setup\Generic</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="widget_setup" xsi:type="string">Magento\Core\Model\Resource\Setup\Generic</item>
+            </argument>
+        </arguments>
     </type>
 </config>

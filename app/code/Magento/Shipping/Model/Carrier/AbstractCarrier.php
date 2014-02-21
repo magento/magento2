@@ -23,10 +23,11 @@
  */
 namespace Magento\Shipping\Model\Carrier;
 
-use Magento\Object;
 use Magento\Sales\Model\Quote\Address\AbstractCarrierInterface;
+use Magento\Shipping\Model\Shipment\Request;
+use Magento\Sales\Model\Quote\Address\RateResult\Error;
 
-abstract class AbstractCarrier extends Object implements AbstractCarrierInterface
+abstract class AbstractCarrier extends \Magento\Object implements AbstractCarrierInterface
 {
     /**
      * Carrier's code
@@ -66,7 +67,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Container types that could be customized
      *
-     * @var array
+     * @var string[]
      */
     protected $_customizableContainerTypes = array();
 
@@ -126,7 +127,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
      * Retrieve information from carrier configuration
      *
      * @param   string $field
-     * @return  mixed
+     * @return  void|false|string
      */
     public function getConfigData($field)
     {
@@ -155,9 +156,9 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Collect and get rates
      *
-     * @abstract
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result|bool|null
+     * @abstract
      */
     abstract public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request);
 
@@ -165,33 +166,33 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
      * Do request to shipment
      * Implementation must be in overridden method
      *
-     * @param \Magento\Shipping\Model\Shipment\Request $request
-     * @return Object
+     * @param Request $request
+     * @return \Magento\Object
      */
     public function requestToShipment($request)
     {
-        return new Object();
+        return new \Magento\Object();
     }
 
     /**
      * Do return of shipment
      * Implementation must be in overridden method
      *
-     * @param $request
-     * @return Object
+     * @param Request $request
+     * @return \Magento\Object
      */
     public function returnOfShipment($request)
     {
-        return new Object();
+        return new \Magento\Object();
     }
 
     /**
      * Return container types of carrier
      *
-     * @param Object|null $params
+     * @param \Magento\Object|null $params
      * @return array
      */
-    public function getContainerTypes(Object $params = null)
+    public function getContainerTypes(\Magento\Object $params = null)
     {
         return array();
     }
@@ -199,10 +200,10 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Get allowed containers of carrier
      *
-     * @param Object|null $params
+     * @param \Magento\Object|null $params
      * @return array|bool
      */
-    protected function _getAllowedContainers(Object $params = null)
+    protected function _getAllowedContainers(\Magento\Object $params = null)
     {
         $containersAll = $this->getContainerTypesAll();
         if (empty($containersAll)) {
@@ -252,7 +253,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Get Container Types, that could be customized
      *
-     * @return array
+     * @return string[]
      */
     public function getCustomizableContainerTypes()
     {
@@ -262,10 +263,10 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param Object|null $params
+     * @param \Magento\Object|null $params
      * @return array
      */
-    public function getDeliveryConfirmationTypes(Object $params = null)
+    public function getDeliveryConfirmationTypes(\Magento\Object $params = null)
     {
         return array();
     }
@@ -280,40 +281,38 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
         /*
         * for specific countries, the flag will be 1
         */
-        if ($speCountriesAllow && $speCountriesAllow == 1){
-             $showMethod = $this->getConfigData('showmethod');
-             $availableCountries = array();
-             if($this->getConfigData('specificcountry')) {
-                $availableCountries = explode(',',$this->getConfigData('specificcountry'));
-             }
-             if ($availableCountries && in_array($request->getDestCountryId(), $availableCountries)) {
-                 return $this;
-             } elseif ($showMethod && (!$availableCountries || ($availableCountries
-                 && !in_array($request->getDestCountryId(), $availableCountries)))
-             ){
-                   /** @var \Magento\Sales\Model\Quote\Address\RateResult\Error $error */
-                   $error = $this->_rateErrorFactory->create();
-                   $error->setCarrier($this->_code);
-                   $error->setCarrierTitle($this->getConfigData('title'));
-                   $errorMsg = $this->getConfigData('specificerrmsg');
-                   $error->setErrorMessage($errorMsg ? $errorMsg : __('Sorry, but we can\'t deliver to the destination country with this shipping module.'));
-                   return $error;
-             } else {
-                 /*
-                * The admin set not to show the shipping module if the devliery country is not within specific countries
+        if ($speCountriesAllow && $speCountriesAllow == 1) {
+            $showMethod = $this->getConfigData('showmethod');
+            $availableCountries = array();
+            if ($this->getConfigData('specificcountry')) {
+                $availableCountries = explode(',', $this->getConfigData('specificcountry'));
+            }
+            if ($availableCountries && in_array($request->getDestCountryId(), $availableCountries)) {
+                return $this;
+            } elseif ($showMethod && (!$availableCountries || ($availableCountries
+                 && !in_array($request->getDestCountryId(), $availableCountries)))) {
+                 /** @var Error $error */
+                 $error = $this->_rateErrorFactory->create();
+                 $error->setCarrier($this->_code);
+                 $error->setCarrierTitle($this->getConfigData('title'));
+                 $errorMsg = $this->getConfigData('specificerrmsg');
+                 $error->setErrorMessage($errorMsg ? $errorMsg : __('Sorry, but we can\'t deliver to the destination country with this shipping module.'));
+                 return $error;
+            } else {
+                /*
+                * The admin set not to show the shipping module if the delivery country is not within specific countries
                 */
                 return false;
-             }
+            }
         }
         return $this;
     }
-
 
     /**
      * Processing additional validation to check is carrier applicable.
      *
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
-     * @return \Magento\Shipping\Model\Carrier\AbstractCarrier|\Magento\Sales\Model\Quote\Address\RateResult\Error|boolean
+     * @return $this|bool|Error
      */
     public function proccessAdditionalValidation(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
@@ -344,7 +343,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Check if carrier has shipping tracking option available
      *
-     * @return boolean
+     * @return bool
      */
     public function isTrackingAvailable()
     {
@@ -354,7 +353,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Check if carrier has shipping label option available
      *
-     * @return boolean
+     * @return bool
      */
     public function isShippingLabelsAvailable()
     {
@@ -364,7 +363,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      *  Retrieve sort order of current carrier
      *
-     * @return mixed
+     * @return string|null
      */
     public function getSortOrder()
     {
@@ -373,7 +372,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
 
     /**
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
-     * @return null
+     * @return void
      */
     protected function _updateFreeMethodQuote($request)
     {
@@ -508,10 +507,10 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     }
 
     /**
-     *  Return weight in pounds
+     * Return weight in pounds
      *
-     *  @param integer Weight in someone measure
-     *  @return float Weight in pounds
+     * @param int $weight In some measure
+     * @return float Weight in pounds
      */
     public function convertWeightToLbs($weight)
     {
@@ -519,9 +518,10 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     }
 
     /**
-     * set the number of boxes for shipping
+     * Sets the number of boxes for shipping
      *
-     * @return weight
+     * @param int $weight in some measure
+     * @return int
      */
     public function getTotalNumOfBoxes($weight)
     {
@@ -551,7 +551,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Check if city option required
      *
-     * @return boolean
+     * @return bool
      */
     public function isCityRequired()
     {
@@ -573,6 +573,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
      * Log debug data to file
      *
      * @param mixed $debugData
+     * @return void
      */
     protected function _debug($debugData)
     {
@@ -597,6 +598,7 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
      * Used to call debug method from not Payment Method context
      *
      * @param mixed $debugData
+     * @return void
      */
     public function debugData($debugData)
     {
@@ -616,10 +618,10 @@ abstract class AbstractCarrier extends Object implements AbstractCarrierInterfac
     /**
      * Return content types of package
      *
-     * @param Object $params
+     * @param \Magento\Object $params
      * @return array
      */
-    public function getContentTypes(Object $params)
+    public function getContentTypes(\Magento\Object $params)
     {
         return array();
     }

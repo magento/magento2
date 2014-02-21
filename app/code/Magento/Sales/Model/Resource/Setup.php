@@ -42,8 +42,8 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     protected $_encryptor;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param string $resourceName
+     * @param \Magento\Eav\Model\Entity\Setup\Context $context
+     * @param $resourceName
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
      * @param \Magento\App\ConfigInterface $config
@@ -51,7 +51,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
         \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,

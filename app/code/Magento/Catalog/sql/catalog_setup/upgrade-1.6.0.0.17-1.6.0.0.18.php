@@ -44,5 +44,4 @@ $this->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'quantity_and_stock_
     'filterable'        => false,
     'comparable'        => false,
     'unique'            => false,
-    'is_configurable'   => false,
 ));

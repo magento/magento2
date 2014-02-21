@@ -25,8 +25,8 @@
  */
 namespace Magento\Catalog\Model\Resource\Product;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Core\Model\Store;
-use Magento\Core\Model\Website;
 
 /**
  * Product collection
@@ -546,7 +546,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         if ($this->isEnabledFlat()) {
             $this->getSelect()
                 ->from(array(self::MAIN_TABLE_ALIAS => $this->getEntity()->getFlatTableName()), null)
-                ->columns(array('status' => new \Zend_Db_Expr(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)));
+                ->columns(array('status' => new \Zend_Db_Expr(ProductStatus::STATUS_ENABLED)));
             $this->addAttributeToSelect(array('entity_id', 'type_id', 'attribute_set_id'));
             if ($this->getFlatHelper()->isAddChildData()) {
                 $this->getSelect()
@@ -766,7 +766,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Add website filter to collection
      *
-     * @param null|bool|int|string|Website|array $websites
+     * @param null|bool|int|string|array $websites
      * @return $this
      */
     public function addWebsiteFilter($websites = null)

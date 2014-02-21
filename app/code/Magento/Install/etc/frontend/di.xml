@@ -23,22 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <array>
-                <item key="install"><value>/install/wizard/checkSecureHost</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="install" xsi:type="string">/install/wizard/checkSecureHost</item>
+            </argument>
+        </arguments>
     </type>
     <virtualType name="Magento\Install\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>install</value>
-        </param>
+        <arguments>
+            <argument name="namespace" xsi:type="string">install</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Install\Model\Session">
-        <param name="storage">
-            <instance type="Magento\Install\Model\Session\Storage" />
-        </param>
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Install\Model\Session\Storage</argument>
+        </arguments>
     </type>
 </config>

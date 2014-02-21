@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer;
 
 class Action
@@ -48,6 +47,12 @@ class Action
         parent::__construct($context, $data);
     }
 
+    /**
+     * Render action
+     *
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
         /** @var \Magento\UrlInterface $urlModel */

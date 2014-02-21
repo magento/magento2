@@ -70,7 +70,7 @@ class State extends \Magento\Core\Model\AbstractModel implements \Magento\Mview\
      * Fill object with state data by view ID
      *
      * @param string $viewId
-     * @return void
+     * @return $this
      */
     public function loadByView($viewId)
     {
@@ -78,12 +78,13 @@ class State extends \Magento\Core\Model\AbstractModel implements \Magento\Mview\
         if (!$this->getId()) {
             $this->setViewId($viewId);
         }
+        return $this;
     }
 
     /**
      * Processing object before save data
      *
-     * @return void
+     * @return $this
      */
     protected function _beforeSave()
     {

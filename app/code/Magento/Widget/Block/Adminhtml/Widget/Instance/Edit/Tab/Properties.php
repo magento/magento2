@@ -91,7 +91,7 @@ class Properties
      * Prepare block children and data.
      * Set widget type and widget parameters if available
      *
-     * @return \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties
+     * @return $this
      */
     protected function _preparelayout()
     {

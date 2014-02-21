@@ -37,6 +37,8 @@ class Label
     protected $_labelsCollection;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Design\Theme\Label\ListInterface $labelList
      */
     public function __construct(\Magento\View\Design\Theme\Label\ListInterface $labelList)

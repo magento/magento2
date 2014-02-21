@@ -35,16 +35,22 @@ use Magento\View\Design\ThemeInterface;
 class ModuleOutput implements SourceInterface
 {
     /**
+     * Subject
+     *
      * @var SourceInterface
      */
     private $subject;
 
     /**
+     * Module manager
+     *
      * @var \Magento\Module\Manager
      */
     private $moduleManager;
 
     /**
+     * Constructor
+     *
      * @param SourceInterface $subject
      * @param Manager $moduleManager
      */

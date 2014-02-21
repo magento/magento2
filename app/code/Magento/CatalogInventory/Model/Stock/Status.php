@@ -27,12 +27,11 @@ namespace Magento\CatalogInventory\Model\Stock;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * CatalogInventory Stock Status per website Model
  *
- * @method \Magento\CatalogInventory\Model\Resource\Stock\Status _getResource()
- * @method \Magento\CatalogInventory\Model\Resource\Stock\Status getResource()
  * @method int getProductId()
  * @method \Magento\CatalogInventory\Model\Stock\Status setProductId(int $value)
  * @method int getWebsiteId()
@@ -47,8 +46,12 @@ use Magento\Catalog\Model\Product\Type;
 
 class Status extends \Magento\Core\Model\AbstractModel
 {
+    /**#@+
+     * Stock Status values
+     */
     const STATUS_OUT_OF_STOCK       = 0;
     const STATUS_IN_STOCK           = 1;
+    /**#@-*/
 
     /**
      * Product Type Instances cache
@@ -94,7 +97,6 @@ class Status extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param Type $productType
-     * @param \Magento\Catalog\Model\Product\Status $productStatus
      * @param \Magento\Catalog\Model\Product\Website $productWebsite
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param ItemFactory $stockItemFactory
@@ -107,7 +109,6 @@ class Status extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
         Type $productType,
-        \Magento\Catalog\Model\Product\Status $productStatus,
         \Magento\Catalog\Model\Product\Website $productWebsite,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         ItemFactory $stockItemFactory,
@@ -120,7 +121,6 @@ class Status extends \Magento\Core\Model\AbstractModel
 
         $this->_catalogInventoryData = $catalogInventoryData;
         $this->_productType = $productType;
-        $this->_productStatus = $productStatus;
         $this->_productWebsite = $productWebsite;
         $this->_storeManager = $storeManager;
         $this->_stockItemFactory = $stockItemFactory;
@@ -206,16 +206,6 @@ class Status extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Retrieve Product Status Enabled Constant
-     *
-     * @return int
-     */
-    public function getProductStatusEnabled()
-    {
-        return \Magento\Catalog\Model\Product\Status::STATUS_ENABLED;
-    }
-
-    /**
      * Change Stock Item status process
      *
      * @param Item $item
@@ -249,7 +239,7 @@ class Status extends \Magento\Core\Model\AbstractModel
     {
         if (is_null($stockStatus)) {
             $websiteId = $product->getStore()->getWebsiteId();
-            $status = $this->getProductStatus($product->getId(), $websiteId, $stockId);
+            $status = $this->getProductStockStatus($product->getId(), $websiteId, $stockId);
             $stockStatus = isset($status[$product->getId()]) ? $status[$product->getId()] : null;
         }
 
@@ -356,19 +346,19 @@ class Status extends \Magento\Core\Model\AbstractModel
             }
             $childrenWebsites = $this->_productWebsite->getWebsites($childrenIds);
             foreach ($websites as $websiteId => $storeId) {
-                $childrenStatus = $this->_productStatus->getProductStatus($childrenIds, $storeId);
-                $childrenStock  = $this->getProductStatus($childrenIds, $websiteId, $stockId);
+                $childrenStatus = $this->getProductStatus($childrenIds, $storeId);
+                $childrenStock  = $this->getProductStockStatus($childrenIds, $websiteId, $stockId);
 
                 $websiteStatus = $statuses[$websiteId];
                 foreach ($requiredChildrenIds as $groupedChildrenIds) {
                     $optionStatus = false;
                     foreach ($groupedChildrenIds as $childId) {
                         if (isset($childrenStatus[$childId])
-                            and isset($childrenWebsites[$childId])
-                            and in_array($websiteId, $childrenWebsites[$childId])
-                            and $childrenStatus[$childId] == $this->getProductStatusEnabled()
-                            and isset($childrenStock[$childId])
-                            and $childrenStock[$childId] == self::STATUS_IN_STOCK
+                            && isset($childrenWebsites[$childId])
+                            && in_array($websiteId, $childrenWebsites[$childId])
+                            && ($childrenStatus[$childId] == ProductStatus::STATUS_ENABLED)
+                            && isset($childrenStock[$childId])
+                            && ($childrenStock[$childId] == self::STATUS_IN_STOCK)
                         ) {
                             $optionStatus = true;
                         }
@@ -446,16 +436,28 @@ class Status extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Retrieve Product(s) status
+     * Retrieve Product(s) stock status
      *
-     * @param int|array $productIds
+     * @param int[] $productIds
      * @param int $websiteId
      * @param int $stockId
      * @return array
      */
-    public function getProductStatus($productIds, $websiteId, $stockId = 1)
+    public function getProductStockStatus($productIds, $websiteId, $stockId = 1)
     {
-        return $this->getResource()->getProductStatus($productIds, $websiteId, $stockId);
+        return $this->getResource()->getProductStockStatus($productIds, $websiteId, $stockId);
+    }
+
+    /**
+     * Retrieve Product(s) status
+     *
+     * @param $productIds
+     * @param int $storeId
+     * @return array
+     */
+    public function getProductStatus($productIds, $storeId = null)
+    {
+        return $this->getResource()->getProductStatus($productIds, $storeId);
     }
 
     /**
@@ -523,7 +525,7 @@ class Status extends \Magento\Core\Model\AbstractModel
         }
 
         if (!empty($productIds)) {
-            $stockStatuses = $this->_getResource()->getProductStatus($productIds, $websiteId, $stockId);
+            $stockStatuses = $this->getProductStockStatus($productIds, $websiteId, $stockId);
             foreach ($stockStatuses as $productId => $status) {
                 if ($product = $productCollection->getItemById($productId)) {
                     $product->setIsSalable($status);

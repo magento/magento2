@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,46 +27,45 @@ namespace Magento\Test\Integrity\Modular;
 class LayoutFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\View\Layout\Argument\HandlerFactory
+     * @var \Magento\View\Layout\Argument\Parser
      */
-    protected $_handlerFactory;
+    protected $_argParser;
 
     /**
-     * @var array
+     * @var \Magento\Data\Argument\InterpreterInterface
      */
-    protected $_types;
+    protected $_argInterpreter;
 
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_handlerFactory = $objectManager->get('Magento\View\Layout\Argument\HandlerFactory');
-        $this->_types = $this->_handlerFactory->getTypes();
+        $this->_argParser = $objectManager->get('Magento\View\Layout\Argument\Parser');
+        $this->_argInterpreter = $objectManager->get('layoutArgumentInterpreter');
     }
 
     /**
-     * @dataProvider layoutTypesDataProvider
+     * @param string $area
+     * @param string $layoutFile
+     * @dataProvider layoutArgumentsDataProvider
      */
-    public function testLayoutTypes($area, $layout)
+    public function testLayoutArguments($area, $layoutFile)
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadArea($area);
-        $layout = simplexml_load_file(
-            $layout,
-            'Magento\View\Layout\Element'
-        );
-        foreach ($layout->xpath('//*[@xsi:type]') as $argument) {
-            $type = (string)$argument->attributes('xsi', true)->type;
-            if (!in_array($type, $this->_types)) {
-                continue;
-            }
+        $dom = new \DOMDocument();
+        $dom->load($layoutFile);
+        $xpath = new \DOMXPath($dom);
+        $argumentNodes = $xpath->query('/layout//arguments/argument | /layout//action/argument');
+        /** @var \DOMNode $argumentNode */
+        foreach ($argumentNodes as $argumentNode) {
             try {
-                /* @var $handler \Magento\View\Layout\Argument\HandlerInterface */
-                $handler = $this->_handlerFactory->getArgumentHandlerByType($type);
-                $argument = $handler->parse($argument);
-                if ($this->_isIgnored($argument)) {
+                $argumentData = $this->_argParser->parse($argumentNode);
+                if ($this->isSkippedArgument($argumentData)) {
                     continue;
                 }
-                $handler->process($argument);
-            } catch (\InvalidArgumentException $e) {
+                $this->_argInterpreter->evaluate($argumentData);
+            } catch (\Magento\Data\Argument\MissingOptionalValueException $e) {
+                // Argument value is missing in the testing environment, but it's optional, so no big deal
+            } catch (\Exception $e) {
                 $this->fail($e->getMessage());
             }
         }
@@ -78,51 +74,55 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function layoutTypesDataProvider()
+    public function layoutArgumentsDataProvider()
     {
         $areas = array('adminhtml', 'frontend', 'install', 'email');
         $data = array();
         foreach ($areas as $area) {
             $layoutFiles = \Magento\TestFramework\Utility\Files::init()->getLayoutFiles(array('area' => $area), false);
             foreach ($layoutFiles as $layoutFile) {
-                $data[] = array($area, $layoutFile);
+                $data[$layoutFile] = array($area, $layoutFile);
             }
         }
         return $data;
     }
 
     /**
-     * @param $argument
+     * Whether an argument should be skipped, because it cannot be evaluated in the testing environment
+     *
+     * @param array $argumentData
      * @return bool
      */
-    protected function _isIgnored($argument)
+    protected function isSkippedArgument(array $argumentData)
     {
-        return
-            // we can't process updaters without value
-            !isset($argument['value']) && isset($argument['updaters'])
+        // Do not take into account argument name and parameters
+        unset($argumentData['name']);
+        unset($argumentData['param']);
 
-            // ignored objects
-            || isset($argument['value']['object'])
-                && in_array($argument['value']['object'], array(
-                    'Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection',
-                    'Magento\Catalog\Model\Resource\Product\Collection\AssociatedProduct',
-                    'Magento\Search\Model\Resource\Search\Grid\Collection',
-                    'Magento\Wishlist\Model\Resource\Item\Collection\Grid',
-                    'Magento\CustomerSegment\Model\Resource\Segment\Report\Detail\Collection',
-                ))
+        $isUpdater = isset($argumentData['updater']);
+        unset($argumentData['updater']);
 
-            // ignored helpers
-            || isset($argument['value']['helperClass']) &&
-                in_array($argument['value']['helperClass'] . '::' . $argument['value']['helperMethod'], array(
-                    'Magento\Pbridge\Helper\Data::getReviewButtonTemplate'
-                ))
+        // Arguments, evaluation of which causes a run-time error, because of unsafe assumptions to the environment
+        $typeAttr = \Magento\Core\Model\Layout\Merge::TYPE_ATTRIBUTE;
+        $ignoredArguments = array(
+            array($typeAttr => 'object',
+                'value' => 'Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection'),
+            array($typeAttr => 'object',
+                'value' => 'Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'),
+            array($typeAttr => 'object', 'value' => 'Magento\Search\Model\Resource\Search\Grid\Collection'),
+            array($typeAttr => 'object', 'value' => 'Magento\Wishlist\Model\Resource\Item\Collection\Grid'),
+            array($typeAttr => 'object',
+                'value' => 'Magento\CustomerSegment\Model\Resource\Segment\Report\Detail\Collection'),
+            array($typeAttr => 'helper', 'helper' => 'Magento\Pbridge\Helper\Data::getReviewButtonTemplate'),
+            array($typeAttr => 'options', 'model' => 'Magento\Search\Model\Adminhtml\Search\Grid\Options'),
+            array($typeAttr => 'options', 'model' => 'Magento\Logging\Model\Resource\Grid\ActionsGroup'),
+            array($typeAttr => 'options', 'model' => 'Magento\Logging\Model\Resource\Grid\Actions'),
+        );
+        $isIgnoredArgument = in_array($argumentData, $ignoredArguments, true);
 
-            // ignored options
-            || isset($argument['value']['model'])
-                && in_array($argument['value']['model'], array(
-                    'Magento\Search\Model\Adminhtml\Search\Grid\Options',
-                    'Magento\Logging\Model\Resource\Grid\ActionsGroup',
-                    'Magento\Logging\Model\Resource\Grid\Actions',
-                ));
+        unset($argumentData[$typeAttr]);
+        $hasValue = !empty($argumentData);
+
+        return $isIgnoredArgument || ($isUpdater && !$hasValue);
     }
 }

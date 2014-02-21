@@ -30,16 +30,22 @@ namespace Magento\View\Asset\MergeStrategy;
 class FileExists implements \Magento\View\Asset\MergeStrategyInterface
 {
     /**
+     * Strategy
+     *
      * @var \Magento\View\Asset\MergeStrategyInterface
      */
     protected $strategy;
 
     /**
+     * Filesystem
+     *
      * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Asset\MergeStrategyInterface $strategy
      * @param \Magento\App\Filesystem $filesystem
      */

@@ -40,7 +40,7 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoConfigFixture current_store shipping/option/checkout_multiple 1
+     * @magentoConfigFixture current_store multishipping/options/checkout_multiple 1
      */
     public function testOverviewAction()
     {

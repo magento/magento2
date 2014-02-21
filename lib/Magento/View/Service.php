@@ -35,26 +35,36 @@ class Service
     const SCOPE_SEPARATOR = '::';
 
     /**
+     * Application state
+     *
      * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
+     * Design
+     *
      * @var \Magento\View\DesignInterface
      */
     private $_design;
 
     /**
+     * Theme factory
+     *
      * @var \Magento\View\Design\Theme\FlyweightFactory
      */
     protected $themeFactory;
 
     /**
+     * Pub directory
+     *
      * @var string
      */
     protected $_pubDirectory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\State $appState
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
@@ -134,7 +144,7 @@ class Service
     /**
      * Update required parameters with default values if custom not specified
      *
-     * @param array $params
+     * @param array &$params
      * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

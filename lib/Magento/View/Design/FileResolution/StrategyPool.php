@@ -42,16 +42,22 @@ class StrategyPool
     const FALLBACK_MAP_DIR = 'maps/fallback';
 
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Application state
+     *
      * @var string
      */
     protected $appState;
 
     /**
+     * File system
+     *
      * @var Filesystem
      */
     protected $filesystem;
@@ -87,6 +93,8 @@ class StrategyPool
     );
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      * @param State $appState
      * @param Filesystem $filesystem
@@ -113,7 +121,7 @@ class StrategyPool
     }
 
     /**
-     * * Get strategy to resolve locale files (e.g. locale settings)
+     * Get strategy to resolve locale files (e.g. locale settings)
      *
      * @param bool $skipProxy
      * @return \Magento\View\Design\FileResolution\Strategy\LocaleInterface

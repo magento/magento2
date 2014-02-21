@@ -32,26 +32,36 @@ use Magento\View\Design\ThemeInterface;
 class File
 {
     /**
+     * File name
+     *
      * @var string
      */
     protected $filename;
 
     /**
+     * Module
+     *
      * @var string
      */
     protected $module;
 
     /**
+     * Theme
+     *
      * @var ThemeInterface
      */
     protected $theme;
 
     /**
+     * Identifier
+     *
      * @var string
      */
     protected $identifier;
 
     /**
+     * Constructor
+     *
      * @param string $filename
      * @param string $module
      * @param ThemeInterface $theme

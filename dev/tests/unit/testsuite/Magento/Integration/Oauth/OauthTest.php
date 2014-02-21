@@ -281,6 +281,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequestTokenOauthTimestampRefused($timestamp)
     {
+        $this->markTestIncomplete('MAGETWO-19388');
         $this->_setupConsumer();
         $this->_makeValidExpirationPeriod();
 

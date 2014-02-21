@@ -70,7 +70,7 @@ foreach ($options as $option) {
         ->setPrice(10)
         ->setCategoryIds(array(2))
         ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-        ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+        ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
         ->setStockData(
             array(
                 'use_config_manage_stock'   => 1,

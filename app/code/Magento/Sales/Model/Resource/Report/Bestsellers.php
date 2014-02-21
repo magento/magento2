@@ -51,9 +51,7 @@ class Bestsellers extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @var array
      */
     protected $ignoredProductTypes = array(
-        \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE
-            => \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE,
-        \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,
+        \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
     );
 
     /**

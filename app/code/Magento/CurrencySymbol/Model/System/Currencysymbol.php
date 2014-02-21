@@ -45,14 +45,14 @@ class Currencysymbol
     /**
      * Store id
      *
-     * @var string | null
+     * @var string|null
      */
     protected $_storeId;
 
     /**
      * Website id
      *
-     * @var string | null
+     * @var string|null
      */
     protected $_websiteId;
     /**
@@ -159,8 +159,8 @@ class Currencysymbol
     /**
      * Sets store Id
      *
-     * @param  $storeId
-     * @return \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @param  string|null $storeId
+     * @return $this
      */
     public function setStoreId($storeId=null)
     {
@@ -173,8 +173,8 @@ class Currencysymbol
     /**
      * Sets website Id
      *
-     * @param  $websiteId
-     * @return \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @param string|null $websiteId
+     * @return $this
      */
     public function setWebsiteId($websiteId=null)
     {
@@ -266,7 +266,7 @@ class Currencysymbol
      * Saves currency symbol to config
      *
      * @param  $symbols array
-     * @return \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @return $this
      */
     public function setCurrencySymbolsData($symbols=array())
     {
@@ -309,8 +309,8 @@ class Currencysymbol
     /**
      * Returns custom currency symbol by currency code
      *
-     * @param  $code
-     * @return bool|string
+     * @param string $code
+     * @return string|false
      */
     public function getCurrencySymbol($code)
     {
@@ -325,7 +325,7 @@ class Currencysymbol
     /**
      * Clear translate cache
      *
-     * @return \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @return $this
      */
     public function clearCache()
     {

@@ -49,7 +49,7 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
      * @var int
      */
     protected $_addChildData;
-    
+
     /**
      * Catalog Flat Product index process code
      */
@@ -79,13 +79,6 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
     protected $_isEnabled = array();
 
     /**
-     * Catalog Product Flat Flag object
-     *
-     * @var \Magento\Catalog\Model\Product\Flat\Flag
-     */
-    protected $_flagObject;
-
-    /**
      * Core store config
      *
      * @var \Magento\Core\Model\Store\Config
@@ -96,7 +89,6 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Index\Model\ProcessFactory $processFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Catalog\Model\Product\Flat\Flag $flatFlag
      * @param mixed $addFilterableAttrs
      * @param mixed $addChildData
      * @param bool $isAvailable
@@ -105,48 +97,24 @@ class Flat extends \Magento\Catalog\Helper\Flat\AbstractFlat
         \Magento\App\Helper\Context $context,
         \Magento\Index\Model\ProcessFactory $processFactory,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Catalog\Model\Product\Flat\Flag $flatFlag,
-        $addFilterableAttrs,
-        $addChildData,
+        $addFilterableAttrs = 0,
+        $addChildData = 0,
         $isAvailable = true
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         parent::__construct($context, $processFactory, $isAvailable);
-        $this->_flagObject = $flatFlag->loadSelf();
         $this->_addFilterableAttrs = intval($addFilterableAttrs);
         $this->_addChildData = intval($addChildData);
     }
 
     /**
-     * Retrieve Catalog Product Flat Flag object
-     *
-     * @return \Magento\Catalog\Model\Product\Flat\Flag
-     */
-    public function getFlag()
-    {
-        return $this->_flagObject;
-    }
-
-    /**
      * Check Catalog Product Flat functionality is enabled
      *
-     * @param int|string|null|\Magento\Core\Model\Store $store this parameter is deprecated and no longer in use
-     *
      * @return bool
      */
-    public function isEnabled($store = null)
+    public function isEnabled()
     {
         return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_USE_PRODUCT_FLAT);
-    }
-
-    /**
-     * Check if Catalog Product Flat Data has been initialized
-     *
-     * @return bool
-     */
-    public function isBuilt()
-    {
-        return $this->getFlag()->getIsBuilt();
     }
 
     /**

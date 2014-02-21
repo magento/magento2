@@ -23,23 +23,16 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 
-class StoreView extends AbstractStore
+class StoreView extends StoreGroup
 {
     /**
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * Validate changes for invalidating indexer
+     *
+     * @param \Magento\Core\Model\AbstractModel $store
+     * @return bool
      */
-    public function aroundSave(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
+    protected function validate(\Magento\Core\Model\AbstractModel $store)
     {
-        /** @var \Magento\Core\Model\Store $store */
-        $store = $arguments[0];
-        $needInvalidating = $store->isObjectNew() || $store->dataHasChangedFor('group_id');
-        $objectResource = $invocationChain->proceed($arguments);
-        if ($needInvalidating) {
-            $this->invalidateIndexer();
-        }
-
-        return $objectResource;
+        return $store->isObjectNew() || $store->dataHasChangedFor('group_id');
     }
 }

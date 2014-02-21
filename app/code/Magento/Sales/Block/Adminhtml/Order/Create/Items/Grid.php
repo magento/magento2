@@ -33,6 +33,8 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
 
+use \Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
@@ -121,7 +123,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 $item->setMessage($check->getMessage());
                 $item->setHasError($check->getHasError());
                 */
-                if ($item->getProduct()->getStatus() == \Magento\Catalog\Model\Product\Status::STATUS_DISABLED) {
+                if ($item->getProduct()->getStatus() == ProductStatus::STATUS_DISABLED) {
                     $item->setMessage(__('This product is disabled.'));
                     $item->setHasError(true);
                 }

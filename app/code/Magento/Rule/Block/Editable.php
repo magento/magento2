@@ -26,18 +26,18 @@
 
 namespace Magento\Rule\Block;
 
+use Magento\Data\Form\Element\Renderer\RendererInterface;
 use Magento\View\Element\AbstractBlock;
 
-class Editable
-    extends \Magento\View\Element\AbstractBlock
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Editable extends AbstractBlock implements RendererInterface
 {
     /**
      * Render element
      *
-     * @see \Magento\Data\Form\Element\Renderer\RendererInterface::render()
      * @param \Magento\Data\Form\Element\AbstractElement $element
      * @return string
+     *
+     * @see RendererInterface::render()
      */
     public function render(\Magento\Data\Form\Element\AbstractElement $element)
     {

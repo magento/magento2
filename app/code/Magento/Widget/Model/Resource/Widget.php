@@ -40,6 +40,7 @@ class Widget extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -50,7 +51,7 @@ class Widget extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieves pre-configured parameters for widget
      *
      * @param int $widgetId
-     * @return array
+     * @return array|false
      */
     public function loadPreconfiguredWidget($widgetId)
     {

@@ -181,6 +181,7 @@ class Session extends \Magento\Core\Helper\Data
      * Set "Remember Me" checked or not
      *
      * @param bool $checked
+     * @return void
      */
     public function setRememberMeChecked($checked = true)
     {

@@ -27,21 +27,29 @@ namespace Magento\View;
 class DesignLoader
 {
     /**
+     * Request
+     *
      * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
     /**
+     * Application
+     *
      * @var \Magento\Core\Model\App
      */
     protected $_app;
 
     /**
+     * Layout
+     *
      * @var \Magento\View\LayoutInterface
      */
     protected $_layout;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Core\Model\App $app
      * @param \Magento\View\LayoutInterface $layout
@@ -58,6 +66,8 @@ class DesignLoader
 
     /**
      * Load design
+     *
+     * @return void
      */
     public function load()
     {

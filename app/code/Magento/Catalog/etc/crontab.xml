@@ -28,5 +28,8 @@
         <job name="catalog_product_index_price_reindex_all" instance="Magento\Catalog\Model\Observer" method="reindexProductPrices">
             <schedule>0 2 * * *</schedule>
         </job>
+        <job name="catalog_product_flat_indexer_store_cleanup" instance="Magento\Catalog\Helper\Product\Flat\Indexer" method="deleteAbandonedStoreFlatTables">
+            <schedule>0 0 * * *</schedule>
+        </job>
     </group>
 </config>

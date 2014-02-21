@@ -15,7 +15,6 @@ app/code/Magento/Catalog/Block/Adminhtml/Product/Edit/Tab/Options/Popup/Grid.php
 app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Category.php
 app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Weight.php
 app/code/Magento/Catalog/Block/Adminhtml/Product/Options/Ajax.php
-app/code/Magento/Catalog/Block/Product/Configurable
 app/code/Magento/Catalog/Block/Product/TemplateSelector.php
 app/code/Magento/Catalog/Block/Product/View/BaseImage.php
 app/code/Magento/Catalog/Block/Product/View/Gallery.php
@@ -23,7 +22,6 @@ app/code/Magento/Catalog/Block/Product/View/Tabs.php
 app/code/Magento/Catalog/Model/Attribute/Config
 app/code/Magento/Catalog/Model/Attribute/Config.php
 app/code/Magento/Catalog/Model/Resource/Category/Collection
-app/code/Magento/Catalog/Model/Resource/Product/Collection
 app/code/Magento/Catalog/Model/Product/Type.php
 app/code/Magento/Catalog/Model/ProductOptions
 app/code/Magento/Catalog/Model/ProductTypes
@@ -36,12 +34,11 @@ app/code/Magento/Checkout/Block/Link.php
 app/code/Magento/Cms/Block/Adminhtml/Page/Edit/Tab/Design.php
 app/code/Magento/Cms/Controller/Router.php
 app/code/Magento/Cms/Model/Template/FilterProvider.php
+app/code/Magento/ConfigurableProduct
 app/code/Magento/Core/data
 app/code/Magento/Core/Model/Config
 app/code/Magento/Core/Model/Design.php
-app/code/Magento/Core/Model/Layout/Factory.php
 app/code/Magento/Core/Model/Layout/Update.php
-app/code/Magento/Core/Model/Layout/Argument
 app/code/Magento/Core/Model/Locale/Validator.php
 app/code/Magento/Core/Model/LocaleInterface.php
 app/code/Magento/Core/Model/Resource/Theme
@@ -137,6 +134,7 @@ lib/Magento/Exception
 lib/Magento/Stdlib/DateTime.php
 lib/Magento/Object.php
 lib/Magento/App
+lib/Magento/Data/Argument
 lib/Magento/ObjectManager
 lib/Magento/Service
 lib/Magento/Url/SecurityInfoInterface.php

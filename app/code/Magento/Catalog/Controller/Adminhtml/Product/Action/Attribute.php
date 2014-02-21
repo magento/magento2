@@ -37,15 +37,23 @@ use Magento\Backend\App\Action;
 class Attribute extends Action
 {
     /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
+     */
+    protected $_productFlatIndexerProcessor;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper
+        \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper,
+        \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
     ) {
         parent::__construct($context);
         $this->_helper = $helper;
+        $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
     }
 
     /**
@@ -185,11 +193,12 @@ class Attribute extends Action
             $this->messageManager->addSuccess(
                 __('A total of %1 record(s) were updated.', count($this->_helper->getProductIds()))
             );
-        }
-        catch (\Magento\Core\Exception $e) {
+
+            $this->_productFlatIndexerProcessor->reindexList($this->_helper->getProductIds());
+
+        } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->messageManager->addException(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')

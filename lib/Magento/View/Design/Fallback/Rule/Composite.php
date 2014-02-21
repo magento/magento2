@@ -32,11 +32,15 @@ namespace Magento\View\Design\Fallback\Rule;
 class Composite implements RuleInterface
 {
     /**
+     * Rules
+     *
      * @var RuleInterface[]
      */
     protected $rules = array();
 
     /**
+     * Constructors
+     *
      * @param RuleInterface[] $rules
      * @throws \InvalidArgumentException
      */

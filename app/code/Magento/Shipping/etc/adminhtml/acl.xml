@@ -32,8 +32,8 @@
                 <resource id="Magento_Adminhtml::stores">
                     <resource id="Magento_Adminhtml::stores_settings">
                         <resource id="Magento_Adminhtml::config">
-                            <resource id="Magento_Shipping::config_shipping" title="Shipping Settings Section" sortOrder="0" />
-                            <resource id="Magento_Shipping::carriers" title="Shipping Methods Section" sortOrder="0" />
+                            <resource id="Magento_Shipping::config_shipping" title="Shipping Settings Section" sortOrder="5" />
+                            <resource id="Magento_Shipping::carriers" title="Shipping Methods Section" sortOrder="5" />
                         </resource>
                     </resource>
                 </resource>

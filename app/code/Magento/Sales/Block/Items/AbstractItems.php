@@ -59,6 +59,7 @@ class AbstractItems extends \Magento\View\Element\Template
         $overriddenTemplates = $this->getOverriddenTemplates() ?: array();
         $template = isset($overriddenTemplates[$type]) ? $overriddenTemplates[$type] : $this->getRendererTemplate();
         $renderer = $rendererList->getRenderer($type, self::DEFAULT_TYPE, $template);
+        $renderer->setRenderedBlock($this);
         return $renderer;
     }
 

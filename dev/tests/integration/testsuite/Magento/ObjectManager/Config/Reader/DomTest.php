@@ -72,7 +72,8 @@ class DomTest extends \PHPUnit_Framework_TestCase
             'Magento\App\Arguments\FileResolver\Primary', array(), array(), '', false
         );
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
-        $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom();
+        $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\ObjectManager\Config\Mapper\Dom');
         $this->_validationState =
             new \Magento\App\Arguments\ValidationState(\Magento\App\State::MODE_DEFAULT);
         $this->_schemaLocator = new \Magento\ObjectManager\Config\SchemaLocator();

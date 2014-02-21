@@ -23,22 +23,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\App\AreaList">
-        <param name="areas">
-            <array>
-                <item key="webapi_rest">
-                    <array>
-                        <item key="frontName"><value>rest</value></item>
-                    </array>
+        <arguments>
+            <argument name="areas" xsi:type="array">
+                <item name="webapi_rest" xsi:type="array">
+                    <item name="frontName" xsi:type="string">rest</item>
                 </item>
-                <item key="webapi_soap">
-                    <array>
-                        <item key="frontName"><value>soap</value></item>
-                    </array>
+                <item name="webapi_soap" xsi:type="array">
+                    <item name="frontName" xsi:type="string">soap</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Xml\Generator" shared="false" />
     <type name="Magento\Xml\Parser" shared="false" />

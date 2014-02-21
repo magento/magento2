@@ -58,6 +58,8 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Block construction
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -148,8 +150,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
     /**
      * Description goes here...
      *
-     * @param none
-     * @return void
+     * @return string
      */
     public function getDeleteFilesUrl()
     {

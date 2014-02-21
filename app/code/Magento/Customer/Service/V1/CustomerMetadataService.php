@@ -1,7 +1,5 @@
 <?php
 /**
- * EAV attribute metadata service
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -26,7 +24,13 @@
 namespace Magento\Customer\Service\V1;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Exception\NoSuchEntityException;
 
+/**
+ * EAV attribute metadata service
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CustomerMetadataService implements CustomerMetadataServiceInterface
 {
     /**
@@ -80,11 +84,7 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
     }
 
     /**
-     * Retrieve EAV attribute metadata
-     *
-     * @param   mixed $entityType
-     * @param   mixed $attributeCode
-     * @return Dto\Eav\AttributeMetadata
+     * {@inheritdoc}
      */
     public function getAttributeMetadata($entityType, $attributeCode)
     {
@@ -95,18 +95,18 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
 
         /** @var AbstractAttribute $attribute */
         $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
-        $attributeMetadata = $this->_createMetadataAttribute($attribute);
-        $dtoCache[$attributeCode] = $attributeMetadata;
-        return $attributeMetadata;
+        if ($attribute) {
+            $attributeMetadata = $this->_createMetadataAttribute($attribute);
+            $dtoCache[$attributeCode] = $attributeMetadata;
+            return $attributeMetadata;
+        } else {
+            throw (new NoSuchEntityException('entityType', $entityType))
+                ->addField('attributeCode', $attributeCode);
+        }
     }
 
     /**
-     * Returns all known attributes metadata for a given entity type and attribute set
-     *
-     * @param string $entityType
-     * @param int $attributeSetId
-     * @param int $storeId
-     * @return Dto\Eav\AttributeMetadata[]
+     * {@inheritdoc}
      */
     public function getAllAttributeSetMetadata($entityType, $attributeSetId = 0, $storeId = null)
     {
@@ -121,17 +121,17 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
 
         $attributesMetadata = [];
         foreach ($attributeCodes as $attributeCode) {
-            $attributesMetadata[] = $this->getAttributeMetadata($entityType, $attributeCode);
+            try {
+                $attributesMetadata[] = $this->getAttributeMetadata($entityType, $attributeCode);
+            } catch (NoSuchEntityException $e) {
+                //If no such entity, skip
+            }
         }
         return $attributesMetadata;
     }
 
     /**
-     * Retrieve all attributes for entityType filtered by form code
-     *
-     * @param $entityType
-     * @param $formCode
-     * @return Dto\Eav\AttributeMetadata[]
+     * {@inheritdoc}
      */
     public function getAttributes($entityType, $formCode)
     {

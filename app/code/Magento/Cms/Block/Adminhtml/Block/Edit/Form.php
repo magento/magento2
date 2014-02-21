@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Block\Adminhtml\Block\Edit;
 
 /**
  * Adminhtml cms block edit form
@@ -32,8 +32,6 @@
  * @package    Magento_Cms
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Block\Edit;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -69,6 +67,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Init form
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,6 +79,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Load Wysiwyg on demand and Prepare layout
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -88,6 +90,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
     }
 
+    /**
+     * Prepare form
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('cms_block');
@@ -126,9 +133,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'class'     => 'validate-xml-identifier',
         ));
 
-        /**
-         * Check is single store mode
-         */
+        /* Check is single store mode */
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field =$fieldset->addField('store_id', 'multiselect', array(
                 'name'      => 'stores[]',

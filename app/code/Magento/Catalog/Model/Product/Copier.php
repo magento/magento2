@@ -65,7 +65,7 @@ class Copier
         $duplicate->setData($product->getData());
         $duplicate->setIsDuplicate(true);
         $duplicate->setOriginalId($product->getId());
-        $duplicate->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED);
+        $duplicate->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
         $duplicate->setCreatedAt(null);
         $duplicate->setUpdatedAt(null);
         $duplicate->setId(null);

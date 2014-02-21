@@ -79,7 +79,7 @@ interface IntegrationV1Interface
      *
      * @param int $integrationId
      * @return array Integration data
-     * @throws \Magento\Integration\Exception if the integration does not exist or cannot be deleted
+     * @throws \Magento\Integration\Exception If the integration does not exist or cannot be deleted
      */
     public function delete($integrationId);
 }

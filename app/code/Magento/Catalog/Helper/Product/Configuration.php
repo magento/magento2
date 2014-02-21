@@ -35,11 +35,6 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     implements \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
-     */
-    protected $_config;
-
-    /**
      * Filter manager
      *
      * @var \Magento\Filter\FilterManager
@@ -65,19 +60,16 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Filter\FilterManager $filter
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      * @param \Magento\Stdlib\String $string
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Filter\FilterManager $filter,
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
         \Magento\Stdlib\String $string
     ) {
         $this->_productOptionFactory = $productOptionFactory;
         $this->filter = $filter;
-        $this->_config = $config;
         $this->string = $string;
         parent::__construct($context);
     }
@@ -139,25 +131,6 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieves configuration options for configurable product
-     *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
-     * @return array
-     * @throws \Magento\Core\Exception
-     */
-    public function getConfigurableOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
-    {
-        $product = $item->getProduct();
-        $typeId = $product->getTypeId();
-        if ($typeId != \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE) {
-             throw new \Magento\Core\Exception(__('The product type to extract configurable options is incorrect.'));
-        }
-        $attributes = $product->getTypeInstance()
-            ->getSelectedAttributesInfo($product);
-        return array_merge($attributes, $this->getCustomOptions($item));
-    }
-
-    /**
      * Retrieves product options list
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
@@ -165,10 +138,6 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
      */
     public function getOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
-        $typeId = $item->getProduct()->getTypeId();
-        if ($typeId == \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE) {
-            return $this->getConfigurableOptions($item);
-        }
         return $this->getCustomOptions($item);
     }
 
@@ -257,15 +226,5 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
         }
 
         return $result;
-    }
-
-    /**
-     * Get allowed product types for configurable product
-     *
-     * @return array
-     */
-    public function getConfigurableAllowedTypes()
-    {
-        return $this->_config->getComposableTypes();
     }
 }

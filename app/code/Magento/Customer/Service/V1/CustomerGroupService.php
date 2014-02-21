@@ -29,8 +29,14 @@ use Magento\Core\Model\Store\Config as StoreConfig;
 use Magento\Customer\Model\Group as CustomerGroupModel;
 use Magento\Customer\Model\GroupFactory;
 use Magento\Customer\Model\Resource\Group\Collection;
+use Magento\Exception\InputException;
 use Magento\Exception\NoSuchEntityException;
 
+/**
+ * Class CustomerGroupService
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CustomerGroupService implements CustomerGroupServiceInterface
 {
     /**
@@ -105,24 +111,12 @@ class CustomerGroupService implements CustomerGroupServiceInterface
         $groups = array();
         /** @var Collection $collection */
         $collection = $this->_groupFactory->create()->getCollection();
-        foreach ($searchCriteria->getFilters() as $filter) {
-            $collection->addFilter($filter->getField(), $filter->getValue(), $filter->getConditionType());
-        }
+        $this->addFiltersToCollection($searchCriteria->getFilters(), $collection);
         $this->_searchResultsBuilder->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         if ($sortOrders) {
             foreach ($searchCriteria->getSortOrders() as $field => $direction) {
-                switch($field) {
-                    case 'id' :
-                        $field = 'customer_group_id';
-                        break;
-                    case 'code':
-                        $field = 'customer_group_code';
-                        break;
-                    case "tax_class_id":
-                    default:
-                        break;
-                }
+                $field = $this->translateField($field);
                 $collection->addOrder($field, $direction == Dto\SearchCriteria::SORT_ASC ? 'ASC' : 'DESC');
             }
         }
@@ -138,6 +132,84 @@ class CustomerGroupService implements CustomerGroupServiceInterface
         }
         $this->_searchResultsBuilder->setItems($groups);
         return $this->_searchResultsBuilder->create();
+    }
+
+    /**
+     * Adds some filters from a filter group to a collection.
+     *
+     * @param Dto\Search\FilterGroupInterface $filterGroup
+     * @param Collection $collection
+     * @throws \Magento\Exception\InputException
+     */
+    protected function addFiltersToCollection(Dto\Search\FilterGroupInterface $filterGroup, Collection $collection)
+    {
+        if (strcasecmp($filterGroup->getGroupType(), 'AND')) {
+            throw new InputException('Only AND grouping is currently supported for filters.');
+        }
+
+        foreach ($filterGroup->getFilters() as $filter) {
+            $this->addFilterToCollection($collection, $filter);
+        }
+
+        foreach ($filterGroup->getGroups() as $group) {
+            $this->addFilterGroupToCollection($collection, $group);
+        }
+    }
+
+    /**
+     * Helper function that adds a filter to the collection
+     *
+     * @param Collection $collection
+     * @param Dto\Filter $filter
+     * @return string
+     */
+    protected function addFilterToCollection(Collection $collection, Dto\Filter $filter)
+    {
+        $field = $this->translateField($filter->getField());
+        $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+        $collection->addFieldToFilter($field, [$condition => $filter->getValue()]);
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param Collection $collection
+     * @param Dto\Search\FilterGroupInterface $group
+     * @throws \Magento\Exception\InputException
+     */
+    protected function addFilterGroupToCollection(Collection $collection, Dto\Search\FilterGroupInterface $group)
+    {
+        if (strcasecmp($group->getGroupType(), 'OR')) {
+            throw new InputException('The only nested groups currently supported for filters are of type OR.');
+        }
+        $fields = [];
+        $conditions = [];
+        foreach ($group->getFilters() as $filter) {
+            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $fields[] = $this->translateField($filter->getField());
+            $conditions[] = [$condition => $filter->getValue()];
+        }
+        if ($fields) {
+            $collection->addFieldToFilter($fields, $conditions);
+        }
+    }
+
+    /**
+     * Translates a field name to a DB column name for use in collection queries.
+     *
+     * @param string $field a field name that should be translated to a DB column name.
+     * @return string
+     */
+    protected function translateField($field)
+    {
+        switch ($field) {
+            case 'code':
+                return 'customer_group_code';
+            case 'id':
+                return 'customer_group_id';
+            default:
+                return $field;
+        }
     }
 
     /**

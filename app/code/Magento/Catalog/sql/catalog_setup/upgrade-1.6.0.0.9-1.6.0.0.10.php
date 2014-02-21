@@ -113,7 +113,7 @@ $installer->addAttribute('catalog_product', 'group_price', array(
     'required'                   => false,
     'sort_order'                 => 6,
     'global'                     => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
-    'apply_to'                   => 'simple,configurable,virtual',
+    'apply_to'                   => 'simple,virtual',
     'group'                      => 'Prices',
 ));
 

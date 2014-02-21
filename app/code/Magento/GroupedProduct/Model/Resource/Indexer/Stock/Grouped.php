@@ -34,22 +34,12 @@
  */
 namespace Magento\GroupedProduct\Model\Resource\Indexer\Stock;
 
+use \Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+
 class Grouped extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
 {
     /**
-     * Reindex stock data for defined configurable product ids
-     *
-     * @param int|array $entityIds
-     * @return $this
-     */
-    public function reindexEntity($entityIds)
-    {
-        $this->_updateIndex($entityIds);
-        return $this;
-    }
-
-    /**
-     * Get the select object for get stock status by product ids
+     * Get the select object for get stock status by grouped product ids
      *
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
@@ -91,19 +81,21 @@ class Grouped extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Def
             ->group(array('e.entity_id', 'cw.website_id', 'cis.stock_id'));
 
         // add limitation of status
-        $psExpr = $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id');
-        $psCond = $adapter->quoteInto($psExpr . '=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $productStatusExpr = $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id');
+        $productStatusCond = $adapter->quoteInto(
+            $productStatusExpr . '=?', ProductStatus::STATUS_ENABLED
+        );
 
         if ($this->_isManageStock()) {
-            $statusExpr = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
+            $statusExpression = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
                 1, 'cisi.is_in_stock');
         } else {
-            $statusExpr = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
+            $statusExpression = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
                 'cisi.is_in_stock', 1);
         }
 
-        $optExpr = $adapter->getCheckSql("{$psCond} AND le.required_options = 0", 'i.stock_status', 0);
-        $stockStatusExpr = $adapter->getLeastSql(array("MAX({$optExpr})", "MIN({$statusExpr})"));
+        $optExpr = $adapter->getCheckSql("{$productStatusCond} AND le.required_options = 0", 'i.stock_status', 0);
+        $stockStatusExpr = $adapter->getLeastSql(array("MAX({$optExpr})", "MIN({$statusExpression})"));
 
         $select->columns(array(
             'status' => $stockStatusExpr

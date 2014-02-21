@@ -34,11 +34,6 @@ class UnitofmeasureTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
-            'Magento\Core\Model\Layout' => array(
-                'parameters' => array('area' => 'adminhtml')
-            )
-        ));
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         /** @var $block \Magento\Usa\Block\Adminhtml\Dhl\Unitofmeasure */

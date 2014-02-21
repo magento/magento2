@@ -21,12 +21,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Shipping\Block\Adminhtml\Order\Packaging;
 
 class Grid extends \Magento\Backend\Block\Template
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'order/packaging/grid.phtml';
 
     /**
@@ -108,8 +109,8 @@ class Grid extends \Magento\Backend\Block\Template
     /**
      * Format price
      *
-     * @param   decimal $value
-     * @return  double
+     * @param   float $value
+     * @return  string
      */
     public function formatPrice($value)
     {

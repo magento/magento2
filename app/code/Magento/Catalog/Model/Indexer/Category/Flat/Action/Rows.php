@@ -140,7 +140,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $select = $this->getWriteAdapter()->select()
             ->from(array('cf' => $this->getTableNameByStore($store, $useTempTable)))
             ->joinLeft(
-                array('ce' => $this->getWriteAdapter()->getTableName($this->getTableName('catalog_category_entity'))),
+                array('ce' => $this->getTableName('catalog_category_entity')),
                 'cf.path = ce.path',
                 array()
             )
@@ -167,10 +167,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $catIdExpr = $this->getReadAdapter()->quote("{$rootId}/{$store->getRootCategoryId()}/%");
 
         $select = $this->getReadAdapter()->select()
-            ->from(
-                $this->getReadAdapter()->getTableName($this->getTableName('catalog_category_entity')),
-                array('entity_id')
-            )
+            ->from($this->getTableName('catalog_category_entity'), array('entity_id'))
             ->where("path = {$rootIdExpr} OR path = {$rootCatIdExpr} OR path like {$catIdExpr}")
             ->where('entity_id IN (?)', $ids);
 

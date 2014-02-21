@@ -39,9 +39,12 @@ class FlatTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Config\Converter\Dom\Flat(array(
-            '/root/multipleNode' => 'id'
-        ));
+        $arrayNodeConfig = new \Magento\Config\Dom\ArrayNodeConfig(
+            new \Magento\Config\Dom\NodePathMatcher(),
+            array('/root/multipleNode' => 'id'),
+            array('/root/node_one/subnode')
+        );
+        $this->_model = new \Magento\Config\Converter\Dom\Flat($arrayNodeConfig);
         $this->_fixturePath = realpath(__DIR__ . '/../../')
             . '/_files/converter/dom/flat/';
     }

@@ -63,7 +63,7 @@ foreach ($urlKeys as $i => $urlKey) {
         ->setPrice(10)
         ->setCategoryIds(array(3))
         ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-        ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+        ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
         ->setUrlKey($urlKey)
         ->setUrlPath($urlKey . '.html')
         ->save();

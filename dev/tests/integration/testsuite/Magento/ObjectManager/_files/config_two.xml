@@ -23,27 +23,19 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Module\UpdaterInterfaceTwo" type="Magento\Module\UpdaterTwo" />
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\UpdaterOne" />
     <type name="Magento\App\Arguments\Loader" shared="false">
-        <param name="customFile">
-            <value type="argument">Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE</value>
-        </param>
-        <param name="newParam">
-            <value>paramValue</value>
-        </param>
-        <param name="customConfig">
-            <instance shared="false" type="Magento\Core\Model\Config\Storage\Modules" />
-        </param>
-        <param name="customValue">
-            <value>someCustomValue</value>
-        </param>
-        <param name="customComplexValue">
-            <array>
-                <item key="three"><value>three</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="customFile" xsi:type="init_parameter">Magento\App\Arguments\Loader::PARAM_CUSTOM_FILE</argument>
+            <argument name="newParam" xsi:type="string">paramValue</argument>
+            <argument name="customConfig" xsi:type="object" shared="false">Magento\Core\Model\Config\Storage\Modules</argument>
+            <argument name="customValue" xsi:type="string">someCustomValue</argument>
+            <argument name="customComplexValue" xsi:type="array">
+                <item name="three" xsi:type="string">three</item>
+            </argument>
+        </arguments>
         <plugin name="three" type="somePluginThree"/>
         <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
         <plugin name="one" sortOrder="800"/>
@@ -54,24 +46,18 @@
         <plugin name="one" sortOrder="800"/>
     </virtualType>
     <type name="Magento\Data\Collection\Db\FetchStrategy\Cache">
-        <param name="cacheTags">
-            <array>
-                <item key="const"><value type="const">Magento\Core\Model\Website::CACHE_TAG</value></item>
-                <item key="boolFalse"><value type="bool">1</value></item>
-                <item key="boolTrue"><value type="int">10</value></item>
-                <item key="boolOne"><value type="string" pattern="[0-9]*">1</value></item>
-                <item key="boolZero"><value type="bool">0</value></item>
-                <item key="stringPattern"><value pattern="[a-zA-Z\-]*">Az-Value</value></item>
-            </array>
-        </param>
-        <param name="constParam">
-            <value type='const'>Magento\Core\Model\Website::CACHE_TAG</value>
-        </param>
-        <param name="boolFalseParam">
-            <value type='int'>100</value>
-        </param>
-        <param name="nullValueParam">
-            <value type='bool'>true</value>
-        </param>
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="const" xsi:type="const">Magento\Core\Model\Website::CACHE_TAG</item>
+                <item name="boolFalse" xsi:type="boolean">1</item>
+                <item name="boolTrue" xsi:type="number">10</item>
+                <item name="boolOne" xsi:type="string">1</item>
+                <item name="boolZero" xsi:type="boolean">0</item>
+                <item name="stringPattern" xsi:type="string">Az-Value</item>
+            </argument>
+            <argument name="constParam" xsi:type="const">Magento\Core\Model\Website::CACHE_TAG</argument>
+            <argument name="boolFalseParam" xsi:type="number">100</argument>
+            <argument name="nullValueParam" xsi:type="boolean">true</argument>
+        </arguments>
     </type>
 </config>

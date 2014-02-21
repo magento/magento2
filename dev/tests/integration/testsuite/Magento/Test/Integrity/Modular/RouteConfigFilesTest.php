@@ -74,7 +74,7 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
         foreach ($files as $file) {
             $content = file_get_contents($file);
             try {
-                new \Magento\Config\Dom($content, $this->_idAttributes, $this->_schemaFile);
+                new \Magento\Config\Dom($content, $this->_idAttributes, null, $this->_schemaFile);
 
                 //merge won't be performed if file is invalid because of exception thrown
                 $mergedConfig->merge($content);

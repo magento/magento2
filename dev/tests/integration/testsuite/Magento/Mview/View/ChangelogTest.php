@@ -116,7 +116,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(1, $this->model->getVersion());
         $this->model->clear(1);
-        $this->assertEquals(0, $this->model->getVersion());//the same that a table is empty
+        $this->assertEquals(1, $this->model->getVersion());//the same that a table is empty
     }
 
     /**

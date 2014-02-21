@@ -47,6 +47,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -57,9 +58,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter by store ids
      *
-     * @param array|integer $storeIds
-     * @param boolean $withDefaultStore if TRUE also filter by store id '0'
-     * @return \Magento\Widget\Model\Resource\Widget\Instance\Collection
+     * @param array|int $storeIds
+     * @param bool $withDefaultStore if TRUE also filter by store id '0'
+     * @return $this
      */
     public function addStoreFilter($storeIds = array(), $withDefaultStore = true)
     {

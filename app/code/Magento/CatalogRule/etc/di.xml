@@ -23,29 +23,32 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\CatalogRule\Model\Resource\Rule">
-        <param name="eventManager">
-            <instance type="Magento\Event\Manager\Proxy" />
-        </param>
+        <arguments>
+            <argument name="eventManager" xsi:type="object">Magento\Event\Manager\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\CatalogRule\Model\Resource\Rule\Collection" shared="false" />
     <type name="Magento\CatalogRule\Model\Observer">
-        <param name="resourceRule">
-            <instance type="Magento\CatalogRule\Model\Resource\Rule\Proxy" />
-        </param>
-        <param name="customerSession">
-            <instance type="Magento\Customer\Model\Session\Proxy" />
-        </param>
-        <param name="backendSession">
-            <instance type="Magento\Backend\Model\Session\Proxy" />
-        </param>
+        <arguments>
+            <argument name="resourceRule" xsi:type="object">Magento\CatalogRule\Model\Resource\Rule\Proxy</argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Session\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="catalogrule_setup"><value>Magento\Core\Model\Resource\Setup\Generic</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="catalogrule_setup" xsi:type="string">Magento\Core\Model\Resource\Setup\Generic</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\PriceModifier\Composite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="catalog_rule" xsi:type="string">Magento\CatalogRule\Model\Product\PriceModifier</item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -289,10 +289,9 @@ class Builder
     {
         $validator = $this->_oneValidatorFactory->create(
             $data['class'],
-            array('options' => isset($data['options']['arguments'])
+            isset($data['options']['arguments'])
                 ? $this->_applyArgumentsCallback($data['options']['arguments'])
                 : array()
-            )
         );
 
         // Check validator type
@@ -348,7 +347,9 @@ class Builder
     protected function _applyArgumentsCallback(array $arguments)
     {
         foreach ($arguments as &$argument) {
-            if ($argument instanceof OptionInterface) {
+            if (is_array($argument)) {
+                $argument = $this->_applyArgumentsCallback($argument);
+            } else if ($argument instanceof OptionInterface) {
                 $argument = $argument->getValue();
             }
         }

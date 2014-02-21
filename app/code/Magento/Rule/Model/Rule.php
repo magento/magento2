@@ -35,7 +35,7 @@
  */
 namespace Magento\Rule\Model;
 
-class Rule extends \Magento\Rule\Model\AbstractModel
+class Rule extends AbstractModel
 {
     /**
      * @var \Magento\Rule\Model\Condition\Combine

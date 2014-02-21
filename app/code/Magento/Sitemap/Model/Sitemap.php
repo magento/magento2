@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sitemap\Model;
 
 /**
@@ -205,6 +204,8 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
 
     /**
      * Init model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -228,6 +229,8 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize sitemap items
+     *
+     * @return void
      */
     protected function _initSitemapItems()
     {
@@ -317,7 +320,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      *
      * @see http://www.sitemaps.org/protocol.html
      *
-     * @return \Magento\Sitemap\Model\Sitemap
+     * @return $this
      */
     public function generateXml()
     {
@@ -373,6 +376,8 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
 
     /**
      * Generate sitemap index XML file
+     *
+     * @return void
      */
     protected function _createSitemapIndex()
     {
@@ -419,18 +424,18 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
     /**
      * Get sitemap row
      *
+     * @param string $url
+     * @param null|string $lastmod
+     * @param null|string $changefreq
+     * @param null|string $priority
+     * @param null|array $images
+     * @return string
+
      * Sitemap images
      * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636
      *
      * Sitemap PageMap
      * @see http://support.google.com/customsearch/bin/answer.py?hl=en&answer=1628213
-     *
-     * @param string $url
-     * @param string $lastmod
-     * @param string $changefreq
-     * @param string $priority
-     * @param array $images
-     * @return string
      */
     protected function _getSitemapRow($url, $lastmod = null, $changefreq = null, $priority = null, $images = null)
     {
@@ -471,7 +476,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * Get sitemap index row
      *
      * @param string $sitemapFilename
-     * @param string $lastmod
+     * @param null|string $lastmod
      * @return string
      */
     protected function _getSitemapIndexRow($sitemapFilename, $lastmod = null)
@@ -488,8 +493,9 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
     /**
      * Create new sitemap file
      *
-     * @param string $fileName
+     * @param null|string $fileName
      * @param string $type
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _createSitemap($fileName = null, $type = self::TYPE_URL)
@@ -511,6 +517,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * Write sitemap row
      *
      * @param string $row
+     * @return void
      */
     protected function _writeSitemapRow($row)
     {
@@ -521,6 +528,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * Write closing tag and close stream
      *
      * @param string $type
+     * @return void
      */
     protected function _finalizeSitemap($type = self::TYPE_URL)
     {
@@ -665,6 +673,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * Add sitemap file to robots.txt
      *
      * @param string $sitemapFileName
+     * @return void
      */
     protected function _addSitemapToRobotsTxt($sitemapFileName)
     {

@@ -57,11 +57,6 @@ class View extends \Magento\Object implements ViewInterface
     protected $state;
 
     /**
-     * @var \Magento\App\Resource
-     */
-    protected $resource;
-
-    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param View\StateInterface $state
@@ -75,7 +70,6 @@ class View extends \Magento\Object implements ViewInterface
         View\StateInterface $state,
         View\ChangelogInterface $changelog,
         View\SubscriptionFactory $subscriptionFactory,
-        \Magento\App\Resource $resource,
         array $data = array()
     ) {
         $this->config = $config;
@@ -83,7 +77,6 @@ class View extends \Magento\Object implements ViewInterface
         $this->state = $state;
         $this->changelog = $changelog;
         $this->subscriptionFactory = $subscriptionFactory;
-        $this->resource = $resource;
         parent::__construct($data);
     }
 
@@ -155,7 +148,7 @@ class View extends \Magento\Object implements ViewInterface
                     /** @var \Magento\Mview\View\SubscriptionInterface $subscription */
                     $subscription = $this->subscriptionFactory->create(array(
                         'view' => $this,
-                        'tableName' => $this->resource->getTableName($subscription['name']),
+                        'tableName' => $subscription['name'],
                         'columnName' => $subscription['column'],
                     ));
                     $subscription->create();
@@ -188,7 +181,7 @@ class View extends \Magento\Object implements ViewInterface
                     /** @var \Magento\Mview\View\SubscriptionInterface $subscription */
                     $subscription = $this->subscriptionFactory->create(array(
                         'view' => $this,
-                        'tableName' => $this->resource->getTableName($subscription['name']),
+                        'tableName' => $subscription['name'],
                         'columnName' => $subscription['column'],
                     ));
                     $subscription->remove();
@@ -257,10 +250,12 @@ class View extends \Magento\Object implements ViewInterface
      */
     public function suspend()
     {
-        $this->getState()
-            ->setVersionId($this->getChangelog()->getVersion())
-            ->setStatus(View\StateInterface::STATUS_SUSPENDED)
-            ->save();
+        if ($this->getState()->getMode() == View\StateInterface::MODE_ENABLED) {
+            $state = $this->getState();
+            $state->setVersionId($this->getChangelog()->getVersion());
+            $state->setStatus(View\StateInterface::STATUS_SUSPENDED);
+            $state->save();
+        }
     }
 
     /**
@@ -268,8 +263,10 @@ class View extends \Magento\Object implements ViewInterface
      */
     public function resume()
     {
-        if ($this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED) {
-            $this->getState()->setStatus(View\StateInterface::STATUS_IDLE)->save();
+        $state = $this->getState();
+        if ($state->getStatus() == View\StateInterface::STATUS_SUSPENDED) {
+            $state->setStatus(View\StateInterface::STATUS_IDLE);
+            $state->save();
         }
     }
 
@@ -278,7 +275,9 @@ class View extends \Magento\Object implements ViewInterface
      */
     public function clearChangelog()
     {
-        $this->getChangelog()->clear($this->getState()->getVersionId());
+        if ($this->getState()->getMode() == View\StateInterface::MODE_ENABLED) {
+            $this->getChangelog()->clear($this->getState()->getVersionId());
+        }
     }
 
     /**

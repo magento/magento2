@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Model;
 
 /**
  * Cms Page Model
@@ -69,8 +69,6 @@
  * @package     Magento_Cms
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Model;
-
 class Page extends \Magento\Core\Model\AbstractModel
 {
     const NOROUTE_PAGE_ID = 'no-route';
@@ -82,6 +80,10 @@ class Page extends \Magento\Core\Model\AbstractModel
     const STATUS_DISABLED = 0;
 
     const CACHE_TAG              = 'cms_page';
+
+    /**
+     * @var string
+     */
     protected $_cacheTag         = 'cms_page';
 
     /**
@@ -94,6 +96,7 @@ class Page extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -103,9 +106,9 @@ class Page extends \Magento\Core\Model\AbstractModel
     /**
      * Load object data
      *
-     * @param mixed $id
+     * @param int|null $id
      * @param string $field
-     * @return \Magento\Cms\Model\Page
+     * @return $this
      */
     public function load($id, $field=null)
     {

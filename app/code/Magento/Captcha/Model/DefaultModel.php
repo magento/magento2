@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Captcha\Model;
 
 /**
  * Implementation of \Zend_Captcha
  *
- * @category   Magento
- * @package    Magento_Captcha
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Captcha\Model;
-
 class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model\ModelInterface
 {
     /**
@@ -154,7 +151,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     /**
      * Check if CAPTCHA has to be shown to logged in user on this form
      *
-     * @return boolean
+     * @return bool
      */
     public function isShownToLoggedInUser()
     {
@@ -168,7 +165,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     }
 
     /**
-     * Check is overlimit attempts
+     * Check is over limit attempts
      *
      * @param string $login
      * @return bool
@@ -344,10 +341,10 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     }
 
     /**
-     * log Attempt
+     * Log attempt
      *
      * @param string $login
-     * @return \Magento\Captcha\Model\DefaultModel
+     * @return $this
      */
     public function logAttempt($login)
     {
@@ -479,7 +476,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      * Set captcha word
      *
      * @param  string $word
-     * @return \Zend_Captcha_Word
+     * @return $this
      */
     protected function _setWord($word)
     {
@@ -497,7 +494,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     /**
      * Set captcha word
      *
-     * @return \Magento\Captcha\Model\DefaultModel
+     * @return $this
      */
     protected function _clearWord()
     {
@@ -519,6 +516,8 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
 
     /**
      * Overlap of the parent method
+     *
+     * @return void
      *
      * Now deleting old captcha images make crontab script
      * @see \Magento\Captcha\Model\Observer::deleteExpiredImages

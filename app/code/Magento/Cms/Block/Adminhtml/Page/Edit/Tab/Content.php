@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Page\Edit\Tab;
 
 /**
  * Cms page edit form main tab
  */
-namespace Magento\Cms\Block\Adminhtml\Page\Edit\Tab;
-
 class Content
     extends \Magento\Backend\Block\Widget\Form\Generic
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -58,6 +57,8 @@ class Content
 
     /**
      * Load Wysiwyg on demand and Prepare layout
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -67,6 +68,11 @@ class Content
         }
     }
 
+    /**
+     * Prepare form
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         /** @var $model \Magento\Cms\Model\Page */

@@ -115,17 +115,6 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         return $out;
     }
 
-    /**
-     * Prepare form html. Add block for configurable product modification interface
-     *
-     * @return string
-     */
-    public function getFormHtml()
-    {
-        $html = parent::getFormHtml();
-        return $html;
-    }
-
     public function getHeaderWidth()
     {
         return 'width: 70%;';

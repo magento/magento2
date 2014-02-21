@@ -45,14 +45,14 @@ class Plugin
     /**
      * Remove grouped product from list of visible product types
      *
-     * @param string $result
-     * @return mixed
+     * @param array $result
+     * @return array
      */
     public function afterGetOptionArray($result)
     {
         if (!$this->moduleManager->isOutputEnabled('Magento_GroupedProduct')) {
-            unset($result[\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE]);
+            unset($result[Grouped::TYPE_CODE]);
         }
         return $result;
     }
-} 
+}

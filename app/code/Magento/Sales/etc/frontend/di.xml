@@ -23,12 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <array>
-                <item key="sales"><value>/sales/</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="sales" xsi:type="string">/sales/</item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -23,12 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\AdminNotification\Model\System\MessageList">
-        <param name="messages">
-            <array>
-                <item key="indexer"><value>Magento\Index\Model\System\Message\IndexOutdated</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="messages" xsi:type="array">
+                <item name="indexer" xsi:type="string">Magento\Index\Model\System\Message\IndexOutdated</item>
+            </argument>
+        </arguments>
     </type>
 </config>

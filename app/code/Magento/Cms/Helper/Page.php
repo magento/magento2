@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Helper;
 
+use Magento\App\Action\Action;
 
 /**
  * CMS Page Helper
@@ -32,8 +34,6 @@
  * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Helper;
-
 class Page extends \Magento\App\Helper\AbstractHelper
 {
     const XML_PATH_NO_ROUTE_PAGE        = 'web/default/cms_no_route';
@@ -136,11 +136,11 @@ class Page extends \Magento\App\Helper\AbstractHelper
      *
      * Call from controller action
      *
-     * @param \Magento\App\Action\Action $action
-     * @param integer $pageId
-     * @return boolean
+     * @param Action $action
+     * @param int $pageId
+     * @return bool
      */
-    public function renderPage(\Magento\App\Action\Action $action, $pageId = null)
+    public function renderPage(Action $action, $pageId = null)
     {
         return $this->_renderPage($action, $pageId);
     }
@@ -148,12 +148,12 @@ class Page extends \Magento\App\Helper\AbstractHelper
     /**
      * Renders CMS page
      *
-     * @param \Magento\App\Action\Action|\Magento\App\Action\Action $action
-     * @param integer $pageId
+     * @param Action $action
+     * @param int $pageId
      * @param bool $renderLayout
-     * @return boolean
+     * @return bool
      */
-    protected function _renderPage(\Magento\App\Action\Action  $action, $pageId = null, $renderLayout = true)
+    protected function _renderPage(Action  $action, $pageId = null, $renderLayout = true)
     {
         if (!is_null($pageId) && $pageId!==$this->_page->getId()) {
             $delimiterPosition = strrpos($pageId, '|');
@@ -232,12 +232,12 @@ class Page extends \Magento\App\Helper\AbstractHelper
      * Allows to use also backend action as first parameter.
      * Also takes third parameter which allows not run renderLayout method.
      *
-     * @param \Magento\App\Action\Action $action
-     * @param $pageId
-     * @param $renderLayout
+     * @param Action $action
+     * @param int $pageId
+     * @param bool $renderLayout
      * @return bool
      */
-    public function renderPageExtended(\Magento\App\Action\Action $action, $pageId = null, $renderLayout = true)
+    public function renderPageExtended(Action $action, $pageId = null, $renderLayout = true)
     {
         return $this->_renderPage($action, $pageId, $renderLayout);
     }

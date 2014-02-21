@@ -18,45 +18,35 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Multishipping\Block\Checkout;
+
 /**
  * Multishipping cart link
  */
-namespace Magento\Multishipping\Block\Checkout;
-
 class Link extends \Magento\View\Element\Template
 {
     /**
-     * Checkout data
+     * Multishipping helper
      *
-     * @var \Magento\Checkout\Helper\Data
+     * @var \Magento\Multishipping\Helper\Data
      */
-    protected $_checkoutData;
-
-    /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $_checkoutSession;
+    protected $helper;
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Checkout\Helper\Data $checkoutData
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Multishipping\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Multishipping\Helper\Data $helper,
         array $data = array()
     ) {
-        $this->_checkoutData = $checkoutData;
-        $this->_checkoutSession = $checkoutSession;
+        $this->helper = $helper;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -74,7 +64,7 @@ class Link extends \Magento\View\Element\Template
      */
     public function getQuote()
     {
-        return $this->_checkoutSession->getQuote();
+        return $this->helper->getQuote();
     }
 
     /**
@@ -82,7 +72,7 @@ class Link extends \Magento\View\Element\Template
      */
     public function _toHtml()
     {
-        if (!$this->_checkoutData->isMultishippingCheckoutAvailable()) {
+        if (!$this->helper->isMultishippingCheckoutAvailable()) {
             return '';
         }
         return parent::_toHtml();

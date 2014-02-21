@@ -38,11 +38,6 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $errorHandlerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Console\Response
-     */
     protected $responseMock;
 
     protected function setUp()
@@ -69,10 +64,6 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($shellHasErrors));
         $shell->expects($this->once())
             ->method('run');
-        $this->responseMock->expects($this->once())
-            ->method('setCode')
-            ->with($shellHasErrors ? -1 : 0)
-            ->will($this->returnSelf());
         $this->shellFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($shell)

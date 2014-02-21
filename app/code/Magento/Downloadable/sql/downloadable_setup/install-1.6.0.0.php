@@ -457,7 +457,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'links_purchase
     'visible_on_front'        => false,
     'unique'                  => false,
     'apply_to'                => 'downloadable',
-    'is_configurable'         => false,
     'used_in_product_listing' => true
 ));
 
@@ -480,7 +479,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'samples_title'
     'visible_on_front'  => false,
     'unique'            => false,
     'apply_to'          => 'downloadable',
-    'is_configurable'   => false
 ));
 
 $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'links_title', array(
@@ -502,7 +500,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'links_title', 
     'visible_on_front'  => false,
     'unique'            => false,
     'apply_to'          => 'downloadable',
-    'is_configurable'   => false
 ));
 
 $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'links_exist', array(
@@ -524,7 +521,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'links_exist', 
     'visible_on_front'          => false,
     'unique'                    => false,
     'apply_to'                  => 'downloadable',
-    'is_configurable'           => false,
     'used_in_product_listing'   => 1
 ));
 

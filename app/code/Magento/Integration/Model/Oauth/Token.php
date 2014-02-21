@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Model\Oauth;
 
 use Magento\Oauth\Helper\Oauth as OauthHelper;
@@ -75,22 +74,34 @@ class Token extends \Magento\Core\Model\AbstractModel
     const USER_TYPE_CUSTOMER = 'customer';
     /**#@- */
 
-    /** @var OauthHelper */
+    /**
+     * @var OauthHelper
+     */
     protected $_oauthHelper;
 
-    /** @var \Magento\Integration\Helper\Oauth\Data */
+    /**
+     * @var \Magento\Integration\Helper\Oauth\Data
+     */
     protected $_oauthData;
 
-    /** @var \Magento\Integration\Model\Oauth\Consumer\Factory */
+    /**
+     * @var \Magento\Integration\Model\Oauth\Consumer\Factory
+     */
     protected $_consumerFactory;
 
-    /** @var \Magento\Url\Validator */
+    /**
+     * @var \Magento\Url\Validator
+     */
     protected $_urlValidator;
 
-    /** @var Consumer\Validator\KeyLengthFactory */
+    /**
+     * @var Consumer\Validator\KeyLengthFactory
+     */
     protected $_keyLengthFactory;
 
-    /** @var \Magento\Stdlib\DateTime */
+    /**
+     * @var \Magento\Stdlib\DateTime
+     */
     protected $_dateTime;
 
     /**
@@ -142,9 +153,9 @@ class Token extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * "After save" actions
+     * The "After save" actions
      *
-     * @return Token
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -161,7 +172,7 @@ class Token extends \Magento\Core\Model\AbstractModel
      * Generate an oauth_verifier for a consumer, if the consumer doesn't already have one.
      *
      * @param int $consumerId - The id of the consumer associated with the verifier to be generated.
-     * @return Token
+     * @return $this
      */
     public function createVerifierToken($consumerId)
     {
@@ -186,7 +197,7 @@ class Token extends \Magento\Core\Model\AbstractModel
      *
      * @param int $userId Authorization user identifier
      * @param string $userType Authorization user type
-     * @return Token
+     * @return $this
      * @throws OauthException
      */
     public function authorize($userId, $userType)
@@ -217,7 +228,7 @@ class Token extends \Magento\Core\Model\AbstractModel
     /**
      * Convert token to access type
      *
-     * @return Token
+     * @return $this
      * @throws OauthException
      */
     public function convertToAccess()
@@ -239,7 +250,7 @@ class Token extends \Magento\Core\Model\AbstractModel
      *
      * @param int $entityId Token identifier
      * @param string $callbackUrl Callback URL
-     * @return Token
+     * @return $this
      */
     public function createRequestToken($entityId, $callbackUrl)
     {
@@ -288,7 +299,7 @@ class Token extends \Magento\Core\Model\AbstractModel
     /**
      * Before save actions
      *
-     * @return \Magento\Integration\Model\Oauth\Consumer
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -304,7 +315,7 @@ class Token extends \Magento\Core\Model\AbstractModel
     /**
      * Validate data
      *
-     * @return array|bool
+     * @return bool
      * @throws OauthException Throw exception on fail validation
      */
     public function validate()
@@ -372,7 +383,7 @@ class Token extends \Magento\Core\Model\AbstractModel
      * Set the token's verifier.
      *
      * @param string $verifier
-     * @return Token
+     * @return $this
      */
     public function setVerifier($verifier)
     {

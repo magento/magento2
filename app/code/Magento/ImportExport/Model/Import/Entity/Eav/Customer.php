@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import\Entity\Eav;
 
 /**
  * Import entity customer model
@@ -34,8 +35,6 @@
  * @todo finish moving dependencies to constructor in the scope of
  * @todo https://wiki.magento.com/display/MAGE2/Technical+Debt+%28Team-Donetsk-B%29
  */
-namespace Magento\ImportExport\Model\Import\Entity\Eav;
-
 class Customer
     extends \Magento\ImportExport\Model\Import\Entity\Eav\AbstractCustomer
 {
@@ -94,7 +93,7 @@ class Customer
      * For example, when entity attribute has own validation and import procedures
      * or just to deny this attribute processing.
      *
-     * @var array
+     * @var string[]
      */
     protected $_ignoredAttributes = array('website_id', 'store_id');
 
@@ -210,7 +209,7 @@ class Customer
      *
      * @param array $entitiesToCreate Rows for insert
      * @param array $entitiesToUpdate Rows for update
-     * @return \Magento\ImportExport\Model\Import\Entity\Eav\Customer
+     * @return $this
      */
     protected function _saveCustomerEntities(array $entitiesToCreate, array $entitiesToUpdate)
     {
@@ -233,7 +232,7 @@ class Customer
      * Save customer attributes.
      *
      * @param array $attributesData
-     * @return \Magento\ImportExport\Model\Import\Entity\Eav\Customer
+     * @return $this
      */
     protected function _saveCustomerAttributes(array $attributesData)
     {
@@ -259,7 +258,7 @@ class Customer
      * Delete list of customers
      *
      * @param array $entitiesToDelete customers id list
-     * @return \Magento\ImportExport\Model\Import\Entity\Eav\Customer
+     * @return $this
      */
     protected function _deleteCustomerEntities(array $entitiesToDelete)
     {
@@ -375,7 +374,7 @@ class Customer
     /**
      * Import data rows
      *
-     * @return boolean
+     * @return bool
      */
     protected function _importData()
     {
@@ -440,7 +439,7 @@ class Customer
      *
      * @param array $rowData
      * @param int $rowNumber
-     * @return null
+     * @return void
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {
@@ -481,7 +480,7 @@ class Customer
      *
      * @param array $rowData
      * @param int $rowNumber
-     * @return null
+     * @return void
      */
     protected function _validateRowForDelete(array $rowData, $rowNumber)
     {

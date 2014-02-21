@@ -36,61 +36,85 @@ namespace Magento\View\Element;
 class Context implements \Magento\ObjectManager\ContextInterface
 {
     /**
+     * Request
+     *
      * @var \Magento\App\RequestInterface
      */
     protected $_request;
 
     /**
+     * Layout
+     *
      * @var \Magento\View\LayoutInterface
      */
     protected $_layout;
 
     /**
+     * Event manager
+     *
      * @var \Magento\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
+     * URL builder
+     *
      * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
+     * Translator
+     *
      * @var \Magento\TranslateInterface
      */
     protected $_translator;
 
     /**
+     * Cache
+     *
      * @var \Magento\App\CacheInterface
      */
     protected $_cache;
 
     /**
+     * Design
+     *
      * @var \Magento\View\DesignInterface
      */
     protected $_design;
 
     /**
+     * Session
+     *
      * @var \Magento\Session\SessionManagerInterface
      */
     protected $_session;
 
     /**
+     * SID Resolver
+     *
      * @var \Magento\Session\SidResolverInterface
      */
     protected $_sidResolver;
 
     /**
+     * Store config
+     *
      * @var \Magento\Core\Model\Store\Config
      */
     protected $_storeConfig;
 
     /**
+     * Front controller
+     *
      * @var \Magento\App\FrontController
      */
     protected $_frontController;
 
     /**
+     * View URL
+     *
      * @var \Magento\View\Url
      */
     protected $_viewUrl;
@@ -103,36 +127,50 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_viewConfig;
 
     /**
+     * Cache state
+     *
      * @var \Magento\App\Cache\StateInterface
      */
     protected $_cacheState;
 
     /**
+     * Logger
+     *
      * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
+     * Application
+     *
      * @var \Magento\Core\Model\App
      */
     protected $_app;
 
     /**
+     * Escaper
+     *
      * @var \Magento\Escaper
      */
     protected $_escaper;
 
     /**
+     * Filter manager
+     *
      * @var \Magento\Filter\FilterManager
      */
     protected $_filterManager;
 
     /**
+     * Locale
+     *
      * @var \Magento\Core\Model\LocaleInterface
      */
     protected $_locale;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -201,6 +239,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get cache
+     *
      * @return \Magento\App\CacheInterface
      */
     public function getCache()
@@ -209,6 +249,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get design package
+     *
      * @return \Magento\View\DesignInterface
      */
     public function getDesignPackage()
@@ -217,6 +259,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get event manager
+     *
      * @return \Magento\Event\ManagerInterface
      */
     public function getEventManager()
@@ -225,6 +269,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get front controller
+     *
      * @return \Magento\App\FrontController
      */
     public function getFrontController()
@@ -233,6 +279,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get layout
+     *
      * @return \Magento\View\LayoutInterface
      */
     public function getLayout()
@@ -241,6 +289,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get request
+     *
      * @return \Magento\App\RequestInterface
      */
     public function getRequest()
@@ -249,6 +299,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get session
+     *
      * @return \Magento\Session\SessionManagerInterface
      */
     public function getSession()
@@ -257,6 +309,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get SID resolver
+     *
      * @return \Magento\Session\SidResolverInterface
      */
     public function getSidResolver()
@@ -265,6 +319,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get store config
+     *
      * @return \Magento\Core\Model\Store\Config
      */
     public function getStoreConfig()
@@ -273,6 +329,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get translator
+     *
      * @return \Magento\TranslateInterface
      */
     public function getTranslator()
@@ -281,6 +339,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get URL builder
+     *
      * @return \Magento\UrlInterface
      */
     public function getUrlBuilder()
@@ -289,6 +349,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get view URL
+     *
      * @return \Magento\View\Url
      */
     public function getViewUrl()
@@ -297,6 +359,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get view config
+     *
      * @return \Magento\View\ConfigInterface
      */
     public function getViewConfig()
@@ -305,6 +369,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get cache state
+     *
      * @return \Magento\App\Cache\StateInterface
      */
     public function getCacheState()
@@ -313,6 +379,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get logger
+     *
      * @return \Magento\Logger
      */
     public function getLogger()
@@ -321,6 +389,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get application
+     *
      * @return \Magento\Core\Model\App
      */
     public function getApp()
@@ -329,6 +399,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get escaper
+     *
      * @return \Magento\Escaper
      */
     public function getEscaper()
@@ -337,6 +409,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get filter manager
+     *
      * @return \Magento\Filter\FilterManager
      */
     public function getFilterManager()
@@ -345,6 +419,8 @@ class Context implements \Magento\ObjectManager\ContextInterface
     }
 
     /**
+     * Get locale
+     *
      * @return \Magento\Core\Model\LocaleInterface
      */
     public function getLocale()

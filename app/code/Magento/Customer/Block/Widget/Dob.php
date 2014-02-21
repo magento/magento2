@@ -49,12 +49,14 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
 
     public function isEnabled()
     {
-        return (bool)$this->_getAttribute('dob')->isVisible();
+        $attributeMetadata = $this->_getAttribute('dob');
+        return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;
     }
 
     public function isRequired()
     {
-        return (bool)$this->_getAttribute('dob')->isRequired();
+        $attributeMetadata = $this->_getAttribute('dob');
+        return $attributeMetadata ? (bool)$attributeMetadata->isRequired() : false;
     }
 
     public function setDate($date)
@@ -128,22 +130,34 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
     /**
      * Return minimal date range value
      *
-     * @return string
+     * @return string|null
      */
     public function getMinDateRange()
     {
-        $rules = $this->_getAttribute('dob')->getValidationRules();
-        return isset($rules[self::MIN_DATE_RANGE_KEY]) ? date("Y/m/d", $rules[self::MIN_DATE_RANGE_KEY]) : null;
+        $dob = $this->_getAttribute('dob');
+        if (!is_null($dob)) {
+            $rules = $this->_getAttribute('dob')->getValidationRules();
+            if (isset($rules[self::MIN_DATE_RANGE_KEY])) {
+                return date("Y/m/d", $rules[self::MIN_DATE_RANGE_KEY]);
+            }
+        }
+        return null;
     }
 
     /**
      * Return maximal date range value
      *
-     * @return string
+     * @return string|null
      */
     public function getMaxDateRange()
     {
-        $rules = $this->_getAttribute('dob')->getValidationRules();
-        return isset($rules[self::MAX_DATE_RANGE_KEY]) ? date("Y/m/d", $rules[self::MAX_DATE_RANGE_KEY]) : null;
+        $dob = $this->_getAttribute('dob');
+        if (!is_null($dob)) {
+            $rules = $this->_getAttribute('dob')->getValidationRules();
+            if (isset($rules[self::MAX_DATE_RANGE_KEY])) {
+                return date("Y/m/d", $rules[self::MAX_DATE_RANGE_KEY]);
+            }
+        }
+        return null;
     }
 }

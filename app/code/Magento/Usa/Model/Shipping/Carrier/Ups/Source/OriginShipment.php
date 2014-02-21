@@ -41,11 +41,14 @@ class OriginShipment extends \Magento\Usa\Model\Shipping\Carrier\Ups\Source\Gene
      */
     protected $_code = 'originShipment';
 
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         $orShipArr = $this->_shippingUps->getCode($this->_code);
         $returnArr = array();
-        foreach ($orShipArr as $key => $val){
+        foreach ($orShipArr as $key => $val) {
             $returnArr[] = array('value' => $key,'label' => $key);
         }
         return $returnArr;

@@ -175,11 +175,12 @@ class Changelog implements ChangelogInterface
         if (!$this->write->isTableExists($changelogTableName)) {
             throw new \Exception("Table {$changelogTableName} does not exist");
         }
-
-        $select = $this->write->select()
-            ->from($changelogTableName, new \Zend_Db_Expr('MAX(`version_id`)'));
-
-        return (int)$this->write->fetchOne($select);
+        $row = $this->write->fetchRow('SHOW TABLE STATUS LIKE ?', array($changelogTableName));
+        if (isset($row['Auto_increment'])) {
+            return (int)$row['Auto_increment'] - 1;
+        } else {
+            throw new \Exception("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.");
+        }
     }
 
     /**
@@ -212,10 +213,12 @@ class Changelog implements ChangelogInterface
      * Set view's identifier
      *
      * @param string $viewId
+     * @return Changelog
      */
     public function setViewId($viewId)
     {
         $this->viewId = $viewId;
+        return $this;
     }
 
     /**

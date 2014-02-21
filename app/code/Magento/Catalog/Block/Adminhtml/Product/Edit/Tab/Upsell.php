@@ -63,7 +63,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_type;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Status
+     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
      */
     protected $_status;
 
@@ -79,7 +79,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
-     * @param \Magento\Catalog\Model\Product\Status $status
+     * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Core\Model\Registry $coreRegistry
      * @param array $data
@@ -93,7 +93,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
-        \Magento\Catalog\Model\Product\Status $status,
+        \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Core\Model\Registry $coreRegistry,
         array $data = array()

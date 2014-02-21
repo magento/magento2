@@ -44,6 +44,8 @@ class ProcessorFactory
     protected $instanceName;
 
     /**
+     * Constructor
+     *
      * @param \Magento\ObjectManager $objectManager
      * @param string $instanceName
      */

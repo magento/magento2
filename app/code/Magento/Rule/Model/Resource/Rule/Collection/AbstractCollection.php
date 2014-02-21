@@ -61,16 +61,16 @@ abstract class AbstractCollection
     /**
      * Quote rule environment
      *
-     * @deprecated after 1.6.1.0
-     *
      * @var \Magento\Rule\Model\Environment
+     *
+     * @deprecated after 1.6.1.0
      */
     protected $_env;
 
     /**
      * Add website ids to rules data
      *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -89,8 +89,7 @@ abstract class AbstractCollection
      * Init flag for adding rule website ids to collection result
      *
      * @param bool|null $flag
-     *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @return $this
      */
     public function addWebsitesToResult($flag = null)
     {
@@ -102,9 +101,8 @@ abstract class AbstractCollection
     /**
      * Limit rules collection by specific websites
      *
-     * @param int|array|\Magento\Core\Model\Website $websiteId
-     *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @param int|int[]|\Magento\Core\Model\Website $websiteId
+     * @return $this
      */
     public function addWebsiteFilter($websiteId)
     {
@@ -130,9 +128,8 @@ abstract class AbstractCollection
      * Provide support for website id filter
      *
      * @param string $field
-     * @param mixed $condition
-     *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @param null|string|array $condition
+     * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -144,13 +141,12 @@ abstract class AbstractCollection
         return $this;
     }
 
-   /**
-    * Filter collection to only active or inactive rules
-    *
-    * @param int $isActive
-    *
-    * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
-    */
+    /**
+     * Filter collection to only active or inactive rules
+     *
+     * @param int $isActive
+     * @return $this
+     */
     public function addIsActiveFilter($isActive = 1)
     {
         if (!$this->getFlag('is_active_filter')) {
@@ -187,10 +183,10 @@ abstract class AbstractCollection
     /**
      * Set environment for all rules in collection
      *
-     * @deprecated after 1.6.2.0
-     *
      * @param \Magento\Rule\Model\Environment $env
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @return $this
+     *
+     * @deprecated after 1.6.2.0
      */
     public function setEnv( $env = null)
     {
@@ -201,9 +197,9 @@ abstract class AbstractCollection
     /**
      * Retrieve environment for the rules in collection
      *
-     * @deprecated after 1.6.2.0
+     * @return $this
      *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @deprecated after 1.6.2.0
      */
     public function getEnv()
     {
@@ -213,9 +209,9 @@ abstract class AbstractCollection
     /**
      * Set filter for the collection based on the environment
      *
-     * @deprecated after 1.6.2.0
+     * @return $this
      *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @deprecated after 1.6.2.0
      */
     public function setActiveFilter()
     {
@@ -225,9 +221,9 @@ abstract class AbstractCollection
     /**
      * Process the quote with all the rules in collection
      *
-     * @deprecated after 1.6.2.0
+     * @return $this
      *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @deprecated after 1.6.2.0
      */
     public function process()
     {

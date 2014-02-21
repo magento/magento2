@@ -84,7 +84,7 @@ class Freeshipping
      * FreeShipping Rates Collector
      *
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return \Magento\Shipping\Model\Rate\Result|bool
      */
     public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
@@ -143,6 +143,9 @@ class Freeshipping
         }
     }
 
+    /**
+     * @return array
+     */
     public function getAllowedMethods()
     {
         return array('freeshipping'=>$this->getConfigData('name'));

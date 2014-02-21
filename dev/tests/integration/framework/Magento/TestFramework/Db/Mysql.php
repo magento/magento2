@@ -37,11 +37,57 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     public function cleanup()
     {
-        $script = $this->_varPath . '/drop_create_database.sql';
-        $this->_createScript($script, "DROP DATABASE `{$this->_schema}`; CREATE DATABASE `{$this->_schema}`");
+        $this->_shell->execute(
+            'mysql --host=%s --user=%s --password=%s %s -e %s',
+            array(
+                $this->_host,
+                $this->_user,
+                $this->_password,
+                $this->_schema,
+                "DROP DATABASE `{$this->_schema}`; CREATE DATABASE `{$this->_schema}`"
+            )
+        );
+    }
+
+    /**
+     * Get filename for setup db dump
+     *
+     * @return string
+     */
+    protected function getSetupDbDumpFilename()
+    {
+        return $this->_varPath . '/setup_dump.sql';
+    }
+
+    /**
+     * Is dump esxists
+     *
+     * @return bool
+     */
+    public function isDbDumpExists()
+    {
+        return file_exists($this->getSetupDbDumpFilename());
+    }
+
+    /**
+     * Store setup db dump
+     */
+    public function storeDbDump()
+    {
+        $this->_shell->execute(
+            'mysqldump --host=%s --user=%s --password=%s %s > %s',
+            array($this->_host, $this->_user, $this->_password, $this->_schema, $this->getSetupDbDumpFilename())
+        );
+    }
+
+    /**
+     * Restore db from setup db dump
+     */
+    public function restoreFromDbDump()
+    {
         $this->_shell->execute(
             'mysql --host=%s --user=%s --password=%s %s < %s',
-            array($this->_host, $this->_user, $this->_password, $this->_schema, $script)
+            array($this->_host, $this->_user, $this->_password, $this->_schema, $this->getSetupDbDumpFilename())
         );
     }
 }

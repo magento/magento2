@@ -30,7 +30,6 @@ class Validator
 {
     /**
      * Validators list by data key
-     *
      * array('dataKey' => array('validator_name' => [validators], ...), ...)
      *
      * @var array
@@ -39,7 +38,6 @@ class Validator
 
     /**
      * List of errors after validation process
-     *
      * array('dataKey' => 'Error message')
      *
      * @var array
@@ -59,7 +57,7 @@ class Validator
     /**
      * Set version validators
      *
-     * @return Validator
+     * @return $this
      */
     protected function _setVersionValidators()
     {
@@ -79,7 +77,7 @@ class Validator
     /**
      * Set title validators
      *
-     * @return Validator
+     * @return $this
      */
     protected function _setTitleValidators()
     {
@@ -100,7 +98,7 @@ class Validator
     /**
      * Set theme type validators
      *
-     * @return Validator
+     * @return $this
      */
     protected function _setTypeValidators()
     {
@@ -137,7 +135,7 @@ class Validator
      *
      * @param string $dataKey
      * @param array $validators
-     * @return Validator
+     * @return $this
      */
     public function addDataValidators($dataKey, $validators)
     {
@@ -167,8 +165,8 @@ class Validator
     /**
      * Instantiate class validator
      *
-     * @param array $validators
-     * @return Validator
+     * @param array &$validators
+     * @return $this
      */
     protected function _instantiateValidators(array &$validators)
     {

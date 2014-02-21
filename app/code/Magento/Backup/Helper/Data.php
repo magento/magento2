@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Helper;
 
 /**
  * Backup data helper
  */
-namespace Magento\Backup\Helper;
-
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
@@ -92,7 +91,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Get all possible backup type values
      *
-     * @return array
+     * @return string[]
      */
     public function getBackupTypesList()
     {
@@ -167,7 +166,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Check Permission for Rollback
      *
-     * @return boolean
+     * @return bool
      */
     public function isRollbackAllowed()
     {
@@ -177,7 +176,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Get paths that should be ignored when creating system snapshots
      *
-     * @return array
+     * @return string[]
      */
     public function getBackupIgnorePaths()
     {
@@ -197,7 +196,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Get paths that should be ignored when rolling back system snapshots
      *
-     * @return array
+     * @return string[]
      */
     public function getRollbackIgnorePaths()
     {
@@ -231,6 +230,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
     /**
      * Turn off store maintenance mode
+     *
+     * @return void
      */
     public function turnOffMaintenanceMode()
     {
@@ -242,7 +243,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Get backup create success message by backup type
      *
      * @param string $type
-     * @return string
+     * @return void|string
      */
     public function getCreateSuccessMessageByType($type)
     {
@@ -273,7 +274,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Invalidate Cache
      *
-     * @return \Magento\Backup\Helper\Data
+     * @return $this
      */
     public function invalidateCache()
     {
@@ -287,7 +288,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Invalidate Indexer
      *
-     * @return \Magento\Backup\Helper\Data
+     * @return $this
      */
     public function invalidateIndexer()
     {

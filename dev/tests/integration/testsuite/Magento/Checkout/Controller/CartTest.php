@@ -163,42 +163,6 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Test for \Magento\Checkout\Controller\Cart::configureAction() with configurable product
-     *
-     * @magentoDataFixture Magento/Checkout/_files/quote_with_configurable_product.php
-     */
-    public function testConfigureActionWithConfigurableProduct()
-    {
-        /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
-
-        $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), 1);
-        $this->assertNotNull($quoteItem, 'Cannot get quote item for configurable product');
-
-        $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
-        $response = $this->getResponse();
-
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
-
-        $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
-            1,
-            $response->getBody(),
-            'Response for configurable product doesn\'t contain "Update Cart" button'
-        );
-
-        $this->assertSelectCount(
-            'select.super-attribute-select',
-            1,
-            $response->getBody(),
-            'Response for configurable product doesn\'t contain select for super attribute'
-        );
-    }
-
-    /**
      * Gets \Magento\Sales\Model\Quote\Item from \Magento\Sales\Model\Quote by product id
      *
      * @param \Magento\Sales\Model\Quote $quote

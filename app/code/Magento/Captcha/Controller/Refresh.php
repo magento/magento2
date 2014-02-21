@@ -23,23 +23,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Captcha\Controller;
 
 /**
  * Captcha controller
  *
- * @category   Magento
- * @package    Magento_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Captcha\Controller;
-
 class Refresh extends \Magento\App\Action\Action
 {
     /**
      * Refreshes captcha and returns JSON encoded URL to image (AJAX action)
      * Example: {'imgSrc': 'http://example.com/media/captcha/67842gh187612ngf8s.png'}
      *
-     * @return null
+     * @return void
      */
     public function indexAction()
     {

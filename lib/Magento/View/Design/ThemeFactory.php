@@ -34,11 +34,15 @@ use Magento\ObjectManager;
 class ThemeFactory
 {
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      */
     public function __construct(ObjectManager $objectManager)
@@ -47,8 +51,10 @@ class ThemeFactory
     }
 
     /**
+     * Get theme
+     *
      * @param int $themeId
-     * @return \Magento\View\Design\ThemeInterface
+     * @return null|\Magento\View\Design\ThemeInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTheme($themeId)

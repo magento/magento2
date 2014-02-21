@@ -36,11 +36,14 @@ class Unitofmeasure extends \Magento\Usa\Model\Shipping\Carrier\Ups\Source\Gener
      */
     protected $_code = 'unit_of_measure';
 
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         $unitArr = $this->_shippingUps->getCode($this->_code);
         $returnArr = array();
-        foreach ($unitArr as $key => $val){
+        foreach ($unitArr as $key => $val) {
             $returnArr[] = array('value'=>$key,'label'=>$key);
         }
         return $returnArr;

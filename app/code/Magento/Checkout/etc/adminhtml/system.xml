@@ -62,10 +62,6 @@
                     <label>After Adding a Product Redirect to Shopping Cart</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="configurable_product_image" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Configurable Product Image</label>
-                    <source_model>Magento\Catalog\Model\Config\Source\Product\Thumbnail</source_model>
-                </field>
             </group>
             <group id="cart_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>My Cart Link</label>

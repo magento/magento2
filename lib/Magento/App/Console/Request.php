@@ -35,15 +35,16 @@ class Request implements \Magento\App\RequestInterface
     /**
      * @param array $parameters
      */
-    public function __construct($parameters = array())
-    {
-        $this->params = $this->setParam($parameters);
+    public function __construct(
+        array $parameters = array()
+    ) {
+        $this->setParam($parameters);
     }
 
     /**
      * Initialize console parameters
      *
-     * @param $parameters
+     * @param array $parameters
      */
     public function setParam($parameters)
     {

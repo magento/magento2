@@ -23,6 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Integration\Model\Resource\Oauth\Nonce;
 
 /**
  * OAuth nonce resource collection model
@@ -31,8 +32,6 @@
  * @package     Magento_Oauth
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Integration\Model\Resource\Oauth\Nonce;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**

@@ -23,12 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\CatalogRule\Model\Rule">
-        <param name="relatedCacheTypes">
-            <array>
-                <item key="blockCache"><value>block_html</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="relatedCacheTypes" xsi:type="array">
+                <item name="blockCache" xsi:type="string">block_html</item>
+            </argument>
+        </arguments>
     </type>
 </config>

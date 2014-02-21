@@ -24,29 +24,10 @@
 
 namespace Magento\Mview\View;
 
-class SubscriptionFactory
+class SubscriptionFactory extends AbstractFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * Instance name
      */
-    protected $objectManager;
-
-    /**
-     * @param \Magento\ObjectManager $objectManager
-     */
-    public function __construct(\Magento\ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
-    /**
-     * Create class instance with specified parameters
-     *
-     * @param array $data
-     * @return StateInterface
-     */
-    public function create(array $data = array())
-    {
-        return $this->objectManager->create('Magento\Mview\View\SubscriptionInterface', $data);
-    }
+    const INSTANCE_NAME = 'Magento\Mview\View\SubscriptionInterface';
 }

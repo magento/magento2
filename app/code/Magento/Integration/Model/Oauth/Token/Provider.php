@@ -29,16 +29,24 @@ use Magento\Oauth\TokenProviderInterface;
 
 class Provider implements TokenProviderInterface
 {
-    /** @var \Magento\Integration\Model\Oauth\Consumer\Factory */
+    /**
+     * @var \Magento\Integration\Model\Oauth\Consumer\Factory
+     */
     protected $_consumerFactory;
 
-    /** @var \Magento\Integration\Model\Oauth\Token\Factory */
+    /**
+     * @var \Magento\Integration\Model\Oauth\Token\Factory
+     */
     protected $_tokenFactory;
 
-    /** @var  \Magento\Integration\Helper\Oauth\Data */
+    /**
+     * @var  \Magento\Integration\Helper\Oauth\Data
+     */
     protected $_dataHelper;
 
-    /** @var \Magento\Core\Model\Date */
+    /**
+     * @var \Magento\Core\Model\Date
+     */
     protected $_date;
 
     /**
@@ -204,6 +212,7 @@ class Provider implements TokenProviderInterface
      *
      * @param string $oauthVerifier
      * @param string $tokenVerifier
+     * @return void
      * @throws \Magento\Oauth\Exception
      */
     protected function _validateVerifierParam($oauthVerifier, $tokenVerifier)

@@ -21,13 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Block\Adminhtml\Order;
 
 /**
  * Shipment tracking control form
  *
  */
-namespace Magento\Shipping\Block\Adminhtml\Order;
-
 class Tracking extends \Magento\Backend\Block\Template
 {
     /**
@@ -62,7 +61,7 @@ class Tracking extends \Magento\Backend\Block\Template
     /**
      * Prepares layout of block
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\View\Giftmessage
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -101,6 +100,9 @@ class Tracking extends \Magento\Backend\Block\Template
         return $carriers;
     }
 
+    /**
+     * @return array
+     */
     protected function _getCarriersInstances()
     {
         return $this->_shippingConfig->getAllCarriers(

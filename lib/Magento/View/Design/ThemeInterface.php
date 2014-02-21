@@ -100,8 +100,9 @@ interface ThemeInterface
 
     /**
      * Return the full theme inheritance sequence, from the root theme till a specified one
+     * Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
      *
-     * @return ThemeInterface[] Format: array([<root_theme>, ..., <parent_theme>,] <current_theme>)
+     * @return ThemeInterface[]
      */
     public function getInheritedThemes();
 

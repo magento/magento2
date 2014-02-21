@@ -49,6 +49,11 @@ class Merge implements \Magento\View\Layout\ProcessorInterface
     const XPATH_HANDLE_DECLARATION = '/layout[@*]';
 
     /**
+     * Name of an attribute that stands for data type of node values
+     */
+    const TYPE_ATTRIBUTE = 'xsi:type';
+
+    /**
      * @var \Magento\Core\Model\Theme
      */
     private $_theme;

@@ -151,6 +151,49 @@ class Collection implements \IteratorAggregate, \Countable, \Magento\Core\Model\
     }
 
     /**
+     * Add field filter to collection
+     *
+     * If $condition integer or string - exact value will be filtered ('eq' condition)
+     *
+     * If $condition is array - one of the following structures is expected:
+     * <pre>
+     * - ["from" => $fromValue, "to" => $toValue]
+     * - ["eq" => $equalValue]
+     * - ["neq" => $notEqualValue]
+     * - ["like" => $likeValue]
+     * - ["in" => [$inValues]]
+     * - ["nin" => [$notInValues]]
+     * - ["notnull" => $valueIsNotNull]
+     * - ["null" => $valueIsNull]
+     * - ["moreq" => $moreOrEqualValue]
+     * - ["gt" => $greaterValue]
+     * - ["lt" => $lessValue]
+     * - ["gteq" => $greaterOrEqualValue]
+     * - ["lteq" => $lessOrEqualValue]
+     * - ["finset" => $valueInSet]
+     * </pre>
+     *
+     * If non matched - sequential parallel arrays are expected and OR conditions
+     * will be built using above mentioned structure.
+     *
+     * Example:
+     * <pre>
+     * $field = ['age', 'name'];
+     * $condition = [42, ['like' => 'Mage']];
+     * </pre>
+     * The above would find where age equal to 42 OR name like %Mage%.
+     *
+     * @param string|array $field
+     * @param string|int|array $condition
+     * @throws \Magento\Exception if some error in the input could be detected.
+     * @return $this
+     */
+    public function addFieldToFilter($field, $condition)
+    {
+        throw new \Magento\Exception('Not implemented');
+    }
+
+    /**
      * Search for a filter by specified field
      *
      * Multiple filters can be matched if an array is specified:

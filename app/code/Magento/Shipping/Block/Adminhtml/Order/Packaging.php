@@ -21,13 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Block\Adminhtml\Order;
 
 /**
  * Adminhtml shipment packaging
  */
-
-namespace Magento\Shipping\Block\Adminhtml\Order;
-
 class Packaging extends \Magento\Backend\Block\Template
 {
     /**
@@ -249,8 +247,8 @@ class Packaging extends \Magento\Backend\Block\Template
     /**
      * Get item of shipment by its id
      *
-     * @param  $itemId
-     * @param  $itemsOf
+     * @param string $itemId
+     * @param string $itemsOf
      * @return \Magento\Object
      */
     public function getShipmentItem($itemId, $itemsOf)
@@ -324,6 +322,8 @@ class Packaging extends \Magento\Backend\Block\Template
 
     /**
      * Check whether girth is allowed for current carrier
+     *
+     * @return bool
      */
     public function isGirthAllowed()
     {

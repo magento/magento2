@@ -29,6 +29,8 @@ namespace Magento\View\Design\Theme;
 interface FileProviderInterface
 {
     /**
+     * Get items
+     *
      * @param \Magento\View\Design\ThemeInterface $theme
      * @param array $filters
      * @return \Magento\View\Design\Theme\FileInterface[]

@@ -29,6 +29,8 @@
  */
 namespace Magento\Rule\Model;
 
+use Magento\Core\Exception;
+
 abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -116,14 +118,15 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare data before saving
      *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
+     * @throws Exception
      */
     protected function _beforeSave()
     {
         // Check if discount amount not negative
         if ($this->hasDiscountAmount()) {
             if ((int)$this->getDiscountAmount() < 0) {
-                throw new \Magento\Core\Exception(__('Invalid discount amount.'));
+                throw new Exception(__('Invalid discount amount.'));
             }
         }
 
@@ -169,8 +172,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set rule combine conditions model
      *
      * @param \Magento\Rule\Model\Condition\Combine $conditions
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function setConditions($conditions)
     {
@@ -208,8 +210,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set rule actions model
      *
      * @param \Magento\Rule\Model\Action\Collection $actions
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function setActions($actions)
     {
@@ -247,8 +248,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Reset rule combine conditions
      *
      * @param null|\Magento\Rule\Model\Condition\Combine $conditions
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     protected function _resetConditions($conditions = null)
     {
@@ -265,8 +265,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Reset rule actions
      *
      * @param null|\Magento\Rule\Model\Action\Collection $actions
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     protected function _resetActions($actions = null)
     {
@@ -296,8 +295,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Initialize rule model data from array
      *
      * @param array $data
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function loadPost(array $data)
     {
@@ -318,7 +316,6 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Convert dates into \Zend_Date.
      *
      * @param array $data
-     *
      * @return array
      */
     protected function _convertFlatToRecursive(array $data)
@@ -362,7 +359,6 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Validate rule conditions to determine if rule can run
      *
      * @param \Magento\Object $object
-     *
      * @return bool
      */
     public function validate(\Magento\Object $object)
@@ -374,8 +370,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Validate rule data
      *
      * @param \Magento\Object $object
-     *
-     * @return bool|array - return true if validation passed successfully. Array with errors description otherwise
+     * @return bool|string[] - return true if validation passed successfully. Array with errors description otherwise
      */
     public function validateData(\Magento\Object $object)
     {
@@ -426,8 +421,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set is rule can be deleted flag
      *
      * @param bool $value
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function setIsDeleteable($value)
     {
@@ -449,8 +443,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set is readonly flag to rule
      *
      * @param bool $value
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function setIsReadonly($value)
     {
@@ -476,11 +469,10 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
 
 
     /**
-     * @deprecated since 1.7.0.0
-     *
      * @param string $format
-     *
      * @return string
+     *
+     * @deprecated since 1.7.0.0
      */
     public function asString($format = '')
     {
@@ -488,9 +480,9 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @deprecated since 1.7.0.0
-     *
      * @return string
+     *
+     * @deprecated since 1.7.0.0
      */
     public function asHtml()
     {
@@ -500,11 +492,10 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Returns rule as an array for admin interface
      *
-     * @deprecated since 1.7.0.0
-     *
      * @param array $arrAttributes
-     *
      * @return array
+     *
+     * @deprecated since 1.7.0.0
      */
     public function asArray(array $arrAttributes = array())
     {
@@ -514,9 +505,9 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Combine website ids to string
      *
-     * @deprecated since 1.7.0.0
+     * @return $this
      *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @deprecated since 1.7.0.0
      */
     protected function _prepareWebsiteIds()
     {

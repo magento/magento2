@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer Service Address Interface
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,15 +23,18 @@
  */
 namespace Magento\Customer\Service\V1\Dto;
 
-use Magento\Customer\Service\V1\Dto\Filter;
+use Magento\Service\Entity\AbstractDto;
 
-class SearchCriteria extends \Magento\Service\Entity\AbstractDto
+/**
+ * DTO for SearchCriteria
+ */
+class SearchCriteria extends AbstractDto
 {
     const SORT_ASC = 1;
     const SORT_DESC = -1;
 
     /**
-     * @return Filter[]
+     * @return \Magento\Customer\Service\V1\Dto\Search\FilterGroupInterface
      */
     public function getFilters()
     {

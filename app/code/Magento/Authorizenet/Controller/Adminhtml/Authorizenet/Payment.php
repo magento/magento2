@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet;
 
 /**
  * Authorize Payment Controller
  *
- * @category   Magento
- * @package    Magento_Authorizenet
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet;
-
 class Payment extends \Magento\Backend\App\Action
 {
     /**
@@ -54,9 +51,10 @@ class Payment extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
-
     /**
-     * Cancel active partail authorizations
+     * Cancel active partial authorizations
+     *
+     * @return void
      */
     public function cancelAction()
     {

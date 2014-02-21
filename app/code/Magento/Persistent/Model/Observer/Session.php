@@ -23,8 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Persistent\Model\Observer;
+
+use Magento\Event\Observer;
 
 /**
  * Persistent Session Observer
@@ -99,7 +100,11 @@ class Session
         $this->_sessionFactory = $sessionFactory;
     }
 
-    public function synchronizePersistentOnLogin(\Magento\Event\Observer $observer)
+    /**
+     * @param Observer $observer
+     * @return void
+     */
+    public function synchronizePersistentOnLogin(Observer $observer)
     {
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $observer->getEvent()->getCustomer();
@@ -148,9 +153,10 @@ class Session
     /**
      * Unload persistent session (if set in config)
      *
-     * @param \Magento\Event\Observer $observer
+     * @param Observer $observer
+     * @return void
      */
-    public function synchronizePersistentOnLogout(\Magento\Event\Observer $observer)
+    public function synchronizePersistentOnLogout(Observer $observer)
     {
         if (!$this->_persistentData->isEnabled() || !$this->_persistentData->getClearOnLogout()) {
             return;
@@ -172,9 +178,10 @@ class Session
     /**
      * Synchronize persistent session info
      *
-     * @param \Magento\Event\Observer $observer
+     * @param Observer $observer
+     * @return void
      */
-    public function synchronizePersistentInfo(\Magento\Event\Observer $observer)
+    public function synchronizePersistentInfo(Observer $observer)
     {
         if (!$this->_persistentData->isEnabled() || !$this->_persistentSession->isPersistent()) {
             return;
@@ -197,9 +204,10 @@ class Session
     /**
      * Set Checked status of "Remember Me"
      *
-     * @param \Magento\Event\Observer $observer
+     * @param Observer $observer
+     * @return void
      */
-    public function setRememberMeCheckedStatus(\Magento\Event\Observer $observer)
+    public function setRememberMeCheckedStatus(Observer $observer)
     {
         if (!$this->_persistentData->canProcess($observer)
             || !$this->_persistentData->isEnabled()
@@ -224,9 +232,10 @@ class Session
     /**
      * Renew persistent cookie
      *
-     * @param \Magento\Event\Observer $observer
+     * @param Observer $observer
+     * @return void
      */
-    public function renewCookie(\Magento\Event\Observer $observer)
+    public function renewCookie(Observer $observer)
     {
         if (!$this->_persistentData->canProcess($observer)
             || !$this->_persistentData->isEnabled()

@@ -35,6 +35,9 @@ namespace Magento\Widget\Block\Adminhtml;
 
 class Widget extends \Magento\Backend\Block\Widget\Form\Container
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();

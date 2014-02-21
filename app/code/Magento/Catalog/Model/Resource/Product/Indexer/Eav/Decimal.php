@@ -85,7 +85,7 @@ class Decimal extends AbstractEav
             ->where('pdd.attribute_id IN(?)', $attrIds)
             ->where("{$productValueExpression} IS NOT NULL");
 
-        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'pdd.entity_id', 'cs.store_id', $statusCond);
 
         if (!is_null($entityIds)) {

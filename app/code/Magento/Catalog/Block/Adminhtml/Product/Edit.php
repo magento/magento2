@@ -189,14 +189,6 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @return string
-     */
-    public function getDuplicateButtonHtml()
-    {
-        return $this->getChildHtml('duplicate_button');
-    }
-
-    /**
      * Get Save Split Button html
      *
      * @return string
@@ -286,22 +278,6 @@ class Edit extends \Magento\Backend\Block\Widget
             return $set->getAttributeSetName();
         }
         return '';
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsConfigured()
-    {
-        $result = true;
-
-        $product = $this->getProduct();
-        if ($product->isConfigurable()) {
-            $superAttributes = $product->getTypeInstance()->getUsedProductAttributeIds($product);
-            $result = !empty($superAttributes);
-        }
-
-        return $result;
     }
 
     /**

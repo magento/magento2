@@ -29,6 +29,9 @@ namespace Magento\Usa\Model\Shipping\Carrier\Dhl\Source\Protection;
 
 class Rounding extends \Magento\Usa\Model\Shipping\Carrier\Dhl\Source\Generic
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         $carrier = $this->_shippingDhl;

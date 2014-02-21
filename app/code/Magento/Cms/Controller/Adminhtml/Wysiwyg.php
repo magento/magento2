@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Controller\Adminhtml;
 
 /**
  * Wysiwyg controller for different purposes
@@ -31,14 +32,14 @@
  * @package     Magento_Cms
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Controller\Adminhtml;
-
 class Wysiwyg extends \Magento\Backend\App\Action
 {
     /**
      * Template directives callback
      *
-     * TODO: move this to some model
+     * @todo: move this to some model
+     *
+     * @return void
      */
     public function directiveAction()
     {

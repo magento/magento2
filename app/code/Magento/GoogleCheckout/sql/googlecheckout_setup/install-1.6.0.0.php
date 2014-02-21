@@ -74,7 +74,6 @@ $installer->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'enable_googlec
     'visible_on_front'  => false,
     'unique'            => false,
     'apply_to'          => '',
-    'is_configurable'   => false
 ));
 
 /**

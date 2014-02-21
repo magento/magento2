@@ -40,27 +40,6 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\Catalog\Helper\Product\Flat');
     }
 
-    public function testGetFlag()
-    {
-        $flag = $this->_helper->getFlag();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Flat\Flag', $flag);
-    }
-
-    public function testIsBuilt()
-    {
-        $this->assertFalse($this->_helper->isBuilt());
-        $flag = $this->_helper->getFlag();
-        try {
-            $flag->setIsBuilt(true);
-            $this->assertTrue($this->_helper->isBuilt());
-
-            $flag->setIsBuilt(false);
-        } catch (\Exception $e) {
-            $flag->setIsBuilt(false);
-            throw $e;
-        }
-    }
-
     public function testIsEnabledDefault()
     {
 

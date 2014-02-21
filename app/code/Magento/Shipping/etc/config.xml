@@ -28,10 +28,6 @@
 <config>
     <default>
         <shipping>
-            <option>
-                <checkout_multiple>1</checkout_multiple>
-                <checkout_multiple_maximum_qty>100</checkout_multiple_maximum_qty>
-            </option>
             <origin>
                 <country_id>US</country_id>
                 <postcode>90034</postcode>

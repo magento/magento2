@@ -102,6 +102,30 @@ abstract class AbstractDb
     abstract public function cleanup();
 
     /**
+     * Get filename for setup db dump
+     *
+     * @return string
+     */
+    abstract protected function getSetupDbDumpFilename();
+
+    /**
+     * Is dump esxists
+     *
+     * @return bool
+     */
+    abstract public function isDbDumpExists();
+
+    /**
+     * Store setup db dump
+     */
+    abstract public function storeDbDump();
+
+    /**
+     * Restore db from setup db dump
+     */
+    abstract public function restoreFromDbDump();
+
+    /**
      * Create file with sql script content.
      * Utility method that is used in children classes
      *

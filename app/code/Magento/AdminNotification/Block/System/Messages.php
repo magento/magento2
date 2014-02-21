@@ -55,6 +55,8 @@ class Messages extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Prepare html output
+     *
      * @return string
      */
     protected function _toHtml()

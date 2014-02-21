@@ -33,11 +33,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 
+use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
+
 class Main extends \Magento\Backend\Block\Template
 {
-    /**
-     * @var string
-     */
     protected $_template = 'catalog/product/attribute/set/main.phtml';
 
     /**
@@ -70,24 +69,23 @@ class Main extends \Magento\Backend\Block\Template
     protected $_groupFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Type\Configurable\AttributeFactory
-     */
-    protected $_attributeFactory;
-
-    /**
      * @var \Magento\Json\EncoderInterface
      */
     protected $_jsonEncoder;
+
+    /**
+     * @var \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface
+     */
+    protected $attributeMapper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Type\Configurable\AttributeFactory $attributeFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Core\Model\Registry $registry
+     * @param AttributeMapperInterface $attributeMapper
      * @param array $data
      */
     public function __construct(
@@ -95,19 +93,17 @@ class Main extends \Magento\Backend\Block\Template
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
-        \Magento\Catalog\Model\Resource\Product\Type\Configurable\AttributeFactory $attributeFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
-        \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Core\Model\Registry $registry,
+        AttributeMapperInterface $attributeMapper,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_typeFactory = $typeFactory;
         $this->_groupFactory = $groupFactory;
-        $this->_attributeFactory = $attributeFactory;
         $this->_collectionFactory = $collectionFactory;
         $this->_coreRegistry = $registry;
-        $this->_catalogProduct = $catalogProduct;
+        $this->attributeMapper = $attributeMapper;
         parent::__construct($context, $data);
     }
 
@@ -234,10 +230,6 @@ class Main extends \Magento\Backend\Block\Template
             ->setSortOrder()
             ->load();
 
-        $configurable = $this->_attributeFactory->create()->getUsedAttributes($setId);
-
-        $unassignableAttributes = $this->_catalogProduct->getUnassignableAttributes();
-
         /* @var $node \Magento\Eav\Model\Entity\Attribute\Group */
         foreach ($groups as $node) {
             $item = array();
@@ -255,24 +247,7 @@ class Main extends \Magento\Backend\Block\Template
             if ($nodeChildren->getSize() > 0) {
                 $item['children'] = array();
                 foreach ($nodeChildren->getItems() as $child) {
-                    /* @var $child \Magento\Eav\Model\Entity\Attribute */
-
-                    $isUnassignable = !in_array($child->getAttributeCode(), $unassignableAttributes);
-
-                    $attr = array(
-                        'text'              => $child->getAttributeCode(),
-                        'id'                => $child->getAttributeId(),
-                        'cls'               => $isUnassignable ? 'leaf' : 'system-leaf',
-                        'allowDrop'         => false,
-                        'allowDrag'         => true,
-                        'leaf'              => true,
-                        'is_user_defined'   => $child->getIsUserDefined(),
-                        'is_configurable'   => (int)in_array($child->getAttributeId(), $configurable),
-                        'is_unassignable'   => $isUnassignable,
-                        'entity_id'         => $child->getEntityAttributeId()
-                    );
-
-                    $item['children'][] = $attr;
+                    $item['children'][] = $this->attributeMapper->map($child);
                 }
             }
 
@@ -316,7 +291,6 @@ class Main extends \Magento\Backend\Block\Template
                 'allowDrag'         => true,
                 'leaf'              => true,
                 'is_user_defined'   => $child->getIsUserDefined(),
-                'is_configurable'   => false,
                 'entity_id'         => $child->getEntityId()
             );
 

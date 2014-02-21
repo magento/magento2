@@ -27,9 +27,14 @@ return array(
             'attributeOne' => '10',
             'attributeTwo' => '20',
             'subnode' => array(
-                'attributeThree' => '40',
-                'attributeFour' => '40',
-                'value' => 'Value1',
+                array(
+                    'attributeThree' => '30',
+                ),
+                array(
+                    'attributeThree' => '40',
+                    'attributeFour' => '40',
+                    'value' => 'Value1',
+                ),
             ),
             'books' => array(
                 'attributeFive' => '50'

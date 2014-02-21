@@ -31,17 +31,6 @@
             <label>Shipping Settings</label>
             <tab>sales</tab>
             <resource>Magento_Shipping::config_shipping</resource>
-            <group id="option" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
-                <label>Options</label>
-                <field id="checkout_multiple" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Allow Shipping to Multiple Addresses</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="checkout_multiple_maximum_qty" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Maximum Qty Allowed for Shipping to Multiple Addresses</label>
-                    <validate>validate-number</validate>
-                </field>
-            </group>
             <group id="origin" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Origin</label>
                 <field id="country_id" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">

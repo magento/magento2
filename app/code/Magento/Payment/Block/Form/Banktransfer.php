@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Block\Form;
 
 /**
  * Block for Bank Transfer payment method form
  */
-namespace Magento\Payment\Block\Form;
-
 class Banktransfer extends \Magento\Payment\Block\Form
 {
 
@@ -39,6 +38,11 @@ class Banktransfer extends \Magento\Payment\Block\Form
      */
     protected $_instructions;
 
+    /**
+     * Bank transfer template
+     *
+     * @var string
+     */
     protected $_template = 'form/banktransfer.phtml';
 
     /**

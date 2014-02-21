@@ -37,6 +37,8 @@ class Currencysymbol extends \Magento\Backend\App\Action
 {
     /**
      * Show Currency Symbols Management dialog
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -58,6 +60,8 @@ class Currencysymbol extends \Magento\Backend\App\Action
 
     /**
      * Save custom Currency symbol
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -83,6 +87,8 @@ class Currencysymbol extends \Magento\Backend\App\Action
 
     /**
      * Resets custom Currency symbol for all store views, websites and default value
+     *
+     * @return void
      */
     public function resetAction()
     {
@@ -93,7 +99,7 @@ class Currencysymbol extends \Magento\Backend\App\Action
     /**
      * Check the permission to run it
      *
-     * @return boolean
+     * @return bool
      */
     protected function _isAllowed()
     {

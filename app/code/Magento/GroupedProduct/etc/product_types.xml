@@ -31,6 +31,7 @@
         <customAttributes>
             <attribute name="is_real_product" value="false"/>
             <attribute name="refundable" value="true"/>
+            <attribute name="taxable" value="false"/>
             <attribute name="is_product_set" value="true"/>
         </customAttributes>
     </type>

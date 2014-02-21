@@ -316,29 +316,6 @@ class Observer
     }
 
     /**
-     * Calculate price using catalog price rules of configurable product
-     *
-     * @param EventObserver $observer
-     * @return $this
-     */
-    public function catalogProductTypeConfigurablePrice(EventObserver $observer)
-    {
-        $product = $observer->getEvent()->getProduct();
-        if ($product instanceof Product
-            && $product->getConfigurablePrice() !== null
-        ) {
-            $configurablePrice = $product->getConfigurablePrice();
-            $productPriceRule = $this->_ruleFactory->create()
-                ->calcProductPriceRule($product, $configurablePrice);
-            if ($productPriceRule !== null) {
-                $product->setConfigurablePrice($productPriceRule);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Daily update catalog price rule by cron
      * Update include interval 3 days - current day - 1 days before + 1 days after
      * This method is called from cron process, cron is working in UTC time and

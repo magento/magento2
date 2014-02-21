@@ -23,20 +23,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Core\Model\Theme" type="Magento\Core\Model\Theme\Data" />
     <type name="Magento\App\RouterList" shared="true">
-        <param name="routerList">
-            <array>
-                <item key="install">
-                    <array>
-                        <item key="instance"><value>Magento\Core\App\Router\Base</value></item>
-                        <item key="disable"><value type="bool">false</value></item>
-                        <item key="sortOrder"><value>20</value></item>
-                    </array>
+        <arguments>
+            <argument name="routerList" xsi:type="array">
+                <item name="install" xsi:type="array">
+                    <item name="instance" xsi:type="string">Magento\Core\App\Router\Base</item>
+                    <item name="disable" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="string">20</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Install\Controller\Action">
         <plugin name="installInitializer" disabled="true" />

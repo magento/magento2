@@ -60,6 +60,11 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_customerHelper;
 
     /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $_directoryHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
@@ -71,6 +76,7 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Backend\Helper\Addresses $adminhtmlAddresses
      * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -87,6 +93,7 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Backend\Helper\Addresses $adminhtmlAddresses,
         \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Directory\Helper\Data $directoryHelper,
         array $data = array()
     ) {
         $this->_customerHelper = $customerHelper;
@@ -97,6 +104,7 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_addressFactory = $addressFactory;
         $this->_customerFactory = $customerFactory;
         $this->_systemStore = $systemStore;
+        $this->_directoryHelper = $directoryHelper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -264,11 +272,6 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
         return $this->getChildHtml('add_address_button');
     }
 
-    public function getTemplatePrefix()
-    {
-        return '_template_';
-    }
-
     /**
      * Return predefined additional element types
      *
@@ -281,25 +284,6 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
             'image'     => 'Magento\Customer\Block\Adminhtml\Form\Element\Image',
             'boolean'   => 'Magento\Customer\Block\Adminhtml\Form\Element\Boolean',
         );
-    }
-
-    /**
-     * Return JSON object with countries associated to possible websites
-     *
-     * @return string
-     */
-    public function getDefaultCountriesJson()
-    {
-        $websites = $this->_systemStore->getWebsiteValuesForForm(false, true);
-        $result = array();
-        foreach ($websites as $website) {
-            $result[$website['value']] = $this->_storeManager->getWebsite($website['value'])
-                ->getConfig(
-                    \Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY
-                );
-        }
-
-        return $this->_jsonEncoder->encode($result);
     }
 
     /**
@@ -328,5 +312,75 @@ class Addresses extends \Magento\Backend\Block\Widget\Form\Generic
             $this->getForm()->getElement('suffix')->addElementValues($values);
         }
         return $this;
+    }
+
+    /**
+     * Returns the template prefix
+     *
+     * @return string
+     */
+    public function getTemplatePrefix()
+    {
+        return '_template_';
+    }
+
+    /**
+     * Return array with countries associated to possible websites
+     *
+     * @return array
+     */
+    public function getDefaultCountries()
+    {
+        $websites = $this->_systemStore->getWebsiteValuesForForm(false, true);
+        $result = array();
+        foreach ($websites as $website) {
+            $result[$website['value']] = $this->_storeManager->getWebsite($website['value'])
+                ->getConfig(
+                    \Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY
+                );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return ISO2 country codes, which have optional Zip/Postal pre-configured
+     *
+     * @return array
+     */
+    public function getOptionalZipCountries()
+    {
+        return $this->_directoryHelper->getCountriesWithOptionalZip();
+    }
+
+    /**
+     * Returns the list of countries, for which region is required
+     *
+     * @return array
+     */
+    public function getRequiredStateForCountries()
+    {
+        return $this->_directoryHelper->getCountriesWithStatesRequired();
+    }
+
+    /**
+     * eturn, whether non-required state should be shown
+     *
+     * @return int 1 if should be shown, and 0 if not.
+     */
+    public function getShowAllRegions()
+    {
+        return (string)$this->_directoryHelper->isShowNonRequiredState() ? 1 : 0;
+    }
+
+    /**
+     * Encode the $data into JSON format.
+     *
+     * @param object|array $data
+     * @return string
+     */
+    public function jsonEncode($data)
+    {
+        return $this->_jsonEncoder->encode($data);
     }
 }

@@ -30,21 +30,28 @@ namespace Magento\View\Asset;
 class PublicFile implements LocalInterface
 {
     /**
+     * View URL
+     *
      * @var \Magento\View\Url
      */
     protected $viewUrl;
 
     /**
+     * File
+     *
      * @var string
      */
     protected $file;
 
     /**
+     * Content type
      * @var string
      */
     protected $contentType;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Url $viewUrl
      * @param string $file
      * @param string $contentType

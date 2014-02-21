@@ -42,31 +42,43 @@ class Image
     const PREVIEW_IMAGE_HEIGHT = 800;
 
     /**
+     * Image factory
+     *
      * @var \Magento\Image\Factory
      */
     protected $_imageFactory;
 
     /**
+     * Image uploader
+     *
      * @var Image\Uploader
      */
     protected $_uploader;
 
     /**
+     * Theme image path
+     *
      * @var Image\PathInterface
      */
     protected $_themeImagePath;
 
     /**
+     * Logger
+     *
      * @var \Magento\Logger
      */
     protected $_logger;
 
     /**
+     * Theme
+     *
      * @var \Magento\View\Design\ThemeInterface
      */
     protected $_theme;
 
     /**
+     * Media directory
+     *
      * @var WriteInterface
      */
     protected $_mediaDirectory;
@@ -101,7 +113,7 @@ class Image
      * Create preview image
      *
      * @param string $imagePath
-     * @return Image
+     * @return $this
      */
     public function createPreviewImage($imagePath)
     {
@@ -170,7 +182,7 @@ class Image
      * Upload and create preview image
      *
      * @param string $scope the request key for file
-     * @return Image
+     * @return $this
      */
     public function uploadPreviewImage($scope)
     {

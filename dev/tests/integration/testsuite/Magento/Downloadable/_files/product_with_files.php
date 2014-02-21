@@ -35,7 +35,7 @@ $product->setTypeId(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
     ->setSku('downloadable-product')
     ->setPrice(10)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setDownloadableData(array(
         'link' => array(array(
             'link_id'        => 0,

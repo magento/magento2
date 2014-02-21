@@ -180,14 +180,9 @@ class Visibility extends \Magento\Object
             'extra'     => null
         );
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = 'tinyint';
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
-            $column['nullable'] = true;
-            $column['comment']  = 'Catalog Product Visibility ' . $attributeCode . ' column';
-        }
+        $column['type']     = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
+        $column['nullable'] = true;
+        $column['comment']  = 'Catalog Product Visibility ' . $attributeCode . ' column';
 
         return array($attributeCode => $column);
     }

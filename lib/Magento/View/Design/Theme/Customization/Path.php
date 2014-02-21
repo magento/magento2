@@ -38,21 +38,29 @@ class Path
     const DIR_NAME = 'theme_customization';
 
     /**
+     * File name
+     *
      * @var string
      */
     protected $filename;
 
     /**
+     * File system
+     *
      * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * Media directory read
+     *
      * @var \Magento\Filesystem\Directory\Read
      */
     protected $mediaDirectoryRead;
 
     /**
+     * Theme directory read
+     *
      * @var \Magento\Filesystem\Directory\Read
      */
     protected $themeDirectoryRead;
@@ -61,7 +69,7 @@ class Path
      * Constructor
      *
      * @param \Magento\App\Filesystem $filesystem
-     * @param $filename
+     * @param string $filename
      */
     public function __construct(
         \Magento\App\Filesystem $filesystem,

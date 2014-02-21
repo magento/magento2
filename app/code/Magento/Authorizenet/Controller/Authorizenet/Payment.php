@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authorizenet\Controller\Authorizenet;
 
 class Payment extends \Magento\App\Action\Action
@@ -49,7 +48,9 @@ class Payment extends \Magento\App\Action\Action
 
 
     /**
-     * Cancel active partail authorizations
+     * Cancel active partial authorizations
+     *
+     * @return void
      */
     public function cancelAction()
     {

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Captcha\Model;
 
 /**
@@ -68,7 +67,7 @@ class Cron
      * @param \Magento\Core\Model\StoreManager $storeManager
      */
     public function __construct(
-        \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
+        Resource\LogFactory $resLogFactory,
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Captcha\Helper\Adminhtml\Data $adminHelper,
         \Magento\App\Filesystem $filesystem,
@@ -112,7 +111,7 @@ class Cron
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Core\Model\Website|null $website
      * @param \Magento\Core\Model\Store|null $store
-     * @return \Magento\Captcha\Model\Observer
+     * @return void
      */
     protected function _deleteExpiredImagesForWebsite(
         \Magento\Captcha\Helper\Data $helper,

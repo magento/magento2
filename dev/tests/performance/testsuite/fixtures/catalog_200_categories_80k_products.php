@@ -85,7 +85,7 @@ $pattern = array(
     'sku' => 'product_dynamic_%s',
     'price' => 10,
     'visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
-    'status' => \Magento\Catalog\Model\Product\Status::STATUS_ENABLED,
+    'status' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
     'tax_class_id' => 0,
 
     // actually it saves without stock data, but by default system won't show on the frontend products out of stock

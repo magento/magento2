@@ -167,13 +167,6 @@ class DefaultRouter extends \Magento\Core\App\Router\Base
      */
     public function getControllerClassName($module, $controller)
     {
-        /**
-         * TODO: Delete these lines after adminhtml module is removed
-         */
-        if ($module == 'Magento_Adminhtml') {
-            return parent::getControllerClassName($module, $controller);
-        }
-
         $parts = explode('_', $module);
         $parts = array_splice($parts, 0, 2);
         $parts[] = 'Controller';

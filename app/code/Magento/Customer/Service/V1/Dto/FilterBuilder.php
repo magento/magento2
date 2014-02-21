@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer Service Address Interface
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,19 +23,13 @@
  */
 namespace Magento\Customer\Service\V1\Dto;
 
-class FilterBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
+use Magento\Service\Entity\AbstractDtoBuilder;
+
+/**
+ * Builder for Filter DTO.
+ */
+class FilterBuilder extends AbstractDtoBuilder
 {
-    /**
-     * Initializes the builder.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        // special constructor to set default values
-        $this->_data['condition_type'] = 'and';
-    }
-
     /**
      * @param string $field
      * @return FilterBuilder
@@ -49,7 +41,7 @@ class FilterBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
     }
 
     /**
-     * @param string $value
+     * @param string | string[] $value
      * @return FilterBuilder
      */
     public function setValue($value)

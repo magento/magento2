@@ -105,7 +105,7 @@ class CarrierFactory implements CarrierFactoryInterface
     /**
      * Create carrier by its code if it is active
      *
-     * @param $carrierCode
+     * @param string $carrierCode
      * @param null|int $storeId
      * @return bool|Carrier\AbstractCarrier
      */

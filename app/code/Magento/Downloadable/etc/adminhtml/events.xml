@@ -30,7 +30,4 @@
     <event name="sales_order_save_commit_after">
         <observer name="downloadable_observer" instance="Magento\Downloadable\Model\Observer" method="setLinkStatus" />
     </event>
-    <event name="catalog_product_transition_product_type">
-        <observer name="downloadable_type_transition" instance="Magento\Downloadable\Model\Observer" method="transitionProductType" />
-    </event>
 </config>

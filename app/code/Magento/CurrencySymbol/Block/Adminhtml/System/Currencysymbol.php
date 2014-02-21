@@ -56,6 +56,8 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
 
     /**
      * Constructor. Initialization required variables for class instance.
+     *
+     * @return void
      */
     protected function _construct()
     {

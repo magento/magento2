@@ -80,7 +80,7 @@ class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('catalog_product_flat', 'entity_id');
-        $this->_storeId = (int)$this->_storeManager->getStore()->getId();
+        $this->setStoreId(null);
     }
 
     /**
@@ -104,7 +104,10 @@ class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
         if (is_int($store)) {
             $this->_storeId = $store;
         } else {
-            $this->_storeId = (int)$this->_storeManager->getStore($store)->getId();
+            $this->_storeId = $this->_storeManager->getStore()->getId();
+        }
+        if (empty($this->_storeId)) {
+            $this->_storeId = (int)$this->_storeManager->getDefaultStoreView()->getId();
         }
         return $this;
     }

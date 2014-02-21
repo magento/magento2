@@ -43,8 +43,6 @@ class CartConfiguration
             case \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE:
             case \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL:
                 return isset($config['options']);
-            case \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE:
-                return isset($config['super_attribute']);
             case \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE:
                 return isset($config['bundle_option']);
         }

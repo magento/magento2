@@ -28,19 +28,14 @@ return array(
     ),
 
     'Magento\App\State' => array(
-        'parameters' => array(
-            'mode' => array(
-                'argument' => 'MAGE_MODE',
-            ),
+        'arguments' => array(
+            'test name' => 'test value',
         ),
     ),
 
     'Magento\Core\Model\Config\Modules' => array(
-        'parameters' => array(
-            'storage' => array(
-                'instance' => 'Magento\Core\Model\Config\Storage\Modules',
-                'shared' => false
-            ),
+        'arguments' => array(
+            'test name' => 'test value',
         ),
         'plugins' => array(
             'simple_modules_plugin' => array(
@@ -61,56 +56,19 @@ return array(
 
     'Magento\Http\Handler\Composite' => array(
         'shared' => false,
-        'parameters' => array(
-            'factory' => array(
-                'instance' => 'Magento\Http\HandlerFactory',
-            ),
-            'handlers' => array(
-                'custom_handler' => array(
-                    'sortOrder' => 25,
-                    'class' => 'Custom_Cache_Model_Http_Handler',
-                ),
-                'other_handler' => array(
-                    'sortOrder' => 10,
-                    'class' => 'Other_Cache_Model_Http_Handler',
-                ),
-            ),
-        ),
-    ),
-
-    'Magento\Data\Collection\Db\FetchStrategy\Cache' => array(
-        'parameters' => array(
-            'cacheIdPrefix' => 'collection_',
-            'cacheLifetime' => '86400',
-            'cacheTags' => array(
-                'const' => \Magento\Core\Model\Website::CACHE_TAG,
-                'boolFalse' => false, 
-                'boolTrue' => true,
-                'boolOne' => true,
-                'boolZero' => false,
-                'intValue' => 100500,
-                'nullValue' => null,
-                'stringPattern' => 'az-value',
-            ),
-            'constParam' => 'website',
-            'boolFalseParam' => false,
-            'boolTrueParam' => true,
-            'boolOneParam' => true,
-            'boolZeroParam' => false,
-            'intValueParam' => 100500,
-            'nullValueParam' => null,
-            'stringPatternParam' => 'az-value',
+        'arguments' => array(
+            'test name' => 'test value',
         ),
     ),
 
     'customCacheInstance' => array(
         'shared' => true,
         'type' => 'Magento\App\Cache',
-        'parameters' => array(),
+        'arguments' => array(),
     ),
 
     'customOverriddenInstance' => array(
         'shared' => false,
-        'parameters' => array(),
+        'arguments' => array(),
     ),
 );

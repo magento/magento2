@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * DirtectPost Payment Controller
- *
- * @category   Magento
- * @package    Magento_Authorizenet
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Authorizenet\Controller\Directpost;
 
+/**
+ * DirectPost Payment Controller
+ *
+ * @author     Magento Core Team <core@magentocommerce.com>
+ */
 class Payment extends \Magento\App\Action\Action
 {
     /**
@@ -75,6 +72,8 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Response action.
      * Action for Authorize.net SIM Relay Request.
+     *
+     * @return void
      */
     public function backendResponseAction()
     {
@@ -84,6 +83,8 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Response action.
      * Action for Authorize.net SIM Relay Request.
+     *
+     * @return void
      */
     public function responseAction()
     {
@@ -95,6 +96,7 @@ class Payment extends \Magento\App\Action\Action
      * Action for Authorize.net SIM Relay Request.
      *
      * @param \Magento\Authorizenet\Helper\HelperInterface $helper
+     * @return void
      */
     protected function _responseAction(\Magento\Authorizenet\Helper\HelperInterface $helper)
     {
@@ -143,6 +145,7 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Retrieve params and put javascript into iframe
      *
+     * @return void
      */
     public function redirectAction()
     {
@@ -176,6 +179,7 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Send request to authorize.net
      *
+     * @return void
      */
     public function placeAction()
     {
@@ -203,6 +207,7 @@ class Payment extends \Magento\App\Action\Action
     /**
      * Return customer quote by ajax
      *
+     * @return void
      */
     public function returnQuoteAction()
     {
@@ -216,6 +221,7 @@ class Payment extends \Magento\App\Action\Action
      *
      * @param bool $cancelOrder
      * @param string $errorMsg
+     * @return void
      */
     protected function _returnCustomerQuote($cancelOrder = false, $errorMsg = '')
     {

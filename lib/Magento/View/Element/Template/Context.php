@@ -32,26 +32,36 @@ class Context extends \Magento\View\Element\Context
     protected $_filesystem;
 
     /**
+     * View file system
+     *
      * @var \Magento\View\FileSystem
      */
     protected $_viewFileSystem;
 
     /**
+     * Template engine pool
+     *
      * @var \Magento\View\TemplateEnginePool
      */
     protected $enginePool;
 
     /**
+     * Application state
+     *
      * @var \Magento\App\State
      */
     protected $_appState;
 
     /**
+     * Store manager
+     *
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Event\ManagerInterface $eventManager

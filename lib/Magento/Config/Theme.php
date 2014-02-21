@@ -45,6 +45,8 @@ class Theme
     protected $_data;
 
     /**
+     * Constructor
+     *
      * @param string $configContent
      */
     public function __construct($configContent)

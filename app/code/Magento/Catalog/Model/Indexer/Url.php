@@ -95,7 +95,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
      *
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Catalog\Model\Resource\Url $catalogResourceUrl
+     * @param \Magento\Catalog\Model\Resource\UrlFactory $catalogResourceUrlFactory
      * @param \Magento\Catalog\Model\Url $catalogUrl
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -104,13 +104,13 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
     public function __construct(
         \Magento\Core\Model\Context $context,
         \Magento\Core\Model\Registry $registry,
-        \Magento\Catalog\Model\Resource\Url $catalogResourceUrl,
+        \Magento\Catalog\Model\Resource\UrlFactory $catalogResourceUrlFactory,
         \Magento\Catalog\Model\Url $catalogUrl,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_catalogResourceUrl = $catalogResourceUrl;
+        $this->_catalogResourceUrl = $catalogResourceUrlFactory->create();
         $this->_catalogUrl = $catalogUrl;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }

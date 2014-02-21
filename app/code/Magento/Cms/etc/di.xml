@@ -23,64 +23,54 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Cms\Model\Wysiwyg\Config">
-        <param name="windowSize">
-            <array>
-                <item key="height"><value type="int">600</value></item>
-                <item key="width"><value type="int">1000</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="windowSize" xsi:type="array">
+                <item name="height" xsi:type="number">600</item>
+                <item name="width" xsi:type="number">1000</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
-        <param name="resizeParameters">
-            <array>
-                <item key="height"><value type="int">75</value></item>
-                <item key="width"><value type="int">100</value></item>
-            </array>
-        </param>
-        <param name="extensions">
-            <array>
-                <item key="allowed">
-                    <array>
-                        <item key="jpg"><value type="int">1</value></item>
-                        <item key="jpeg"><value type="int">1</value></item>
-                        <item key="png"><value type="int">1</value></item>
-                        <item key="gif"><value type="int">1</value></item>
-                    </array>
+        <arguments>
+            <argument name="resizeParameters" xsi:type="array">
+                <item name="height" xsi:type="number">75</item>
+                <item name="width" xsi:type="number">100</item>
+            </argument>
+            <argument name="extensions" xsi:type="array">
+                <item name="allowed" xsi:type="array">
+                    <item name="jpg" xsi:type="number">1</item>
+                    <item name="jpeg" xsi:type="number">1</item>
+                    <item name="png" xsi:type="number">1</item>
+                    <item name="gif" xsi:type="number">1</item>
                 </item>
-                <item key="image_allowed">
-                    <array>
-                        <item key="jpg"><value type="int">1</value></item>
-                        <item key="jpeg"><value type="int">1</value></item>
-                        <item key="png"><value type="int">1</value></item>
-                        <item key="gif"><value type="int">1</value></item>
-                    </array>
+                <item name="image_allowed" xsi:type="array">
+                    <item name="jpg" xsi:type="number">1</item>
+                    <item name="jpeg" xsi:type="number">1</item>
+                    <item name="png" xsi:type="number">1</item>
+                    <item name="gif" xsi:type="number">1</item>
                 </item>
-                <item key="media_allowed">
-                    <array>
-                        <item key="flv"><value type="int">1</value></item>
-                        <item key="swf"><value type="int">1</value></item>
-                        <item key="avi"><value type="int">1</value></item>
-                        <item key="mov"><value type="int">1</value></item>
-                        <item key="rm"><value type="int">1</value></item>
-                        <item key="wmv"><value type="int">1</value></item>
-                    </array>
+                <item name="media_allowed" xsi:type="array">
+                    <item name="flv" xsi:type="number">1</item>
+                    <item name="swf" xsi:type="number">1</item>
+                    <item name="avi" xsi:type="number">1</item>
+                    <item name="mov" xsi:type="number">1</item>
+                    <item name="rm" xsi:type="number">1</item>
+                    <item name="wmv" xsi:type="number">1</item>
                 </item>
-            </array>
-        </param>
-        <param name="dirs">
-            <array>
-                <item key="exclude"><value/></item>
-                <item key="include"><value/></item>
-            </array>
-        </param>
+            </argument>
+            <argument name="dirs" xsi:type="array">
+                <item name="exclude" xsi:type="string"></item>
+                <item name="include" xsi:type="string"></item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="cms_setup"><value>Magento\Cms\Model\Resource\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="cms_setup" xsi:type="string">Magento\Cms\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -47,7 +47,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'frontend_input' => 'select',
             'frontend_label' => 'Status',
             'frontend_class' => null,
-            'source_model' => 'Magento\Catalog\Model\Product\Status',
+            'source_model' => 'Magento\Catalog\Model\Product\Attribute\Source\Status',
             'is_required' => 1,
             'is_user_defined' => 0,
             'is_unique' => 0,

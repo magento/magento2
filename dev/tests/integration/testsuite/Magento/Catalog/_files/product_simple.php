@@ -62,7 +62,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setMetaDescription('meta description')
 
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
 
     ->setCategoryIds(array(2))
 

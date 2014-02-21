@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Authorizenet directpayment observer
- *
- * @category    Magento
- * @package     Magento_Authorizenet
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Authorizenet\Model\Directpost;
 
+/**
+ * Authorize.net directpayment observer
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 class Observer
 {
     /**
@@ -99,7 +96,7 @@ class Observer
      * Save order into registry to use it in the overloaded controller.
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Authorizenet\Model\Directpost\Observer
+     * @return $this
      */
     public function saveOrderAfterSubmit(\Magento\Event\Observer $observer)
     {
@@ -114,7 +111,7 @@ class Observer
      * Set data for response of frontend saveOrder action
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Authorizenet\Model\Directpost\Observer
+     * @return $this
      */
     public function addAdditionalFieldsToResponseFrontend(\Magento\Event\Observer $observer)
     {
@@ -155,7 +152,7 @@ class Observer
      * Needed for correct work of edit orders in Admin area.
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Authorizenet\Model\Directpost\Observer
+     * @return $this
      */
     public function updateAllEditIncrements(\Magento\Event\Observer $observer)
     {

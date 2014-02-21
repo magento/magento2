@@ -234,14 +234,17 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($fileIterator));
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(array(
-            'Magento\Backend\Model\Config\Structure\Reader' => array(
-                'parameters' => array('fileResolver' => $fileResolverMock)
-            )
-        ));
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $structureReader = $objectManager->create(
+            'Magento\Backend\Model\Config\Structure\Reader', array('fileResolver' => $fileResolverMock)
+        );
+        $structureData = $objectManager->create(
+            'Magento\Backend\Model\Config\Structure\Data', array('reader' => $structureReader)
+        );
         /** @var \Magento\Backend\Model\Config\Structure $structure  */
-        $structure = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Model\Config\Structure');
+        $structure = $objectManager->create('Magento\Backend\Model\Config\Structure',
+            array('structureData' => $structureData));
 
         $this->_section = $structure->getElement('test_section');
 

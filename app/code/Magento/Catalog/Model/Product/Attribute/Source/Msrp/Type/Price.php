@@ -111,13 +111,8 @@ class Price
             'extra'     => null
         );
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = $attributeType;
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = $this->_eavResourceHelper->getDdlTypeByColumnType($attributeType);
-            $column['nullable'] = true;
-        }
+        $column['type']     = $this->_eavResourceHelper->getDdlTypeByColumnType($attributeType);
+        $column['nullable'] = true;
 
         return array($attributeCode => $column);
     }

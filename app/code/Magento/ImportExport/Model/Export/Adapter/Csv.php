@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Export\Adapter;
 
 /**
  * Export adapter csv.
@@ -31,8 +32,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Export\Adapter;
-
 class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
 {
     /**
@@ -58,8 +57,6 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
 
     /**
      * Object destructor.
-     *
-     * @return void
      */
     public function __destruct()
     {
@@ -71,7 +68,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
     /**
      * Method called as last step of object instance creation. Can be overrided in child classes.
      *
-     * @return \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
+     * @return $this
      */
     protected function _init()
     {
@@ -104,7 +101,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      *
      * @param array $headerColumns
      * @throws \Exception
-     * @return \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
+     * @return $this
      */
     public function setHeaderCols(array $headerColumns)
     {
@@ -125,7 +122,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      *
      * @param array $rowData
      * @throws \Exception
-     * @return \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
+     * @return $this
      */
     public function writeRow(array $rowData)
     {

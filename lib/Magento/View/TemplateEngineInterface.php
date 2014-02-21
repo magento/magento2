@@ -36,7 +36,7 @@ interface TemplateEngineInterface
      * the data provided in $vars.
      *
      * @param \Magento\View\Element\BlockInterface $block
-     * @param $templateFile
+     * @param string $templateFile
      * @param array $dictionary
      * @return string rendered template
      */

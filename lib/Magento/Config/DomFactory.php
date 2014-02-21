@@ -25,22 +25,26 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Config;
+
 /**
  * Magento configuration DOM factory
  */
-namespace Magento\Config;
-
 class DomFactory
 {
 
     const CLASS_NAME = 'Magento\Config\Dom';
 
     /**
+     * Object manager
+     *
      * @var \Magento\ObjectManager
      */
     protected $_objectManager;
 
     /**
+     * Constructor
+     *
      * @param \Magento\ObjectManager $objectManger
      */
     public function __construct(\Magento\ObjectManager $objectManger)

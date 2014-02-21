@@ -26,6 +26,8 @@ namespace Magento\Session;
 class Generic extends SessionManager
 {
     /**
+     * Constructor
+     *
      * @param \Magento\App\RequestInterface $request
      * @param SidResolverInterface $sidResolver
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig

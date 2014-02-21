@@ -48,6 +48,9 @@ class Types implements \Magento\Core\Model\Option\ArrayInterface
         $this->_model = $widgetInstanceModel;
     }
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         $widgets = array();

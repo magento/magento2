@@ -262,7 +262,7 @@ $catalogInstaller->addAttribute(\Magento\Catalog\Model\Product::ENTITY, 'tax_cla
     'visible_in_advanced_search' => true,
     'used_in_product_listing'    => true,
     'unique'                     => false,
-    'apply_to'                   => 'simple,configurable,virtual,downloadable,bundle'
+    'apply_to'                   => implode($this->getTaxableItems(), ',')
 ));
 
 $installer->endSetup();

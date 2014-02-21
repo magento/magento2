@@ -23,14 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Shipping\Model\Rate;
 
 class Result
 {
     /**
-     * Shippin method rates
+     * Shipping method rates
      *
      * @var array
      */
@@ -60,7 +58,7 @@ class Result
     /**
      * Reset result
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function reset()
     {
@@ -82,7 +80,7 @@ class Result
     /**
      * Get Error
      *
-     * @return null|bool;
+     * @return null|bool
      */
     public function getError()
     {
@@ -93,7 +91,7 @@ class Result
      * Add a rate to the result
      *
      * @param \Magento\Sales\Model\Quote\Address\RateResult\AbstractResult|\Magento\Shipping\Model\Rate\Result $result
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function append($result)
     {
@@ -192,7 +190,7 @@ class Result
     /**
      * Sort rates by price from min to max
      *
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function sortRatesByPrice()
     {
@@ -219,7 +217,7 @@ class Result
      * Set price for each rate according to count of packages
      *
      * @param int $packageCount
-     * @return \Magento\Shipping\Model\Rate\Result
+     * @return $this
      */
     public function updateRatePrice($packageCount)
     {

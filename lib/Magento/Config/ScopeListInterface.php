@@ -29,7 +29,7 @@ interface ScopeListInterface
     /**
      * Retrieve list of all scopes
      *
-     * @return array
+     * @return string[]
      */
     public function getAllScopes();
 }

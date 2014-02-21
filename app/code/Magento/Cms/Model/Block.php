@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Model;
 
 /**
  * CMS block model
@@ -46,12 +47,13 @@
  * @package     Magento_Cms
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Cms\Model;
-
 class Block extends \Magento\Core\Model\AbstractModel
 {
     const CACHE_TAG     = 'cms_block';
+
+    /**
+     * @var string
+     */
     protected $_cacheTag= 'cms_block';
 
     /**
@@ -61,6 +63,9 @@ class Block extends \Magento\Core\Model\AbstractModel
      */
     protected $_eventPrefix = 'cms_block';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Cms\Model\Resource\Block');

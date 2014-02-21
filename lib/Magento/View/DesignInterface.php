@@ -42,9 +42,9 @@ interface DesignInterface
     /**
      * Set package area
      *
-     * @deprecated
      * @param string $area
      * @return DesignInterface
+     * @deprecated
      */
     public function setArea($area);
 
@@ -59,7 +59,7 @@ interface DesignInterface
      * Set theme path
      *
      * @param Design\ThemeInterface|int|string $theme
-     * @param string $area
+     * @param string|null $area
      * @return DesignInterface
      */
     public function setDesignTheme($theme, $area = null);
@@ -67,7 +67,7 @@ interface DesignInterface
     /**
      * Get default theme which declared in configuration
      *
-     * @param string $area
+     * @param string|null $area
      * @param array $params
      * @return string
      */

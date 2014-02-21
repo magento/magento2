@@ -314,29 +314,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Check if multishipping checkout is available.
-     * There should be a valid quote in checkout session. If not, only the config value will be returned.
-     *
-     * @return bool
-     */
-    public function isMultishippingCheckoutAvailable()
-    {
-        $quote = $this->getQuote();
-        $isMultiShipping = (bool)(int)$this->_coreStoreConfig->getConfig('shipping/option/checkout_multiple');
-        if ((!$quote) || !$quote->hasItems()) {
-            return $isMultiShipping;
-        }
-        $maximunQty = (int)$this->_coreStoreConfig->getConfig('shipping/option/checkout_multiple_maximum_qty');
-        return $isMultiShipping
-            && !$quote->hasItemsWithDecimalQty()
-            && $quote->validateMinimumAmount(true)
-            && (($quote->getItemsSummaryQty() - $quote->getItemVirtualQty()) > 0)
-            && ($quote->getItemsSummaryQty() <= $maximunQty)
-            && !$quote->hasNominalItems()
-        ;
-    }
-
-    /**
      * Check is allowed Guest Checkout
      * Use config settings and observer
      *

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -600,16 +598,6 @@ class Product extends \Magento\Core\Helper\Url
     {
         return $this->_coreConfig
             ->getValue(Product::XML_PATH_AUTO_GENERATE_MASK, 'default');
-    }
-
-    /**
-     * Retrieve list of attributes that cannot be removed from attribute set
-     *
-     * @return array
-     */
-    public function getUnassignableAttributes()
-    {
-        return $this->_attributeConfig->getAttributeNames('unassignable');
     }
 
     /**

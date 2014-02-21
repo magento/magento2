@@ -76,24 +76,4 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
         }
         return $result;
     }
-
-    /**
-     * Check if contains attributes used in the configurable products
-     *
-     * @return bool
-     */
-    public function hasConfigurableAttributes()
-    {
-        $result = false;
-        /** @var $attributesCollection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
-        $attributesCollection = $this->_attributeCollectionFactory->create();
-        $attributesCollection->setAttributeGroupFilter($this->getId());
-        foreach ($attributesCollection as $attribute) {
-            if ($attribute->getIsConfigurable()) {
-                $result = true;
-                break;
-            }
-        }
-        return $result;
-    }
 }

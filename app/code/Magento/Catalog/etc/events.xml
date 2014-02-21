@@ -30,7 +30,4 @@
     <event name="page_block_html_topmenu_gethtml_before">
         <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Model\Observer" method="addCatalogToTopmenuItems" />
     </event>
-    <event name="catalog_product_transition_product_type">
-        <observer name="type_transition" instance="Magento\Catalog\Model\Observer" method="transitionProductType" />
-    </event>
 </config>

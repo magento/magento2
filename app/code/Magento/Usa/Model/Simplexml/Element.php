@@ -23,17 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Usa\Model\Simplexml;
 
 /**
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
  *
- * @category Magento
- * @package  Magento_Usa
  * @author   Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Usa\Model\Simplexml;
-
 class Element extends \Magento\Simplexml\Element
 {
     /**
@@ -71,7 +67,7 @@ class Element extends \Magento\Simplexml\Element
     /**
      * Converts meaningful xml characters to xml entities
      *
-     * @param string
+     * @param string|null $value
      * @return string
      */
     public function xmlentities($value = null)

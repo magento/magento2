@@ -474,7 +474,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $data .= implode(',', array(
             'test_sku', 'Default', \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE, 'base', 'Product Name', '9.99',
             'Product description', 'Short desc.', '1',
-            \Magento\Catalog\Model\Product\Status::STATUS_ENABLED,
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
             \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH, 0,
             $attribute->getId(), 'magento_image.jpg', 'Image Label', '1', '0'
         )) . "\n";

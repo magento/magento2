@@ -30,10 +30,10 @@
         </action>
     </referenceBlock>
     <referenceContainer name="product.info.type">
-        <block class="Magento\Catalog\Block\Product\View\Type\Configurable" name="product.info.configurable" as="product_type_data" template="product/view/type/default.phtml" cacheable="false"/>
+        <block class="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable" name="product.info.configurable" as="product_type_data" template="Magento_Catalog::product/view/type/default.phtml" cacheable="false"/>
         <container name="product.info.configurable.extra" after="product.info.configurable" as="product_type_data_extra" label="Product Extra Info"/>
     </referenceContainer>
     <referenceBlock name="product.info.options.wrapper">
-        <block class="Magento\Catalog\Block\Product\View\Type\Configurable" name="product.info.options.configurable" as="options_configurable" before="-" template="product/view/type/options/configurable.phtml" cacheable="false"/>
+        <block class="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable" name="product.info.options.configurable" as="options_configurable" before="-" template="product/view/type/options/configurable.phtml" cacheable="false"/>
     </referenceBlock>
 </layout>

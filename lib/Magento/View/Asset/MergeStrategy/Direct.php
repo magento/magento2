@@ -30,16 +30,22 @@ namespace Magento\View\Asset\MergeStrategy;
 class Direct implements \Magento\View\Asset\MergeStrategyInterface
 {
     /**
+     * Directory Write
+     *
      * @var \Magento\Filesystem\Directory\Write
      */
     private $_directory;
 
     /**
+     * Css Resolver
+     *
      * @var \Magento\View\Url\CssResolver
      */
     protected $cssUrlResolver;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\Url\CssResolver $cssUrlResolver
      */

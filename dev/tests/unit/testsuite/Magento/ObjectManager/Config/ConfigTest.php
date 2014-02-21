@@ -1,0 +1,66 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+namespace Magento\ObjectManager\Config;
+
+class ConfigTest extends \PHPUnit_Framework_TestCase
+{
+    public function testGetArgumentsEmpty()
+    {
+        $config = new Config;
+        $this->assertSame(array(), $config->getArguments('An invalid type'));
+    }
+
+    public function testExtendMergeConfiguration()
+    {
+        $this->_assertFooTypeArguments(new Config);
+    }
+
+    /**
+     * A primitive fixture for testing merging arguments
+     *
+     * @param Config $config
+     */
+    private function _assertFooTypeArguments(Config $config)
+    {
+        $expected = array('argName' => 'argValue');
+        $fixture = array('FooType' => array('arguments' => $expected));
+        $config->extend($fixture);
+        $this->assertEquals($expected, $config->getArguments('FooType'));
+    }
+
+    public function testExtendWithCacheMock()
+    {
+        $definitions = $this->getMockForAbstractClass('\Magento\ObjectManager\Definition');
+        $definitions->expects($this->once())->method('getClasses')->will($this->returnValue(array('FooType')));
+
+        $cache = $this->getMockForAbstractClass('\Magento\ObjectManager\ConfigCache');
+        $cache->expects($this->once())->method('get')->will($this->returnValue(false));
+
+        $config = new Config(null, $definitions);
+        $config->setCache($cache);
+
+        $this->_assertFooTypeArguments($config);
+    }
+} 

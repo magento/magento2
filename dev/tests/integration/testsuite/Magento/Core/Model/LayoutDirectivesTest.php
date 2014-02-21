@@ -116,10 +116,9 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
         $expectedObjectData = array(
             0 => 'updater call',
             1 => 'updater call',
-            2 => 'updater call',
         );
 
-        $expectedSimpleData = 2;
+        $expectedSimpleData = 1;
 
         $dataSource = $layout->getBlock('block_with_object_updater_args')->getOne();
         $this->assertInstanceOf('Magento\Data\Collection', $dataSource);

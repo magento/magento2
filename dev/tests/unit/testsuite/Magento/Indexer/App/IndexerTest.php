@@ -40,14 +40,8 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\App\Console\Response
-     */
-    protected $responseMock;
-
     protected function setUp()
     {
-        $this->responseMock = $this->getMock('Magento\App\Console\Response', array('setCode'), array(), '', false);
         $this->filesystemMock = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $directoryMock->expects($this->any())
@@ -60,17 +54,13 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->entryPoint = new \Magento\Indexer\App\Indexer(
             'reportDir',
             $this->filesystemMock,
-            $this->processorMock,
-            $this->responseMock
+            $this->processorMock
         );
     }
 
-    public function testLaunch()
+    public function testExecute()
     {
-        $this->responseMock->expects($this->once())
-            ->method('setCode')
-            ->with(0);
         $this->processorMock->expects($this->once())->method('reindexAll');
-        $this->assertSame($this->responseMock, $this->entryPoint->launch());
+        $this->assertEquals('0', $this->entryPoint->launch());
     }
 }

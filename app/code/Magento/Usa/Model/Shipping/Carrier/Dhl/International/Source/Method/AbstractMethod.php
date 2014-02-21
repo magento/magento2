@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method;
 
 /**
  * Source model for DHL shipping methods
  *
- * @category   Magento
- * @package    Magento_Usa
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method;
-
 abstract class AbstractMethod extends \Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Generic
 {
     /**
@@ -50,9 +47,7 @@ abstract class AbstractMethod extends \Magento\Usa\Model\Shipping\Carrier\Dhl\In
     protected $_noneMethod = false;
 
     /**
-     * Returns array to be used in multiselect on back-end
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {

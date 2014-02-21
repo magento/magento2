@@ -59,6 +59,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Internal constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -82,7 +83,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Prepare layout.
      * Adding save_and_continue button
      *
-     * @return \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit
+     * @return $this
      */
     protected function _preparelayout()
     {

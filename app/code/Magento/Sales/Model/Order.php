@@ -992,7 +992,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
             /*
              * @TODO ACPAOC: Use product collection here, but ensure that product
              * is loaded with order store id, otherwise there'll be problems with isSalable()
-             * for configurables, bundles and other composites
+             * for composite products
              *
              */
             /*

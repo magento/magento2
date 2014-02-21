@@ -31,5 +31,5 @@ $model->setName('system_attribute')
     ->setId(3)
     ->setEntityTypeId(4)
     ->setIsUserDefined(0)
-    ->setApplyTo(array('simple', 'configurable'));
+    ->setApplyTo(array('simple'));
 $model->save();

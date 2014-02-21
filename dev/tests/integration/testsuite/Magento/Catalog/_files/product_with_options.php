@@ -41,7 +41,7 @@ $product->setTypeId('simple')
     ->setMetaDescription('meta description')
 
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
 
     ->setCanSaveCustomOptions(true)
     ->setProductOptions(array(array('title' => 'test_option_code_1', 'type' => 'field', 'is_require' => true)))

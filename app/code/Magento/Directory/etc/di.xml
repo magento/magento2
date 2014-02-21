@@ -23,25 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\Directory\Model\Resource\Country\Collection" shared="false" />
     <type name="Magento\Directory\Model\Currency\Import\Config">
-        <param name="servicesConfig">
-            <array>
-                <item key="webservicex">
-                    <array>
-                        <item key="label"><value>Webservicex</value></item>
-                        <item key="class"><value>Magento\Directory\Model\Currency\Import\Webservicex</value></item>
-                    </array>
+        <arguments>
+            <argument name="servicesConfig" xsi:type="array">
+                <item name="webservicex" xsi:type="array">
+                    <item name="label" xsi:type="string">Webservicex</item>
+                    <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\Webservicex</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <array>
-                <item key="directory_setup"><value>Magento\Directory\Model\Resource\Setup</value></item>
-            </array>
-        </param>
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="directory_setup" xsi:type="string">Magento\Directory\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
 </config>

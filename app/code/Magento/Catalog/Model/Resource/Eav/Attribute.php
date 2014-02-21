@@ -25,6 +25,7 @@
  */
 namespace Magento\Catalog\Model\Resource\Eav;
 
+use \Magento\Catalog\Model\Attribute\LockValidatorInterface;
 /**
  * Catalog attribute model
  *
@@ -54,8 +55,6 @@ namespace Magento\Catalog\Model\Resource\Eav;
  * @method int setUsedInProductListing(int $value)
  * @method \Magento\Catalog\Model\Resource\Eav\Attribute getUsedForSortBy()
  * @method int setUsedForSortBy(int $value)
- * @method \Magento\Catalog\Model\Resource\Eav\Attribute getIsConfigurable()
- * @method int setIsConfigurable(int $value)
  * @method string setApplyTo(string $value)
  * @method \Magento\Catalog\Model\Resource\Eav\Attribute getIsVisibleInAdvancedSearch()
  * @method int setIsVisibleInAdvancedSearch(int $value)
@@ -71,6 +70,7 @@ namespace Magento\Catalog\Model\Resource\Eav;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     const SCOPE_STORE                           = 0;
@@ -81,11 +81,17 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     const ENTITY                                = 'catalog_eav_attribute';
 
     /**
-     * Event prefix
+     * Index indexer
      *
-     * @var string
+     * @var \Magento\Index\Model\Indexer
      */
-    protected $_eventPrefix                     = 'catalog_entity_attribute';
+    protected $_indexIndexer;
+
+    /**
+     * @var LockValidatorInterface
+     */
+    protected $attrLockValidator;
+
     /**
      * Event object name
      *
@@ -101,15 +107,23 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     static protected $_labels                   = null;
 
     /**
-     * Index indexer
+     * Event prefix
      *
-     * @var \Magento\Index\Model\Indexer
+     * @var string
      */
-    protected $_indexIndexer;
+    protected $_eventPrefix                     = 'catalog_entity_attribute';
 
     /**
-     * Class constructor
-     *
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
+     */
+    protected $_productFlatIndexerProcessor;
+
+    /**
+     * @var \Magento\Catalog\Helper\Product\Flat
+     */
+    protected $_productFlatHelper;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Core\Helper\Data $coreData
@@ -121,6 +135,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      * @param \Magento\Index\Model\Indexer $indexIndexer
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
+     * @param \Magento\Catalog\Helper\Product\Flat $productFlatHelper
+     * @param LockValidatorInterface $lockValidator
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -137,11 +154,17 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
         \Magento\Index\Model\Indexer $indexIndexer,
+        \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
+        \Magento\Catalog\Helper\Product\Flat $productFlatHelper,
+        LockValidatorInterface $lockValidator,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_indexIndexer = $indexIndexer;
+        $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
+        $this->_productFlatHelper = $productFlatHelper;
+        $this->attrLockValidator = $lockValidator;
         parent::__construct(
             $context,
             $registry,
@@ -180,11 +203,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             if (!isset($this->_data['is_global'])) {
                 $this->_data['is_global'] = self::SCOPE_GLOBAL;
             }
-            if (($this->_data['is_global'] != $this->_origData['is_global'])
-                && $this->_getResource()->isUsedBySuperProducts($this)) {
-                throw new \Magento\Core\Exception(
-                    __('Do not change the scope. This attribute is used in configurable products.')
-                );
+            if ($this->_data['is_global'] != $this->_origData['is_global']) {
+                try {
+                    $this->attrLockValidator->validate($this);
+                } catch (\Magento\Core\Exception $exception) {
+                    throw new \Magento\Core\Exception(
+                        __('Do not change the scope. ' . $exception->getMessage())
+                    );
+                }
             }
         }
         if ($this->getFrontendInput() == 'price') {
@@ -211,6 +237,20 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
          * Fix saving attribute in admin
          */
         $this->_eavConfig->clear();
+
+        $enableBefore = ($this->getOrigData('backend_type') == 'static')
+            || ($this->_productFlatHelper->isAddFilterableAttributes() && $this->getOrigData('is_filterable') > 0)
+            || ($this->getOrigData('used_in_product_listing') == 1)
+            || ($this->getOrigData('used_for_sort_by') == 1);
+        $enableAfter = ($this->getData('backend_type') == 'static')
+            || ($this->_productFlatHelper->isAddFilterableAttributes() && $this->getData('is_filterable') > 0)
+            || ($this->getData('used_in_product_listing') == 1)
+            || ($this->getData('used_for_sort_by') == 1);
+
+        if ($enableBefore != $enableAfter) {
+            $this->_productFlatIndexerProcessor->markIndexerAsInvalid();
+        }
+
         $this->_indexIndexer->processEntityAction(
             $this, self::ENTITY, \Magento\Index\Model\Event::TYPE_SAVE
         );
@@ -225,9 +265,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      */
     protected function _beforeDelete()
     {
-        if ($this->_getResource()->isUsedBySuperProducts($this)) {
-            throw new \Magento\Core\Exception(__('This attribute is used in configurable products.'));
-        }
+        $this->attrLockValidator->validate($this);
         $this->_indexIndexer->logEvent(
             $this, self::ENTITY, \Magento\Index\Model\Event::TYPE_DELETE
         );
@@ -242,6 +280,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     protected function _afterDeleteCommit()
     {
         parent::_afterDeleteCommit();
+
+        $this->_productFlatIndexerProcessor->markIndexerAsInvalid();
+
         $this->_indexIndexer->indexEvents(
             self::ENTITY, \Magento\Index\Model\Event::TYPE_DELETE
         );

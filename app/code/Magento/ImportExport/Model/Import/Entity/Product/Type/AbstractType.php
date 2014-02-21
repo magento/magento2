@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import\Entity\Product\Type;
 
 /**
  * Import entity abstract product type model
@@ -31,14 +32,12 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Import\Entity\Product\Type;
-
 abstract class AbstractType
 {
     /**
      * Product type attribute sets and attributes parameters.
      *
-     * [attr_set_name_1] => array(
+     * Example: [attr_set_name_1] => array(
      *     [attr_code_1] => array(
      *         'options' => array(),
      *         'type' => 'text', 'price', 'textarea', 'select', etc.
@@ -55,14 +54,14 @@ abstract class AbstractType
     /**
      * Attributes' codes which will be allowed anyway, independently from its visibility property.
      *
-     * @var array
+     * @var string[]
      */
     protected $_forcedAttributesCodes = array();
 
     /**
      * Attributes with index (not label) value.
      *
-     * @var array
+     * @var string[]
      */
     protected $_indexValueAttributes = array();
 
@@ -76,7 +75,7 @@ abstract class AbstractType
     /**
      * Column names that holds values with particular meaning.
      *
-     * @var array
+     * @var string[]
      */
     protected $_specialAttributes = array();
 
@@ -88,7 +87,7 @@ abstract class AbstractType
     protected $_entityModel;
 
     /**
-     * Product type (simple, configurable, etc.).
+     * Product type (simple, etc.).
      *
      * @var string
      */
@@ -141,9 +140,10 @@ abstract class AbstractType
      *
      * @param string $attrSetName Name of attribute set.
      * @param array $attrParams Refined attribute parameters.
+     * @param mixed $attribute
      * @return \Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType
      */
-    protected function _addAttributeParams($attrSetName, array $attrParams)
+    protected function _addAttributeParams($attrSetName, array $attrParams, $attribute)
     {
         if (!$attrParams['apply_to'] || in_array($this->_type, $attrParams['apply_to'])) {
             $this->_attributes[$attrSetName][$attrParams['code']] = $attrParams;
@@ -169,7 +169,7 @@ abstract class AbstractType
     /**
      * Initialize attributes parameters for all attributes' sets.
      *
-     * @return \Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType
+     * @return $this
      */
     protected function _initAttributes()
     {
@@ -189,7 +189,6 @@ abstract class AbstractType
                         $attributesCache[$attributeId] = array(
                             'id'               => $attributeId,
                             'code'             => $attributeCode,
-                            'for_configurable' => $attribute->getIsConfigurable(),
                             'is_global'        => $attribute->getIsGlobal(),
                             'is_required'      => $attribute->getIsRequired(),
                             'is_unique'        => $attribute->getIsUnique(),
@@ -203,7 +202,9 @@ abstract class AbstractType
                                                       ->getAttributeOptions($attribute, $this->_indexValueAttributes)
                         );
                     }
-                    $this->_addAttributeParams($attributeSet->getAttributeSetName(), $attributesCache[$attributeId]);
+                    $this->_addAttributeParams(
+                        $attributeSet->getAttributeSetName(), $attributesCache[$attributeId], $attribute
+                    );
                 }
             }
         }
@@ -247,7 +248,7 @@ abstract class AbstractType
     /**
      * Particular attribute names getter.
      *
-     * @return array
+     * @return string[]
      */
     public function getParticularAttributes()
     {
@@ -259,8 +260,8 @@ abstract class AbstractType
      *
      * @param array $rowData
      * @param int $rowNum
-     * @param boolean $isNewProduct OPTIONAL
-     * @return boolean
+     * @param bool $isNewProduct Optional
+     * @return bool
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
@@ -353,7 +354,7 @@ abstract class AbstractType
     /**
      * Save product type specific data.
      *
-     * @return \Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType
+     * @return $this
      */
     public function saveData()
     {

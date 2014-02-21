@@ -54,7 +54,7 @@ interface ProcessorInterface
     /**
      * Add handle(s) to update
      *
-     * @param array|string $handleName
+     * @param string|string[] $handleName
      * @return ProcessorInterface
      */
     public function addHandle($handleName);

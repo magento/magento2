@@ -23,21 +23,30 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Payment\Model\Method;
 
 class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
 {
+    /**
+     * @var string
+     */
     protected $_code  = 'checkmo';
+
+    /**
+     * @var string
+     */
     protected $_formBlockType = 'Magento\Payment\Block\Form\Checkmo';
+
+    /**
+     * @var string
+     */
     protected $_infoBlockType = 'Magento\Payment\Block\Info\Checkmo';
 
     /**
      * Assign data to info model instance
      *
-     * @param   mixed $data
-     * @return  \Magento\Payment\Model\Method\Checkmo
+     * @param mixed $data
+     * @return $this
      */
     public function assignData($data)
     {
@@ -54,11 +63,17 @@ class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getPayableTo()
     {
         return $this->getConfigData('payable_to');
     }
 
+    /**
+     * @return string
+     */
     public function getMailingAddress()
     {
         return $this->getConfigData('mailing_address');

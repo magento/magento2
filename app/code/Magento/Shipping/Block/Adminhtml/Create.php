@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Block\Adminhtml;
 
 /**
  * Adminhtml shipment create
  */
-
-namespace Magento\Shipping\Block\Adminhtml;
-
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -53,6 +51,9 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'order_id';
@@ -74,12 +75,18 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         return $this->_coreRegistry->registry('current_shipment');
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderText()
     {
         $header = __('New Shipment for Order #%1', $this->getShipment()->getOrder()->getRealOrderId());
         return $header;
     }
 
+    /**
+     * @return string
+     */
     public function getBackUrl()
     {
         return $this->getUrl(

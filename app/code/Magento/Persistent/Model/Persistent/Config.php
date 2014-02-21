@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Persistent\Model\Persistent;
 
 /**
  * Persistent Config Model
  */
-namespace Magento\Persistent\Model\Persistent;
-
 class Config
 {
     /**
@@ -39,13 +37,19 @@ class Config
      */
     protected $_configFilePath;
 
-    /** @var \Magento\Config\DomFactory  */
+    /**
+     * @var \Magento\Config\DomFactory
+     */
     protected $_domFactory;
 
-    /** @var \Magento\Module\Dir\Reader  */
+    /**
+     * @var \Magento\Module\Dir\Reader
+     */
     protected $_moduleReader;
 
-    /** @var \DOMXPath  */
+    /**
+     * @var \DOMXPath
+     */
     protected $_configDomXPath = null;
 
     /**
@@ -104,7 +108,7 @@ class Config
      * Set path to config file that should be loaded
      *
      * @param string $path
-     * @return \Magento\Persistent\Model\Persistent\Config
+     * @return $this
      */
     public function setConfigFilePath($path)
     {
@@ -151,7 +155,7 @@ class Config
      * Get block's persistent config info.
      *
      * @param string $block
-     * @return $array
+     * @return array
      */
     public function getBlockConfigInfo($block)
     {
@@ -176,7 +180,7 @@ class Config
     /**
      * Convert Blocks
      *
-     * @param DomNodeList $blocks
+     * @param /DomNodeList $blocks
      * @return array
      */
     protected function _convertBlocksToArray($blocks)
@@ -186,7 +190,7 @@ class Config
             $referenceAttributes = $reference->attributes;
             $id = $referenceAttributes->getNamedItem('id')->nodeValue;
             $blocksArray[$id] = array();
-            /** @var $referenceSubNode DOMNode */
+            /** @var $referenceSubNode /DOMNode */
             foreach ($reference->childNodes as $referenceSubNode) {
                 switch ($referenceSubNode->nodeName) {
                     case 'name_in_layout':
@@ -205,7 +209,7 @@ class Config
     /**
      * Run all methods declared in persistent configuration
      *
-     * @return \Magento\Persistent\Model\Persistent\Config
+     * @return $this
      */
     public function fire()
     {
@@ -229,7 +233,7 @@ class Config
      *
      * @param array $info
      * @param bool $instance
-     * @return \Magento\Persistent\Model\Persistent\Config
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function fireOne($info, $instance = false)

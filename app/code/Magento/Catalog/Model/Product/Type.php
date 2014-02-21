@@ -36,7 +36,6 @@ class Type
      */
     const TYPE_SIMPLE       = 'simple';
     const TYPE_BUNDLE       = 'bundle';
-    const TYPE_CONFIGURABLE = 'configurable';
     const TYPE_VIRTUAL      = 'virtual';
     /**#@-*/
 

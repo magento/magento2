@@ -35,7 +35,6 @@
             <cart>
                 <delete_quote_after>30</delete_quote_after>
                 <redirect_to_cart>1</redirect_to_cart>
-                <configurable_product_image>parent</configurable_product_image>
             </cart>
             <cart_link>
                 <use_qty>1</use_qty>

@@ -24,7 +24,7 @@
 
 namespace Magento\Indexer\Block\Backend\Grid;
 
-class ItemsUpdater implements \Magento\Core\Model\Layout\Argument\UpdaterInterface
+class ItemsUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
 {
     /**
      * @var \Magento\AuthorizationInterface

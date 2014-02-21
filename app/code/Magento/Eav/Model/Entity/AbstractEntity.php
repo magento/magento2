@@ -496,10 +496,6 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
 
         $attribute = $attributeInstance;
 
-        if (empty($attributeId)) {
-            $attributeId = $attribute->getAttributeId();
-        }
-
         if (!$attribute->getAttributeCode()) {
             $attribute->setAttributeCode($attributeCode);
         }

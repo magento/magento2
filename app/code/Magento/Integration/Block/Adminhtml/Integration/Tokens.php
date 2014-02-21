@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Block\Adminhtml\Integration;
 
 use \Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
@@ -45,7 +44,7 @@ class Tokens extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Set form id prefix, declare fields for integration consumer modal
      *
-     * @return \Magento\Backend\Block\Widget\Form
+     * @return $this
      */
     protected function _prepareForm()
     {

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Resource\Import\CustomerComposite;
 
 /**
  * ImportExport customer_composite entity import data abstract resource model
@@ -31,8 +32,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Resource\Import\CustomerComposite;
-
 class Data extends \Magento\ImportExport\Model\Resource\Import\Data
 {
     /**
@@ -98,7 +97,7 @@ class Data extends \Magento\ImportExport\Model\Resource\Import\Data
      * Prepare row
      *
      * @param array $rowData
-     * @return array
+     * @return array|null
      */
     protected function _prepareRow(array $rowData)
     {

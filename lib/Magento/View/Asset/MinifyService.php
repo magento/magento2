@@ -30,26 +30,36 @@ namespace Magento\View\Asset;
 class MinifyService
 {
     /**
+     * Config
+     *
      * @var ConfigInterface
      */
     protected $config;
 
     /**
+     * ObjectManager
+     *
      * @var \Magento\ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Enabled
+     *
      * @var array
      */
     protected $enabled = array();
 
     /**
+     * Minfiers
+     *
      * @var \Magento\Code\Minifier[]
      */
     protected $minifiers = array();
 
     /**
+     * Applicaiton State
+     *
      * @var \Magento\App\State
      */
     protected $appState;
@@ -62,6 +72,8 @@ class MinifyService
     protected $_filesystem;
 
     /**
+     * Constructor
+     *
      * @param ConfigInterface $config
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\App\State $appState
@@ -142,7 +154,7 @@ class MinifyService
     /**
      * Check if minification is enabled for specified content type
      *
-     * @param $contentType
+     * @param string $contentType
      * @return bool
      */
     protected function isEnabled($contentType)
@@ -156,7 +168,7 @@ class MinifyService
     /**
      * Get minification adapter by specified content type
      *
-     * @param $contentType
+     * @param string $contentType
      * @return mixed
      * @throws \Magento\Exception
      */

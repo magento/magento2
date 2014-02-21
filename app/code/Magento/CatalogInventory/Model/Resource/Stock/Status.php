@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Model\Resource\Stock;
 
 /**
  * CatalogInventory Stock Status per website Resource Model
  */
-namespace Magento\CatalogInventory\Model\Resource\Stock;
-
 class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -47,21 +44,27 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_websiteFactory;
 
     /**
-     * Construct
-     *
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
+     * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\WebsiteFactory $websiteFactory
+        \Magento\Core\Model\WebsiteFactory $websiteFactory,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         parent::__construct($resource);
 
         $this->_storeManager = $storeManager;
         $this->_websiteFactory = $websiteFactory;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -85,9 +88,14 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int|null $websiteId
      * @return $this
      */
-    public function saveProductStatus(\Magento\CatalogInventory\Model\Stock\Status $object, $productId, $status, $qty = 0,
-        $stockId = 1, $websiteId = null)
-    {
+    public function saveProductStatus(
+        \Magento\CatalogInventory\Model\Stock\Status $object,
+        $productId,
+        $status,
+        $qty = 0,
+        $stockId = 1,
+        $websiteId = null
+    ) {
         $websites = array_keys($object->getWebsites($websiteId));
         $adapter = $this->_getWriteAdapter();
         foreach ($websites as $websiteId) {
@@ -131,12 +139,12 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve product status
      * Return array as key product id, value - stock status
      *
-     * @param int|array $productIds
+     * @param int[] $productIds
      * @param int $websiteId
      * @param int $stockId
      * @return array
      */
-    public function getProductStatus($productIds, $websiteId, $stockId = 1)
+    public function getProductStockStatus($productIds, $websiteId, $stockId = 1)
     {
         if (!is_array($productIds)) {
             $productIds = array($productIds);
@@ -297,5 +305,61 @@ class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
             ->where('stock_status_index.stock_status=?', \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK);
 
         return $this;
+    }
+
+    /**
+     * Retrieve Product(s) status for store
+     * Return array where key is a product_id, value - status
+     *
+     * @param int[] $productIds
+     * @param int $storeId
+     * @return array
+     */
+    public function getProductStatus($productIds, $storeId = null)
+    {
+        if (!is_array($productIds)) {
+            $productIds = array($productIds);
+        }
+
+        $attribute      = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status');
+        $attributeTable = $attribute->getBackend()->getTable();
+
+        $adapter        = $this->_getReadAdapter();
+
+        if ($storeId === null || $storeId == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
+            $select = $adapter->select()
+                ->from($attributeTable, array('entity_id', 'value'))
+                ->where('entity_id IN (?)', $productIds)
+                ->where('attribute_id = ?', $attribute->getAttributeId())
+                ->where('store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID);
+
+            $rows = $adapter->fetchPairs($select);
+        } else {
+            $select = $adapter->select()
+                ->from(
+                    array('t1' => $attributeTable),
+                    array('value' => $adapter->getCheckSql('t2.value_id > 0', 't2.value', 't1.value')))
+                ->joinLeft(
+                    array('t2' => $attributeTable),
+                    't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = '
+                    . (int)$storeId,
+                    array('t1.entity_id')
+                )
+                ->where('t1.store_id = ?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
+                ->where('t1.attribute_id = ?', $attribute->getAttributeId())
+                ->where('t1.entity_id IN(?)', $productIds);
+
+            $rows = $adapter->fetchPairs($select);
+        }
+
+        $statuses = array();
+        foreach ($productIds as $productId) {
+            if (isset($rows[$productId])) {
+                $statuses[$productId] = $rows[$productId];
+            } else {
+                $statuses[$productId] = -1;
+            }
+        }
+        return $statuses;
     }
 }

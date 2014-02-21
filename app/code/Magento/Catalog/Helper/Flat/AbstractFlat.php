@@ -50,20 +50,11 @@ abstract class AbstractFlat extends \Magento\App\Helper\AbstractHelper
     protected $_process = null;
 
     /**
-     * Check if Catalog Flat Data has been initialized
-     *
-     * @return bool
-     */
-    abstract public function isBuilt();
-
-    /**
      * Check if Catalog Category Flat Data is enabled
      *
-     * @param mixed $deprecatedParam this parameter is deprecated and no longer in use
-     *
      * @return bool
      */
-    abstract public function isEnabled($deprecatedParam = false);
+    abstract public function isEnabled();
 
     /**
      * Process factory

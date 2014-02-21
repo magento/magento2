@@ -44,6 +44,8 @@ class LayoutFactory
     protected $_instanceName;
 
     /**
+     * Constructor
+     *
      * @param \Magento\ObjectManager $objectManager
      * @param string $instanceName
      */

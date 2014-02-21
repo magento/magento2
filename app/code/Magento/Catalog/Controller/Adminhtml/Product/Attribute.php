@@ -362,7 +362,6 @@ class Attribute extends \Magento\Backend\App\Action
             }
 
             $data += array(
-                'is_configurable' => 0,
                 'is_filterable' => 0,
                 'is_filterable_in_search' => 0,
                 'apply_to' => array(),
@@ -473,19 +472,6 @@ class Attribute extends \Magento\Backend\App\Action
         }
         $this->messageManager->addError(__('We can\'t find an attribute to delete.'));
         $this->_redirect('catalog/*/');
-    }
-
-    /**
-     * Search for attributes by part of attribute's label in admin store
-     *
-     * @return void
-     */
-    public function suggestConfigurableAttributesAction()
-    {
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
-            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Product\Configurable\AttributeSelector')
-                ->getSuggestedAttributes($this->getRequest()->getParam('label_part'))
-        ));
     }
 
     /**

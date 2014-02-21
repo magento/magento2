@@ -23,18 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\App\RouterList">
-        <param name="routerList">
-            <array>
-                <item key="cms">
-                    <array>
-                        <item key="instance"><value>Magento\Cms\Controller\Router</value></item>
-                        <item key="disable"><value type="bool">false</value></item>
-                        <item key="sortOrder"><value>60</value></item>
-                    </array>
+        <arguments>
+            <argument name="routerList" xsi:type="array">
+                <item name="cms" xsi:type="array">
+                    <item name="instance" xsi:type="string">Magento\Cms\Controller\Router</item>
+                    <item name="disable" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="string">60</item>
                 </item>
-            </array>
-        </param>
+            </argument>
+        </arguments>
     </type>
 </config>

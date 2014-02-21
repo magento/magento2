@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model;
 
 /**
  * Payment information model
  */
-namespace Magento\Payment\Model;
-
 class Info extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -76,9 +75,9 @@ class Info extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve data
      *
-     * @param   string $key
-     * @param   mixed $index
-     * @return  mixed
+     * @param string $key
+     * @param mixed $index
+     * @return mixed
      */
     public function getData($key = '', $index = null)
     {
@@ -121,8 +120,8 @@ class Info extends \Magento\Core\Model\AbstractModel
     /**
      * Encrypt data
      *
-     * @param   string $data
-     * @return  string
+     * @param string $data
+     * @return string
      */
     public function encrypt($data)
     {
@@ -135,8 +134,8 @@ class Info extends \Magento\Core\Model\AbstractModel
     /**
      * Decrypt data
      *
-     * @param   string $data
-     * @return  string
+     * @param string $data
+     * @return string
      */
     public function decrypt($data)
     {
@@ -153,7 +152,7 @@ class Info extends \Magento\Core\Model\AbstractModel
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Payment\Model\Info
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function setAdditionalInformation($key, $value = null)
@@ -189,7 +188,7 @@ class Info extends \Magento\Core\Model\AbstractModel
      * Unsetter for entire additional_information value or one of its element by key
      *
      * @param string $key
-     * @return \Magento\Payment\Model\Info
+     * @return $this
      */
     public function unsAdditionalInformation($key = null)
     {
@@ -204,7 +203,7 @@ class Info extends \Magento\Core\Model\AbstractModel
     /**
      * Check whether there is additional information by specified key
      *
-     * @param $key
+     * @param mixed|null $key
      * @return bool
      */
     public function hasAdditionalInformation($key = null)
@@ -217,6 +216,8 @@ class Info extends \Magento\Core\Model\AbstractModel
 
     /**
      * Make sure _additionalInformation is an array
+     *
+     * @return void
      */
     protected function _initAdditionalInformation()
     {

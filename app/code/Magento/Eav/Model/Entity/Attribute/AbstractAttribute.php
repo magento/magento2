@@ -650,12 +650,7 @@ abstract class AbstractAttribute
         if ($this->usesSource() && $this->getBackendType() != self::TYPE_STATIC) {
             return $this->getSource()->getFlatColums();
         }
-
-        if ($this->_coreData->useDbCompatibleMode()) {
-            return $this->_getFlatColumnsOldDefinition();
-        } else {
-            return $this->_getFlatColumnsDdlDefinition();
-        }
+        return $this->_getFlatColumnsDdlDefinition();
     }
 
     /**

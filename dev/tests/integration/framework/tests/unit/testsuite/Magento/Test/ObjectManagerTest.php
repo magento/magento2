@@ -55,9 +55,17 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $primaryLoaderMock = $this->getMock(
             'Magento\App\ObjectManager\ConfigLoader\Primary', array(), array(), '', false
         );
+        $factory = $this->getMock('\Magento\ObjectManager\Factory', array(), array(), '', false);
+        $factory->expects($this->exactly(2))
+            ->method('create')
+            ->will($this->returnCallback(function ($className) {
+                if ($className === 'Magento\Object') {
+                    return $this->getMock('Magento\Object', array(), array(), '', false);
+                }
+            }));
 
         $model = new \Magento\TestFramework\ObjectManager(
-            null, $instanceConfig,
+            $factory, $instanceConfig,
             array(
                 'Magento\App\Filesystem\DirectoryList\Verification' => $verification,
                 'Magento\App\Cache\Type\Config' => $cache,

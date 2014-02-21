@@ -33,14 +33,15 @@ class DomTest extends \PHPUnit_Framework_TestCase
      * @param string $xmlFile
      * @param string $newXmlFile
      * @param array $ids
+     * @param string|null $typeAttributeName
      * @param string $expectedXmlFile
      * @dataProvider mergeDataProvider
      */
-    public function testMerge($xmlFile, $newXmlFile, $ids, $expectedXmlFile)
+    public function testMerge($xmlFile, $newXmlFile, $ids, $typeAttributeName, $expectedXmlFile)
     {
         $xml = file_get_contents(__DIR__ . "/_files/dom/{$xmlFile}");
         $newXml = file_get_contents(__DIR__ . "/_files/dom/{$newXmlFile}");
-        $config = new \Magento\Config\Dom($xml, $ids);
+        $config = new \Magento\Config\Dom($xml, $ids, $typeAttributeName);
         $config->merge($newXml);
         $this->assertXmlStringEqualsXmlFile(__DIR__ . "/_files/dom/{$expectedXmlFile}", $config->getDom()->saveXML());
     }
@@ -57,25 +58,46 @@ class DomTest extends \PHPUnit_Framework_TestCase
                     '/root/other_node'       => 'id',
                     '/root/other_node/child' => 'identifier',
                 ),
+                null,
                 'ids_merged.xml'
             ),
-            array('no_ids.xml', 'no_ids_new.xml', array(), 'no_ids_merged.xml'),
-            array('ambiguous_one.xml', 'ambiguous_new_two.xml', array(), 'ambiguous_merged.xml'),
-            array('namespaced.xml', 'namespaced_new.xml', array('/root/node' => 'id'), 'namespaced_merged.xml'),
-            array('override_node.xml', 'override_node_new.xml', array(), 'override_node_merged.xml'),
-            array('override_node_new.xml', 'override_node.xml', array(), 'override_node_merged.xml'),
-            array('text_node.xml', 'text_node_new.xml', array(), 'text_node_merged.xml'),
+            array('no_ids.xml', 'no_ids_new.xml', array(), null, 'no_ids_merged.xml'),
+            array('ambiguous_one.xml', 'ambiguous_new_two.xml', array(), null, 'ambiguous_merged.xml'),
+            array('namespaced.xml', 'namespaced_new.xml', array('/root/node' => 'id'), null, 'namespaced_merged.xml'),
+            array('override_node.xml', 'override_node_new.xml', array(), null, 'override_node_merged.xml'),
+            array('override_node_new.xml', 'override_node.xml', array(), null, 'override_node_merged.xml'),
+            array('text_node.xml', 'text_node_new.xml', array(), null, 'text_node_merged.xml'),
             array(
                 'recursive.xml', 'recursive_new.xml', array(
                     '/root/(node|another_node)(/param)?' => 'name',
                     '/root/node/param(/complex/item)+' => 'key',
                 ),
+                null,
                'recursive_merged.xml',
             ),
             array(
                 'recursive_deep.xml', 'recursive_deep_new.xml',
                 array('/root(/node)+' => 'name'),
+                null,
                 'recursive_deep_merged.xml',
+            ),
+            array(
+                'types.xml', 'types_new.xml',
+                array(
+                    '/root/item' => 'id',
+                    '/root/item/subitem' => 'id',
+                ),
+                'xsi:type',
+                'types_merged.xml',
+            ),
+            array(
+                'attributes.xml', 'attributes_new.xml',
+                array(
+                    '/root/item' => 'id',
+                    '/root/item/subitem' => 'id',
+                ),
+                'xsi:type',
+                'attributes_merged.xml',
             ),
         );
     }
@@ -127,7 +149,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $xml = '<root><unknown_node/></root>';
         $errorFormat = 'Error: `%message%`';
         $expectedErrors = array("Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`");
-        $dom = new \Magento\Config\Dom($xml, array(), null, $errorFormat);
+        $dom = new \Magento\Config\Dom($xml, array(), null, null, $errorFormat);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
         $this->assertFalse($actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);
@@ -141,7 +163,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         $xml = '<root><unknown_node/></root>';
         $errorFormat = '%message%,%unknown%';
-        $dom = new \Magento\Config\Dom($xml, array(), null, $errorFormat);
+        $dom = new \Magento\Config\Dom($xml, array(), null, null, $errorFormat);
         $dom->validate(__DIR__ . '/_files/sample.xsd');
     }
 }

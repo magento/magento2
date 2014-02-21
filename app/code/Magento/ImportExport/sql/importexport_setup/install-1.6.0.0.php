@@ -53,48 +53,6 @@ $table = $installer->getConnection()
 $installer->getConnection()->createTable($table);
 
 /**
- * Add unique key for parent-child pairs which makes easier configurable products import
- */
-$installer->getConnection()->addIndex(
-    $installer->getTable('catalog_product_super_link'),
-    $installer->getIdxName(
-        'catalog_product_super_link',
-        array('product_id', 'parent_id'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-    ),
-    array('product_id', 'parent_id'),
-    \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-);
-
-/**
- * Add unique key for 'catalog_product_super_attribute' table
- */
-$installer->getConnection()->addIndex(
-    $installer->getTable('catalog_product_super_attribute'),
-    $installer->getIdxName(
-        'catalog_product_super_attribute',
-        array('product_id', 'attribute_id'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-    ),
-    array('product_id', 'attribute_id'),
-    \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-);
-
-/**
- * Add unique key for 'catalog_product_super_attribute_pricing' table
- */
-$installer->getConnection()->addIndex(
-    $installer->getTable('catalog_product_super_attribute_pricing'),
-    $installer->getIdxName(
-        'catalog_product_super_attribute_pricing',
-        array('product_super_attribute_id', 'value_index', 'website_id'),
-        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-    ),
-    array('product_super_attribute_id', 'value_index', 'website_id'),
-    \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-);
-
-/**
  * Add unique key for 'catalog_product_link_attribute_int' table
  */
 $installer->getConnection()->addIndex(

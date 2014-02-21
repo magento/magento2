@@ -146,7 +146,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         // enabled and visible
         $product->setId(1);
-        $product->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $product->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH);
         $this->assertTrue($this->_helper->canShow($product));
 

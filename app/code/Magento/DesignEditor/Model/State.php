@@ -31,11 +31,6 @@ namespace Magento\DesignEditor\Model;
 class State
 {
     /**
-     * Name of layout classes that will be used as main layout
-     */
-    const LAYOUT_NAVIGATION_CLASS_NAME = 'Magento\Core\Model\Layout';
-
-    /**
      * Url model classes that will be used instead of \Magento\UrlInterface in navigation vde modes
      */
     const URL_MODEL_NAVIGATION_MODE_CLASS_NAME = 'Magento\DesignEditor\Model\Url\NavigationMode';
@@ -58,9 +53,9 @@ class State
     protected $_backendSession;
 
     /**
-     * @var \Magento\Core\Model\Layout\Factory
+     * @var AreaEmulator
      */
-    protected $_layoutFactory;
+    protected $_areaEmulator;
 
     /**
      * @var \Magento\DesignEditor\Model\Url\Factory
@@ -98,7 +93,7 @@ class State
 
     /**
      * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Core\Model\Layout\Factory $layoutFactory
+     * @param AreaEmulator $areaEmulator
      * @param \Magento\DesignEditor\Model\Url\Factory $urlModelFactory
      * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\DesignEditor\Helper\Data $dataHelper
@@ -109,7 +104,7 @@ class State
      */
     public function __construct(
         \Magento\Backend\Model\Session $backendSession,
-        \Magento\Core\Model\Layout\Factory $layoutFactory,
+        AreaEmulator $areaEmulator,
         \Magento\DesignEditor\Model\Url\Factory $urlModelFactory,
         \Magento\App\Cache\StateInterface $cacheState,
         \Magento\DesignEditor\Helper\Data $dataHelper,
@@ -119,7 +114,7 @@ class State
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_backendSession  = $backendSession;
-        $this->_layoutFactory   = $layoutFactory;
+        $this->_areaEmulator    = $areaEmulator;
         $this->_urlModelFactory = $urlModelFactory;
         $this->_cacheState      = $cacheState;
         $this->_dataHelper      = $dataHelper;
@@ -146,7 +141,7 @@ class State
             $this->_backendSession->setData(self::CURRENT_MODE_SESSION_KEY, $mode);
         }
         $this->_injectUrlModel($mode);
-        $this->_injectLayout($mode, $areaCode);
+        $this->_emulateArea($mode, $areaCode);
         $this->_setTheme();
         $this->_disableCache();
     }
@@ -165,18 +160,18 @@ class State
     }
 
     /**
-     * Create layout instance that will be used as main layout for whole system
+     * Emulate environment of an area
      *
      * @param string $mode
      * @param string $areaCode
      * @return void
      */
-    protected function _injectLayout($mode, $areaCode)
+    protected function _emulateArea($mode, $areaCode)
     {
         switch ($mode) {
             case self::MODE_NAVIGATION:
             default:
-                $this->_layoutFactory->createLayout(array('area' => $areaCode), self::LAYOUT_NAVIGATION_CLASS_NAME);
+                $this->_areaEmulator->emulateLayoutArea($areaCode);
                 break;
         }
     }

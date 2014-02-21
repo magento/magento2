@@ -23,17 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Model\Config\Backend;
+
+use Magento\Core\Model\AbstractModel;
 
 /**
  * Backend model for shipping table rates CSV importing
  *
- * @category   Magento
- * @package    Magento_Shipping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Shipping\Model\Config\Backend;
-
 class Tablerate extends \Magento\Core\Model\Config\Value
 {
     /**
@@ -65,6 +63,9 @@ class Tablerate extends \Magento\Core\Model\Config\Value
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return AbstractModel|void
+     */
     public function _afterSave()
     {
         $this->_tablerateFactory->create()->uploadAndImport($this);

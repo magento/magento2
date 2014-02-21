@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backup\Model\Resource;
 
 class Helper extends \Magento\Core\Model\Resource\Helper
@@ -46,7 +45,7 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\Date $coreDate
-     * @param $modulePrefix
+     * @param string $modulePrefix
      */
     public function __construct(
         \Magento\App\Resource $resource,
@@ -331,6 +330,8 @@ class Helper extends \Magento\Core\Model\Resource\Helper
 
     /**
      * Prepare transaction isolation level for backup process
+     *
+     * @return void
      */
     public function prepareTransactionIsolationLevel()
     {
@@ -339,6 +340,8 @@ class Helper extends \Magento\Core\Model\Resource\Helper
 
     /**
      * Restore transaction isolation level after backup
+     *
+     * @return void
      */
     public function restoreTransactionIsolationLevel()
     {

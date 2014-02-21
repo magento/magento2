@@ -1,5 +1,7 @@
 <?php
 /**
+ * EAV Entity Setup Model
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,20 +20,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Eav\Model\Entity;
 
-/**
- * EAV Entity Setup Model
- *
- * @category   Magento
- * @package    Magento_Eav
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 class Setup extends \Magento\Core\Model\Resource\Setup
 {
     /**
@@ -45,24 +38,29 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     protected $_attrGroupCollectionFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param string $resourceName
+     * @var Setup\PropertyMapperInterface
+     */
+    protected $attributeMapper;
+
+    /**
+     * @param Setup\Context $context
+     * @param $resourceName
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
         \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         $moduleName = 'Magento_Eav',
         $connectionName = ''
     ) {
-
         $this->_cache = $cache;
         $this->_attrGroupCollectionFactory = $attrGroupCollectionFactory;
+        $this->attributeMapper = $context->getAttributeMapper();
         parent::__construct($context, $resourceName, $moduleName, $connectionName);
     }
 
@@ -108,7 +106,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     }
 
     /**
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory
+     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
      */
     public function getAttributeGroupCollectionFactory()
     {
@@ -657,36 +655,6 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     }
 
     /**
-     * Prepare attribute values to save
-     *
-     * @param array $attr
-     * @return array
-     */
-    protected function _prepareValues($attr)
-    {
-        $data = array(
-            'backend_model'   => $this->_getValue($attr, 'backend'),
-            'backend_type'    => $this->_getValue($attr, 'type', 'varchar'),
-            'backend_table'   => $this->_getValue($attr, 'table'),
-            'frontend_model'  => $this->_getValue($attr, 'frontend'),
-            'frontend_input'  => $this->_getValue($attr, 'input', 'text'),
-            'frontend_label'  => $this->_getValue($attr, 'label'),
-            'frontend_class'  => $this->_getValue($attr, 'frontend_class'),
-            'source_model'    => $this->_getValue($attr, 'source'),
-            'is_required'     => $this->_getValue($attr, 'required', 1),
-            'is_user_defined' => $this->_getValue($attr, 'user_defined', 0),
-            'default_value'   => $this->_getValue($attr, 'default'),
-            'is_unique'       => $this->_getValue($attr, 'unique', 0),
-            'note'            => $this->_getValue($attr, 'note'),
-            'is_global'       => $this->_getValue($attr, 'global',
-                                     \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL
-                                 ),
-        );
-
-        return $data;
-    }
-
-    /**
      * Validate attribute data before insert into table
      *
      * @param  array $data
@@ -721,13 +689,14 @@ class Setup extends \Magento\Core\Model\Resource\Setup
     public function addAttribute($entityTypeId, $code, array $attr)
     {
         $entityTypeId = $this->getEntityTypeId($entityTypeId);
-        $data = array_merge(
+
+        $data = array_replace(
             array(
                 'entity_type_id' => $entityTypeId,
                 'attribute_code' => $code
             ),
-            $this->_prepareValues($attr)
-         );
+            $this->attributeMapper->map($attr, $entityTypeId)
+        );
 
         $this->_validateAttributeData($data);
 

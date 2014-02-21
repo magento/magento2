@@ -143,9 +143,14 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     protected $_nameIncrement = array();
 
     /**
-     * @var \Magento\Core\Model\Layout\Argument\Processor
+     * @var \Magento\View\Layout\Argument\Parser
      */
-    protected $_argumentProcessor;
+    protected $argumentParser;
+
+    /**
+     * @var \Magento\Data\Argument\InterpreterInterface
+     */
+    protected $argumentInterpreter;
 
     /**
      * @var \Magento\Core\Model\Layout\ScheduledStructure
@@ -219,7 +224,8 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\View\Element\BlockFactory $blockFactory
      * @param \Magento\Data\Structure $structure
-     * @param \Magento\Core\Model\Layout\Argument\Processor $argumentProcessor
+     * @param \Magento\View\Layout\Argument\Parser $argumentParser
+     * @param \Magento\Data\Argument\InterpreterInterface $argumentInterpreter
      * @param \Magento\Core\Model\Layout\ScheduledStructure $scheduledStructure
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\State $appState
@@ -235,7 +241,8 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         \Magento\View\DesignInterface $design,
         \Magento\View\Element\BlockFactory $blockFactory,
         \Magento\Data\Structure $structure,
-        \Magento\Core\Model\Layout\Argument\Processor $argumentProcessor,
+        \Magento\View\Layout\Argument\Parser $argumentParser,
+        \Magento\Data\Argument\InterpreterInterface $argumentInterpreter,
         \Magento\Core\Model\Layout\ScheduledStructure $scheduledStructure,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\State $appState,
@@ -250,7 +257,8 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         $this->_appState = $appState;
         $this->_area = $area;
         $this->_structure = $structure;
-        $this->_argumentProcessor = $argumentProcessor;
+        $this->argumentParser = $argumentParser;
+        $this->argumentInterpreter = $argumentInterpreter;
         $this->_elementClass = 'Magento\View\Layout\Element';
         $this->setXml(simplexml_load_string('<layout/>', $this->_elementClass));
         $this->_renderingOutput = new \Magento\Object;
@@ -547,33 +555,35 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
     }
 
     /**
-     * Parse argument nodes and create prepared array of items
+     * Parse argument nodes and return their array representation
      *
      * @param \Magento\View\Layout\Element $node
      * @return array
      */
     protected function _parseArguments(\Magento\View\Layout\Element $node)
     {
-        $arguments = array();
-        foreach ($node->xpath('argument') as $argument) {
-            /** @var $argument \Magento\View\Layout\Element */
-            $argumentName = (string)$argument['name'];
-            $arguments[$argumentName] = $this->_argumentProcessor->parse($argument);
+        $nodeDom = dom_import_simplexml($node);
+        $result = array();
+        foreach ($nodeDom->childNodes as $argumentNode) {
+            if ($argumentNode instanceof \DOMElement && $argumentNode->nodeName == 'argument') {
+                $argumentName = $argumentNode->getAttribute('name');
+                $result[$argumentName] = $this->argumentParser->parse($argumentNode);
+            }
         }
-        return $arguments;
+        return $result;
     }
 
     /**
-     * Process arguments
+     * Compute and return argument values
      *
      * @param array $arguments
      * @return array
      */
-    protected function _processArguments(array $arguments)
+    protected function _evaluateArguments(array $arguments)
     {
         $result = array();
-        foreach ($arguments as $name => $argument) {
-            $result[$name] = $this->_argumentProcessor->process($argument);
+        foreach ($arguments as $argumentName => $argumentData) {
+            $result[$argumentName] = $this->argumentInterpreter->evaluate($argumentData);
         }
         return $result;
     }
@@ -835,7 +845,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         // create block
         $className = (string)$node['class'];
 
-        $arguments = $this->_processArguments($args);
+        $arguments = $this->_evaluateArguments($args);
 
         $block = $this->_createBlock($className, $elementName,
             array('data' => $arguments));
@@ -916,7 +926,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         $block = $this->getBlock($parentName);
         if (!empty($block)) {
             $args = $this->_parseArguments($node);
-            $args = $this->_processArguments($args);
+            $args = $this->_evaluateArguments($args);
             call_user_func_array(array($block, $method), $args);
         }
 

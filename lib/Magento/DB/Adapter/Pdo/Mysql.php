@@ -2083,6 +2083,65 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
+     * Create temporary table
+     *
+     * @param \Magento\DB\Ddl\Table $table
+     * @throws \Zend_Db_Exception
+     * @return \Zend_Db_Pdo_Statement
+     */
+    public function createTemporaryTable(\Magento\DB\Ddl\Table $table)
+    {
+        $columns = $table->getColumns();
+        $sqlFragment    = array_merge(
+            $this->_getColumnsDefinition($table),
+            $this->_getIndexesDefinition($table),
+            $this->_getForeignKeysDefinition($table)
+        );
+        $tableOptions   = $this->_getOptionsDefinition($table);
+        $sql = sprintf("CREATE TEMPORARY TABLE %s (\n%s\n) %s",
+            $this->quoteIdentifier($table->getName()),
+            implode(",\n", $sqlFragment),
+            implode(" ", $tableOptions));
+
+        return $this->query($sql);
+    }
+
+    /**
+     * Rename several tables
+     *
+     * @param array $tablePairs array('oldName' => 'Name1', 'newName' => 'Name2')
+     *
+     * @return boolean
+     * @throws \Zend_Db_Exception
+     */
+    public function renameTablesBatch(array $tablePairs)
+    {
+        if (count($tablePairs) == 0) {
+            throw new \Zend_Db_Exception('Please provide tables for rename');
+        }
+
+        $renamesList = array();
+        $tablesList  = array();
+        foreach ($tablePairs as $pair) {
+            $oldTableName  = $pair['oldName'];
+            $newTableName  = $pair['newName'];
+            $renamesList[] = sprintf('%s TO %s', $oldTableName, $newTableName);
+
+            $tablesList[$oldTableName] = $oldTableName;
+            $tablesList[$newTableName] = $newTableName;
+        }
+
+        $query = sprintf('RENAME TABLE %s', implode(',', $renamesList));
+        $this->query($query);
+
+        foreach ($tablesList as $table) {
+            $this->resetDdlCache($table);
+        }
+
+        return true;
+    }
+
+    /**
      * Retrieve columns and primary keys definition array for create table
      *
      * @param Table $table
@@ -2391,6 +2450,22 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $table = $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
         $query = 'DROP TABLE IF EXISTS ' . $table;
+        $this->query($query);
+
+        return true;
+    }
+
+    /**
+     * Drop temporary table from database
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @return boolean
+     */
+    public function dropTemporaryTable($tableName, $schemaName = null)
+    {
+        $table = $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
+        $query = 'DROP TEMPORARY TABLE IF EXISTS ' . $table;
         $this->query($query);
 
         return true;
@@ -3318,6 +3393,61 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
+     * Get insert queries in array for insert by range with step parameter
+     *
+     * @param string $rangeField
+     * @param \Magento\DB\Select $select
+     * @param int $stepCount
+     * @return \Magento\DB\Select[]
+     * @throws \Magento\DB\DBException
+     */
+    public function selectsByRange($rangeField, \Magento\DB\Select $select, $stepCount = 100)
+    {
+        $fromSelect = $select->getPart(\Magento\DB\Select::FROM);
+        if (empty($fromSelect)) {
+            throw new \Magento\DB\DBException('Select object must have correct "FROM" part');
+        }
+
+        $tableName = array();
+        $correlationName = '';
+        foreach ($fromSelect as $correlationName => $formPart) {
+            if ($formPart['joinType'] == \Magento\DB\Select::FROM) {
+                $tableName = $formPart['tableName'];
+                break;
+            }
+        }
+
+        $selectRange = $this->select()
+            ->from(
+                $tableName,
+                [
+                    new \Zend_Db_Expr('MIN(' . $this->quoteIdentifier($rangeField) . ') AS min'),
+                    new \Zend_Db_Expr('MAX(' . $this->quoteIdentifier($rangeField) . ') AS max'),
+                ]
+            );
+
+        $rangeResult = $this->fetchRow($selectRange);
+        $min = $rangeResult['min'];
+        $max = $rangeResult['max'];
+
+        $queries = [];
+        while ($min <= $max) {
+            $partialSelect = clone $select;
+            $partialSelect->where(
+                    $this->quoteIdentifier($correlationName) . '.'
+                        . $this->quoteIdentifier($rangeField) . ' >= ?', $min
+                )
+                ->where(
+                    $this->quoteIdentifier($correlationName) . '.'
+                        . $this->quoteIdentifier($rangeField) . ' < ?', $min + $stepCount
+                );
+            $queries[] = $partialSelect;
+            $min += $stepCount;
+        }
+        return $queries;
+    }
+
+    /**
      * Get update table query using select object for join and update
      *
      * @param Select $select
@@ -3700,4 +3830,23 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             trigger_error('Some transactions have not been committed or rolled back', E_USER_ERROR);
         }
     }
+
+    /**
+     * Retrieve tables list
+     *
+     * @param null|string $likeCondition
+     * @return array
+     */
+    public function getTables($likeCondition = null)
+    {
+        $sql = is_null($likeCondition) ? 'SHOW TABLES' : sprintf("SHOW TABLES LIKE '%s'", $likeCondition);
+        $result = $this->query($sql);
+        $tables = [];
+        while ($row = $result->fetchColumn()) {
+            $tables[] = $row;
+        }
+        return $tables;
+    }
+
+
 }

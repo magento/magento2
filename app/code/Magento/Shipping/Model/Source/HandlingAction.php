@@ -27,6 +27,9 @@ namespace Magento\Shipping\Model\Source;
 
 class HandlingAction implements \Magento\Core\Model\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return array(

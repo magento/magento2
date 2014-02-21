@@ -33,9 +33,9 @@ class Reader extends \Magento\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = array(
-        'config/entity' => 'type',
-        'config/entity/attribute' => 'code',
-        'config/entity/attribute/field' => 'code'
+        '/config/entity' => 'type',
+        '/config/entity/attribute' => 'code',
+        '/config/entity/attribute/field' => 'code'
     );
 
     /**

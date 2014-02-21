@@ -82,7 +82,7 @@
             this.element.trigger('addToCart', this.element);
             if (this.options.addToCartUrl) {
                 $('#map-popup').hide();
-                if (opener !== null) {
+                if (opener) {
                     opener.location.href = this.options.addToCartUrl;
                 } else {
                     location.href = this.options.addToCartUrl;

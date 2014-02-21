@@ -28,8 +28,8 @@ interface ConverterInterface
     /**
      * Convert config
      *
-     * @param mixed $source
-     * @param array
+     * @param \DOMDocument $source
+     * @return array
      */
     public function convert($source);
 }

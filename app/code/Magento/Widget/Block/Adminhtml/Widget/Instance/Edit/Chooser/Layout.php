@@ -72,6 +72,7 @@ class Layout extends \Magento\View\Element\Html\Select
      * Add page types information to the options
      *
      * @param array $pageTypes
+     * @return void
      */
     protected function _addPageTypeOptions(array $pageTypes)
     {

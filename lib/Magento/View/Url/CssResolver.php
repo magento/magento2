@@ -36,16 +36,22 @@ class CssResolver
         = '#url\s*\(\s*(?(?=\'|").)(?!http\://|https\://|/|data\:)(.+?)(?:[\#\?].*?|[\'"])?\s*\)#';
 
     /**
+     * File system
+     *
      * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * View file system
+     *
      * @var \Magento\View\FileSystem
      */
     protected $viewFileSystem;
 
     /**
+     * Constructor
+     *
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\FileSystem $viewFileSystem
      */
@@ -66,7 +72,7 @@ class CssResolver
      * @param string $originalPath
      * @param string $newPath
      * @param callable|null $cbRelUrlToPublicPath Optional custom callback to resolve relative urls to file paths
-     * @return mixed
+     * @return string
      */
     public function replaceCssRelativeUrls($cssContent, $originalPath, $newPath, $cbRelUrlToPublicPath = null)
     {

@@ -37,16 +37,22 @@ use Magento\Exception;
 class Theme implements SourceInterface
 {
     /**
+     * Themes directory
+     *
      * @var ReadInterface
      */
     protected $themesDirectory;
 
     /**
+     * File factory
+     *
      * @var Factory
      */
     private $fileFactory;
 
     /**
+     * Constructor
+     *
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      */

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Payment\Model\Config\Source;
 
 class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
@@ -44,6 +43,9 @@ class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
         $this->_paymentData = $paymentData;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return $this->_paymentData->getPaymentMethodList(true, true, true);

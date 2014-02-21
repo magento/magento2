@@ -39,11 +39,15 @@ class Calendar extends \Magento\View\Element\Template
     protected $_date;
 
     /**
+     * JSON Encoder
+     *
      * @var \Magento\Json\EncoderInterface
      */
     protected $encoder;
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Model\Date $date
      * @param \Magento\Json\EncoderInterface $encoder
@@ -124,7 +128,7 @@ class Calendar extends \Magento\View\Element\Template
     /**
      * Return offset of current timezone with GMT in seconds
      *
-     * @return integer
+     * @return int
      */
     public function getTimezoneOffsetSeconds()
     {
@@ -134,7 +138,7 @@ class Calendar extends \Magento\View\Element\Template
     /**
      * Getter for store timestamp based on store timezone settings
      *
-     * @param mixed $store
+     * @param null|string|bool|int|\Magento\Core\Model\Store $store
      * @return int
      */
     public function getStoreTimestamp($store = null)

@@ -53,26 +53,26 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @var string
      */
-    protected $_keyStatusFilters        = '_cache_instance_status_filters';
+    protected $_keyStatusFilters = '_cache_instance_status_filters';
 
     /**
      * Product is composite properties
      *
      * @var bool
      */
-    protected $_isComposite             = true;
+    protected $_isComposite = true;
 
     /**
-     * Product is configurable
+     * Product is possible to configure
      *
      * @var bool
      */
-    protected $_canConfigure            = true;
+    protected $_canConfigure = true;
 
     /**
      * Catalog product status
      *
-     * @var \Magento\Catalog\Model\Product\Status
+     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
      */
     protected $_catalogProductStatus;
 
@@ -108,7 +108,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Logger $logger
      * @param \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Product\Status $catalogProductStatus
+     * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\App\State $appState
      * @param array $data
      *
@@ -127,7 +127,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Logger $logger,
         \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Product\Status $catalogProductStatus,
+        \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\App\State $appState,
         array $data = array()
     ) {
@@ -272,8 +272,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if (!$product->hasData($this->_keyStatusFilters)) {
             return array(
-                \Magento\Catalog\Model\Product\Status::STATUS_ENABLED,
-                \Magento\Catalog\Model\Product\Status::STATUS_DISABLED
+                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
+                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED
             );
         }
         return $product->getData($this->_keyStatusFilters);

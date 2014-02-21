@@ -57,6 +57,9 @@ class DbTable extends \SessionHandler
 
     /**
      * Check DB connection
+     *
+     * @return void
+     * @throws \Magento\Session\SaveHandlerException
      */
     protected function checkConnection()
     {
@@ -73,7 +76,7 @@ class DbTable extends \SessionHandler
      *
      * @param string $savePath ignored
      * @param string $sessionName ignored
-     * @return boolean
+     * @return bool
      */
     public function open($savePath, $sessionName)
     {
@@ -83,7 +86,7 @@ class DbTable extends \SessionHandler
     /**
      * Close session
      *
-     * @return boolean
+     * @return bool
      */
     public function close()
     {
@@ -118,7 +121,7 @@ class DbTable extends \SessionHandler
      *
      * @param string $sessionId
      * @param string $sessionData
-     * @return boolean
+     * @return bool
      */
     public function write($sessionId, $sessionData)
     {
@@ -149,7 +152,7 @@ class DbTable extends \SessionHandler
      * Destroy session
      *
      * @param string $sessionId
-     * @return boolean
+     * @return bool
      */
     public function destroy($sessionId)
     {
@@ -162,7 +165,7 @@ class DbTable extends \SessionHandler
      * Garbage collection
      *
      * @param int $maxLifeTime
-     * @return boolean
+     * @return bool
      */
     public function gc($maxLifeTime)
     {

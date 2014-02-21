@@ -45,7 +45,6 @@ class CartConfigurationTest extends \PHPUnit_Framework_TestCase
         return array(
             'simple' => array('simple', array(), false),
             'virtual' => array('virtual', array('options' => true), true),
-            'configurable' => array('configurable',array('super_attribute' => false), true),
             'bundle' => array('bundle', array('bundle_option' => 'option1'), true),
             'some_option_type' => array('some_option_type', array(), false)
         );

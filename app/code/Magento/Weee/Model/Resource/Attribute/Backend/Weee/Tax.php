@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Weee\Model\Resource\Attribute\Backend\Weee;
 
 /**
  * Catalog product WEEE tax backend attribute model
@@ -32,8 +32,6 @@
  * @package     Magento_Weee
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Weee\Model\Resource\Attribute\Backend\Weee;
-
 class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -56,6 +54,7 @@ class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Defines main resource table and table identifier field
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -96,7 +95,7 @@ class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @return \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax
+     * @return $this
      */
     public function deleteProductData($product, $attribute)
     {
@@ -121,7 +120,7 @@ class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $data
-     * @return \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax
+     * @return $this
      */
     public function insertProductData($product, $data)
     {

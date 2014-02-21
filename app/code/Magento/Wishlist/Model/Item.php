@@ -422,7 +422,7 @@ class Item extends \Magento\Core\Model\AbstractModel
 
         $storeId = $this->getStoreId();
 
-        if ($product->getStatus() != \Magento\Catalog\Model\Product\Status::STATUS_ENABLED) {
+        if ($product->getStatus() != \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
             return false;
         }
 

@@ -30,6 +30,8 @@ use Magento\View\Element\Template;
 class Components extends Template
 {
     /**
+     * Developer mode
+     *
      * @return bool
      */
     public function isDeveloperMode()

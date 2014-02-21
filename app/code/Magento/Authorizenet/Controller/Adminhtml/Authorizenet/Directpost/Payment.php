@@ -1,6 +1,6 @@
 <?php
 /**
- * Admihtml DirtectPost Payment Controller
+ * Adminhtml DirectPost Payment Controller
  *
  * Magento
  *
@@ -82,6 +82,7 @@ class Payment
     /**
      * Send request to authorize.net
      *
+     * @return void
      */
     public function placeAction()
     {
@@ -178,6 +179,7 @@ class Payment
     /**
      * Retrieve params and put javascript into iframe
      *
+     * @return void
      */
     public function redirectAction()
     {
@@ -222,6 +224,7 @@ class Payment
     /**
      * Return order quote by ajax
      *
+     * @return void
      */
     public function returnQuoteAction()
     {
@@ -235,6 +238,7 @@ class Payment
      *
      * @param bool $cancelOrder
      * @param string $errorMsg
+     * @return void
      */
     protected function _returnQuote($cancelOrder = false, $errorMsg = '')
     {

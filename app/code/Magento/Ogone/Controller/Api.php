@@ -23,16 +23,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Ogone\Controller;
+
+use \Magento\Sales\Model\Order;
 
 /**
  * Ogone Api Controller
  */
-namespace Magento\Ogone\Controller;
-
 class Api extends \Magento\App\Action\Action
 {
     /**
      * Order instance
+     *
+     * @var Order
      */
     protected $_order;
 
@@ -82,9 +85,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Return order instance loaded by increment id'
+     * Return order instance loaded by increment id
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     protected function _getOrder()
     {
@@ -136,7 +139,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Load place from layout to make POST on ogone
+     * Load place from layout to make POST on Ogone
+     *
+     * @return void
      */
     public function placeformAction()
     {
@@ -166,7 +171,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Display our pay page, need to ogone payment with external pay page mode
+     * Display our pay page, need to Ogone payment with external pay page mode
+     *
+     * @return void
      */
     public function paypageAction()
     {
@@ -175,8 +182,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Action to control postback data from ogone
+     * Action to control postback data from Ogone
      *
+     * @return null|false
      */
     public function postBackAction()
     {
@@ -189,8 +197,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Action to process ogone offline data
+     * Action to process Ogone offline data
      *
+     * @return null|false
      */
     public function offlineProcessAction()
     {
@@ -202,7 +211,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Made offline ogone data processing, depending of incoming statuses
+     * Made offline Ogone data processing, depending of incoming statuses
+     *
+     * @return void
      */
     protected function _ogoneProcess()
     {
@@ -230,10 +241,11 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * when payment gateway accept the payment, it will land to here
-     * need to change order status as processed ogone
+     * When payment gateway accept the payment, it will land to here
+     * need to change order status as processed Ogone
      * update transaction id
      *
+     * @return void
      */
     public function acceptAction()
     {
@@ -246,6 +258,8 @@ class Api extends \Magento\App\Action\Action
 
     /**
      * Process success action by accept url
+     *
+     * @return void
      */
     protected function _acceptProcess()
     {
@@ -282,7 +296,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Process Configured Payment Action: Direct Sale, create invoce if state is Pending
+     * Process Configured Payment Action: Direct Sale, create invoice if state is Pending
+     *
+     * @return void
      */
     protected function _processDirectSale()
     {
@@ -340,6 +356,8 @@ class Api extends \Magento\App\Action\Action
     /**
      * Process Configured Payment Actions: Authorized, Default operation
      * just place order
+     *
+     * @return void
      */
     protected function _processAuthorize()
     {
@@ -374,12 +392,12 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * We get some CC info from ogone, so we must save it
+     * We get some CC info from Ogone, so we must save it
      *
      * @param \Magento\Sales\Model\Order $order
      * @param array $ccInfo
      *
-     * @return \Magento\Ogone\Controller\Api
+     * @return $this
      */
     protected function _prepareCCInfo($order, $ccInfo)
     {
@@ -393,11 +411,12 @@ class Api extends \Magento\App\Action\Action
 
 
     /**
-     * the payment result is uncertain
+     * The payment result is uncertain
      * exception status can be 52 or 92
-     * need to change order status as processing ogone
+     * need to change order status as processing Ogone
      * update transaction id
      *
+     * @return void
      */
     public function exceptionAction()
     {
@@ -409,7 +428,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Process exception action by ogone exception url
+     * Process exception action by Ogone exception url
+     *
+     * @return void
      */
     public function _exceptionProcess()
     {
@@ -458,10 +479,11 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * when payment got decline
+     * When payment got decline
      * need to change order status to cancelled
      * take the user back to shopping cart
      *
+     * @return void
      */
     public function declineAction()
     {
@@ -474,7 +496,9 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * Process decline action by ogone decline url
+     * Process decline action by Ogone decline url
+     *
+     * @return void
      */
     protected function _declineProcess()
     {
@@ -485,11 +509,11 @@ class Api extends \Magento\App\Action\Action
     }
 
     /**
-     * when user cancel the payment
+     * When user cancel the payment
      * change order status to cancelled
-     * need to rediect user to shopping cart
+     * need to redirect user to shopping cart
      *
-     * @return \Magento\Ogone\Controller\Api
+     * @return void
      */
     public function cancelAction()
     {
@@ -504,7 +528,7 @@ class Api extends \Magento\App\Action\Action
     /**
      * Process cancel action by cancel url
      *
-     * @return \Magento\Ogone\Controller\Api
+     * @return $this
      */
     public function _cancelProcess()
     {
@@ -519,7 +543,7 @@ class Api extends \Magento\App\Action\Action
      *
      * @param string $status
      * @param string $comment
-     * @return \Magento\Ogone\Controller\Api
+     * @return void|$this
      */
     protected function _cancelOrder($status, $comment='')
     {

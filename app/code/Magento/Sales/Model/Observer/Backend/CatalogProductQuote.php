@@ -46,7 +46,7 @@ class CatalogProductQuote
      */
     protected function _recollectQuotes($productId, $status)
     {
-        if ($status != \Magento\Catalog\Model\Product\Status::STATUS_ENABLED) {
+        if ($status != \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
             $this->_quote->markQuotesRecollect($productId);
         }
     }
@@ -60,18 +60,6 @@ class CatalogProductQuote
     {
         $product = $observer->getEvent()->getProduct();
         $this->_recollectQuotes($product->getId(), $product->getStatus());
-    }
-
-    /**
-     * Catalog Mass Status update process
-     *
-     * @param \Magento\Event\Observer $observer
-     */
-    public function catalogProductStatusUpdate(\Magento\Event\Observer $observer)
-    {
-        $status = $observer->getEvent()->getStatus();
-        $productId  = $observer->getEvent()->getProductId();
-        $this->_recollectQuotes($productId, $status);
     }
 
     /**

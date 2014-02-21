@@ -167,10 +167,7 @@ class Indexer extends \Magento\Object implements IndexerInterface
     {
         if (!$this->state) {
             $this->state = $this->stateFactory->create();
-            $this->state->load($this->getId(), 'indexer_id');
-            if (!$this->state->getId()) {
-                $this->state->setIndexerId($this->getId());
-            }
+            $this->state->loadByIndexer($this->getId());
         }
         return $this->state;
     }
@@ -247,7 +244,9 @@ class Indexer extends \Magento\Object implements IndexerInterface
      */
     public function invalidate()
     {
-        $this->getState()->setStatus(Indexer\State::STATUS_INVALID)->save();
+        $state = $this->getState();
+        $state->setStatus(Indexer\State::STATUS_INVALID);
+        $state->save();
     }
 
     /**
@@ -298,22 +297,20 @@ class Indexer extends \Magento\Object implements IndexerInterface
     public function reindexAll()
     {
         if ($this->getState()->getStatus() != Indexer\State::STATUS_WORKING) {
-            $this->getState()
-                ->setStatus(Indexer\State::STATUS_WORKING)
-                ->save();
+            $state = $this->getState();
+            $state->setStatus(Indexer\State::STATUS_WORKING);
+            $state->save();
             if ($this->getView()->isEnabled()) {
                 $this->getView()->suspend();
             }
             try {
                 $this->getActionInstance()->executeFull();
-                $this->getState()
-                    ->setStatus(Indexer\State::STATUS_VALID)
-                    ->save();
+                $state->setStatus(Indexer\State::STATUS_VALID);
+                $state->save();
                 $this->getView()->resume();
             } catch (\Exception $exception) {
-                $this->getState()
-                    ->setStatus(Indexer\State::STATUS_INVALID)
-                    ->save();
+                $state->setStatus(Indexer\State::STATUS_INVALID);
+                $state->save();
                 $this->getView()->resume();
                 throw $exception;
             }

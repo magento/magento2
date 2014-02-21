@@ -30,21 +30,29 @@ namespace Magento\View;
 class RelatedFile
 {
     /**
+     * View service
+     *
      * @var Service
      */
     protected $viewService;
 
     /**
+     * View file system
+     *
      * @var FileSystem
      */
     protected $viewFileSystem;
 
     /**
+     * File system
+     *
      * @var \Magento\Filesystem
      */
     protected $filesystem;
 
     /**
+     * Constructor
+     *
      * @param Service $viewService
      * @param FileSystem $viewFileSystem
      * @param \Magento\App\Filesystem $filesystem
@@ -65,7 +73,7 @@ class RelatedFile
      * @param string $relatedFilePath URL to the file that was extracted from $parentPath
      * @param string $parentPath path to the file
      * @param string $parentRelativePath original file name identifier that was requested for processing
-     * @param array $params theme/module parameters array
+     * @param array &$params theme/module parameters array
      * @return string
      */
     public function buildPath($relatedFilePath, $parentPath, $parentRelativePath, &$params)

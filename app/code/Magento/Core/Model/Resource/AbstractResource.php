@@ -249,7 +249,7 @@ abstract class AbstractResource
         $fieldsetColumns = $object->getFieldset();
         if (!empty($fieldsetColumns)) {
             $readAdapter = $this->_getReadAdapter();
-            if ($readAdapter instanceof \Magento\Db\Adapter\AdapterInterface) {
+            if ($readAdapter instanceof \Magento\DB\Adapter\AdapterInterface) {
                 $entityTableColumns = $readAdapter->describeTable($tableName);
                 $columns = array_intersect($fieldsetColumns, array_keys($entityTableColumns));
             }

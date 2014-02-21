@@ -85,7 +85,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
         $duplicateMock->expects($this->once())->method('setOriginalId')->with(1);
         $duplicateMock->expects($this->once())->method('setStatus')
-            ->with(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED);
+            ->with(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
         $duplicateMock->expects($this->once())->method('setCreatedAt')->with(null);
         $duplicateMock->expects($this->once())->method('setUpdatedAt')->with(null);
         $duplicateMock->expects($this->once())->method('setId')->with(null);

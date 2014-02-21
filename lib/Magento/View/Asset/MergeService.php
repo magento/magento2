@@ -30,29 +30,39 @@ namespace Magento\View\Asset;
 class MergeService
 {
     /**
+     * Object Manager
+     *
      * @var \Magento\ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Config
+     *
      * @var ConfigInterface
      */
     protected $config;
 
     /**
+     * Filesystem
+     *
      * @var \Magento\App\Filesystem
      */
     protected $filesystem;
 
     /**
+     * State
+     *
      * @var \Magento\App\State
      */
     protected $state;
 
     /**
+     * Constructor
+     *
      * @param \Magento\ObjectManager $objectManager
      * @param ConfigInterface $config
-     * @param \Magento\App\Filesystem $filesystem,
+     * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\App\State $state
      */
     public function __construct(
@@ -103,6 +113,8 @@ class MergeService
 
     /**
      * Remove all merged js/css files
+     *
+     * @return void
      */
     public function cleanMergedJsCss()
     {

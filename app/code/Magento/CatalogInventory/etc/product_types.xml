@@ -26,7 +26,4 @@
 <config>
     <type name="simple" isQty="true" />
     <type name="virtual" isQty="true" />
-    <type name="configurable">
-        <stockIndexerModel instance="Magento\CatalogInventory\Model\Resource\Indexer\Stock\Configurable" />
-    </type>
 </config>

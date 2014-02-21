@@ -85,7 +85,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_keyUsedOptionsIds           = '_cache_instance_used_options_ids';
 
     /**
-     * Product is configurable
+     * Product is possible to configure
      *
      * @var bool
      */

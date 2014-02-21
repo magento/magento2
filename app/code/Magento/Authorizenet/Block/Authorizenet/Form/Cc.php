@@ -23,11 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authorizenet\Block\Authorizenet\Form;
 
 class Cc extends \Magento\Payment\Block\Form
 {
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Authorizenet::form/cc.phtml';
 
     /**
@@ -90,6 +92,7 @@ class Cc extends \Magento\Payment\Block\Form
     /**
      * Get notice message
      *
+     * @param string $message
      * @return string
      */
     public function showNoticeMessage($message)
@@ -102,7 +105,7 @@ class Cc extends \Magento\Payment\Block\Form
     /**
      * Return partial authorization confirmation message and unset it in payment model
      *
-     * @return string
+     * @return string|false
      */
     public function getPartialAuthorizationConfirmationMessage()
     {
@@ -156,7 +159,7 @@ class Cc extends \Magento\Payment\Block\Form
     /**
      * Return flag - is partial authorization process started
      *
-     * @return string
+     * @return bool
      */
     public function isPartialAuthorization()
     {

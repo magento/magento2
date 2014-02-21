@@ -32,6 +32,8 @@ use Magento\View\Element\Text;
 class Link extends \Magento\View\Element\Text
 {
     /**
+     * Set link
+     *
      * @param array|string $liParams
      * @param array|string $aParams
      * @param string $innerText

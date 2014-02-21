@@ -48,7 +48,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_widget;
 
     /**
-     * @var \Magento\Widget\Model\Widget\Instance\OptionsFactory
      * @var \Magento\Core\Model\Option\ArrayPool
      */
     protected $_sourceModelPool;
@@ -77,8 +76,10 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare Widget Options Form and values according to specified type
      *
-     * widget_type must be set in data before
+     * The widget_type must be set in data before
      * widget_values may be set before to render element values
+     *
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -132,7 +133,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * Add fields to main fieldset based on specified widget type
      *
      * @throws \Magento\Core\Exception
-     * @return \Magento\Backend\Block\Widget\Form
+     * @return $this
      */
     public function addFields()
     {
@@ -174,8 +175,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
 
         if ($values = $this->getWidgetValues()) {
             $data['value'] = (isset($values[$fieldName]) ? $values[$fieldName] : '');
-        }
-        else {
+        } else {
             $data['value'] = $parameter->getValue();
             //prepare unique id value
             if ($fieldName == 'unique_id' && $data['value'] == '') {

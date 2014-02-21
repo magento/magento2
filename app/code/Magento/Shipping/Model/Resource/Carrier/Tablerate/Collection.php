@@ -23,27 +23,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Shipping\Model\Resource\Carrier\Tablerate;
 
 /**
  * Shipping table rates collection
  *
- * @category   Magento
- * @package    Magento_Shipping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Shipping\Model\Resource\Carrier\Tablerate;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
-     * directory/country table name
+     * Directory/country table name
      *
      * @var string
      */
     protected $_countryTable;
 
     /**
-     * directory/country_region table name
+     * Directory/country_region table name
      *
      * @var string
      */
@@ -52,6 +49,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Define resource model and item
      *
+     * @return void
      */
     protected function _construct()
     {

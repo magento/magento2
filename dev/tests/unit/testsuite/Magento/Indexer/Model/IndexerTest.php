@@ -114,20 +114,15 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $indexId = 'indexer_internal_name';
         $stateMock = $this->getMock(
             '\Magento\Indexer\Model\Indexer\State',
-            array('load', 'getId', 'setIndexerId', '__wakeup'),
+            array('loadByIndexer', 'getId', '__wakeup'),
             array(),
             '',
             false
         );
         $stateMock->expects($this->once())
-            ->method('load')
-            ->with($indexId, 'indexer_id')
+            ->method('loadByIndexer')
+            ->with($indexId)
             ->will($this->returnSelf());
-        $stateMock->expects($this->never())
-            ->method('setIndexerId');
-        $stateMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(1));
         $this->stateFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($stateMock));

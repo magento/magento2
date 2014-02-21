@@ -35,7 +35,7 @@ class SearchResults extends \Magento\Service\Entity\AbstractDto
      */
     public function getItems()
     {
-        return $this->_get('items');
+        return is_null($this->_get('items')) ? [] : $this->_get('items');
     }
 
     /**

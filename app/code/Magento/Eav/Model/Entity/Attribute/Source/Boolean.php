@@ -124,16 +124,10 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             'default'   => null,
             'extra'     => null
         );
-
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $column['type']     = 'tinyint(1)';
-            $column['is_null']  = true;
-        } else {
-            $column['type']     = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
-            $column['length']   = 1;
-            $column['nullable'] = true;
-            $column['comment']  = $attributeCode . ' column';
-        }
+        $column['type']     = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
+        $column['length']   = 1;
+        $column['nullable'] = true;
+        $column['comment']  = $attributeCode . ' column';
 
         return array($attributeCode => $column);
     }

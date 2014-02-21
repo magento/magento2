@@ -105,9 +105,6 @@ class DefaultColumn extends \Magento\Backend\Block\Template
 
     public function getSku()
     {
-        /*if ($this->getItem()->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE) {
-            return $this->getItem()->getProductOptionByCode('simple_sku');
-        }*/
         return $this->getItem()->getSku();
     }
 

@@ -23,22 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Indexer\Model\ConfigInterface" type="Magento\Indexer\Model\Config" />
     <preference for="Magento\Indexer\Model\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
     <type name="Magento\Indexer\Model\Indexer">
-        <param name="view">
-            <instance type="Magento\Mview\View" shared="false"/>
-        </param>
+        <arguments>
+            <argument name="view" xsi:type="object" shared="false">Magento\Mview\View</argument>
+        </arguments>
     </type>
     <type name="Magento\Indexer\Model\Config">
-        <param name="configData">
-            <instance type="Magento\Indexer\Model\Config\Data\Proxy"/>
-        </param>
+        <arguments>
+            <argument name="configData" xsi:type="object">Magento\Indexer\Model\Config\Data\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Indexer\Model\Config\Data">
-        <param name="stateCollection">
-            <instance type="Magento\Indexer\Model\Resource\Indexer\State\Collection" shared="false"/>
-        </param>
+        <arguments>
+            <argument name="stateCollection" xsi:type="object" shared="false">Magento\Indexer\Model\Resource\Indexer\State\Collection</argument>
+        </arguments>
     </type>
 </config>

@@ -37,11 +37,15 @@ class Factory
     const FILE_LIST_COLLATOR = 'Magento\View\Layout\File\FileList\Collator';
 
     /**
+     * Object manager
+     *
      * @var ObjectManager
      */
     protected $objectManager;
 
     /**
+     * Constructor
+     *
      * @param ObjectManager $objectManager
      */
     public function __construct(ObjectManager $objectManager)

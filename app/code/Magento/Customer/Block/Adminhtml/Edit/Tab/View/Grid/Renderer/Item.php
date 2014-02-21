@@ -137,7 +137,7 @@ class Item
         return $this->_productConfig->getFormattedOptionValue($option, $params);
     }
 
-    /*
+    /**
      * Renders item product name and its configuration
      *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item

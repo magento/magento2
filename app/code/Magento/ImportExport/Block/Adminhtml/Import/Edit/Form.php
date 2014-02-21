@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
 /**
  * Import edit form block
@@ -31,8 +32,6 @@
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -79,7 +78,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add fieldsets
      *
-     * @return \Magento\ImportExport\Block\Adminhtml\Import\Edit\Form
+     * @return $this
      */
     protected function _prepareForm()
     {

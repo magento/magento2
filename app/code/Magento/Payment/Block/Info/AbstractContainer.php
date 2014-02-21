@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Block\Info;
 
 /**
  * Payment information container block
@@ -31,8 +32,6 @@
  * @package    Magento_Payment
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Payment\Block\Info;
-
 abstract class AbstractContainer extends \Magento\View\Element\Template
 {
     /**
@@ -59,7 +58,7 @@ abstract class AbstractContainer extends \Magento\View\Element\Template
     /**
      * Add payment info block to layout
      *
-     * @return \Magento\Payment\Block\Info\AbstractContainer
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -75,7 +74,7 @@ abstract class AbstractContainer extends \Magento\View\Element\Template
     /**
      * Retrieve info block name
      *
-     * @return unknown
+     * @return string|false
      */
     protected function _getInfoBlockName()
     {
@@ -95,9 +94,9 @@ abstract class AbstractContainer extends \Magento\View\Element\Template
     /**
      * Declare info block template
      *
-     * @param   string $method
-     * @param   string $template
-     * @return  \Magento\Payment\Block\Info\AbstractContainer
+     * @param string $method
+     * @param string $template
+     * @return $this
      */
     public function setInfoTemplate($method='', $template='')
     {

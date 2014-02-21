@@ -79,29 +79,6 @@ class FactoryDecorator implements Factory
     }
 
     /**
-     * Set object manager
-     *
-     * @param ObjectManager $objectManager
-     * @return void
-     */
-    public function setObjectManager(ObjectManager $objectManager)
-    {
-        $this->_objectManager = $objectManager;
-        $this->_factory->setObjectManager($objectManager);
-    }
-
-    /**
-     * Set application arguments
-     *
-     * @param array $arguments
-     * @return void
-     */
-    public function setArguments($arguments)
-    {
-        $this->_factory->setArguments($arguments);
-    }
-
-    /**
      * Create instance of requested type with requested arguments
      *
      * @param string $type

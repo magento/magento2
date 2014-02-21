@@ -28,7 +28,6 @@
     <entity name="customer" label="Customers Main File" model="Magento\ImportExport\Model\Export\Entity\Eav\Customer" />
     <entity name="customer_address" label="Customer Addresses" model="Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address" />
     <productType name="simple" model="Magento\ImportExport\Model\Export\Entity\Product\Type\Simple" />
-    <productType name="configurable" model="Magento\ImportExport\Model\Export\Entity\Product\Type\Configurable" />
     <productType name="virtual" model="Magento\ImportExport\Model\Export\Entity\Product\Type\Simple" />
     <fileFormat name="csv" label="CSV" model="Magento\ImportExport\Model\Export\Adapter\Csv" />
 </config>

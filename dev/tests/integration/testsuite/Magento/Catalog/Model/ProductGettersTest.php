@@ -78,9 +78,17 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStatus()
     {
-        $this->assertEquals(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED, $this->_model->getStatus());
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED);
-        $this->assertEquals(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED, $this->_model->getStatus());
+        $this->assertEquals(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
+            $this->_model->getStatus()
+        );
+
+        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+
+        $this->assertEquals(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
+            $this->_model->getStatus()
+        );
     }
 
     public function testGetSetTypeInstance()
@@ -201,7 +209,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributeText()
     {
         $this->assertNull($this->_model->getAttributeText('status'));
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->assertEquals('Enabled', $this->_model->getAttributeText('status'));
     }
 

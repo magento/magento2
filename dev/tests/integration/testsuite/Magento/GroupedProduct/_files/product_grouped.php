@@ -38,7 +38,7 @@ $product->setTypeId(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_COD
     ->setPrice(100)
     ->setTaxClassId(0)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setGroupedLinkData(array(
         2 => array('qty' => 1, 'position' => 1),
         21 => array('qty' => 1, 'position' => 2),

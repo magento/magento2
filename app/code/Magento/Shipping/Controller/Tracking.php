@@ -69,6 +69,7 @@ class Tracking extends \Magento\App\Action\Action
      * Popup action
      * Shows tracking info if it's present, otherwise redirects to 404
      *
+     * @return void
      * @throws NotFoundException
      */
     public function popupAction()

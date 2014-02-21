@@ -75,8 +75,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testReindexAllInvalid()
     {
         $indexers = array(
-            'indexer1',
-            'indexer2',
+            'indexer1' => array(),
+            'indexer2' => array(),
         );
 
         $this->configMock->expects($this->once())

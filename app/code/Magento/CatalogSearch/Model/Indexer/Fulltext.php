@@ -495,7 +495,7 @@ class Fulltext extends AbstractIndexer
             }
             if (isset($data['catalogsearch_status'])) {
                 $status = $data['catalogsearch_status'];
-                if ($status == \Magento\Catalog\Model\Product\Status::STATUS_ENABLED) {
+                if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
                     $this->_getIndexer()
                         ->rebuildIndex(null, $productIds);
                 } else {

@@ -23,16 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Controller\Adminhtml;
 
 /**
  * Backup admin controller
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup\Controller\Adminhtml;
-
 class Index extends \Magento\Backend\App\Action
 {
     /**
@@ -80,6 +77,8 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Backup list action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -101,6 +100,8 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Backup list action
+     *
+     * @return void
      */
     public function gridAction()
     {
@@ -111,7 +112,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Create backup action
      *
-     * @return \Magento\Backend\App\Action
+     * @return void|\Magento\Backend\App\Action
      */
     public function createAction()
     {
@@ -195,7 +196,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Download backup action
      *
-     * @return \Magento\Backend\App\Action
+     * @return void|\Magento\Backend\App\Action
      */
     public function downloadAction()
     {
@@ -229,7 +230,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Rollback Action
      *
-     * @return \Magento\Backend\App\Action
+     * @return void|\Magento\Backend\App\Action
      */
     public function rollbackAction()
     {

@@ -61,7 +61,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $model = new \Magento\Config\Reader\Filesystem(
+        $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,
             $this->_schemaLocatorMock,
@@ -88,7 +88,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->method('getSchema')
             ->will($this->returnValue(__DIR__ . "/../_files/reader/schema.xsd"));
         $this->_validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
-        $model = new \Magento\Config\Reader\Filesystem(
+        $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,
             $this->_schemaLocatorMock,
@@ -113,7 +113,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(__DIR__ . "/../_files/reader/schema.xsd"));
         $this->_validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
 
-        $model = new \Magento\Config\Reader\Filesystem(
+        $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,
             $this->_schemaLocatorMock,
@@ -124,5 +124,24 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->_fileResolverMock
             ->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
         $model->read('scope');
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Instance of the DOM config merger is expected, got StdClass instead.
+     */
+    public function testReadException()
+    {
+        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
+        $model = new Filesystem(
+            $this->_fileResolverMock,
+            $this->_converterMock,
+            $this->_schemaLocatorMock,
+            $this->_validationStateMock,
+            'fileName',
+            array(),
+            'StdClass'
+        );
+        $model->read();
     }
 }

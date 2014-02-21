@@ -60,7 +60,7 @@ abstract class AbstractDhl extends \Magento\Usa\Model\Shipping\Carrier\AbstractC
     /**
      * Determine shipping day according to configuration settings
      *
-     * @param array $shippingDays
+     * @param string[] $shippingDays
      * @param string $date
      * @return string
      */

@@ -28,16 +28,22 @@ use Magento\View\TemplateEngineFactory;
 class TemplateEnginePool
 {
     /**
+     * Factory
+     *
      * @var TemplateEngineFactory
      */
     protected $factory;
 
     /**
+     * Template engines
+     *
      * @var \Magento\View\TemplateEngineInterface[]
      */
     protected $engines = array();
 
     /**
+     * Constructor
+     *
      * @param TemplateEngineFactory $factory
      */
     public function __construct(TemplateEngineFactory $factory)

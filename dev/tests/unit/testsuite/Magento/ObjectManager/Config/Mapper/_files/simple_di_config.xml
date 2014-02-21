@@ -23,88 +23,30 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <!-- Comment within root node -->
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updaterter" />
     <preference for="Magento\AppInterface" type="Magento\Core\Model\App\Proxy" />
+    <!--Arguments only-->
     <type name="Magento\App\State">
-        <param name="mode">
-            <value type="argument">Magento\App\State::PARAM_MODE</value>
-        </param>
+        <arguments>
+            <argument name="test name" xsi:type="test_type">test value</argument>
+        </arguments>
     </type>
+    <!--Arguments and plugins-->
     <type name="Magento\Core\Model\Config\Modules">
-        <!-- Comment within type node -->
-        <param name="storage">
-            <!-- Comment within param node -->
-            <instance type="Magento\Core\Model\Config\Storage\Modules" shared="false" />
-        </param>
+        <arguments>
+            <argument name="test name" xsi:type="test_type">test value</argument>
+        </arguments>
         <plugin name="simple_modules_plugin" type="Magento\Core\Model\Config\Modules\Plugin" disabled="true" sortOrder="10" />
         <plugin name="simple_modules_plugin_advanced" type="Magento\Core\Model\Config\Modules\PluginAdvanced" />
         <plugin name="overridden_plugin" sortOrder="30" disabled="true" />
     </type>
+    <!--Shared type-->
     <type name="Magento\Http\Handler\Composite" shared="false">
-        <param name="factory">
-            <instance type="Magento\Http\HandlerFactory" />
-        </param>
-        <param name="handlers">
-            <array>
-                <!-- Comment within value node -->
-                <item key="custom_handler">
-                    <array>
-                        <item key="sortOrder"><value>25</value></item>
-                        <item key="class"><value>Custom_Cache_Model_Http_Handler</value></item>
-                    </array>
-                </item>
-                <item key="other_handler">
-                    <array>
-                        <!-- Comment within child node of the value node that represents an assoc array -->
-                        <item key="sortOrder"><value>10</value></item>
-                        <item key="class"><value><![CDATA[Other_Cache_Model_Http_Handler]]></value></item>
-                    </array>
-                </item>
-            </array>
-        </param>
-    </type>
-    <type name="Magento\Data\Collection\Db\FetchStrategy\Cache">
-        <param name="cacheIdPrefix"><value><![CDATA[collection_]]></value></param>
-        <param name="cacheLifetime"><value>86400</value></param>
-        <param name="cacheTags">
-            <array>
-                <item key="const"><value type="const">Magento\Core\Model\Website::CACHE_TAG</value></item>
-                <item key="boolFalse"><value type="bool">false</value></item>
-                <item key="boolTrue"><value type="bool">true</value></item>
-                <item key="boolOne"><value type="bool">1</value></item>
-                <item key="boolZero"><value type="bool">0</value></item>
-                <item key="intValue"><value type="int">100500</value></item>
-                <item key="nullValue"><value type="null"/>
-                </item>
-                <item key="stringPattern"><value type="string" pattern="[a-z\-]*">az-value</value></item>
-            </array>
-        </param>
-        <param name="constParam">
-            <value type='const'>Magento\Core\Model\Website::CACHE_TAG</value>
-        </param>
-        <param name="boolFalseParam">
-            <value type='bool'>false</value>
-        </param>
-        <param name="boolTrueParam">
-            <value type='bool'>true</value>
-        </param>
-        <param name="boolOneParam">
-            <value type='bool'>1</value>
-        </param>
-        <param name="boolZeroParam">
-            <value type='bool'>0</value>
-        </param>
-        <param name="intValueParam">
-            <value type='int'>100500</value>
-        </param>
-        <param name="nullValueParam">
-            <value type='null' />
-        </param>
-        <param name="stringPatternParam">
-            <value type='string' pattern="[a-z\-]*">az-value</value>
-        </param>
+        <arguments>
+            <argument name="test name" xsi:type="test_type">test value</argument>
+        </arguments>
     </type>
     <virtualType name="customCacheInstance" type="Magento\App\Cache" shared="true" />
     <virtualType name="customOverriddenInstance" shared="false" />

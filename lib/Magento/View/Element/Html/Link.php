@@ -65,7 +65,7 @@ class Link extends \Magento\View\Element\Template
     }
 
     /**
-     * serialize attributes
+     * Serialize attributes
      *
      * @param   array $attributes
      * @param   string $valueSeparator
@@ -98,6 +98,8 @@ class Link extends \Magento\View\Element\Template
     }
 
     /**
+     * Get href URL
+     *
      * @return string
      */
     public function getHref()

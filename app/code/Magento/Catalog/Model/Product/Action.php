@@ -49,10 +49,16 @@ class Action extends \Magento\Core\Model\AbstractModel
     protected $_productWebsiteFactory;
 
     /**
+     * @var \Magento\Indexer\Model\IndexerInterface
+     */
+    protected $categoryIndexer;
+
+    /**
      * @param \Magento\Core\Model\Context $context
      * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory
      * @param \Magento\Index\Model\Indexer $indexIndexer
+     * @param \Magento\Indexer\Model\IndexerInterface $categoryIndexer
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -62,12 +68,14 @@ class Action extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\Registry $registry,
         \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory,
         \Magento\Index\Model\Indexer $indexIndexer,
+        \Magento\Indexer\Model\IndexerInterface $categoryIndexer,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_productWebsiteFactory = $productWebsiteFactory;
         $this->_indexIndexer = $indexIndexer;
+        $this->categoryIndexer = $categoryIndexer;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -79,6 +87,19 @@ class Action extends \Magento\Core\Model\AbstractModel
     protected function _construct()
     {
         $this->_init('Magento\Catalog\Model\Resource\Product\Action');
+    }
+
+    /**
+     * Return product category indexer object
+     *
+     * @return \Magento\Indexer\Model\IndexerInterface
+     */
+    protected function getCategoryIndexer()
+    {
+        if (!$this->categoryIndexer->getId()) {
+            $this->categoryIndexer->load(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID);
+        }
+        return $this->categoryIndexer;
     }
 
     /**
@@ -118,6 +139,9 @@ class Action extends \Magento\Core\Model\AbstractModel
         $this->_indexIndexer->processEntityAction(
             $this, \Magento\Catalog\Model\Product::ENTITY, \Magento\Index\Model\Event::TYPE_MASS_ACTION
         );
+        if (!$this->getCategoryIndexer()->isScheduled()) {
+            $this->getCategoryIndexer()->reindexList(array_unique($productIds));
+        }
         return $this;
     }
 
@@ -151,5 +175,8 @@ class Action extends \Magento\Core\Model\AbstractModel
         $this->_indexIndexer->processEntityAction(
             $this, \Magento\Catalog\Model\Product::ENTITY, \Magento\Index\Model\Event::TYPE_MASS_ACTION
         );
+        if (!$this->getCategoryIndexer()->isScheduled()) {
+            $this->getCategoryIndexer()->reindexList(array_unique($productIds));
+        }
     }
 }

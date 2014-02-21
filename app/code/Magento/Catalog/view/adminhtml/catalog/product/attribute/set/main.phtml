@@ -195,7 +195,7 @@
                 }
             }
 
-            var editSet = function() {
+            editSet = function() {
                 return {
                     register : function(node) {
                         editSet.currentNode = node;
@@ -215,10 +215,6 @@
                             return;
                         }
 
-                        if (editSet.ConfigurableNodeExists(editSet.currentNode)) {
-                            alert('<?php echo $this->escapeJsQuote(__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>');
-                            return;
-                        }
 
                         if( editSet.currentNode && editSet.currentNode.attributes.cls == 'folder' ) {
                             TreePanels.root.removeChild(editSet.currentNode);
@@ -246,18 +242,6 @@
                                 }
                             }
                         }
-                    },
-
-                    ConfigurableNodeExists : function(currentNode) {
-                        for (var i in currentNode.childNodes ) {
-                            if (currentNode.childNodes[i].id) {
-                                child = editSet.currentNode.childNodes[i];
-                                if (child.attributes.is_configurable) {
-                                    return true;
-                                }
-                            }
-                        }
-                        return false;
                     },
 
                     rightAppend : function(node) {
@@ -363,12 +347,7 @@
                         if (node.attributes.is_user_defined == 0) {
                             alert('<?php echo $this->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
                             return false;
-                        }
-                        else if (node.attributes.is_configurable == 1) {
-                            alert('<?php echo $this->escapeJsQuote(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>');
-                            return false;
-                        }
-                        else {
+                        } else {
                             return true;
                         }
                     },
@@ -381,9 +360,6 @@
 
                         if (node.attributes.is_unassignable == 0) {
                             alert('<?php echo $this->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
-                            return false;
-                        } else if (node.attributes.is_configurable == 1) {
-                            alert('<?php echo $this->escapeJsQuote(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>');
                             return false;
                         } else {
                             return true;
@@ -434,8 +410,10 @@
                 editSet.req.removeGroups = new Array();
             }
 
-            initVars();
-            Ext.EventManager.onDocumentReady(TreePanels.init, TreePanels, true);
+            jQuery(function() {
+                initVars();
+                TreePanels.init();
+            });
             //]]>
             </script>
     </div>

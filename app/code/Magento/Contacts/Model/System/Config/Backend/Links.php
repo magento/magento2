@@ -35,7 +35,7 @@ class Links extends \Magento\Backend\Model\Config\Backend\Cache
     /**
      * Cache tags to clean
      *
-     * @var array
+     * @var string[]
      */
     protected $_cacheTags = array(\Magento\Core\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG);
 

@@ -106,18 +106,18 @@ class Info extends \Magento\View\Element\Template
 
         $customer = $this->getCustomer();
 
-        if ($this->_metadataService->getCustomerAttributeMetadata('prefix')->isVisible()
-            && $customer->getPrefix()) {
+        $prefixMetadata = $this->_getAttributeMetadata('prefix');
+        if (!is_null($prefixMetadata) && $prefixMetadata->isVisible() && $customer->getPrefix()) {
             $name .= $customer->getPrefix() . ' ';
         }
         $name .= $customer->getFirstname();
-        if ($this->_metadataService->getCustomerAttributeMetadata('middlename')->isVisible()
-            && $customer->getMiddlename()) {
+        $midNameMetadata = $this->_getAttributeMetadata('middlename');
+        if (!is_null($midNameMetadata) && $midNameMetadata->isVisible() && $customer->getMiddlename()) {
             $name .= ' ' . $customer->getMiddlename();
         }
         $name .=  ' ' . $customer->getLastname();
-        if ($this->_metadataService->getCustomerAttributeMetadata('suffix')->isVisible()
-            && $customer->getSuffix()) {
+        $suffixMetadata = $this->_getAttributeMetadata('suffix');
+        if (!is_null($suffixMetadata) && $suffixMetadata->isVisible() && $customer->getSuffix()) {
             $name .= ' ' . $customer->getSuffix();
         }
         return $name;
@@ -171,5 +171,18 @@ class Info extends \Magento\View\Element\Template
     protected function _createSubscriber()
     {
         return $this->_subscriberFactory->create();
+    }
+
+    /**
+     * @param $attributeCode
+     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata|null
+     */
+    protected function _getAttributeMetadata($attributeCode)
+    {
+        try {
+            return $this->_metadataService->getCustomerAttributeMetadata($attributeCode);
+        } catch (NoSuchEntityException $e) {
+            return null;
+        }
     }
 }

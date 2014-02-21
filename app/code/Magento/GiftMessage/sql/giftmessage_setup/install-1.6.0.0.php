@@ -97,7 +97,6 @@ $installer->createGiftMessageSetup(array('resourceName' => 'catalog_setup'))->ad
         'default'       => '',
         'apply_to'      => '',
         'input_renderer'   => 'Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form\Config',
-        'is_configurable'  => 0,
         'visible_on_front' => false
     )
 );

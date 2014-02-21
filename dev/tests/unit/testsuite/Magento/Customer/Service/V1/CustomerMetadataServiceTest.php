@@ -25,6 +25,8 @@
  */
 namespace Magento\Customer\Service\V1;
 
+use Magento\Exception\NoSuchEntityException;
+
 class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
 {
     /** Sample values for testing */
@@ -155,6 +157,41 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value2', $options['label2']->getValue());
     }
 
+    public function testGetAttributeMetadataWithoutAttributeMetadata()
+    {
+        $this->_eavConfigMock->expects($this->any())
+            ->method('getAttribute')
+            ->will($this->returnValue(false));
+
+        $attributeColMock = $this->getMockBuilder('\Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeManagerMock = $this->getMockBuilder('\Magento\Core\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $optionBuilder = new \Magento\Customer\Service\V1\Dto\Eav\OptionBuilder();
+
+        $attributeMetadataBuilder = new \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadataBuilder();
+
+        $service = new CustomerMetadataService($this->_eavConfigMock, $attributeColMock, $storeManagerMock,
+            $optionBuilder, $attributeMetadataBuilder);
+
+        try {
+            $service->getAttributeMetadata('entityCode', 'attributeId');
+            $this->fail('Expected exception not thrown.');
+        } catch (\Magento\Exception\NoSuchEntityException $e) {
+            $this->assertEquals(\Magento\Exception\NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
+            $this->assertEquals(
+                [
+                    'entityType' => 'entityCode',
+                    'attributeCode' => 'attributeId'
+                ],
+                $e->getParams()
+            );
+        }
+    }
+
     public function testGetAttributeMetadataWithoutOptions()
     {
         $this->_eavConfigMock->expects($this->any())
@@ -219,6 +256,104 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
 
         $options = $attributeMetadata->getOptions();
         $this->assertEquals(0, count($options));
+    }
+
+    public function testGetCustomerAttributeMetadataWithoutAttributeMetadata()
+    {
+        $this->_eavConfigMock->expects($this->any())
+            ->method('getAttribute')
+            ->will($this->returnValue(false));
+
+        $attributeColMock = $this->getMockBuilder('\Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeManagerMock = $this->getMockBuilder('\Magento\Core\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $optionBuilder = new \Magento\Customer\Service\V1\Dto\Eav\OptionBuilder();
+
+        $attributeMetadataBuilder = new \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadataBuilder();
+
+        $service = new CustomerMetadataService($this->_eavConfigMock, $attributeColMock, $storeManagerMock,
+            $optionBuilder, $attributeMetadataBuilder);
+
+        try {
+            $service->getCustomerAttributeMetadata('attributeId');
+            $this->fail('Expected exception not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
+            $this->assertEquals(
+                [
+                    'entityType' => 'customer',
+                    'attributeCode' => 'attributeId'
+                ],
+                $e->getParams()
+            );
+        }
+    }
+
+    public function testGetAddressAttributeMetadataWithoutAttributeMetadata()
+    {
+        $this->_eavConfigMock->expects($this->any())
+            ->method('getAttribute')
+            ->will($this->returnValue(false));
+
+        $attributeColMock = $this->getMockBuilder('\Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeManagerMock = $this->getMockBuilder('\Magento\Core\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $optionBuilder = new \Magento\Customer\Service\V1\Dto\Eav\OptionBuilder();
+
+        $attributeMetadataBuilder = new \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadataBuilder();
+
+        $service = new CustomerMetadataService($this->_eavConfigMock, $attributeColMock, $storeManagerMock,
+            $optionBuilder, $attributeMetadataBuilder);
+
+        try {
+            $service->getAddressAttributeMetadata('attributeId');
+            $this->fail('Expected exception not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $this->assertEquals(NoSuchEntityException::NO_SUCH_ENTITY, $e->getCode());
+            $this->assertEquals(
+                [
+                    'entityType' => 'customer_address',
+                    'attributeCode' => 'attributeId'
+                ],
+                $e->getParams()
+            );
+        }
+    }
+
+    public function testGetAllAttributeSetMetadataWithoutAttributeMetadata()
+    {
+        $this->_eavConfigMock->expects($this->any())
+            ->method('getAttribute')
+            ->will($this->returnValue(false));
+
+        $this->_eavConfigMock->expects($this->any())
+            ->method('getEntityAttributeCodes')
+            ->will($this->returnValue(['bogus']));
+
+        $attributeColMock = $this->getMockBuilder('\Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $storeManagerMock = $this->getMockBuilder('\Magento\Core\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $optionBuilder = new \Magento\Customer\Service\V1\Dto\Eav\OptionBuilder();
+
+        $attributeMetadataBuilder = new \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadataBuilder();
+
+        $service = new CustomerMetadataService($this->_eavConfigMock, $attributeColMock, $storeManagerMock,
+            $optionBuilder, $attributeMetadataBuilder);
+
+        $this->assertEquals([], $service->getAllAttributeSetMetadata('entityType', 0, 1));
     }
 
     /**

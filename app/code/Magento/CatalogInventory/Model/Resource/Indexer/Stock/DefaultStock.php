@@ -204,7 +204,7 @@ class DefaultStock
             ->where('e.type_id = ?', $this->getTypeId());
 
         // add limitation of status
-        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
 
         if ($this->_isManageStock()) {
