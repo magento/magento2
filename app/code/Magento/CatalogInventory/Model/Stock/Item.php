@@ -801,6 +801,8 @@ class Item extends \Magento\Core\Model\AbstractModel
      */
     protected function _beforeSave()
     {
+        parent::_beforeSave();
+
         // see if quantity is defined for this item type
         $typeId = $this->getTypeId();
         if ($productTypeId = $this->getProductTypeId()) {
