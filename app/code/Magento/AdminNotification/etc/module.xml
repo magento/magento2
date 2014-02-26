@@ -27,6 +27,7 @@
     <module name="Magento_AdminNotification" version="2.0.0.0" active="true">
         <sequence>
             <module name="Magento_Core"/>
+            <module name="Magento_Backend"/>
         </sequence>
         <depends>
             <module name="Magento_Core"/>
