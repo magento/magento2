@@ -733,13 +733,17 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      *
      * @param string $path
      * @param string $scope (default|stores|websites|config)
+     * @param int $scope_id
      * @return $this
      */
-    public function deleteConfigData($path, $scope = null)
+    public function deleteConfigData($path, $scope = null, $scope_id = null)
     {
         $where = array('path = ?' => $path);
         if (null !== $scope) {
             $where['scope = ?'] = $scope;
+        }
+        if (null !== $scope_id) {
+            $where['scope_id = ?'] = $scope_id;
         }
         $this->getConnection()->delete($this->getTable('core_config_data'), $where);
         return $this;
