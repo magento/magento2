@@ -27,12 +27,7 @@ namespace Magento\Cms\Block\Adminhtml\Page\Edit;
 
 /**
  * Admin page left menu
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**

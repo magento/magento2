@@ -34,7 +34,7 @@
 
 namespace Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source;
 
-class Mode implements \Magento\Core\Model\Option\ArrayInterface
+class Mode implements \Magento\Option\ArrayInterface
 {
     /**
      * Returns array to be used in packages request type on back-end

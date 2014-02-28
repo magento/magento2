@@ -38,7 +38,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Sales\Model\Order');
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_order', $order);
+        $objectManager->get('Magento\Registry')->register('current_order', $order);
         $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Sales\Model\Order\Payment');
         $payment->setMethod('checkmo');

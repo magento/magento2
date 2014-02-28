@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Block\Cart;
 
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
@@ -93,7 +92,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Get config
      *
      * @param string $path
-     * @return mixed
+     * @return string|null
      */
     public function getConfig($path)
     {
@@ -139,7 +138,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Get Carrier Name
      *
      * @param string $carrierCode
-     * @return mixed
+     * @return string
      */
     public function getCarrierName($carrierCode)
     {

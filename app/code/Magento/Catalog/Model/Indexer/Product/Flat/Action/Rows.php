@@ -55,42 +55,4 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         }
         return $this;
     }
-
-    /**
-     * Move data from temporary flat table into regular flat table.
-     *
-     * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows
-     */
-    protected function _moveDataToFlatTable()
-    {
-        $flatTable = $this->_productIndexerHelper->getFlatTableName($this->_storeId);
-
-        if (!$this->_connection->isTableExists($flatTable)) {
-            parent::_moveDataToFlatTable();
-        } else {
-            $describe = $this->_connection->describeTable(
-                $this->_productIndexerHelper->getFlatTableName($this->_storeId)
-            );
-            $columns  = $this->_productIndexerHelper->getFlatColumns();
-            $columns  = array_keys(array_intersect_key($describe, $columns));
-            $select   = $this->_connection->select();
-
-            $select->from(
-                array(
-                    'tf' => $this->_getTemporaryTableName(
-                            $this->_productIndexerHelper->getFlatTableName($this->_storeId)
-                        ),
-                ),
-                $columns
-            );
-            $sql = $select->insertFromSelect($flatTable, $columns);
-            $this->_connection->query($sql);
-
-            $this->_connection->dropTable(
-                $this->_getTemporaryTableName($this->_productIndexerHelper->getFlatTableName($this->_storeId))
-            );
-        }
-
-        return $this;
-    }
 }

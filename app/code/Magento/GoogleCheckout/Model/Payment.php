@@ -66,7 +66,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\DateFactory $dateFactory,
         \Magento\UrlFactory $urlFactory,
         \Magento\GoogleCheckout\Model\ApiFactory $apiFactory,

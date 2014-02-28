@@ -7,8 +7,14 @@
 div.module_test {
   color: red;
 }
+div.import_in_magento_import_theme {
+  color: white;
+}
 div.magento_import_lib {
   color: green;
+}
+div.import_in_magento_import_module {
+  color: white;
 }
 div.test {
   color: white;

@@ -37,7 +37,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -74,7 +74,7 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
@@ -82,7 +82,7 @@ class Index extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\App\Response\Http\FileFactory $fileFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\AddressFactory $addressFactory,
@@ -313,7 +313,7 @@ class Index extends \Magento\Backend\App\Action
                 }
 
                 // Done Saving customer, finish save action
-                $this->_objectManager->get('Magento\Core\Model\Registry')
+                $this->_objectManager->get('Magento\Registry')
                     ->register(self::REGISTRY_CURRENT_CUSTOMER, $customer);
                 $this->messageManager->addSuccess(__('You saved the customer.'));
 

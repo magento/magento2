@@ -29,7 +29,7 @@ namespace Magento\Backend\Model\Config\Source\Website;
 use Magento\Core\Model\System\Store;
 
 class OptionHash
-    implements \Magento\Core\Model\Option\ArrayInterface
+    implements \Magento\Option\ArrayInterface
 {
     /**
      * System Store Model

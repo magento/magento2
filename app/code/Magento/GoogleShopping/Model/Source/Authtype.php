@@ -32,7 +32,7 @@ namespace Magento\GoogleShopping\Model\Source;
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Authtype implements \Magento\Core\Model\Option\ArrayInterface
+class Authtype implements \Magento\Option\ArrayInterface
 {
     /**
      * Retrieve option array with authentification types

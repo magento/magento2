@@ -45,7 +45,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->setDefaultDesignTheme();
         $rule = $objectManager->create('Magento\CatalogRule\Model\Rule');
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_promo_catalog_rule', $rule);
+        $objectManager->get('Magento\Registry')->register('current_promo_catalog_rule', $rule);
 
         $block = $objectManager->create('Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main');
         $block->setLayout($objectManager->create('Magento\Core\Model\Layout'));

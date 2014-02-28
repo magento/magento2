@@ -26,7 +26,7 @@
 namespace Magento\Tax\Model\Resource\Rule\Grid\Options;
 
 class HashOptimized
-    implements \Magento\Core\Model\Option\ArrayInterface
+    implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Tax\Model\Resource\Calculation\Rate\Collection

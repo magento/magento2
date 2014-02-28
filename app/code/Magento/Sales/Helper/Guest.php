@@ -43,7 +43,7 @@ class Guest extends \Magento\Core\Helper\Data
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -73,7 +73,7 @@ class Guest extends \Magento\Core\Helper\Data
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Stdlib\Cookie $coreCookie
      * @param \Magento\Message\ManagerInterface $messageManager
@@ -87,7 +87,7 @@ class Guest extends \Magento\Core\Helper\Data
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Stdlib\Cookie $coreCookie,
         \Magento\Message\ManagerInterface $messageManager,

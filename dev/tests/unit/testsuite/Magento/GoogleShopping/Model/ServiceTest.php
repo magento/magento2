@@ -56,7 +56,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->_contentMock));
 
-        $coreRegistryMock = $this->getMockBuilder('Magento\Core\Model\Registry')
+        $coreRegistryMock = $this->getMockBuilder('Magento\Registry')
             ->disableOriginalConstructor()
             ->setMethods(array('registry'))
             ->getMock();

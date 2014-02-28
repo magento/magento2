@@ -29,26 +29,25 @@ require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 /** @var \Magento\Catalog\Model\Product $product */
 
 $addressData = include(__DIR__ . '/address_data.php');
-$billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Order\Address', array('data' => $addressData));
+
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$billingAddress = $objectManager->create('Magento\Sales\Model\Order\Address', array('data' => $addressData));
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)
     ->setAddressType('shipping');
 
-$payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Order\Payment');
+$payment = $objectManager->create('Magento\Sales\Model\Order\Payment');
 $payment->setMethod('checkmo');
 
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
-$orderItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Order\Item');
+$orderItem = $objectManager->create('Magento\Sales\Model\Order\Item');
 $orderItem->setProductId($product->getId())->setQtyOrdered(2);
 
 /** @var \Magento\Sales\Model\Order $order */
-$order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Order');
+$order = $objectManager->create('Magento\Sales\Model\Order');
 $order->setIncrementId('100000001')
     ->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
     ->setSubtotal(100)
@@ -57,10 +56,7 @@ $order->setIncrementId('100000001')
     ->setCustomerEmail('customer@null.com')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
-    ->setStoreId(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->getId()
-    )
+    ->setStoreId($objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId())
     ->addItem($orderItem)
     ->setPayment($payment);
 $order->save();

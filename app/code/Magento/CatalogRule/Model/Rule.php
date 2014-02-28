@@ -168,8 +168,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
@@ -189,8 +189,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,

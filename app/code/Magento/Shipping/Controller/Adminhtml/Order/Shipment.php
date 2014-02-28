@@ -37,7 +37,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -54,13 +54,13 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory
     ) {
         $this->_coreRegistry = $coreRegistry;

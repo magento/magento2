@@ -1,3 +1,30 @@
+2.0.0.0-dev67
+=============
+* GitHub requests:
+  * [#235](https://github.com/magento/magento2/issues/235) -- Translation escaping
+  * [#463](https://github.com/magento/magento2/pull/463) -- allow _resolveArguments to do sequential lookups
+* Fixed bugs:
+  * Fixed an issue where nonexistent store views flat tables cleanuper dropped the catalog_category_flat_cl table
+  * Fixed an issue where the Product Flat Data indexer used the helpers logic instead of the Flat State logic
+  * Fixed an issue where an exception was thrown when applying a coupon code
+  * Fixed an issue where a Shopping Cart Price Rule was applied to the wrong products
+  * Fixed an issue with the broken Related Orders link on the Recurring Profile page
+  * Fixed an issue with CMS pages preview not working
+  * Fixed an issue with a sales report for a store view returning wrong result
+  * Fixed an issue where shipping did not work for orders containing only bundle products
+  * Fixed an issue where a custom not found page action did not work
+  * Fixed an issue where user configuration for a shopping cart rule to stop further rules processing was ignored
+* Modularity improvements:
+  * Resolved dependencies of the Sales module on the RecurringProfile module
+  * Resolved dependencies of the Email Templates functionality on application modules
+  * Lib-only dependent components of the Core module moved to library
+  * CSS URL resolving logic moved from the publisher to a separate CSS pre-processor
+  * Refactored the View publisher
+* Customer Service usage:
+  * Refactored the Sales module to use Customer service layer
+  * Refactored the Checkout module to use Customer service layer
+* Updated various PHPDoc with the parameter and return types
+
 2.0.0.0-dev66
 =============
 * GitHub requests:
@@ -17,8 +44,8 @@
   * Moved the Billing Agreements functionality to the PayPal module
   * Finalized the work on resolving dependencies between the Multishipping module, and all other modules. Module can be removed without any impact on the system
 * Customer Service usage:
- * Updated Customer Group Grid to use Customer Service for data retrieving and filtering
- * Updated CustomerMetadataService::getAttributeMetadata to throw an exception if invalid code is provided
+  * Updated Customer Group Grid to use Customer Service for data retrieving and filtering
+  * Updated CustomerMetadataService::getAttributeMetadata to throw an exception if invalid code is provided
 * Unified the format of specifying arguments for class constructors in DI and in Layout configuration:
   * A common xsd schema is being used for defining simple types. Layout and DI customize common types with their specific ones
   * Argument processing is unified, and moved to library
@@ -50,9 +77,12 @@
  * [#319] (https://github.com/magento/magento2/issues/319) No message was displayed when product added to shopping cart.
  * [#367] (https://github.com/magento/magento2/issues/367) Improve the error message from the contact form
  * [#469] (https://github.com/magento/magento2/issues/469) Can't change prices on different websites for custom options
-* Updated the Customer service exception handling, and added tests
-* Added usage of the Customer service to the Customer module, replacing some direct usage of the Customer model
-* Updated various PHPDoc with the parameter and return types
+ * [#484] (https://github.com/magento/magento2/pull/484) Calling clear / removeAllItems / removeItemByKey on Magento\Eav\Model\Entity\Collection\AbstractCollection does not remove model from protected _itemsById array
+ * [#474] (https://github.com/magento/magento2/pull/474) Change for Options Collection class
+ * [#483] (https://github.com/magento/magento2/pull/483) Update Category.php
+* Update Customer Service Exception handling and add tests
+* Add usage of Customer Service to Customer Module, replacing some direct usage of Customer Model
+* Updated various PHPDoc with parameter and return types
 
 2.0.0.0-dev64
 =============

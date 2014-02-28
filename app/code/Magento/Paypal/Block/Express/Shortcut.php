@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Paypal express checkout shortcut link
- */
 namespace Magento\Paypal\Block\Express;
 
 use Magento\Catalog\Block as CatalogBlock;
 
+/**
+ * Paypal express checkout shortcut link
+ */
 class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\ShortcutInterface
 {
     /**
@@ -64,7 +63,7 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry;
 
@@ -116,20 +115,20 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Paypal\Helper\Data $paypalData
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory
-     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Paypal\Helper\Data $paypalData,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,

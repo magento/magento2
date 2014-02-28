@@ -34,7 +34,7 @@ class InstructionFactory
      *
      * @var \Magento\ObjectManager
      */
-    protected $_objectManager;
+    protected $objectManager;
 
     /**
      * Factory constructor
@@ -43,22 +43,23 @@ class InstructionFactory
      */
     public function __construct(\Magento\ObjectManager $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
      * Create class instance with specified parameters
      *
      * @param string $className
+     * @param array $data
      * @return \Magento\Less\PreProcessorInterface
      * @throws \InvalidArgumentException
      */
-    public function create($className)
+    public function create($className, array $data = [])
     {
-        $preProcessor = $this->_objectManager->create($className);
+        $preProcessor = $this->objectManager->create($className, $data);
         if (!$preProcessor instanceof \Magento\Less\PreProcessorInterface) {
             throw new \InvalidArgumentException(
-                "{$className} aren't instance of \\Magento\\Less\\PreProcessorInterface"
+                "{$className} doesn't implement \\Magento\\Less\\PreProcessorInterface"
             );
         }
         return $preProcessor;

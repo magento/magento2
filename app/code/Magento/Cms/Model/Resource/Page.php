@@ -23,14 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Cms\Model\Resource;
 
 /**
  * Cms page mysql resource
- *
- * @category    Magento
- * @package     Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
@@ -96,9 +93,7 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _beforeDelete(\Magento\Core\Model\AbstractModel $object)
     {
-        $condition = array(
-            'page_id = ?'     => (int) $object->getId(),
-        );
+        $condition = array('page_id = ?' => (int) $object->getId());
 
         $this->_getWriteAdapter()->delete($this->getTable('cms_page_store'), $condition);
 
@@ -309,7 +304,6 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Core\Model\AbstractModel $object
      * @return bool
-     * @date Wed Mar 26 18:12:28 EET 2008
      */
     protected function isNumericPageIdentifier(\Magento\Core\Model\AbstractModel $object)
     {

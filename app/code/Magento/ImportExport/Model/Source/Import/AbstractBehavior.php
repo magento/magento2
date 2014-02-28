@@ -32,7 +32,7 @@ namespace Magento\ImportExport\Model\Source\Import;
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractBehavior implements \Magento\Core\Model\Option\ArrayInterface
+abstract class AbstractBehavior implements \Magento\Option\ArrayInterface
 {
     /**
      * Get array of possible values

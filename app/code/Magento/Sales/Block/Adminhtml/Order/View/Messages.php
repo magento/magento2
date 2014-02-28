@@ -38,7 +38,7 @@ class Messages extends \Magento\View\Element\Messages
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $coreRegistry = null;
 
@@ -47,7 +47,7 @@ class Messages extends \Magento\View\Element\Messages
      * @param \Magento\Message\Factory $messageFactory
      * @param \Magento\Message\CollectionFactory $collectionFactory
      * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -55,7 +55,7 @@ class Messages extends \Magento\View\Element\Messages
         \Magento\Message\Factory $messageFactory,
         \Magento\Message\CollectionFactory $collectionFactory,
         \Magento\Message\ManagerInterface $messageManager,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->coreRegistry = $registry;

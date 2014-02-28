@@ -33,7 +33,7 @@
  */
 namespace Magento\Captcha\Model\Config;
 
-class Font implements \Magento\Core\Model\Option\ArrayInterface
+class Font implements \Magento\Option\ArrayInterface
 {
     /**
      * Captcha data

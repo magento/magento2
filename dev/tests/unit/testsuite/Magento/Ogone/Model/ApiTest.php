@@ -46,13 +46,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $locale = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false);
         $urlBuilder = $this->getMock('Magento\UrlInterface', array(), array(), '', false);
         $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $coreString = $this->getMock('Magento\Core\Helper\String', array(), array(), '', false);
+        $string = $this->getMock('\Magento\Stdlib\String', array(), array(), '', false);
         $config = $this->getMock('Magento\Ogone\Model\Config', array(), array(), '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $loggerFactory = $this->getMock('\Magento\Logger\AdapterFactory', array(), array(), '', false);
         $object = new \Magento\Ogone\Model\Api(
-            $storeManager, $locale, $urlBuilder, $eventManager,
-            $coreString, $coreStoreConfig, $config, $paymentDataMock
+            $storeManager, $paymentDataMock, $coreStoreConfig, $loggerFactory,
+            $eventManager, $locale, $urlBuilder, $string, $config
         );
 
         $method = new \ReflectionMethod('Magento\Ogone\Model\Api', '_translate');

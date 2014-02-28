@@ -42,7 +42,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
     protected $_request;
 
     /**
-     * @var \Magento\Core\Model\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_registry;
 
@@ -101,7 +101,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getRedirect')->will($this->returnValue($redirect));
         $context->expects($this->any())->method('getMessageManager')->will($this->returnValue($this->_messageManager));
 
-        $this->_registry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $this->_registry = $this->getMock('Magento\Registry', array(), array(), '', false);
 
         $title = $this->getMock('Magento\App\Action\Title', array(), array(), '', false);
 

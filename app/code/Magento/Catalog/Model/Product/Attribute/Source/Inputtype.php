@@ -33,10 +33,10 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
-    
+
     /**
      * Core event manager proxy
      *
@@ -46,11 +46,11 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->_eventManager = $eventManager;
         $this->_coreRegistry = $coreRegistry;

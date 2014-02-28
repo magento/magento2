@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Model\Order;
+
 /**
  * Sales order address model
  *
@@ -33,6 +35,10 @@
  * @method \Magento\Sales\Model\Order\Address setParentId(int $value)
  * @method int getCustomerAddressId()
  * @method \Magento\Sales\Model\Order\Address setCustomerAddressId(int $value)
+ * @method \Magento\Customer\Model\Address getCustomerAddress()
+ * @method \Magento\Sales\Model\Order\Address setCustomerAddress(\Magento\Customer\Model\Address $value)
+ * @method \Magento\Customer\Service\V1\Dto\Address getCustomerAddressData()
+ * @method \Magento\Sales\Model\Order\Address setCustomerAddressData(\Magento\Customer\Service\V1\Dto\Address $value)
  * @method int getQuoteAddressId()
  * @method \Magento\Sales\Model\Order\Address setQuoteAddressId(int $value)
  * @method \Magento\Sales\Model\Order\Address setRegionId(int $value)
@@ -66,8 +72,6 @@
  * @method string getCompany()
  * @method \Magento\Sales\Model\Order\Address setCompany(string $value)
  */
-namespace Magento\Sales\Model\Order;
-
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
     /**
@@ -91,8 +95,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_orderFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Address\Config $addressConfig
@@ -104,8 +108,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
@@ -180,6 +184,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         // Init customer address id if customer address is assigned
         if ($this->getCustomerAddress()) {
             $this->setCustomerAddressId($this->getCustomerAddress()->getId());
+        } else if ($this->getCustomerAddressData()) {
+            $this->setCustomerAddressId($this->getCustomerAddressData()->getId());
         }
 
         return $this;

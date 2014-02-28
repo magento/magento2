@@ -138,15 +138,15 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         /* Category in registry */
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_category', $existingCategory);
+        $objectManager->get('Magento\Registry')->register('current_category', $existingCategory);
         try {
             $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Layer');
             $this->assertSame($existingCategory, $model->getCurrentCategory());
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Registry')->unregister('current_category');
             $this->assertSame($existingCategory, $model->getCurrentCategory());
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Registry')->unregister('current_category');
             throw $e;
         }
 

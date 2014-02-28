@@ -125,7 +125,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     protected function _buildFormClassName()
     {
-        return \Magento\Core\Helper\String::buildClassName(array(
+        return $this->nameBuilder->buildClassName(array(
             $this->_blockGroup,
             'Block',
             $this->_controller,

@@ -21,12 +21,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Helper;
+
+use Magento\Paypal\Model\Billing\Agreement\MethodInterface;
 
 /**
  * Paypal Data helper
  */
-namespace Magento\Paypal\Helper;
-
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
@@ -94,9 +95,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Retrieve available billing agreement methods
      *
-     * @param mixed $store
-     * @param \Magento\Sales\Model\Quote $quote
-     * @return array
+     * @param null|string|bool|int|\Magento\Core\Model\Store $store
+     * @param \Magento\Sales\Model\Quote|null $quote
+     * @return MethodInterface[]
      */
     public function getBillingAgreementMethods($store = null, $quote = null)
     {
@@ -138,7 +139,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function canManageBillingAgreements($methodInstance)
     {
-        return ($methodInstance instanceof \Magento\Paypal\Model\Billing\Agreement\MethodInterface);
+        return ($methodInstance instanceof MethodInterface);
     }
 
     /**

@@ -59,7 +59,7 @@
 "Checkout with Multiple Addresses","Paiement avec des adresses multiples"
 "City","Ville"
 "Clear Shopping Cart","Vider le panier"
-"Click <a href=""%s"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","Cliquez <a href=""%s"">ici pour imprimer</a> une copie de votre confirmation de commande."
+"Click <a href=""%s"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","Cliquez <a href=""%s"">ici pour imprimer</a> une copie de votre confirmation de commande."
 "Click <a href=""%s"">here</a> to continue shopping.","Cliquez <a href=""%s"">ici</a> pour continuer vos achats"
 "Close","Fermer"
 "Company","Société"

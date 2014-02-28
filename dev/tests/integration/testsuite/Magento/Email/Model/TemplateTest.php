@@ -48,9 +48,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getMockBuilder('Magento\Email\Model\Template')
             ->setMethods(array('_getMail'))
             ->setConstructorArgs(array(
-                $objectManager->get('Magento\Core\Model\Context'),
+                $objectManager->get('Magento\Model\Context'),
                 $objectManager->get('Magento\View\DesignInterface'),
-                $objectManager->get('Magento\Core\Model\Registry'),
+                $objectManager->get('Magento\Registry'),
                 $objectManager->get('Magento\Core\Model\App\Emulation'),
                 $objectManager->get('Magento\Core\Model\StoreManager'),
                 $objectManager->create('Magento\App\Filesystem'),
@@ -175,78 +175,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Email\Model\Template::send
-     * @covers \Magento\Email\Model\Template::addBcc
-     * @covers \Magento\Email\Model\Template::setReturnPath
-     * @covers \Magento\Email\Model\Template::setReplyTo
-     */
-    public function testSend()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND)->load();
-        $this->_mail->expects($this->exactly(2))->method('send');
-        $this->_mail->expects($this->once())->method('addBcc')->with('bcc@example.com');
-        $this->_mail->expects($this->once())->method('setReturnPath')->with('return@example.com');
-        $this->_mail->expects($this->once())->method('setReplyTo')->with('replyto@example.com');
-
-        $this->_model->addBcc('bcc@example.com')
-            ->setReturnPath('return@example.com')
-            ->setReplyTo('replyto@example.com')
-        ;
-        $this->assertNull($this->_model->getSendingException());
-        $this->assertTrue($this->_model->send('test@example.com'));
-        $this->assertNull($this->_model->getSendingException());
-
-        // send once again to make sure bcc, return path and reply-to were not invoked second time
-        $this->assertTrue($this->_model->send('test@example.com'));
-    }
-
-    public function testSendMultipleRecipients()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND)->load();
-        $this->_mail->expects($this->at(0))->method('addTo')->with('one@example.com', '=?utf-8?B?TmFtZSBPbmU=?=');
-        $this->_mail->expects($this->at(1))->method('addTo')->with('two@example.com', '=?utf-8?B?dHdv?=');
-        $this->assertTrue($this->_model->send(array('one@example.com', 'two@example.com'), array('Name One')));
-    }
-
-    public function testSendFailure()
-    {
-        $exception = new \Exception('test');
-        $this->_mail->expects($this->once())->method('send')->will($this->throwException($exception));
-
-        $this->assertNull($this->_model->getSendingException());
-        $this->assertFalse($this->_model->send('test@example.com'));
-        $this->assertSame($exception, $this->_model->getSendingException());
-    }
-
-    public function testSendTransactional()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND)->load();
-        $this->_model->sendTransactional('customer_create_account_email_template',
-            array('name' => 'Sender Name', 'email' => 'sender@example.com'), 'recipient@example.com', 'Recipient Name'
-        );
-        $this->assertEquals('customer_create_account_email_template', $this->_model->getId());
-        $this->assertTrue($this->_model->getSentSuccess());
-    }
-
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Email template 'wrong_id' is not defined
-     */
-    public function testSendTransactionalWrongId()
-    {
-        $this->_model->sendTransactional('wrong_id',
-            array('name' => 'Sender Name', 'email' => 'sender@example.com'), 'recipient@example.com', 'Recipient Name'
-        );
-    }
-
-    /**
      * @magentoAppIsolation enabled
      */
     public function testGetDefaultEmailLogo()
     {
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+            ->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND)->load();
         $this->assertStringEndsWith(
             'static/frontend/magento_plushe/en_US/Magento_Email/logo_email.gif',
             $this->_model->getDefaultEmailLogo()

@@ -49,13 +49,13 @@ class AbstractTest
             ->getEntityType('customer');
         $model = $objectManager->create('Magento\Customer\Model\Attribute');
         $model->setEntityTypeId($entityType->getId());
-        $objectManager->get('Magento\Core\Model\Registry')->register('entity_attribute', $model);
+        $objectManager->get('Magento\Registry')->register('entity_attribute', $model);
 
         $block = $this->getMockForAbstractClass(
             'Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain',
             array(
                 $objectManager->get('Magento\Backend\Block\Template\Context'),
-                $objectManager->get('Magento\Core\Model\Registry'),
+                $objectManager->get('Magento\Registry'),
                 $objectManager->get('Magento\Data\FormFactory'),
                 $objectManager->get('Magento\Eav\Helper\Data'),
                 $objectManager->get('Magento\Backend\Model\Config\Source\YesnoFactory'),

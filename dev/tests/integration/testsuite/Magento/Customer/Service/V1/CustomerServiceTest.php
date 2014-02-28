@@ -23,7 +23,6 @@
  */
 namespace Magento\Customer\Service\V1;
 
-use Magento\Customer\Service\V1;
 use Magento\Exception\InputException;
 use Magento\Exception\NoSuchEntityException;
 
@@ -40,6 +39,9 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
 
     /** @var CustomerAccountServiceInterface Needed for password checking */
     private $_accountService;
+
+    /** @var CustomerAddressServiceInterface Needed for verifying if addresses are deleted */
+    private $_addressService;
 
     /** @var \Magento\ObjectManager */
     private $_objectManager;
@@ -59,6 +61,8 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
         $this->_service = $this->_objectManager->create('Magento\Customer\Service\V1\CustomerServiceInterface');
         $this->_accountService = $this->_objectManager
             ->create('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        $this->_addressService = $this->_objectManager
+            ->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
 
         $this->_addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Dto\AddressBuilder');
         $this->_customerBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Dto\CustomerBuilder');
@@ -69,7 +73,7 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
             ->setDefaultBilling(true)
             ->setDefaultShipping(true)
             ->setPostcode('75477')
-            ->setRegion(new V1\Dto\Region([
+            ->setRegion(new Dto\Region([
                 'region_code' => 'AL',
                 'region' => 'Alabama',
                 'region_id' => 1
@@ -88,7 +92,7 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
             ->setDefaultBilling(false)
             ->setDefaultShipping(false)
             ->setPostcode('47676')
-            ->setRegion(new V1\Dto\Region([
+            ->setRegion(new Dto\Region([
                 'region_code' => 'AL',
                 'region' => 'Alabama',
                 'region_id' => 1
@@ -214,17 +218,16 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
         $inBeforeOnly = array_diff_assoc($attributesBefore, $attributesAfter);
         $inAfterOnly = array_diff_assoc($attributesAfter, $attributesBefore);
         $expectedInBefore = array(
+            'email',
             'firstname',
             'lastname',
-            'email',
-            'password_hash',
         );
         $this->assertEquals($expectedInBefore, array_keys($inBeforeOnly));
         $this->assertContains('created_in', array_keys($inAfterOnly));
         $this->assertContains('firstname', array_keys($inAfterOnly));
         $this->assertContains('lastname', array_keys($inAfterOnly));
         $this->assertContains('email', array_keys($inAfterOnly));
-        $this->assertContains('password_hash', array_keys($inAfterOnly));
+        $this->assertNotContains('password_hash', array_keys($inAfterOnly));
     }
 
     /**
@@ -442,23 +445,21 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
         $inBeforeOnly = array_diff_assoc($attributesBefore, $attributesAfter);
         $inAfterOnly = array_diff_assoc($attributesAfter, $attributesBefore);
         $expectedInBefore = array(
-            'firstname',
-            'lastname',
             'email',
-            'entity_id',
-            'password_hash',
+            'firstname',
+            'id',
+            'lastname'
         );
         sort($expectedInBefore);
         $actualInBeforeOnly = array_keys($inBeforeOnly);
         sort($actualInBeforeOnly);
         $this->assertEquals($expectedInBefore, $actualInBeforeOnly);
         $expectedInAfter = array(
-            'firstname',
-            'lastname',
-            'email',
-            'entity_id',
             'created_in',
-            'password_hash',
+            'email',
+            'firstname',
+            'id',
+            'lastname',
         );
         sort($expectedInAfter);
         $actualInAfterOnly = array_keys($inAfterOnly);
@@ -502,8 +503,8 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($customerId);
         $savedCustomer = $this->_service->getCustomer($customerId);
         $dataInService = $savedCustomer->getAttributes();
-        $expectedDifferences = ['created_at', 'updated_at', 'email', 'is_active', 'entity_id', 'password_hash',
-            'attribute_set_id', 'confirmation'];
+        $expectedDifferences = ['created_at', 'updated_at', 'email', 'is_active', 'entity_id', 'entity_type_id',
+            'password_hash', 'attribute_set_id', 'disable_auto_group_change', 'confirmation'];
         foreach ($dataInModel as $key => $value) {
             if (!in_array($key, $expectedDifferences)) {
                 if (is_null($value)) {
@@ -513,12 +514,10 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
-        $this->assertArrayNotHasKey('is_active', $dataInService);
-        $this->assertNotNull($dataInService['created_at']);
-        $this->assertNotNull($dataInService['updated_at']);
-        $this->assertNotNull($dataInService['entity_id']);
-        $this->assertNotNull($dataInService['password_hash']);
         $this->assertEquals($email2, $dataInService['email']);
+        $this->assertArrayNotHasKey('is_active', $dataInService);
+        $this->assertArrayNotHasKey('updated_at', $dataInService);
+        $this->assertArrayNotHasKey('password_hash', $dataInService);
     }
 
     /**
@@ -614,6 +613,73 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
+     * @expectedException \Magento\Exception\NoSuchEntityException
+     * @expectedExceptionMessage No such entity with customerId = 1
+     */
+    public function testDeleteCustomer()
+    {
+        // _files/customer.php sets the customer id to 1
+        $this->_service->deleteCustomer(1);
+        $this->_service->getCustomer(1);
+    }
+
+    /**
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @expectedException \Magento\Exception\NoSuchEntityException
+     * @expectedExceptionMessage No such entity with customerId = 1
+     */
+    public function testDeleteCustomerWithAddress()
+    {
+        $this->markTestSkipped('Investigate how to ensure that addresses are deleted. Currently it is false negative');
+        //Verify address is created for the customer;
+        $result = $this->_addressService->getAddresses(1);
+        $this->assertEquals(2, count($result));
+        // _files/customer.php sets the customer id to 1
+        $this->_service->deleteCustomer(1);
+
+        // Verify by directly loading the address by id
+        $this->verifyDeletedAddress(1);
+        $this->verifyDeletedAddress(2);
+
+        //Verify by calling the Address Service. This will throw the expected exception since customerId doesn't exist
+        $result = $this->_addressService->getAddresses(1);
+        $this->assertTrue(empty($result));
+    }
+
+    /**
+     * Check if the Address with the give addressid is deleted
+     *
+     * @param int $addressId
+     */
+    protected function verifyDeletedAddress($addressId)
+    {
+        /** @var $addressFactory \Magento\Customer\Model\AddressFactory */
+        $addressFactory = $this->_objectManager
+            ->create('Magento\Customer\Model\AddressFactory');
+        $addressModel = $addressFactory->create()->load($addressId);
+        $addressData = $addressModel->getData();
+        $this->assertTrue(empty($addressData));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
+     * @expectedException
+     * V1\Exception
+     * @expectedExceptionMessage Cannot complete this operation from non-admin area.
+     */
+    public function testDeleteCustomerNonSecureArea()
+    {
+        /** _files/customer.php sets the customer id to 1 */
+        $this->_service->deleteCustomer(1);
+    }
+
+    /**
      * @magentoDbIsolation enabled
      */
     public function testSaveCustomerNewThenUpdateFirstName()
@@ -641,4 +707,40 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Tested', $customer->getFirstname());
         $this->assertEquals($lastname, $customer->getLastname());
     }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testGetCustomerByEmail()
+    {
+        $websiteId = 1;
+        /** _files/customer.php sets the customer with id = 1 and email = customer@example.com */
+        $customer = $this->_service->getCustomerByEmail('customer@example.com', $websiteId);
+        $this->assertEquals(1, $customer->getCustomerId());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Magento\Core\Exception
+     * @expectedExceptionMessage Customer website ID must be specified when using the website scope
+     */
+    public function testGetCustomerByEmailNoWebsiteSpecified()
+    {
+        /** _files/customer.php sets the customer with id = 1 and email = customer@example.com */
+        $this->_service->getCustomerByEmail('customer@example.com');
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Magento\Exception\NoSuchEntityException
+     * @expectedExceptionMessage No such entity with email = nonexistent@example.com
+     */
+    public function testGetCustomerByEmailNonExistentEmail()
+    {
+        $websiteId = 1;
+        /** _files/customer.php sets the customer with id = 1 and email = customer@example.com */
+        $customer = $this->_service->getCustomerByEmail('nonexistent@example.com', $websiteId);
+        assertEquals(null, $customer->getCustomerId());
+    }
 }
+

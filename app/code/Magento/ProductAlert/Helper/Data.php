@@ -46,10 +46,10 @@ class Data extends \Magento\Core\Helper\Url
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
-    
+
     /**
      * Core store config
      *
@@ -70,7 +70,7 @@ class Data extends \Magento\Core\Helper\Url
     /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Customer\Model\Session $session
@@ -78,7 +78,7 @@ class Data extends \Magento\Core\Helper\Url
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\View\LayoutInterface $layout,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Customer\Model\Session $session

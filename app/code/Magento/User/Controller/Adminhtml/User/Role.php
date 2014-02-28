@@ -30,7 +30,7 @@ class Role extends \Magento\Backend\App\AbstractAction
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -64,7 +64,7 @@ class Role extends \Magento\Backend\App\AbstractAction
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\User\Model\RoleFactory $roleFactory
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\User\Model\RulesFactory $rulesFactory
@@ -72,7 +72,7 @@ class Role extends \Magento\Backend\App\AbstractAction
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\User\Model\RoleFactory $roleFactory,
         \Magento\User\Model\UserFactory $userFactory,
         \Magento\User\Model\RulesFactory $rulesFactory,
@@ -222,7 +222,7 @@ class Role extends \Magento\Backend\App\AbstractAction
 
         $isAll = $this->getRequest()->getParam('all');
         if ($isAll) {
-            $resource = array($this->_objectManager->get('Magento\Core\Model\Acl\RootResource')->getId());
+            $resource = array($this->_objectManager->get('Magento\Acl\RootResource')->getId());
         }
 
         $role = $this->_initRole('role_id');

@@ -50,7 +50,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $category->load(5);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_category', $category);
+        $objectManager->get('Magento\Registry')->register('current_category', $category);
 
         try {
             $path = $this->_helper->getBreadcrumbPath();
@@ -58,9 +58,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(array('category3', 'category4', 'category5'), array_keys($path));
             $this->assertArrayHasKey('label', $path['category3']);
             $this->assertArrayHasKey('link', $path['category3']);
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Registry')->unregister('current_category');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Registry')->unregister('current_category');
             throw $e;
         }
     }
@@ -71,12 +71,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Catalog\Model\Category');
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_category', $category);
+        $objectManager->get('Magento\Registry')->register('current_category', $category);
         try {
             $this->assertSame($category, $this->_helper->getCategory());
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Registry')->unregister('current_category');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('current_category');
+            $objectManager->get('Magento\Registry')->unregister('current_category');
             throw $e;
         }
     }
@@ -87,12 +87,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Catalog\Model\Product');
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Registry')->register('current_product', $product);
         try {
             $this->assertSame($product, $this->_helper->getProduct());
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('current_product');
+            $objectManager->get('Magento\Registry')->unregister('current_product');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('current_product');
+            $objectManager->get('Magento\Registry')->unregister('current_product');
             throw $e;
         }
     }
@@ -108,12 +108,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $this->_helper->getAttributeHiddenFields());
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('attribute_type_hidden_fields', 'test');
+        $objectManager->get('Magento\Registry')->register('attribute_type_hidden_fields', 'test');
         try {
             $this->assertEquals('test', $this->_helper->getAttributeHiddenFields());
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('attribute_type_hidden_fields');
+            $objectManager->get('Magento\Registry')->unregister('attribute_type_hidden_fields');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Core\Model\Registry')->unregister('attribute_type_hidden_fields');
+            $objectManager->get('Magento\Registry')->unregister('attribute_type_hidden_fields');
             throw $e;
         }
     }

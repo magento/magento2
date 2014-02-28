@@ -41,7 +41,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -56,14 +56,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;

@@ -34,7 +34,7 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -45,13 +45,13 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Payment\Helper\Data $paymentHelper,
         array $data = array()
     ) {

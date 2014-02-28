@@ -40,7 +40,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_block = $this->getMockForAbstractClass('Magento\Wishlist\Block\AbstractBlock', array(
             $objectManager->get('Magento\View\Element\Template\Context'),
             $objectManager->get('Magento\Catalog\Model\Config'),
-            $objectManager->get('Magento\Core\Model\Registry'),
+            $objectManager->get('Magento\Registry'),
             $objectManager->get('Magento\Tax\Helper\Data'),
             $objectManager->get('Magento\Catalog\Helper\Data'),
             $objectManager->get('Magento\Math\Random'),

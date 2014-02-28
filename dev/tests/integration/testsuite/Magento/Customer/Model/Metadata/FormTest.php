@@ -117,6 +117,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testRestoreData()
     {
+        $this->_expected['street'] = trim(implode("\n", $this->_expected['street']));
         $attributeValues = $this->_form->restoreData($this->_form->extractData($this->_request));
         $this->assertEquals($this->_expected, $attributeValues);
     }

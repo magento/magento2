@@ -46,7 +46,7 @@ class ProductTest extends \Magento\Backend\Utility\Controller
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = $objectManager->get('Magento\Core\Model\Registry')->registry('current_product');
+        $product = $objectManager->get('Magento\Registry')->registry('current_product');
         $this->assertEquals($associatedProductIds, $product->getAssociatedProductIds());
 
         /** @see \Magento\Backend\Utility\Controller::assertPostConditions() */

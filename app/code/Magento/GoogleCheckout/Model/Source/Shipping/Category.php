@@ -27,7 +27,7 @@
 
 namespace Magento\GoogleCheckout\Model\Source\Shipping;
 
-class Category implements \Magento\Core\Model\Option\ArrayInterface
+class Category implements \Magento\Option\ArrayInterface
 {
     public function toOptionArray()
     {

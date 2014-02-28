@@ -63,7 +63,7 @@ class Account extends \Magento\App\Action\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -132,7 +132,7 @@ class Account extends \Magento\App\Action\Action
 
     /**
      * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\UrlFactory $urlFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
@@ -150,7 +150,7 @@ class Account extends \Magento\App\Action\Action
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\UrlFactory $urlFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,

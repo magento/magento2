@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Adminhtml\System\Config\Source;
 
-class Inputtype implements \Magento\Core\Model\Option\ArrayInterface
+class Inputtype implements \Magento\Option\ArrayInterface
 {
     /**
      * Return array of options

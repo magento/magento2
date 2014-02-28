@@ -31,15 +31,15 @@ namespace Magento\Review\Model\Review;
 class Summary extends \Magento\Core\Model\AbstractModel
 {
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Review\Model\Resource\Review\Summary $resource
      * @param \Magento\Review\Model\Resource\Review\Summary\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Review\Model\Resource\Review\Summary $resource,
         \Magento\Review\Model\Resource\Review\Summary\Collection $resourceCollection,
         array $data = array()

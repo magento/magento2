@@ -50,7 +50,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_coreDataMock;
 
     /**
-     * @var \Magento\Core\Helper\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_string;
 
@@ -128,18 +128,10 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $localeMock = $this->getMock('Magento\Core\Model\Locale', array(), array(), '', false);
-        $string = new \Magento\Stdlib\String;
         $data = array(
             'data_source_model'            => 'not_used',
             'connection'                   => 'not_used',
             'json_helper'                  => 'not_used',
-            'string_helper'                => new \Magento\Core\Helper\String(
-                $this->getMock('Magento\App\Helper\Context', array(), array(), '', false, false),
-                $localeMock,
-                $string,
-                new \Magento\Stdlib\String($string)
-            ),
             'page_size'                    => 1,
             'max_data_size'                => 1,
             'bunch_size'                   => 1,

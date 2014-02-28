@@ -24,7 +24,9 @@
  */
 -->
 <config>
+    <preference for="Magento\Mail\TemplateInterface" type="Magento\Email\Model\Template" />
+    <preference for="Magento\Mail\Template\FactoryInterface" type="Magento\Mail\Template\Factory" />
+    <preference for="Magento\Mail\TransportInterface" type="Magento\Mail\Transport" />
+    <preference for="Magento\Mail\MessageInterface" type="Magento\Mail\Message" />
+    <preference for="Magento\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver" />
 </config>
-
-<!--/var/www/magetwo-firedrakes.localhost/app/code/Magento/Email/etc/di.xml-->
-<!--/var/www/magetwo-firedrakes.localhost/app/etc/code/Magento/Email/etc/di.xml-->

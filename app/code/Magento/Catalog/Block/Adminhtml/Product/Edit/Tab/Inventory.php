@@ -48,7 +48,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -67,7 +67,7 @@ class Inventory extends \Magento\Backend\Block\Widget
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Model\Source\Stock $stock
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -75,7 +75,7 @@ class Inventory extends \Magento\Backend\Block\Widget
         \Magento\CatalogInventory\Model\Source\Backorders $backorders,
         \Magento\CatalogInventory\Model\Source\Stock $stock,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_stock = $stock;

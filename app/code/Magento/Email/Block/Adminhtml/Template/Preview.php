@@ -36,7 +36,7 @@ namespace Magento\Email\Block\Adminhtml\Template;
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**
-     * @var \Magento\Core\Model\Input\Filter\MaliciousCode
+     * @var \Magento\Filter\Input\MaliciousCode
      */
     protected $_maliciousCode;
 
@@ -47,13 +47,13 @@ class Preview extends \Magento\Backend\Block\Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Input\Filter\MaliciousCode $maliciousCode
+     * @param \Magento\Filter\Input\MaliciousCode $maliciousCode
      * @param \Magento\Email\Model\TemplateFactory $emailFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Input\Filter\MaliciousCode $maliciousCode,
+        \Magento\Filter\Input\MaliciousCode $maliciousCode,
         \Magento\Email\Model\TemplateFactory $emailFactory,
         array $data = array()
     ) {

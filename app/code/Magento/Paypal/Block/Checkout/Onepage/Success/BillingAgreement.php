@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Checkout\Onepage\Success;
 
 /**
  * Billing agreement information on Order success page
  */
-namespace Magento\Paypal\Block\Checkout\Onepage\Success;
-
 class BillingAgreement extends \Magento\View\Element\Template
 {
     /**

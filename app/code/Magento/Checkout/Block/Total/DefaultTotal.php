@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Checkout\Block\Total;
 
 /**
  * Default Total Row Renderer
  */
-namespace Magento\Checkout\Block\Total;
-
 class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
 {
     /**
@@ -42,6 +40,9 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
      */
     protected $_store;
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -59,7 +60,7 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
     }
 
     /**
-     * @param $total
+     * @param float $total
      * @return $this
      */
     public function setTotal($total)

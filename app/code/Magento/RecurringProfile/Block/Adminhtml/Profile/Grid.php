@@ -27,18 +27,12 @@
  */
 namespace Magento\RecurringProfile\Block\Adminhtml\Profile;
 
+/**
+ * Class Grid
+ * @todo: convert to layout update
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
-    /**
-     * Set ajax/session parameters
-     */
-    /**
-     * Payment data
-     *
-     * @var \Magento\Payment\Helper\Data
-     */
-    protected $_paymentData = null;
-
     /**
      * @var \Magento\RecurringProfile\Model\Resource\Profile\CollectionFactory
      */
@@ -54,27 +48,30 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected $_fields;
 
+    /** @var \Magento\RecurringProfile\Model\Method\PaymentMethodsList */
+    protected $payments;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\RecurringProfile\Model\Resource\Profile\CollectionFactory $profileCollection
      * @param \Magento\RecurringProfile\Model\States $recurringStates
      * @param \Magento\RecurringProfile\Block\Fields $fields
+     * @param \Magento\RecurringProfile\Model\Method\PaymentMethodsList $payments
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Payment\Helper\Data $paymentData,
         \Magento\RecurringProfile\Model\Resource\Profile\CollectionFactory $profileCollection,
         \Magento\RecurringProfile\Model\States $recurringStates,
         \Magento\RecurringProfile\Block\Fields $fields,
+        \Magento\RecurringProfile\Model\Method\PaymentMethodsList $payments,
         array $data = array()
     ) {
-        $this->_paymentData = $paymentData;
         $this->_profileCollection = $profileCollection;
         $this->recurringStates = $recurringStates;
+        $this->payments = $payments;
         parent::__construct($context, $backendHelper, $data);
         $this->_fields = $fields;
     }
@@ -151,15 +148,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'width' => 1,
         ));
 
-        $methods = array();
-        foreach ($this->_paymentData->getRecurringProfileMethods() as $method) {
-            $methods[$method->getCode()] = $method->getTitle();
-        }
         $this->addColumn('method_code', array(
             'header'  => $this->_fields->getFieldLabel('method_code'),
             'index'   => 'method_code',
             'type'    => 'options',
-            'options' => $methods,
+            'options' => $this->payments->toOptionArray(),
         ));
 
         $this->addColumn('schedule_description', array(

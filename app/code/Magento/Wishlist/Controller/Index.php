@@ -62,27 +62,35 @@ class Index
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
     /**
+     * @var \Magento\Mail\Template\TransportBuilder
+     */
+    protected $_transportBuilder;
+
+    /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\App\Response\Http\FileFactory $fileResponseFactory
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Wishlist\Model\Config $wishlistConfig,
-        \Magento\App\Response\Http\FileFactory $fileResponseFactory
+        \Magento\App\Response\Http\FileFactory $fileResponseFactory,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_wishlistConfig = $wishlistConfig;
         $this->_fileResponseFactory = $fileResponseFactory;
+        $this->_transportBuilder = $transportBuilder;
         parent::__construct($context, $formKeyValidator);
     }
 
@@ -738,31 +746,33 @@ class Index
                 ->toHtml();
 
             $emails = array_unique($emails);
-            /* @var $emailModel \Magento\Email\Model\Template */
-            $emailModel = $this->_objectManager->create('Magento\Email\Model\Template');
-
             $sharingCode = $wishlist->getSharingCode();
 
             try {
+                $storeConfig = $this->_objectManager->get('Magento\Core\Model\Store\Config');
+                $storeManager = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface');
                 foreach ($emails as $email) {
-                    $emailModel->sendTransactional(
-                        $this->_objectManager
-                            ->get('Magento\Core\Model\Store\Config')
-                            ->getConfig('wishlist/email/email_template'),
-                        $this->_objectManager
-                            ->get('Magento\Core\Model\Store\Config')
-                            ->getConfig('wishlist/email/email_identity'),
-                        $email,
-                        null,
-                        array(
+                    $transport = $this->_transportBuilder
+                        ->setTemplateIdentifier($storeConfig->getConfig('wishlist/email/email_template'))
+                        ->setTemplateOptions(array(
+                            'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                            'store' => $storeManager->getStore()->getStoreId()
+                        ))
+                        ->setTemplateVars(array(
                             'customer'      => $customer,
                             'salable'       => $wishlist->isSalable() ? 'yes' : '',
                             'items'         => $wishlistBlock,
                             'addAllLink'    => $this->_url->getUrl('*/shared/allcart', array('code' => $sharingCode)),
                             'viewOnSiteLink'=> $this->_url->getUrl('*/shared/index', array('code' => $sharingCode)),
-                            'message'       => $message
-                        )
-                    );
+                            'message'       => $message,
+                            'store'         => $storeManager->getStore()
+                        ))
+                        ->setFrom($storeConfig->getConfig('wishlist/email/email_identity'))
+                        ->addTo($email)
+                        ->getTransport();
+
+                    $transport->sendMessage();
+
                     $sent++;
                 }
             } catch (\Exception $e) {

@@ -27,7 +27,7 @@
 
 namespace Magento\Shipping\Model\Config\Source;
 
-class Tablerate implements \Magento\Core\Model\Option\ArrayInterface
+class Tablerate implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Shipping\Model\Carrier\Tablerate

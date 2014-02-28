@@ -32,7 +32,7 @@ namespace Magento\GoogleShopping\Model\Source;
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Country implements \Magento\Core\Model\Option\ArrayInterface
+class Country implements \Magento\Option\ArrayInterface
 {
     /**
      * Config

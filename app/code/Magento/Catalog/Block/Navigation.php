@@ -61,7 +61,7 @@ class Navigation extends \Magento\View\Element\Template
     protected $_catalogCategory;
 
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry;
 
@@ -98,7 +98,7 @@ class Navigation extends \Magento\View\Element\Template
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $flatState
      * @param array $data
      */
@@ -109,7 +109,7 @@ class Navigation extends \Magento\View\Element\Template
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\Indexer\Category\Flat\State $flatState,
         array $data = array()
     ) {

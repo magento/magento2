@@ -21,18 +21,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Helper;
 
 /**
  * Hosted Sole Solution helper
  */
-namespace Magento\Paypal\Helper;
-
 class Hss extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Hosted Sole Solution methods
      *
-     * @var array
+     * @var string[]
      */
     protected $_hssMethods = array(
         \Magento\Paypal\Model\Config::METHOD_HOSTEDPRO,
@@ -93,7 +92,7 @@ class Hss extends \Magento\App\Helper\AbstractHelper
     /**
      * Get methods
      *
-     * @return array
+     * @return string[]
      */
     public function getHssMethods()
     {

@@ -21,36 +21,42 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
 /**
  * Adminhtml billing agreement info tab
  */
-namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
-
 class Info extends \Magento\Backend\Block\Template
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+    /**
+     * @var string
+     */
     protected $_template = 'billing/agreement/view/tab/info.phtml';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
-    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface */
+    /**
+     * Customer service
+     *
+     * @var \Magento\Customer\Service\V1\CustomerServiceInterface
+     */
     protected $_customerService;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
         array $data = array()
     ) {
@@ -60,9 +66,7 @@ class Info extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Return Tab label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -70,9 +74,7 @@ class Info extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Return Tab title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -80,9 +82,7 @@ class Info extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Can show tab in tabs
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -90,9 +90,7 @@ class Info extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Tab is hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {

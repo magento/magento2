@@ -27,10 +27,6 @@ namespace Magento\Cms\Block\Widget\Page;
 
 /**
  * Widget to display link to CMS page
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Link
     extends \Magento\View\Element\Html\Link
@@ -141,12 +137,12 @@ class Link
     {
         if ($this->getData('anchor_text')) {
             $this->_anchorText = $this->getData('anchor_text');
-        } else if ($this->getTitle()) {
+        } elseif ($this->getTitle()) {
             $this->_anchorText = $this->getTitle();
-        } else if ($this->getData('href')) {
+        } elseif ($this->getData('href')) {
             $this->_anchorText = $this->_resourcePage->setStore($this->_storeManager->getStore())
                 ->getCmsPageTitleByIdentifier($this->getData('href'));
-        } else if ($this->getData('page_id')) {
+        } elseif ($this->getData('page_id')) {
             $this->_anchorText = $this->_resourcePage->getCmsPageTitleById($this->getData('page_id'));
         } else {
             $this->_anchorText = $this->getData('href');

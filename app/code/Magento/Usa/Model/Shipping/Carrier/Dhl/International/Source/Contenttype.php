@@ -30,7 +30,7 @@ namespace Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Contenttype implements \Magento\Core\Model\Option\ArrayInterface
+class Contenttype implements \Magento\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

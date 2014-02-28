@@ -29,7 +29,7 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Grid;
 
-class StatusesArray implements \Magento\Core\Model\Option\ArrayInterface
+class StatusesArray implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory

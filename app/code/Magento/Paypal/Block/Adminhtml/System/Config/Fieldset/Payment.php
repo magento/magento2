@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
 /**
  * Fieldset renderer for PayPal solution
  */
-namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
-
 class Payment
     extends \Magento\Backend\Block\System\Config\Form\Fieldset
 {
@@ -147,7 +146,7 @@ class Payment
      * Get collapsed state on-load
      *
      * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return bool
+     * @return false
      */
     protected function _isCollapseState($element)
     {

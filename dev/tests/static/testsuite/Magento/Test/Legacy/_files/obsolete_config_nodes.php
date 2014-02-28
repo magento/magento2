@@ -88,9 +88,9 @@ return array(
     '/config/global/catalog/product/flat/attribute_groups' =>
         'This configuration moved to Di configuration of \Magento\Catalog\Model\Resource\Product\Flat\Indexer',
     '/config/global/catalog/product/flat/add_filterable_attributes' =>
-        'This configuration moved to Di configuration of \Magento\Catalog\Helper\Product\Flat',
+        'This configuration moved to Di configuration of \Magento\Catalog\Helper\Product\Flat\Indexer',
     '/config/global/catalog/product/flat/add_child_data' =>
-        'This configuration moved to Di configuration of \Magento\Catalog\Helper\Product\Flat',
+        'This configuration moved to Di configuration of \Magento\Catalog\Helper\Product\Flat\Indexer',
     '/config/global/catalog/content/template_filter' =>
         'This configuration moved to Di configuration of \Magento\Catalog\Helper\Data',
     '/config/frontend/catalog/per_page_values/list' =>

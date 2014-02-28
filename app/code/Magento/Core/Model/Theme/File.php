@@ -69,8 +69,8 @@ class File extends AbstractModel implements FileInterface
     protected $_themeFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
      * @param \Magento\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -78,8 +78,8 @@ class File extends AbstractModel implements FileInterface
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
         \Magento\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,

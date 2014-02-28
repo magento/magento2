@@ -79,7 +79,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::TAXVAT, $customer->getTaxvat());
         $this->assertEquals(self::WEBSITE_ID, $customer->getWebsiteId());
         $attribute = $customer->getAttribute(self::ATTRIBUTE_CODE);
-        $this->assertEquals(self::ATTRIBUTE_VALUE, $attribute);
+        $this->assertNull($attribute, "Arbitrary attributes must not be available to DTO users.");
     }
 
     public function testGetAttributeNotExist()
@@ -104,6 +104,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $actualAttributes = $customer->getAttributes();
         $this->assertEquals(
             [
+                'id' => self::ID,
                 'confirmation' => self::CONFIRMATION,
                 'created_at' => self::CREATED_AT,
                 'created_in' => self::STORE_NAME,
@@ -118,8 +119,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'store_id' => self::STORE_ID,
                 'suffix' => self::SUFFIX,
                 'taxvat' => self::TAXVAT,
-                'website_id' => self::WEBSITE_ID,
-                self::ATTRIBUTE_CODE => self::ATTRIBUTE_VALUE,
+                'website_id' => self::WEBSITE_ID
             ],
             $actualAttributes
         );
@@ -159,7 +159,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::LASTNAME, $customer->getLastname());
         $this->assertEquals(self::EMAIL, $customer->getEmail());
         $this->assertEquals(self::ID, $customer->getCustomerId());
-        $this->assertEquals(self::ID, $customer->getAttribute('entity_id'));
     }
 
     /**

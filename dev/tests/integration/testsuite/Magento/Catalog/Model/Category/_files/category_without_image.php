@@ -41,4 +41,4 @@ $category->setName('Category Without Image 1')
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get('Magento\Core\Model\Registry')->register('_fixture/Magento\Catalog\Model\Category', $category);
+$objectManager->get('Magento\Registry')->register('_fixture/Magento\Catalog\Model\Category', $category);

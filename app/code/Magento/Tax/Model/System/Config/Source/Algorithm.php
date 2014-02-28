@@ -26,7 +26,7 @@
 
 namespace Magento\Tax\Model\System\Config\Source;
 
-class Algorithm implements \Magento\Core\Model\Option\ArrayInterface
+class Algorithm implements \Magento\Option\ArrayInterface
 {
     /**
      * @var array

@@ -33,7 +33,7 @@
  */
 namespace Magento\Downloadable\Model\System\Config\Source;
 
-class Contentdisposition implements \Magento\Core\Model\Option\ArrayInterface
+class Contentdisposition implements \Magento\Option\ArrayInterface
 {
     public function toOptionArray()
     {

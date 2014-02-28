@@ -27,7 +27,7 @@
 
 namespace Magento\GoogleCheckout\Model\Source;
 
-class Locale implements \Magento\Core\Model\Option\ArrayInterface
+class Locale implements \Magento\Option\ArrayInterface
 {
     public function toOptionArray()
     {

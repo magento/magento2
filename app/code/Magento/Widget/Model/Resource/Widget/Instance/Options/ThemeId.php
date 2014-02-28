@@ -33,7 +33,7 @@
 
 namespace Magento\Widget\Model\Resource\Widget\Instance\Options;
 
-class ThemeId implements \Magento\Core\Model\Option\ArrayInterface
+class ThemeId implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Widget\Model\Widget\Instance

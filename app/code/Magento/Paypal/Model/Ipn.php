@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model;
 
 /**
  * PayPal Instant Payment Notification processor model
  */
-namespace Magento\Paypal\Model;
-
 class Ipn
 {
     /**
@@ -37,7 +36,9 @@ class Ipn
     const DEFAULT_LOG_FILE = 'paypal_unknown_ipn.log';
 
     /**
-     * @param \Magento\Sales\Model\Order
+     * Sales order
+     *
+     * @var \Magento\Sales\Model\Order
      */
     protected $_order;
 
@@ -100,7 +101,7 @@ class Ipn
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory
      * @param \Magento\Paypal\Model\Info $paypalInfo
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -108,7 +109,7 @@ class Ipn
         \Magento\Paypal\Model\ConfigFactory $configFactory,
         \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory,
         \Magento\Paypal\Model\Info $paypalInfo,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+        \Magento\Logger\AdapterFactory $logAdapterFactory
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_responseHttp = $responseHttp;
@@ -121,7 +122,7 @@ class Ipn
     /**
      * IPN request data getter
      *
-     * @param string $key
+     * @param string|null $key
      * @return array|string
      */
     public function getRequestData($key = null)
@@ -136,7 +137,8 @@ class Ipn
      * Get ipn data, send verification to PayPal, run corresponding handler
      *
      * @param array $request
-     * @param \Zend_Http_Client_Adapter_Interface $httpAdapter
+     * @param \Zend_Http_Client_Adapter_Interface|null $httpAdapter
+     * @return void
      * @throws \Exception
      */
     public function processIpnRequest(array $request, \Zend_Http_Client_Adapter_Interface $httpAdapter = null)
@@ -171,6 +173,7 @@ class Ipn
      * Post back to PayPal to check whether this request is a valid one
      *
      * @param \Zend_Http_Client_Adapter_Interface $httpAdapter
+     * @return void
      * @throws \Exception
      */
     protected function _postBack(\Zend_Http_Client_Adapter_Interface $httpAdapter)
@@ -199,7 +202,6 @@ class Ipn
 
     /**
      * Load and validate order, instantiate proper configuration
-     *
      *
      * @return \Magento\Sales\Model\Order
      * @throws \Exception
@@ -262,6 +264,7 @@ class Ipn
      * Validate incoming request data, as PayPal recommends
      *
      * @throws \Exception
+     * @return void
      * @link https://cms.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=developer/e_howto_admin_IPNIntro
      */
     protected function _verifyOrder()
@@ -287,6 +290,8 @@ class Ipn
      * IPN workflow implementation
      * Everything should be added to order comments. In positive processing cases customer will get email notifications.
      * Admin will be notified on errors.
+     *
+     * @return void
      */
     protected function _processOrder()
     {
@@ -320,6 +325,8 @@ class Ipn
 
     /**
      * Process adjustment notification
+     *
+     * @return void
      */
     protected function _registerAdjustment()
     {
@@ -342,6 +349,8 @@ class Ipn
 
     /**
      * Process dispute notification
+     *
+     * @return void
      */
     protected function _registerDispute()
     {
@@ -367,6 +376,8 @@ class Ipn
 
     /**
      * Process payment reversal and cancelled reversal notification
+     *
+     * @return void
      */
     protected function _registerPaymentReversal()
     {
@@ -402,6 +413,8 @@ class Ipn
 
     /**
      * Process regular IPN notifications
+     *
+     * @return void
      */
     protected function _registerTransaction()
     {
@@ -460,6 +473,8 @@ class Ipn
 
     /**
      * Process notification from recurring profile payments
+     *
+     * @return void
      */
     protected function _processRecurringProfile()
     {
@@ -516,6 +531,8 @@ class Ipn
 
     /**
      * Process completed payment (either full or partial)
+     *
+     * @return void
      */
     protected function _registerPaymentCapture()
     {
@@ -545,6 +562,8 @@ class Ipn
 
     /**
      * Process denied payment notification
+     *
+     * @return void
      */
     protected function _registerPaymentDenial()
     {
@@ -559,6 +578,8 @@ class Ipn
 
     /**
      * Treat failed payment as order cancellation
+     *
+     * @return void
      */
     protected function _registerPaymentFailure()
     {
@@ -570,6 +591,8 @@ class Ipn
 
     /**
      * Process a refund
+     *
+     * @return void
      */
     protected function _registerPaymentRefund()
     {
@@ -598,6 +621,7 @@ class Ipn
     /**
      * Process payment pending notification
      *
+     * @return void
      * @throws \Exception
      */
     public function _registerPaymentPending()
@@ -629,6 +653,8 @@ class Ipn
 
     /**
      * Register authorized payment
+     *
+     * @return void
      */
     protected function _registerPaymentAuthorization()
     {
@@ -653,6 +679,8 @@ class Ipn
 
     /**
      * Process voided authorization
+     *
+     * @return void
      */
     protected function _registerPaymentVoid()
     {
@@ -671,6 +699,8 @@ class Ipn
 
     /**
      * The status "Processed" is used when all Masspayments are successful
+     *
+     * @return void
      */
     protected function _registerMasspaymentsSuccess()
     {
@@ -787,14 +817,16 @@ class Ipn
             case 'Voided':    return \Magento\Paypal\Model\Info::PAYMENTSTATUS_VOIDED;
         }
         return '';
-// documented in NVP, but not documented in IPN:
-//Magento_Paypal_Model_Info::PAYMENTSTATUS_NONE
-//Magento_Paypal_Model_Info::PAYMENTSTATUS_INPROGRESS
-//Magento_Paypal_Model_Info::PAYMENTSTATUS_REFUNDEDPART
+        // documented in NVP, but not documented in IPN:
+        //Magento_Paypal_Model_Info::PAYMENTSTATUS_NONE
+        //Magento_Paypal_Model_Info::PAYMENTSTATUS_INPROGRESS
+        //Magento_Paypal_Model_Info::PAYMENTSTATUS_REFUNDEDPART
     }
 
     /**
      * Log debug data to file
+     *
+     * @return void
      */
     protected function _debug()
     {

@@ -27,12 +27,20 @@ namespace Magento\Customer\Service\V1\Dto;
 
 class Region extends \Magento\Service\Entity\AbstractDto
 {
+    /**#@+
+     * Array keys
+     */
+    const KEY_REGION_CODE = 'region_code';
+    const KEY_REGION = 'region';
+    const KEY_REGION_ID = 'region_id';
+    /**#@-*/
+
     /**
      * @return string
      */
     public function getRegionCode()
     {
-        return $this->_get('region_code');
+        return $this->_get(self::KEY_REGION_CODE);
     }
 
     /**
@@ -40,7 +48,7 @@ class Region extends \Magento\Service\Entity\AbstractDto
      */
     public function getRegion()
     {
-        return $this->_get('region');
+        return $this->_get(self::KEY_REGION);
     }
 
     /**
@@ -48,6 +56,6 @@ class Region extends \Magento\Service\Entity\AbstractDto
      */
     public function getRegionId()
     {
-        return $this->_get('region_id');
+        return $this->_get(self::KEY_REGION_ID);
     }
 }

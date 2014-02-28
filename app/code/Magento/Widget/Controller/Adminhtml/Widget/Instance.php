@@ -34,7 +34,7 @@ class Instance extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -60,7 +60,7 @@ class Instance extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Math\Random $mathRandom
@@ -68,7 +68,7 @@ class Instance extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory,
         \Magento\Logger $logger,
         \Magento\Math\Random $mathRandom,

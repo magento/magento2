@@ -52,8 +52,8 @@ class Design extends \Magento\Core\Model\AbstractModel
     protected $_locale;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\View\DesignInterface $design
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -61,8 +61,8 @@ class Design extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\View\DesignInterface $design,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,

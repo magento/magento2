@@ -103,8 +103,8 @@ class ClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckClassCanBeDeletedCustomerClassUsedInTaxRule()
     {
-        /** @var $registry \Magento\Core\Model\Registry */
-        $registry = $this->_objectManager->get('Magento\Core\Model\Registry');
+        /** @var $registry \Magento\Registry */
+        $registry = $this->_objectManager->get('Magento\Registry');
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
         $taxRule = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $customerClasses = $taxRule->getCustomerTaxClasses();
@@ -123,8 +123,8 @@ class ClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckClassCanBeDeletedProductClassUsedInTaxRule()
     {
-        /** @var $registry \Magento\Core\Model\Registry */
-        $registry = $this->_objectManager->get('Magento\Core\Model\Registry');
+        /** @var $registry \Magento\Registry */
+        $registry = $this->_objectManager->get('Magento\Registry');
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
         $taxRule = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $productClasses = $taxRule->getProductTaxClasses();

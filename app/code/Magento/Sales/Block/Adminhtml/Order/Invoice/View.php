@@ -45,7 +45,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -57,13 +57,13 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Auth\Session $backendSession
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Auth\Session $backendSession,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_backendSession = $backendSession;

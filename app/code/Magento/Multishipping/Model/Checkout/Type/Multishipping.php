@@ -18,21 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Multishipping checkout model
- *
- * @category    Magento
- * @package     Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Multishipping\Model\Checkout\Type;
 
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+
+/**
+ * Multishipping checkout model
+ */
 class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
 {
     /**
@@ -82,6 +78,8 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
     protected $paymentSpecification;
 
     /**
+     * Initialize dependencies.
+     *
      * @var \Magento\Multishipping\Helper\Data
      */
     protected $helper;
@@ -90,6 +88,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param CustomerAddressServiceInterface $customerAddressService
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Session $session
@@ -104,6 +103,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
+        CustomerAddressServiceInterface $customerAddressService,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Session $session,
@@ -122,7 +122,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
         $this->_storeManager = $storeManager;
         $this->paymentSpecification = $paymentSpecification;
         $this->helper = $helper;
-        parent::__construct($checkoutSession, $customerSession, $orderFactory, $data);
+        parent::__construct($checkoutSession, $customerSession, $orderFactory, $customerAddressService, $data);
         $this->_init();
     }
 
@@ -138,7 +138,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
          * reset quote shipping addresses and items
          */
         $quote = $this->getQuote();
-        if (!$this->getCustomer()->getId()) {
+        if (!$this->getCustomer()->getCustomerId()) {
             return $this;
         }
 
@@ -154,7 +154,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
 
             $defaultShipping = $this->getCustomerDefaultShippingAddress();
             if ($defaultShipping) {
-                $quote->getShippingAddress()->importCustomerAddress($defaultShipping);
+                $quote->getShippingAddress()->importCustomerAddressData($defaultShipping);
 
                 foreach ($this->getQuoteItems() as $item) {
                     /**
@@ -169,8 +169,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             }
 
             if ($this->getCustomerDefaultBillingAddress()) {
-                $quote->getBillingAddress()
-                    ->importCustomerAddress($this->getCustomerDefaultBillingAddress());
+                $quote->getBillingAddress()->importCustomerAddressData($this->getCustomerDefaultBillingAddress());
                 foreach ($this->getQuoteItems() as $item) {
                     if ($item->getParentItemId()) {
                         continue;
@@ -336,7 +335,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
 
             $customerDefaultBilling = $this->getCustomerDefaultBillingAddress();
             if ($customerDefaultBilling) {
-                $quote->getBillingAddress()->importCustomerAddress($customerDefaultBilling);
+                $quote->getBillingAddress()->importCustomerAddressData($customerDefaultBilling);
             }
 
             foreach ($quote->getAllItems() as $_item) {
@@ -386,10 +385,14 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             }
             $quoteItem->setMultishippingQty((int)$quoteItem->getMultishippingQty()+$qty);
             $quoteItem->setQty($quoteItem->getMultishippingQty());
-            $address = $this->getCustomer()->getAddressById($addressId);
-            if ($address->getId()) {
+            try {
+                $address = $this->_customerAddressService->getAddressById($addressId);
+            } catch (\Exception $e) {
+                /** Customer address does not exist. */
+            }
+            if (isset($address)) {
                 if (!$quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId())) {
-                    $quoteAddress = $this->_addressFactory->create()->importCustomerAddress($address);
+                    $quoteAddress = $this->_addressFactory->create()->importCustomerAddressData($address);
                     $this->getQuote()->addShippingAddress($quoteAddress);
                 }
 
@@ -417,11 +420,15 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      */
     public function updateQuoteCustomerShippingAddress($addressId)
     {
-        $address = $this->getCustomer()->getAddressById($addressId);
-        if ($address) {
+        try {
+            $address = $this->_customerAddressService->getAddressById($addressId);
+        } catch (\Exception $e) {
+            /** Customer address does not exist. */
+        }
+        if (isset($address)) {
             $this->getQuote()->getShippingAddressByCustomerAddressId($addressId)
                 ->setCollectShippingRates(true)
-                ->importCustomerAddress($address)
+                ->importCustomerAddressData($address)
                 ->collectTotals();
             $this->getQuote()->save();
         }
@@ -436,10 +443,14 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      */
     public function setQuoteCustomerBillingAddress($addressId)
     {
-        $address = $this->getCustomer()->getAddressById($addressId);
-        if ($address) {
+        try {
+            $address = $this->_customerAddressService->getAddressById($addressId);
+        } catch (\Exception $e) {
+            /** Customer address does not exist. */
+        }
+        if (isset($address)) {
             $this->getQuote()->getBillingAddress($addressId)
-                ->importCustomerAddress($address)
+                ->importCustomerAddressData($address)
                 ->collectTotals();
             $this->getQuote()->collectTotals()->save();
         }

@@ -32,7 +32,7 @@ namespace Magento\ProductAlert\Block\Product;
 class View extends \Magento\View\Element\Template
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry;
 
@@ -53,13 +53,13 @@ class View extends \Magento\View\Element\Template
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\ProductAlert\Helper\Data $helper
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\ProductAlert\Helper\Data $helper,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         parent::__construct($context, $data);

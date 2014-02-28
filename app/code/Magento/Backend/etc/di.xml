@@ -123,12 +123,12 @@
             <argument name="resourceLoader" xsi:type="object">Magento\Acl\Loader\Resource</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Acl\Cache">
+    <type name="Magento\Acl\Cache">
         <arguments>
             <argument name="cacheKey" xsi:type="string">backend_acl_resources</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Acl\RootResource">
+    <type name="Magento\Acl\RootResource">
         <arguments>
             <argument name="identifier" xsi:type="string">Magento_Adminhtml::all</argument>
         </arguments>

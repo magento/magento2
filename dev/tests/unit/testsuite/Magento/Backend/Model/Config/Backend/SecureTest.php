@@ -32,7 +32,7 @@ class SecureTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $cacheManager = $this->getMock('Magento\App\CacheInterface');
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $context = new \Magento\Core\Model\Context(
+        $context = new \Magento\Model\Context(
             $logger,
             $eventDispatcher,
             $cacheManager,
@@ -46,7 +46,7 @@ class SecureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($resource));
         $resourceCollection = $this->getMock('Magento\Data\Collection\Db', array(), array(), '', false);
         $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
-        $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $coreRegistry = $this->getMock('Magento\Registry', array(), array(), '', false);
         $coreConfig = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 

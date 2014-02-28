@@ -56,14 +56,16 @@ class Factory
     /**
      * Return newly created instance of a layout file list
      *
-     * @param string $collator
+     * @param string $instanceName
      * @return \Magento\View\Layout\File\FileList
+     * @throws \UnexpectedValueException
      */
-    public function create($collator = self::FILE_LIST_COLLATOR)
+    public function create($instanceName = self::FILE_LIST_COLLATOR)
     {
-        return $this->objectManager->create(
-            'Magento\View\Layout\File\FileList',
-            array('collator' => $this->objectManager->get($collator))
-        );
+        $collator = $this->objectManager->get($instanceName);
+        if (!$collator instanceof CollateInterface) {
+            throw new \UnexpectedValueException("$instanceName has to implement the collate interface.");
+        }
+        return $this->objectManager->create('Magento\View\Layout\File\FileList', array('collator' => $collator));
     }
 }

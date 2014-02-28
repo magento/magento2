@@ -27,14 +27,9 @@ namespace Magento\Cms\Block\Adminhtml;
 
 /**
  * Adminhtml cms blocks content block
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Block extends \Magento\Backend\Block\Widget\Grid\Container
 {
-
     /**
      * @return void
      */
@@ -46,5 +41,4 @@ class Block extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_addButtonLabel = __('Add New Block');
         parent::_construct();
     }
-
 }

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Cms\Model;
 
 /**
@@ -64,13 +65,12 @@ namespace Magento\Cms\Model;
  * @method \Magento\Cms\Model\Page setCustomThemeFrom(string $value)
  * @method string getCustomThemeTo()
  * @method \Magento\Cms\Model\Page setCustomThemeTo(string $value)
- *
- * @category    Magento
- * @package     Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Page extends \Magento\Core\Model\AbstractModel
 {
+    /**
+     * No route page id
+     */
     const NOROUTE_PAGE_ID = 'no-route';
 
     /**
@@ -110,7 +110,7 @@ class Page extends \Magento\Core\Model\AbstractModel
      * @param string $field
      * @return $this
      */
-    public function load($id, $field=null)
+    public function load($id, $field = null)
     {
         if (is_null($id)) {
             return $this->noRoutePage();

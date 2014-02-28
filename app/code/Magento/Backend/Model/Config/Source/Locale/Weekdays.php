@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Locale;
 
-class Weekdays implements \Magento\Core\Model\Option\ArrayInterface
+class Weekdays implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Core\Model\LocaleInterface

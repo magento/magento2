@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Method;
 
 /**
  * Factory class for payment method model
  */
-namespace Magento\Paypal\Model\Method;
-
 class ProTypeFactory
 {
     /**
@@ -53,7 +52,7 @@ class ProTypeFactory
      *
      * @param string $className
      * @param array $data
-     * @return object
+     * @return \Magento\Object
      */
     public function create($className, array $data = array())
     {

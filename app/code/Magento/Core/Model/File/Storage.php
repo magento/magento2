@@ -102,8 +102,8 @@ class Storage extends AbstractModel
     protected $filesystem;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage $coreFileStorage
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\ConfigInterface $coreConfig
@@ -116,8 +116,8 @@ class Storage extends AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage $coreFileStorage,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\ConfigInterface $coreConfig,

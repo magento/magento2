@@ -31,7 +31,7 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax\Display;
 
-class Type implements \Magento\Core\Model\Option\ArrayInterface
+class Type implements \Magento\Option\ArrayInterface
 {
     /**
      * @var array

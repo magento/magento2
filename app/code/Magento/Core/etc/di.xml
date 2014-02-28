@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <preference for="Magento\Acl\CacheInterface" type="Magento\Core\Model\Acl\Cache" />
+    <preference for="Magento\Acl\CacheInterface" type="Magento\Acl\Cache" />
     <preference for="Magento\Module\Updater\SetupInterface" type="Magento\Core\Model\Resource\Setup" />
     <preference for="Magento\Module\ResourceResolverInterface" type="Magento\Module\ResourceResolver" />
     <preference for="Magento\AuthorizationInterface" type="Magento\Authorization" />
@@ -117,7 +117,7 @@
             <argument name="url" xsi:type="object" shared="false">Magento\UrlInterface</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Acl\Cache">
+    <type name="Magento\Acl\Cache">
         <arguments>
             <argument name="cacheKey" xsi:type="string">global_acl_resources</argument>
         </arguments>
@@ -247,7 +247,7 @@
     </type>
     <type name="Magento\Core\Model\Translate\Inline\Parser">
         <arguments>
-            <argument name="inputFilter" xsi:type="object">Magento\Core\Model\Input\Filter\MaliciousCode</argument>
+            <argument name="inputFilter" xsi:type="object">Magento\Filter\Input\MaliciousCode</argument>
         </arguments>
     </type>
     <type name="Magento\App\Config\ScopePool">
@@ -317,6 +317,15 @@
     <type name="Magento\View\Publisher">
         <arguments>
             <argument name="preProcessor" xsi:type="object">Magento\View\Asset\PreProcessor\Composite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\View\Publisher\CssFile">
+        <arguments>
+            <argument name="allowDuplication" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+    <type name="Magento\View\Publisher\File">
+        <arguments>
             <argument name="allowDuplication" xsi:type="boolean">true</argument>
         </arguments>
     </type>
@@ -334,6 +343,7 @@
         <arguments>
             <argument name="preProcessors" xsi:type="array">
                 <item name="css_source_processor" xsi:type="string">Magento\Css\PreProcessor\Less</item>
+                <item name="css_url_processor" xsi:type="string">Magento\Css\PreProcessor\UrlResolver</item>
             </argument>
         </arguments>
     </type>
@@ -500,6 +510,7 @@
     </type>
     <type name="Magento\View\Asset\MergeService">
         <plugin name="cleanMergedJsCss" type="Magento\Core\Model\Asset\Plugin\CleanMergedJsCss"/>
+        <plugin name="clearLessImportCache" type="Magento\Css\PreProcessor\Cache\Plugin\ImportCleaner" sortOrder="10"/>
     </type>
     <type name="Magento\Core\Model\Url\ScopeResolver">
         <arguments>
@@ -519,17 +530,17 @@
         </arguments>
     </type>
     <type name="Magento\Css\PreProcessor\Less">
-        <plugin name="process_less" type="Magento\Css\PreProcessor\Cache\Plugin" sortOrder="10"/>
+        <plugin name="process_less" type="Magento\Css\PreProcessor\Cache\Plugin\Less" sortOrder="10"/>
     </type>
     <type name="Magento\Less\PreProcessor">
-        <plugin name="process_less_instructions" type="Magento\Css\PreProcessor\Cache\Plugin" sortOrder="10"/>
+        <plugin name="process_less" type="Magento\Css\PreProcessor\Cache\Plugin\InstructionPreProcessor" sortOrder="10"/>
         <arguments>
             <argument name="preProcessors" xsi:type="array">
-                <item name="import" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Less\PreProcessor\Instruction\Import</item>
-                </item>
                 <item name="magento_import" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Less\PreProcessor\Instruction\MagentoImport</item>
+                </item>
+                <item name="import" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Less\PreProcessor\Instruction\Import</item>
                 </item>
             </argument>
         </arguments>

@@ -38,7 +38,7 @@ class Collection extends \Magento\Rating\Model\Resource\Rating\Collection
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -49,7 +49,7 @@ class Collection extends \Magento\Rating\Model\Resource\Rating\Collection
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Rating\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param mixed $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
@@ -60,7 +60,7 @@ class Collection extends \Magento\Rating\Model\Resource\Rating\Collection
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Rating\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {

@@ -93,6 +93,11 @@ class Base extends \Magento\App\Router\AbstractRouter
     protected $_defaultPath;
 
     /**
+     * @var \Magento\Code\NameBuilder
+     */
+    protected $nameBuilder;
+
+    /**
      * @param \Magento\App\ActionFactory $actionFactory
      * @param \Magento\App\DefaultPathInterface $defaultPath
      * @param \Magento\App\ResponseFactory $responseFactory
@@ -103,6 +108,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      * @param \Magento\Core\Model\Store\Config $storeConfig
      * @param \Magento\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
+     * @param \Magento\Code\NameBuilder $nameBuilder
      * @throws \InvalidArgumentException
      */
     public function __construct(
@@ -115,7 +121,8 @@ class Base extends \Magento\App\Router\AbstractRouter
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Store\Config $storeConfig,
         \Magento\Url\SecurityInfoInterface $urlSecurityInfo,
-        $routerId
+        $routerId,
+        \Magento\Code\NameBuilder $nameBuilder
     ) {
         parent::__construct($actionFactory);
 
@@ -127,6 +134,7 @@ class Base extends \Magento\App\Router\AbstractRouter
         $this->_url             = $url;
         $this->_storeManager    = $storeManager;
         $this->_appState        = $appState;
+        $this->nameBuilder = $nameBuilder;
     }
 
     /**
@@ -311,6 +319,7 @@ class Base extends \Magento\App\Router\AbstractRouter
             if (is_null($controllerInstance)) {
                 return null;
             }
+            $action = 'noroute';
         }
 
         // set values only after all the checks are done
@@ -353,7 +362,7 @@ class Base extends \Magento\App\Router\AbstractRouter
      */
     public function getControllerClassName($module, $controller)
     {
-        return \Magento\Core\Helper\String::buildClassName(array(
+        return $this->nameBuilder->buildClassName(array(
             $module,
             'Controller',
             $controller

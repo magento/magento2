@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model;
 
 /**
  * Payflow Link payment gateway model
  */
-namespace Magento\Paypal\Model;
-
 class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 {
     /**
@@ -74,6 +73,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
 
     /**
      * Payment method code
+     *
+     * @var string
      */
     protected $_code = \Magento\Paypal\Model\Config::METHOD_PAYFLOWLINK;
 
@@ -87,12 +88,19 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     protected $_infoBlockType = 'Magento\Paypal\Block\Payflow\Link\Info';
 
-    /**#@+
-     * Availability options
+    /**
+     * Availability option
+     *
+     * @var bool
      */
     protected $_canUseInternal          = false;
+
+    /**
+     * Availability option
+     *
+     * @var bool
+     */
     protected $_isInitializeNeeded      = true;
-    /**#@-*/
 
     /**
      * Request & response model
@@ -142,7 +150,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Module\ModuleListInterface $moduleList
      * @param \Magento\Core\Model\LocaleInterface $locale
@@ -156,14 +164,14 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\App\RequestInterface $requestHttp
      * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Logger $logger,
         \Magento\Module\ModuleListInterface $moduleList,
         \Magento\Core\Model\LocaleInterface $locale,
@@ -202,7 +210,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * Do not validate payment form using server methods
      *
-     * @return  bool
+     * @return true
      */
     public function validate()
     {
@@ -212,7 +220,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * Check whether payment method can be used
      *
-     * @param \Magento\Sales\Model\Quote
+     * @param \Magento\Sales\Model\Quote|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)
@@ -233,6 +241,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @param string $paymentAction
      * @param \Magento\Object $stateObject
+     * @return void
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -279,7 +288,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Fill response with data.
      *
      * @param array $postData
-     * @return \Magento\Paypal\Model\Payflowlink
+     * @return $this
      */
     public function setResponseData(array $postData)
     {
@@ -311,7 +320,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Operate with order using data from $_POST which came from Silent Post Url.
      *
      * @param array $responseData
-     * @throws \Magento\Core\Exception in case of validation error or order creation error
+     * @return void
+     * @throws \Magento\Core\Exception In case of validation error or order creation error
      */
     public function process($responseData)
     {
@@ -331,6 +341,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Operate with order using information from silent post
      *
      * @param \Magento\Sales\Model\Order $order
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _processOrder(\Magento\Sales\Model\Order $order)
@@ -387,7 +398,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * Get fraud message from response
      *
-     * @return string|bool
+     * @return string|false
      */
     protected function _getFraudMessage()
     {
@@ -403,8 +414,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * Check response from Payflow gateway.
      *
-     * @return \Magento\Sales\Model\Order in case of validation passed
-     * @throws \Magento\Core\Exception in other cases
+     * @return false|\Magento\Sales\Model\Order in case of validation passed
+     * @throws \Magento\Core\Exception In other cases
      */
     protected function _getOrderFromResponse()
     {
@@ -580,7 +591,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @param mixed $format
      * @param mixed $string
-     * @return mixed
+     * @return string
      */
     protected function _formatStr($format, $string)
     {
@@ -593,6 +604,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @param \Magento\Object $response
      * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _processTokenErrors($response, $payment)
@@ -638,6 +650,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @deprecated since 1.6.2.0
      * @param \Magento\Object $payment
      * @param string $txnId
+     * @return void
      */
     protected function _addTransaction($payment, $txnId)
     {
@@ -648,8 +661,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @deprecated since 1.6.2.0
      * @param \Magento\Object $payment
-     * @param  $amount
-     * @return \Magento\Paypal\Model\Payflowlink
+     * @param mixed $amount
+     * @return $this
      */
     protected function _initialize(\Magento\Object $payment, $amount)
     {
@@ -660,7 +673,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * Check whether order review has enough data to initialize
      *
      * @deprecated since 1.6.2.0
-     * @param $token
+     * @param mixed|null $token
+     * @return void
      * @throws \Magento\Core\Exception
      */
     public function prepareOrderReview($token = null)
@@ -675,7 +689,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param mixed $amount
      * @param \Magento\Paypal\Model\Payment\Transaction $transaction
      * @param string $txnId
-     * @return \Magento\Paypal\Model\Payflowlink
+     * @return $this
      */
     protected function _authorize(\Magento\Object $payment, $amount, $transaction, $txnId)
     {
@@ -687,6 +701,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @deprecated since 1.6.2.0
      * @param \Magento\Object $document
+     * @return void
      */
     protected function _process(\Magento\Object $document)
     {
@@ -698,7 +713,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @deprecated since 1.6.2.0
      * @param \Magento\Paypal\Model\Payment\Transaction $transaction
      * @param mixed $amount
-     * @return \Magento\Paypal\Model\Payflowlink
+     * @return $this
      */
     protected function _checkTransaction($transaction, $amount)
     {
@@ -710,7 +725,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @deprecated since 1.6.2.0
      * @return \Magento\Sales\Model\AbstractModel in case of validation passed
-     * @throws \Magento\Core\Exception in other cases
+     * @throws \Magento\Core\Exception In other cases
      */
     protected function _getDocumentFromResponse()
     {

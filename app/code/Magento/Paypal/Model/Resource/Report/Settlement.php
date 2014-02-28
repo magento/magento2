@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Resource\Report;
 
 /**
  * Report settlement resource model
  */
-namespace Magento\Paypal\Model\Resource\Report;
-
 class Settlement extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -55,6 +54,8 @@ class Settlement extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Init main table
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -66,7 +67,7 @@ class Settlement extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Save report rows collected in settlement model
      *
      * @param \Magento\Core\Model\AbstractModel|\Magento\Paypal\Model\Report\Settlement $object
-     * @return \Magento\Paypal\Model\Resource\Report\Settlement
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -117,7 +118,7 @@ class Settlement extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Paypal\Model\Report\Settlement $report
      * @param string $accountId
      * @param string $reportDate
-     * @return \Magento\Paypal\Model\Resource\Report\Settlement
+     * @return $this
      */
     public function loadByAccountAndDate(\Magento\Paypal\Model\Report\Settlement $report, $accountId, $reportDate)
     {

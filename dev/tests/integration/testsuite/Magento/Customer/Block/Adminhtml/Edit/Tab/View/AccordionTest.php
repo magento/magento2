@@ -46,7 +46,7 @@ class AccordionTest extends \PHPUnit_Framework_TestCase
         $customer->load(1);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_customer', $customer);
+        $objectManager->get('Magento\Registry')->register('current_customer', $customer);
         /** @var $layout \Magento\View\LayoutInterface */
         $layout = $objectManager->create(
             'Magento\Core\Model\Layout',

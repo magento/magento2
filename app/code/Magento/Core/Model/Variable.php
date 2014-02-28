@@ -55,16 +55,16 @@ class Variable extends \Magento\Core\Model\AbstractModel
     protected $_escaper = null;
 
     /**
-     * @param Context $context
-     * @param Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Model\Resource\Variable $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        Context $context,
-        Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Escaper $escaper,
         \Magento\Core\Model\Resource\Variable $resource,
         \Magento\Data\Collection\Db $resourceCollection = null,

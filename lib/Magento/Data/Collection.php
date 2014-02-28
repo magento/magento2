@@ -33,14 +33,14 @@
  */
 
 /**
- * TODO: Refactor use of \Magento\Core\Model\Option\ArrayInterface in library. Probably will be refactored while
+ * TODO: Refactor use of \Magento\Option\ArrayInterface in library. Probably will be refactored while
  * moving \Magento\Core to library
  */
 namespace Magento\Data;
 
 use Magento\Data\Collection\EntityFactoryInterface;
 
-class Collection implements \IteratorAggregate, \Countable, \Magento\Core\Model\Option\ArrayInterface
+class Collection implements \IteratorAggregate, \Countable, \Magento\Option\ArrayInterface
 {
     const SORT_ORDER_ASC    = 'ASC';
     const SORT_ORDER_DESC   = 'DESC';

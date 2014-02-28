@@ -231,6 +231,24 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     }
 
     /**
+     * Add filter by specified billing agreements
+     *
+     * @param int|array $agreements
+     * @return \Magento\Sales\Model\Resource\Order\Collection
+     */
+    public function addBillingAgreementsFilter($agreements)
+    {
+        $agreements = (is_array($agreements)) ? $agreements : array($agreements);
+        $this->getSelect()
+            ->joinInner(
+                array('sbao' => $this->getTable('sales_billing_agreement_order')),
+                'main_table.entity_id = sbao.order_id',
+                array())
+            ->where('sbao.agreement_id IN(?)', $agreements);
+        return $this;
+    }
+
+    /**
      * Add filter by specified recurring profile id(s)
      *
      * @param array|int $ids

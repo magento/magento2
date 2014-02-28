@@ -64,7 +64,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                 'Magento\Sales\Model\Resource\OrderFactory', array(), array(), '', false
             ),
             'calculatorFactory' => $this->getMock(
-                'Magento\Core\Model\CalculatorFactory', array(), array(), '', false
+                'Magento\Math\CalculatorFactory', array(), array(), '', false
             ),
             'invoiceItemCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory', array(), array(), '', false
@@ -74,12 +74,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             ),
             'commentCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory', array(), array(), '', false
-            ),
-            'templateMailerFactory' => $this->getMock(
-                'Magento\Email\Model\Template\MailerFactory', array(), array(), '', false
-            ),
-            'emailInfoFactory' => $this->getMock(
-                'Magento\Email\Model\InfoFactory', array(), array(), '', false
             ),
         );
         $this->_model = $helperManager->getObject('Magento\Sales\Model\Order\Invoice', $arguments);

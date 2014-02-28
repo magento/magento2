@@ -97,8 +97,8 @@ class Rule extends \Magento\Core\Model\AbstractModel
     protected $_calculation;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @param \Magento\Tax\Model\Calculation $calculation
@@ -107,8 +107,8 @@ class Rule extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\ClassModel $taxClass,
         \Magento\Tax\Model\Calculation $calculation,

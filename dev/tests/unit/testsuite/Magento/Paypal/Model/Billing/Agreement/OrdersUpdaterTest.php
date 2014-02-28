@@ -35,7 +35,7 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_registry;
 
@@ -46,7 +46,7 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_registry = $this->getMock('Magento\Core\Model\Registry', [], [], '', false);
+        $this->_registry = $this->getMock('Magento\Registry', [], [], '', false);
         $this->_agreementResource = $this->getMock(
             '\Magento\Paypal\Model\Resource\Billing\Agreement',
             [],

@@ -50,7 +50,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\RecurringProfile\Model\Profile');
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_recurring_profile', $this->_profile);
+        $objectManager->get('Magento\Registry')->register('current_recurring_profile', $this->_profile);
 
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\View\LayoutInterface');
@@ -61,7 +61,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('current_recurring_profile');
+        $objectManager->get('Magento\Registry')->unregister('current_recurring_profile');
         $this->_profile = null;
         $this->_block = null;
         $this->_layout = null;

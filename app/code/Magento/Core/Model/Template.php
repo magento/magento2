@@ -32,14 +32,8 @@ namespace Magento\Core\Model;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Template extends AbstractModel
+abstract class Template extends \Magento\Core\Model\AbstractModel implements \Magento\App\TemplateTypesInterface
 {
-    /**
-     * Types of template
-     */
-    const TYPE_TEXT = 1;
-    const TYPE_HTML = 2;
-
     /**
      * Default design area for emulation
      */
@@ -95,22 +89,22 @@ abstract class Template extends AbstractModel
     protected $_appEmulation;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Model\Context $context
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
+        \Magento\Model\Context $context,
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         array $data = array()

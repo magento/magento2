@@ -70,7 +70,7 @@ class Product extends \Magento\Core\Helper\Url
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -129,7 +129,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\View\Url $viewUrl
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\ConfigInterface $coreConfig
@@ -142,7 +142,7 @@ class Product extends \Magento\Core\Helper\Url
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\View\Url $viewUrl,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\ConfigInterface $coreConfig,
@@ -160,7 +160,7 @@ class Product extends \Magento\Core\Helper\Url
         $this->_coreConfig = $coreConfig;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_logger = $context->getLogger();
-        parent::__construct($context, $storeManager);        
+        parent::__construct($context, $storeManager);
     }
 
     /**

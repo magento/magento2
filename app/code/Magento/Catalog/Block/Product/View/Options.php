@@ -53,7 +53,7 @@ class Options extends \Magento\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry = null;
 
@@ -87,7 +87,7 @@ class Options extends \Magento\View\Element\Template
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Model\Product\Option $option
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Stdlib\ArrayUtils $arrayUtils
      * @param array $data
      */
@@ -97,7 +97,7 @@ class Options extends \Magento\View\Element\Template
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Model\Product\Option $option,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Stdlib\ArrayUtils $arrayUtils,
         array $data = array()
     ) {

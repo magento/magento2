@@ -24,14 +24,19 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php /** @var $this \Magento\Weee\Block\Renderer\Weee\Tax */?>
+<?php
+/** @var $this \Magento\Weee\Block\Renderer\Weee\Tax */
+$data = ['fptAttribute' => [
+    'region' => $this->helper('Magento\Core\Helper\Data')->jsonDecode(
+        $this->helper('Magento\Directory\Helper\Data')->getRegionJson()
+    ),
+    'itemsData' => $this->getValues(),
+    'bundlePriceType' => '#price_type',
+]];
+?>
 <div id="attribute-<?php echo $this->getElement()->getHtmlId(); ?>-container" class="field"
      data-element-id="<?php echo $this->getElement()->getHtmlId(); ?>"
-     data-mage-init='{"fptAttribute":{
-        "region": <?php echo $this->escapeHtml($this->helper('Magento\Directory\Helper\Data')->getRegionJson()) ?>,
-        "itemsData": <?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getValues())); ?>,
-        "bundlePriceType": "#price_type"
-     }}'>
+     data-mage-init="<?=$this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>">
     <label class="label"><span><?php echo $this->getElement()->getLabel() ?></span></label>
 
     <div class="control">

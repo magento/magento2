@@ -55,19 +55,17 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $collectionElement = $this->getMock('Magento\RecurringProfile\Model\Profile', $args, array(), '', false);
         $collectionElement->expects($this->once())->method('getIncrementId')
             ->will($this->returnValue(1));
-        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', array(), array(), '', false);
+        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
         $collection->expects($this->any())->method('addFieldToFilter')
             ->will($this->returnValue($collection));
         $collection->expects($this->once())->method('addFieldToSelect')
-            ->will($this->returnValue($collection));
-        $collection->expects($this->once())->method('addRecurringProfilesFilter')
             ->will($this->returnValue($collection));
         $collection->expects($this->once())->method('setOrder')
             ->will($this->returnValue($collection));
         $collection->expects($this->once())->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator(array($collectionElement))));
         $profile = $this->getMock('Magento\RecurringProfile\Model\Profile', array(), array(), '', false);
-        $registry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $registry = $this->getMock('Magento\Registry', array(), array(), '', false);
         $registry->expects($this->at(0))
             ->method('registry')
             ->with('current_recurring_profile')
@@ -83,6 +81,14 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $locale = $this->getMock('\Magento\Core\Model\LocaleInterface');
         $locale->expects($this->once())->method('formatDate')
             ->will($this->returnValue('11-11-1999'));
+        $recurringCollectionFilter = $this->getMock(
+            '\Magento\RecurringProfile\Model\Resource\Order\CollectionFilter',
+            ['byIds'],
+            [],
+            '',
+            false
+        );
+        $recurringCollectionFilter->expects($this->once())->method('byIds')->will($this->returnValue($collection));
         $helper = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $helper->expects($this->once())->method('formatCurrency')
             ->will($this->returnValue('10 USD'));
@@ -93,7 +99,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager,
                 'collection' => $collection,
                 'locale' => $locale,
-                'coreHelper' => $helper
+                'coreHelper' => $helper,
+                'recurringCollectionFilter' => $recurringCollectionFilter
             )
         );
         $pagerBlock = $this->getMockBuilder('Magento\Theme\Block\Html\Pager')

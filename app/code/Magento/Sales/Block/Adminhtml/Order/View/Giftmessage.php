@@ -45,7 +45,7 @@ class Giftmessage extends \Magento\Backend\Block\Widget
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -62,14 +62,14 @@ class Giftmessage extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\GiftMessage\Model\MessageFactory $messageFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\GiftMessage\Model\MessageFactory $messageFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\GiftMessage\Helper\Message $messageHelper,
         array $data = array()
     ) {

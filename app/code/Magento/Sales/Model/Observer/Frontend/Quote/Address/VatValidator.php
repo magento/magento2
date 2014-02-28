@@ -112,6 +112,10 @@ class VatValidator
     {
         $configAddressType = $this->customerAddress->getTaxCalculationAddressType($store);
 
+        /**
+         * TODO: References to Magento\Customer\Model\Address\AbstractAddress will be eliminated
+         * in scope of MAGETWO-21105
+         */
         // When VAT is based on billing address then Magento have to handle only billing addresses
         $additionalBillingAddressCondition =
             $configAddressType == \Magento\Customer\Model\Address\AbstractAddress::TYPE_BILLING
@@ -125,4 +129,4 @@ class VatValidator
 
         return true;
     }
-} 
+}

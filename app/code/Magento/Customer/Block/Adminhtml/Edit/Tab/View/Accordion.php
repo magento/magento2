@@ -38,7 +38,7 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -56,14 +56,14 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;

@@ -44,11 +44,9 @@ class Collection extends \Magento\Data\Collection\Db
     );
 
     /**
-     * Customer model
-     *
-     * @var \Magento\Customer\Model\Customer
+     * @var int
      */
-    protected $_customer;
+    protected $_customerId;
 
     /**
      * Order state value
@@ -106,12 +104,12 @@ class Collection extends \Magento\Data\Collection\Db
     /**
      * Set filter by customer
      *
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param int $customerId
      * @return \Magento\Sales\Model\Resource\Sale\Collection
      */
-    public function setCustomerFilter(\Magento\Customer\Model\Customer $customer)
+    public function setCustomerFilter($customerId)
     {
-        $this->_customer = $customer;
+        $this->_customerId = (int)$customerId;
         return $this;
     }
 
@@ -136,7 +134,7 @@ class Collection extends \Magento\Data\Collection\Db
     public function setOrderStateFilter($state, $exclude = false)
     {
         $this->_orderStateCondition = ($exclude) ? 'NOT IN' : 'IN';
-        $this->_orderStateValue     = (!is_array($state)) ? array($state) : $state;
+        $this->_state = (!is_array($state)) ? array($state) : $state;
         return $this;
     }
 
@@ -161,11 +159,11 @@ class Collection extends \Magento\Data\Collection\Db
             )
             ->group('sales.store_id');
 
-        if ($this->_customer instanceof \Magento\Customer\Model\Customer) {
-            $this->addFieldToFilter('sales.customer_id', $this->_customer->getId());
+        if ($this->_customerId) {
+            $this->addFieldToFilter('sales.customer_id', $this->_customerId);
         }
 
-        if (!is_null($this->_orderStateValue)) {
+        if (!is_null($this->_state)) {
             $condition = '';
             switch ($this->_orderStateCondition) {
                 case 'IN' :
@@ -175,7 +173,7 @@ class Collection extends \Magento\Data\Collection\Db
                     $condition = 'nin';
                     break;
             }
-            $this->addFieldToFilter('state', array($condition => $this->_orderStateValue));
+            $this->addFieldToFilter('state', array($condition => $this->_state));
         }
 
         $this->_eventManager->dispatch('sales_sale_collection_query_before', array('collection' => $this));

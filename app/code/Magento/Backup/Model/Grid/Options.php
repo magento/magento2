@@ -33,7 +33,7 @@
  */
 namespace Magento\Backup\Model\Grid;
 
-class Options implements \Magento\Core\Model\Option\ArrayInterface
+class Options implements \Magento\Option\ArrayInterface
 {
 
     /**

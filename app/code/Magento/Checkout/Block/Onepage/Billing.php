@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Onepage;
 
 /**
  * One page checkout status
@@ -32,8 +33,6 @@
  * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Onepage;
-
 class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
@@ -93,6 +92,8 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 
     /**
      * Initialize billing address step
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -107,6 +108,9 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         parent::_construct();
     }
 
+    /**
+     * @return bool
+     */
     public function isUseBillingAddressForShipping()
     {
         if (($this->getQuote()->getIsVirtual())
@@ -193,13 +197,16 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     /**
      * Check is Quote items can ship to
      *
-     * @return boolean
+     * @return bool
      */
     public function canShip()
     {
         return !$this->getQuote()->isVirtual();
     }
 
+    /**
+     * @return void
+     */
     public function getSaveUrl()
     {
     }
@@ -228,6 +235,9 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         return $this->_getTaxvat()->isEnabled();
     }
 
+    /**
+     * @return string
+     */
     public function getTaxvatHtml()
     {
         return $this->_getTaxvat()

@@ -38,7 +38,7 @@ use Magento\Catalog\Model\Resource\Product;
 use Magento\CatalogSearch\Helper\Data;
 use Magento\CatalogSearch\Model\Query;
 use Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory;
-use Magento\Core\Model\Registry;
+use Magento\Registry;
 use Magento\Core\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Entity\Attribute;

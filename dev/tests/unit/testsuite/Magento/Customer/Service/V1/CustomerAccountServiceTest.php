@@ -35,6 +35,7 @@ use Magento\Exception\StateException;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -99,6 +100,14 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\CustomerAddressService
      */
     private $_customerAddressServiceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Data
+     */
+    private $_customerHelperMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ObjectManager */
+    protected $_objectManagerMock;
 
     public function setUp()
     {
@@ -192,8 +201,24 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->_customerAddressServiceMock =
             $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerAddressService')
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
+
+        $this->_customerHelperMock =
+            $this->getMockBuilder('Magento\Customer\Helper\Data')
+                ->disableOriginalConstructor()
+                ->setMethods(['isCustomerInStore'])
+                ->getMock();
+        $this->_customerHelperMock->expects($this->any())
+            ->method('isCustomerInStore')
+            ->will($this->returnValue(false));
+
+        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager', [], [], '', false);
+        $this->_objectManagerMock
+            ->expects($this->any())
+            ->method('create')
+            ->with('Magento\Customer\Helper\Data')
+            ->will($this->returnValue($this->_customerHelperMock));
     }
 
 
@@ -987,7 +1012,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             $this->_validator,
             new Dto\Response\CreateCustomerAccountResponseBuilder(),
             $this->_customerServiceMock,
-            $this->_customerAddressServiceMock
+            $this->_customerAddressServiceMock,
+            $this->_objectManagerMock
         );
         return $customerService;
     }

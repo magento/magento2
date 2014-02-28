@@ -1030,7 +1030,7 @@ final class Controller
                 ->setBackupsDir(\Mage::getBaseDir('var') . '/backups');
 
             \Magento\App\ObjectManager::getInstance()
-                ->get('Magento\Core\Model\Registry')
+                ->get('Magento\Registry')
                 ->register('backup_manager', $backupManager);
 
             if ($type != \Magento\Backup\Factory::TYPE_DB) {

@@ -60,17 +60,25 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_attributeConfig;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $_eavConfig;
+
+    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_attributeConfig = $attributeConfig;
+        $this->_eavConfig = $eavConfig;
         parent::__construct($context);
     }
 
@@ -163,5 +171,26 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getInputTypesValidatorData()
     {
         return $this->_coreStoreConfig->getConfig(self::XML_PATH_VALIDATOR_DATA_INPUT_TYPES);
+    }
+
+    /**
+     * Retrieve attribute metadata.
+     *
+     * @param string $entityTypeCode
+     * @param string $attributeCode
+     * @return array <pre>[
+     *      'entity_type_id' => $entityTypeId,
+     *      'attribute_id' => $attributeId,
+     *      'attribute_table' => $attributeTable
+     * ]</pre>
+     */
+    public function getAttributeMetadata($entityTypeCode, $attributeCode)
+    {
+        $attribute = $this->_eavConfig->getAttribute($entityTypeCode, $attributeCode);
+        return [
+            'entity_type_id' => $attribute->getEntityTypeId(),
+            'attribute_id' => $attribute->getAttributeId(),
+            'attribute_table' => $attribute->getBackend()->getTable(),
+        ];
     }
 }

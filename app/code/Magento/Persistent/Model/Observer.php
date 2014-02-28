@@ -517,7 +517,7 @@ class Observer
     {
         /** @var \Magento\Sales\Model\Quote $quote */
         $quote = $this->_quoteFactory->create();
-        $quote->loadByCustomer($this->_getPersistentCustomer());
+        $quote->loadByCustomer($this->_persistentSession->getSession()->getCustomerId());
         return $quote;
     }
 

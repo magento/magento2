@@ -32,7 +32,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Core\Model\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreRegistry;
 
@@ -45,7 +45,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $store = $this->getMock('Magento\Core\Model\Store', [], [], '', false);
-        $this->coreRegistry = $this->getMock('Magento\Core\Model\Registry', []);
+        $this->coreRegistry = $this->getMock('Magento\Registry', []);
         $storeManager = $this->getMockForAbstractClass('Magento\Core\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $payment = $this->getMock('Magento\Authorizenet\Model\Directpost', null, [], '', false);

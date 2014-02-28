@@ -93,6 +93,7 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 
         $address->setDiscountDescription(array());
 
+        $items = $this->_calculator->sortItemsByPriority($items);
         foreach ($items as $item) {
             if ($item->getNoDiscount()) {
                 $item->setDiscountAmount(0);

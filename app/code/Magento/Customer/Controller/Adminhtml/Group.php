@@ -36,7 +36,7 @@ class Group extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -44,7 +44,7 @@ class Group extends \Magento\Backend\App\Action
      * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
     protected $_groupService;
-    
+
     /**
      * @var \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder
      */
@@ -52,13 +52,13 @@ class Group extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder $customerGroupBuilder
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder $customerGroupBuilder
     ) {

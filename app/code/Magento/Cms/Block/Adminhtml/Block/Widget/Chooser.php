@@ -27,10 +27,6 @@ namespace Magento\Cms\Block\Adminhtml\Block\Widget;
 
 /**
  * CMS block chooser for Wysiwyg CMS widget
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {

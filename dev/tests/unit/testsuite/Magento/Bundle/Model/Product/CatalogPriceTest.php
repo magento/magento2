@@ -61,7 +61,7 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
         $this->commonPriceMock
             = $this->getMock('Magento\Catalog\Model\Product\CatalogPrice', array(), array(), '', false);
-        $this->coreRegistryMock = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $this->coreRegistryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
         $methods = array('getStoreId', 'getWebsiteId', 'getCustomerGroupId', 'getPriceModel', '__wakeup');
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, array(), '', false);
         $this->priceModelMock

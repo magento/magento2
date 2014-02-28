@@ -170,7 +170,7 @@ class Creditmemo
             'request' => $this->getRequest(),
         ));
 
-        $this->_objectManager->get('Magento\Core\Model\Registry')->register('current_creditmemo', $creditmemo);
+        $this->_objectManager->get('Magento\Registry')->register('current_creditmemo', $creditmemo);
         return $creditmemo;
     }
 

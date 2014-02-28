@@ -67,8 +67,8 @@ class Event extends \Magento\Core\Model\AbstractModel
     protected $_eventTypeFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\DateFactory $dateFactory
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -76,8 +76,8 @@ class Event extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\DateFactory $dateFactory,
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,

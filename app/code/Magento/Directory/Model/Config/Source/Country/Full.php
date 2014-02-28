@@ -28,7 +28,7 @@
 namespace Magento\Directory\Model\Config\Source\Country;
 
 class Full extends \Magento\Directory\Model\Config\Source\Country
-    implements \Magento\Core\Model\Option\ArrayInterface
+    implements \Magento\Option\ArrayInterface
 {
     /**
      * @param bool $isMultiselect

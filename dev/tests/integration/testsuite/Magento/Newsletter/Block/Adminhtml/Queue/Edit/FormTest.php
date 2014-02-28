@@ -38,19 +38,26 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareForm()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $queue = $objectManager->get('Magento\Newsletter\Model\Queue');
+        /** @var \Magento\Registry $registry */
+        $registry = $objectManager->get('\Magento\Registry');
+        $registry->register('current_queue', $queue);
+
+        $objectManager->get('Magento\View\DesignInterface')
             ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->setDefaultDesignTheme();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $objectManager
             ->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form');
+        $block = $objectManager
+            ->create('Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form', array(
+                'registry' => $registry,
+            ));
         $prepareFormMethod = new \ReflectionMethod(
             'Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form', '_prepareForm');
         $prepareFormMethod->setAccessible(true);
 
-        $queue = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\Queue');
         $statuses = array(\Magento\Newsletter\Model\Queue::STATUS_NEVER, \Magento\Newsletter\Model\Queue::STATUS_PAUSE);
         foreach ($statuses as $status) {
             $queue->setQueueStatus($status);

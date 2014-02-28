@@ -51,7 +51,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         foreach ($registryData as $key => $value) {
-            $objectManager->get('Magento\Core\Model\Registry')->register($key, $value);
+            $objectManager->get('Magento\Registry')->register($key, $value);
         }
 
         /** @var $layout \Magento\Core\Model\Layout */
@@ -66,9 +66,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('store_type');
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('store_data');
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('store_action');
+        $objectManager->get('Magento\Registry')->unregister('store_type');
+        $objectManager->get('Magento\Registry')->unregister('store_data');
+        $objectManager->get('Magento\Registry')->unregister('store_action');
     }
 
     public function testPrepareForm()

@@ -48,7 +48,7 @@ class Selection
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -67,7 +67,7 @@ class Selection
      * @param \Magento\Backend\Model\Config\Source\Yesno $yesno
      * @param \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -75,7 +75,7 @@ class Selection
         \Magento\Backend\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_catalogData = $catalogData;

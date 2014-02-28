@@ -20,3 +20,4 @@
 \Magento\Core\Model\Translate\Inline\Config
 \Magento\Core\Model\Translate\Inline\Parser
 \Magento\Translate
+\Magento\Email\Model\Template

@@ -117,10 +117,10 @@ class Instance extends \Magento\Core\Model\AbstractModel
      * @var \Magento\Filesystem\Directory\ReadInterface
      */
     protected $_directory;
-    
+
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Escaper $escaper
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
@@ -136,8 +136,8 @@ class Instance extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Escaper $escaper,
         \Magento\View\FileSystem $viewFileSystem,
         \Magento\App\Cache\TypeListInterface $cacheTypeList,

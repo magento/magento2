@@ -21,17 +21,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Adminhtml\Billing;
 
 /**
  * Adminhtml billing agreement grid container
  */
-namespace Magento\Paypal\Block\Adminhtml\Billing;
-
 class Agreement extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Initialize billing agreements grid container
      *
+     * @return void
      */
     protected function _construct()
     {

@@ -31,4 +31,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Block\Onepage\Payment">
+        <plugin name="recurringprofile" type="Magento\RecurringProfile\Block\Plugin\Payment" />
+    </type>
 </config>

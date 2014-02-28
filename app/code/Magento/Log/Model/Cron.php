@@ -71,14 +71,14 @@ class Cron extends \Magento\Core\Model\AbstractModel
     protected $_log;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory
+     * @var \Magento\Mail\Template\TransportBuilder
      */
-    protected $_templateFactory;
+    protected $_transportBuilder;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Log\Model\Log $log
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\TranslateInterface $translate
@@ -88,9 +88,9 @@ class Cron extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Log\Model\Log $log,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\TranslateInterface $translate,
@@ -99,7 +99,7 @@ class Cron extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_templateFactory = $templateFactory;
+        $this->_transportBuilder = $transportBuilder;
         $this->_log = $log;
         $this->_storeManager = $storeManager;
         $this->_translate = $translate;
@@ -121,23 +121,20 @@ class Cron extends \Magento\Core\Model\AbstractModel
             return $this;
         }
 
-
         $this->_translate->setTranslateInline(false);
 
-        $emailTemplate = $this->_templateFactory->create();
-        /* @var $emailTemplate \Magento\Email\Model\Template */
-        $emailTemplate->setDesignConfig(
-            array(
-                'area' => 'backend',
+        $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE))
+            ->setTemplateOptions(array(
+                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
                 'store' => $this->_storeManager->getStore()->getId()
-            )
-        )->sendTransactional(
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE),
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY),
-            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT),
-            null,
-            array('warnings' => join("\n", $this->_errors))
-        );
+            ))
+            ->setTemplateVars(array('warnings' => join("\n", $this->_errors)))
+            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY))
+            ->addTo($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT))
+            ->getTransport();
+
+        $transport->sendMessage();
 
         $this->_translate->setTranslateInline(true);
         return $this;

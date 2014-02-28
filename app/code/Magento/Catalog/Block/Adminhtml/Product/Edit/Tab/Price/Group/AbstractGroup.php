@@ -68,7 +68,7 @@ abstract class AbstractGroup
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -87,7 +87,7 @@ abstract class AbstractGroup
      * @param \Magento\Customer\Model\GroupFactory $groupFactory
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -95,7 +95,7 @@ abstract class AbstractGroup
         \Magento\Customer\Model\GroupFactory $groupFactory,
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_groupFactory = $groupFactory;

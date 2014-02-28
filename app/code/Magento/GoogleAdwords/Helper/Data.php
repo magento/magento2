@@ -82,7 +82,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_storeConfig;
 
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry;
 
@@ -90,13 +90,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
-        \Magento\Core\Model\Registry $registry
+        \Magento\Registry $registry
     ) {
         parent::__construct($context);
         $this->_config = $config;

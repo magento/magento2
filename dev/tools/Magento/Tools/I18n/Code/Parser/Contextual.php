@@ -92,6 +92,7 @@ class Contextual extends AbstractParser
                 'translation' => $phraseData['phrase'],
                 'context_type' => $contextType,
                 'context_value' => array($contextValue),
+                'quote' => $phraseData['quote']
             ));
         }
     }

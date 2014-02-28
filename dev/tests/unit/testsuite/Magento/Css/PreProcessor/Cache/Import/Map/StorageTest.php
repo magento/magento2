@@ -149,4 +149,14 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ['some-key-to-delete', 'maps/less/bf8aef83aab96deb7dbd66579b389794.ser']
         ];
     }
+
+    public function testClearMaps()
+    {
+        $this->mapsDirectoryMock->expects($this->once())
+            ->method('delete')
+            ->with($this->equalTo(\Magento\Css\PreProcessor\Cache\Import\Map\Storage::MAPS_DIR))
+            ->will($this->returnSelf());
+
+        $this->assertEquals($this->storage, $this->storage->clearMaps());
+    }
 }

@@ -24,22 +24,20 @@
 
 namespace Magento\Webapi\Helper;
 
-use Magento\App\Helper\Context;
-use Magento\Core\Model\Registry;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 
 class Data extends \Magento\App\Helper\AbstractHelper
 {
-    /** @var Registry */
+    /** @var \Magento\Registry */
     protected $_registry;
 
     /**
-     * @param Context $context
-     * @param Registry $registry
+     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Registry $registry
      */
     public function __construct(
-        Context $context,
-        Registry $registry
+        \Magento\App\Helper\Context $context,
+        \Magento\Registry $registry
     ) {
         $this->_registry = $registry;
         parent::__construct($context);

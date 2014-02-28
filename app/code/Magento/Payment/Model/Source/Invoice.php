@@ -30,7 +30,7 @@ namespace Magento\Payment\Model\Source;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Invoice implements \Magento\Core\Model\Option\ArrayInterface
+class Invoice implements \Magento\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

@@ -58,6 +58,7 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->_expectedData = $this->_requestData;
+        $this->_expectedData['street'] = trim(implode("\n", $this->_expectedData['street']));
 
         unset($this->_expectedData['id']);
         unset($this->_expectedData['default_shipping']);

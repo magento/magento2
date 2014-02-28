@@ -253,8 +253,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel
     protected $_productFlatIndexerProcessor;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param Product\Url $url
      * @param Product\Link $productLink
@@ -282,8 +282,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         Product\Url $url,
         Product\Link $productLink,

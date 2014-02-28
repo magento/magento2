@@ -42,7 +42,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
     protected $_product;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Registry
+     * @var PHPUnit_Framework_MockObject_MockObject|\Magento\Registry
      */
     protected $_registry;
 
@@ -66,7 +66,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product', array('isAvailable', 'getId', '__wakeup'), array(), '', false
         );
         $this->_product->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->_registry = $this->getMockBuilder('Magento\Core\Model\Registry')
+        $this->_registry = $this->getMockBuilder('Magento\Registry')
             ->disableOriginalConstructor()
             ->setMethods(array('registry'))
             ->getMock();

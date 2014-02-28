@@ -39,8 +39,8 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
     protected $string;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Filter\FilterManager $filterManager
@@ -50,8 +50,8 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\App\Filesystem $filesystem,
         \Magento\Filter\FilterManager $filterManager,

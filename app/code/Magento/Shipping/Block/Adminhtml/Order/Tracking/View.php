@@ -37,14 +37,14 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         array $data = array()
     ) {

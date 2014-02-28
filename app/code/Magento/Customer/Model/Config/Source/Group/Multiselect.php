@@ -26,7 +26,7 @@
 
 namespace Magento\Customer\Model\Config\Source\Group;
 
-class Multiselect implements \Magento\Core\Model\Option\ArrayInterface
+class Multiselect implements \Magento\Option\ArrayInterface
 {
     /**
      * Customer groups options array

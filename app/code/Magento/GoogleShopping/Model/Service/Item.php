@@ -47,8 +47,8 @@ class Item extends \Magento\GoogleShopping\Model\Service
     protected $_date;
 
     /**
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\Gdata\Gshopping\ContentFactory $contentFactory
      * @param \Magento\Core\Model\Date $date
@@ -56,8 +56,8 @@ class Item extends \Magento\GoogleShopping\Model\Service
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Registry $coreRegistry,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\Gdata\Gshopping\ContentFactory $contentFactory,
         \Magento\Core\Model\Date $date,

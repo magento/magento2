@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Express;
 
 /**
  * PayPal Standard payment "form"
  */
-namespace Magento\Paypal\Block\Express;
-
 class Form extends \Magento\Paypal\Block\Standard\Form
 {
     /**
@@ -72,6 +71,8 @@ class Form extends \Magento\Paypal\Block\Standard\Form
 
     /**
      * Set template and redirect message
+     *
+     * @return null
      */
     protected function _construct()
     {

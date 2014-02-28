@@ -92,8 +92,8 @@ class Tax extends \Magento\Core\Model\AbstractModel
     protected $_customerSession;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Model\CalculationFactory $calculationFactory
@@ -105,8 +105,8 @@ class Tax extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Tax\Model\CalculationFactory $calculationFactory,

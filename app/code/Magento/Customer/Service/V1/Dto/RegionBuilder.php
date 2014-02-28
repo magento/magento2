@@ -33,7 +33,7 @@ class RegionBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
      */
     public function setRegionCode($regionCode)
     {
-        $this->_data['region_code'] = $regionCode;
+        $this->_data[Region::KEY_REGION_CODE] = $regionCode;
         return $this;
     }
 
@@ -43,7 +43,7 @@ class RegionBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
      */
     public function setRegion($regionName)
     {
-        $this->_data['region'] = $regionName;
+        $this->_data[Region::KEY_REGION] = $regionName;
         return $this;
     }
 
@@ -53,7 +53,7 @@ class RegionBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
      */
     public function setRegionId($regionId)
     {
-        $this->_data['region_id'] = $regionId;
+        $this->_data[Region::KEY_REGION_ID] = $regionId;
         return $this;
     }
 }

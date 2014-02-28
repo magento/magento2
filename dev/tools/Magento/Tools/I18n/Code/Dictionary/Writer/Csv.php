@@ -60,12 +60,31 @@ class Csv implements WriterInterface
     public function write(Phrase $phrase)
     {
         $fields = array($phrase->getPhrase(), $phrase->getTranslation());
+        $encloseQuote = $phrase->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
+        $fields[0] = $this->_compileString($fields[0], $encloseQuote);
+        $fields[1] = $this->_compileString($fields[1], $encloseQuote);
         if (($contextType = $phrase->getContextType()) && ($contextValue = $phrase->getContextValueAsString())) {
             $fields[] = $contextType;
             $fields[] = $contextValue;
         }
 
         fputcsv($this->_fileHandler, $fields, ',', '"');
+    }
+
+    /**
+     * Compile PHP string based on quotes type it enclosed with
+     *
+     * @param string $string
+     * @param string $encloseQuote
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.EvalExpression)
+     */
+    protected function _compileString($string, $encloseQuote)
+    {
+        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
+        $result = @eval($evalString);
+        return is_string($result) ? $result : $string;
     }
 
     /**

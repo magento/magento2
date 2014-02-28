@@ -238,6 +238,24 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve available billing agreement methods
+     *
+     * @param mixed $store
+     * @param \Magento\Sales\Model\Quote $quote
+     * @return array
+     */
+    public function getBillingAgreementMethods($store = null, $quote = null)
+    {
+        $result = array();
+        foreach ($this->getStoreMethods($store, $quote) as $method) {
+            if ($method->canManageBillingAgreements()) {
+                $result[] = $method;
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Get payment methods that implement recurring profilez management
      *
      * @param mixed $store

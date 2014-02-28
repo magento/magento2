@@ -25,7 +25,7 @@
  */
 namespace Magento\Weee\Model\Config\Source;
 
-class Display implements \Magento\Core\Model\Option\ArrayInterface
+class Display implements \Magento\Option\ArrayInterface
 {
     /**
      * Retrieve list of available options to display FPT

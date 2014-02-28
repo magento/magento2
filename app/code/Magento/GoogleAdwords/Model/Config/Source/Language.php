@@ -28,7 +28,7 @@ namespace Magento\GoogleAdwords\Model\Config\Source;
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Language implements \Magento\Core\Model\Option\ArrayInterface
+class Language implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Zend_Locale

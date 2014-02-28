@@ -58,13 +58,13 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Json\EncoderInterface $jsonEncoder,
         array $data = array()
     ) {

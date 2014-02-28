@@ -47,7 +47,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->productTypeConfig = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
-        $this->registryMock = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $this->registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
         $this->view = $helper->getObject('Magento\Catalog\Block\Product\View', array(
                 'productTypeConfig' => $this->productTypeConfig,
                 'registry' => $this->registryMock

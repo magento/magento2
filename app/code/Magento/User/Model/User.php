@@ -33,7 +33,6 @@ namespace Magento\User\Model;
  * @method string getLastname()
  * @method \Magento\User\Model\User setLastname(string $value)
  * @method string getEmail()
- * @method \Magento\User\Model\User setEmail(string $value)
  * @method string getUsername()
  * @method \Magento\User\Model\User setUsername(string $value)
  * @method string getPassword()
@@ -94,16 +93,6 @@ class User
     protected $_hasResources = true;
 
     /**
-     * Mail handler
-     *
-     * @var  \Magento\Email\Model\Template\Mailer
-     */
-    protected $_mailer;
-
-    /** @var \Magento\Email\Model\Sender */
-    protected $_sender;
-
-    /**
      * User data
      *
      * @var \Magento\User\Helper\Data
@@ -132,13 +121,6 @@ class User
     protected $_roleFactory;
 
     /**
-     * Factory for email info model
-     *
-     * @var \Magento\Email\Model\InfoFactory
-     */
-    protected $_emailInfoFactory;
-
-    /**
      * @var \Magento\Encryption\EncryptorInterface
      */
     protected $_encryptor;
@@ -149,35 +131,43 @@ class User
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @var \Magento\Mail\Template\TransportBuilder
+     */
+    protected $_transportBuilder;
+
+    /**
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\User\Helper\Data $userData
-     * @param \Magento\Email\Model\Sender $sender
      * @param \Magento\Backend\App\ConfigInterface $config
      * @param \Magento\Validator\ObjectFactory $validatorObjectFactory
      * @param \Magento\User\Model\RoleFactory $roleFactory
-     * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
-     * @param \Magento\Email\Model\Template\MailerFactory $mailerFactory
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\User\Helper\Data $userData,
-        \Magento\Email\Model\Sender $sender,
         \Magento\Backend\App\ConfigInterface $config,
         \Magento\Validator\ObjectFactory $validatorObjectFactory,
         \Magento\User\Model\RoleFactory $roleFactory,
-        \Magento\Email\Model\InfoFactory $emailInfoFactory,
-        \Magento\Email\Model\Template\MailerFactory $mailerFactory,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -186,12 +176,11 @@ class User
         $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_userData = $userData;
-        $this->_sender = $sender;
         $this->_config = $config;
         $this->_validatorObject = $validatorObjectFactory;
         $this->_roleFactory = $roleFactory;
-        $this->_emailInfoFactory = $emailInfoFactory;
-        $this->_mailer = $mailerFactory->create();
+        $this->_transportBuilder = $transportBuilder;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -212,14 +201,13 @@ class User
         $properties = parent::__sleep();
         return array_diff($properties, array(
             '_eventManager',
-            '_sender',
             '_userData',
             '_config',
             '_validatorObject',
             '_roleFactory',
-            '_emailInfoFactory',
-            '_mailer',
-            '_encryptor'
+            '_encryptor',
+            '_transportBuilder',
+            '_storeManager'
         ));
     }
 
@@ -231,15 +219,14 @@ class User
         parent::__wakeup();
         $objectManager = \Magento\App\ObjectManager::getInstance();
         $this->_eventManager    = $objectManager->get('Magento\Event\ManagerInterface');
-        $this->_sender          = $objectManager->get('Magento\Email\Model\Sender');
         $this->_userData        = $objectManager->get('Magento\User\Helper\Data');
         $this->_config = $objectManager->get('Magento\Backend\App\ConfigInterface');
-        $this->_coreRegistry    = $objectManager->get('Magento\Core\Model\Registry');
+        $this->_coreRegistry    = $objectManager->get('Magento\Registry');
         $this->_validatorObject = $objectManager->get('Magento\Validator\ObjectFactory');
         $this->_roleFactory = $objectManager->get('Magento\User\Model\RoleFactory');
-        $this->_emailInfoFactory = $objectManager->get('Magento\Email\Model\InfoFactory');
-        $this->_mailer = $objectManager->get('Magento\Email\Model\Template\MailerFactory');
         $this->_encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
+        $this->_transportBuilder =  $objectManager->get('Magento\Mail\Template\TransportBuilder');
+        $this->_storeManager =  $objectManager->get('Magento\Core\Model\StoreManagerInterface');
     }
 
     /**
@@ -444,38 +431,26 @@ class User
     }
 
     /**
-     * Set custom mail handler
-     *
-     * @param \Magento\Email\Model\Template\Mailer $mailer
-     * @return $this
-     */
-    public function setMailer(\Magento\Email\Model\Template\Mailer $mailer)
-    {
-        $this->_mailer = $mailer;
-        return $this;
-    }
-
-    /**
      * Send email with reset password confirmation link
      *
      * @return $this
      */
     public function sendPasswordResetConfirmationEmail()
     {
-        /** @var \Magento\Email\Model\Info $emailInfo */
-        $emailInfo = $this->_emailInfoFactory->create();
-        $emailInfo->addTo($this->getEmail(), $this->getName());
-        $this->_mailer->addEmailInfo($emailInfo);
-
         // Set all required params and send emails
-        $this->_mailer->setSender($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY));
-        $this->_mailer->setStoreId(0);
-        $this->_mailer->setTemplateId($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE));
-        $this->_mailer->setTemplateParams(array(
-            'user' => $this
-        ));
-        $this->_mailer->send();
+        /** @var \Magento\Mail\TransportInterface $transport */
+        $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE))
+            ->setTemplateOptions(array(
+                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                'store' => 0
+            ))
+            ->setTemplateVars(array('user' => $this, 'store' => $this->_storeManager->getStore(0)))
+            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
+            ->addTo($this->getEmail(), $this->getName())
+            ->getTransport();
 
+        $transport->sendMessage();
         return $this;
     }
 
@@ -486,15 +461,20 @@ class User
      */
     public function sendPasswordResetNotificationEmail()
     {
-        $this->_sender->send(
-            $this->getEmail(),
-            $this->getName(),
-            self::XML_PATH_RESET_PASSWORD_TEMPLATE,
-            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            array('user' => $this),
-            0
-        );
-        return $this;
+        // Set all required params and send emails
+        /** @var \Magento\Mail\TransportInterface $transport */
+        $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE))
+            ->setTemplateOptions(array(
+                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                'store' => 0
+            ))
+            ->setTemplateVars(array('user' => $this, 'store' => $this->_storeManager->getStore(0)))
+            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
+            ->addTo($this->getEmail(), $this->getName())
+            ->getTransport();
+
+        $transport->sendMessage();
     }
 
     /**

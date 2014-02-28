@@ -86,6 +86,9 @@ class CustomerAccountService implements CustomerAccountServiceInterface
      */
     private $_customerAddressService;
 
+    /** @var \Magento\ObjectManager */
+    protected $_objectManager;
+
     /**
      * Constructor
      *
@@ -98,6 +101,9 @@ class CustomerAccountService implements CustomerAccountServiceInterface
      * @param Dto\Response\CreateCustomerAccountResponseBuilder $createCustomerAccountResponseBuilder
      * @param CustomerServiceInterface $customerService
      * @param CustomerAddressServiceInterface $customerAddressService
+     * @param \Magento\ObjectManager $objectManager
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -108,7 +114,8 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         Validator $validator,
         Dto\Response\CreateCustomerAccountResponseBuilder $createCustomerAccountResponseBuilder,
         CustomerServiceInterface $customerService,
-        CustomerAddressServiceInterface $customerAddressService
+        CustomerAddressServiceInterface $customerAddressService,
+        \Magento\ObjectManager $objectManager
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_eventManager = $eventManager;
@@ -119,6 +126,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $this->_createCustomerAccountResponseBuilder = $createCustomerAccountResponseBuilder;
         $this->_customerService = $customerService;
         $this->_customerAddressService = $customerAddressService;
+        $this->_objectManager = $objectManager;
     }
 
 
@@ -243,7 +251,10 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $customerId = $customer->getCustomerId();
         if ($customerId) {
             $customerModel = $this->_converter->getCustomerModel($customerId);
-            if ($customerModel->isInStore($storeId)) {
+            // We can't pass it through DI because going to get circular dependency
+            /** @var \Magento\Customer\Helper\Data $customerHelper */
+            $customerHelper = $this->_objectManager->get('Magento\Customer\Helper\Data');
+            if ($customerHelper->isCustomerInStore($customerModel->getWebsiteId(), $storeId)) {
                 return $this->_createCustomerAccountResponseBuilder->setCustomerId($customerId)
                     ->setStatus('')
                     ->create();

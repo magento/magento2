@@ -38,8 +38,9 @@ abstract class AbstractDto
      * Initialize internal storage
      *
      * @param array $data
+     * @throws \InvalidArgumentException
      */
-    public function __construct(array $data)
+    public function __construct($data)
     {
         $this->_data = $data;
     }

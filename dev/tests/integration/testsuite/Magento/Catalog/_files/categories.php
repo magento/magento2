@@ -101,6 +101,18 @@ $category->setId(7)
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Catalog\Model\Category');
+$category->setId(8)
+    ->setName('Inactive')
+    ->setParentId(2)
+    ->setPath('1/2/8')
+    ->setAvailableSortBy('name')
+    ->setDefaultSortBy('name')
+    ->setIsActive(false)
+    ->setPosition(4)
+    ->save();
+
+$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Model\Category');
 $category->setId(9)
     ->setName('Movable Position 1')
     ->setParentId(2)
@@ -140,14 +152,15 @@ $category->setId(11)
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Catalog\Model\Category');
-$category->setId(8)
-    ->setName('Inactive')
+$category->setId(12)
+    ->setName('Category 12')
     ->setParentId(2)
-    ->setPath('1/2/8')
+    ->setPath('1/2/12')
+    ->setLevel(2)
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
-    ->setIsActive(false)
-    ->setPosition(4)
+    ->setIsActive(true)
+    ->setPosition(8)
     ->save();
 
 /** @var $product \Magento\Catalog\Model\Product */
@@ -185,6 +198,45 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
         'use_config_manage_stock' => 0,
     ))
     ->setCategoryIds(array(5))
+    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->save();
+
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Model\Product');
+$product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
+    ->setId(3)
+    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setStoreId(1)
+    ->setWebsiteIds(array(1))
+    ->setName('Simple Product Not Visible On Frontend')
+    ->setSku('simple')
+    ->setPrice(15)
+    ->setWeight(2)
+    ->setStockData(array(
+        'use_config_manage_stock' => 0,
+    ))
+    ->setCategoryIds(array(10, 11, 12))
+    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->save();
+
+/** @var $product \Magento\Catalog\Model\Product */
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Model\Product');
+$product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
+    ->setId(4)
+    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setStoreId(1)
+    ->setWebsiteIds(array(1))
+    ->setName('Simple Product Three')
+    ->setSku('simple')
+    ->setPrice(10)
+    ->setWeight(18)
+    ->setStockData(array(
+        'use_config_manage_stock' => 0,
+    ))
+    ->setCategoryIds(array(10, 11, 12))
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->save();

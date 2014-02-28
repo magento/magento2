@@ -23,13 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
- 
+
 /**
  * Locale country source
  */
 namespace Magento\Backend\Model\Config\Source\Locale;
 
-class Country implements \Magento\Core\Model\Option\ArrayInterface
+class Country implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Core\Model\LocaleInterface

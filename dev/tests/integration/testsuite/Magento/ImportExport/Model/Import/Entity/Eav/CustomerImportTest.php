@@ -106,7 +106,7 @@ class CustomerImportTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $existingCustomer = $objectManager->get('Magento\Core\Model\Registry')
+        $existingCustomer = $objectManager->get('Magento\Registry')
             ->registry('_fixture/Magento_ImportExport_Customer');
 
         $updatedCustomer = $customers[$existingCustomer->getId()];

@@ -42,7 +42,7 @@ class ColumnSetTest
         $product->load(1); // fixture
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_product', $product);
+        $objectManager->get('Magento\Registry')->register('current_product', $product);
 
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');

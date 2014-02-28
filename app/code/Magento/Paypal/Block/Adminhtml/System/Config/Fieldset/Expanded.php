@@ -23,12 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
+
+use Magento\Data\Form\Element\AbstractElement;
 
 /**
  * Fieldset renderer which expanded by default
  */
-namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
-
 class Expanded
     extends \Magento\Backend\Block\System\Config\Form\Fieldset
 {
@@ -50,8 +51,8 @@ class Expanded
     /**
      * Return collapse state
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return bool
+     * @param AbstractElement $element
+     * @return string|true
      */
     protected function _isCollapseState($element)
     {

@@ -21,28 +21,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Controller\Adminhtml\Billing;
 
 /**
  * Adminhtml billing agreement controller
  */
-namespace Magento\Paypal\Controller\Adminhtml\Billing;
-
 class Agreement extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -51,6 +50,7 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Billing agreements
      *
+     * @return void
      */
     public function indexAction()
     {
@@ -64,6 +64,7 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Ajax action for billing agreements
      *
+     * @return void
      */
     public function gridAction()
     {
@@ -74,6 +75,7 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * View billing agreement action
      *
+     * @return void
      */
     public function viewAction()
     {
@@ -96,6 +98,7 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Related orders ajax action
      *
+     * @return void
      */
     public function ordersGridAction()
     {
@@ -107,6 +110,7 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Customer billing agreements ajax action
      *
+     * @return void
      */
     public function customerGridAction()
     {
@@ -118,6 +122,7 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Cancel billing agreement action
      *
+     * @return void
      */
     public function cancelAction()
     {
@@ -142,6 +147,8 @@ class Agreement extends \Magento\Backend\App\Action
 
     /**
      * Delete billing agreement action
+     *
+     * @return void
      */
     public function deleteAction()
     {
@@ -167,7 +174,7 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Initialize billing agreement by ID specified in request
      *
-     * @return \Magento\Paypal\Model\Billing\Agreement | false
+     * @return \Magento\Paypal\Model\Billing\Agreement|false
      */
     protected function _initBillingAgreement()
     {
@@ -186,7 +193,7 @@ class Agreement extends \Magento\Backend\App\Action
     /**
      * Initialize customer by ID specified in request
      *
-     * @return \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
+     * @return $this
      */
     protected function _initCustomer()
     {

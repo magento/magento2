@@ -43,8 +43,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\CatalogInventory\Model\Adminhtml\Stock\Item(
-            $this->getMock('Magento\Core\Model\Context', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false),
+            $this->getMock('Magento\Model\Context', array(), array(), '', false),
+            $this->getMock('Magento\Registry', array(), array(), '', false),
             $this->getMock('Magento\Customer\Model\Session', array(), array(), '', false),
             $this->getMock('Magento\Index\Model\Indexer', array(), array(), '', false),
             $this->getMock('Magento\CatalogInventory\Model\Stock\Status', array(), array(), '', false),

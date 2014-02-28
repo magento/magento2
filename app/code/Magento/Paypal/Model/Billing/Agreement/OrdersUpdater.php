@@ -21,16 +21,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Billing\Agreement;
 
 /**
  * Orders grid massaction items updater
  */
-namespace Magento\Paypal\Model\Billing\Agreement;
-
 class OrdersUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registryManager;
 
@@ -40,21 +39,21 @@ class OrdersUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
     protected $_agreementResource;
 
     /**
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource
      * @param array $data
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource,
         array $data = array()
     ) {
         $this->_registryManager = isset($data['registry']) ? $data['registry'] : $coreRegistry;
         $this->_agreementResource = $agreementResource;
 
-        if (false === ($this->_registryManager instanceof \Magento\Core\Model\Registry)) {
-            throw new \InvalidArgumentException('registry object has to be an instance of \Magento\Core\Model\Registry');
+        if (false === ($this->_registryManager instanceof \Magento\Registry)) {
+            throw new \InvalidArgumentException('registry object has to be an instance of \Magento\Registry');
         }
     }
 
@@ -62,7 +61,6 @@ class OrdersUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
      * Add billing agreement filter
      *
      * @param mixed $argument
-     * @throws \DomainException
      * @return mixed
      * @throws \DomainException
      */

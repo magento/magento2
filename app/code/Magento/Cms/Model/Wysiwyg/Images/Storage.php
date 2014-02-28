@@ -340,7 +340,8 @@ class Storage extends \Magento\Object
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new \Magento\Core\Exception(
-                __('Please correct the folder name. Use only letters, numbers, underscores and dashes.'));
+                __('Please correct the folder name. Use only letters, numbers, underscores and dashes.')
+            );
         }
 
         $relativePath = $this->_directory->getRelativePath($path);
@@ -352,7 +353,8 @@ class Storage extends \Magento\Object
         $relativeNewPath = $this->_directory->getRelativePath($newPath);
         if ($this->_directory->isDirectory($relativeNewPath)) {
             throw new \Magento\Core\Exception(
-                __('We found a directory with the same name. Please try another folder name.'));
+                __('We found a directory with the same name. Please try another folder name.')
+            );
         }
 
         $this->_directory->create($relativeNewPath);
@@ -369,7 +371,7 @@ class Storage extends \Magento\Object
                 'id'            => $this->_cmsWysiwygImages->convertPathToId($newPath)
             );
             return $result;
-        } Catch (\Magento\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Filesystem\FilesystemException $e) {
             throw new \Magento\Core\Exception(__('We cannot create a new directory.'));
         }
     }
@@ -457,7 +459,7 @@ class Storage extends \Magento\Object
         $result = $uploader->save($targetPath);
 
         if (!$result) {
-            throw new \Magento\Core\Exception(__('We cannot upload the file.') );
+            throw new \Magento\Core\Exception(__('We cannot upload the file.'));
         }
 
         // create thumbnail
@@ -509,8 +511,9 @@ class Storage extends \Magento\Object
 
         if (strpos($filePath, $mediaRootDir) === 0) {
             $thumbSuffix = self::THUMBS_DIRECTORY_NAME . substr($filePath, strlen($mediaRootDir));
-            if (!$checkFile || $this->_directory->isExist(
-                    $this->_directory->getRelativePath($mediaRootDir . '/' . $thumbSuffix))) {
+            if (!$checkFile
+                || $this->_directory->isExist($this->_directory->getRelativePath($mediaRootDir . '/' . $thumbSuffix))
+            ) {
                 $thumbSuffix = substr($mediaRootDir, strlen($this->_directory->getAbsolutePath())) . '/' . $thumbSuffix;
                 $randomIndex = '?rand=' . time();
                 return str_replace('\\', '/', $this->_cmsWysiwygImages->getBaseUrl() . $thumbSuffix) . $randomIndex;
@@ -529,7 +532,7 @@ class Storage extends \Magento\Object
      */
     public function resizeFile($source, $keepRation = true)
     {
-       $realPath = $this->_directory->getRelativePath($source);
+        $realPath = $this->_directory->getRelativePath($source);
         if (!$this->_directory->isFile($realPath) || !$this->_directory->isExist($realPath)) {
             return false;
         }
@@ -673,7 +676,6 @@ class Storage extends \Magento\Object
      * Is path under storage root directory
      *
      * @param string $path
-     *
      * @return void
      * @throws \Magento\Core\Exception
      */
@@ -692,7 +694,6 @@ class Storage extends \Magento\Object
      * Sanitize path
      *
      * @param string $path
-     *
      * @return string
      */
     protected function _sanitizePath($path)
@@ -704,7 +705,6 @@ class Storage extends \Magento\Object
      * Get path in root storage dir
      *
      * @param string $path
-     *
      * @return string|bool
      */
     protected function _getRelativePathToRoot($path)

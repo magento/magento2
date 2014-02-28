@@ -73,22 +73,22 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     public function testWrite()
     {
         $this->_phraseFirstMock->expects($this->once())->method('getPhrase')
-            ->will($this->returnValue('phrase1'));
+            ->will($this->returnValue("phrase1_quote\\'"));
         $this->_phraseFirstMock->expects($this->once())->method('getTranslation')
-            ->will($this->returnValue('translation1'));
+            ->will($this->returnValue("translation1_quote\\'"));
         $this->_phraseFirstMock->expects($this->once())->method('getContextType')
-            ->will($this->returnValue('context_type1'));
+            ->will($this->returnValue("context_type1_quote\\'"));
         $this->_phraseFirstMock->expects($this->once())->method('getContextValueAsString')
-            ->will($this->returnValue('content_value1'));
+            ->will($this->returnValue("content_value1_quote\\'"));
 
         $this->_phraseSecondMock->expects($this->once())->method('getPhrase')
-            ->will($this->returnValue('phrase2'));
+            ->will($this->returnValue("phrase2_quote\\'"));
         $this->_phraseSecondMock->expects($this->once())->method('getTranslation')
-            ->will($this->returnValue('translation2'));
+            ->will($this->returnValue("translation2_quote\\'"));
         $this->_phraseSecondMock->expects($this->once())->method('getContextType')
-            ->will($this->returnValue('context_type2'));
+            ->will($this->returnValue("context_type2_quote\\'"));
         $this->_phraseSecondMock->expects($this->once())->method('getContextValueAsString')
-            ->will($this->returnValue('content_value2'));
+            ->will($this->returnValue("content_value2_quote\\'"));
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Code\Dictionary\Writer\Csv $writer */
@@ -98,8 +98,12 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $writer->write($this->_phraseFirstMock);
         $writer->write($this->_phraseSecondMock);
 
-        $expected = "phrase1,translation1,context_type1,content_value1\nphrase2,translation2,context_type2,"
-            . "content_value2\n";
+        $expected = <<<EXPECTED
+phrase1_quote',translation1_quote',"context_type1_quote\'","content_value1_quote\'"
+phrase2_quote',translation2_quote',"context_type2_quote\'","content_value2_quote\'"
+
+EXPECTED;
+
         $this->assertEquals($expected, file_get_contents($this->_testFile));
     }
 

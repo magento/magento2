@@ -245,12 +245,22 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     }
 
     /**
-     * Apply filters common to reports
-     *
      * @return $this
      */
     protected function _initSelect()
     {
+        return $this;
+    }
+
+    /**
+     * Apply filters common to reports
+     *
+     * @return $this
+     */
+    protected function _beforeLoad()
+    {
+        parent::_beforeLoad();
+
         $this->_applyDateRangeFilter();
         $this->_applyStoresFilter();
         $this->_applyCustomFilter();

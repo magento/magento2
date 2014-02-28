@@ -27,7 +27,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\App\RequestInterface;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg;
-use Magento\Core\Model\Registry;
+use Magento\Registry;
 use Magento\Logger;
 
 class Builder
@@ -43,7 +43,7 @@ class Builder
     protected $logger;
 
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $registry;
 
@@ -108,4 +108,4 @@ class Builder
         $this->wysiwygConfig->setStoreId($request->getParam('store'));
         return $product;
     }
-} 
+}

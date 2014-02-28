@@ -34,12 +34,12 @@ class Orders
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory
+     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
      */
     protected $_orderCollection;
 
@@ -49,24 +49,31 @@ class Orders
     protected $_orderConfig;
 
     /**
+     * @var \Magento\RecurringProfile\Model\Resource\Order\CollectionFilter
+     */
+    protected $_recurringCollectionFilter;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory $orderCollection
+     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollection
      * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\Sales\Model\Resource\Order\Grid\CollectionFactory $orderCollection,
+        \Magento\Registry $coreRegistry,
+        \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollection,
         \Magento\Sales\Model\Order\ConfigFactory $orderConfig,
+        \Magento\RecurringProfile\Model\Resource\Order\CollectionFilter $recurringCollectionFilter,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_orderCollection = $orderCollection;
         $this->_orderConfig = $orderConfig;
+        $this->_recurringCollectionFilter = $recurringCollectionFilter;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -88,8 +95,10 @@ class Orders
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_orderCollection->create()
-            ->addRecurringProfilesFilter($this->_coreRegistry->registry('current_recurring_profile')->getId());
+        $collection = $this->_recurringCollectionFilter->byIds(
+            $this->_orderCollection->create(),
+            $this->_coreRegistry->registry('current_recurring_profile')->getId()
+        );
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

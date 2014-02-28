@@ -32,7 +32,7 @@ class TrackingTest extends \PHPUnit_Framework_TestCase
 
         $shipment = new \Magento\Object(['store_id' => 1]);
 
-        $registry = $this->getMock('Magento\Core\Model\Registry', ['registry'], [], '', false);
+        $registry = $this->getMock('Magento\Registry', ['registry'], [], '', false);
         $registry->expects($this->once())->method('registry')
             ->with('current_shipment')->will($this->returnValue($shipment));
 

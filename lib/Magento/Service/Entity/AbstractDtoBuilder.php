@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Service\Entity;
 
 abstract class AbstractDtoBuilder
@@ -52,7 +53,6 @@ abstract class AbstractDtoBuilder
     /**
      * Populates the fields with data from the array.
      *
-     * The $data array should be a map that only contain scalar types or arrays of scalar types.
      * Keys for the map are snake_case attribute/field names.
      *
      * @param array $data
@@ -72,6 +72,32 @@ abstract class AbstractDtoBuilder
         }
 
         return $this;
+    }
+
+    /**
+     * Merge second DTO data with first DTO data and create new DTO object based on merge result.
+     *
+     * @param AbstractDto $firstDto
+     * @param AbstractDto $secondDto
+     * @return AbstractDto
+     */
+    public function mergeDtos(AbstractDto $firstDto, AbstractDto $secondDto)
+    {
+        $this->_data = array_merge($firstDto->__toArray(), $secondDto->__toArray());
+        return $this->create();
+    }
+
+    /**
+     * Merged data provided in array format with DTO data and create new DTO object based on merge result.
+     *
+     * @param AbstractDto $dto
+     * @param array $data
+     * @return AbstractDto
+     */
+    public function mergeDtoWithArray(AbstractDto $dto, array $data)
+    {
+        $this->_data = array_merge($dto->__toArray(), $data);
+        return $this->create();
     }
 
     /**

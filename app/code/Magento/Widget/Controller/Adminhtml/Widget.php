@@ -40,7 +40,7 @@ class Widget extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -58,13 +58,13 @@ class Widget extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Widget\Model\Widget $widget
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Widget\Model\Widget $widget,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->_widgetConfig = $widgetConfig;
         $this->_widget = $widget;

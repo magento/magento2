@@ -32,7 +32,7 @@ namespace Magento\GoogleShopping\Model\Source;
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Destinationstates implements \Magento\Core\Model\Option\ArrayInterface
+class Destinationstates implements \Magento\Option\ArrayInterface
 {
     /**
      * Retrieve option array with destinations

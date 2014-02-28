@@ -61,7 +61,7 @@ class Tax
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -79,14 +79,14 @@ class Tax
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Directory\Model\Config\Source\Country $sourceCountry
      * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Directory\Model\Config\Source\Country $sourceCountry,
         \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_sourceCountry = $sourceCountry;

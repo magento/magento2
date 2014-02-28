@@ -69,21 +69,17 @@ class Composite implements PreProcessorInterface
     /**
      * Process view asset pro-processors
      *
-     * @param string $filePath
-     * @param array $params
+     * @param \Magento\View\Publisher\FileInterface $publisherFile
      * @param \Magento\Filesystem\Directory\WriteInterface $targetDirectory
-     * @param null|string $sourcePath
-     * @return null|string
+     * @return \Magento\View\Publisher\FileInterface
      */
-    public function process($filePath, $params, $targetDirectory, $sourcePath = null)
+    public function process(\Magento\View\Publisher\FileInterface $publisherFile, $targetDirectory)
     {
-        $assetType = pathinfo($filePath, PATHINFO_EXTENSION);
-
-        foreach ($this->getAssetTypePreProcessors($assetType) as $preProcessor) {
-            $sourcePath = $preProcessor->process($filePath, $params, $targetDirectory, $sourcePath);
+        foreach ($this->getAssetTypePreProcessors($publisherFile->getExtension()) as $preProcessor) {
+            $publisherFile = $preProcessor->process($publisherFile, $targetDirectory);
         }
 
-        return $sourcePath;
+        return $publisherFile;
     }
 
     /**

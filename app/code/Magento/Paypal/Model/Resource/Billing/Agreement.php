@@ -21,18 +21,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Paypal\Model\Resource\Billing;
 
 /**
  * Billing agreement resource model
  */
-namespace Magento\Paypal\Model\Resource\Billing;
-
 class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -44,7 +43,7 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int $agreementId
      * @param int $orderId
-     * @return \Magento\Paypal\Model\Resource\Billing\Agreement
+     * @return $this
      */
     public function addOrderRelation($agreementId, $orderId)
     {

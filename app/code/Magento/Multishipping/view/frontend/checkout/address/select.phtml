@@ -18,10 +18,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var \Magento\Multishipping\Block\Checkout\Address\Select $this */
 ?>
 <div class="multicheckout block change billing">
     <div class="actions">
@@ -30,7 +31,7 @@
     <?php foreach ($this->getAddressCollection() as $_address): ?>
         <div class="box billing">
             <address>
-                <?php echo $_address->format('html') ?>
+                <?php echo $this->getAddressAsHtml($_address) ?>
                 <?php if($this->isAddressDefaultBilling($_address)): ?>
                     <br /><strong><?php echo __('Default Billing') ?></strong>
                 <?php endif; ?>

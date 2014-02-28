@@ -70,9 +70,9 @@ class Observer
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory
+     * @var \Magento\Mail\Template\TransportBuilder
      */
-    protected $_templateFactory;
+    protected $_transportBuilder;
 
     /**
      * @var \Magento\TranslateInterface
@@ -80,21 +80,29 @@ class Observer
     protected $_translateModel;
 
     /**
+     * @var \Magento\Core\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory
+     * @param Resource\Sitemap\CollectionFactory $collectionFactory
      * @param \Magento\TranslateInterface $translateModel
-     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory,
         \Magento\TranslateInterface $translateModel,
-        \Magento\Email\Model\TemplateFactory $templateFactory
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_collectionFactory = $collectionFactory;
         $this->_translateModel = $translateModel;
-        $this->_templateFactory = $templateFactory;
+        $this->_storeManager = $storeManager;
+        $this->_transportBuilder = $transportBuilder;
     }
 
     /**
@@ -126,20 +134,24 @@ class Observer
         }
 
         if ($errors && $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT)) {
+            $translate = $this->_translateModel->getTranslateInline();
             $this->_translateModel->setTranslateInline(false);
 
-            $emailTemplate = $this->_templateFactory->create();
-            /* @var $emailTemplate \Magento\Email\Model\Template */
-            $emailTemplate->setDesignConfig(array('area' => 'backend'))
-                ->sendTransactional(
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE),
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY),
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT),
-                    null,
-                    array('warnings' => join("\n", $errors))
-                );
+            $this->_transportBuilder
+                ->setTemplateIdentifier(
+                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
+                )
+                ->setTemplateOptions(array(
+                    'area' => \Magento\Core\Model\App\Area::AREA_ADMIN,
+                    'store' => $this->_storeManager->getStore()->getId(),
+                ))
+                ->setTemplateVars(array('warnings' => join("\n", $errors)))
+                ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY))
+                ->addTo($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT));
+            $transport = $this->_transportBuilder->getTransport();
+            $transport->sendMessage();
 
-            $this->_translateModel->setTranslateInline(true);
+            $this->_translateModel->setTranslateInline($translate);
         }
     }
 }

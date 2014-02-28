@@ -27,20 +27,56 @@ namespace Magento\Customer\Service\V1\Dto;
 
 class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityInterface
 {
-
+    const ADDRESS_TYPE_BILLING = 'billing';
+    const ADDRESS_TYPE_SHIPPING = 'shipping';
     const KEY_COUNTRY_ID = 'country_id';
+    const KEY_DEFAULT_BILLING = 'default_billing';
+    const KEY_DEFAULT_SHIPPING = 'default_shipping';
+    const KEY_ID = 'id';
+    const KEY_CUSTOMER_ID = 'customer_id';
+    const KEY_REGION = Region::KEY_REGION;
+    const KEY_REGION_ID = Region::KEY_REGION_ID;
+    const KEY_STREET = 'street';
+    const KEY_COMPANY = 'company';
+    const KEY_TELEPHONE = 'telephone';
+    const KEY_FAX = 'fax';
+    const KEY_POSTCODE = 'postcode';
+    const KEY_CITY = 'city';
+    const KEY_FIRSTNAME = 'firstname';
+    const KEY_LASTNAME = 'lastname';
+    const KEY_MIDDLENAME = 'middlename';
+    const KEY_PREFIX = 'prefix';
+    const KEY_SUFFIX = 'suffix';
+    const KEY_VAT_ID = 'vat_id';
 
-    /**
-     * @var array
-     */
-    private static $_nonAttributes = ['id', 'customer_id', 'region', 'default_billing', 'default_shipping'];
+    protected $_validAttributes = [
+        self::KEY_COUNTRY_ID,
+        self::KEY_DEFAULT_BILLING,
+        self::KEY_DEFAULT_SHIPPING,
+        self::KEY_ID,
+        self::KEY_CUSTOMER_ID,
+        self::KEY_REGION,
+        self::KEY_REGION_ID,
+        self::KEY_STREET,
+        self::KEY_COMPANY,
+        self::KEY_TELEPHONE,
+        self::KEY_FAX,
+        self::KEY_POSTCODE,
+        self::KEY_CITY,
+        self::KEY_FIRSTNAME,
+        self::KEY_LASTNAME,
+        self::KEY_MIDDLENAME,
+        self::KEY_PREFIX,
+        self::KEY_SUFFIX,
+        self::KEY_VAT_ID
+    ];
 
     /**
      * @return int|null
      */
     public function getId()
     {
-        return $this->_get('id');
+        return $this->_get(self::KEY_ID);
     }
 
     /**
@@ -48,7 +84,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function isDefaultShipping()
     {
-        return $this->_get('default_shipping');
+        return $this->_get(self::KEY_DEFAULT_SHIPPING);
     }
 
     /**
@@ -56,26 +92,24 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function isDefaultBilling()
     {
-        return $this->_get('default_billing');
+        return $this->_get(self::KEY_DEFAULT_BILLING);
     }
 
     /**
-     * @return string[]
+     * Retrieve array of all attributes, in the form of 'attribute code' => <attribute value'
+     *
+     * @return array
      */
     public function getAttributes()
     {
-        $attributes = $this->_data;
-        foreach (self::$_nonAttributes as $keyName) {
-            unset ($attributes[$keyName]);
+        $unvalidatedData = $this->__toArray();
+        $validData = [];
+        foreach ($this->_validAttributes as $attributeCode) {
+            if (isset($unvalidatedData[$attributeCode])) {
+                $validData[$attributeCode] = $unvalidatedData[$attributeCode];
+            }
         }
-
-        /** This triggers some code in _updateAddressModel in CustomerV1 Service */
-        if (!is_null($this->getRegion())) {
-            $attributes['region']['region_id'] = $this->getRegion()->getRegionId();
-            $attributes['region']['region'] = $this->getRegion()->getRegion();
-        }
-
-        return $attributes;
+        return $validData;
     }
 
     /**
@@ -85,8 +119,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
     public function getAttribute($attributeCode)
     {
         $attributes = $this->getAttributes();
-        if (isset($attributes[$attributeCode])
-            && !in_array($attributeCode, self::$_nonAttributes)) {
+        if (isset($attributes[$attributeCode])) {
             return $attributes[$attributeCode];
         }
         return null;
@@ -97,7 +130,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getRegion()
     {
-        return $this->_get('region');
+        return $this->_get(self::KEY_REGION);
     }
 
     /**
@@ -113,7 +146,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getStreet()
     {
-        return $this->_get('street');
+        return $this->_get(self::KEY_STREET);
     }
 
     /**
@@ -121,7 +154,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getCompany()
     {
-        return $this->_get('company');
+        return $this->_get(self::KEY_COMPANY);
     }
 
     /**
@@ -129,7 +162,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getTelephone()
     {
-        return $this->_get('telephone');
+        return $this->_get(self::KEY_TELEPHONE);
     }
 
     /**
@@ -137,7 +170,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getFax()
     {
-        return $this->_get('fax');
+        return $this->_get(self::KEY_FAX);
     }
 
     /**
@@ -145,7 +178,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getPostcode()
     {
-        return $this->_get('postcode');
+        return $this->_get(self::KEY_POSTCODE);
     }
 
     /**
@@ -153,7 +186,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getCity()
     {
-        return $this->_get('city');
+        return $this->_get(self::KEY_CITY);
     }
 
     /**
@@ -161,7 +194,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getFirstname()
     {
-        return $this->_get('firstname');
+        return $this->_get(self::KEY_FIRSTNAME);
     }
 
     /**
@@ -169,7 +202,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getLastname()
     {
-        return $this->_get('lastname');
+        return $this->_get(self::KEY_LASTNAME);
     }
 
     /**
@@ -177,7 +210,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getMiddlename()
     {
-        return $this->_get('middlename');
+        return $this->_get(self::KEY_MIDDLENAME);
     }
 
     /**
@@ -185,7 +218,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getPrefix()
     {
-        return $this->_get('prefix');
+        return $this->_get(self::KEY_PREFIX);
     }
 
     /**
@@ -193,7 +226,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getSuffix()
     {
-        return $this->_get('suffix');
+        return $this->_get(self::KEY_SUFFIX);
     }
 
     /**
@@ -201,7 +234,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getVatId()
     {
-        return $this->_get('vat_id');
+        return $this->_get(self::KEY_VAT_ID);
     }
 
     /**
@@ -209,6 +242,6 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
      */
     public function getCustomerId()
     {
-        return $this->_get('customer_id');
+        return $this->_get(self::KEY_CUSTOMER_ID);
     }
 }

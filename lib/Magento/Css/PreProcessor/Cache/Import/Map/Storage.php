@@ -90,6 +90,15 @@ class Storage
     }
 
     /**
+     * @return $this
+     */
+    public function clearMaps()
+    {
+        $this->mapsDirectory->delete(self::MAPS_DIR);
+        return $this;
+    }
+
+    /**
      * @param string $key
      * @return string
      */

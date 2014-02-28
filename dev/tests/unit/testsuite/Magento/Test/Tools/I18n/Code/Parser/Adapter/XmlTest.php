@@ -52,16 +52,19 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                 'phrase' => 'Phrase 2',
                 'file' => $this->_testFile,
                 'line' => '',
+                'quote' => '',
             ),
             array(
                 'phrase' => 'Phrase 3',
                 'file' => $this->_testFile,
                 'line' => '',
+                'quote' => '',
             ),
             array(
                 'phrase' => 'Phrase 1',
                 'file' => $this->_testFile,
                 'line' => '',
+                'quote' => '',
             ),
         );
 

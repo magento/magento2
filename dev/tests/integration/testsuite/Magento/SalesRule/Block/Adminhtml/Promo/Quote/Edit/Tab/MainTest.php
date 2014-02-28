@@ -43,7 +43,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\View\DesignInterface')
             ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->setDefaultDesignTheme();
-        $objectManager->get('Magento\Core\Model\Registry')
+        $objectManager->get('Magento\Registry')
             ->register('current_promo_quote_rule', $objectManager->create('Magento\SalesRule\Model\Rule'));
 
         $layout = $objectManager->create('Magento\Core\Model\Layout');

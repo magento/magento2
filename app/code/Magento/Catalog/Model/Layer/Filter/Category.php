@@ -59,7 +59,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -78,7 +78,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Catalog\Model\Layer $catalogLayer
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Escaper $escaper
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -87,7 +87,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Catalog\Model\Layer $catalogLayer,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Escaper $escaper,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_categoryFactory = $categoryFactory;
@@ -195,9 +195,8 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _getItemsData()
     {
-        $categoty   = $this->getCategory();
-        /** @var $category \Magento\Catalog\Model\Categeory */
-        $categories = $categoty->getChildrenCategories();
+        $category   = $this->getCategory();
+        $categories = $category->getChildrenCategories();
 
         $this->getLayer()->getProductCollection()
             ->addCountToCategories($categories);

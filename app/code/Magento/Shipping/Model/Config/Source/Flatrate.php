@@ -25,7 +25,7 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
-class Flatrate implements \Magento\Core\Model\Option\ArrayInterface
+class Flatrate implements \Magento\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

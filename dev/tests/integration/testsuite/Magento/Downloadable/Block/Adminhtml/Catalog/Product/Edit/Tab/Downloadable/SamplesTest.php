@@ -45,7 +45,7 @@ class SamplesTest
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')
+        $objectManager->get('Magento\Registry')
             ->register('current_product', new \Magento\Object(array('type_id' => 'simple')));
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
             ->createBlock('Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples');
@@ -67,7 +67,7 @@ class SamplesTest
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_product', new \Magento\Object(array(
+        $objectManager->get('Magento\Registry')->register('current_product', new \Magento\Object(array(
             'type_id' => $productType,
             'id' => '1',
             'samples_title' => $samplesTitle

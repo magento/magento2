@@ -33,7 +33,7 @@
  */
 namespace Magento\SalesRule\Model\System\Config\Source\Coupon;
 
-class Format implements \Magento\Core\Model\Option\ArrayInterface
+class Format implements \Magento\Option\ArrayInterface
 {
     /**
      * Sales rule coupon

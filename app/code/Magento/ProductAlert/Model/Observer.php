@@ -127,9 +127,9 @@ class Observer
     protected $_translate;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory
+     * @var \Magento\Mail\Template\TransportBuilder
      */
-    protected $_templateFactory;
+    protected $_transportBuilder;
 
     /**
      * @var \Magento\ProductAlert\Model\EmailFactory
@@ -146,7 +146,7 @@ class Observer
      * @param \Magento\Core\Model\DateFactory $dateFactory
      * @param \Magento\ProductAlert\Model\Resource\Stock\CollectionFactory $stockColFactory
      * @param \Magento\TranslateInterface $translate
-     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\ProductAlert\Model\EmailFactory $emailFactory
      */
     public function __construct(
@@ -159,7 +159,7 @@ class Observer
         \Magento\Core\Model\DateFactory $dateFactory,
         \Magento\ProductAlert\Model\Resource\Stock\CollectionFactory $stockColFactory,
         \Magento\TranslateInterface $translate,
-        \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\ProductAlert\Model\EmailFactory $emailFactory
     ) {
         $this->_taxData = $taxData;
@@ -171,7 +171,7 @@ class Observer
         $this->_dateFactory = $dateFactory;
         $this->_stockColFactory = $stockColFactory;
         $this->_translate = $translate;
-        $this->_templateFactory = $templateFactory;
+        $this->_transportBuilder = $transportBuilder;
         $this->_emailFactory = $emailFactory;
     }
 
@@ -380,19 +380,22 @@ class Observer
                 return $this;
             }
 
-            $$this->_translate->setTranslateInline(false);
+            $this->_translate->setTranslateInline(false);
 
-            /* @var $emailTemplate \Magento\Email\Model\Template */
-            $this->_templateFactory->create()->setDesignConfig(array('area'  => 'backend'))
-                ->sendTransactional(
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE),
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY),
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT),
-                    null,
-                    array('warnings' => join("\n", $this->_errors))
-                );
+            $transport = $this->_transportBuilder
+                ->setTemplateIdentifier($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE))
+                ->setTemplateOptions(array(
+                    'area'  => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                    'store' => $this->_storeManager->getStore()->getId()
+                ))
+                ->setTemplateVars(array('warnings' => join("\n", $this->_errors)))
+                ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY))
+                ->addTo($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT))
+                ->getTransport();
 
-            $$this->_translate->setTranslateInline(true);
+            $transport->sendMessage();
+
+            $this->_translate->setTranslateInline(true);
             $this->_errors[] = array();
         }
         return $this;

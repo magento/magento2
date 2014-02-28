@@ -53,7 +53,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registryMock = $this->getMock('\Magento\Core\Model\Registry', array(), array(), '', false);
+        $this->registryMock = $this->getMock('\Magento\Registry', array(), array(), '', false);
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', array(), array(), '', false);
         $this->storeManagerMock = $this->getMock(

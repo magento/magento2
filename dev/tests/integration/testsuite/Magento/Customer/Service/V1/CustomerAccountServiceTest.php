@@ -80,7 +80,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ->setLastname('Smith');
         $address = $this->_addressBuilder->create();
 
-        /* XXX: would it be better to have a clear method for this? */
         $this->_addressBuilder->setId(2)
             ->setCountryId('US')
             ->setCustomerId(1)
@@ -253,7 +252,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             'rp_token' => $resetToken,
             'rp_token_created_at' => '1970-01-01',
         ]));
-        $this->_customerService->saveCustomer($this->_customerBuilder->create());
+        $customerData = $this->_customerBuilder->create();
+        $this->_customerService->saveCustomer($customerData);
 
         $this->_service->validateResetPasswordLinkToken(1, $resetToken);
     }

@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Admin;
 
-class Page implements \Magento\Core\Model\Option\ArrayInterface
+class Page implements \Magento\Option\ArrayInterface
 {
     /**
      * Menu model

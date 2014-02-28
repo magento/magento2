@@ -29,7 +29,7 @@
  */
 namespace Magento\Sales\Model\Config\Source\Order;
 
-class Status implements \Magento\Core\Model\Option\ArrayInterface
+class Status implements \Magento\Option\ArrayInterface
 {
     // set null to enable all possible
     /**

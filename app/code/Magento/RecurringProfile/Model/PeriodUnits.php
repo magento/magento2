@@ -23,9 +23,7 @@
  */
 namespace Magento\RecurringProfile\Model;
 
-use Magento\Core\Model\Option;
-
-class PeriodUnits implements Option\ArrayInterface
+class PeriodUnits implements \Magento\Option\ArrayInterface
 {
     const DAY = 'day';
     const WEEK = 'week';

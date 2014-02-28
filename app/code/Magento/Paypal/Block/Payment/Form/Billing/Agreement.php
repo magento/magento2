@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Payment\Form\Billing;
 
 /**
  * Paypal Billing Agreement form block
  */
-namespace Magento\Paypal\Block\Payment\Form\Billing;
-
 class Agreement extends \Magento\Payment\Block\Form
 {
     /**
@@ -54,6 +53,9 @@ class Agreement extends \Magento\Payment\Block\Form
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -71,12 +73,13 @@ class Agreement extends \Magento\Payment\Block\Form
     public function getBillingAgreements()
     {
         $data = array();
+        /** @var \Magento\Sales\Model\Quote $quote */
         $quote = $this->getParentBlock()->getQuote();
-        if (!$quote || !$quote->getCustomer()) {
+        if (!$quote || !$quote->getCustomerId()) {
             return $data;
         }
         $collection = $this->_agreementFactory->create()->getAvailableCustomerBillingAgreements(
-            $quote->getCustomer()->getId()
+            $quote->getCustomerId()
         );
 
         foreach ($collection as $item) {

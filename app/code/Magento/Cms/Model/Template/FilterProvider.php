@@ -25,6 +25,9 @@
  */
 namespace Magento\Cms\Model\Template;
 
+/**
+ * Filter provider model
+ */
 class FilterProvider
 {
     /**

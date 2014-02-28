@@ -21,20 +21,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Billing agreements controller
- */
 namespace Magento\Paypal\Controller\Billing;
 
 use Magento\App\RequestInterface;
 
+/**
+ * Billing agreements controller
+ */
 class Agreement extends \Magento\App\Action\Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -45,12 +44,12 @@ class Agreement extends \Magento\App\Action\Action
 
     /**
      * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\App\Action\Title $title
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\App\Action\Title $title
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -61,6 +60,7 @@ class Agreement extends \Magento\App\Action\Action
     /**
      * View billing agreements
      *
+     * @return void
      */
     public function indexAction()
     {
@@ -90,6 +90,7 @@ class Agreement extends \Magento\App\Action\Action
     /**
      * View billing agreement
      *
+     * @return void
      */
     public function viewAction()
     {
@@ -110,6 +111,7 @@ class Agreement extends \Magento\App\Action\Action
     /**
      * Wizard start action
      *
+     * @return \Zend_Controller_Response_Abstract
      */
     public function startWizardAction()
     {
@@ -139,6 +141,7 @@ class Agreement extends \Magento\App\Action\Action
     /**
      * Wizard return action
      *
+     * @return void
      */
     public function returnWizardAction()
     {
@@ -171,6 +174,7 @@ class Agreement extends \Magento\App\Action\Action
     /**
      * Wizard cancel action
      *
+     * @return void
      */
     public function cancelWizardAction()
     {
@@ -181,6 +185,7 @@ class Agreement extends \Magento\App\Action\Action
      * Cancel action
      * Set billing agreement status to 'Canceled'
      *
+     * @return void
      */
     public function cancelAction()
     {
@@ -207,7 +212,7 @@ class Agreement extends \Magento\App\Action\Action
     /**
      * Init billing agreement model from request
      *
-     * @return \Magento\Paypal\Model\Billing\Agreement|bool
+     * @return \Magento\Paypal\Model\Billing\Agreement|false
      */
     protected function _initAgreement()
     {

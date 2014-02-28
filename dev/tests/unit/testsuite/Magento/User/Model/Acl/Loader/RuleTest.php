@@ -40,14 +40,14 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Core\Model\Acl\RootResource
+     * @var \Magento\Acl\RootResource
      */
     protected $_rootResourceMock;
 
     protected function setUp()
     {
         $this->_resourceMock = $this->getMock('Magento\App\Resource', array(), array(), '', false, false);
-        $this->_rootResourceMock = new \Magento\Core\Model\Acl\RootResource('Magento_Adminhtml::all');
+        $this->_rootResourceMock = new \Magento\Acl\RootResource('Magento_Adminhtml::all');
         $this->_model = new \Magento\User\Model\Acl\Loader\Rule(
             $this->_rootResourceMock,
             $this->_resourceMock

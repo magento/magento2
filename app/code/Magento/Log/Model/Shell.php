@@ -32,7 +32,7 @@ namespace Magento\Log\Model;
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Shell extends \Magento\Core\Model\AbstractShell
+class Shell extends \Magento\App\AbstractShell
 {
     /**
      * @var \Magento\Log\Model\Shell\Command\Factory

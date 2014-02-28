@@ -34,7 +34,7 @@
 namespace Magento\Captcha\Model\Config\Form;
 
 abstract class AbstractForm extends \Magento\Core\Model\Config\Value
-    implements \Magento\Core\Model\Option\ArrayInterface
+    implements \Magento\Option\ArrayInterface
 {
     /**
      * @var string

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\System\Config\Source;
 
 /**
  * Source model for available Authorization Amounts for Account Verification
@@ -32,14 +33,10 @@
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Model\System\Config\Source;
-
-class AuthorizationAmounts implements \Magento\Core\Model\Option\ArrayInterface
+class AuthorizationAmounts implements \Magento\Option\ArrayInterface
 {
     /**
-     * Options getter
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {

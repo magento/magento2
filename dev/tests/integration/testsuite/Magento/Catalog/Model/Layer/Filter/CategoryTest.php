@@ -74,7 +74,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull($objectManager->get('Magento\Core\Model\Registry')->registry('current_category_filter'));
+        $this->assertNull($objectManager->get('Magento\Registry')->registry('current_category_filter'));
     }
 
     public function testApply()
@@ -89,7 +89,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $objectManager->get('Magento\Core\Model\Registry')->registry('current_category_filter');
+        $category = $objectManager->get('Magento\Registry')->registry('current_category_filter');
         $this->assertInstanceOf('Magento\Catalog\Model\Category', $category);
         $this->assertEquals(3, $category->getId());
 

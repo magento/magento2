@@ -40,6 +40,7 @@ class Collection
     /**
      * Resource initializing
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +50,7 @@ class Collection
     /**
      * Join reports info table
      *
-     * @return \Magento\Paypal\Model\Resource\Report\Settlement\Row\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
@@ -67,7 +68,7 @@ class Collection
      * Filter items collection by account ID
      *
      * @param string $accountId
-     * @return \Magento\Paypal\Model\Resource\Report\Settlement\Row\Collection
+     * @return $this
      */
     public function addAccountFilter($accountId)
     {

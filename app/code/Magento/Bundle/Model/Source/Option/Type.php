@@ -25,7 +25,7 @@
  */
 namespace Magento\Bundle\Model\Source\Option;
 
-class Type implements \Magento\Core\Model\Option\ArrayInterface
+class Type implements \Magento\Option\ArrayInterface
 {
     /**
      * @var array

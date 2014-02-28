@@ -23,7 +23,7 @@
  */
 namespace Magento\Theme\Model\Layout\Source;
 
-class Layout implements \Magento\Core\Model\Option\ArrayInterface
+class Layout implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Theme\Model\Layout\Config

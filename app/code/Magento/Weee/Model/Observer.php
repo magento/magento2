@@ -55,8 +55,8 @@ class Observer extends \Magento\Core\Model\AbstractModel
     protected $productTypeConfig;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\View\LayoutInterface $layout
      * @param Tax $weeeTax
      * @param \Magento\Weee\Helper\Data $weeeData
@@ -67,8 +67,8 @@ class Observer extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\View\LayoutInterface $layout,
         Tax $weeeTax,
         \Magento\Weee\Helper\Data $weeeData,

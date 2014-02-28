@@ -33,6 +33,11 @@ use \Magento\View\Asset\PreProcessorFactory;
 class Composite implements PreProcessorInterface
 {
     /**
+     * Temporary directory prefix
+     */
+    const TMP_VIEW_DIR   = 'view';
+
+    /**
      * @var PreProcessorInterface[]
      */
     protected $preProcessors = array();
@@ -55,19 +60,17 @@ class Composite implements PreProcessorInterface
     }
 
     /**
-     * @param string $filePath
-     * @param array $params
+     * @param \Magento\View\Publisher\FileInterface $publisherFile
      * @param \Magento\Filesystem\Directory\WriteInterface $targetDirectory
-     * @param null $sourcePath
-     * @return null|string
+     * @return \Magento\View\Publisher\FileInterface
      */
-    public function process($filePath, $params, $targetDirectory, $sourcePath = null)
+    public function process(\Magento\View\Publisher\FileInterface $publisherFile, $targetDirectory)
     {
         foreach ($this->preProcessors as $preProcessor) {
-            $sourcePath = $preProcessor->process($filePath, $params, $targetDirectory, $sourcePath);
+            $publisherFile = $preProcessor->process($publisherFile, $targetDirectory);
         }
 
-        return $sourcePath;
+        return $publisherFile;
     }
 
     /**

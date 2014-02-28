@@ -115,14 +115,29 @@ return array(
         'Magento_Core_Model_Design_Package::PUBLIC_MODULE_DIR'
     ),
     array(
+        'PUBLIC_MODULE_DIR',
+        'Magento\View\Publisher',
+        'Magento\View\Publisher\FileInterface::PUBLIC_MODULE_DIR'
+    ),
+    array(
         'PUBLIC_THEME_DIR',
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_THEME_DIR'
     ),
     array(
+        'PUBLIC_THEME_DIR',
+        'Magento\View\Publisher',
+        'Magento\View\Publisher\FileInterface::PUBLIC_THEME_DIR'
+    ),
+    array(
         'PUBLIC_VIEW_DIR',
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_VIEW_DIR'
+    ),
+    array(
+        'PUBLIC_VIEW_DIR',
+        'Magento\View\Publisher',
+        'Magento\View\Publisher\FileInterface::PUBLIC_VIEW_DIR'
     ),
     array('REGISTRY_FORM_PARAMS_KEY', null, 'direct value'),
     array('SCOPE_TYPE_GROUP', 'Magento\Core\Model\App', 'Magento_Core_Model_StoreManagerInterface::SCOPE_TYPE_GROUP'),

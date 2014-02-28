@@ -178,7 +178,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Catalog\Model\Product\Copier');
         $duplicate = $copier->copy($this->_model);
-        $this->assertEquals('simple-1', $duplicate->getSku());
+        $this->assertEquals('simple-3', $duplicate->getSku());
     }
 
     /**

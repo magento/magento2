@@ -88,8 +88,8 @@ class RecurringProfile extends \Magento\Core\Model\AbstractModel
     protected $_locale;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param PeriodUnits $periodUnits
      * @param \Magento\RecurringProfile\Block\Fields $fields
@@ -99,8 +99,8 @@ class RecurringProfile extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\RecurringProfile\Model\PeriodUnits $periodUnits,
         \Magento\RecurringProfile\Block\Fields $fields,

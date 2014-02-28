@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Adminhtml\Settlement;
 
 /**
  * Settlement reports transaction details
@@ -31,13 +32,13 @@
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Block\Adminhtml\Settlement;
-
 class Details extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Block construction
      * Initialize titles, buttons
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -51,7 +52,8 @@ class Details extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * Initialize form
-     * @return \Magento\Paypal\Block\Adminhtml\Settlement\Details
+     *
+     * @return $this
      */
     protected function _prepareLayout()
     {

@@ -24,37 +24,31 @@
 
 namespace Magento\Css\PreProcessor;
 
+use \Magento\Css\PreProcessor\Cache\Import\Cache;
+use \Magento\Css\PreProcessor\Cache\Import\Map\Storage;
+
 class CacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
      * @var \Magento\Css\PreProcessor\Less
      */
-    protected $model;
+    protected $preProcessorLess;
 
     /**
-     * @var \Magento\Css\PreProcessor\Cache\CacheManagerFactory
-     */
-    protected $cacheManagerFactory;
-
-    /**
-     * @var \Magento\App\Filesystem
+     * @var \Magento\Filesystem
      */
     protected $filesystem;
 
-    /**
-     * @var \Magento\View\Service
-     */
-    protected $viewService;
-
     public function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $objectManager->create('Magento\Css\PreProcessor\Less');
-        $this->cacheManagerFactory = $objectManager->create('Magento\Css\PreProcessor\Cache\CacheManagerFactory');
-        $this->filesystem = $objectManager->get('Magento\Filesystem');
-        $this->viewService = $objectManager->get('Magento\View\Service');
-
-        $this->clearCache();
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->preProcessorLess = $this->objectManager->create('Magento\Css\PreProcessor\Less');
+        $this->filesystem = $this->objectManager->get('Magento\Filesystem');
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
             \Magento\App\Filesystem::PARAM_APP_DIRS => array(
@@ -63,6 +57,8 @@ class CacheTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         ));
+
+        $this->clearCache();
     }
 
     protected function tearDown()
@@ -70,30 +66,37 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->clearCache();
     }
 
-    public function testProcess()
+    public function testLessCache()
     {
-        $sourceFilePath = 'oyejorge.less';
+        $file = $this->objectManager->create('Magento\View\Publisher\CssFile',
+            [
+                'filePath' => 'oyejorge.css',
+                'allowDuplication' => false,
+                'viewParams' => $this->getDesignParams()
+            ]
+        );
 
-        $designParams = $this->getDesignParams();
         $targetDirectory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::TMP_DIR);
 
         /**
-         * cache was not initialize yet and will return empty value
+         * cache was not initialize yet and return empty value
          *
          * @var \Magento\Css\PreProcessor\Cache\CacheManager $cacheManagerEmpty
          */
-        $cacheManagerEmpty = $this->cacheManagerFactory->create($sourceFilePath, $designParams);
-        $this->assertEmpty($cacheManagerEmpty->getCachedFile());
+        $emptyCache = $this->objectManager->create('Magento\Css\PreProcessor\Cache\CacheManager');
+        $emptyCache->initializeCacheByType(Cache::IMPORT_CACHE, $file);
+        $this->assertEmpty($emptyCache->getCachedFile(Cache::IMPORT_CACHE));
 
-        $this->model->process($sourceFilePath, $designParams, $targetDirectory);
+        $this->preProcessorLess->process($file, $targetDirectory);
 
         /**
-         * cache initialized and will return cached file
+         * cache initialized and return cached file
          *
          * @var \Magento\Css\PreProcessor\Cache\CacheManager $cacheManagerGenerated
          */
-        $cacheManagerGenerated = $this->cacheManagerFactory->create($sourceFilePath, $designParams);
-        $this->assertNotEmpty($cacheManagerGenerated->getCachedFile());
+        $generatedCache = $this->objectManager->create('Magento\Css\PreProcessor\Cache\CacheManager');
+        $generatedCache->initializeCacheByType(Cache::IMPORT_CACHE, $file);
+        $this->assertNotEmpty($generatedCache->getCachedFile(Cache::IMPORT_CACHE));
     }
 
     /**
@@ -102,8 +105,8 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     protected function getDesignParams()
     {
         $designParams = ['area' => 'frontend'];
-        /** @var \Magento\View\Service $viewService */
-        $this->viewService->updateDesignParams($designParams);
+        $viewService = $this->objectManager->get('Magento\View\Service');
+        $viewService->updateDesignParams($designParams);
 
         return $designParams;
     }
@@ -116,8 +119,8 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Filesystem\Directory\WriteInterface $mapsDirectory */
         $mapsDirectory = $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
 
-        if ($mapsDirectory->isDirectory(\Magento\Css\PreProcessor\Cache\Import\Map\Storage::MAPS_DIR)) {
-            $mapsDirectory->delete(\Magento\Css\PreProcessor\Cache\Import\Map\Storage::MAPS_DIR);
+        if ($mapsDirectory->isDirectory(Storage::MAPS_DIR)) {
+            $mapsDirectory->delete(Storage::MAPS_DIR);
         }
         return $this;
     }

@@ -45,7 +45,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
@@ -57,7 +57,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Stdlib\String $string,
         \Magento\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,

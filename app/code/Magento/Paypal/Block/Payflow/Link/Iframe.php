@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Payflow\Link;
 
 /**
  * Payflow link iframe block
  */
-namespace Magento\Paypal\Block\Payflow\Link;
-
 class Iframe extends \Magento\Paypal\Block\Iframe
 {
     /**
@@ -60,6 +59,8 @@ class Iframe extends \Magento\Paypal\Block\Iframe
 
     /**
      * Set payment method code
+     *
+     * @return void
      */
     protected function _construct()
     {

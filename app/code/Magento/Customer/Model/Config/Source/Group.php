@@ -27,7 +27,7 @@
 
 namespace Magento\Customer\Model\Config\Source;
 
-class Group implements \Magento\Core\Model\Option\ArrayInterface
+class Group implements \Magento\Option\ArrayInterface
 {
     /**
      * @var array

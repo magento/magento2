@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Customer\Model\Address;
+
 /**
  * Address abstract model
  *
@@ -33,9 +35,11 @@
  * @method string getMiddlename()
  * @method string getLastname()
  * @method int getCountryId()
+ * @method string getCity()
+ * @method string getTelephone()
+ * @method string getPostcode()
+ * @method bool getShouldIgnoreValidation()
  */
-namespace Magento\Customer\Model\Address;
-
 class AbstractAddress extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -100,8 +104,8 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     protected $_countryFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Address\Config $addressConfig
@@ -112,8 +116,8 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
@@ -439,7 +443,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     /**
      * Validate address attribute values
      *
-     * @return bool
+     * @return bool|array
      */
     public function validate()
     {

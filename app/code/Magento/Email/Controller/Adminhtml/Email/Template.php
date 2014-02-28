@@ -37,17 +37,17 @@ class Template extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
@@ -152,7 +152,7 @@ class Template extends \Magento\Backend\App\Action
             }
 
             if ($request->getParam('_change_type_flag')) {
-                $template->setTemplateType(\Magento\Email\Model\Template::TYPE_TEXT);
+                $template->setTemplateType(\Magento\App\TemplateTypesInterface::TYPE_TEXT);
                 $template->setTemplateStyles('');
             }
 

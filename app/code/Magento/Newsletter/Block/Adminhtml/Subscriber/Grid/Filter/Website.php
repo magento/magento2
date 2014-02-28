@@ -44,7 +44,7 @@ class Website
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -63,7 +63,7 @@ class Website
      * @param \Magento\Core\Model\Resource\Helper $resourceHelper
      * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -71,7 +71,7 @@ class Website
         \Magento\Core\Model\Resource\Helper $resourceHelper,
         \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;

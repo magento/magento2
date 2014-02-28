@@ -43,7 +43,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -66,7 +66,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param array $data
      */
@@ -74,7 +74,7 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Catalog\Helper\Product $productHelper,
         array $data = array()
     ) {

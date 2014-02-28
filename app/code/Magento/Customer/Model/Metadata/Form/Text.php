@@ -28,7 +28,7 @@ namespace Magento\Customer\Model\Metadata\Form;
 class Text extends AbstractData
 {
     /**
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Stdlib\String
      */
     protected $_string;
 

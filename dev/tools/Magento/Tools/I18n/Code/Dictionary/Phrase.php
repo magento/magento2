@@ -30,6 +30,20 @@ namespace Magento\Tools\I18n\Code\Dictionary;
 class Phrase
 {
     /**
+     * Single quote that enclose the phrase
+     *
+     * @var string
+     */
+    const QUOTE_SINGLE = "'";
+
+    /**
+     * Double quote that enclose the phrase
+     *
+     * @var string
+     */
+    const QUOTE_DOUBLE = '"';
+
+    /**
      * Phrase
      *
      * @var string
@@ -58,19 +72,28 @@ class Phrase
     private $_contextValue = array();
 
     /**
+     * Quote type that enclose the phrase, single or double
+     *
+     * @var string
+     */
+    private $_quote;
+
+    /**
      * Phrase construct
      *
      * @param string $phrase
      * @param string $translation
      * @param string|null $contextType
      * @param string|array|null $contextValue
+     * @param string|null $quote
      */
-    public function __construct($phrase, $translation, $contextType = null, $contextValue = null)
+    public function __construct($phrase, $translation, $contextType = null, $contextValue = null, $quote = null)
     {
         $this->setPhrase($phrase);
         $this->setTranslation($translation);
         $this->setContextType($contextType);
         $this->setContextValue($contextValue);
+        $this->setQuote($quote);
     }
 
     /**
@@ -88,13 +111,35 @@ class Phrase
     }
 
     /**
-     * Get phrase
+     * Get quote type
      *
      * @return string
      */
     public function getPhrase()
     {
         return $this->_phrase;
+    }
+
+    /**
+     * Set quote type
+     *
+     * @param string $quote
+     */
+    public function setQuote($quote)
+    {
+        if (in_array($quote, [self::QUOTE_SINGLE, self::QUOTE_DOUBLE])) {
+            $this->_quote = $quote;
+        }
+    }
+
+    /**
+     * Get phrase
+     *
+     * @return string
+     */
+    public function getQuote()
+    {
+        return $this->_quote;
     }
 
     /**

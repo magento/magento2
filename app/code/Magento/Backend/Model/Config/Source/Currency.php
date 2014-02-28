@@ -26,7 +26,7 @@
 
 namespace Magento\Backend\Model\Config\Source;
 
-class Currency implements \Magento\Core\Model\Option\ArrayInterface
+class Currency implements \Magento\Option\ArrayInterface
 {
     /**
      * @var array

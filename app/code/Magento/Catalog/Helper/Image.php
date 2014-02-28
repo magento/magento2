@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Catalog\Helper;
 
 use Magento\App\Helper\AbstractHelper;
 
 /**
  * Catalog image helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Image extends AbstractHelper
 {
@@ -342,7 +341,7 @@ class Image extends AbstractHelper
      * @param int $imageOpacity
      * @return $this
      */
-    public function watermark($fileName, $position, $size=null, $imageOpacity=null)
+    public function watermark($fileName, $position, $size = null, $imageOpacity = null)
     {
         $this->setWatermark($fileName)
             ->setWatermarkPosition($position)
@@ -410,7 +409,21 @@ class Image extends AbstractHelper
                 $url = $model->saveFile()->getUrl();
             }
         } catch (\Exception $e) {
+            $url = $this->getDefaultPlaceholderUrl();
+        }
+        return $url;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDefaultPlaceholderUrl()
+    {
+        try {
             $url = $this->_viewUrl->getViewFileUrl($this->getPlaceholder());
+        } catch (\Exception $e) {
+            $this->_logger->logException($e);
+            $url = $this->_urlBuilder->getUrl('', array('_direct' => 'core/index/notfound'));
         }
         return $url;
     }

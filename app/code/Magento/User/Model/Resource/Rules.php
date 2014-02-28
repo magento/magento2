@@ -31,7 +31,7 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Root ACL resource
      *
-     * @var \Magento\Core\Model\Acl\RootResource
+     * @var \Magento\Acl\RootResource
      */
     protected $_rootResource;
 
@@ -56,14 +56,14 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\App\Resource $resource
      * @param \Magento\Acl\Builder $aclBuilder
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\Acl\RootResource $rootResource
+     * @param \Magento\Acl\RootResource $rootResource
      * @param \Magento\Acl\CacheInterface $aclCache
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Acl\Builder $aclBuilder,
         \Magento\Logger $logger,
-        \Magento\Core\Model\Acl\RootResource $rootResource,
+        \Magento\Acl\RootResource $rootResource,
         \Magento\Acl\CacheInterface $aclCache
     ) {
         $this->_aclBuilder = $aclBuilder;

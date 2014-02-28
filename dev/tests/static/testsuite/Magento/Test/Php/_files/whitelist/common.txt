@@ -44,7 +44,6 @@ app/code/Magento/Core/Model/LocaleInterface.php
 app/code/Magento/Core/Model/Resource/Theme
 app/code/Magento/Core/Model/Resource/Theme.php
 app/code/Magento/Core/Model/Session/Validator.php
-app/code/Magento/Core/Model/AbstractShell.php
 app/code/Magento/Core/Model/Theme
 app/code/Magento/Core/Model/Theme.php
 app/code/Magento/Core/Model/Url/SecurityInfo.php
@@ -139,3 +138,4 @@ lib/Magento/ObjectManager
 lib/Magento/Service
 lib/Magento/Url/SecurityInfoInterface.php
 lib/Magento/View
+lib/Magento/App/AbstractShell.php

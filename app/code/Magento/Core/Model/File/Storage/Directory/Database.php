@@ -51,8 +51,8 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     protected $_directoryFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Core\Model\Date $dateModel
      * @param \Magento\Core\Model\App $app
@@ -63,8 +63,8 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Core\Model\Date $dateModel,
         \Magento\Core\Model\App $app,

@@ -42,7 +42,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\View\DesignInterface')
             ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->setDefaultDesignTheme();
-        $objectManager->get('Magento\Core\Model\Registry')
+        $objectManager->get('Magento\Registry')
             ->register('design', $objectManager ->create('Magento\Core\Model\Design'));
         $layout = $objectManager ->create('Magento\Core\Model\Layout');
         $block = $layout->addBlock('Magento\Backend\Block\System\Design\Edit\Tab\General');

@@ -23,12 +23,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Controller;
 
 class Index extends \Magento\App\Action\Action
 {
-    function indexAction()
+    /**
+     * @return void
+     */
+    public function indexAction()
     {
         $this->_redirect('checkout/onepage', array('_secure'=>true));
     }

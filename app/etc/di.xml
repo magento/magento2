@@ -92,7 +92,7 @@
     </type>
     <preference for="Magento\Module\Output\ConfigInterface" type="Magento\Core\Model\Module\Output\Config" />
     <preference for="Magento\View\Design\Theme\CustomizationInterface" type="Magento\View\Design\Theme\Customization" />
-    <preference for="Magento\Image\Adapter\ConfigInterface" type="Magento\Core\Model\Image\Adapter\Config" />
+    <preference for="Magento\Image\Adapter\ConfigInterface" type="Magento\Image\Adapter\Config" />
     <preference for="Magento\View\Design\Theme\Image\PathInterface" type="Magento\Core\Model\Theme\Image\Path" />
     <preference for="Magento\Session\Config\ConfigInterface" type="Magento\Core\Model\Session\Config" />
     <preference for="Magento\Session\SidResolverInterface" type="Magento\Core\Model\Session\SidResolver\Proxy" />
@@ -258,9 +258,6 @@
             <argument name="fileReadFactory" xsi:type="object">Magento\Filesystem\File\ReadFactory</argument>
             <argument name="fileWriteFactory" xsi:type="object">Magento\Filesystem\File\WriteFactory</argument>
         </arguments>
-    </type>
-    <type name="Magento\App\FrontController">
-        <plugin name="install" type="Magento\Module\FrontController\Plugin\Install" sortOrder="40"/>
     </type>
     <virtualType name="layoutArgumentInterpreterInternal" type="Magento\Data\Argument\Interpreter\Composite">
         <arguments>

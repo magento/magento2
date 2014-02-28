@@ -27,7 +27,7 @@
 
 namespace Magento\Backend\Model\Config\Source;
 
-class Enabledisable implements \Magento\Core\Model\Option\ArrayInterface
+class Enabledisable implements \Magento\Option\ArrayInterface
 {
     /**
      * @return array

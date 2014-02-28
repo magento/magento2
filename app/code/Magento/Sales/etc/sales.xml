@@ -33,8 +33,6 @@
             <item name="grand_total" instance="Magento\Sales\Model\Quote\Address\Total\Grand" sort_order="550"/>
         </group>
         <group name="nominal_totals">
-            <item name="recurring_initial_fee" instance="Magento\Sales\Model\Quote\Address\Total\Nominal\Recurring\Initial" sort_order="10"/>
-            <item name="recurring_trial_payment" instance="Magento\Sales\Model\Quote\Address\Total\Nominal\Recurring\Trial" sort_order="50"/>
             <item name="nominal_subtotal" instance="Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal" sort_order="250"/>
             <item name="nominal_shipping" instance="Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping" sort_order="1250"/>
         </group>

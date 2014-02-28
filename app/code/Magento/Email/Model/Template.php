@@ -71,7 +71,7 @@ use Magento\Filter\Template as FilterTemplate;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Template extends \Magento\Core\Model\Template
+class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\TemplateInterface
 {
     /**
      * Configuration path for default email templates
@@ -122,6 +122,11 @@ class Template extends \Magento\Core\Model\Template
     protected $_replyTo = '';
 
     /**
+     * @var array
+     */
+    protected $_vars = array();
+
+    /**
      * @var \Exception|null
      */
     protected $_sendingException = null;
@@ -163,15 +168,9 @@ class Template extends \Magento\Core\Model\Template
     protected $_emailFilterFactory;
 
     /**
-     * Types of template
-     */
-    const TYPE_TEXT = 1;
-    const TYPE_HTML = 2;
-
-    /**
-     * @param \Magento\Core\Model\Context $context
+     * @param \Magento\Model\Context $context
      * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\Filesystem $filesystem
@@ -179,16 +178,16 @@ class Template extends \Magento\Core\Model\Template
      * @param \Magento\View\FileSystem $viewFileSystem
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\App\ConfigInterface $coreConfig
-     * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
-     * @param \Magento\Email\Model\Template\Config $emailConfig
+     * @param Template\FilterFactory $emailFilterFactory
+     * @param Template\Config $emailConfig
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
+        \Magento\Model\Context $context,
         \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\Filesystem $filesystem,
@@ -268,16 +267,6 @@ class Template extends \Magento\Core\Model\Template
             return $alt;
         }
         return $store->getFrontendName();
-    }
-
-    /**
-     * Retrieve mail object instance
-     *
-     * @return \Zend_Mail
-     */
-    protected function _getMail()
-    {
-        return new \Zend_Mail('utf-8');
     }
 
     /**
@@ -402,7 +391,12 @@ class Template extends \Magento\Core\Model\Template
      */
     public function getType()
     {
-        return $this->getTemplateType();
+        $templateType = $this->getTemplateType();
+        if (is_null($templateType) && $this->getId()) {
+            $templateType = $this->_emailConfig->getTemplateType($this->getId());
+            $templateType = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
+        }
+        return $templateType;
     }
 
     /**
@@ -410,7 +404,7 @@ class Template extends \Magento\Core\Model\Template
      *
      * @param array $variables
      * @return string
-     * @throws \Exception
+     * @throws \Magento\Mail\Exception
      */
     public function getProcessedTemplate(array $variables = array())
     {
@@ -443,9 +437,8 @@ class Template extends \Magento\Core\Model\Template
                 ->filter($this->getPreparedTemplateText());
         } catch (\Exception $e) {
             $this->_cancelDesignConfig();
-            throw $e;
+            throw new \Magento\Mail\Exception($e->getMessage(), $e->getCode(), $e);
         }
-        $this->_cancelDesignConfig();
         return $processedResult;
     }
 
@@ -482,101 +475,6 @@ class Template extends \Magento\Core\Model\Template
     }
 
     /**
-     * Send mail to recipient
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param array|string $email E-mail(s)
-     * @param array|string|null $name receiver name(s)
-     * @param array $variables template variables
-     * @return bool
-     */
-    public function send($email, $name = null, array $variables = array())
-    {
-        if (!$this->isValidForSend()) {
-            $this->_logger->logException(
-                new \Exception('This letter cannot be sent.') // translation is intentionally omitted
-            );
-            return false;
-        }
-
-        $emails = array_values((array)$email);
-        $names = is_array($name) ? $name : (array)$name;
-        $names = array_values($names);
-        foreach ($emails as $key => $email) {
-            if (!isset($names[$key])) {
-                $names[$key] = substr($email, 0, strpos($email, '@'));
-            }
-        }
-
-        $variables['email'] = reset($emails);
-        $variables['name'] = reset($names);
-
-        ini_set('SMTP', $this->_coreStoreConfig->getConfig('system/smtp/host'));
-        ini_set('smtp_port', $this->_coreStoreConfig->getConfig('system/smtp/port'));
-
-        $mail = $this->_getMail();
-        foreach ($this->_bcc as $bcc) {
-            $mail->addBcc($bcc);
-        }
-        if ($this->_returnPath) {
-            $mail->setReturnPath($this->_returnPath);
-        }
-        if ($this->_replyTo) {
-            $mail->setReplyTo($this->_replyTo);
-        }
-
-        $setReturnPath = $this->_coreStoreConfig->getConfig(self::XML_PATH_SENDING_SET_RETURN_PATH);
-        switch ($setReturnPath) {
-            case 1:
-                $returnPathEmail = $this->getSenderEmail();
-                break;
-            case 2:
-                $returnPathEmail = $this->_coreStoreConfig->getConfig(self::XML_PATH_SENDING_RETURN_PATH_EMAIL);
-                break;
-            default:
-                $returnPathEmail = null;
-                break;
-        }
-
-        if ($returnPathEmail !== null) {
-            $mailTransport = new \Zend_Mail_Transport_Sendmail("-f" . $returnPathEmail);
-            \Zend_Mail::setDefaultTransport($mailTransport);
-        }
-
-        foreach ($emails as $key => $email) {
-            $mail->addTo($email, '=?utf-8?B?' . base64_encode($names[$key]) . '?=');
-        }
-
-        $this->setUseAbsoluteLinks(true);
-        $text = $this->getProcessedTemplate($variables, true);
-
-        if ($this->isPlain()) {
-            $mail->setBodyText($text);
-        } else {
-            $mail->setBodyHTML($text);
-        }
-
-        $mail->setSubject('=?utf-8?B?' . base64_encode($this->getProcessedTemplateSubject($variables)) . '?=');
-        $mail->setFrom($this->getSenderEmail(), $this->getSenderName());
-
-        $result = false;
-        $this->_sendingException = null;
-        try {
-            $mail->send();
-            $result = true;
-        } catch (\Exception $e) {
-            $this->_logger->logException($e);
-            $this->_sendingException = $e;
-        }
-        $this->_bcc = array();
-        $this->_returnPath = '';
-        $this->_replyTo = '';
-
-        return $result;
-    }
-
-    /**
      * Get exception, generated during send() method
      *
      * @return \Exception|null
@@ -587,59 +485,11 @@ class Template extends \Magento\Core\Model\Template
     }
 
     /**
-     * Send transactional email to recipient
-     *
-     * @param int|string $templateId
-     * @param string|array $sender sender information, can be declared as part of config path
-     * @param string $email recipient email
-     * @param string $name recipient name
-     * @param array $vars variables which can be used in template
-     * @param int|null $storeId
-     * @return $this
-     * @throws Exception
-     */
-    public function sendTransactional($templateId, $sender, $email, $name, $vars = array(), $storeId = null)
-    {
-        $this->setSentSuccess(false);
-        if (($storeId === null) && $this->getDesignConfig()->getStore()) {
-            $storeId = $this->getDesignConfig()->getStore();
-        }
-
-        if (is_numeric($templateId)) {
-            $this->load($templateId);
-        } else {
-            $this->loadDefault($templateId);
-        }
-
-        if (!$this->getId()) {
-            throw new Exception(__('Invalid transactional email code: %1', $templateId));
-        }
-
-        if (!is_array($sender)) {
-            $this->setSenderName(
-                $this->_coreStoreConfig->getConfig('trans_email/ident_' . $sender . '/name', $storeId)
-            );
-            $this->setSenderEmail(
-                $this->_coreStoreConfig->getConfig('trans_email/ident_' . $sender . '/email', $storeId)
-            );
-        } else {
-            $this->setSenderName($sender['name']);
-            $this->setSenderEmail($sender['email']);
-        }
-
-        if (!isset($vars['store'])) {
-            $vars['store'] = $this->_storeManager->getStore($storeId);
-        }
-        $this->setSentSuccess($this->send($email, $name, $vars));
-        return $this;
-    }
-
-    /**
      * Process email subject
      *
      * @param array $variables
      * @return string
-     * @throws \Exception
+     * @throws \Magento\Mail\Exception
      */
     public function getProcessedTemplateSubject(array $variables)
     {
@@ -658,7 +508,7 @@ class Template extends \Magento\Core\Model\Template
                 ->filter($this->getTemplateSubject());
         } catch (\Exception $e) {
             $this->_cancelDesignConfig();
-            throw $e;
+            throw new \Magento\Mail\Exception($e->getMessage(), $e->getCode(), $e);
         }
         $this->_cancelDesignConfig();
         return $processedResult;
@@ -746,18 +596,85 @@ class Template extends \Magento\Core\Model\Template
     /**
      * Validate email template code
      *
-     * @throws Exception
+     * @throws \Magento\Mail\Exception
      * @return $this
      */
     protected function _beforeSave()
     {
         $code = $this->getTemplateCode();
         if (empty($code)) {
-            throw new Exception(__('The template Name must not be empty.'));
+            throw new \Magento\Mail\Exception(__('The template Name must not be empty.'));
         }
         if ($this->_getResource()->checkCodeUsage($this)) {
-            throw new Exception(__('Duplicate Of Template Name'));
+            throw new \Magento\Mail\Exception(__('Duplicate Of Template Name'));
         }
         return parent::_beforeSave();
+    }
+
+    /**
+     * Get processed template
+     *
+     * @return string
+     * @throws \Magento\Mail\Exception
+     */
+    public function processTemplate()
+    {
+        $templateId = $this->getId();
+        if (is_numeric($templateId)) {
+            $this->load($templateId);
+        } else {
+            $this->loadDefault($templateId);
+        }
+
+        if (!$this->getId()) {
+            throw new \Magento\Mail\Exception(__('Invalid transactional email code: %1', $templateId));
+        }
+
+        $this->setUseAbsoluteLinks(true);
+        $text = $this->getProcessedTemplate($this->_getVars(), true);
+        return $text;
+    }
+
+    /**
+     * Get processed subject
+     *
+     * @return string
+     */
+    public function getSubject()
+    {
+        return $this->getProcessedTemplateSubject($this->_getVars());
+    }
+
+    /**
+     * Set template variables
+     *
+     * @param array $vars
+     * @return $this
+     */
+    public function setVars(array $vars)
+    {
+        $this->_vars = $vars;
+        return $this;
+    }
+
+    /**
+     * Set template options
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function setOptions(array $options)
+    {
+        return $this->setDesignConfig($options);
+    }
+
+    /**
+     * Retrieve template variables
+     *
+     * @return array
+     */
+    protected function _getVars()
+    {
+        return $this->_vars;
     }
 }

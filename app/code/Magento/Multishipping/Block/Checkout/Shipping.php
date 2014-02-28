@@ -84,6 +84,9 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return \Magento\Customer\Model\Address[]
+     */
     public function getAddresses()
     {
         return $this->getCheckout()->getQuote()->getAllShippingAddresses();

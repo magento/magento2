@@ -55,7 +55,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_coreHelper;
 
     /**
-     * @var \Magento\Core\Helper\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_string;
 

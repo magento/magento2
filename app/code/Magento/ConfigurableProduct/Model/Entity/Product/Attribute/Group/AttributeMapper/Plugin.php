@@ -26,7 +26,7 @@
 namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper;
 
 use Magento\Code\Plugin\InvocationChain;
-use Magento\Core\Model\Registry;
+use Magento\Registry;
 use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\AttributeFactory;
 
 class Plugin
@@ -37,7 +37,7 @@ class Plugin
     protected $attributeFactory;
 
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $registry;
 
@@ -76,4 +76,4 @@ class Plugin
         $result['is_configurable'] = (int)in_array($attribute->getAttributeId(), $this->configurableAttributes[$setId]);
         return $result;
     }
-} 
+}

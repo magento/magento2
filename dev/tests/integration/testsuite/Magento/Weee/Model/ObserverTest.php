@@ -48,14 +48,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('current_product');
+        $objectManager->get('Magento\Registry')->unregister('current_product');
         $eventObserver = $this->_createEventObserverForUpdateConfigurableProductOptions();
         $this->_model->updateProductOptions($eventObserver);
         $this->assertEquals(array(), $eventObserver->getEvent()->getResponseObject()->getAdditionalOptions());
 
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product');
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_product', $product->load(1));
+        $objectManager->get('Magento\Registry')->register('current_product', $product->load(1));
 
         foreach (array(\Magento\Weee\Model\Tax::DISPLAY_INCL, \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR) as $mode) {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')

@@ -40,7 +40,7 @@ class Invoices
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -59,7 +59,7 @@ class Invoices
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory
      * @param \Magento\Sales\Model\Order\Invoice $orderInvoice
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -67,7 +67,7 @@ class Invoices
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory,
         \Magento\Sales\Model\Order\Invoice $orderInvoice,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;

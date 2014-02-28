@@ -42,7 +42,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Widget\Model\Widget\Instance');
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_widget_instance', $widgetInstance);
+        $objectManager->get('Magento\Registry')->register('current_widget_instance', $widgetInstance);
 
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');

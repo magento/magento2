@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Resource\Payment;
 
 /**
  * Paypal transaction resource model
@@ -32,8 +33,6 @@
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Model\Resource\Payment;
-
 class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -48,6 +47,7 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize main table and the primary key field name
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -59,6 +59,7 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Paypal\Model\Payment\Transaction $transaction
      * @param string $txnId
+     * @return void
      */
     public function loadObjectByTxnId(\Magento\Paypal\Model\Payment\Transaction $transaction, $txnId)
     {
@@ -72,10 +73,9 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Serialize additional information, if any
      *
-     * @throws \Magento\Core\Exception
-     *
      * @param \Magento\Core\Model\AbstractModel $transaction
-     * @return \Magento\Paypal\Model\Resource\Payment\Transaction
+     * @return $this
+     * @throws \Magento\Core\Exception
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $transaction)
     {
@@ -97,9 +97,9 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Load cell/row by specified unique key parts
      *
      * @param string $txnId
-     * @param mixed (array|string|object) $columns
+     * @param array|string|object $columns
      * @param bool $isRow
-     * @return mixed (array|string)
+     * @return array|string
      */
     private function _lookupByTxnId($txnId, $columns, $isRow = false)
     {

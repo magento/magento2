@@ -45,7 +45,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             ->setDefaultDesignTheme();
         $objectManager->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $objectManager->get('Magento\Core\Model\Registry')
+        $objectManager->get('Magento\Registry')
             ->register('cms_page', $objectManager->create('Magento\Cms\Model\Page'));
 
         $block = $objectManager->create('Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Design');

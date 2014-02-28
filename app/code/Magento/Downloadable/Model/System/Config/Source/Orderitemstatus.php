@@ -33,7 +33,7 @@
  */
 namespace Magento\Downloadable\Model\System\Config\Source;
 
-class Orderitemstatus implements \Magento\Core\Model\Option\ArrayInterface
+class Orderitemstatus implements \Magento\Option\ArrayInterface
 {
     public function toOptionArray()
     {

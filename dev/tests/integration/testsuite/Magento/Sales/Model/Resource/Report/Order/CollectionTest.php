@@ -44,6 +44,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/invoice.php
+     * @magentoDataFixture Magento/Sales/_files/invoice_fixture_store_order.php
      * @magentoDataFixture Magento/Sales/_files/report_order.php
      */
     public function testGetItems()

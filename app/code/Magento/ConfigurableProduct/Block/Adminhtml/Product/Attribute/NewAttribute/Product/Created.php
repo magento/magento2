@@ -43,7 +43,7 @@ class Created extends \Magento\Backend\Block\Widget
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -67,7 +67,7 @@ class Created extends \Magento\Backend\Block\Widget
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -75,7 +75,7 @@ class Created extends \Magento\Backend\Block\Widget
         \Magento\Json\EncoderInterface $jsonEncoder,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;

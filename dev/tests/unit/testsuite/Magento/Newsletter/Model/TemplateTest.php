@@ -33,8 +33,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetProcessedTemplate($isSingleStore)
     {
         $design = $this->getMock('Magento\View\DesignInterface');
-        $context = $this->getMock('Magento\Core\Model\Context', array(), array(), '', false);
-        $registry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $context = $this->getMock('Magento\Model\Context', array(), array(), '', false);
+        $registry = $this->getMock('Magento\Registry', array(), array(), '', false);
 
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $storeManager->expects($this->once())

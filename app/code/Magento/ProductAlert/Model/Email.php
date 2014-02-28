@@ -119,32 +119,32 @@ class Email extends \Magento\Core\Model\AbstractModel
     protected $_appEmulation;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory
+     * @var \Magento\Mail\Template\TransportBuilder
      */
-    protected $_templateFactory;
+    protected $_transportBuilder;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\ProductAlert\Helper\Data $productAlertData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\ProductAlert\Helper\Data $productAlertData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -154,7 +154,7 @@ class Email extends \Magento\Core\Model\AbstractModel
         $this->_storeManager = $storeManager;
         $this->_customerFactory = $customerFactory;
         $this->_appEmulation = $appEmulation;
-        $this->_templateFactory = $templateFactory;
+        $this->_transportBuilder = $transportBuilder;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -350,20 +350,21 @@ class Email extends \Magento\Core\Model\AbstractModel
 
         $this->_appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
 
-        $this->_templateFactory->create()
-            ->setDesignConfig(array(
+        $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($templateId)
+            ->setTemplateOptions(array(
                 'area'  => \Magento\Core\Model\App\Area::AREA_FRONTEND,
                 'store' => $storeId
-            ))->sendTransactional(
-                $templateId,
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId),
-                $this->_customer->getEmail(),
-                $this->_customer->getName(),
-                array(
-                    'customerName'  => $this->_customer->getName(),
-                    'alertGrid'     => $block
-                )
-            );
+            ))
+            ->setTemplateVars(array(
+                'customerName'  => $this->_customer->getName(),
+                'alertGrid'     => $block
+            ))
+            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId))
+            ->addTo($this->_customer->getEmail(), $this->_customer->getName())
+            ->getTransport();
+
+        $transport->sendMessage();
 
         return true;
     }

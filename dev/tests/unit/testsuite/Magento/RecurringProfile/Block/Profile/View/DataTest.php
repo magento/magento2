@@ -48,7 +48,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->_profile->expects($this->once())->method('setStore')->will($this->returnValue($this->_profile));
 
-        $registry = $this->getMockBuilder('Magento\Core\Model\Registry')
+        $registry = $this->getMockBuilder('Magento\Registry')
             ->disableOriginalConstructor()
             ->setMethods(array('registry'))
             ->getMock();

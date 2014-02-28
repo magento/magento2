@@ -48,7 +48,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $coreDataMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $fileStorageDbMock = $this->getMock('Magento\Core\Helper\File\Storage\Database', array(), array(), '', false);
         $filesystem = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
-        $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $coreRegistry = $this->getMock('Magento\Registry', array(), array(), '', false);
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false);
         $confFactoryMock = $this->getMock('Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory',

@@ -45,7 +45,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getId', '__wakeup'))
             ->getMock();
         $customer->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $registry = $this->getMockBuilder('Magento\Core\Model\Registry')
+        $registry = $this->getMockBuilder('Magento\Registry')
             ->disableOriginalConstructor()
             ->setMethods(array('registry'))
             ->getMock();

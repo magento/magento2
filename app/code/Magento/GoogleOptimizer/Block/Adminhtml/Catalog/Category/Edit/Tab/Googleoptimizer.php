@@ -29,7 +29,7 @@ class Googleoptimizer
     extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry;
 
@@ -45,7 +45,7 @@ class Googleoptimizer
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\GoogleOptimizer\Helper\Code $codeHelper
      * @param \Magento\GoogleOptimizer\Helper\Form $formHelper
@@ -53,7 +53,7 @@ class Googleoptimizer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\GoogleOptimizer\Helper\Code $codeHelper,
         \Magento\GoogleOptimizer\Helper\Form $formHelper,

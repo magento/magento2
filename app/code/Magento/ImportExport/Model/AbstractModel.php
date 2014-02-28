@@ -42,8 +42,8 @@ abstract class AbstractModel extends \Magento\Object
     protected $_debugMode = false;
 
     /**
-     * Loger instance
-     * @var \Magento\Core\Model\Log\Adapter
+     * Logger instance
+     * @var \Magento\Logger\Adapter
      */
     protected $_logInstance;
 
@@ -72,20 +72,20 @@ abstract class AbstractModel extends \Magento\Object
     protected $_varDirectory;
 
     /**
-     * @var \Magento\Core\Model\Log\AdapterFactory
+     * @var \Magento\Logger\AdapterFactory
      */
     protected $_adapterFactory;
 
     /**
      * @param \Magento\Logger $logger
      * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\Core\Model\Log\AdapterFactory $adapterFactory
+     * @param \Magento\Logger\AdapterFactory $adapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\App\Filesystem $filesystem,
-        \Magento\Core\Model\Log\AdapterFactory $adapterFactory,
+        \Magento\Logger\AdapterFactory $adapterFactory,
         array $data = array()
     ) {
         $this->_logger = $logger;

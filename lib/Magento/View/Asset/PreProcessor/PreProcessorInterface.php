@@ -26,18 +26,16 @@ namespace Magento\View\Asset\PreProcessor;
 
 /**
  * The pre-processors which implement this interface are supposed to publish processed content to the $targetDirectory
- * and return the path to the published file.
+ * and return publisher file object with updated path to the published file.
  */
 interface PreProcessorInterface
 {
     /**
      * Process content
      *
-     * @param string $filePath
-     * @param array $params
+     * @param \Magento\View\Publisher\FileInterface $publisherFile
      * @param \Magento\Filesystem\Directory\WriteInterface $targetDirectory
-     * @param string|null $sourcePath
-     * @return string
+     * @return \Magento\View\Publisher\FileInterface
      */
-    public function process($filePath, $params, $targetDirectory, $sourcePath = null);
+    public function process(\Magento\View\Publisher\FileInterface $publisherFile, $targetDirectory);
 }

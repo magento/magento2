@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Cart\Item;
+
+use Magento\Sales\Model\Quote\Item;
 
 /**
  * Shopping cart item render block
@@ -34,13 +37,22 @@
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setProductName(string)
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  */
-namespace Magento\Checkout\Block\Cart\Item;
 
 class Renderer extends \Magento\View\Element\Template
 {
-    /** @var \Magento\Checkout\Model\Session */
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
     protected $_checkoutSession;
+
+    /**
+     * @var Item
+     */
     protected $_item;
+
+    /**
+     * @var string
+     */
     protected $_productUrl;
 
     /**
@@ -121,7 +133,7 @@ class Renderer extends \Magento\View\Element\Template
     /**
      * Get quote item
      *
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return Item
      */
     public function getItem()
     {
@@ -200,6 +212,10 @@ class Renderer extends \Magento\View\Element\Template
         return $this->getVar('product_thumbnail_image_sidebar_size', 'Magento_Catalog');
     }
 
+    /**
+     * @param string $productUrl
+     * @return $this
+     */
     public function overrideProductUrl($productUrl)
     {
         $this->_productUrl = $productUrl;
@@ -280,7 +296,7 @@ class Renderer extends \Magento\View\Element\Template
     /**
      * Get product customize options
      *
-     * @return array || false
+     * @return array
      */
     public function getProductOptions()
     {
@@ -336,7 +352,7 @@ class Renderer extends \Magento\View\Element\Template
     /**
      * Get quote item qty
      *
-     * @return float|int|string
+     * @return float|int
      */
     public function getQty()
     {
@@ -401,7 +417,7 @@ class Renderer extends \Magento\View\Element\Template
     /**
      * Accept option value and return its formatted view
      *
-     * @param mixed $optionValue
+     * @param string|array $optionValue
      * Method works well with these $optionValue format:
      *      1. String
      *      2. Indexed array e.g. array(val1, val2, ...)
@@ -452,7 +468,7 @@ class Renderer extends \Magento\View\Element\Template
     /**
      * Get html for MAP product enabled
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param Item $item
      * @return string
      */
     public function getMsrpHtml($item)
@@ -467,7 +483,7 @@ class Renderer extends \Magento\View\Element\Template
      * Set qty mode to be strict or not
      *
      * @param bool $strict
-     * @return \Magento\Checkout\Block\Cart\Item\Renderer
+     * @return $this
      */
     public function setQtyMode($strict)
     {
@@ -479,7 +495,7 @@ class Renderer extends \Magento\View\Element\Template
      * Set ignore product URL rendering
      *
      * @param bool $ignore
-     * @return \Magento\Checkout\Block\Cart\Item\Renderer
+     * @return $this
      */
     public function setIgnoreProductUrl($ignore = true)
     {

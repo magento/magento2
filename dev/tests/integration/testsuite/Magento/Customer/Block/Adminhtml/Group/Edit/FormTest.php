@@ -44,7 +44,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Service\V1\CustomerGroupService */
     private $customerGroupService;
 
-    /** @var \Magento\Core\Model\Registry */
+    /** @var \Magento\Registry */
     private $registry;
 
     public function setUp()
@@ -58,7 +58,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\CustomerGroupServiceInterface'
         );
 
-        $this->registry = Bootstrap::getObjectManager()->get('Magento\Core\Model\Registry');
+        $this->registry = Bootstrap::getObjectManager()->get('Magento\Registry');
     }
 
     public function tearDown()

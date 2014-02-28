@@ -32,7 +32,7 @@ namespace Magento\Index\Model;
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Shell extends \Magento\Core\Model\AbstractShell
+class Shell extends \Magento\App\AbstractShell
 {
     /**
      * Error status - whether errors have happened

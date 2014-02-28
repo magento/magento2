@@ -73,6 +73,7 @@ class CollectTotals
         /** @var \Magento\Sales\Model\Quote $quote */
         $quote = $quoteAddress->getQuote();
 
+        /** TODO: References to Magento\Customer\Model\Customer will be eliminated in scope of MAGETWO-19763 */
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = $quote->getCustomer();
 
@@ -90,6 +91,7 @@ class CollectTotals
         if (empty($customerVatNumber) || false == $this->customerData->isCountryInEU($customerCountryCode)) {
             $groupId = $customer->getId()
                 ? $this->customerData->getDefaultCustomerGroupId($store)
+                /** TODO: References to Magento\Customer\Model\Group will be eliminated in scope of MAGETWO-19763 */
                 : \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
         } else {
             // Magento always has to emulate group even if customer uses default billing/shipping address

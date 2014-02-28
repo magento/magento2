@@ -48,6 +48,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -57,12 +60,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setSaveParametersInSession(true);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         $this->setCollection($this->_collectionFactory->create());
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('agreement_id',
@@ -113,12 +122,20 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return void
+     */
     protected function _afterLoadCollection()
     {
         $this->getCollection()->walk('afterLoad');
         parent::_afterLoadCollection();
     }
 
+    /**
+     * @param \Magento\Data\Collection $collection
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
+     * @return void
+     */
     protected function _filterStoreCondition($collection, $column)
     {
         if (!$value = $column->getFilter()->getValue()) {
@@ -128,6 +145,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->getCollection()->addStoreFilter($value);
     }
 
+    /**
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function getRowUrl($row)
     {
         return $this->getUrl('checkout/*/edit', array('id' => $row->getId()));

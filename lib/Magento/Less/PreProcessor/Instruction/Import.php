@@ -26,6 +26,7 @@ namespace Magento\Less\PreProcessor\Instruction;
 
 use Magento\Less\PreProcessorInterface;
 use Magento\Less\PreProcessor;
+use Magento\View;
 
 /**
  * Less @import instruction preprocessor
@@ -39,58 +40,60 @@ class Import implements PreProcessorInterface
         '#@import\s+(\((?P<type>\w+)\)\s+)?[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?(?P<media>.*?);#';
 
     /**
-     * @var \Magento\Less\PreProcessor
+     * @var PreProcessor\File\FileList
      */
-    protected $preProcessor;
+    protected $fileList;
 
     /**
-     * @var \Magento\View\RelatedFile
-     */
-    protected $relatedFile;
-
-    /**
+     * Pre-processor error handler
+     *
      * @var PreProcessor\ErrorHandlerInterface
      */
     protected $errorHandler;
 
     /**
-     * @param PreProcessor $preProcessor
+     * Related file
+     *
+     * @var View\RelatedFile
+     */
+    protected $relatedFile;
+
+    /**
+     * @param View\RelatedFile $relatedFile
      * @param PreProcessor\ErrorHandlerInterface $errorHandler
-     * @param \Magento\View\RelatedFile $relatedFile
+     * @param PreProcessor\File\FileList $fileList
      */
     public function __construct(
-        PreProcessor $preProcessor,
+        View\RelatedFile $relatedFile,
         PreProcessor\ErrorHandlerInterface $errorHandler,
-        \Magento\View\RelatedFile $relatedFile
+        PreProcessor\File\FileList $fileList
     ) {
-        $this->preProcessor = $preProcessor;
-        $this->errorHandler = $errorHandler;
         $this->relatedFile = $relatedFile;
+        $this->errorHandler = $errorHandler;
+        $this->fileList = $fileList;
     }
 
     /**
      * Explode import paths
      *
+     * @param \Magento\Less\PreProcessor\File\Less $lessFile
      * @param array $matchedPaths
-     * @param array $viewParams
-     * @param array $params
      * @return array
      */
-    protected function generatePaths($matchedPaths, $viewParams, array $params)
+    protected function generatePaths(PreProcessor\File\Less $lessFile, $matchedPaths)
     {
         $importPaths = array();
         foreach ($matchedPaths as $path) {
-            $resolvedPath = $this->relatedFile->buildPath(
-                $this->preparePath($path),
-                $params['parentAbsolutePath'],
-                $params['parentPath'],
-                $viewParams
-            );
             try {
-                $importPaths[$path] = $this->preProcessor->processLessInstructions(
-                    $resolvedPath,
+                $viewParams = $lessFile->getViewParams();
+                $resolvedPath = $this->relatedFile->buildPath(
+                    $this->preparePath($path),
+                    $lessFile->getFilePath(),
                     $viewParams
                 );
+                $importedLessFile = $this->fileList->createFile($resolvedPath, $viewParams);
+                $this->fileList->addFile($importedLessFile);
+                $importPaths[$path] = $importedLessFile->getPublicationPath();
             } catch (\Magento\Filesystem\FilesystemException $e) {
                 $this->errorHandler->processException($e);
             }
@@ -112,11 +115,11 @@ class Import implements PreProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process($lessContent, array $viewParams, array $params = [])
+    public function process(PreProcessor\File\Less $lessFile, $lessContent)
     {
         $matches = [];
         preg_match_all(self::REPLACE_PATTERN, $lessContent, $matches);
-        $importPaths = $this->generatePaths($matches['path'], $viewParams, $params);
+        $importPaths = $this->generatePaths($lessFile, $matches['path']);
         $replaceCallback = function ($matchContent) use ($importPaths) {
             return $this->replace($matchContent, $importPaths);
         };
@@ -127,17 +130,17 @@ class Import implements PreProcessorInterface
      * Replace import path to file
      *
      * @param array $matchContent
-     * @param $importPaths
+     * @param array $importPaths
      * @return string
      */
     protected function replace($matchContent, $importPaths)
     {
-        $path = $matchContent['path'];
-        if (empty($importPaths[$path])) {
+        if (empty($importPaths[$matchContent['path']])) {
             return '';
         }
-        $typeString  = empty($matchContent['type']) ? '' : '(' . $matchContent['type'] . ') ';
-        $mediaString  = empty($matchContent['media']) ? '' : ' ' . $matchContent['media'];
-        return "@import {$typeString}'{$importPaths[$path]}'{$mediaString};";
+        $filePath = $importPaths[$matchContent['path']];
+        $typeString = empty($matchContent['type']) ? '' : '(' . $matchContent['type'] . ') ';
+        $mediaString = empty($matchContent['media']) ? '' : ' ' . $matchContent['media'];
+        return "@import {$typeString}'{$filePath}'{$mediaString};";
     }
 }

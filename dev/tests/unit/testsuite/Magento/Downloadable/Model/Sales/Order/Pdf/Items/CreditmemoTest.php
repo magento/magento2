@@ -51,12 +51,6 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             'productFactory' => $this->getMock(
                 'Magento\Catalog\Model\ProductFactory', array(), array(), '', false
             ),
-            'templateMailerFactory' => $this->getMock(
-                'Magento\Email\Model\Template\MailerFactory', array(), array(), '', false
-            ),
-            'emailInfoFactory' => $this->getMock(
-                'Magento\Email\Model\InfoFactory', array(), array(), '', false
-            ),
             'orderItemCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Item\CollectionFactory', array(), array(), '', false
             ),

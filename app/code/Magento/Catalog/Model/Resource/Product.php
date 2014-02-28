@@ -381,7 +381,8 @@ class Product extends AbstractResource
         // fetching all parent IDs, including those are higher on the tree
         $select = $this->_getReadAdapter()->select()->distinct()
             ->from($this->getTable('catalog_category_product_index'), array('category_id'))
-            ->where('product_id = ? AND is_parent = 1', (int)$object->getEntityId());
+            ->where('product_id = ? AND is_parent = 1', (int)$object->getEntityId())
+            ->where('visibility != ?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
 
         return $this->_getReadAdapter()->fetchCol($select);
     }

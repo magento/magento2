@@ -23,14 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Cms\Model;
 
 /**
  * CMS Observer model
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Observer
 {
@@ -39,7 +36,7 @@ class Observer
      *
      * @var \Magento\Cms\Helper\Page
      */
-    protected $_cmsPage = null;
+    protected $_cmsPage;
 
     /**
      * Core store config
@@ -91,8 +88,7 @@ class Observer
 
         if ($pageUrl) {
             $redirect->setRedirectUrl($pageUrl);
-        }
-        else {
+        } else {
             $redirect->setRedirect(true)
                 ->setPath('cms/index/noCookies')
                 ->setArguments(array());

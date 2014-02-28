@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\System\Config\Backend;
 
 /**
  * Backend model for saving certificate file in case of using certificate based authentication
  */
-namespace Magento\Paypal\Model\System\Config\Backend;
-
 class Cert extends \Magento\Core\Model\Config\Value
 {
     /**
@@ -47,8 +46,8 @@ class Cert extends \Magento\Core\Model\Config\Value
     protected $_tmpDirectory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Paypal\Model\CertFactory $certFactory
@@ -59,8 +58,8 @@ class Cert extends \Magento\Core\Model\Config\Value
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\Paypal\Model\CertFactory $certFactory,
@@ -79,7 +78,7 @@ class Cert extends \Magento\Core\Model\Config\Value
     /**
      * Process additional data before save config
      *
-     * @return \Magento\Paypal\Model\System\Config\Backend\Cert
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     protected function _beforeSave()
@@ -112,7 +111,7 @@ class Cert extends \Magento\Core\Model\Config\Value
     /**
      * Process object after delete data
      *
-     * @return \Magento\Paypal\Model\System\Config\Backend\Cert
+     * @return $this
      */
     protected function _afterDelete()
     {

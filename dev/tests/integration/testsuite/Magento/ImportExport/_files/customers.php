@@ -86,6 +86,6 @@ $customers[] = $customer;
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get('Magento\Core\Model\Registry')->unregister('_fixture/Magento_ImportExport_Customer_Collection');
-$objectManager->get('Magento\Core\Model\Registry')
+$objectManager->get('Magento\Registry')->unregister('_fixture/Magento_ImportExport_Customer_Collection');
+$objectManager->get('Magento\Registry')
     ->register('_fixture/Magento_ImportExport_Customer_Collection', $customers);

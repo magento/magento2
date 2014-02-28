@@ -45,11 +45,6 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
     const BATCH_SIZE = 500;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat
-     */
-    protected $_flatHelper;
-
-    /**
      * Resource instance
      *
      * @var \Magento\App\Resource
@@ -132,35 +127,56 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
+     * @var bool
+     */
+    protected $_addFilterableAttrs;
+
+    /**
+     * @var bool
+     */
+    protected $_addChildData;
+
+    /**
+     * @var \Magento\Mview\View\Changelog
+     */
+    protected $_changelog;
+
+    /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Catalog\Helper\Product\Flat $flatHelper
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $configFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Mview\View\Changelog $changelog
+     * @param bool $addFilterableAttrs
+     * @param bool $addChildData
      * @param array $flatAttributeGroups
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\App\Resource $resource,
-        \Magento\Catalog\Helper\Product\Flat $flatHelper,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\ConfigFactory $configFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Mview\View\Changelog $changelog,
+        $addFilterableAttrs = false,
+        $addChildData = false,
         $flatAttributeGroups = array()
     ) {
         $this->_configFactory = $configFactory;
-        $this->_flatHelper = $flatHelper;
         $this->_resource = $resource;
         $this->_eavConfig = $eavConfig;
         $this->_attributeConfig = $attributeConfig;
         $this->_attributeFactory = $attributeFactory;
         $this->_flatAttributeGroups = $flatAttributeGroups;
         $this->_storeManager = $storeManager;
+        $this->_changelog = $changelog;
+        $this->_addFilterableAttrs = $addFilterableAttrs;
+        $this->_addChildData = $addChildData;
         parent::__construct($context);
     }
 
@@ -181,7 +197,7 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
             'primary'   => true,
             'comment'   => 'Entity Id'
         );
-        if ($this->_flatHelper->isAddChildData()) {
+        if ($this->isAddChildData()) {
             $columns['child_id'] = array(
                 'type'      => \Magento\DB\Ddl\Table::TYPE_INTEGER,
                 'length'    => null,
@@ -220,6 +236,26 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
+     * Check whether filterable attributes should be added
+     *
+     * @return bool
+     */
+    public function isAddFilterableAttributes()
+    {
+        return $this->_addFilterableAttrs;
+    }
+
+    /**
+     * Check whether child data should be added
+     *
+     * @return bool
+     */
+    public function isAddChildData()
+    {
+        return $this->_addChildData;
+    }
+
+    /**
      * Retrieve catalog product flat table columns array
      *
      * @return array
@@ -231,8 +267,8 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
             foreach ($this->getAttributes() as $attribute) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
                 $columns = $attribute
-                    ->setFlatAddFilterableAttributes($this->_flatHelper->isAddFilterableAttributes())
-                    ->setFlatAddChildData($this->_flatHelper->isAddChildData())
+                    ->setFlatAddFilterableAttributes($this->isAddFilterableAttributes())
+                    ->setFlatAddChildData($this->isAddChildData())
                     ->getFlatColumns();
                 if ($columns !== null) {
                     $this->_columns = array_merge($this->_columns, $columns);
@@ -333,7 +369,7 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
                 $adapter->quoteInto('additional_table.used_for_sort_by = ?', 1),
                 $adapter->quoteInto('main_table.attribute_code IN(?)', $this->_systemAttributes)
             );
-            if ($this->_flatHelper->isAddFilterableAttributes()) {
+            if ($this->isAddFilterableAttributes()) {
                 $whereCondition[] = $adapter->quoteInto('additional_table.is_filterable > ?', 0);
             }
 
@@ -358,7 +394,7 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
     {
         if ($this->_indexes === null) {
             $this->_indexes = array();
-            if ($this->_flatHelper->isAddChildData()) {
+            if ($this->isAddChildData()) {
                 $this->_indexes['PRIMARY'] = array(
                     'type'   => \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY,
                     'fields' => array('entity_id', 'child_id')
@@ -389,8 +425,8 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
             foreach ($this->getAttributes() as $attribute) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
                 $indexes = $attribute
-                    ->setFlatAddFilterableAttributes($this->_flatHelper->isAddFilterableAttributes())
-                    ->setFlatAddChildData($this->_flatHelper->isAddChildData())
+                    ->setFlatAddFilterableAttributes($this->isAddFilterableAttributes())
+                    ->setFlatAddChildData($this->isAddChildData())
                     ->getFlatIndexes();
                 if ($indexes !== null) {
                     $this->_indexes = array_merge($this->_indexes, $indexes);
@@ -475,7 +511,12 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
     {
         $connection = $this->_resource->getConnection('write');
         $existentTables = $connection->getTables($connection->getTableName('catalog_product_flat_%'));
-
+        $this->_changelog->setViewId('catalog_product_flat');
+        foreach ($existentTables as $key => $tableName) {
+            if ($this->_changelog->getName() == $tableName) {
+                unset($existentTables[$key]);
+            }
+        }
         $actualStoreTables = array();
         foreach ($this->_storeManager->getStores() as $store) {
             $actualStoreTables[] = $this->getFlatTableName($store->getId());

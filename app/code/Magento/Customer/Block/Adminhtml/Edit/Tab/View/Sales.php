@@ -56,7 +56,7 @@ class Sales extends \Magento\Backend\Block\Template
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -74,14 +74,14 @@ class Sales extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -101,8 +101,11 @@ class Sales extends \Magento\Backend\Block\Template
         $this->_currency = $this->_currencyFactory->create()
             ->load($this->_storeConfig->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE));
 
+        $customerId = $this->_coreRegistry->registry('current_customer')
+            ? $this->_coreRegistry->registry('current_customer')->getId()
+            : 0;
         $this->_collection = $this->_collectionFactory->create()
-            ->setCustomerFilter($this->_coreRegistry->registry('current_customer'))
+            ->setCustomerFilter($customerId)
             ->setOrderStateFilter(\Magento\Sales\Model\Order::STATE_CANCELED, true)
             ->load();
 

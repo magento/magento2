@@ -57,7 +57,7 @@
 "Payment canceling error.","Erreur dans l'annulation du paiement."
 "Payment capturing error.","Erreur lors de la saisie du paiement"
 "Payment error. Order was not found.","Erreur de paiement. La commande n'a pas été trouvée."
-"Payment error. Paid amount doesn\'t match the order amount.","Erreur de paiement. Le montant payé ne correspond pas au montant de la commande."
+"Payment error. Paid amount doesn't match the order amount.","Erreur de paiement. Le montant payé ne correspond pas au montant de la commande."
 "Payment from Applicable Countries","Paiement depuis les pays applicables"
 "Payment from Applicable Countries","Paiement depuis les pays disponibles."
 "Payment from Specific Countries","Paiement depuis les pays spécifiques"

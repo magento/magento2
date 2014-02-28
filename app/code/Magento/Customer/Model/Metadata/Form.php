@@ -28,6 +28,13 @@ namespace Magento\Customer\Model\Metadata;
 
 class Form
 {
+    /**#@+
+     * Values for ignoreInvisible parameter in constructor
+     */
+    const IGNORE_INVISIBLE = true;
+    const DONT_IGNORE_INVISIBLE = false;
+    /**#@-*/
+
     /**
      * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
      */
@@ -117,7 +124,7 @@ class Form
         $entityType,
         $formCode,
         array $attributeValues = [],
-        $ignoreInvisible = true,
+        $ignoreInvisible = self::IGNORE_INVISIBLE,
         $filterAttributes = [],
         $isAjax = false
     )  {
@@ -252,7 +259,7 @@ class Form
             if (!isset($data[$attribute->getAttributeCode()])) {
                 $data[$attribute->getAttributeCode()] = false;
             }
-            $dataModel->restoreValue($data[$attribute->getAttributeCode()]);
+            $data[$attribute->getAttributeCode()] = $dataModel->restoreValue($data[$attribute->getAttributeCode()]);
         }
         return $data;
     }
@@ -334,7 +341,7 @@ class Form
     public function validateData(array $data)
     {
         $validator = $this->_getValidator($data);
-        if (!$validator->isValid(false)) {
+        if (!$validator->isValid($this->_attributeValues)) {
             $messages = array();
             foreach ($validator->getMessages() as $errorMessages) {
                 $messages = array_merge($messages, (array)$errorMessages);

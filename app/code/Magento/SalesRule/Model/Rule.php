@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\SalesRule\Model;
 
 /**
  * Shopping Cart Rule data model
@@ -81,13 +82,9 @@
  * @method \Magento\SalesRule\Model\Rule setUseAutoGeneration(int $value)
  * @method string getCouponCode()
  * @method \Magento\SalesRule\Model\Rule setCouponCode(string $value)
- *
- * @category    Magento
- * @package     Magento_SalesRule
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @method int getRuleId()
+ * @method \Magento\SalesRule\Model\Rule setRuleId(int $ruleId)
  */
-namespace Magento\SalesRule\Model;
-
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
     /**
@@ -208,8 +205,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Model\LocaleInterface $locale
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
@@ -223,8 +220,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Model\LocaleInterface $locale,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,

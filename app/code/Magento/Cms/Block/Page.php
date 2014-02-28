@@ -25,14 +25,8 @@
  */
 namespace Magento\Cms\Block;
 
-use Magento\View\Element\AbstractBlock;
-
 /**
  * Cms page content block
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Page extends \Magento\View\Element\AbstractBlock
 {

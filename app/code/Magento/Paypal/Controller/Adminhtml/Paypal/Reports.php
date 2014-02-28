@@ -23,18 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Controller\Adminhtml\Paypal;
 
 /**
  * PayPal Settlement Reports Controller
  */
-namespace Magento\Paypal\Controller\Adminhtml\Paypal;
-
 class Reports extends \Magento\Backend\App\Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -55,14 +54,14 @@ class Reports extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Paypal\Model\Report\Settlement\RowFactory $rowFactory
      * @param \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory
      * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Paypal\Model\Report\Settlement\RowFactory $rowFactory,
         \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory,
         \Magento\Logger $logger
@@ -76,6 +75,8 @@ class Reports extends \Magento\Backend\App\Action
 
     /**
      * Grid action
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -85,6 +86,8 @@ class Reports extends \Magento\Backend\App\Action
 
     /**
      * Ajax callback for grid actions
+     *
+     * @return void
      */
     public function gridAction()
     {
@@ -94,6 +97,8 @@ class Reports extends \Magento\Backend\App\Action
 
     /**
      * View transaction details action
+     *
+     * @return void
      */
     public function detailsAction()
     {
@@ -116,6 +121,7 @@ class Reports extends \Magento\Backend\App\Action
     /**
      * Forced fetch reports action
      *
+     * @return void
      * @throws \Magento\Core\Exception
      */
     public function fetchAction()
@@ -153,7 +159,8 @@ class Reports extends \Magento\Backend\App\Action
 
     /**
      * Initialize titles, navigation
-     * @return \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
+     *
+     * @return $this
      */
     protected function _initAction()
     {
@@ -168,6 +175,7 @@ class Reports extends \Magento\Backend\App\Action
 
     /**
      * ACL check
+     *
      * @return bool
      */
     protected function _isAllowed()

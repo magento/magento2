@@ -61,7 +61,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $coreDataMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $fileStorageDbMock = $this->getMock('Magento\Core\Helper\File\Storage\Database', array(), array(), '', false);
         $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
-        $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $coreRegistry = $this->getMock('Magento\Registry', array(), array(), '', false);
         $this->product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false);

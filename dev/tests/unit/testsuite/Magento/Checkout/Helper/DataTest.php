@@ -33,7 +33,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $_emailTemplate;
+    private $_transportBuilder;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -67,15 +67,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '\Magento\Checkout\Model\Resource\Agreement\CollectionFactory', array(), array(), '', false
         );
 
-        $this->_emailTemplate = $this->getMock('\Magento\Email\Model\Template', array(), array(), '', false);
-        $emailTplFactory = $this->getMock(
-            '\Magento\Email\Model\TemplateFactory', array('create'), array(), '', false
+        $this->_transportBuilder = $this->getMock(
+            '\Magento\Mail\Template\TransportBuilder', array(), array(), '', false
         );
-        $emailTplFactory->expects($this->once())->method('create')->will($this->returnValue($this->_emailTemplate));
 
         $this->_helper = new Data(
             $context, $storeConfig, $storeManager, $checkoutSession,
-            $locale, $collectionFactory, $emailTplFactory, $this->_translator
+            $locale, $collectionFactory, $this->_transportBuilder, $this->_translator
         );
     }
 
@@ -84,18 +82,35 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $shippingAddress = new \Magento\Object(array('shipping_method' => 'ground_transportation'));
         $billingAddress = new \Magento\Object(array('street' => 'Fixture St'));
 
-        $this->_emailTemplate
+        $this->_transportBuilder
             ->expects($this->once())
-            ->method('setDesignConfig')
+            ->method('setTemplateOptions')
             ->with(array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => 8))
             ->will($this->returnSelf())
         ;
-        $this->_emailTemplate->expects($this->once())->method('sendTransactional')->with(
-            'fixture_email_template_payment_failed',
-            'noreply@example.com',
-            'sysadmin@example.com',
-            'System Administrator',
-            $this->identicalTo(array(
+
+        $this->_transportBuilder
+            ->expects($this->once())
+            ->method('setTemplateIdentifier')
+            ->with('fixture_email_template_payment_failed')
+            ->will($this->returnSelf());
+
+        $this->_transportBuilder
+            ->expects($this->once())
+            ->method('setFrom')
+            ->with('noreply@example.com')
+            ->will($this->returnSelf());
+
+        $this->_transportBuilder
+            ->expects($this->once())
+            ->method('addTo')
+            ->with('sysadmin@example.com', 'System Administrator')
+            ->will($this->returnSelf());
+
+        $this->_transportBuilder
+            ->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(array(
                 'reason'            => 'test message',
                 'checkoutType'      => 'onepage',
                 'dateAndTime'       => 'Oct 02, 2013',
@@ -108,6 +123,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'items'             => "Product One  x 2  USD 10<br />\nProduct Two  x 3  USD 60<br />\n",
                 'total'             => 'USD 70',
             ))
+            ->will($this->returnSelf());
+
+        $this->_transportBuilder->expects($this->once())->method('addBcc')->will($this->returnSelf());
+        $this->_transportBuilder->expects($this->once())->method('getTransport')->will(
+            $this->returnValue($this->getMock('Magento\Mail\TransportInterface'))
         );
 
         $this->_translator->expects($this->at(0))->method('setTranslateInline')->with(false);

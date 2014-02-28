@@ -34,7 +34,7 @@ class Status extends \Magento\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -50,14 +50,14 @@ class Status extends \Magento\View\Element\Template
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Rss\Model\Resource\OrderFactory $orderFactory
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Rss\Model\Resource\OrderFactory $orderFactory,
         array $data = array()

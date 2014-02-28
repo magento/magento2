@@ -18,25 +18,45 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Multishipping\Controller;
+
+use Magento\App\RequestInterface;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
+use Magento\Customer\Service\V1\CustomerServiceInterface as CustomerService;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 
 /**
  * Multishipping checkout controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Multishipping\Controller;
-
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
-
 class Checkout extends \Magento\Checkout\Controller\Action
 {
+    /**
+     * @param \Magento\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param CustomerService $customerService
+     * @param CustomerAccountService $customerAccountService
+     * @param CustomerMetadataService $customerMetadataService
+     */
+    public function __construct(
+        \Magento\App\Action\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        CustomerService $customerService,
+        CustomerAccountService $customerAccountService,
+        CustomerMetadataService $customerMetadataService
+    ) {
+        parent::__construct(
+            $context,
+            $customerSession,
+            $customerService,
+            $customerAccountService,
+            $customerMetadataService
+        );
+    }
+
     /**
      * Retrieve checkout model
      *
@@ -75,17 +95,6 @@ class Checkout extends \Magento\Checkout\Controller\Action
     protected function _getCheckoutSession()
     {
         return $this->_objectManager->get('Magento\Checkout\Model\Session');
-    }
-
-    /**
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     */
-    public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession
-    ) {
-        parent::__construct($context, $customerSession);
     }
 
     /**

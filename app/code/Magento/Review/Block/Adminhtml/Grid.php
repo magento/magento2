@@ -58,7 +58,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -83,7 +83,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -93,7 +93,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory,
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_productsFactory = $productsFactory;

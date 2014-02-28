@@ -100,7 +100,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)->setId(99)->setUrlKey($uniqid);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('product', $product);
+        $objectManager->get('Magento\Registry')->register('product', $product);
 
         $this->_helper->initProductLayout($product, $this->_controller);
         $rootBlock = $this->_layout->getBlock('root');

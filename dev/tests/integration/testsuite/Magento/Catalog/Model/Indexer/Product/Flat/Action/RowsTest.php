@@ -64,9 +64,9 @@ class RowsTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_processor->reindexList(array($this->_product->getId()));
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Catalog\Model\CategoryFactory');
+            ->get('Magento\Catalog\Model\CategoryFactory');
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Catalog\Block\Product\ListProduct');
+            ->get('Magento\Catalog\Block\Product\ListProduct');
 
         $category = $categoryFactory->create()->load(2);
         $layer = $listProduct->getLayer();

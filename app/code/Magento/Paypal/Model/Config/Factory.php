@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Config;
 
 /**
  * Factory class for payment config
  */
-namespace Magento\Paypal\Model\Config;
-
 class Factory
 {
     /**

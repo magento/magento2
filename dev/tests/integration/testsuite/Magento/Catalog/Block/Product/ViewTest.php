@@ -50,8 +50,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->_block = $objectManager->create('Magento\Catalog\Block\Product\View');
         $this->_product = $objectManager->create('Magento\Catalog\Model\Product');
         $this->_product->load(1);
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('product');
-        $objectManager->get('Magento\Core\Model\Registry')->register('product', $this->_product);
+        $objectManager->get('Magento\Registry')->unregister('product');
+        $objectManager->get('Magento\Registry')->register('product', $this->_product);
     }
 
     public function testSetLayout()
@@ -74,7 +74,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('product');
+        $objectManager->get('Magento\Registry')->unregister('product');
         $this->_block->setProductId(1);
         $this->assertEquals($this->_product->getId(), $this->_block->getProduct()->getId());
     }

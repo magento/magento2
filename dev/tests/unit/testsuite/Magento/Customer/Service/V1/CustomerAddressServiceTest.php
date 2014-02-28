@@ -272,10 +272,10 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             'default_billing' => false,
             'customer_id' => self::ID,
             'region' => [
-                    'region_id' => self::REGION_ID,
-                    'region_code' => '',
-                    'region' => self::REGION
-                ],
+                'region_id' => self::REGION_ID,
+                'region_code' => '',
+                'region' => self::REGION
+            ],
             'country_id' => self::COUNTRY_ID,
             'street' => [self::STREET],
             'telephone' => self::TELEPHONE,
@@ -738,8 +738,11 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
         $customerService = new CustomerAddressService(
             $this->_addressFactoryMock,
             $this->_converter,
-            new Dto\RegionBuilder(),
-            $this->_addressBuilder,
+            new \Magento\Customer\Model\Address\Converter(
+                $this->_addressBuilder,
+                $this->_addressFactoryMock,
+                new Dto\RegionBuilder()
+            ),
             $this->_directoryData
         );
         return $customerService;

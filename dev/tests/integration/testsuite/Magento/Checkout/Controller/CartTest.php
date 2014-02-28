@@ -163,6 +163,56 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product.php
+     * @magentoAppIsolation enabled
+     */
+    public function testUpdatePostAction()
+    {
+        /** Preconditions */
+        $customerFromFixture = 1;
+        $productId = 1;
+        $originalQuantity = 1;
+        $updatedQuantity = 2;
+        /** @var $checkoutSession \Magento\Checkout\Model\Session  */
+        $checkoutSession = $this->_objectManager->create('Magento\Checkout\Model\Session');
+        $quoteItem = $this->_getQuoteItemIdByProductId($checkoutSession->getQuote(), $productId);
+
+        /** @var \Magento\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Data\Form\FormKey');
+        $postData = [
+            'cart' => [$quoteItem->getId() => ['qty' => $updatedQuantity]],
+            'update_cart_action' => 'update_qty',
+            'form_key' => $formKey->getFormKey()
+        ];
+        $this->getRequest()->setPost($postData);
+        /** @var $customerSession \Magento\Customer\Model\Session */
+        $customerSession = $this->_objectManager->create('Magento\Customer\Model\Session');
+        $customerSession->setCustomerId($customerFromFixture);
+
+        $this->assertNotNull($quoteItem, 'Cannot get quote item for simple product');
+        $this->assertEquals(
+            $originalQuantity,
+            $quoteItem->getQty(),
+            "Precondition failed: invalid quote item quantity"
+        );
+
+        /** Execute SUT */
+        $this->dispatch('checkout/cart/updatePost');
+
+        /** Check results */
+        /** @var \Magento\Sales\Model\Quote $quote */
+        $quote = $this->_objectManager->create('Magento\Sales\Model\Quote');
+        $quote->load($checkoutSession->getQuote()->getId());
+        $quoteItem = $this->_getQuoteItemIdByProductId($quote, 1);
+        $this->assertEquals(
+            $updatedQuantity,
+            $quoteItem->getQty(),
+            "Invalid quote item quantity"
+        );
+    }
+
+    /**
      * Gets \Magento\Sales\Model\Quote\Item from \Magento\Sales\Model\Quote by product id
      *
      * @param \Magento\Sales\Model\Quote $quote

@@ -2,7 +2,7 @@
 "Allowed Currencies","允许的货币"
 "Base Currency","基准货币"
 "Base currency is used for all online payment transactions. Scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","基准货币将被所有在线支付交易所使用。范围则是由分类价格范围 (""分类"" > ""价格"" > ""分类价格范围"")决定的。"
-"Can\'t convert rate from ""%s-%s"".","无法执行 ""%s-%s"" 费率转换。"
+"Can't convert rate from ""%s-%s"".","无法执行 ""%s-%s"" 费率转换。"
 "Cannot retrieve rate from %s.","无法从 %s 获取费率。"
 "Connection Timeout in Seconds","连接超时的秒数"
 "Continue &raquo;","继续 &raquo;"

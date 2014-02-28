@@ -38,7 +38,7 @@ class ContainerAbstractTest extends \PHPUnit_Framework_TestCase
             array('getChildBlock', 'getPaymentInfo'), array(), '', false);
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $paymentInfo = $objectManagerHelper->getObject('Magento\Payment\Model\Info');
-        $adapterFactoryMock = $this->getMock('Magento\Core\Model\Log\AdapterFactory', array('create'),
+        $adapterFactoryMock = $this->getMock('Magento\Logger\AdapterFactory', array('create'),
             array(), '', false);
         $methodInstance = $objectManagerHelper->getObject('Magento\Payment\Model\Method\Checkmo', array(
             'logAdapterFactory' => $adapterFactoryMock,

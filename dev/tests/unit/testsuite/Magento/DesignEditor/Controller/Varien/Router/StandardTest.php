@@ -226,22 +226,14 @@ class StandardTest extends \PHPUnit_Framework_TestCase
                 ->method('getRouters')
                 ->will($this->returnValue($routers));
         }
-
-        $router = new \Magento\DesignEditor\Controller\Varien\Router\Standard(
-            $this->getMock('Magento\App\ActionFactory', array(), array(), '', false),
-            $this->getMock('Magento\App\DefaultPathInterface'),
-            $this->getMock('Magento\App\ResponseFactory', array(), array(), '', false),
-            $this->getMock('Magento\App\Route\Config', array(), array(), '', false),
-            $this->getMock('Magento\App\State', array(), array(), '', false),
-            $this->getMock('Magento\UrlInterface'),
-            $this->getMock('Magento\Core\Model\StoreManagerInterface'),
-            $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
-            $this->getMock('Magento\Url\SecurityInfoInterface'),
-            'frontend',
-            $routerListMock,
-            $objectManager,
-            $rewriteServiceMock
+        $arguments = array(
+            'routerId' => 'frontend',
+            'routerList' => $routerListMock,
+            'objectManager' => $objectManager,
+            'urlRewriteService' => $rewriteServiceMock
         );
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $router = $helper->getObject('\Magento\DesignEditor\Controller\Varien\Router\Standard', $arguments);
         return $router;
     }
 

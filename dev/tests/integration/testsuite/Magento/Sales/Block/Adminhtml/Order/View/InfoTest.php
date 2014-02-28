@@ -94,11 +94,11 @@ class InfoTest extends \Magento\Backend\Utility\Controller
 
     /**
      * @param array $additionalOrderData
-     * @return \Magento\Core\Model\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _putOrderIntoRegistry(array $additionalOrderData = [])
     {
-        $registry = $this->getMockBuilder('Magento\Core\Model\Registry')
+        $registry = $this->getMockBuilder('Magento\Registry')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -36,7 +36,7 @@ use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRule\Model\Resource\Rule\Collection;
 use Magento\CatalogRule\Model\Rule\Product\Price;
-use Magento\Core\Model\Registry;
+use Magento\Registry;
 use Magento\Core\Model\StoreManagerInterface;
 use Magento\Core\Model\LocaleInterface;
 use Magento\Customer\Model\Group;

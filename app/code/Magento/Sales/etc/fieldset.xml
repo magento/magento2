@@ -325,8 +325,8 @@
                 <aspect name="to_order_address" />
                 <aspect name="to_customer_address" />
             </field>
-            <field name="street_full">
-                <aspect name="to_order_address" targetField="street" />
+            <field name="street">
+                <aspect name="to_order_address" />
             </field>
             <field name="street">
                 <aspect name="to_customer_address" />
@@ -670,8 +670,8 @@
             <field name="company">
                 <aspect name="to_quote_address" />
             </field>
-            <field name="street_full">
-                <aspect name="to_quote_address" targetField="street" />
+            <field name="street">
+                <aspect name="to_quote_address" />
             </field>
             <field name="city">
                 <aspect name="to_quote_address" />
@@ -875,8 +875,8 @@
             <field name="company">
                 <aspect name="to_quote_address" />
             </field>
-            <field name="street_full">
-                <aspect name="to_quote_address" targetField="street" />
+            <field name="street">
+                <aspect name="to_quote_address" />
             </field>
             <field name="city">
                 <aspect name="to_quote_address" />

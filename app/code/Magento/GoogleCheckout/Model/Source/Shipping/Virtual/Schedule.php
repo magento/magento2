@@ -27,7 +27,7 @@
 
 namespace Magento\GoogleCheckout\Model\Source\Shipping\Virtual;
 
-class Schedule implements \Magento\Core\Model\Option\ArrayInterface
+class Schedule implements \Magento\Option\ArrayInterface
 {
     public function toOptionArray()
     {

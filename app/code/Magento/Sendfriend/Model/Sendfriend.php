@@ -100,9 +100,9 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     protected $_catalogImage = null;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory
+     * @var \Magento\Mail\Template\TransportBuilder
      */
-    protected $_templateFactory;
+    protected $_transportBuilder;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -115,10 +115,10 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     protected $_escaper;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\TranslateInterface $translate
      * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
@@ -128,10 +128,10 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\TranslateInterface $translate,
         \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
@@ -141,7 +141,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
-        $this->_templateFactory = $templateFactory;
+        $this->_transportBuilder = $transportBuilder;
         $this->_translate = $translate;
         $this->_catalogImage = $catalogImage;
         $this->_sendfriendData = $sendfriendData;
@@ -160,16 +160,6 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Retrieve Data Helper
-     *
-     * @return \Magento\Sendfriend\Helper\Data
-     */
-    protected function _getHelper()
-    {
-        return $this->_sendfriendData;
-    }
-
-    /**
      * @return $this
      * @throws CoreException
      */
@@ -181,12 +171,8 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
             );
         }
 
-        /* @var $translate \Magento\TranslateInterface */
-        $translate = $this->_translate;
-        $translate->setTranslateInline(false);
-
-        /* @var $mailTemplate \Magento\Email\Model\Template */
-        $mailTemplate = $this->_templateFactory->create();
+        $translate = $this->_translate->getTranslateInline();
+        $this->_translate->setTranslateInline(false);
 
         $message = nl2br(htmlspecialchars($this->getSender()->getMessage()));
         $sender  = array(
@@ -194,19 +180,16 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
             'email' => $this->_escaper->escapeHtml($this->getSender()->getEmail())
         );
 
-        $mailTemplate->setDesignConfig(array(
-            'area'  => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-            'store' => $this->_storeManager->getStore()->getId(),
-        ));
-
         foreach ($this->getRecipients()->getEmails() as $k => $email) {
             $name = $this->getRecipients()->getNames($k);
-            $mailTemplate->sendTransactional(
-                $this->getTemplate(),
-                $sender,
-                $email,
-                $name,
-                array(
+            $this->_transportBuilder
+                ->setTemplateIdentifier($this->_sendfriendData->getEmailTemplate())
+                ->setTemplateOptions(array(
+                    'area'  => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                    'store' => $this->_storeManager->getStore()->getId(),
+                ))
+                ->setFrom($sender)
+                ->setTemplateVars(array(
                     'name'          => $name,
                     'email'         => $email,
                     'product_name'  => $this->getProduct()->getName(),
@@ -214,13 +197,13 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
                     'message'       => $message,
                     'sender_name'   => $sender['name'],
                     'sender_email'  => $sender['email'],
-                    'product_image' => $this->_catalogImage->init($this->getProduct(),
-                        'small_image')->resize(75),
-                )
-            );
+                    'product_image' => $this->_catalogImage->init($this->getProduct(), 'small_image')->resize(75),
+                ))
+                ->addTo($email, $name);
+            $transport = $this->_transportBuilder->getTransport();
+            $transport->sendMessage();
         }
-
-        $translate->setTranslateInline(true);
+        $this->_translate->setTranslateInline($translate);
         $this->_incrementSentCount();
 
         return $this;
@@ -459,17 +442,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      */
     public function getMaxSendsToFriend()
     {
-        return $this->_getHelper()->getMaxEmailPerPeriod();
-    }
-
-    /**
-     * Get current Email "Send to friend" template
-     *
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->_getHelper()->getEmailTemplate();
+        return $this->_sendfriendData->getMaxEmailPerPeriod();
     }
 
     /**
@@ -479,7 +452,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      */
     public function getMaxRecipients()
     {
-        return $this->_getHelper()->getMaxRecipients();
+        return $this->_sendfriendData->getMaxRecipients();
     }
 
     /**
@@ -489,7 +462,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      */
     public function canEmailToFriend()
     {
-        return $this->_getHelper()->isEnabled();
+        return $this->_sendfriendData->isEnabled();
     }
 
     /**
@@ -514,7 +487,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
             return $this->_sentCount;
         }
 
-        switch ($this->_getHelper()->getLimitBy()) {
+        switch ($this->_sendfriendData->getLimitBy()) {
             case \Magento\Sendfriend\Helper\Data::CHECK_COOKIE:
                 return $this->_sentCount = $this->_sentCountByCookies(false);
             case \Magento\Sendfriend\Helper\Data::CHECK_IP:
@@ -531,7 +504,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      */
     protected function _incrementSentCount()
     {
-        switch ($this->_getHelper()->getLimitBy()) {
+        switch ($this->_sendfriendData->getLimitBy()) {
             case \Magento\Sendfriend\Helper\Data::CHECK_COOKIE:
                 return $this->_sentCount = $this->_sentCountByCookies(true);
             case \Magento\Sendfriend\Helper\Data::CHECK_IP:
@@ -549,7 +522,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      */
     protected function _sentCountByCookies($increment = false)
     {
-        $cookie   = $this->_getHelper()->getCookieName();
+        $cookie   = $this->_sendfriendData->getCookieName();
         $time     = time();
         $newTimes = array();
 
@@ -562,7 +535,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
         if ($oldTimes) {
             $oldTimes = explode(',', $oldTimes);
             foreach ($oldTimes as $oldTime) {
-                $periodTime = $time - $this->_getHelper()->getPeriod();
+                $periodTime = $time - $this->_sendfriendData->getPeriod();
                 if (is_numeric($oldTime) AND $oldTime >= $periodTime) {
                     $newTimes[] = $oldTime;
                 }
@@ -587,7 +560,7 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     protected function _sentCountByIp($increment = false)
     {
         $time   = time();
-        $period = $this->_getHelper()->getPeriod();
+        $period = $this->_sendfriendData->getPeriod();
         $websiteId = $this->getWebsiteId();
 
         if ($increment) {

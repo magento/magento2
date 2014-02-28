@@ -31,21 +31,10 @@ namespace Magento\Customer\Service\V1\Dto;
  */
 class Customer extends \Magento\Service\Entity\AbstractDto implements Eav\EntityInterface
 {
-
-    /**
-     * @var array  Special attribute codes which cannot be set or gotten
-     * they are used by the model but should not be exposed in the DTO
-     */
-    private static $_nonAttributes = [self::ID];
-
-    /**
-     * name of field containing entity id, used to exclude this field from list of attributes.
-     */
-    const ID = 'id';
-
-    /**
+    /**#@+
      * constants defined for keys of array, makes typos less likely
      */
+    const ID = 'id';
     const CONFIRMATION = 'confirmation';
     const CREATED_AT = 'created_at';
     const CREATED_IN = 'created_in';
@@ -63,30 +52,64 @@ class Customer extends \Magento\Service\Entity\AbstractDto implements Eav\Entity
     const WEBSITE_ID = 'website_id';
     const DEFAULT_BILLING = 'default_billing';
     const DEFAULT_SHIPPING = 'default_shipping';
+    const RP_TOKEN = 'rp_token';
+    const RP_TOKEN_CREATED_AT = 'rp_token_created_at';
+    /**#@-*/
+
+    /**
+     * A list of valid customer DTO attributes.
+     *
+     * @var string[]
+     */
+    protected $_validAttributes = [
+        self::ID,
+        self::CONFIRMATION,
+        self::CREATED_AT,
+        self::CREATED_IN,
+        self::DOB,
+        self::EMAIL,
+        self::FIRSTNAME,
+        self::GENDER,
+        self::GROUP_ID,
+        self::LASTNAME,
+        self::MIDDLENAME,
+        self::PREFIX,
+        self::STORE_ID,
+        self::SUFFIX,
+        self::TAXVAT,
+        self::WEBSITE_ID,
+        self::DEFAULT_BILLING,
+        self::DEFAULT_SHIPPING,
+        self::RP_TOKEN,
+        self::RP_TOKEN_CREATED_AT,
+    ];
 
     /**
      * Retrieve array of all attributes, in the form of 'attribute code' => 'attribute value'
      *
-     * @return array|\ArrayAccess|\string[]
+     * @return array
      */
     public function getAttributes()
     {
-        $attributes = $this->__toArray();
-        foreach (self::$_nonAttributes as $keyName) {
-            unset ($attributes[$keyName]);
+        $unvalidatedData = $this->__toArray();
+        $validData = [];
+        foreach ($this->_validAttributes as $attributeCode) {
+            if (array_key_exists($attributeCode, $unvalidatedData)) {
+                $validData[$attributeCode] = $unvalidatedData[$attributeCode];
+            }
         }
-        return $attributes;
+        return $validData;
     }
 
     /**
-     * Gets an attribute value.
+     * Get an attribute value.
      *
      * @param string $attributeCode
      * @return mixed The attribute value or null if the attribute has not been set
      */
     public function getAttribute($attributeCode)
     {
-        if (isset($this->_data[$attributeCode])) {
+        if (in_array($attributeCode, $this->_validAttributes) && isset($this->_data[$attributeCode])) {
             return $this->_data[$attributeCode];
         } else {
             return null;
@@ -234,6 +257,22 @@ class Customer extends \Magento\Service\Entity\AbstractDto implements Eav\Entity
      */
     public function getWebsiteId()
     {
-        return $this->_get(self::WEBSITE_ID, 0);
+        return (int)$this->_get(self::WEBSITE_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRpToken()
+    {
+        return $this->_get(self::RP_TOKEN);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRpTokenCreatedAt()
+    {
+        return $this->_get(self::RP_TOKEN_CREATED_AT);
     }
 }

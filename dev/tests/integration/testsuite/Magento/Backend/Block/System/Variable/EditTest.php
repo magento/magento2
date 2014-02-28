@@ -50,7 +50,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->setData($data)
             ->save();
 
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_variable', $variable);
+        $objectManager->get('Magento\Registry')->register('current_variable', $variable);
         $objectManager->get('Magento\App\RequestInterface')
             ->setParam('variable_id', $variable->getId());
         $block = $objectManager->get('Magento\View\LayoutInterface')

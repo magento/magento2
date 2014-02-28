@@ -138,5 +138,5 @@ foreach ($bunches as $bunch) {
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get('Magento\Core\Model\Registry')->unregister('_fixture/Magento_ImportExport_Import_Data');
-$objectManager->get('Magento\Core\Model\Registry')->register('_fixture/Magento_ImportExport_Import_Data', $bunches);
+$objectManager->get('Magento\Registry')->unregister('_fixture/Magento_ImportExport_Import_Data');
+$objectManager->get('Magento\Registry')->register('_fixture/Magento_ImportExport_Import_Data', $bunches);

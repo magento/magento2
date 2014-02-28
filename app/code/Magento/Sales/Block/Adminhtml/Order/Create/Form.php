@@ -128,7 +128,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 $addressForm = $this->_customerFormFactory->create(
                     'customer_address',
                     'adminhtml_customer_address',
-                    $addressDto->__toArray()
+                    $addressDto->getAttributes()
                 );
                 $data['addresses'][$addressDto->getId()] = $addressForm
                     ->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON);

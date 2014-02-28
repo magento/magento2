@@ -59,7 +59,7 @@
 "Checkout with Multiple Addresses","按多个地址支付"
 "City","城市"
 "Clear Shopping Cart","清空购物车"
-"Click <a href=""%s"" onclick=""this.target=\'_blank\'"">here to print</a> a copy of your order confirmation.","单击<a href=""%s"">这里来打印</a>您订单确认信息的拷贝。"
+"Click <a href=""%s"" onclick=""this.target='_blank'"">here to print</a> a copy of your order confirmation.","单击<a href=""%s"">这里来打印</a>您订单确认信息的拷贝。"
 "Click <a href=""%s"">here</a> to continue shopping.","单击<a href=""%s"">这里</a>来继续购物。"
 "Close","关闭"
 "Company","公司"

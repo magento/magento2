@@ -28,7 +28,7 @@ namespace Magento\Mail;
 class Message extends \Zend_Mail implements MessageInterface
 {
     /**
-     * Body
+     * Message type
      *
      * @var string
      */
@@ -53,49 +53,6 @@ class Message extends \Zend_Mail implements MessageInterface
     public function getBody()
     {
         return $this->messageType == self::TYPE_TEXT ? $this->getBodyText() : $this->getBodyHtml();
-    }
-
-    /**
-     * Set to address
-     *
-     * @param string|array $toAddress
-     * @return $this
-     */
-    public function setTo($toAddress)
-    {
-        return $this->addTo($toAddress);
-    }
-
-    /**
-     * Set cc address
-     * @param string|array $ccAddress
-     * @return $this
-     */
-    public function setCc($ccAddress)
-    {
-        return $this->addCc($ccAddress);
-    }
-
-    /**
-     * Set bcc address
-     *
-     * @param string|array $bccAddress
-     * @return $this
-     */
-    public function setBcc($bccAddress)
-    {
-        return $this->addBcc($bccAddress);
-    }
-
-    /**
-     * Set reply-to address
-     *
-     * @param string|array $replyToAddress
-     * @return $this
-     */
-    public function addReplyTo($replyToAddress)
-    {
-        return $this->addBcc($replyToAddress);
     }
 
     /**

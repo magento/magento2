@@ -34,7 +34,7 @@ use Magento\User\Model\Resource\Rules\CollectionFactory as RulesCollectionFactor
 use Magento\User\Model\Role;
 use Magento\User\Model\RoleFactory;
 use Magento\User\Model\RulesFactory;
-use Magento\Core\Model\Acl\RootResource as RootAclResource;
+use Magento\Acl\RootResource as RootAclResource;
 
 /**
  * Authorization service.

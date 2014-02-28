@@ -34,7 +34,7 @@ namespace Magento\PageCache\Model\System\Config\Source;
  *
  * @package Magento\PageCache\Model\System\Config\Source
  */
-class Application implements \Magento\Core\Model\Option\ArrayInterface
+class Application implements \Magento\Option\ArrayInterface
 {
     /**
      * Options getter
@@ -61,4 +61,4 @@ class Application implements \Magento\Core\Model\Option\ArrayInterface
             1 => __('Varnish Caching'),
         );
     }
-} 
+}

@@ -35,35 +35,38 @@ class ImportEntityFactory
     protected $objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * Instance name
+     *
+     * @var string
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
-    {
+    protected $instanceName;
+
+    /**
+     * @param \Magento\ObjectManager $objectManager
+     * @param string $instanceName
+     */
+    public function __construct(
+        \Magento\ObjectManager $objectManager,
+        $instanceName = 'Magento\Css\PreProcessor\Cache\Import\ImportEntity'
+    ) {
         $this->objectManager = $objectManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
-     * @param string $filePath
-     * @param array $params
-     * @return \Magento\Css\PreProcessor\Cache\Import\ImportEntityInterface
+     * @param \Magento\Less\PreProcessor\File\Less $lessFile
+     * @return ImportEntityInterface
      * @throws \InvalidArgumentException
      */
-    public function create($filePath, $params)
+    public function create($lessFile)
     {
         /** @var \Magento\Css\PreProcessor\Cache\Import\ImportEntityInterface $importEntity */
-        $importEntity = $this->objectManager->create(
-            'Magento\Css\PreProcessor\Cache\Import\ImportEntity',
-            array('filePath' => $filePath, 'params' => $params)
-        );
-
+        $importEntity = $this->objectManager->create($this->instanceName, array('lessFile' => $lessFile));
         if (!$importEntity instanceof \Magento\Css\PreProcessor\Cache\Import\ImportEntityInterface) {
             throw new \InvalidArgumentException(
                 'Import Entity does not implement \Magento\Css\PreProcessor\Cache\Import\ImportEntityInterface'
             );
         }
-
         return $importEntity;
     }
 }
-
-

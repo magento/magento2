@@ -112,8 +112,8 @@ class Theme extends AbstractModel implements ThemeInterface
     /**
      * Initialize dependencies
      *
-     * @param Context $context
-     * @param Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
      * @param \Magento\View\Design\Theme\Domain\Factory $domainFactory
      * @param \Magento\View\Design\Theme\ImageFactory $imageFactory
@@ -126,8 +126,8 @@ class Theme extends AbstractModel implements ThemeInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Context $context,
-        Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
         \Magento\View\Design\Theme\Domain\Factory $domainFactory,
         \Magento\View\Design\Theme\ImageFactory $imageFactory,

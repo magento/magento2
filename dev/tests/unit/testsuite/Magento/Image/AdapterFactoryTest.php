@@ -30,7 +30,7 @@ namespace Magento\Image;
 class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Image\Adapter\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Image\Adapter\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 

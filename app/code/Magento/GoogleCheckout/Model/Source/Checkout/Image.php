@@ -27,7 +27,7 @@
 
 namespace Magento\GoogleCheckout\Model\Source\Checkout;
 
-class Image implements \Magento\Core\Model\Option\ArrayInterface
+class Image implements \Magento\Option\ArrayInterface
 {
     public function toOptionArray()
     {

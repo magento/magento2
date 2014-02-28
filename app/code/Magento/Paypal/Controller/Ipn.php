@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Controller;
 
 /**
  * Unified IPN controller for all supported PayPal methods
  */
-namespace Magento\Paypal\Controller;
-
 class Ipn extends \Magento\App\Action\Action
 {
     /**
@@ -48,6 +47,7 @@ class Ipn extends \Magento\App\Action\Action
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Paypal\Model\IpnFactory $ipnFactory
      * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
+     * @param \Magento\Logger $logger
      */
     public function __construct(
         \Magento\App\Action\Context $context,
@@ -63,6 +63,8 @@ class Ipn extends \Magento\App\Action\Action
 
     /**
      * Instantiate IPN model and pass IPN request to it
+     *
+     * @return void
      */
     public function indexAction()
     {

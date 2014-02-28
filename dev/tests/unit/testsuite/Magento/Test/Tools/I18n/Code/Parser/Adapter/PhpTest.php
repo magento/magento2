@@ -56,6 +56,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
                 'phrase' => 'phrase1',
                 'file' => 'file1',
                 'line' => 15,
+                'quote' => '',
             ),
         );
 

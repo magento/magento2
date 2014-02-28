@@ -33,7 +33,7 @@
  */
 namespace Magento\Captcha\Model\Config;
 
-class Mode implements \Magento\Core\Model\Option\ArrayInterface
+class Mode implements \Magento\Option\ArrayInterface
 {
     /**
      * Get options for captcha mode selection field

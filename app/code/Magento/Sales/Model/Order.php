@@ -437,14 +437,9 @@ class Order extends \Magento\Sales\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @var \Magento\Email\Model\Template\MailerFactory
+     * @var \Magento\Mail\Template\TransportBuilder
      */
-    protected $_templateMailerFactory;
-
-    /**
-     * @var \Magento\Email\Model\InfoFactory
-     */
-    protected $_emailInfoFactory;
+    protected $_transportBuilder;
 
     /**
      * @var \Magento\Sales\Model\Resource\Order\Item\CollectionFactory
@@ -522,8 +517,8 @@ class Order extends \Magento\Sales\Model\AbstractModel
     protected $_trackCollectionFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\LocaleInterface $coreLocale
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Payment\Helper\Data $paymentData
@@ -532,8 +527,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Email\Model\Template\MailerFactory $templateMailerFactory
-     * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
+     * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Tax\Model\Calculation $taxCalculation
@@ -554,8 +548,8 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Model\LocaleInterface $coreLocale,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Payment\Helper\Data $paymentData,
@@ -564,8 +558,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Email\Model\Template\MailerFactory $templateMailerFactory,
-        \Magento\Email\Model\InfoFactory $emailInfoFactory,
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Tax\Model\Calculation $taxCalculation,
@@ -591,8 +584,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
         $this->_productFactory = $productFactory;
-        $this->_templateMailerFactory = $templateMailerFactory;
-        $this->_emailInfoFactory = $emailInfoFactory;
+        $this->_transportBuilder = $transportBuilder;
         $this->_orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->_productVisibility = $productVisibility;
         $this->_taxCalculation = $taxCalculation;
@@ -1449,37 +1441,51 @@ class Order extends \Magento\Sales\Model\AbstractModel
             $customerName = $this->getCustomerName();
         }
 
-        $mailer = $this->_templateMailerFactory->create();
-        $emailInfo = $this->_emailInfoFactory->create();
-        $emailInfo->addTo($this->getCustomerEmail(), $customerName);
+        $this->_transportBuilder
+            ->setTemplateIdentifier($templateId)
+            ->setTemplateOptions(array(
+                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                'store' => $storeId
+            ))
+            ->setTemplateVars(array(
+                'order'        => $this,
+                'billing'      => $this->getBillingAddress(),
+                'payment_html' => $paymentBlockHtml,
+                'store'        => $this->getStore()
+            ))
+            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId))
+            ->addTo($this->getCustomerEmail(), $customerName);
         if ($copyTo && $copyMethod == 'bcc') {
             // Add bcc to customer email
             foreach ($copyTo as $email) {
-                $emailInfo->addBcc($email);
+                $this->_transportBuilder->addBcc($email);
             }
         }
-        $mailer->addEmailInfo($emailInfo);
+        /** @var \Magento\Mail\TransportInterface $transport */
+        $transport =  $this->_transportBuilder->getTransport();
+        $transport->sendMessage();
 
         // Email copies are sent as separated emails if their copy method is 'copy'
         if ($copyTo && $copyMethod == 'copy') {
             foreach ($copyTo as $email) {
-                $emailInfo = $this->_emailInfoFactory->create();
-                $emailInfo->addTo($email);
-                $mailer->addEmailInfo($emailInfo);
+                $this->_transportBuilder
+                    ->setTemplateIdentifier($templateId)
+                    ->setTemplateOptions(array(
+                        'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                        'store' => $storeId
+                    ))
+                    ->setTemplateVars(array(
+                        'order'        => $this,
+                        'billing'      => $this->getBillingAddress(),
+                        'payment_html' => $paymentBlockHtml,
+                        'store'        => $this->getStore()
+                    ))
+                    ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId))
+                    ->addTo($email)
+                    ->getTransport()
+                    ->sendMessage();
             }
         }
-
-        // Set all required params and send emails
-        $mailer->setSender($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId));
-        $mailer->setStoreId($storeId);
-        $mailer->setTemplateId($templateId);
-        $mailer->setTemplateParams(array(
-                'order'        => $this,
-                'billing'      => $this->getBillingAddress(),
-                'payment_html' => $paymentBlockHtml
-            )
-        );
-        $mailer->send();
 
         $this->setEmailSent(true);
         $this->_getResource()->saveAttribute($this, 'email_sent');
@@ -1518,40 +1524,54 @@ class Order extends \Magento\Sales\Model\AbstractModel
             $customerName = $this->getCustomerName();
         }
 
-        $mailer = $this->_templateMailerFactory->create();
         if ($notifyCustomer) {
-            $emailInfo = $this->_emailInfoFactory->create();
-            $emailInfo->addTo($this->getCustomerEmail(), $customerName);
+            $this->_transportBuilder
+                ->setTemplateIdentifier($templateId)
+                ->setTemplateOptions(array(
+                    'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                    'store' => $storeId
+                ))
+                ->setTemplateVars(array(
+                    'order'   => $this,
+                    'comment' => $comment,
+                    'billing' => $this->getBillingAddress(),
+                    'store'   => $this->getStore()
+                ))
+                ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $storeId))
+                ->addTo($this->getCustomerEmail(), $customerName);
             if ($copyTo && $copyMethod == 'bcc') {
                 // Add bcc to customer email
                 foreach ($copyTo as $email) {
-                    $emailInfo->addBcc($email);
+                    $this->_transportBuilder->addBcc($email);
                 }
             }
-            $mailer->addEmailInfo($emailInfo);
+            /** @var \Magento\Mail\TransportInterface $transport */
+            $transport =  $this->_transportBuilder->getTransport();
+            $transport->sendMessage();
         }
 
         // Email copies are sent as separated emails if their copy method is
         // 'copy' or a customer should not be notified
         if ($copyTo && ($copyMethod == 'copy' || !$notifyCustomer)) {
             foreach ($copyTo as $email) {
-                $emailInfo = $this->_emailInfoFactory->create();
-                $emailInfo->addTo($email);
-                $mailer->addEmailInfo($emailInfo);
+                $this->_transportBuilder
+                    ->setTemplateIdentifier($templateId)
+                    ->setTemplateOptions(array(
+                        'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
+                        'store' => $storeId
+                    ))
+                    ->setTemplateVars(array(
+                        'order'   => $this,
+                        'comment' => $comment,
+                        'billing' => $this->getBillingAddress(),
+                        'store'   => $this->getStore()
+                    ))
+                    ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $storeId))
+                    ->addTo($email)
+                    ->getTransport()
+                    ->sendMessage();
             }
         }
-
-        // Set all required params and send emails
-        $mailer->setSender($this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $storeId));
-        $mailer->setStoreId($storeId);
-        $mailer->setTemplateId($templateId);
-        $mailer->setTemplateParams(array(
-                'order'   => $this,
-                'comment' => $comment,
-                'billing' => $this->getBillingAddress()
-            )
-        );
-        $mailer->send();
 
         return $this;
     }
@@ -2268,7 +2288,9 @@ class Order extends \Magento\Sales\Model\AbstractModel
             // Set items count
             $this->setTotalItemCount($itemsCount);
         }
-        if ($this->getCustomer()) {
+        /** TODO refactor getCustomer usage after MAGETWO-20182 and MAGETWO-20258 are done */
+        $isNewCustomer = !$this->getCustomerId() || ($this->getCustomerId() === true);
+        if ($isNewCustomer && $this->getCustomer()) {
             $this->setCustomerId($this->getCustomer()->getId());
         }
 

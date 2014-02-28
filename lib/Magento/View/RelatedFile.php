@@ -44,61 +44,32 @@ class RelatedFile
     protected $viewFileSystem;
 
     /**
-     * File system
-     *
-     * @var \Magento\Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * Constructor
-     *
      * @param Service $viewService
      * @param FileSystem $viewFileSystem
-     * @param \Magento\App\Filesystem $filesystem
      */
     public function __construct(
         Service $viewService,
-        FileSystem $viewFileSystem,
-        \Magento\App\Filesystem $filesystem
+        FileSystem $viewFileSystem
     ) {
         $this->viewService = $viewService;
         $this->viewFileSystem = $viewFileSystem;
-        $this->filesystem = $filesystem;
     }
 
     /**
      * Get relative $fileUrl based on information about parent file path and name.
      *
-     * @param string $relatedFilePath URL to the file that was extracted from $parentPath
-     * @param string $parentPath path to the file
+     * @param string $relativeFilePath URL to the file that was extracted from $parentPath
      * @param string $parentRelativePath original file name identifier that was requested for processing
      * @param array &$params theme/module parameters array
      * @return string
      */
-    public function buildPath($relatedFilePath, $parentPath, $parentRelativePath, &$params)
+    public function buildPath($relativeFilePath, $parentRelativePath, &$params)
     {
-        if (strpos($relatedFilePath, \Magento\View\Service::SCOPE_SEPARATOR)) {
-            $filePath = $this->viewService->extractScope(
-                $this->viewFileSystem->normalizePath($relatedFilePath),
-                $params
-            );
+        if (strpos($relativeFilePath, \Magento\View\Service::SCOPE_SEPARATOR)) {
+            $relativeFilePath = $this->viewService->extractScope($relativeFilePath, $params);
         } else {
-            /* Check if module file overridden on theme level based on _module property and file path */
-            $themesPath = $this->filesystem->getPath(\Magento\App\Filesystem::THEMES_DIR);
-            if ($params['module'] && strpos($parentPath, $themesPath) === 0) {
-                /* Add module directory to relative URL */
-                $filePath = dirname($params['module'] . '/' . $parentRelativePath) . '/' . $relatedFilePath;
-                if (strpos($filePath, $params['module']) === 0) {
-                    $filePath = ltrim(str_replace($params['module'], '', $filePath), '/');
-                } else {
-                    $params['module'] = false;
-                }
-            } else {
-                $filePath = dirname($parentRelativePath) . '/' . $relatedFilePath;
-            }
+            $relativeFilePath = dirname($parentRelativePath) . '/' . $relativeFilePath;
         }
-
-        return $this->viewFileSystem->normalizePath($filePath);
+        return $this->viewFileSystem->normalizePath($relativeFilePath);
     }
 }

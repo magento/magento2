@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
-class TimeFormat implements \Magento\Core\Model\Option\ArrayInterface
+class TimeFormat implements \Magento\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}

@@ -132,7 +132,7 @@ abstract class AbstractType
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -187,7 +187,7 @@ abstract class AbstractType
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param array $data
      */
@@ -200,7 +200,7 @@ abstract class AbstractType
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\App\Filesystem $filesystem,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Logger $logger,
         array $data = array()
     ) {
@@ -506,7 +506,8 @@ abstract class AbstractType
                         $path = dirname($dst);
 
                         try {
-                            $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR)->create($path);
+                            $rootDir = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
+                            $rootDir->create($rootDir->getRelativePath($path));
                         } catch (\Magento\Filesystem\FilesystemException $e) {
                             throw new \Magento\Core\Exception(
                                 __("We can't create writeable directory \"%1\".", $path)

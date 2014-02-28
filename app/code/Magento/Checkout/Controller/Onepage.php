@@ -23,13 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Controller;
 
 use Magento\App\Action\NotFoundException;
 use Magento\App\RequestInterface;
+use Magento\Customer\Service\V1\CustomerServiceInterface as CustomerService;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 
-class Onepage extends \Magento\Checkout\Controller\Action
+class Onepage extends Action
 {
     /**
      * @var array
@@ -48,7 +50,7 @@ class Onepage extends \Magento\Checkout\Controller\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -65,21 +67,33 @@ class Onepage extends \Magento\Checkout\Controller\Action
     /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param CustomerService $customerService
+     * @param CustomerAccountService $customerAccountService
+     * @param CustomerMetadataService $customerMetadataService
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Translate\InlineInterface $translateInline,
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Model\Registry $coreRegistry,
+        CustomerService $customerService,
+        CustomerAccountService $customerAccountService,
+        CustomerMetadataService $customerMetadataService,
+        \Magento\Registry $coreRegistry,
         \Magento\Translate\InlineInterface $translateInline,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_translateInline = $translateInline;
         $this->_formKeyValidator = $formKeyValidator;
-        parent::__construct($context, $customerSession);
+        parent::__construct(
+            $context,
+            $customerSession,
+            $customerService,
+            $customerAccountService,
+            $customerMetadataService
+        );
     }
 
     /**
@@ -107,7 +121,7 @@ class Onepage extends \Magento\Checkout\Controller\Action
     }
 
     /**
-     * @return \Magento\Checkout\Controller\Onepage
+     * @return $this
      */
     protected function _ajaxRedirectResponse()
     {
@@ -209,6 +223,8 @@ class Onepage extends \Magento\Checkout\Controller\Action
 
     /**
      * Checkout page
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -245,6 +261,8 @@ class Onepage extends \Magento\Checkout\Controller\Action
 
     /**
      * Checkout status block
+     *
+     * @return void
      */
     public function progressAction()
     {
@@ -256,6 +274,9 @@ class Onepage extends \Magento\Checkout\Controller\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function shippingMethodAction()
     {
         if ($this->_expireAjax()) {
@@ -266,6 +287,9 @@ class Onepage extends \Magento\Checkout\Controller\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function reviewAction()
     {
         if ($this->_expireAjax()) {
@@ -278,6 +302,8 @@ class Onepage extends \Magento\Checkout\Controller\Action
 
     /**
      * Order success action
+     *
+     * @return void
      */
     public function successAction()
     {
@@ -305,6 +331,9 @@ class Onepage extends \Magento\Checkout\Controller\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function failureAction()
     {
         $lastQuoteId = $this->getOnepage()->getCheckout()->getLastQuoteId();
@@ -320,35 +349,18 @@ class Onepage extends \Magento\Checkout\Controller\Action
     }
 
 
+    /**
+     * @return void
+     */
     public function getAdditionalAction()
     {
         $this->getResponse()->setBody($this->_getAdditionalHtml());
     }
 
     /**
-     * Address JSON
-     */
-    public function getAddressAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        $addressId = $this->getRequest()->getParam('address', false);
-        if ($addressId) {
-            $address = $this->getOnepage()->getAddress($addressId);
-
-            $customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
-            if ($customerSession->getCustomer()->getId() == $address->getCustomerId()) {
-                $this->getResponse()->setHeader('Content-type', 'application/x-json');
-                $this->getResponse()->setBody($address->toJson());
-            } else {
-                $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-            }
-        }
-    }
-
-    /**
      * Save checkout method
+     *
+     * @return void
      */
     public function saveMethodAction()
     {
@@ -363,7 +375,9 @@ class Onepage extends \Magento\Checkout\Controller\Action
     }
 
     /**
-     * save checkout billing address
+     * Save checkout billing address
+     *
+     * @return void
      */
     public function saveBillingAction()
     {
@@ -406,6 +420,8 @@ class Onepage extends \Magento\Checkout\Controller\Action
 
     /**
      * Shipping address save action
+     *
+     * @return void
      */
     public function saveShippingAction()
     {
@@ -430,6 +446,8 @@ class Onepage extends \Magento\Checkout\Controller\Action
 
     /**
      * Shipping method save action
+     *
+     * @return void
      */
     public function saveShippingMethodAction()
     {
@@ -440,7 +458,7 @@ class Onepage extends \Magento\Checkout\Controller\Action
             $data = $this->getRequest()->getPost('shipping_method', '');
             $result = $this->getOnepage()->saveShippingMethod($data);
             // $result will contain error data if shipping method is empty
-            if(!$result) {
+            if (!$result) {
                 $this->_eventManager->dispatch('checkout_controller_onepage_save_shipping_method',
                         array('request'=>$this->getRequest(),
                             'quote'=>$this->getOnepage()->getQuote()));
@@ -462,6 +480,8 @@ class Onepage extends \Magento\Checkout\Controller\Action
      * Save payment ajax action
      *
      * Sets either redirect or a JSON response
+     *
+     * @return void
      */
     public function savePaymentAction()
     {
@@ -546,6 +566,8 @@ class Onepage extends \Magento\Checkout\Controller\Action
 
     /**
      * Create order action
+     *
+     * @return void
      */
     public function saveOrderAction()
     {

@@ -67,8 +67,8 @@ class Category extends \Magento\Backend\App\Action
         if ($activeTabId) {
             $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->setActiveTabId($activeTabId);
         }
-        $this->_objectManager->get('Magento\Core\Model\Registry')->register('category', $category);
-        $this->_objectManager->get('Magento\Core\Model\Registry')->register('current_category', $category);
+        $this->_objectManager->get('Magento\Registry')->register('category', $category);
+        $this->_objectManager->get('Magento\Registry')->register('current_category', $category);
         $this->_objectManager->get('Magento\Cms\Model\Wysiwyg\Config')->setStoreId($this->getRequest()->getParam('store'));
         return $category;
     }

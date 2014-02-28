@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Onepage;
+
+use Magento\Message\Collection;
 
 /**
  * One page checkout status
@@ -32,8 +35,6 @@
  * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Onepage;
-
 class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
@@ -88,6 +89,9 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         if (!$this->isCustomerLoggedIn()) {
@@ -96,31 +100,49 @@ class Login extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         parent::_construct();
     }
 
+    /**
+     * @return Collection
+     */
     public function getMessages()
     {
         return $this->messageManager->getMessages(true);
     }
 
+    /**
+     * @return string
+     */
     public function getPostAction()
     {
         return $this->getUrl('customer/account/loginPost', array('_secure'=>true));
     }
 
+    /**
+     * @return string
+     */
     public function getMethod()
     {
         return $this->getQuote()->getMethod();
     }
 
+    /**
+     * @return mixed
+     */
     public function getMethodData()
     {
         return $this->getCheckout()->getMethodData();
     }
 
+    /**
+     * @return string
+     */
     public function getSuccessUrl()
     {
         return $this->getUrl('*/*');
     }
 
+    /**
+     * @return string
+     */
     public function getErrorUrl()
     {
         return $this->getUrl('*/*');

@@ -23,14 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
 /**
  * Renderer for service JavaScript code that disables corresponding paypal methods on page load
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
-
 class Store
     extends \Magento\Backend\Block\Template
     implements \Magento\Data\Form\Element\Renderer\RendererInterface

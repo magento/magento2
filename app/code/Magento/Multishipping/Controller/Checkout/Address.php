@@ -18,23 +18,37 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Multishipping checkout address matipulation controller
- *
- * @category   Magento
- * @package    Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\App\Action\Context;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+
+/**
+ * Multishipping checkout address manipulation controller
+ */
 class Address extends \Magento\App\Action\Action
 {
+    /** @var CustomerAddressServiceInterface */
+    protected $_customerAddressService;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param Context $context
+     * @param CustomerAddressServiceInterface $customerAddressService
+     */
+    public function __construct(
+        \Magento\App\Action\Context $context,
+        CustomerAddressServiceInterface $customerAddressService
+    ) {
+        $this->_customerAddressService = $customerAddressService;
+        parent::__construct($context);
+    }
+
     /**
      * Retrieve multishipping checkout model
      *
@@ -89,7 +103,8 @@ class Address extends \Magento\App\Action\Action
         /**
          * if we create first address we need reset emd init checkout
          */
-        if (count($this->_getCheckout()->getCustomer()->getAddresses()) == 1) {
+        $customerId = $this->_getCheckout()->getCustomer()->getCustomerId();
+        if (count($this->_customerAddressService->getAddresses($customerId)) == 1) {
             $this->_getCheckout()->reset();
         }
         $this->_redirect('*/checkout/addresses');

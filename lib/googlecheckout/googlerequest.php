@@ -55,7 +55,7 @@
     var $log;
 
       /**
-       * @var \Magento\Core\Model\Log\AdapterFactory
+       * @var \Magento\Logger\AdapterFactory
        */
       protected $_logAdapterFactory;
 
@@ -65,11 +65,11 @@
       protected $_coreStoreConfig;
 
       /**
-       * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+       * @param \Magento\Logger\AdapterFactory $logAdapterFactory
        * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
        */
       public function __construct(
-          \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+          \Magento\Logger\AdapterFactory $logAdapterFactory,
           \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
       ) {
           $this->_logAdapterFactory = $logAdapterFactory;

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Express;
 
 /**
  * Paypal Express Onepage checkout block
@@ -31,8 +32,6 @@
  * @package    Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Block\Express;
-
 class Review extends \Magento\View\Element\Template
 {
     /**
@@ -77,7 +76,7 @@ class Review extends \Magento\View\Element\Template
      * Quote object setter
      *
      * @param \Magento\Sales\Model\Quote $quote
-     * @return \Magento\Paypal\Block\Express\Review
+     * @return $this
      */
     public function setQuote(\Magento\Sales\Model\Quote $quote)
     {
@@ -98,7 +97,7 @@ class Review extends \Magento\View\Element\Template
     /**
      * Return quote shipping address
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return false|\Magento\Sales\Model\Quote\Address
      */
     public function getShippingAddress()
     {
@@ -188,6 +187,9 @@ class Review extends \Magento\View\Element\Template
 
     /**
      * Set controller path
+     *
+     * @param string $prefix
+     * @return void
      */
     public function setControllerPath($prefix)
     {
@@ -199,8 +201,7 @@ class Review extends \Magento\View\Element\Template
      *
      * @param float $price
      * @param bool $isInclTax
-     *
-     * @return bool
+     * @return string
      */
     protected function _getShippingPrice($price, $isInclTax)
     {
@@ -227,7 +228,7 @@ class Review extends \Magento\View\Element\Template
     /**
      * Retrieve payment method and assign additional template values
      *
-     * @return \Magento\Paypal\Block\Express\Review
+     * @return $this
      */
     protected function _beforeToHtml()
     {

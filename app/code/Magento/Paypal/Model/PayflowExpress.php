@@ -21,13 +21,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Model;
 
 class PayflowExpress extends \Magento\Paypal\Model\Express
 {
+    /**
+     * @var string
+     */
     protected $_code = \Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS;
+
+    /**
+     * @var string
+     */
     protected $_formBlockType = 'Magento\Paypal\Block\PayflowExpress\Form';
+
+    /**
+     * @var bool
+     */
     protected $_canManageRecurringProfiles = false;
 
     /**
@@ -53,7 +63,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
+     * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\UrlInterface $urlBuilder
@@ -65,7 +75,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
+        \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\UrlInterface $urlBuilder,
@@ -90,7 +100,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
     /**
      * EC PE won't be available if the EC is available
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Sales\Model\Quote|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)
@@ -111,8 +121,9 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
     /**
      * Import payment info to payment
      *
-     * @param \Magento\Paypal\Model\Api\Nvp
-     * @param \Magento\Sales\Model\Order\Payment
+     * @param \Magento\Paypal\Model\Api\Nvp $api
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return void
      */
     protected function _importToPayment($api, $payment)
     {

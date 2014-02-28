@@ -48,7 +48,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
@@ -56,7 +56,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\GiftMessage\Helper\Message $messageHelper,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         array $data = array()

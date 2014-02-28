@@ -56,7 +56,7 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('import_option_products', array(1));
+        $objectManager->get('Magento\Registry')->register('import_option_products', array(1));
         $result = json_decode($this->_block->toHtml(), true);
         $this->assertEquals('test_option_code_1', $result[0]['title']);
     }

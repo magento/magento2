@@ -23,18 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * PayPal Standard checkout request API
- */
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Payment\Model\Cart;
 
+/**
+ * PayPal Standard checkout request API
+ */
 class Standard extends \Magento\Paypal\Model\Api\AbstractApi
 {
     /**
-     * Global interface map and export filters
+     * Global interface map
+     *
      * @var array
      */
     protected $_globalMap = array(
@@ -60,9 +60,15 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
         'cpp_headerback_color'   => 'hdrbackcolor',
         'cpp_headerborder_color' => 'hdrbordercolor',
         'cpp_payflow_color'      => 'payflowcolor',
-//        'cs' => '', // TODO
+        // 'cs' => '', // TODO
         'lc'                     => 'locale',
     );
+
+    /**
+     * Export filters
+     *
+     * @var array
+     */
     protected $_exportToRequestFilters = array(
         'amount'   => '_filterAmount',
         'shipping' => '_filterAmount',
@@ -72,7 +78,8 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Interface for common and "aggregated order" specific fields
-     * @var array
+     *
+     * @var string[]
      */
     protected $_commonRequestFields = array(
         'business', 'invoice', 'currency_code', 'paymentaction', 'return', 'cancel_return', 'notify_url', 'bn',
@@ -83,7 +90,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Fields that should be replaced in debug with '***'
      *
-     * @var array
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = array('business');
 
@@ -118,6 +125,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Address export to request map
+     *
      * @var array
      */
     protected $_addressMap = array(
@@ -136,6 +144,8 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
      * Generate PayPal Standard checkout request fields
      * Depending on whether there are cart line items set, will aggregate everything or display items specifically
      * Shipping amount in cart line items is implemented as a separate "fake" line item
+     *
+     * @return array
      */
     public function getStandardCheckoutRequest()
     {
@@ -169,6 +179,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Merchant account email getter
+     *
      * @return string
      */
     public function getBusinessAccount()
@@ -178,6 +189,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
 
     /**
      * Payment action getter
+     *
      * @return string
      */
     public function getPaymentAction()
@@ -209,6 +221,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
      * Import address object, if set, to the request
      *
      * @param array $request
+     * @return void
      */
     protected function _importAddress(&$request)
     {
@@ -245,6 +258,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
      * Puerto Rico should be as state of USA and not as a country
      *
      * @param array $request
+     * @return void
      */
     protected function _applyCountryWorkarounds(&$request)
     {

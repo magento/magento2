@@ -44,6 +44,4 @@
     <type id="sales_order_reorder" label="Sales Reorder"/>
     <type id="sales_order_shipment" label="Customer My Account Order Shipment View"/>
     <type id="sales_order_view" label="Customer My Account Order View"/>
-    <type id="sales_recurringprofile_index" label="Recurring Profile"/>
-    <type id="sales_recurringprofile_view" label="Recurring Profile View"/>
 </page_types>

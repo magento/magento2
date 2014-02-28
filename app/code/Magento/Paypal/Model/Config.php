@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model;
 
 /**
  * Config model that is aware of all \Magento\Paypal payment methods
  * Works with PayPal-specific system configuration
  */
-namespace Magento\Paypal\Model;
-
 class Config
 {
     /**
@@ -197,7 +196,7 @@ class Config
     /**
      * Currency codes supported by PayPal methods
      *
-     * @var array
+     * @var string[]
      */
     protected $_supportedCurrencyCodes = array('AUD', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS', 'JPY', 'MXN',
         'NOK', 'NZD', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'USD', 'TWD', 'THB');
@@ -205,7 +204,7 @@ class Config
     /**
      * Merchant country supported by PayPal
      *
-     * @var array
+     * @var string[]
      */
     protected $_supportedCountryCodes = array(
         'AE','AR','AT','AU','BE','BG','BR','CA','CH','CL','CR','CY','CZ','DE','DK','DO','EC','EE','ES','FI','FR','GB',
@@ -215,7 +214,7 @@ class Config
     /**
      * Buyer country supported by PayPal
      *
-     * @var array
+     * @var string[]
      */
     protected $_supportedBuyerCountryCodes = array(
         'AF ', 'AX ', 'AL ', 'DZ ', 'AS ', 'AD ', 'AO ', 'AI ', 'AQ ', 'AG ', 'AR ', 'AM ', 'AW ', 'AU ', 'AT ', 'AZ ',
@@ -239,7 +238,7 @@ class Config
     /**
      * Locale codes supported by misc images (marks, shortcuts etc)
      *
-     * @var array
+     * @var string[]
      * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration#id089QD0O0TX4__id08AH904I0YK
      */
     protected $_supportedImageLocales = array('de_DE', 'en_AU', 'en_GB', 'en_US', 'es_ES', 'es_XC', 'fr_FR',
@@ -310,7 +309,7 @@ class Config
      * Method code setter
      *
      * @param string|\Magento\Payment\Model\Method\AbstractMethod $method
-     * @return \Magento\Paypal\Model\Config
+     * @return $this
      */
     public function setMethod($method)
     {
@@ -336,7 +335,7 @@ class Config
      * Store ID setter
      *
      * @param int $storeId
-     * @return \Magento\Paypal\Model\Config
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -455,8 +454,7 @@ class Config
         if ($key == 'payment_action'
             && $value != self::PAYMENT_ACTION_SALE
             && $this->_methodCode == self::METHOD_WPP_EXPRESS
-            && $this->shouldUseUnilateralPayments())
-        {
+            && $this->shouldUseUnilateralPayments()) {
             return self::PAYMENT_ACTION_SALE;
         }
         return $value;
@@ -465,7 +463,7 @@ class Config
     /**
      * Return merchant country codes supported by PayPal
      *
-     * @return array
+     * @return string[]
      */
     public function getSupportedMerchantCountryCodes()
     {
@@ -475,7 +473,7 @@ class Config
     /**
      * Return buyer country codes supported by PayPal
      *
-     * @return array
+     * @return string[]
      */
     public function getSupportedBuyerCountryCodes()
     {
@@ -518,7 +516,7 @@ class Config
     /**
      * Return list of allowed methods for specified country iso code
      *
-     * @param string $countryCode 2-letters iso code
+     * @param string|null $countryCode 2-letters iso code
      * @return array
      */
     public function getCountryMethods($countryCode = null)
@@ -664,7 +662,7 @@ class Config
         ));
     }
 
-     /**
+    /**
      * PayPal web URL generic getter
      *
      * @param array $params
@@ -693,8 +691,8 @@ class Config
      * PayPal will ignore "pal", if there is no total amount specified
      *
      * @param string $localeCode
-     * @param float $orderTotal
-     * @param string $pal encrypted summary about merchant
+     * @param float|null $orderTotal
+     * @param string|null $pal encrypted summary about merchant
      * @return string
      * @see Paypal_Model_Api_Nvp::callGetPalDetails()
      */
@@ -716,9 +714,9 @@ class Config
      * $staticSize is applicable for static images only
      *
      * @param string $localeCode
-     * @param float $orderTotal
-     * @param string $pal
-     * @param string $staticSize
+     * @param float|null $orderTotal
+     * @param string|null $pal
+     * @param string|null $staticSize
      * @return string
      */
     public function getPaymentMarkImageUrl($localeCode, $orderTotal = null, $pal = null, $staticSize = null)
@@ -747,7 +745,7 @@ class Config
      * Get "What Is PayPal" localized URL
      * Supposed to be used with "mark" as popup window
      *
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Core\Model\LocaleInterface|null $locale
      * @return string
      */
     public function getPaymentMarkWhatIsPaypalUrl(\Magento\Core\Model\LocaleInterface $locale = null)
@@ -871,7 +869,7 @@ class Config
     /**
      * BN code getter
      *
-     * @param string $countryCode ISO 3166-1
+     * @param string|null $countryCode ISO 3166-1
      * @return string
      */
     public function getBuildNotationCode($countryCode = null)
@@ -1127,6 +1125,7 @@ class Config
      * Export page style current settings to specified object
      *
      * @param \Magento\Object $to
+     * @return void
      */
     public function exportExpressCheckoutStyleSettings(\Magento\Object $to)
     {
@@ -1168,7 +1167,7 @@ class Config
     /**
      * Check whether specified locale code is supported. Fallback to en_US
      *
-     * @param string $localeCode
+     * @param string|null $localeCode
      * @return string
      */
     protected function _getSupportedLocaleCode($localeCode = null)
@@ -1235,7 +1234,7 @@ class Config
     /**
      * Check wheter specified country code is supported by build notation codes for specific countries
      *
-     * @param $code
+     * @param string $code
      * @return string|null
      */
     private function _matchBnCountryCode($code)

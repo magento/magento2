@@ -38,12 +38,12 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $directoryDatabase;
 
     /**
-     * @var \Magento\Core\Model\Context |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Model\Context |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Core\Model\Registry |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Registry |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $registryMock;
 
@@ -97,8 +97,8 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock          = $this->getMock('Magento\Core\Model\Context', array(), array(), '', false);
-        $this->registryMock         = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
+        $this->contextMock          = $this->getMock('Magento\Model\Context', array(), array(), '', false);
+        $this->registryMock         = $this->getMock('Magento\Registry', array(), array(), '', false);
         $this->helperStorageDatabase = $this->getMock('Magento\Core\Helper\File\Storage\Database',
             array(), array(), '', false);
         $this->dateModelMock        = $this->getMock('Magento\Core\Model\Date',

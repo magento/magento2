@@ -36,6 +36,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form */
     protected $_orderCreateBlock;
 
+    /** @var \Magento\ObjectManager */
+    protected $_objectManager;
+
     /**
      * @magentoDataFixture Magento/Sales/_files/quote.php
      */

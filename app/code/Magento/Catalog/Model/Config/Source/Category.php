@@ -30,7 +30,7 @@ namespace Magento\Catalog\Model\Config\Source;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Category implements \Magento\Core\Model\Option\ArrayInterface
+class Category implements \Magento\Option\ArrayInterface
 {
     /**
      * Category collection factory

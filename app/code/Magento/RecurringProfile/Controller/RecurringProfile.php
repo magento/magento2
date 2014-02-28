@@ -40,7 +40,7 @@ class RecurringProfile extends \Magento\App\Action\Action
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -51,12 +51,12 @@ class RecurringProfile extends \Magento\App\Action\Action
 
     /**
      * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\App\Action\Title $title
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\App\Action\Title $title
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -98,6 +98,14 @@ class RecurringProfile extends \Magento\App\Action\Action
      * Profile main view
      */
     public function viewAction()
+    {
+        $this->_viewAction();
+    }
+
+    /**
+     * Profile related orders view
+     */
+    public function ordersAction()
     {
         $this->_viewAction();
     }

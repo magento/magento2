@@ -64,16 +64,16 @@ class Selection extends \Magento\Core\Model\AbstractModel
     protected $_catalogData = null;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Bundle\Model\Resource\Selection $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Bundle\Model\Resource\Selection $resource,
         \Magento\Data\Collection\Db $resourceCollection = null,

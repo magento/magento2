@@ -30,7 +30,7 @@ namespace Magento\RecurringProfile\Block\Profile\Related\Orders;
 class Grid extends \Magento\RecurringProfile\Block\Profile\View
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Collection
+     * @var \Magento\RecurringProfile\Model\Resource\Order\Collection
      */
     protected $_orderCollection;
     /**
@@ -44,19 +44,26 @@ class Grid extends \Magento\RecurringProfile\Block\Profile\View
     protected $_coreHelper;
 
     /**
+     * @var \Magento\RecurringProfile\Model\Resource\Order\CollectionFilter
+     */
+    protected $_recurringCollectionFilter;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Sales\Model\Resource\Order\Collection $collection
      * @param \Magento\Sales\Model\Order\Config $config
      * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\RecurringProfile\Model\Resource\Order\CollectionFilter $recurringCollectionFilter
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Sales\Model\Resource\Order\Collection $collection,
         \Magento\Sales\Model\Order\Config $config,
         \Magento\Core\Helper\Data $coreHelper,
+        \Magento\RecurringProfile\Model\Resource\Order\CollectionFilter $recurringCollectionFilter,
         array $data = array()
     ) {
         $this->_coreHelper = $coreHelper;
@@ -64,6 +71,7 @@ class Grid extends \Magento\RecurringProfile\Block\Profile\View
         $this->_orderCollection = $collection;
         $this->_config = $config;
         $this->_isScopePrivate = true;
+        $this->_recurringCollectionFilter = $recurringCollectionFilter;
     }
     /**
      * Prepare related orders collection
@@ -73,11 +81,14 @@ class Grid extends \Magento\RecurringProfile\Block\Profile\View
     protected function _prepareRelatedOrders($fieldsToSelect = '*')
     {
         if (null === $this->_relatedOrders) {
-            $this->_relatedOrders = $this->_orderCollection
+            $this->_orderCollection
                 ->addFieldToSelect($fieldsToSelect)
                 ->addFieldToFilter('customer_id', $this->_registry->registry('current_customer')->getId())
-                ->addRecurringProfilesFilter($this->_recurringProfile->getId())
                 ->setOrder('entity_id', 'desc');
+            $this->_relatedOrders = $this->_recurringCollectionFilter->byIds(
+                $this->_orderCollection,
+                $this->_recurringProfile->getId()
+            );
         }
     }
 

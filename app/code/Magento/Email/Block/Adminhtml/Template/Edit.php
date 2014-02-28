@@ -36,7 +36,7 @@ namespace Magento\Email\Block\Adminhtml\Template;
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registryManager;
 
@@ -75,7 +75,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Email\Model\Template\Config $emailConfig
@@ -85,7 +85,7 @@ class Edit extends \Magento\Backend\Block\Widget
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Email\Model\Template\Config $emailConfig,

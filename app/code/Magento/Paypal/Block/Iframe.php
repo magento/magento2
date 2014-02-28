@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block;
 
 /**
  * HSS iframe block
  */
-namespace Magento\Paypal\Block;
-
 class Iframe extends \Magento\Payment\Block\Form
 {
     /**
@@ -102,6 +101,8 @@ class Iframe extends \Magento\Payment\Block\Form
 
     /**
      * Internal constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -128,7 +129,7 @@ class Iframe extends \Magento\Payment\Block\Form
     /**
      * Get current block instance
      *
-     * @return \Magento\Paypal\Block\Iframe
+     * @return \Magento\Payment\Block\Form
      * @throws \Magento\Core\Exception
      */
     protected function _getBlock()

@@ -323,8 +323,8 @@ class Store extends AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\App\Cache\Type\Config $configCacheType,
         \Magento\UrlInterface $url,

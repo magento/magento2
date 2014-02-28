@@ -30,7 +30,7 @@ namespace Magento\RecurringProfile\Block\Profile;
 class Grid extends \Magento\RecurringProfile\Block\Profiles
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_registry;
 
@@ -54,14 +54,14 @@ class Grid extends \Magento\RecurringProfile\Block\Profiles
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\RecurringProfile\Model\Profile $recurringProfile
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\RecurringProfile\Block\Fields $fields
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\RecurringProfile\Model\Profile $recurringProfile,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\RecurringProfile\Block\Fields $fields,
         array $data = array()
     ) {

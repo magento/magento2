@@ -33,9 +33,9 @@
  */
 namespace Magento;
 
-use Magento\Exception;
-use Magento\Pear\Frontend;
-use Magento\Pear\Registry;
+use \Magento\Exception;
+use \Magento\Pear\Frontend;
+use \Magento\Pear\Registry as PearRegistry;
 
 // Looks like PEAR is being developed without E_NOTICE (1.7.0RC1)
 error_reporting(E_ALL & ~E_NOTICE);
@@ -56,14 +56,6 @@ if (strpos($_includePath, $_pearPhpDir) === false) {
     set_include_path($_includePath);
 }
 
-// include necessary PEAR libs
-//require_once $_pearPhpDir."/PEAR.php";
-//require_once $_pearPhpDir."/PEAR/Frontend.php";
-//require_once $_pearPhpDir."/PEAR/Registry.php";
-//require_once $_pearPhpDir."/PEAR/Config.php";
-//require_once $_pearPhpDir."/PEAR/Command.php";
-//require_once $_pearPhpDir."/PEAR/Exception.php";
-
 require_once __DIR__ . "/Pear/Frontend.php";
 require_once __DIR__ . "/Pear/Package.php";
 
@@ -77,7 +69,7 @@ class Pear
     protected $_config;
 
     /**
-     * @var Registry
+     * @var PearRegistry
      */
     protected $_registry;
 
@@ -101,7 +93,7 @@ class Pear
      */
     static public $reloadOnRegistryUpdate = true;
 
-    
+
     public function __construct()
     {
         $this->getConfig();
@@ -200,12 +192,12 @@ class Pear
 
     /**
      * @param bool $redirectOnChange
-     * @return Registry
+     * @return PearRegistry
      */
     public function getRegistry($redirectOnChange=true)
     {
         if (!$this->_registry) {
-            $this->_registry = new Registry($this->getPearDir() . '/php');
+            $this->_registry = new PearRegistry($this->getPearDir() . '/php');
 
             $changed = false;
             foreach ($this->getMagentoChannels() as $channel) {
@@ -216,7 +208,7 @@ class Pear
             }
 
             if ($changed) {
-                $this->_registry = new \Magento\Pear\Registry($this->getPearDir() . '/php');
+                $this->_registry = new PearRegistry($this->getPearDir() . '/php');
             }
 //            if ($changed && self::$reloadOnRegistryUpdate && empty($_GET['pear_registry'])) {
 //                echo "TEST:";

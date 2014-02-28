@@ -40,19 +40,19 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
     protected $commonPriceModel;
 
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $coreRegistry;
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->storeManager = $storeManager;
         $this->commonPriceModel = $commonPriceModel;

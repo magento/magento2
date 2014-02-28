@@ -29,17 +29,17 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 class IndexerConfigData
 {
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State
      */
-    protected $_helper;
+    protected $_state;
 
     /**
-     * @param \Magento\Catalog\Helper\Product\Flat $helper
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $state
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product\Flat $helper
+        \Magento\Catalog\Model\Indexer\Product\Flat\State $state
     ) {
-        $this->_helper = $helper;
+        $this->_state = $state;
     }
 
     /**
@@ -54,7 +54,7 @@ class IndexerConfigData
     {
         $data = $invocationChain->proceed($arguments);
 
-        if (!$this->_helper->isEnabled()) {
+        if (!$this->_state->isFlatEnabled()) {
             $indexerId = \Magento\Catalog\Model\Indexer\Product\Flat\Processor::INDEXER_ID;
             if ((!isset($arguments['path']) || !$arguments['path']) && isset($data[$indexerId])) {
                 unset($data[$indexerId]);

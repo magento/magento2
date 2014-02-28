@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Cart;
+
+use Magento\Customer\Model\Customer;
+use Magento\Sales\Model\Quote;
 
 /**
  * Shopping cart abstract block
@@ -31,8 +35,6 @@
  * @package     Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Cart;
-
 class AbstractCart extends \Magento\View\Element\Template
 {
     /**
@@ -40,9 +42,24 @@ class AbstractCart extends \Magento\View\Element\Template
      */
     const DEFAULT_TYPE = 'default';
 
+    /**
+     * @var Customer|null
+     */
     protected $_customer = null;
+
+    /**
+     * @var Quote|null
+     */
     protected $_quote    = null;
+
+    /**
+     * @var array
+     */
     protected $_totals;
+
+    /**
+     * @var array
+     */
     protected $_itemRenders = array();
 
     /**
@@ -99,7 +116,6 @@ class AbstractCart extends \Magento\View\Element\Template
      * Retrieve item renderer block
      *
      * @param string $type
-     *
      * @return \Magento\View\Element\Template
      * @throws \RuntimeException
      */
@@ -117,7 +133,7 @@ class AbstractCart extends \Magento\View\Element\Template
     /**
      * Get logged in customer
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return Customer
      */
     public function getCustomer()
     {
@@ -130,7 +146,7 @@ class AbstractCart extends \Magento\View\Element\Template
     /**
      * Get active quote
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return Quote
      */
     public function getQuote()
     {
@@ -162,11 +178,17 @@ class AbstractCart extends \Magento\View\Element\Template
         return $renderer->toHtml();
     }
 
+    /**
+     * @return array
+     */
     public function getTotals()
     {
         return $this->getTotalsCache();
     }
 
+    /**
+     * @return array
+     */
     public function getTotalsCache()
     {
         if (empty($this->_totals)) {

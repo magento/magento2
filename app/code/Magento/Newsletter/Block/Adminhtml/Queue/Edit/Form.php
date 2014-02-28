@@ -25,8 +25,6 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
 
-use Magento\Newsletter\Model\Queue;
-
 /**
  * Newsletter queue edit form
  *
@@ -53,7 +51,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param \Magento\Core\Model\System\Store $systemStore
@@ -62,7 +60,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Newsletter\Model\QueueFactory $queueFactory,
         \Magento\Core\Model\System\Store $systemStore,
@@ -84,6 +82,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
+        /* @var $queue \Magento\Newsletter\Model\Queue */
         $queue = $this->getQueue();
 
         /** @var \Magento\Data\Form $form */
@@ -97,7 +96,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $dateFormat = $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM);
         $timeFormat = $this->_locale->getTimeFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM);
 
-        if ($queue->getQueueStatus() == Queue::STATUS_NEVER) {
+        if ($queue->getQueueStatus() == \Magento\Newsletter\Model\Queue::STATUS_NEVER) {
             $fieldset->addField('date', 'date', array(
                 'name'      =>    'start_at',
                 'date_format' => $dateFormat,
@@ -204,7 +203,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'container_id'  => 'field_newsletter_styles',
                 'value'         => $queue->getTemplate()->getTemplateStyles()
             ));
-        } elseif (Queue::STATUS_NEVER != $queue->getQueueStatus()) {
+        } elseif (\Magento\Newsletter\Model\Queue::STATUS_NEVER != $queue->getQueueStatus()) {
             $fieldset->addField('text', 'textarea', array(
                 'name'      =>    'text',
                 'label'     =>    __('Message'),
@@ -249,7 +248,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve queue object
      *
-     * @return Queue
+     * @return \Magento\Newsletter\Model\Queue
      */
     protected function getQueue()
     {

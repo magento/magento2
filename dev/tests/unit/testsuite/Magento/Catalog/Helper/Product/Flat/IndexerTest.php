@@ -46,6 +46,16 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_resourceMock;
 
+    /**
+     * @var \Magento\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_connectionMock;
+
+    /**
+     * @var \Magento\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_changelogMock;
+
     public function setUp()
     {
         $contextMock = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
@@ -58,23 +68,34 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
 
         $flatHelperMock = $this->getMock(
-            '\Magento\Catalog\Helper\Product\Flat', array('isAddChildData'), array(), '', false
+            'Magento\Catalog\Helper\Product\Flat\Indexer', array('isAddChildData'), array(), '', false
         );
         $flatHelperMock->expects($this->any())
             ->method('isAddChildData')
             ->will($this->returnValue(true));
 
-        $eavConfigMock = $this->getMock('\Magento\Eav\Model\Config', array(), array(), '', false);
+        $eavConfigMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
 
-        $attributeConfigMock = $this->getMock('\Magento\Catalog\Model\Attribute\Config', array(), array(), '', false);
+        $attributeConfigMock = $this->getMock('Magento\Catalog\Model\Attribute\Config', array(), array(), '', false);
 
         $resourceConfigFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\ConfigFactory', array(), array(), '', false
+            'Magento\Catalog\Model\Resource\ConfigFactory', array(), array(), '', false
         );
 
-        $eavFactoryMock = $this->getMock('\Magento\Eav\Model\Entity\AttributeFactory', array(), array(), '', false);
+        $eavFactoryMock = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', array(), array(), '', false);
 
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
+
+        $this->_connectionMock = $this->getMock(
+            'Magento\DB\Adapter\Pdo\Mysql', array('getTables', 'dropTable'), array(), '', false
+        );
+
+        $this->_changelogMock = $this->getMock(
+            'Magento\Mview\View\Changelog', array('getName'), array(), '', false
+        );
+
+
+
 
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $this->_objectManager->getObject('Magento\Catalog\Helper\Product\Flat\Indexer', array(
@@ -86,8 +107,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             'configFactory'       => $resourceConfigFactoryMock,
             'attributeFactory'    => $eavFactoryMock,
             'storeManager'        => $this->_storeManagerMock,
+            'changelog'           => $this->_changelogMock,
             'flatAttributeGroups' => array('catalog_product')
         ));
+
     }
 
     public function testGetFlatColumnsDdlDefinition()
@@ -104,13 +127,16 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('catalog_product_flat_1', $this->_model->getFlatTableName($storeId));
     }
 
+    /**
+     * Test deleting non-existent stores flat tables
+     */
     public function testDeleteAbandonedStoreFlatTables()
     {
-        $connectionMock = $this->getMock(
-            'Magento\DB\Adapter\Pdo\Mysql', array('getTables', 'dropTable'), [], '', false
-        );
+        $this->_changelogMock->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('catalog_product_flat_cl'));
 
-        $connectionMock->expects($this->once())
+        $this->_connectionMock->expects($this->once())
             ->method('getTables')
             ->with('catalog_product_flat_%')
             ->will($this->returnValue(array(
@@ -119,18 +145,94 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
                 'catalog_product_flat_3'
             )));
 
-        $connectionMock->expects($this->once())
+        $this->_connectionMock->expects($this->once())
             ->method('dropTable')
             ->with('catalog_product_flat_3');
 
         $this->_resourceMock->expects($this->once())
             ->method('getConnection')
             ->with('write')
-            ->will($this->returnValue($connectionMock));
+            ->will($this->returnValue($this->_connectionMock));
 
-        $stores = [];
-        foreach (array(1 ,2) as $storeId) {
-            $store = $this->getMock('Magento\Core\Model\Store', array('getId', '__sleep', '__wakeup'), [], '', false);
+        $this->_setStoreManagerExpectedStores(array(1, 2));
+
+        $this->_model->deleteAbandonedStoreFlatTables();
+    }
+
+    /**
+     * Test deleting multiple non-existent stores tables with changelog table
+     */
+    public function testDeleteNoStoresTables()
+    {
+        $this->_changelogMock->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('catalog_product_flat_cl'));
+
+        $this->_connectionMock->expects($this->once())
+            ->method('getTables')
+            ->with('catalog_product_flat_%')
+            ->will($this->returnValue(array(
+                'catalog_product_flat_1',
+                'catalog_product_flat_2',
+                'catalog_product_flat_3',
+                'catalog_product_flat_4',
+                'catalog_product_flat_cl'
+            )));
+
+        $this->_connectionMock->expects($this->exactly(3))
+            ->method('dropTable');
+
+        $this->_resourceMock->expects($this->once())
+            ->method('getConnection')
+            ->with('write')
+            ->will($this->returnValue($this->_connectionMock));
+
+        $this->_setStoreManagerExpectedStores(array(1));
+
+        $this->_model->deleteAbandonedStoreFlatTables();
+    }
+
+    /**
+     * Test deleting changelog table
+     */
+    public function testDeleteCl()
+    {
+        $this->_changelogMock->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('catalog_product_flat_cl'));
+
+        $this->_connectionMock->expects($this->once())
+            ->method('getTables')
+            ->with('catalog_product_flat_%')
+            ->will($this->returnValue(array(
+                'catalog_product_flat_cl'
+            )));
+
+        $this->_connectionMock->expects($this->never())
+            ->method('dropTable');
+
+        $this->_resourceMock->expects($this->once())
+            ->method('getConnection')
+            ->with('write')
+            ->will($this->returnValue($this->_connectionMock));
+
+        $this->_setStoreManagerExpectedStores(array(1));
+
+        $this->_model->deleteAbandonedStoreFlatTables();
+    }
+
+    /**
+     * Initialize store manager mock with expected store IDs
+     *
+     * @param array $storeIds
+     */
+    protected function _setStoreManagerExpectedStores(array $storeIds)
+    {
+        $stores = array();
+        foreach ($storeIds as $storeId) {
+            $store = $this->getMock(
+                'Magento\Core\Model\Store', array('getId', '__sleep', '__wakeup'), array(), '', false
+            );
             $store->expects($this->once())
                 ->method('getId')
                 ->will($this->returnValue($storeId));
@@ -140,7 +242,5 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->_storeManagerMock->expects($this->once())
             ->method('getStores')
             ->will($this->returnValue($stores));
-
-        $this->_model->deleteAbandonedStoreFlatTables();
     }
 }

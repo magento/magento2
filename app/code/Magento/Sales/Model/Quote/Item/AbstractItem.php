@@ -24,6 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Sales\Model\Quote\Item;
+
 /**
  * Quote item abstract model
  *
@@ -34,12 +36,23 @@
  *  - custom_price - new price that can be declared by user and recalculated during calculation process
  *  - original_custom_price - original defined value of custom price without any convertion
  *
- * @category   Magento
- * @package    Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @method float getDiscountAmount()
+ * @method \Magento\Sales\Model\Quote\Item\AbstractItem setDiscountAmount(float $amount)
+ * @method float getBaseDiscountAmount()
+ * @method \Magento\Sales\Model\Quote\Item\AbstractItem setBaseDiscountAmount(float $amount)
+ * @method float getDiscountPercent()
+ * @method \Magento\Sales\Model\Quote\Item\AbstractItem setDiscountPercent()
+ * @method float getOriginalDiscountAmount()
+ * @method \Magento\Sales\Model\Quote\Item\AbstractItem setOriginalDiscountAmount()
+ * @method float getBaseOriginalDiscountAmount()
+ * @method \Magento\Sales\Model\Quote\Item\AbstractItem setBaseOriginalDiscountAmount()
+ * @method float getDiscountCalculationPrice()
+ * @method \Magento\Sales\Model\Quote\Item\AbstractItem setDiscountCalculationPrice()
+ * @method float getBaseDiscountCalculationPrice()
+ * @method \Magento\Sales\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice($price)
+ * @method int[] getAppliedRuleIds()
+ * @method \Magento\Sales\Model\Quote\Item\AbstractItem setAppliedRuleIds(array $ruleIds)
  */
-namespace Magento\Sales\Model\Quote\Item;
-
 abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     implements \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
 {
@@ -60,16 +73,16 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -149,7 +162,6 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
         }
         return $this;
     }
-
 
     /**
      * Set parent item

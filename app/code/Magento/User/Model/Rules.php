@@ -44,15 +44,15 @@ class Rules extends \Magento\Core\Model\AbstractModel
     /**
      * Class constructor
      *
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param Resource\Rules $resource
      * @param Resource\Permissions\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\User\Model\Resource\Rules $resource,
         \Magento\User\Model\Resource\Permissions\Collection $resourceCollection,
         array $data = array()

@@ -41,7 +41,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     /** @var string[] */
     protected $_selectedResources;
 
-    /** @var \Magento\Core\Model\Acl\RootResource */
+    /** @var \Magento\Acl\RootResource */
     protected $_rootResource;
 
     /** @var \Magento\Acl\Resource\ProviderInterface */
@@ -60,10 +60,10 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize dependencies.
      *
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreHelper
-     * @param \Magento\Core\Model\Acl\RootResource $rootResource
+     * @param \Magento\Acl\RootResource $rootResource
      * @param \Magento\Acl\Resource\ProviderInterface $resourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Webapi\Helper\Data $webapiData
@@ -71,10 +71,10 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreHelper,
-        \Magento\Core\Model\Acl\RootResource $rootResource,
+        \Magento\Acl\RootResource $rootResource,
         \Magento\Acl\Resource\ProviderInterface $resourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Webapi\Helper\Data $webapiData,

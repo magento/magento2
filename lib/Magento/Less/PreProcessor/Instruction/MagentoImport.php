@@ -26,6 +26,7 @@ namespace Magento\Less\PreProcessor\Instruction;
 
 use Magento\Less\PreProcessor;
 use Magento\Less\PreProcessorInterface;
+use Magento\View;
 
 /**
  * Less @magento_import instruction preprocessor
@@ -38,35 +39,43 @@ class MagentoImport implements PreProcessorInterface
     const REPLACE_PATTERN = '#//@magento_import\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
 
     /**
+     * Layout file source
+     *
      * @var \Magento\View\Layout\File\SourceInterface
      */
     protected $fileSource;
 
     /**
+     * Pre-processor error handler
+     *
      * @var PreProcessor\ErrorHandlerInterface
      */
     protected $errorHandler;
 
     /**
+     * Related file
+     *
      * @var \Magento\View\RelatedFile
      */
     protected $relatedFile;
 
     /**
+     * View service
+     *
      * @var \Magento\View\Service
      */
     protected $viewService;
 
     /**
-     * @param \Magento\View\Layout\File\SourceInterface $fileSource
-     * @param \Magento\View\Service $viewService
-     * @param \Magento\View\RelatedFile $relatedFile
+     * @param View\Layout\File\SourceInterface $fileSource
+     * @param View\Service $viewService
+     * @param View\RelatedFile $relatedFile
      * @param PreProcessor\ErrorHandlerInterface $errorHandler
      */
     public function __construct(
-        \Magento\View\Layout\File\SourceInterface $fileSource,
-        \Magento\View\Service $viewService,
-        \Magento\View\RelatedFile $relatedFile,
+        View\Layout\File\SourceInterface $fileSource,
+        View\Service $viewService,
+        View\RelatedFile $relatedFile,
         PreProcessor\ErrorHandlerInterface $errorHandler
     ) {
         $this->fileSource = $fileSource;
@@ -78,11 +87,13 @@ class MagentoImport implements PreProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process($lessContent, array $viewParams, array $paths = [])
+    public function process(PreProcessor\File\Less $lessFile, $lessContent)
     {
+        $viewParams = $lessFile->getViewParams();
+        $parentPath = $lessFile->getFilePath();
         $this->viewService->updateDesignParams($viewParams);
-        $replaceCallback = function ($matchContent) use ($viewParams, $paths) {
-            return $this->replace($matchContent, $viewParams, $paths);
+        $replaceCallback = function ($matchContent) use ($viewParams, $parentPath) {
+            return $this->replace($matchContent, $viewParams, $parentPath);
         };
         return preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $lessContent);
     }
@@ -92,23 +103,20 @@ class MagentoImport implements PreProcessorInterface
      *
      * @param array $matchContent
      * @param array $viewParams
-     * @param array $paths
+     * @param string $parentPath
      * @return string
      */
-    protected function replace($matchContent, $viewParams, $paths)
+    protected function replace($matchContent, $viewParams, $parentPath)
     {
         $importsContent = '';
         try {
-            $resolvedPath = $this->relatedFile->buildPath(
-                $matchContent['path'],
-                $paths['parentAbsolutePath'],
-                $paths['parentPath'],
-                $viewParams
-            );
+            $resolvedPath = $this->relatedFile->buildPath($matchContent['path'], $parentPath, $viewParams);
             $importFiles = $this->fileSource->getFiles($viewParams['themeModel'], $resolvedPath);
             /** @var $importFile \Magento\View\Layout\File */
             foreach ($importFiles as $importFile) {
-                $importsContent .= "@import '{$importFile->getFilename()}';\n";
+                $importsContent .=  $importFile->getModule()
+                    ? "@import '{$importFile->getModule()}::{$resolvedPath}';\n"
+                    : "@import '{$matchContent['path']}';\n";
             }
         } catch (\LogicException $e) {
             $this->errorHandler->processException($e);

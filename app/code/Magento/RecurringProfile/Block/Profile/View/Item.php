@@ -40,14 +40,14 @@ class Item extends \Magento\RecurringProfile\Block\Profile\View
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param \Magento\Catalog\Model\Product $product
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         \Magento\Catalog\Model\Product\Option $option,
         \Magento\Catalog\Model\Product $product,
         array $data = array()
@@ -115,7 +115,7 @@ class Item extends \Magento\RecurringProfile\Block\Profile\View
                     'option_id' => $option->getId(),
                     'key' => $request['options'][$option->getId()]['secret_key']
                 );
-                $group->setCustomOptionDownloadUrl('sales/download/downloadProfileCustomOption')
+                $group->setCustomOptionDownloadUrl('recurringProfile/download/downloadProfileCustomOption')
                     ->setCustomOptionUrlParams($downloadParams);
             }
 

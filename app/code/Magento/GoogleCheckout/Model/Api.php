@@ -256,7 +256,7 @@ class Api extends \Magento\Object
     {
         if ($this->getDebugFlag()) {
             $this->objectManager->create(
-                'Magento\Core\Model\Log\Adapter',
+                'Magento\Logger\Adapter',
                 array('fileName' => 'payment_googlecheckout.log')
             )->setFilterDataKeys($this->_debugReplacePrivateDataKeys)->log($debugData);
         }

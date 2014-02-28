@@ -49,7 +49,7 @@ class Main extends \Magento\Backend\Block\Template
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -84,7 +84,7 @@ class Main extends \Magento\Backend\Block\Template
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param AttributeMapperInterface $attributeMapper
      * @param array $data
      */
@@ -94,7 +94,7 @@ class Main extends \Magento\Backend\Block\Template
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         AttributeMapperInterface $attributeMapper,
         array $data = array()
     ) {

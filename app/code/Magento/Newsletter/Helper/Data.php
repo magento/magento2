@@ -44,7 +44,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getConfirmationUrl($subscriber)
     {
-        return $this->_urlBuilder->setStore($subscriber->getStoreId())
+        return $this->_urlBuilder->setScope($subscriber->getStoreId())
             ->getUrl('newsletter/subscriber/confirm', array(
                 'id'     => $subscriber->getId(),
                 'code'   => $subscriber->getCode(),
@@ -60,7 +60,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getUnsubscribeUrl($subscriber)
     {
-        return $this->_urlBuilder->setStore($subscriber->getStoreId())
+        return $this->_urlBuilder->setScope($subscriber->getStoreId())
             ->getUrl('newsletter/subscriber/unsubscribe', array(
                 'id'     => $subscriber->getId(),
                 'code'   => $subscriber->getCode(),

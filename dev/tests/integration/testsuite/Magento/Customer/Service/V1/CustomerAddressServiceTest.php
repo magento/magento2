@@ -1,7 +1,5 @@
 <?php
 /**
- * Integration test for service layer \Magento\Customer\Service\V1\CustomerAddressService
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,11 +23,13 @@
  */
 namespace Magento\Customer\Service\V1;
 
-use Magento\Customer\Service\V1;
 use Magento\Exception\InputException;
 use Magento\Exception\NoSuchEntityException;
+use Magento\Customer\Service\V1;
 
 /**
+ * Integration test for service layer \Magento\Customer\Service\V1\CustomerAddressService
+ *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
@@ -263,8 +263,16 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
 
         $addresses = $this->_service->getAddresses($customerId);
         $this->assertNotEquals($proposedAddress->getAttributes(), $addresses[1]->getAttributes());
-        $this->assertArrayHasKey('weird', $proposedAddress->getAttributes());
-        $this->assertArrayNotHasKey('weird', $addresses[1]->getAttributes());
+        $this->assertArrayNotHasKey(
+            'weird',
+            $proposedAddress->getAttributes(),
+            'Only valid attributes should be available.'
+        );
+        $this->assertArrayNotHasKey(
+            'weird',
+            $addresses[1]->getAttributes(),
+            'Only valid attributes should be available.'
+        );
     }
 
     /**

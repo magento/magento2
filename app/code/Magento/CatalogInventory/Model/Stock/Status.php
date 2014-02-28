@@ -94,8 +94,8 @@ class Status extends \Magento\Core\Model\AbstractModel
     protected $_stockItemFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param Type $productType
      * @param \Magento\Catalog\Model\Product\Website $productWebsite
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -106,8 +106,8 @@ class Status extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         Type $productType,
         \Magento\Catalog\Model\Product\Website $productWebsite,
         \Magento\Core\Model\StoreManagerInterface $storeManager,

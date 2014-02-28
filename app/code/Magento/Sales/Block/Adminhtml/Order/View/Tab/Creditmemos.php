@@ -40,7 +40,7 @@ class Creditmemos
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry = null;
 
@@ -59,7 +59,7 @@ class Creditmemos
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory
      * @param \Magento\Sales\Model\Order\Creditmemo $orderCreditmemo
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -67,7 +67,7 @@ class Creditmemos
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Sales\Model\Resource\Order\Collection\Factory $collectionFactory,
         \Magento\Sales\Model\Order\Creditmemo $orderCreditmemo,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;

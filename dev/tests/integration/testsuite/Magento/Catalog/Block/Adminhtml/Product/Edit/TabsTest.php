@@ -45,7 +45,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $objectManager->create('Magento\Catalog\Model\Product');
         $product->load(1); // fixture
-        $objectManager->get('Magento\Core\Model\Registry')->register('product', $product);
+        $objectManager->get('Magento\Registry')->register('product', $product);
 
         $objectManager->get('Magento\App\State')->setAreaCode('nonexisting');
         /** @var $layout \Magento\Core\Model\Layout */

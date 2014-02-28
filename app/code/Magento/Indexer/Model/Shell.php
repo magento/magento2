@@ -24,7 +24,7 @@
 
 namespace Magento\Indexer\Model;
 
-class Shell extends \Magento\Core\Model\AbstractShell
+class Shell extends \Magento\App\AbstractShell
 {
     /**
      * Error status - whether errors have happened

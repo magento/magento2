@@ -46,7 +46,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry|null
+     * @var \Magento\Registry|null
      */
     protected $_coreRegistry = null;
 
@@ -68,7 +68,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Catalog $helperCatalog
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -77,7 +77,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory,
         \Magento\Catalog\Helper\Catalog $helperCatalog,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;

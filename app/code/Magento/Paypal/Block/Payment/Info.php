@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Payment;
 
 /**
  * PayPal common payment info block
  * Uses default templates
  */
-namespace Magento\Paypal\Block\Payment;
-
 class Info extends \Magento\Payment\Block\Info\Cc
 {
     /**
@@ -68,7 +67,7 @@ class Info extends \Magento\Payment\Block\Info\Cc
     /**
      * Prepare PayPal-specific payment information
      *
-     * @param \Magento\Object|array $transport
+     * @param \Magento\Object|array|null $transport
      * @return \Magento\Object
      */
     protected function _prepareSpecificInformation($transport = null)

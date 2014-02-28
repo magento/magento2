@@ -36,7 +36,7 @@ namespace Magento\Checkout\Model;
 class Observer
 {
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $_checkoutSession;
 
@@ -46,22 +46,28 @@ class Observer
     protected $messageManager;
 
     /**
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param Session $checkoutSession
      * @param \Magento\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession,
+        Session $checkoutSession,
         \Magento\Message\ManagerInterface $messageManager
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->messageManager = $messageManager;
     }
 
+    /**
+     * @return void
+     */
     public function unsetAll()
     {
         $this->_checkoutSession->clearQuote()->clearStorage();
     }
 
+    /**
+     * @return void
+     */
     public function loadCustomerQuote()
     {
         try {
@@ -73,6 +79,10 @@ class Observer
         }
     }
 
+    /**
+     * @param Observer $observer
+     * @return void
+     */
     public function salesQuoteSaveAfter($observer)
     {
         $quote = $observer->getEvent()->getQuote();

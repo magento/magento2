@@ -31,6 +31,16 @@ namespace Magento\Backend\Model\Menu\Filter;
 class Iterator extends \FilterIterator
 {
     /**
+     * Constructor
+     *
+     * @param \Iterator $iterator
+     */
+    public function __construct(\Iterator $iterator)
+    {
+        parent::__construct($iterator);
+    }
+
+    /**
      * Check whether the current element of the iterator is acceptable
      *
      * @return bool true if the current element is acceptable, otherwise false.

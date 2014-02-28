@@ -152,8 +152,8 @@
         <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>
     </type>
     <type name="Magento\Indexer\Model\Config\Data">
-        <plugin name="indexerCategoryFlat" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData"/>
-        <plugin name="indexerProductFlat" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData"/>
+        <plugin name="indexerCategoryFlatConfigGet" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData"/>
+        <plugin name="indexerProductFlatConfigGet" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData"/>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Flat">
         <arguments>
@@ -217,6 +217,24 @@
     <type name="Magento\Catalog\Model\Product\Action">
         <arguments>
             <argument name="categoryIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="rowsFlatTableBuilder" type="Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder">
+        <arguments>
+            <argument name="tableData" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows">
+        <arguments>
+            <argument name="tableData" xsi:type="object">rowsFlatTableBuilder</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder">
+        <arguments>
+            <argument name="tableData" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Flat\TableData</argument>
         </arguments>
     </type>
 </config>

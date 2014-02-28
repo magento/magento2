@@ -33,7 +33,7 @@
  */
 namespace Magento\Core\Model\Source\Urlrewrite;
 
-class Types implements \Magento\Core\Model\Option\ArrayInterface
+class Types implements \Magento\Option\ArrayInterface
 {
     const SYSTEM = 1;
     const CUSTOM = 0;

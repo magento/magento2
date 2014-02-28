@@ -2,7 +2,7 @@
 "Allowed Currencies","Divisas permitidas"
 "Base Currency","Divisa base"
 "Base currency is used for all online payment transactions. Scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").","La divisa base se utiliza en todas las transacciones de pago en línea. El alcance queda definido por el alcance del precio del catálogo ((""Catálogo"" > ""Precio"" > ""Alcance del Precio del Catálogo"")."
-"Can\'t convert rate from ""%s-%s"".","No se puede convertir la tarifa de ""%s-%s""."
+"Can't convert rate from ""%s-%s"".","No se puede convertir la tarifa de ""%s-%s""."
 "Cannot retrieve rate from %s.","No se puede obtener el tipo de cambio de %s."
 "Connection Timeout in Seconds","Plazo de expiración de la conexión en segundos"
 "Continue &raquo;","Seguir &gt;"

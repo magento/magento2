@@ -23,9 +23,7 @@
  */
 namespace Magento\RecurringProfile\Model;
 
-use Magento\Core\Model\Option\ArrayInterface;
-
-class States implements ArrayInterface
+class States implements \Magento\Option\ArrayInterface
 {
     /**
      * @var string

@@ -50,7 +50,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
                 'Magento\Sales\Model\Resource\OrderFactory', array(), array(), '', false
             ),
             'calculatorFactory' => $this->getMock(
-                'Magento\Core\Model\CalculatorFactory', array(), array(), '', false
+                'Magento\Math\CalculatorFactory', array(), array(), '', false
             ),
             'invoiceItemCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory', array(), array(), '', false
@@ -60,13 +60,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ),
             'commentCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory', array(), array(), '', false
-            ),
-            'templateMailerFactory' => $this->getMock(
-                'Magento\Email\Model\Template\MailerFactory', array(), array(), '', false
-            ),
-            'emailInfoFactory' => $this->getMock(
-                'Magento\Email\Model\InfoFactory', array(), array(), '', false
-            ),
+            )
         );
         foreach ($invoicesData as $oneInvoiceData) {
             $arguments['data'] = $oneInvoiceData;
@@ -91,12 +85,6 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $arguments = array(
             'productFactory' => $this->getMock(
                 'Magento\Catalog\Model\ProductFactory', array(), array(), '', false
-            ),
-            'templateMailerFactory' => $this->getMock(
-                'Magento\Email\Model\Template\MailerFactory', array(), array(), '', false
-            ),
-            'emailInfoFactory' => $this->getMock(
-                'Magento\Email\Model\InfoFactory', array(), array(), '', false
             ),
             'orderItemCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Item\CollectionFactory', array(), array(), '', false

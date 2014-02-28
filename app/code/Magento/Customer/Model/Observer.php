@@ -51,7 +51,7 @@ class Observer
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -65,12 +65,12 @@ class Observer
     /**
      * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Customer\Helper\Data $customerData,
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Registry $coreRegistry
     ) {
         $this->_customerData = $customerData;
         $this->_customerAddress = $customerAddress;

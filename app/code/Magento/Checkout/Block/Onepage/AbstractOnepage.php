@@ -23,14 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Onepage;
+
+use Magento\Customer\Model\Customer;
+use Magento\Directory\Model\Resource\Country\Collection;
+use Magento\Directory\Model\Resource\Region\Collection as RegionCollection;
+use Magento\Sales\Model\Quote;
 
 /**
  * One page common functionality block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Onepage;
-
 abstract class AbstractOnepage extends \Magento\View\Element\Template
 {
     /**
@@ -38,10 +42,29 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
      */
     protected $_configCacheType;
 
+    /**
+     * @var Customer
+     */
     protected $_customer;
+
+    /**
+     * @var Quote
+     */
     protected $_quote;
+
+    /**
+     * @var  Collection
+     */
     protected $_countryCollection;
+
+    /**
+     * @var RegionCollection
+     */
     protected $_regionCollection;
+
+    /**
+     * @var mixed
+     */
     protected $_addressesCollection;
 
     /**
@@ -98,7 +121,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
      * Get config
      *
      * @param string $path
-     * @return mixed
+     * @return string|null
      */
     public function getConfig($path)
     {
@@ -108,7 +131,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     /**
      * Get logged in customer
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return Customer
      */
     public function getCustomer()
     {
@@ -131,7 +154,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     /**
      * Retrieve sales quote model
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return Quote
      */
     public function getQuote()
     {
@@ -141,11 +164,17 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
         return $this->_quote;
     }
 
+    /**
+     * @return bool
+     */
     public function isCustomerLoggedIn()
     {
         return $this->_customerSession->isLoggedIn();
     }
 
+    /**
+     * @return Collection
+     */
     public function getCountryCollection()
     {
         if (!$this->_countryCollection) {
@@ -154,6 +183,9 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
         return $this->_countryCollection;
     }
 
+    /**
+     * @return RegionCollection
+     */
     public function getRegionCollection()
     {
         if (!$this->_regionCollection) {
@@ -164,11 +196,18 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
         return $this->_regionCollection;
     }
 
+    /**
+     * @return int
+     */
     public function customerHasAddresses()
     {
         return count($this->getCustomer()->getAddresses());
     }
 
+    /**
+     * @param string $type
+     * @return string
+     */
     public function getAddressesHtmlSelect($type)
     {
         if ($this->isCustomerLoggedIn()) {
@@ -208,6 +247,10 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
         return '';
     }
 
+    /**
+     * @param string $type
+     * @return string
+     */
     public function getCountryHtmlSelect($type)
     {
         $countryId = $this->getAddress()->getCountryId();
@@ -225,6 +268,10 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     }
 
 
+    /**
+     * @param string $type
+     * @return string
+     */
     public function getRegionHtmlSelect($type)
     {
         $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
@@ -238,6 +285,9 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
         return $select->getHtml();
     }
 
+    /**
+     * @return mixed
+     */
     public function getCountryOptions()
     {
         $options = false;
@@ -256,7 +306,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     /**
      * Get checkout steps codes
      *
-     * @return array
+     * @return string[]
      */
     protected function _getStepCodes()
     {

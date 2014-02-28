@@ -42,10 +42,12 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         $this->_model = $objectManager->getObject('Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows');
     }
 
-
+    /**
+     * @expectedException \Magento\Core\Exception
+     * @expectedExceptionMessage Bad value was supplied.
+     */
     public function testEmptyIds()
     {
-        $this->setExpectedException('\Magento\Core\Exception', 'Bad value was supplied.');
         $this->_model->execute(null);
     }
 }

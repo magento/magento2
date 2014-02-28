@@ -88,7 +88,8 @@ class Factory
             $data['phrase'],
             $data['translation'],
             isset($data['context_type']) ? $data['context_type'] : null,
-            isset($data['context_value']) ? $data['context_value'] : null
+            isset($data['context_value']) ? $data['context_value'] : null,
+            isset($data['quote']) ? $data['quote'] : null
         );
     }
 }

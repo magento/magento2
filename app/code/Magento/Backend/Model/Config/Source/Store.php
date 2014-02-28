@@ -26,7 +26,7 @@
 
 namespace Magento\Backend\Model\Config\Source;
 
-class Store implements \Magento\Core\Model\Option\ArrayInterface
+class Store implements \Magento\Option\ArrayInterface
 {
     /**
      * @var array

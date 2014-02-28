@@ -23,18 +23,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model;
+
+use Magento\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
  */
-namespace Magento\Paypal\Model;
-
 class Observer
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Registry
      */
     protected $_coreRegistry;
 
@@ -85,7 +86,7 @@ class Observer
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Paypal\Helper\Hss $paypalHss
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Registry $coreRegistry
      * @param \Magento\Logger $logger
      * @param Report\SettlementFactory $settlementFactory
      * @param \Magento\App\ViewInterface $view
@@ -96,7 +97,7 @@ class Observer
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Paypal\Helper\Hss $paypalHss,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Registry $coreRegistry,
         \Magento\Logger $logger,
         \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory,
         \Magento\App\ViewInterface $view,
@@ -117,7 +118,8 @@ class Observer
 
     /**
      * Goes to reports.paypal.com and fetches Settlement reports.
-     * @return \Magento\Paypal\Model\Observer
+     *
+     * @return void
      */
     public function fetchReports()
     {
@@ -142,7 +144,7 @@ class Observer
      * Clean unfinished transaction
      *
      * @deprecated since 1.6.2.0
-     * @return \Magento\Paypal\Model\Observer
+     * @return $this
      */
     public function cleanTransactions()
     {
@@ -152,10 +154,10 @@ class Observer
     /**
      * Save order into registry to use it in the overloaded controller.
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Paypal\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function saveOrderAfterSubmit(\Magento\Event\Observer $observer)
+    public function saveOrderAfterSubmit(EventObserver $observer)
     {
         /* @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');
@@ -167,10 +169,10 @@ class Observer
     /**
      * Set data for response of frontend saveOrder action
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Paypal\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function setResponseAfterSaveOrder(\Magento\Event\Observer $observer)
+    public function setResponseAfterSaveOrder(EventObserver $observer)
     {
         /* @var $order \Magento\Sales\Model\Order */
         $order = $this->_coreRegistry->registry('hss_order');
@@ -203,7 +205,8 @@ class Observer
     /**
      * Block admin ability to use customer billing agreements
      *
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
+     * @return void
      */
     public function restrictAdminBillingAgreementUsage($observer)
     {
@@ -217,9 +220,10 @@ class Observer
     }
 
     /**
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
+     * @return void
      */
-    public function addBillingAgreementToSession(\Magento\Event\Observer $observer)
+    public function addBillingAgreementToSession(EventObserver $observer)
     {
         /** @var \Magento\Sales\Model\Order\Payment $orderPayment */
         $orderPayment = $observer->getEvent()->getPayment();
@@ -247,9 +251,10 @@ class Observer
     /**
      * Add PayPal shortcut buttons
      *
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
+     * @return void
      */
-    public function addPaypalShortcuts(\Magento\Event\Observer $observer)
+    public function addPaypalShortcuts(EventObserver $observer)
     {
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();

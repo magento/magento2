@@ -78,7 +78,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $customers \Magento\Customer\Model\Customer[] */
-        $customers = $objectManager->get('Magento\Core\Model\Registry')
+        $customers = $objectManager->get('Magento\Registry')
             ->registry('_fixture/Magento_ImportExport_Customer_Collection');
         foreach ($customers as $key => $customer) {
             foreach ($expectedAttributes as $code) {
@@ -168,7 +168,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         /**
          * Change created_at date of first customer for future filter test.
          */
-        $customers = $objectManager->get('Magento\Core\Model\Registry')
+        $customers = $objectManager->get('Magento\Registry')
             ->registry('_fixture/Magento_ImportExport_Customer_Collection');
         $customers[0]->setCreatedAt($createdAtDate);
         $customers[0]->save();

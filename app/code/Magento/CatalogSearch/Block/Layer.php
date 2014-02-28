@@ -34,7 +34,7 @@ use Magento\Catalog\Block\Layer\View;
 use Magento\CatalogSearch\Helper\Data;
 use Magento\CatalogSearch\Model\Layer as ModelLayer;
 use Magento\CatalogSearch\Model\Resource\EngineProvider;
-use Magento\Core\Model\Registry;
+use Magento\Registry;
 use Magento\View\Element\Template\Context;
 
 class Layer extends View
@@ -52,7 +52,7 @@ class Layer extends View
      * @var Registry
      */
     protected $_coreRegistry = null;
-    
+
     /**
      * Catalog search data
      *

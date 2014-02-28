@@ -64,8 +64,8 @@ class Type extends \Magento\Core\Model\AbstractModel
     protected $_elementFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Eav\Model\Form\FieldsetFactory $fieldsetFactory
      * @param \Magento\Eav\Model\Form\ElementFactory $elementFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -73,8 +73,8 @@ class Type extends \Magento\Core\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Model\Context $context,
+        \Magento\Registry $registry,
         \Magento\Eav\Model\Form\FieldsetFactory $fieldsetFactory,
         \Magento\Eav\Model\Form\ElementFactory $elementFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
