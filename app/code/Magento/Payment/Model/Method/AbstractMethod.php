@@ -241,7 +241,7 @@ abstract class AbstractMethod extends \Magento\Object
     }
 
     /**
-     * Check authorise availability
+     * Check authorize availability
      *
      * @return bool
      */
@@ -441,7 +441,7 @@ abstract class AbstractMethod extends \Magento\Object
     }
 
     /**
-     * Retrieve payment iformation model object
+     * Retrieve payment information model object
      *
      * @return \Magento\Payment\Model\Info
      * @throws \Magento\Core\Exception
